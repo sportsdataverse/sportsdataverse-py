@@ -16,16 +16,20 @@ import polars as pl
 import pytest
 
 from sportsdataverse._common.situational_splits import FAMILIES, situational_team_schema
+from sportsdataverse.mbb import mbb_loaders
 from sportsdataverse.mbb.mbb_situational import (
+    COUNT_COLUMNS,
     _qualified_ratings,
     mbb_situational_lineup,
     mbb_situational_player,
     mbb_situational_team,
+    mbb_situational_team_games,
     ncaa_situation_rows,
+    ncaa_team_game_counts,
 )
-from sportsdataverse.mbb.mbb_team_season_rates import ncaa_possession_rate_rows
+from sportsdataverse.mbb.mbb_team_season_rates import ncaa_possession_rate_rows, ncaa_team_box_count_rows
 from sportsdataverse.wbb import wbb_loaders
-from sportsdataverse.wbb.wbb_situational import wbb_situational_team
+from sportsdataverse.wbb.wbb_situational import wbb_situational_team, wbb_situational_team_games
 
 # The package re-exports the functions under the modules' names, so import the modules themselves.
 mbb_team_season_rates = importlib.import_module("sportsdataverse.mbb.mbb_team_season_rates")
@@ -46,8 +50,13 @@ def _releases(league: str) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
     return poss, sched, ratings
 
 
+def _pbp(league: str) -> pl.DataFrame:
+    return pl.read_parquet(SIT / f"ncaa_{_LG[league]}_pbp_2025.parquet")
+
+
 def _patch(mp: pytest.MonkeyPatch, league: str) -> None:
     poss, sched, ratings = _releases(league)
+    pbp = _pbp(league)
 
     def frame(f: pl.DataFrame):  # type: ignore[no-untyped-def]
         def load(seasons: int | list[int]) -> pl.DataFrame:
@@ -60,10 +69,12 @@ def _patch(mp: pytest.MonkeyPatch, league: str) -> None:
         mp.setattr(mbb_team_season_rates, "load_ncaa_mbb_possessions", frame(poss))
         mp.setattr(mbb_team_season_rates, "load_mbb_schedule", frame(sched))
         mp.setattr(mbb_team_strength, "load_mbb_ratings", frame(ratings))
+        mp.setattr(mbb_loaders, "load_ncaa_mbb_pbp", frame(pbp))
     else:
         mp.setattr(wbb_loaders, "load_ncaa_wbb_possessions", frame(poss))
         mp.setattr(wbb_loaders, "load_wbb_schedule", frame(sched))
         mp.setattr(wbb_loaders, "load_wbb_ratings", frame(ratings))
+        mp.setattr(wbb_loaders, "load_ncaa_wbb_pbp", frame(pbp))
 
 
 @pytest.fixture(scope="module")
@@ -177,3 +188,75 @@ def test_errors() -> None:
         mbb_situational_team(2025, league="coed")
     with pytest.raises(ValueError, match="top_n"):
         mbb_situational_player(2025, top_n=0)
+
+
+def test_team_games_add_up_to_the_season(mens: dict[str, pl.DataFrame], womens: pl.DataFrame) -> None:
+    """Q27 on college: the per-game situational rows summed over a split are the season row."""
+    from tests.nba.test_nba_situational import assert_situational_games_add_up
+
+    with pytest.MonkeyPatch.context() as mp:
+        _patch(mp, "mens")
+        men = mbb_situational_team_games(2025)
+    with pytest.MonkeyPatch.context() as mp:
+        _patch(mp, "womens")
+        women = wbb_situational_team_games(2025)
+    assert_situational_games_add_up(men.drop(COUNT_COLUMNS), mens["team"])
+    assert_situational_games_add_up(women.drop(COUNT_COLUMNS), womens)
+    # every game of the two fixture teams has an all row for them
+    for league, frame in (("mens", men), ("womens", women)):
+        for team in TEAMS[league]:
+            season_games = _ours(mens["team"] if league == "mens" else womens, league)
+            n = season_games.filter(team_id=team, family="all")["games"].item()
+            assert frame.filter(team_id=team, family="all").height == n
+
+
+@pytest.mark.parametrize("league", ["mens", "womens"])
+def test_event_counts_are_the_team_box(league: str) -> None:
+    """Q6: the events summed per team-game are stats.ncaa.org's own team box, every count, every game."""
+    counts = ncaa_team_game_counts(_pbp(league))
+    box = ncaa_team_box_count_rows(
+        pl.read_parquet(FIXTURES / "bb_team_season_rates" / f"ncaa_{_LG[league]}_team_box_2025.parquet")
+    )
+    whole = counts.filter(family="all")
+    j = whole.join(
+        box.rename({"offense_team_id": "team_id"}), on=["season", "game_id", "team_id"], suffix="_box", validate="1:1"
+    )
+    assert j.height == whole.height  # every team-game the events have: 144 men's, 138 women's
+    for c in ("fga", "fgm", "fg3m", "fta", "oreb", "tov"):
+        assert (j[c] == j[f"{c}_box"]).all(), c
+    # garbage time out and in add up to the whole game (every fixture event is flagged)
+    assert _pbp(league)["is_garbage_time"].null_count() == 0
+    split = counts.filter(family="garbage").group_by("season", "game_id", "team_id").agg(pl.col(COUNT_COLUMNS).sum())
+    k = whole.join(split, on=["season", "game_id", "team_id"], suffix="_g", validate="1:1")
+    assert k.height == whole.height
+    for c in COUNT_COLUMNS:
+        assert (k[c] == k[f"{c}_g"]).all(), c
+    assert counts.filter(split="garbage_time").height > 0  # some of these games had garbage time
+
+
+@pytest.mark.parametrize("league", ["mens", "womens"])
+def test_team_games_carry_garbage_out_counts(league: str) -> None:
+    with pytest.MonkeyPatch.context() as mp:
+        _patch(mp, league)
+        games = (mbb_situational_team_games if league == "mens" else wbb_situational_team_games)(2025)
+    assert list(games.columns[-len(COUNT_COLUMNS) :]) == list(COUNT_COLUMNS)
+    counted = pl.col("family").is_in(["all", "garbage"])
+    assert games.filter(~counted).select(pl.col(COUNT_COLUMNS).is_null().all()).row(0) == (True,) * 9
+    ours = _ours(games.filter(counted), league)
+    assert ours.select(pl.col(COUNT_COLUMNS).is_not_null().all()).row(0) == (True,) * 9
+    # the published row is the event sum for that team, game and split
+    want = ncaa_team_game_counts(_pbp(league))
+    j = ours.join(want, on=["season", "game_id", "team_id", "family", "split"], suffix="_w", validate="1:1")
+    assert j.height == ours.height
+    for c in COUNT_COLUMNS:
+        assert (j[c] == j[f"{c}_w"]).all(), c
+    # the counts' points are the team's own scoring; the possession credit can differ by a basket
+    pts = 2 * pl.col("fgm") + pl.col("fg3m") + pl.col("ftm")
+    gap = ours.filter(family="all").select((pts - pl.col("pts")).abs())
+    assert gap.to_series().max() <= 3
+
+
+def test_counts_input_errors() -> None:
+    with pytest.raises(KeyError, match="shot_value"):
+        ncaa_team_game_counts(_pbp("mens").drop("shot_value"))
+    assert dict(ncaa_team_game_counts(_pbp("mens").head(0)).schema)["fga"] == pl.Int64

@@ -14,7 +14,7 @@ Release: [ncaa_wbb_rapm](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `player_id` | String | Unique player identifier. |
 | `person_id` | String | Unique player identifier (V3 endpoints). |
 | `player` | String | Player name. |
@@ -73,13 +73,13 @@ Release: [ncaa_wbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `sub_deviate` | Int64 | Per-game count of substitution-tracking deviations found while walking lineups forward; nonzero flags imperfect substitution data. |
 | `contest_id` | String |  |
 | `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
-| `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
+| `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
 | `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
-| `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
+| `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
 | `event_team_ncaa_team_id` | String | stats.ncaa.org team identifier of the team credited with the event. |
-| `event_team_espn_team_id` | String | ESPN team identifier of the team credited with the event, via the NCAA-to-ESPN crosswalk. |
+| `event_team_espn_team_id` | Int32 | ESPN team identifier of the team credited with the event, via the NCAA-to-ESPN crosswalk. |
 | `poss_team_ncaa_team_id` | String | stats.ncaa.org team identifier of the team in possession. |
-| `poss_team_espn_team_id` | String | ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk. |
+| `poss_team_espn_team_id` | Int32 | ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk. |
 | `player_1_id` | String | stats.ncaa.org player identifier for player_1, resolved through the roster name matcher. |
 | `player_1_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name for player_1. |
 | `player_2_id` | String | stats.ncaa.org player identifier for player_2, resolved through the roster name matcher. |
@@ -104,7 +104,7 @@ Release: [ncaa_wbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `away_4_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-4 on-floor player. |
 | `away_5_player_id` | String | stats.ncaa.org player identifier for the away slot-5 on-floor player. |
 | `away_5_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-5 on-floor player. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `espn_game_id` | Int32 | ESPN game id (NA for bart-only rows). |
 | `is_fastbreak` | Boolean | Flag marking the shot as a fast-break attempt, from the stats.ncaa.org play text. |
 | `is_from_turnover` | Boolean | Flag marking an attempt generated off an opponent turnover. |
 | `is_paint` | Boolean | Flag marking the shot as attempted in the paint. |
@@ -123,7 +123,7 @@ Release: [ncaa_wbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `is_team_turnover` | Boolean | Flag marking a turnover charged to the team rather than an individual player. |
 | `timeout_type` | String | Type of timeout called (e.g. full, 30-second, media). |
 | `challenge_outcome` | String | Outcome of a coach's challenge or video-review event, when present. |
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_wbb_pbp(seasons=2024)
@@ -142,7 +142,7 @@ Release: [ncaa_wbb_schedule](https://github.com/sportsdataverse/sportsdataverse-
 | `away` | String | Away record. |
 | `home_score` | Int64 | Home team score at the time of the play. |
 | `away_score` | Int64 | Away team score at the time of the play. |
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_wbb_schedule(seasons=2024)
@@ -271,15 +271,15 @@ Release: [ncaa_wbb_player_box](https://github.com/sportsdataverse/sportsdatavers
 | `mid_pct_unast` | Float64 | Mid-range field-goal percentage in the unassisted split (makes for which no assist was credited). |
 | `contest_id` | String |  |
 | `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
-| `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
+| `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
 | `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
-| `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
+| `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
 | `team_ncaa_team_id` | String | stats.ncaa.org team identifier of the player's team. |
-| `team_espn_team_id` | String | ESPN team identifier of the player's team, via the NCAA-to-ESPN crosswalk. |
+| `team_espn_team_id` | Int32 | ESPN team identifier of the player's team, via the NCAA-to-ESPN crosswalk. |
 | `player_id` | String | Unique player identifier. |
 | `clean_name` | String | Normalized (diacritics- and punctuation-cleaned) player name used to join across the NCAA datasets. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `espn_game_id` | Int32 | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_wbb_player_box(seasons=2024)
@@ -366,13 +366,13 @@ Release: [ncaa_wbb_team_box](https://github.com/sportsdataverse/sportsdataverse-
 | `d_time_per_poss` | Float64 | Average seconds per defensive possession. |
 | `contest_id` | String |  |
 | `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
-| `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
+| `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
 | `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
-| `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
+| `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
 | `team_ncaa_team_id` | String | stats.ncaa.org team identifier of the team the row belongs to. |
-| `team_espn_team_id` | String | ESPN team identifier of the team, via the NCAA-to-ESPN crosswalk. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `team_espn_team_id` | Int32 | ESPN team identifier of the team, via the NCAA-to-ESPN crosswalk. |
+| `espn_game_id` | Int32 | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_wbb_team_box(seasons=2024)
@@ -385,7 +385,7 @@ Release: [ncaa_wbb_rosters](https://github.com/sportsdataverse/sportsdataverse-d
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `team` | String | Team-side label or team identifier. |
 | `player` | String | Player name. |
 | `games` | Int64 | Games played. |
@@ -401,7 +401,7 @@ Release: [ncaa_wbb_team_rosters](https://github.com/sportsdataverse/sportsdatave
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `team_id` | String | Unique team identifier. |
 | `team` | String | Team-side label or team identifier. |
 | `player_id` | String | Unique player identifier. |
@@ -432,7 +432,7 @@ Release: [ncaa_wbb_team_ids](https://github.com/sportsdataverse/sportsdataverse-
 | `team` | String | Team-side label or team identifier. |
 | `conference` | String | Filter players or teams by conference. |
 | `id` | String | Unique play identification number |
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_wbb_team_ids(seasons=2024)
@@ -474,11 +474,11 @@ Release: [ncaa_wbb_possessions](https://github.com/sportsdataverse/sportsdataver
 | `last_event_type` | String | Event type that ended the possession (e.g., a made shot, turnover, or defensive rebound). |
 | `contest_id` | String |  |
 | `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
-| `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
+| `home_espn_team_id` | Int32 | ESPN home team id (NA for bart-only rows). |
 | `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
-| `away_espn_team_id` | String | ESPN away team id (NA for bart-only rows). |
+| `away_espn_team_id` | Int32 | ESPN away team id (NA for bart-only rows). |
 | `poss_team_ncaa_team_id` | String | stats.ncaa.org team identifier of the team in possession. |
-| `poss_team_espn_team_id` | String | ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk. |
+| `poss_team_espn_team_id` | Int32 | ESPN team identifier of the team in possession, via the NCAA-to-ESPN crosswalk. |
 | `home_1_player_id` | String | stats.ncaa.org player identifier for the home slot-1 on-floor player. |
 | `home_1_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the home slot-1 on-floor player. |
 | `home_2_player_id` | String | stats.ncaa.org player identifier for the home slot-2 on-floor player. |
@@ -499,8 +499,8 @@ Release: [ncaa_wbb_possessions](https://github.com/sportsdataverse/sportsdataver
 | `away_4_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-4 on-floor player. |
 | `away_5_player_id` | String | stats.ncaa.org player identifier for the away slot-5 on-floor player. |
 | `away_5_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the away slot-5 on-floor player. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `espn_game_id` | Int32 | ESPN game id (NA for bart-only rows). |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_wbb_possessions(seasons=2024)
@@ -589,7 +589,7 @@ Release: [ncaa_wbb_lineups](https://github.com/sportsdataverse/sportsdataverse-d
 | `opp_foul` | Int64 | Opponent fouls committed while the lineup was on the floor during the stint. |
 | `stint_num` | Int64 | Sequential on-floor stint number for the lineup within the game. |
 | `contest_id` | String |  |
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 
 ```python
 load_ncaa_wbb_lineups(seasons=2024)
@@ -603,7 +603,7 @@ Release: [ncaa_wbb_matchup_stints](https://github.com/sportsdataverse/sportsdata
 | col_name | type | description |
 |---|---|---|
 | `contest_id` | String |  |
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `home` | String | Home. |
 | `away` | String | Away record. |
@@ -647,7 +647,7 @@ Release: [ncaa_wbb_shots](https://github.com/sportsdataverse/sportsdataverse-dat
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `team_id` | String | Unique team identifier. |
 | `shooter_id` | String | Unique identifier for shooter. |
 | `shot_x` | Float64 | Court x-coordinate of the attempt in feet, decoded from the stats.ncaa.org shot-chart map. |
@@ -662,10 +662,10 @@ Release: [ncaa_wbb_shots](https://github.com/sportsdataverse/sportsdataverse-dat
 | `source` | String |  |
 | `contest_id` | String |  |
 | `ncaa_team_id` | String | stats.ncaa.org team identifier of the shooting team. |
-| `espn_team_id` | String | ESPN team id (canonical key). |
+| `espn_team_id` | Int32 | ESPN team id (canonical key). |
 | `shooter_player_id` | String | stats.ncaa.org player identifier of the shooter. |
 | `shooter_clean_name` | String | Normalized (diacritics- and punctuation-cleaned) name of the shooter. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `espn_game_id` | Int32 | ESPN game id (NA for bart-only rows). |
 
 ```python
 load_ncaa_wbb_shots(seasons=2024)
@@ -685,7 +685,7 @@ Release: [ncaa_wbb_rapm_within_team](https://github.com/sportsdataverse/sportsda
 | `team_off_poss` | Float64 | Team offensive possessions underlying the within-team fit. |
 | `num_players` | Int64 | Number of players in the team's RAPM design matrix. |
 | `rapm_net` | Float64 | Net RAPM — the sum of the offensive and defensive components, per 100 possessions. |
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `player_id` | String | Unique player identifier. |
 | `team_id` | String | Unique team identifier. |
 | `person_id` | String | Unique player identifier (V3 endpoints). |

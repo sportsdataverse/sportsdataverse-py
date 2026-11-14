@@ -39,7 +39,14 @@ from sportsdataverse._common.league_context import (
 )
 from sportsdataverse._common.rate_gates import NBA_LEVEL, ON_OFF_MIN_N
 
-__all__ = ["IMPACT_LOWER_IS_BETTER", "IMPACT_RANKED", "nba_player_impact_context", "nba_player_impact_league_averages"]
+__all__ = [
+    "CURRENT_IMPACT_RANKED",
+    "IMPACT_LOWER_IS_BETTER",
+    "IMPACT_RANKED",
+    "nba_current_impact_context",
+    "nba_player_impact_context",
+    "nba_player_impact_league_averages",
+]
 
 #: Ranked impact metric -> the side its ``<m>_n`` counts: ``"o"`` offensive possessions,
 #: ``"d"`` defensive, ``"net"`` both. Higher is better except :data:`IMPACT_LOWER_IS_BETTER`.
@@ -172,4 +179,57 @@ def nba_player_impact_league_averages(
         for st in sorted(sized["season_type"].unique().drop_nulls().to_list())
     ]
     out = pl.concat(frames) if frames else pl.DataFrame(schema=LEAGUE_AVERAGES_SCHEMA)
+    return out.to_pandas() if return_as_pandas else out
+
+
+#: ``current_impact``'s headline columns -> the side its ``<m>_n`` counts (as :data:`IMPACT_RANKED`).
+CURRENT_IMPACT_RANKED: dict[str, str] = {"o_current_impact": "o", "d_current_impact": "d", "current_impact": "net"}
+
+
+def nba_current_impact_context(current: pl.DataFrame, *, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """Append ``<m>_n``, ``<m>_rank`` and ``<m>_pct`` to a ``current_impact`` table, within each ``as_of`` date.
+
+    ``nba_current_impact``'s three ratings (:data:`CURRENT_IMPACT_RANKED`) are ranked among the
+    players of the date who have played this season: ``<m>_n`` (the season-to-date ``off_poss``,
+    ``def_poss`` or both) at least 1. There is no larger sample gate, unlike ``player_impact``'s:
+    a current rating is the box prior moved by the games, so a player with few possessions sits near
+    his prior, never at a raw on-court extreme, and the date's ranks exist from the season's first
+    week (the season gates of 1,600 to 3,200 possessions would leave the first seven weeks
+    unranked). 1 is best; ``d_current_impact`` is positive for a good defense, so it ranks
+    descending too. A rank and percentile are null when the rating is null or non-finite, when
+    ``as_of`` is null, when fewer than
+    :data:`~sportsdataverse._common.league_context.MIN_COHORT_PLAYERS` players have played (opening
+    night), or when every value is equal. Nothing is dropped, and running it on its own output gives
+    the same frame.
+
+    Args:
+        current: A ``current_impact`` table (:func:`~sportsdataverse.nba.nba_current_impact.nba_current_impact`,
+            or the ``nba_current_impact`` release): ``as_of``, ``off_poss``, ``def_poss`` and the three ratings.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        ``current`` with ``<m>_n`` (Int64), then ``<m>_rank`` and ``<m>_pct`` (Float64) appended for
+        ``o_current_impact``, ``d_current_impact`` and ``current_impact``, in that order.
+
+    Raises:
+        KeyError: If a rating, ``as_of``, ``off_poss`` or ``def_poss`` is missing.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import nba_current_impact, nba_current_impact_context
+            cur = nba_current_impact_context(nba_current_impact(possessions, priors, ["2025-01-15", "2025-03-01"]))
+            cur.sort("as_of", "current_impact_rank").select("as_of", "player_id", "current_impact", "current_impact_rank")
+    """
+    missing = [c for c in ("off_poss", "def_poss") if c not in current.columns]
+    if missing:
+        raise KeyError(f"{missing} missing from the frame: the ranks' sample sizes need them")
+    out = attach_sample_sizes(current, {m: _N[s] for m, s in CURRENT_IMPACT_RANKED.items()})
+    out = attach_ranks(
+        out,
+        list(CURRENT_IMPACT_RANKED),
+        min_cohort=MIN_COHORT_PLAYERS,
+        by=("as_of",),
+        min_n=dict.fromkeys(CURRENT_IMPACT_RANKED, 1),
+    )
     return out.to_pandas() if return_as_pandas else out

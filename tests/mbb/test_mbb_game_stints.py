@@ -20,7 +20,7 @@ from sportsdataverse._common.game_impact import game_lineups_used, game_player_i
 from sportsdataverse._common.game_stints import game_on_off, game_stints, game_stints_schema, game_units
 from sportsdataverse.mbb import mbb_loaders
 from sportsdataverse.mbb.mbb_game_impact import ncaa_impact_rows
-from sportsdataverse.mbb.mbb_game_stints import ncaa_stint_rows
+from sportsdataverse.mbb.mbb_game_stints import ncaa_box_events, ncaa_stint_rows
 from sportsdataverse.mbb.mbb_lineup_seasons import ncaa_lineup_count_rows
 from sportsdataverse.wbb import wbb_loaders
 from sportsdataverse.wbb.wbb_game_stints import wbb_game_on_off, wbb_game_stints, wbb_game_units
@@ -41,9 +41,9 @@ def _read(lg: str, name: str) -> pl.DataFrame:
 
 
 def _stints(lg: str) -> pl.DataFrame:
-    return game_stints(
-        ncaa_stint_rows(_read(lg, "pbp"), _read(lg, "possessions"), league=LEAGUE[lg]), player_dtype=PLAYER
-    )
+    pbp = _read(lg, "pbp")
+    rows = ncaa_stint_rows(pbp, _read(lg, "possessions"), league=LEAGUE[lg])
+    return game_stints(rows, player_dtype=PLAYER, events=ncaa_box_events(pbp))
 
 
 def _rows(lg: str) -> pl.DataFrame:

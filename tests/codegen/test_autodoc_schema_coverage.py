@@ -109,6 +109,26 @@ def test_a_recapture_keeps_an_authored_description():
     assert not str(cols[1].get("description", "")).strip()
 
 
+def test_a_recapture_keeps_a_pinned_integer_width():
+    """A committed ``Int32`` (``ncaa_espn_team_crosswalk.espn_team_id``) must not fold back to ``integer``,
+    which renders as ``Int64``; a real family change (integer -> character) still wins."""
+    committed = [{"name": "espn_team_id", "type": "Int32"}, {"name": "x", "type": "Int32"}]
+    fresh = pl.DataFrame({"espn_team_id": [2000], "x": ["a"]}, schema={"espn_team_id": pl.Int32, "x": pl.Utf8})
+    cols, *_ = generate._merge_autodoc_columns(committed, fresh)
+    assert [c["type"] for c in cols] == ["Int32", "character"]
+    assert generate._doc_dtype(cols[0]["type"]) == "Int32"
+
+
+@pytest.mark.parametrize("committed", ["double", "logical", "Float64", "Boolean", "integer"])
+def test_a_recapture_as_text_replaces_a_committed_non_text_type(committed):
+    """A non-null String capture is a real change: it must replace a committed double / logical / integer
+    (R or polars spelling), not keep it because a mapper folds both sides to ``character``."""
+    cols, *_ = generate._merge_autodoc_columns(
+        [{"name": "x", "type": committed}], pl.DataFrame({"x": ["a"]}, schema={"x": pl.Utf8})
+    )
+    assert cols[0]["type"] == "character"
+
+
 def test_a_call_reference_is_resolved_once_and_can_pick_a_key(monkeypatch):
     calls = []
 

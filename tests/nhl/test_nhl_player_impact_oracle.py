@@ -184,7 +184,7 @@ def test_unit_ratings_internal_gate_summed_rapm_tracks_on_ice_xg_diff():
 
 
 # Observed on the 3-game fixture: reconstructed league PP xGF rate == 10.18 per 60
-# (ratio 1.64x the seeded LEAGUE_CONSTANTS["nhl"].league_xg_rate_pp=6.2). A 3-game
+# (ratio 1.64x the then-seeded LEAGUE_CONSTANTS["nhl"].league_xg_rate_pp=6.2; now fitted, 5.91). A 3-game
 # sample's PP rate legitimately runs hot/cold vs. a full-season-fit constant -- this is
 # a soft sanity check that the strength-state filter + rate math are right (order of
 # magnitude), not a tight fit to this specific tiny sample. BAND is a x3 multiplicative

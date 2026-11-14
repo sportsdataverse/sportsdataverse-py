@@ -55,11 +55,11 @@ class ImpactConfig:
     Attributes:
         goals_per_win: goals-per-win denominator for GAR->WAR (a seeded value until it is
             fitted from NHL team wins vs goal differential).
-        replacement_ev_off: EV offense replacement-level rate (xG/60), subtracted before
-            summing GAR.
-        replacement_ev_def: EV defense replacement-level rate (xGA/60 suppressed).
-        league_xg_rate_ev: league-average even-strength xG rate (per 60), used as the
-            RAPM intercept sanity check.
+        replacement_ev_off: EV xGF/60 of a unit of five replacement-level skaters (a TEAM
+            on-ice rate, not a RAPM coefficient; see ``replacement_rapm``).
+        replacement_ev_def: EV xGA/60 allowed by a unit of five replacement-level skaters.
+        league_xg_rate_ev: league-average even-strength xG rate (per 60), the level the two
+            replacement rates are measured against.
         league_xg_rate_pp: league-average power-play xGF rate (per 60).
         league_xg_rate_pk: league-average penalty-kill xGA rate (per 60).
         rapm_lambda_grid: candidate ridge penalties for the skater RAPM CV.
@@ -87,6 +87,35 @@ class ImpactConfig:
     danger_medium: dict = field(default_factory=lambda: {"max_distance": 40.0, "max_angle": 55.0})
     xg_booster_league: str = "nhl"
 
+    def replacement_rapm(self) -> tuple[float, float]:
+        """Replacement level on the skater-RAPM scale: ``(offense, defense)`` in xG/60.
+
+        The 5v5 fit ``nhl_skater_war`` uses (``nhl_skater_rapm(strength_states=["5v5"])``)
+        gives each skater a coefficient relative to the design's intercept (about the
+        league-average rate; home ice is its own column), additive over the five skaters
+        on ice, with defense signed so that positive means suppression. The replacement
+        rates are team on-ice levels, so each skater's share of the unit's gap to the
+        league average is a fifth of it. Both rates are seeds, not fitted values, and the
+        ridge pulls low-minute skaters toward 0, above this level, so fringe skaters tend
+        to earn small positive EV GAR; fitting the level from the replacement pool's own
+        RAPM is the open follow-up.
+
+        Returns:
+            ``((replacement_ev_off - league_xg_rate_ev) / 5,
+            (league_xg_rate_ev - replacement_ev_def) / 5)``; both negative for a
+            below-average replacement unit.
+
+        Example:
+            Quick start::
+
+                from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
+                off, dfn = get_constants("nhl").replacement_rapm()  # (-0.12, -0.02)
+        """
+        return (
+            (self.replacement_ev_off - self.league_xg_rate_ev) / 5.0,
+            (self.league_xg_rate_ev - self.replacement_ev_def) / 5.0,
+        )
+
 
 # `goals_per_win` for the NHL is the fitted output of
 # `dev/nhl_player_impact/fit_goals_per_win.py`: OLS `wins = a + b*goal_diff`
@@ -104,8 +133,14 @@ LEAGUE_CONSTANTS: dict[str, ImpactConfig] = {
         replacement_ev_off=1.9,
         replacement_ev_def=2.6,
         league_xg_rate_ev=2.5,
-        league_xg_rate_pp=6.2,
-        league_xg_rate_pk=6.2,
+        # Fitted by `tools/fit_nhl_special_teams_rates.py` (2026-11-14) on the retrained xG: pooled
+        # PP xGF/60 per season 5.824 / 6.129 / 5.693 / 6.007 (2022-23..2025-26), mean 5.91. One
+        # number for both: the PP's shots are the PK's shots against. Was a 6.2 seed. Refit after
+        # every xG retrain. A pooled mean, so one season's league PP value need not sum to zero
+        # (2024-25 runs about -0.22 xG per PP hour), and it is on the published boosters' scale:
+        # a caller passing its own xG (`xg_scored=True`) compares against a rate of another model.
+        league_xg_rate_pp=5.91,
+        league_xg_rate_pk=5.91,
         xg_booster_league="nhl",
     ),
     "pwhl": ImpactConfig(

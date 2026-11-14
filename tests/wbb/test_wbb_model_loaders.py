@@ -59,7 +59,7 @@ def test_player_value_declared_schema_matches_the_producer() -> None:
 
 def test_loader_entries_point_at_the_published_tags_and_floor() -> None:
     r = _entry("load_wbb_ratings")
-    assert (r["tag"], r["base"], r["min_season"]) == ("wbb_ratings", "sdv_releases", 2008)
+    assert (r["tag"], r["base"], r["min_season"]) == ("wbb_ratings", "sdv_releases", 2009)
     assert r["url"] == "wbb_ratings/wbb_ratings_{season}.parquet"
 
     v = _entry("load_wbb_player_value")

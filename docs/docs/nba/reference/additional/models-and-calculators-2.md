@@ -608,7 +608,7 @@ worse than the filter. The fitted team-change SD and drift barely move the ratin
 
 **Returns**
 
-`CURRENT_IMPACT_SCHEMA`, one row per date and player seen before it: `o_current_impact` / `d_current_impact` / `current_impact` (per 100, `d` positive = good defense, `current_impact = o + d`), the prior in force (`o_prior` / `d_prior`), the season-to-date possessions (`off_poss` / `def_poss`, 0 for a player who has not played this season) and the player's last game date. `season` is that of the last game before the date.
+`CURRENT_IMPACT_SCHEMA`, one row per date and player seen before it: `o_current_impact` / `d_current_impact` / `current_impact` (per 100, `d` positive = good defense, `current_impact = o + d`), the prior in force (`o_prior` / `d_prior`), the season-to-date possessions (`off_poss` / `def_poss`, 0 for a player who has not played this season) and the player's last game date, and the prior weights `o_prior_weight` / `d_prior_weight` / `prior_weight` (0-1: posterior over no-update variance, the module docstring's prior weight). `season` is that of the last game before the date.
 
 | col_name | type | description |
 |---|---|---|
@@ -623,6 +623,9 @@ worse than the filter. The fitted team-change SD and drift barely move the ratin
 | `off_poss` | Int64 | Offensive possessions this season before as_of (0 for a player carried from an earlier season who has not played in this one). |
 | `def_poss` | Int64 | Defensive possessions this season before as_of. |
 | `last_game_date` | Date | Date of the player's last game before as_of in the input. |
+| `o_prior_weight` | Float64 | Prior weight of o_current_impact (0-1): the offensive deviation's posterior variance over its variance with no game updates. Equals the box prior's weight in the estimate while the prior is fixed and no shock falls between his games, and sits above it with shocks. 1 before his first game; falls as his games (this season's and carried earlier ones) accumulate, and a season, team-change or drift shock raises it. |
+| `d_prior_weight` | Float64 | Prior weight of d_current_impact (0-1): the same variance ratio for the defensive deviation. |
+| `prior_weight` | Float64 | Prior weight of current_impact (0-1): the net (offense + defense) deviation's posterior variance over its no-update variance. |
 
 **Example**
 
@@ -630,6 +633,76 @@ worse than the filter. The fitted team-change SD and drift barely move the ratin
 from sportsdataverse.nba import nba_current_impact
 cur = nba_current_impact(possessions, priors, ["2025-01-15", "2025-03-01"])
 print(cur.filter(pl.col("as_of") == pl.date(2025, 3, 1)).sort("current_impact", descending=True).head())
+```
+
+### nba_current_impact_context {#nba_current_impact_context}
+
+`nba_current_impact_context(current: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Append `<m>_n`, `<m>_rank` and `<m>_pct` to a `current_impact` table, within each `as_of` date.
+
+`nba_current_impact`'s three ratings (`CURRENT_IMPACT_RANKED`) are ranked among the
+players of the date who have played this season: `<m>_n` (the season-to-date `off_poss`,
+`def_poss` or both) at least 1. There is no larger sample gate, unlike `player_impact`'s:
+a current rating is the box prior moved by the games, so a player with few possessions sits near
+his prior, never at a raw on-court extreme, and the date's ranks exist from the season's first
+week (the season gates of 1,600 to 3,200 possessions would leave the first seven weeks
+unranked). 1 is best; `d_current_impact` is positive for a good defense, so it ranks
+descending too. A rank and percentile are null when the rating is null or non-finite, when
+`as_of` is null, when fewer than
+`~sportsdataverse._common.league_context.MIN_COHORT_PLAYERS` players have played (opening
+night), or when every value is equal. Nothing is dropped, and running it on its own output gives
+the same frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `current` | `DataFrame` |  | A `current_impact` table (`~sportsdataverse.nba.nba_current_impact.nba_current_impact`, or the `nba_current_impact` release): `as_of`, `off_poss`, `def_poss` and the three ratings. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`current` with `<m>_n` (Int64), then `<m>_rank` and `<m>_pct` (Float64) appended for `o_current_impact`, `d_current_impact` and `current_impact`, in that order.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | NBA stats person id. |
+| `as_of` | Date | The rating date: only games dated strictly before it are used. |
+| `season` | Int64 | Season (end year) of the last game before as_of. |
+| `o_current_impact` | Float64 | Expected offensive impact per 100 on as_of: o_prior plus the Kalman-filtered offensive deviation from it. |
+| `d_current_impact` | Float64 | Expected defensive impact per 100 on as_of (positive = good defense): d_prior plus the filtered defensive deviation. |
+| `current_impact` | Float64 | o_current_impact + d_current_impact. |
+| `o_prior` | Float64 | The offensive box prior in force on as_of (the latest prior_date on or before it), per 100. |
+| `d_prior` | Float64 | The defensive box prior in force on as_of, per 100 (positive = good defense). |
+| `off_poss` | Int64 | Offensive possessions this season before as_of (0 for a player carried from an earlier season who has not played in this one). |
+| `def_poss` | Int64 | Defensive possessions this season before as_of. |
+| `last_game_date` | Date | Date of the player's last game before as_of in the input. |
+| `o_prior_weight` | Float64 | Prior weight of o_current_impact (0-1): the offensive deviation's posterior variance over its variance with no game updates. Equals the box prior's weight in the estimate while the prior is fixed and no shock falls between his games, and sits above it with shocks. 1 before his first game; falls as his games (this season's and carried earlier ones) accumulate, and a season, team-change or drift shock raises it. |
+| `d_prior_weight` | Float64 | Prior weight of d_current_impact (0-1): the same variance ratio for the defensive deviation. |
+| `prior_weight` | Float64 | Prior weight of current_impact (0-1): the net (offense + defense) deviation's posterior variance over its no-update variance. |
+| `o_current_impact_n` | Int64 | Possessions o_current_impact is ranked on: this season's off_poss before as_of. A rank needs at least 1 (he has played this season). |
+| `d_current_impact_n` | Int64 | Possessions d_current_impact is ranked on: this season's def_poss before as_of. A rank needs at least 1 (he has played this season). |
+| `current_impact_n` | Int64 | Possessions current_impact is ranked on: this season's off_poss + def_poss before as_of. A rank needs at least 1 (he has played this season). |
+| `o_current_impact_rank` | Float64 | Rank of o_current_impact among the as_of date's players with o_current_impact_n >= 1 (1 = best, ties averaged); null on a date with fewer than 10 such players, or when the value is null. |
+| `d_current_impact_rank` | Float64 | Rank of d_current_impact among the as_of date's players with d_current_impact_n >= 1 (1 = best, ties averaged); null on a date with fewer than 10 such players, or when the value is null. |
+| `current_impact_rank` | Float64 | Rank of current_impact among the as_of date's players with current_impact_n >= 1 (1 = best, ties averaged); null on a date with fewer than 10 such players, or when the value is null. |
+| `o_current_impact_pct` | Float64 | Percentile of o_current_impact in the same cohort: 100 * (n + 1 - rank) / (n + 1), n the ranked players of the date; null where the rank is. |
+| `d_current_impact_pct` | Float64 | Percentile of d_current_impact in the same cohort: 100 * (n + 1 - rank) / (n + 1), n the ranked players of the date; null where the rank is. |
+| `current_impact_pct` | Float64 | Percentile of current_impact in the same cohort: 100 * (n + 1 - rank) / (n + 1), n the ranked players of the date; null where the rank is. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If a rating, `as_of`, `off_poss` or `def_poss` is missing. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_current_impact, nba_current_impact_context
+cur = nba_current_impact_context(nba_current_impact(possessions, priors, ["2025-01-15", "2025-03-01"]))
+cur.sort("as_of", "current_impact_rank").select("as_of", "player_id", "current_impact", "current_impact_rank")
 ```
 
 ### nba_darko {#nba_darko}

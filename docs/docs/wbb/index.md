@@ -15,7 +15,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 | [Bart Torvik Women's T-Rank](#bart-torvik-women-s-t-rank) | `barttorvik.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
 | [Her Hoop Stats](#her-hoop-stats) | `herhoopstats.com` | 5 | subscription |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 354 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 362 | — |
 
 ## ESPN {#espn}
 
@@ -223,24 +223,30 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`wbb_game_flow`](reference/additional/analytics-2#wbb_game_flow)
 - [`wbb_game_lineups_used`](reference/additional/analytics-2#wbb_game_lineups_used)
 - [`wbb_game_on_off`](reference/additional/analytics-2#wbb_game_on_off)
+- [`wbb_game_player_box_splits`](reference/additional/analytics-2#wbb_game_player_box_splits)
 - [`wbb_game_player_impact`](reference/additional/analytics-2#wbb_game_player_impact)
 - [`wbb_game_stints`](reference/additional/analytics-2#wbb_game_stints)
 - [`wbb_game_units`](reference/additional/analytics-2#wbb_game_units)
 - [`wbb_lineup_seasons`](reference/additional/analytics-3#wbb_lineup_seasons)
 - [`wbb_official_seasons`](reference/additional/analytics-3#wbb_official_seasons)
 - [`wbb_play_styles`](reference/additional/analytics-3#wbb_play_styles)
+- [`wbb_player_game_expected_box`](reference/additional/analytics-3#wbb_player_game_expected_box)
 - [`wbb_player_on_off`](reference/additional/analytics-3#wbb_player_on_off)
+- [`wbb_player_season_box_rates`](reference/additional/analytics-3#wbb_player_season_box_rates)
 - [`wbb_player_shot_zones`](reference/additional/analytics-3#wbb_player_shot_zones)
 - [`wbb_player_war`](reference/additional/analytics-3#wbb_player_war)
-- [`wbb_player_wowy`](reference/additional/analytics-3#wbb_player_wowy)
-- [`wbb_situational_lineup`](reference/additional/analytics-3#wbb_situational_lineup)
-- [`wbb_situational_player`](reference/additional/analytics-3#wbb_situational_player)
+- [`wbb_player_wowy`](reference/additional/analytics-4#wbb_player_wowy)
+- [`wbb_situational_lineup`](reference/additional/analytics-4#wbb_situational_lineup)
+- [`wbb_situational_player`](reference/additional/analytics-4#wbb_situational_player)
 - [`wbb_situational_team`](reference/additional/analytics-4#wbb_situational_team)
+- [`wbb_situational_team_games`](reference/additional/analytics-4#wbb_situational_team_games)
 - [`wbb_strength_of_schedule`](reference/additional/analytics-4#wbb_strength_of_schedule)
+- [`wbb_team_game_four_factors`](reference/additional/analytics-4#wbb_team_game_four_factors)
+- [`wbb_team_game_possessions`](reference/additional/analytics-4#wbb_team_game_possessions)
 - [`wbb_team_luck`](reference/additional/analytics-4#wbb_team_luck)
 - [`wbb_team_season_flow`](reference/additional/analytics-4#wbb_team_season_flow)
 - [`wbb_team_season_rates`](reference/additional/analytics-4#wbb_team_season_rates)
-- [`wbb_team_shot_zones`](reference/additional/analytics-4#wbb_team_shot_zones)
+- [`wbb_team_shot_zones`](reference/additional/analytics-5#wbb_team_shot_zones)
 - [`wbb_team_strength`](reference/additional/analytics-5#wbb_team_strength)
 - [`weighted_avg`](reference/additional/analytics-5#weighted_avg)
 
@@ -263,6 +269,8 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`display_name_to_roster_key`](reference/additional/ids-and-crosswalks#display_name_to_roster_key)
 - [`fuzzy_box_match`](reference/additional/ids-and-crosswalks#fuzzy_box_match)
 - [`ncaa_espn_player_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_player_crosswalk)
+- [`ncaa_espn_school_seasons`](reference/additional/ids-and-crosswalks#ncaa_espn_school_seasons)
+- [`ncaa_espn_schools`](reference/additional/ids-and-crosswalks#ncaa_espn_schools)
 - [`ncaa_espn_team_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_team_crosswalk)
 - [`ncaa_wbb_team_ids`](reference/additional/ids-and-crosswalks#ncaa_wbb_team_ids)
 - [`resolve_ncaa_team_id`](reference/additional/ids-and-crosswalks#resolve_ncaa_team_id)
@@ -396,8 +404,8 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wbb_player_value`](reference/loaders/player#load_wbb_player_value) | [`load_wbb_player_value`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_value.html) |
 | [`load_wbb_ratings`](reference/loaders/other#load_wbb_ratings) | [`load_wbb_ratings`](https://wehoop.sportsdataverse.org/reference/load_wbb_ratings.html) |
 | [`load_wbb_rosters`](reference/loaders/other#load_wbb_rosters) | [`load_wbb_rosters`](https://wehoop.sportsdataverse.org/reference/load_wbb_rosters.html) |
-| [`load_wbb_schedule`](reference/loaders/other#load_wbb_schedule) | [`load_wbb_schedule`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule.html) |
-| [`load_wbb_schedule_crosswalk`](reference/loaders/other#load_wbb_schedule_crosswalk) | [`load_wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule_crosswalk.html) |
+| [`load_wbb_schedule`](reference/loaders/schedule#load_wbb_schedule) | [`load_wbb_schedule`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule.html) |
+| [`load_wbb_schedule_crosswalk`](reference/loaders/schedule#load_wbb_schedule_crosswalk) | [`load_wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule_crosswalk.html) |
 | [`load_wbb_shots`](reference/loaders/other#load_wbb_shots) | [`load_wbb_shots`](https://wehoop.sportsdataverse.org/reference/load_wbb_shots.html) |
 | [`load_wbb_standings`](reference/loaders/other#load_wbb_standings) | [`load_wbb_standings`](https://wehoop.sportsdataverse.org/reference/load_wbb_standings.html) |
 | [`load_wbb_team_boxscore`](reference/loaders/team#load_wbb_team_boxscore) | [`load_wbb_team_box`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_box.html) |

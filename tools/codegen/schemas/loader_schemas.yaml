@@ -12565,6 +12565,8 @@ load_mbb_player_crosswalk:
   type: String
 - name: kp_player_id
   type: String
+- name: ncaa_player_id
+  type: String
 - name: match_method
   type: String
 - name: match_confidence
@@ -12643,6 +12645,16 @@ load_mbb_ratings:
 - name: rank
   type: Int64
 - name: adj_em_z
+  type: Float64
+- name: adj_o_blend
+  type: Float64
+- name: adj_d_blend
+  type: Float64
+- name: adj_em_blend
+  type: Float64
+- name: rank_blend
+  type: Int64
+- name: prior_games
   type: Float64
 load_mbb_rosters:
 - name: season
@@ -12916,6 +12928,8 @@ load_mbb_schedule_crosswalk:
 - name: fox_game_id
   type: String
 - name: yahoo_game_id
+  type: String
+- name: ncaa_contest_id
   type: String
 - name: match_method
   type: String
@@ -13926,6 +13940,43 @@ load_mlb_xera:
   type: Float64
 - name: x_era
   type: Float64
+load_nba_depth_charts:
+- name: as_of_date
+  type: Date
+- name: league
+  type: String
+- name: season
+  type: Int64
+- name: season_type
+  type: Int64
+- name: team_id
+  type: Int64
+- name: team_display_name
+  type: String
+- name: team_abbreviation
+  type: String
+- name: group_id
+  type: Int64
+- name: group_name
+  type: String
+- name: position_slot
+  type: String
+- name: position_id
+  type: Int64
+- name: position_abbreviation
+  type: String
+- name: position_name
+  type: String
+- name: depth_rank
+  type: Int64
+- name: athlete_id
+  type: Int64
+- name: athlete_display_name
+  type: String
+- name: athlete_short_name
+  type: String
+- name: espn_timestamp
+  type: String
 load_nba_draft:
 - name: season
   type: Int32
@@ -14474,7 +14525,7 @@ load_nba_player_crosswalk:
 - name: espn_position
   type: String
 - name: nba_player_id
-  type: String
+  type: Int64
 - name: nba_player_name
   type: String
 - name: nba_jersey_num
@@ -14935,9 +14986,9 @@ load_nba_schedule_crosswalk:
 - name: nba_game_code
   type: String
 - name: nba_home_team_id
-  type: String
+  type: Int64
 - name: nba_away_team_id
-  type: String
+  type: Int64
 - name: fox_game_id
   type: String
 - name: fox_home_team_id
@@ -15674,6 +15725,35 @@ load_nba_stats_lineups_v3:
   type: Int64
 - name: season
   type: Int64
+load_nba_stats_metric_curves:
+- name: season
+  type: Int64
+- name: entity_type
+  type: String
+- name: entity_id
+  type: Int64
+- name: entity_name
+  type: String
+- name: team_id
+  type: Int64
+- name: id_source
+  type: String
+- name: metric
+  type: String
+- name: down
+  type: Int64
+- name: x_lo
+  type: Float64
+- name: x_hi
+  type: Float64
+- name: attempts
+  type: Int64
+- name: successes
+  type: Int64
+- name: rate
+  type: Float64
+- name: epa_per_att
+  type: Float64
 load_nba_stats_officials:
 - name: official_id
   type: Int64
@@ -15965,6 +16045,10 @@ load_nba_stats_player_boxscores:
 load_nba_stats_player_game_logs:
 - name: season_id
   type: String
+- name: player_id
+  type: Int64
+- name: player_name
+  type: String
 - name: team_id
   type: Int64
 - name: team_abbreviation
@@ -16019,6 +16103,8 @@ load_nba_stats_player_game_logs:
   type: Int64
 - name: plus_minus
   type: Int64
+- name: fantasy_pts
+  type: Float64
 - name: video_available
   type: Int64
 - name: season
@@ -16588,6 +16674,49 @@ load_nba_stats_possessions_v3:
   type: String
 - name: season
   type: Int64
+load_nba_stats_rolling_windows:
+- name: season
+  type: Int64
+- name: entity_type
+  type: String
+- name: entity_id
+  type: Int64
+- name: entity_name
+  type: String
+- name: team_id
+  type: Int64
+- name: metric
+  type: String
+- name: window_unit
+  type: String
+- name: window_n
+  type: Int64
+- name: cur
+  type: Float64
+- name: prev
+  type: Float64
+- name: season_start
+  type: Float64
+- name: career_baseline
+  type: Float64
+- name: delta_prev
+  type: Float64
+- name: delta_season
+  type: Float64
+- name: delta_career
+  type: Float64
+- name: delta_prev_rank
+  type: Int64
+- name: n
+  type: Int64
+- name: qualified
+  type: Boolean
+- name: last_event_date
+  type: Date
+- name: as_of_date
+  type: Date
+- name: id_source
+  type: String
 load_nba_stats_rosters:
 - name: team_id
   type: Int64
@@ -16942,6 +17071,69 @@ load_nba_stats_team_boxscores:
 - name: season
   type: Int32
 - name: season_type_id
+  type: String
+load_nba_stats_team_game_logs:
+- name: season_id
+  type: String
+- name: team_id
+  type: Int64
+- name: team_abbreviation
+  type: String
+- name: team_name
+  type: String
+- name: game_id
+  type: String
+- name: game_date
+  type: String
+- name: matchup
+  type: String
+- name: wl
+  type: String
+- name: min
+  type: Int64
+- name: fgm
+  type: Int64
+- name: fga
+  type: Int64
+- name: fg_pct
+  type: Float64
+- name: fg3m
+  type: Int64
+- name: fg3a
+  type: Int64
+- name: fg3_pct
+  type: Float64
+- name: ftm
+  type: Int64
+- name: fta
+  type: Int64
+- name: ft_pct
+  type: Float64
+- name: oreb
+  type: Int64
+- name: dreb
+  type: Int64
+- name: reb
+  type: Int64
+- name: ast
+  type: Int64
+- name: stl
+  type: Int64
+- name: blk
+  type: Int64
+- name: tov
+  type: Int64
+- name: pf
+  type: Int64
+- name: pts
+  type: Int64
+- name: plus_minus
+  type: Int64
+- name: video_available
+  type: Int64
+- name: season
+  type: Int32
+- name: season_type
   type: String
 load_nba_stats_team_season_stats:
 - name: team_id
@@ -17460,7 +17652,7 @@ load_nba_team_crosswalk:
 - name: espn_mascot
   type: String
 - name: nba_team_id
-  type: String
+  type: Int64
 - name: nba_team_abbreviation
   type: String
 - name: nba_team_name
@@ -19979,19 +20171,19 @@ load_ncaa_wbb_pbp:
 - name: home_ncaa_team_id
   type: String
 - name: home_espn_team_id
-  type: String
+  type: Int32
 - name: away_ncaa_team_id
   type: String
 - name: away_espn_team_id
-  type: String
+  type: Int32
 - name: event_team_ncaa_team_id
   type: String
 - name: event_team_espn_team_id
-  type: String
+  type: Int32
 - name: poss_team_ncaa_team_id
   type: String
 - name: poss_team_espn_team_id
-  type: String
+  type: Int32
 - name: player_1_id
   type: String
 - name: player_1_clean_name
@@ -20041,7 +20233,7 @@ load_ncaa_wbb_pbp:
 - name: away_5_clean_name
   type: String
 - name: espn_game_id
-  type: String
+  type: Int32
 - name: is_fastbreak
   type: Boolean
 - name: is_from_turnover
@@ -20314,21 +20506,21 @@ load_ncaa_wbb_player_box:
 - name: home_ncaa_team_id
   type: String
 - name: home_espn_team_id
-  type: String
+  type: Int32
 - name: away_ncaa_team_id
   type: String
 - name: away_espn_team_id
-  type: String
+  type: Int32
 - name: team_ncaa_team_id
   type: String
 - name: team_espn_team_id
-  type: String
+  type: Int32
 - name: player_id
   type: String
 - name: clean_name
   type: String
 - name: espn_game_id
-  type: String
+  type: Int32
 - name: season
   type: Int64
 load_ncaa_wbb_possessions:
@@ -20391,15 +20583,15 @@ load_ncaa_wbb_possessions:
 - name: home_ncaa_team_id
   type: String
 - name: home_espn_team_id
-  type: String
+  type: Int32
 - name: away_ncaa_team_id
   type: String
 - name: away_espn_team_id
-  type: String
+  type: Int32
 - name: poss_team_ncaa_team_id
   type: String
 - name: poss_team_espn_team_id
-  type: String
+  type: Int32
 - name: home_1_player_id
   type: String
 - name: home_1_clean_name
@@ -20441,7 +20633,7 @@ load_ncaa_wbb_possessions:
 - name: away_5_clean_name
   type: String
 - name: espn_game_id
-  type: String
+  type: Int32
 - name: season
   type: Int64
 load_ncaa_wbb_rapm:
@@ -20546,13 +20738,13 @@ load_ncaa_wbb_shots:
 - name: ncaa_team_id
   type: String
 - name: espn_team_id
-  type: String
+  type: Int32
 - name: shooter_player_id
   type: String
 - name: shooter_clean_name
   type: String
 - name: espn_game_id
-  type: String
+  type: Int32
 load_ncaa_wbb_team_box:
 - name: home
   type: String
@@ -20703,17 +20895,17 @@ load_ncaa_wbb_team_box:
 - name: home_ncaa_team_id
   type: String
 - name: home_espn_team_id
-  type: String
+  type: Int32
 - name: away_ncaa_team_id
   type: String
 - name: away_espn_team_id
-  type: String
+  type: Int32
 - name: team_ncaa_team_id
   type: String
 - name: team_espn_team_id
-  type: String
+  type: Int32
 - name: espn_game_id
-  type: String
+  type: Int32
 - name: season
   type: Int64
 load_ncaa_wbb_team_ids:
@@ -30196,6 +30388,8 @@ load_wbb_player_crosswalk:
   type: String
 - name: yahoo_player_name
   type: String
+- name: ncaa_player_id
+  type: String
 - name: match_method
   type: String
 - name: match_confidence
@@ -30276,6 +30470,16 @@ load_wbb_ratings:
 - name: rank
   type: Int64
 - name: adj_em_z
+  type: Float64
+- name: adj_o_blend
+  type: Float64
+- name: adj_d_blend
+  type: Float64
+- name: adj_em_blend
+  type: Float64
+- name: rank_blend
+  type: Int64
+- name: prior_games
   type: Float64
 load_wbb_rosters:
 - name: season
@@ -30563,6 +30767,8 @@ load_wbb_schedule_crosswalk:
 - name: fox_game_id
   type: String
 - name: yahoo_game_id
+  type: String
+- name: ncaa_contest_id
   type: String
 - name: match_method
   type: String
@@ -32119,6 +32325,35 @@ load_wnba_stats_game_rosters:
   type: Int32
 - name: game_id
   type: String
+load_wnba_stats_metric_curves:
+- name: season
+  type: Int64
+- name: entity_type
+  type: String
+- name: entity_id
+  type: Int64
+- name: entity_name
+  type: String
+- name: team_id
+  type: Int64
+- name: id_source
+  type: String
+- name: metric
+  type: String
+- name: down
+  type: Int64
+- name: x_lo
+  type: Float64
+- name: x_hi
+  type: Float64
+- name: attempts
+  type: Int64
+- name: successes
+  type: Int64
+- name: rate
+  type: Float64
+- name: epa_per_att
+  type: Float64
 load_wnba_stats_officials:
 - name: official_id
   type: Int64
@@ -32418,6 +32653,49 @@ load_wnba_stats_possessions:
   type: Int64
 - name: season
   type: Int64
+load_wnba_stats_rolling_windows:
+- name: season
+  type: Int64
+- name: entity_type
+  type: String
+- name: entity_id
+  type: Int64
+- name: entity_name
+  type: String
+- name: team_id
+  type: Int64
+- name: metric
+  type: String
+- name: window_unit
+  type: String
+- name: window_n
+  type: Int64
+- name: cur
+  type: Float64
+- name: prev
+  type: Float64
+- name: season_start
+  type: Float64
+- name: career_baseline
+  type: Float64
+- name: delta_prev
+  type: Float64
+- name: delta_season
+  type: Float64
+- name: delta_career
+  type: Float64
+- name: delta_prev_rank
+  type: Int64
+- name: n
+  type: Int64
+- name: qualified
+  type: Boolean
+- name: last_event_date
+  type: Date
+- name: as_of_date
+  type: Date
+- name: id_source
+  type: String
 load_wnba_stats_rosters:
 - name: team_id
   type: Int64

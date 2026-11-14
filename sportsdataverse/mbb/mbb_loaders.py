@@ -61,9 +61,10 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_pbp (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_pbp
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/pbp.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -137,8 +138,11 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         |pregame_home_prob              |Float64                                                |
         |home_win_prob                  |Float64                                                |
 
+    Note:
+        Published seasons: every season from the floor except 2004 and 2005, which the release has no asset for; a request for one is skipped with a warning.
+
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -147,8 +151,8 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_pbp/play_by_play_{season}.parquet"
         )
@@ -169,9 +173,10 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_player_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_boxscores
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/player_box.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -237,7 +242,7 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
         |active                            |Boolean                                                |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -246,8 +251,8 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_boxscores/player_box_{season}.parquet"
         )
@@ -272,6 +277,7 @@ def load_mbb_schedule(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_schedules (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_schedules
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/schedules.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -405,9 +411,10 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_team_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_boxscores
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/team_box.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -477,7 +484,7 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |lead_percentage                   |String                                                 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -486,8 +493,8 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_team_boxscores/team_box_{season}.parquet"
         )
@@ -521,19 +528,24 @@ def load_mbb_ratings(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name  |type    |
-        |:---------|:-------|
-        |season    |Int64   |
-        |team_id   |String  |
-        |adj_o     |Float64 |
-        |adj_d     |Float64 |
-        |adj_em    |Float64 |
-        |adj_tempo |Float64 |
-        |raw_o     |Float64 |
-        |raw_d     |Float64 |
-        |games     |Int64   |
-        |rank      |Int64   |
-        |adj_em_z  |Float64 |
+        |col_name     |type    |
+        |:------------|:-------|
+        |season       |Int64   |
+        |team_id      |String  |
+        |adj_o        |Float64 |
+        |adj_d        |Float64 |
+        |adj_em       |Float64 |
+        |adj_tempo    |Float64 |
+        |raw_o        |Float64 |
+        |raw_d        |Float64 |
+        |games        |Int64   |
+        |rank         |Int64   |
+        |adj_em_z     |Float64 |
+        |adj_o_blend  |Float64 |
+        |adj_d_blend  |Float64 |
+        |adj_em_blend |Float64 |
+        |rank_blend   |Int64   |
+        |prior_games  |Float64 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2006.
@@ -624,6 +636,7 @@ def load_mbb_shots(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_shots (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_shots
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/shots.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2003).
@@ -691,6 +704,7 @@ def load_mbb_standings(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_standings (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_standings
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/standings.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2003).
@@ -761,9 +775,10 @@ def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_player_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_season_stats
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/player_season_stats.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2003).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -789,7 +804,7 @@ def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
         |value                         |Float64 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2003.
 
     Example:
         Quick start::
@@ -798,8 +813,8 @@ def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2003:
+            raise SeasonNotFoundError("season cannot be less than 2003")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_season_stats/player_season_stats_{season}.parquet"
         )
@@ -824,6 +839,7 @@ def load_mbb_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_rosters
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2025).
@@ -907,6 +923,7 @@ def load_mbb_officials(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_officials (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_officials
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/officials.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2003).
@@ -925,6 +942,9 @@ def load_mbb_officials(seasons, return_as_pandas: bool = False):
         |official_position     |String |
         |official_position_id  |Int32  |
         |official_order        |Int32  |
+
+    Note:
+        Published seasons: every season from the floor except 2010, which the release has no asset for; a request for one is skipped with a warning.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2003.
@@ -960,6 +980,7 @@ def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_game_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_game_rosters
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/game_rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -1033,6 +1054,7 @@ def load_mbb_team_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_team_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_season_stats
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/team_season_stats.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2003).
@@ -1097,9 +1119,10 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
     """Load mbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/player_crosswalk.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1123,12 +1146,13 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         |yahoo_player_id    |String  |
         |yahoo_player_name  |String  |
         |kp_player_id       |String  |
+        |ncaa_player_id     |String  |
         |match_method       |String  |
         |match_confidence   |Float64 |
         |match_keys         |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -1137,8 +1161,8 @@ def load_mbb_player_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_player_crosswalk_{season}.parquet"
         )
@@ -1166,6 +1190,7 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """Load mbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/schedule_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2008).
@@ -1189,6 +1214,7 @@ def load_mbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |kp_game_id        |String  |
         |fox_game_id       |String  |
         |yahoo_game_id     |String  |
+        |ncaa_contest_id   |String  |
         |match_method      |String  |
         |match_confidence  |Float64 |
 
@@ -1231,6 +1257,7 @@ def load_mbb_team_crosswalk(seasons, return_as_pandas: bool = False):
     """Load mbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/team_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -1303,6 +1330,7 @@ def load_mbb_player_core(seasons, return_as_pandas: bool = False):
     """Load espn_mens_college_basketball_player_core (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_core
+    Dataset page: https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/player_core.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2003).

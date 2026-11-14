@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## load_wnba_team_boxscore
 
-Release: [espn_wnba_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_team_boxscores/team_box_{season}.parquet`
+Release: [espn_wnba_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_team_boxscores/team_box_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/team_box.md)
 ### Returns {#load_wnba_team_boxscore-returns}
 
 | col_name | type | description |
@@ -80,12 +80,7 @@ load_wnba_team_boxscore(seasons=2024)
 
 ## load_wnba_team_season_stats
 
-Release: [espn_wnba_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_team_season_stats/team_season_stats_{season}.parquet`
-
-:::caution[Coverage]
-Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning.
-:::
-
+Release: [espn_wnba_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_wnba_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_wnba_team_season_stats/team_season_stats_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/team_season_stats.md)
 ### Returns {#load_wnba_team_season_stats-returns}
 
 | col_name | type | description |
@@ -113,7 +108,7 @@ load_wnba_team_season_stats(seasons=2024)
 
 ## load_wnba_team_crosswalk
 
-Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_team_crosswalk_{season}.parquet`
+Release: [wnba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_team_crosswalk_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wnba-data/blob/main/docs/datasets/team_crosswalk.md)
 
 :::caution[Coverage]
 wnba_team_id is Int64, as WNBA Stats ships team_id, so the bridge joins without a cast.

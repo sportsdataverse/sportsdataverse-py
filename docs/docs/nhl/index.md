@@ -16,7 +16,7 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 | [NHL Stats REST](#nhl-stats-rest) | `api.nhle.com` | 21 | none |
 | [NHL Records](#nhl-records) | `records.nhl.com` | 50 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 87 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 88 | — |
 
 ## ESPN {#espn}
 
@@ -118,6 +118,7 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 - [`nhl_zone_transitions`](reference/additional/analytics#nhl_zone_transitions)
 - [`predict_margin`](reference/additional/analytics#predict_margin)
 - [`predict_total`](reference/additional/analytics#predict_total)
+- [`special_teams_split`](reference/additional/analytics#special_teams_split)
 - [`win_prob_from_margin`](reference/additional/analytics#win_prob_from_margin)
 
 ### Dates and seasons {#dates-and-seasons}

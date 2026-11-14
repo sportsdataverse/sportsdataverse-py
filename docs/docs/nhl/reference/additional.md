@@ -97,7 +97,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [build_design](additional/models-and-calculators.md#build_design) | Build the sparse RAPM design matrix -- two rows per stint (one per attacking team). |
 | [build_stints](additional/models-and-calculators.md#build_stints) | Fold `load_nhl_shifts` CHANGE events into contiguous constant-personnel intervals. |
 | [calibration_table](additional/models-and-calculators.md#calibration_table) | Bucket predicted probabilities into bins and compare to actual outcome rates. |
-| [ensure_xg_models](additional/models-and-calculators.md#ensure_xg_models) | Return a dir holding the 3 published booster files, downloading any missing ones. |
+| [ensure_xg_models](additional/models-and-calculators.md#ensure_xg_models) | Return a dir holding the published boosters, checked against the release manifest. |
 | [get_constants](additional/models-and-calculators.md#get_constants) | Resolve the fitted-constants row for a league. |
 | [load_xg_models](additional/models-and-calculators.md#load_xg_models) | Load the two published boosters (+ embedded feature names) and the penalty-shot constant. |
 | [log_loss_score](additional/models-and-calculators.md#log_loss_score) | Binary cross-entropy loss between predicted probabilities and outcomes. |
@@ -128,10 +128,11 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nhl_penalty_value](additional/analytics.md#nhl_penalty_value) | Per-player net penalty drawn/taken value. |
 | [nhl_player_props](additional/analytics.md#nhl_player_props) | Empirical-Bayes shots/points player-prop projections. |
 | [nhl_predict_games](additional/analytics.md#nhl_predict_games) | Vectorized pregame margin/win-prob/total (+ market edge) over a schedule. |
-| [nhl_special_teams_value](additional/analytics.md#nhl_special_teams_value) | Per-skater power-play/penalty-kill value (goals) above/below league baseline. |
+| [nhl_special_teams_value](additional/analytics.md#nhl_special_teams_value) | Per-skater share of power-play/penalty-kill value (goals) above/below the league rate. |
 | [nhl_zone_transitions](additional/analytics.md#nhl_zone_transitions) | Per-player controlled/dump entry & exit rates + xG-weighted values. |
 | [predict_margin](additional/analytics.md#predict_margin) | Expected home-minus-away goal margin. |
 | [predict_total](additional/analytics.md#predict_total) | Expected total goals, variance-corrected by the fitted `total_scale`. |
+| [special_teams_split](additional/analytics.md#special_teams_split) | Which side of a stint is on the power play, and that side's xG (shared with the fitter). |
 | [win_prob_from_margin](additional/analytics.md#win_prob_from_margin) | Convert an expected goal margin to a home win probability via Phi(margin/sigma). |
 
 ## Dates and seasons

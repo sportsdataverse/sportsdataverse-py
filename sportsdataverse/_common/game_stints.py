@@ -23,6 +23,14 @@ starts.
   (:func:`~sportsdataverse._common.lineup_seasons.lineup_count_schema`, with the zones).
 * **On/off** (:func:`game_on_off`): per player and game, the team with him on the floor (``_on``)
   and the rest of its game (``_off``). ``<total>_on + <total>_off`` is the team's game total.
+* **Player box** (:func:`game_player_box_splits`, and the counts on :func:`game_stints`): each player's
+  own box counts (:data:`BOX_COUNTS`) from the play-by-play, one box event row
+  (:func:`box_event_schema`) per action he is credited on. :func:`game_player_box_splits` sums them per
+  player and game whole (``all``), per period (``period``: with his minutes and whether he was on the
+  floor at the period's last action) and with garbage time split out (``garbage``: each action's
+  ``is_garbage_time``, the flag the situational splits read). The stint counts are the events of the
+  actions inside the stint, so an event the source credits to a player its lineup has off the floor
+  is in no stint (it stays in his ``all`` and ``period`` rows).
 
 Per team and game, every sum over its players' stints is five times the team's: ``seconds``,
 ``pts``, ``opp_pts`` and ``plus_minus`` (five times the final margin), and ``poss`` / ``opp_poss``.
@@ -45,10 +53,14 @@ from sportsdataverse._common.lineup_seasons import _RATED, _ZONE_RATED, COUNTS, 
 from sportsdataverse._common.player_on_off import _RATINGS, _SIDE_COLS, _n_expr, _side_rates
 
 __all__ = [
+    "BOX_COUNTS",
     "UNIT_SIZES",
+    "box_event_schema",
     "credit_free_throws_to_foul_row",
     "game_on_off",
     "game_on_off_schema",
+    "game_player_box_splits",
+    "game_player_box_splits_schema",
     "game_stints",
     "game_stints_schema",
     "game_units",
@@ -56,6 +68,11 @@ __all__ = [
     "stint_row_schema",
 ]
 
+#: A player's box counts, in output order: ``reb`` is ``oreb + dreb``, the rest are summed events.
+BOX_COUNTS: tuple[str, ...] = (
+    "points", "fgm", "fga", "fg3m", "fg3a", "ftm", "fta", "oreb", "dreb", "reb", "ast", "stl", "blk", "tov", "pf",
+)  # fmt: skip
+_EVENT_COUNTS = tuple(c for c in BOX_COUNTS if c != "reb")
 #: The unit sizes :func:`game_units` carries.
 UNIT_SIZES: tuple[int, ...] = (1, 2, 3, 4, 5)
 _SLOTS = HOME_SLOTS + AWAY_SLOTS
@@ -69,15 +86,38 @@ _KEY_SCHEMA: dict[str, pl.DataType] = {
     "opp_team_id": pl.Int64(),
 }
 _RATES = {**_RATED, **_ZONE_RATED}
+_KEY_SCHEMA_NO_OPP = {k: t for k, t in _KEY_SCHEMA.items() if k != "opp_team_id"}
+_BOX_SCHEMA: dict[str, pl.DataType] = dict.fromkeys(BOX_COUNTS, pl.Int64())
 
 
 def stint_row_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
     """The stint-row frame :func:`game_stints` reads: impact action rows plus their place in the game.
 
     ``period``; ``clock``, the period clock left after the action (seconds); ``order``, the action's
-    position in the game. The action ran from ``clock + seconds`` down to ``clock``.
+    position in the game (unique within it); ``is_garbage_time``, the action's garbage-time flag
+    (null when the source has none). The action ran from ``clock + seconds`` down to ``clock``.
     """
-    return {**impact_row_schema(player_dtype), "period": pl.Int64(), "clock": pl.Float64(), "order": pl.Int64()}
+    return {
+        **impact_row_schema(player_dtype),
+        "period": pl.Int64(),
+        "clock": pl.Float64(),
+        "order": pl.Int64(),
+        "is_garbage_time": pl.Boolean(),
+    }
+
+
+def box_event_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
+    """One player's box counts on one action: the frame :func:`game_player_box_splits` reads.
+
+    ``order`` is the action's stint-row ``order``; the counts are :data:`BOX_COUNTS` less ``reb``.
+    A player may have several rows on one action (a made shot and, from a teammate, its assist).
+    """
+    return {
+        **_KEY_SCHEMA_NO_OPP,
+        "player_id": player_dtype,
+        "order": pl.Int64(),
+        **dict.fromkeys(_EVENT_COUNTS, pl.Int64()),
+    }
 
 
 def game_stints_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
@@ -96,6 +136,22 @@ def game_stints_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
         "pts": pl.Int64(),
         "opp_pts": pl.Int64(),
         "plus_minus": pl.Int64(),
+        **_BOX_SCHEMA,
+    }
+
+
+def game_player_box_splits_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
+    """Columns of :func:`game_player_box_splits` for a league whose player ids are ``player_dtype``."""
+    return {
+        **_KEY_SCHEMA_NO_OPP,
+        "player_id": player_dtype,
+        "family": pl.Utf8(),
+        "split": pl.Utf8(),
+        "period": pl.Int64(),
+        "seconds": pl.Float64(),
+        "minutes": pl.Float64(),
+        **_BOX_SCHEMA,
+        "on_floor_at_end": pl.Boolean(),
     }
 
 
@@ -168,21 +224,28 @@ def credit_free_throws_to_foul_row(
     )
 
 
-def game_stints(rows: pl.DataFrame, *, player_dtype: pl.DataType) -> pl.DataFrame:
-    """Per player and game, each stint on the floor: period, clock in and out, points and possessions.
+def game_stints(rows: pl.DataFrame, *, player_dtype: pl.DataType, events: pl.DataFrame | None = None) -> pl.DataFrame:
+    """Per player and game, each stint on the floor: period, clock in and out, points, possessions and box.
 
     Args:
         rows: Stint rows (:func:`stint_row_schema`), free-throw points already on the foul row.
         player_dtype: The league's player id dtype.
+        events: Box event rows (:func:`box_event_schema`) of the same games, or None.
 
     Returns:
         One row per ``(season, game_id, team_id, player_id, stint_number)`` in
         :func:`game_stints_schema`, ``stint_number`` counting from 1 in game order. ``clock_in`` /
-        ``clock_out`` are the period clock (seconds left) when the stint began and ended. A player
-        whose side has no team id (a non-D1 college opponent) gets no row. Sorted by game, team,
-        player and stint.
+        ``clock_out`` are the period clock (seconds left) when the stint began and ended. The
+        :data:`BOX_COUNTS` are the player's own events on the stint's actions (0 when he has none;
+        null on every row when ``events`` is None). A player whose side has no team id (a non-D1
+        college opponent) gets no row. Sorted by game, team, player and stint.
+
+    Raises:
+        KeyError: If ``events`` is missing a :func:`box_event_schema` column.
     """
     schema = game_stints_schema(player_dtype)
+    if events is not None:
+        events = _box_events(events, player_dtype)
     if rows.height == 0:
         return pl.DataFrame(schema=schema)
     # Collapse each run of consecutive actions with the same ten players (within a period) to one
@@ -194,15 +257,12 @@ def game_stints(rows: pl.DataFrame, *, player_dtype: pl.DataType) -> pl.DataFram
     changed = pl.any_horizontal([pl.col(c).ne_missing(pl.col(c).shift(1)) for c in (*_SLOTS, "period")]) | pl.col(
         "game_id"
     ).ne_missing(pl.col("game_id").shift(1))
-    runs = (
-        ordered.with_columns(changed.cast(pl.Int64).cum_sum().alias("_seq"))
-        .group_by("_seq", maintain_order=True)
-        .agg(
-            *[pl.col(c).first() for c in ("season", "game_id", "home_team_id", "away_team_id", *_SLOTS, "period")],
-            (pl.col("clock") + pl.col("seconds")).first().alias("clock_in"),
-            pl.col("clock").last().alias("clock_out"),
-            pl.col("seconds", "home_pts", "away_pts", "home_poss", "away_poss").sum(),
-        )
+    ordered = ordered.with_columns(changed.cast(pl.Int64).cum_sum().alias("_seq"))
+    runs = ordered.group_by("_seq", maintain_order=True).agg(
+        *[pl.col(c).first() for c in ("season", "game_id", "home_team_id", "away_team_id", *_SLOTS, "period")],
+        (pl.col("clock") + pl.col("seconds")).first().alias("clock_in"),
+        pl.col("clock").last().alias("clock_out"),
+        pl.col("seconds", "home_pts", "away_pts", "home_poss", "away_poss").sum(),
     )
     sides = pl.concat(
         [
@@ -246,7 +306,129 @@ def game_stints(rows: pl.DataFrame, *, player_dtype: pl.DataType) -> pl.DataFram
             (pl.col("pts") - pl.col("opp_pts")).alias("plus_minus"),
         )
     )
+    if events is not None:
+        # an event sits on its action's run; it is in the stint of his that holds that run
+        stint_of = on.select(*player, "_seq", "stint_number")
+        box = (
+            events.join(ordered.select("game_id", "order", "_seq"), on=["game_id", "order"], how="inner")
+            .join(stint_of, on=[*player, "_seq"], how="inner", validate="m:1")
+            .group_by([*player, "stint_number"])
+            .agg(pl.col(_EVENT_COUNTS).sum())
+        )
+        out = out.join(box, on=[*player, "stint_number"], how="left", validate="1:1", maintain_order="left")
+        out = out.with_columns(pl.col(_EVENT_COUNTS).fill_null(0)).with_columns(_reb())
+    else:
+        out = out.with_columns(pl.lit(None, dtype=pl.Int64).alias(c) for c in BOX_COUNTS)
     return out.select(list(schema)).cast(schema).sort([*player, "stint_number"])
+
+
+def _reb() -> pl.Expr:
+    return (pl.col("oreb") + pl.col("dreb")).alias("reb")
+
+
+def _box_events(events: pl.DataFrame, player_dtype: pl.DataType) -> pl.DataFrame:
+    """``events`` checked and cast to :func:`box_event_schema` (the join keys' dtypes fixed here)."""
+    schema = box_event_schema(player_dtype)
+    missing = sorted(set(schema) - set(events.columns))
+    if missing:
+        raise KeyError(f"events missing columns: {missing}")
+    return events.select(list(schema)).cast(schema)
+
+
+def _on_floor(rows: pl.DataFrame, by: list[str]) -> pl.DataFrame:
+    """Per player and ``by`` label: seconds on the floor (an action's clock goes to its lineup)."""
+    keys = ["season", "game_id", "home_team_id", "away_team_id", *_SLOTS, *by]
+    stretches = rows.group_by(keys).agg(pl.col("seconds").sum())
+    sides = pl.concat(
+        [
+            stretches.select(
+                "season",
+                "game_id",
+                pl.col(f"{us}_team_id").alias("team_id"),
+                pl.concat_list(slots).list.drop_nulls().list.unique().alias("player_id"),
+                *by,
+                "seconds",
+            )
+            for us, slots in (("home", HOME_SLOTS), ("away", AWAY_SLOTS))
+        ]
+    )
+    return (
+        sides.filter(pl.col("team_id").is_not_null())
+        .explode("player_id")
+        .drop_nulls("player_id")
+        .group_by(["season", "game_id", "team_id", "player_id", *by])
+        .agg(pl.col("seconds").sum())
+    )
+
+
+def game_player_box_splits(rows: pl.DataFrame, events: pl.DataFrame, *, player_dtype: pl.DataType) -> pl.DataFrame:
+    """Per player and game: his box and minutes whole, per period and with garbage time split out.
+
+    Args:
+        rows: Stint rows (:func:`stint_row_schema`) of the games, every action.
+        events: Box event rows (:func:`box_event_schema`); an event whose ``order`` is not an action
+            of ``rows`` is dropped.
+        player_dtype: The league's player id dtype.
+
+    Returns:
+        Rows in :func:`game_player_box_splits_schema`, per ``(season, game_id, team_id, player_id)``:
+
+        * ``family="all"``, ``split="all"``: the game;
+        * ``family="period"``, ``split="p<period>"`` (``period`` set; periods past regulation are
+          the overtimes, so an NBA game's first is ``p5``), one row per period he was on the floor
+          or had an event in, with ``on_floor_at_end`` (in his side's lineup at the period's last
+          action);
+        * ``family="garbage"``, ``split`` ``garbage_time`` and ``not_garbage_time``: both rows for
+          every player-game, by each action's ``is_garbage_time`` (an action with a null flag is in
+          neither, so the two then fall short of ``all``).
+
+        ``period`` and ``on_floor_at_end`` are null outside the ``period`` family. A player gets
+        rows when he was on the floor or has an event; seconds come from the stint rows, the
+        :data:`BOX_COUNTS` from the events, so the period rows (and, with every flag set, the two
+        garbage rows) add up to the ``all`` row. Sorted by game, team, player, family and split.
+
+    Raises:
+        KeyError: If ``events`` is missing a :func:`box_event_schema` column.
+    """
+    schema = game_player_box_splits_schema(player_dtype)
+    events = _box_events(events, player_dtype)
+    if rows.height == 0:
+        return pl.DataFrame(schema=schema)
+    player = ["season", "game_id", "team_id", "player_id"]
+    labels = rows.select("game_id", "order", "period", "is_garbage_time")
+    ev = events.join(labels, on=["game_id", "order"], how="inner", validate="m:1")
+
+    def part(by: list[str]) -> pl.DataFrame:
+        box = ev.group_by([*player, *by]).agg(pl.col(_EVENT_COUNTS).sum())
+        return _on_floor(rows, by).join(box, on=[*player, *by], how="full", coalesce=True, nulls_equal=True)
+
+    whole = part([]).with_columns(family=pl.lit("all"), split=pl.lit("all"))
+    last = rows.sort("game_id", "order").group_by("game_id", "period").agg(pl.all().last())
+    at_end = _on_floor(last.with_columns(on_floor_at_end=pl.lit(True)), ["period", "on_floor_at_end"])
+    periods = (
+        part(["period"])
+        .join(at_end.drop("seconds"), on=[*player, "period"], how="left", validate="1:1")
+        .with_columns(
+            pl.col("on_floor_at_end").fill_null(False), family=pl.lit("period"), split=pl.format("p{}", "period")
+        )
+    )
+    flagged = part(["is_garbage_time"]).drop_nulls("is_garbage_time")
+    garbage = (
+        whole.select(player)
+        .join(pl.DataFrame({"is_garbage_time": [True, False]}), how="cross")
+        .join(flagged, on=[*player, "is_garbage_time"], how="left", validate="1:1")
+        .with_columns(
+            family=pl.lit("garbage"),
+            split=pl.when("is_garbage_time").then(pl.lit("garbage_time")).otherwise(pl.lit("not_garbage_time")),
+        )
+        .drop("is_garbage_time")
+    )
+    out = pl.concat([whole, periods, garbage], how="diagonal_relaxed").with_columns(
+        pl.col("seconds").fill_null(0.0).round(6), pl.col(_EVENT_COUNTS).fill_null(0)
+    )
+    out = out.with_columns((pl.col("seconds") / 60).round(6).alias("minutes"), _reb())
+    family = pl.col("family").replace_strict({"all": 0, "period": 1, "garbage": 2}, return_dtype=pl.Int64)
+    return out.sort([*player, family, "period", "split"], nulls_last=True).select(list(schema)).cast(schema)
 
 
 def _unit_sides(rows: pl.DataFrame, counts: pl.DataFrame) -> pl.DataFrame:

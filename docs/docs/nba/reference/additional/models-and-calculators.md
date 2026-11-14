@@ -171,13 +171,15 @@ Store each seen player's mean and variance for later seasons.
 
 #### CurrentImpactFilter.ratings
 
-`CurrentImpactFilter.ratings() -> 'dict[int, tuple[float, float, float, float, int, int, dt.date | None]]'`
+`CurrentImpactFilter.ratings() -> 'dict[int, Rating]'`
 
-Every seen player's `(o, d, o_prior, d_prior, off_poss, def_poss, last_game)`.
+Every seen player's `(o, d, o_prior, d_prior, off_poss, def_poss, last_game, w_o, w_d, w)`.
 
 Ratings and priors per 100 (`d` positive = good defense): the prior in force plus the deviation.
 A player carried from an earlier season who is not in this one's matrix gets his carried deviation
 plus the prior in force for him (0 when he has none). Possessions count this season's games.
+`w_o` / `w_d` / `w` are the prior weights of the offense, defense and net rating (module
+docstring): posterior variance over the no-update variance, clipped to [0, 1] against rounding.
 
 #### CurrentImpactFilter.set_prior
 
@@ -652,6 +654,35 @@ from sportsdataverse.nba.nba_team_ratings import adjust_pace, raw_game_efficienc
 pace = adjust_pace(raw_game_efficiency(sched, box))
 ```
 
+### advanced_min_poss {#advanced_min_poss}
+
+`advanced_min_poss(league_id: 'str' = '00') -> 'float'`
+
+The possessions (one side) a player needs to be ranked: half the on-court net gate.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+
+**Returns**
+
+NBA 1,600.0, WNBA 800.0.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import advanced_min_poss
+advanced_min_poss("10")  # 800.0
+```
+
 ### apply_box_prior {#apply_box_prior}
 
 `apply_box_prior(features: 'pl.DataFrame', model: 'BoxPriorModel', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -859,7 +890,7 @@ this function does not assume or invent any such win-percentage convention.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `ratings` | `DataFrame` |  | Frame with `player_id` and `rating_col`. |
-| `poss` | `DataFrame` |  | Frame with `player_id` and `poss_col` (total possessions played). |
+| `poss` | `DataFrame` |  | Frame with `player_id` and `poss_col` (possessions played, each counted once: see `nba_war`). |
 | `pts_per_win` | `float` |  | Points of season margin per marginal win (`calibrate_pts_per_win`'s output). |
 | `target_total_war` | `float` |  | The desired sum of every player's WAR. |
 | `rating_col` | `str` | `'rating'` | Column in `ratings` holding the per-100-possession rating. |
@@ -1246,7 +1277,7 @@ average length.
 
 **Returns**
 
-`{"gei", "lead_changes", "max_swing_pts", "completed"}`: the index (`None` for no plays), how often the leader flipped (a tie is not a lead, so A ahead, tied, then B ahead counts once), the largest of the changes the index sums in percentage points (the last play's swing to the result included; `None` for no plays), and whether the last play was taken to the result.
+`{"gei", "lead_changes", "max_swing_pts", "completed", "winner_team_id", "winner_low_wp", "winner_low_period", "winner_low_clock"}`: the index (`None` for no plays), how often the leader flipped (a tie is not a lead, so A ahead, tied, then B ahead counts once), the largest of the changes the index sums in percentage points (the last play's swing to the result included; `None` for no plays), whether the last play was taken to the result, and the comeback low: the winner's `home_team_id` / `away_team_id`, its lowest WP after any play (0-1, the prior is not a play) and that play's (the earliest at the low) `period_number` and `clock_display_value`; `None` for a column the frame lacks, and all four `None` for a game not completed or ending tied.
 
 **Raises**
 

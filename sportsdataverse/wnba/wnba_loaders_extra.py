@@ -79,6 +79,8 @@ def load_wnba_stats_leaguedash(
 ) -> pl.DataFrame:
     """Load one asset family of the ``wnba_stats_leaguedash`` release.
 
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_leaguedash
+
     ``wnba_stats_leaguedash`` is a parameter cube: one asset per
     (family, season) pair rather than one per season, so a family must be named.
     The valid families are exported as :data:`WNBA_STATS_LEAGUEDASH_FAMILIES` --
@@ -223,6 +225,8 @@ def _stack_measures(
 def load_wnba_stats_player_season_stats(seasons, return_as_pandas: bool = False) -> pl.DataFrame:
     """Load season-level WNBA player statistics (deprecated).
 
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_leaguedash
+
     Args:
         seasons: an int or iterable of seasons.
         return_as_pandas: return a pandas DataFrame instead of polars.
@@ -261,6 +265,8 @@ def load_wnba_stats_player_season_stats(seasons, return_as_pandas: bool = False)
 
 def load_wnba_stats_lineups(seasons, return_as_pandas: bool = False) -> pl.DataFrame:
     """Load season-level WNBA 5-man lineup statistics (deprecated).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_leaguedash
 
     Args:
         seasons: an int or iterable of seasons.
@@ -302,6 +308,8 @@ def load_wnba_stats_lineups(seasons, return_as_pandas: bool = False) -> pl.DataF
 def load_wnba_stats_team_season_stats(seasons, return_as_pandas: bool = False) -> pl.DataFrame:
     """Load season-level WNBA team statistics (deprecated).
 
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_leaguedash
+
     Args:
         seasons: an int or iterable of seasons.
         return_as_pandas: return a pandas DataFrame instead of polars.
@@ -334,6 +342,8 @@ def load_wnba_stats_team_season_stats(seasons, return_as_pandas: bool = False) -
 
 def load_wnba_stats_standings(seasons, return_as_pandas: bool = False) -> pl.DataFrame:
     """Load season-level WNBA standings (deprecated).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_leaguedash
 
     Args:
         seasons: an int or iterable of seasons.

@@ -9,13 +9,13 @@ toc_max_heading_level: 2
 
 ## load_wbb_player_boxscore
 
-Release: [espn_womens_college_basketball_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet`
+Release: [espn_womens_college_basketball_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_box.md)
 ### Returns {#load_wbb_player_boxscore-returns}
 
 | col_name | type | description |
 |---|---|---|
 | `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
@@ -83,7 +83,7 @@ Release: [wbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 |---|---|---|
 | `player_id` | String | Unique player identifier. |
 | `player` | String | Player name. |
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `team_id` | String | Unique team identifier. |
 | `min` | Float64 | Minutes played. |
 | `box_obpm` | Float64 | Box-score offensive plus/minus for the player, the offensive half of box BPM. |
@@ -97,17 +97,12 @@ load_wbb_player_value(seasons=2025)
 
 ## load_wbb_player_season_stats
 
-Release: [espn_womens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet`
-
-:::caution[Coverage]
-Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
-:::
-
+Release: [espn_womens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_season_stats.md)
 ### Returns {#load_wbb_player_season_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `athlete_display_name` | String | Athlete display name (full). |
 | `athlete_first_name` | String |  |
@@ -130,12 +125,12 @@ load_wbb_player_season_stats(seasons=2026)
 
 ## load_wbb_player_crosswalk
 
-Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_player_crosswalk_{season}.parquet`
+Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_player_crosswalk_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_crosswalk.md)
 ### Returns {#load_wbb_player_crosswalk-returns}
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26), the year in the asset name. |
 | `espn_team_id` | Int32 | ESPN team id (canonical key). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
 | `player_name` | String | Player name. |
@@ -149,6 +144,7 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `fox_position_group` | String | Fox position group label (NA if unmatched). |
 | `yahoo_player_id` | String | Yahoo player id (NA placeholder). |
 | `yahoo_player_name` | String | Yahoo player name (NA placeholder). |
+| `ncaa_player_id` | String | stats.ncaa.org player id for that season (string, the player_id of the load_ncaa_wbb_* releases), from the ncaa rows of load_wbb_player_aliases valid that season, preferring an id made on the row's ESPN team; null when no NCAA id matches or the match is ambiguous, and on every row of a season before 2010 (2009-10; season is the ending year). |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 | `match_keys` | String | NA (reserved for future use). |
@@ -159,12 +155,12 @@ load_wbb_player_crosswalk(seasons=2026)
 
 ## load_wbb_player_core
 
-Release: [espn_womens_college_basketball_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_core) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_core/player_core_{season}.parquet`
+Release: [espn_womens_college_basketball_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_core) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_core/player_core_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_core.md)
 ### Returns {#load_wbb_player_core-returns}
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `guid` | String | Stable cross-league team GUID. |
 | `uid` | String | ESPN UID string. |

@@ -61,9 +61,10 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_pbp (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_pbp
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/pbp.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -145,7 +146,7 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
         |home_win_prob                   |Float64                                                |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -154,8 +155,8 @@ def load_wbb_pbp(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_pbp/play_by_play_{season}.parquet"
         )
@@ -176,9 +177,10 @@ def load_wbb_player_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_player_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_boxscores
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_box.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -244,7 +246,7 @@ def load_wbb_player_boxscore(seasons, return_as_pandas: bool = False):
         |opponent_team_score               |Int32                                                  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -253,8 +255,8 @@ def load_wbb_player_boxscore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet"
         )
@@ -279,6 +281,7 @@ def load_wbb_schedule(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_schedules (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_schedules
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/schedules.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2001).
@@ -420,9 +423,10 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_team_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_boxscores
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_box.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2002).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -491,7 +495,7 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
         |lead_percentage                   |String                                                 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2002.
+        SeasonNotFoundError: if a requested season is below 2004.
 
     Example:
         Quick start::
@@ -500,8 +504,8 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2002:
-            raise SeasonNotFoundError("season cannot be less than 2002")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet"
         )
@@ -528,29 +532,34 @@ def load_wbb_ratings(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_ratings
 
     Args:
-        seasons: an int or iterable of seasons (>= 2008).
+        seasons: an int or iterable of seasons (>= 2009).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name  |type    |
-        |:---------|:-------|
-        |season    |Int64   |
-        |team_id   |String  |
-        |adj_o     |Float64 |
-        |adj_d     |Float64 |
-        |adj_em    |Float64 |
-        |adj_tempo |Float64 |
-        |raw_o     |Float64 |
-        |raw_d     |Float64 |
-        |games     |Int64   |
-        |rank      |Int64   |
-        |adj_em_z  |Float64 |
+        |col_name     |type    |
+        |:------------|:-------|
+        |season       |Int64   |
+        |team_id      |String  |
+        |adj_o        |Float64 |
+        |adj_d        |Float64 |
+        |adj_em       |Float64 |
+        |adj_tempo    |Float64 |
+        |raw_o        |Float64 |
+        |raw_d        |Float64 |
+        |games        |Int64   |
+        |rank         |Int64   |
+        |adj_em_z     |Float64 |
+        |adj_o_blend  |Float64 |
+        |adj_d_blend  |Float64 |
+        |adj_em_blend |Float64 |
+        |rank_blend   |Int64   |
+        |prior_games  |Float64 |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2008.
+        SeasonNotFoundError: if a requested season is below 2009.
 
     Example:
         Quick start::
@@ -559,8 +568,8 @@ def load_wbb_ratings(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2008:
-            raise SeasonNotFoundError("season cannot be less than 2008")
+        if int(season) < 2009:
+            raise SeasonNotFoundError("season cannot be less than 2009")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_ratings/wbb_ratings_{season}.parquet"
         )
@@ -638,6 +647,7 @@ def load_wbb_game_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_game_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_game_rosters
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/game_rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -711,6 +721,7 @@ def load_wbb_officials(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_officials (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_officials
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/officials.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2014).
@@ -733,9 +744,6 @@ def load_wbb_officials(seasons, return_as_pandas: bool = False):
         |official_order        |Int32  |
         |position_name         |String |
         |position_display_name |String |
-
-    Note:
-        Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2014.
@@ -771,9 +779,10 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_player_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_season_stats.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2006).
+        seasons: an int or iterable of seasons (>= 2010).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -799,11 +808,8 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
         |display_value                 |String  |
         |value                         |Float64 |
 
-    Note:
-        Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
-
     Raises:
-        SeasonNotFoundError: if a requested season is below 2006.
+        SeasonNotFoundError: if a requested season is below 2010.
 
     Example:
         Quick start::
@@ -812,8 +818,8 @@ def load_wbb_player_season_stats(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2006:
-            raise SeasonNotFoundError("season cannot be less than 2006")
+        if int(season) < 2010:
+            raise SeasonNotFoundError("season cannot be less than 2010")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet"
         )
@@ -838,6 +844,7 @@ def load_wbb_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_rosters
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2026).
@@ -918,6 +925,7 @@ def load_wbb_shots(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_shots (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_shots
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/shots.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -982,9 +990,10 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_standings (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_standings
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/standings.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2003).
+        seasons: an int or iterable of seasons (>= 2001).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1018,11 +1027,8 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
         |display_value           |String  |
         |value                   |Float64 |
 
-    Note:
-        Published seasons: every season from the floor except 2005, 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
-
     Raises:
-        SeasonNotFoundError: if a requested season is below 2003.
+        SeasonNotFoundError: if a requested season is below 2001.
 
     Example:
         Quick start::
@@ -1031,8 +1037,8 @@ def load_wbb_standings(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2003:
-            raise SeasonNotFoundError("season cannot be less than 2003")
+        if int(season) < 2001:
+            raise SeasonNotFoundError("season cannot be less than 2001")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_standings/standings_{season}.parquet"
         )
@@ -1055,6 +1061,7 @@ def load_wbb_team_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_team_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_season_stats
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_season_stats.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2010).
@@ -1082,9 +1089,6 @@ def load_wbb_team_season_stats(seasons, return_as_pandas: bool = False):
         |stat_description        |String  |
         |display_value           |String  |
         |value                   |Float64 |
-
-    Note:
-        Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning.
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2010.
@@ -1122,9 +1126,10 @@ def load_wbb_player_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_crosswalk.md
 
     Args:
-        seasons: an int or iterable of seasons (>= 2014).
+        seasons: an int or iterable of seasons (>= 2007).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1147,12 +1152,13 @@ def load_wbb_player_crosswalk(seasons, return_as_pandas: bool = False):
         |fox_position_group |String  |
         |yahoo_player_id    |String  |
         |yahoo_player_name  |String  |
+        |ncaa_player_id     |String  |
         |match_method       |String  |
         |match_confidence   |Float64 |
         |match_keys         |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2014.
+        SeasonNotFoundError: if a requested season is below 2007.
 
     Example:
         Quick start::
@@ -1161,8 +1167,8 @@ def load_wbb_player_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2014:
-            raise SeasonNotFoundError("season cannot be less than 2014")
+        if int(season) < 2007:
+            raise SeasonNotFoundError("season cannot be less than 2007")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_player_crosswalk_{season}.parquet"
         )
@@ -1190,6 +1196,7 @@ def load_wbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/schedule_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2021).
@@ -1212,6 +1219,7 @@ def load_wbb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         |bart_winner       |String  |
         |fox_game_id       |String  |
         |yahoo_game_id     |String  |
+        |ncaa_contest_id   |String  |
         |match_method      |String  |
         |match_confidence  |Float64 |
 
@@ -1254,6 +1262,7 @@ def load_wbb_team_crosswalk(seasons, return_as_pandas: bool = False):
     """Load wbb_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/team_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -1323,6 +1332,7 @@ def load_wbb_player_core(seasons, return_as_pandas: bool = False):
     """Load espn_womens_college_basketball_player_core (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_core
+    Dataset page: https://github.com/sportsdataverse/wehoop-wbb-data/blob/main/docs/datasets/player_core.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2004).
@@ -1514,13 +1524,13 @@ def load_ncaa_wbb_pbp(seasons, return_as_pandas: bool = False):
         |sub_deviate             |Int64   |
         |contest_id              |String  |
         |home_ncaa_team_id       |String  |
-        |home_espn_team_id       |String  |
+        |home_espn_team_id       |Int32   |
         |away_ncaa_team_id       |String  |
-        |away_espn_team_id       |String  |
+        |away_espn_team_id       |Int32   |
         |event_team_ncaa_team_id |String  |
-        |event_team_espn_team_id |String  |
+        |event_team_espn_team_id |Int32   |
         |poss_team_ncaa_team_id  |String  |
-        |poss_team_espn_team_id  |String  |
+        |poss_team_espn_team_id  |Int32   |
         |player_1_id             |String  |
         |player_1_clean_name     |String  |
         |player_2_id             |String  |
@@ -1545,7 +1555,7 @@ def load_ncaa_wbb_pbp(seasons, return_as_pandas: bool = False):
         |away_4_clean_name       |String  |
         |away_5_player_id        |String  |
         |away_5_clean_name       |String  |
-        |espn_game_id            |String  |
+        |espn_game_id            |Int32   |
         |is_fastbreak            |Boolean |
         |is_from_turnover        |Boolean |
         |is_paint                |Boolean |
@@ -1592,6 +1602,12 @@ def load_ncaa_wbb_pbp(seasons, return_as_pandas: bool = False):
     # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
     out = (
         pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_ncaa_wbb_pbp")
+    )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(
+        out,
+        ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "event_team_espn_team_id", "poss_team_espn_team_id"],
     )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -1782,14 +1798,14 @@ def load_ncaa_wbb_player_box(seasons, return_as_pandas: bool = False):
         |mid_pct_unast     |Float64 |
         |contest_id        |String  |
         |home_ncaa_team_id |String  |
-        |home_espn_team_id |String  |
+        |home_espn_team_id |Int32   |
         |away_ncaa_team_id |String  |
-        |away_espn_team_id |String  |
+        |away_espn_team_id |Int32   |
         |team_ncaa_team_id |String  |
-        |team_espn_team_id |String  |
+        |team_espn_team_id |Int32   |
         |player_id         |String  |
         |clean_name        |String  |
-        |espn_game_id      |String  |
+        |espn_game_id      |Int32   |
         |season            |Int64   |
 
     Raises:
@@ -1821,6 +1837,9 @@ def load_ncaa_wbb_player_box(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_wbb_player_box")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "team_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -1913,12 +1932,12 @@ def load_ncaa_wbb_team_box(seasons, return_as_pandas: bool = False):
         |d_time_per_poss   |Float64 |
         |contest_id        |String  |
         |home_ncaa_team_id |String  |
-        |home_espn_team_id |String  |
+        |home_espn_team_id |Int32   |
         |away_ncaa_team_id |String  |
-        |away_espn_team_id |String  |
+        |away_espn_team_id |Int32   |
         |team_ncaa_team_id |String  |
-        |team_espn_team_id |String  |
-        |espn_game_id      |String  |
+        |team_espn_team_id |Int32   |
+        |espn_game_id      |Int32   |
         |season            |Int64   |
 
     Raises:
@@ -1950,6 +1969,9 @@ def load_ncaa_wbb_team_box(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_wbb_team_box")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "team_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2165,11 +2187,11 @@ def load_ncaa_wbb_possessions(seasons, return_as_pandas: bool = False):
         |last_event_type        |String |
         |contest_id             |String |
         |home_ncaa_team_id      |String |
-        |home_espn_team_id      |String |
+        |home_espn_team_id      |Int32  |
         |away_ncaa_team_id      |String |
-        |away_espn_team_id      |String |
+        |away_espn_team_id      |Int32  |
         |poss_team_ncaa_team_id |String |
-        |poss_team_espn_team_id |String |
+        |poss_team_espn_team_id |Int32  |
         |home_1_player_id       |String |
         |home_1_clean_name      |String |
         |home_2_player_id       |String |
@@ -2190,7 +2212,7 @@ def load_ncaa_wbb_possessions(seasons, return_as_pandas: bool = False):
         |away_4_clean_name      |String |
         |away_5_player_id       |String |
         |away_5_clean_name      |String |
-        |espn_game_id           |String |
+        |espn_game_id           |Int32  |
         |season                 |Int64  |
 
     Raises:
@@ -2222,6 +2244,9 @@ def load_ncaa_wbb_possessions(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_wbb_possessions")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "home_espn_team_id", "away_espn_team_id", "poss_team_espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -2461,10 +2486,10 @@ def load_ncaa_wbb_shots(seasons, return_as_pandas: bool = False):
         |source             |String  |
         |contest_id         |String  |
         |ncaa_team_id       |String  |
-        |espn_team_id       |String  |
+        |espn_team_id       |Int32   |
         |shooter_player_id  |String  |
         |shooter_clean_name |String  |
-        |espn_game_id       |String  |
+        |espn_game_id       |Int32   |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2019.
@@ -2495,6 +2520,9 @@ def load_ncaa_wbb_shots(seasons, return_as_pandas: bool = False):
         if frames
         else _empty_from_schema("loader_schemas:load_ncaa_wbb_shots")
     )
+    # Pin these ids to Int32, the dtype the ESPN release family (pbp, box, schedule,
+    # shots) ships them as, so a join on them is schema-equal; a String key raises.
+    out = _cast_ids_int32(out, ["espn_game_id", "espn_team_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

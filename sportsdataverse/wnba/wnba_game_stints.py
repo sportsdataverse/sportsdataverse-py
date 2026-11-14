@@ -1,4 +1,4 @@
-"""WNBA game stints, in-game units and on/off (BB-D32) -- thin shim over the NBA core (league_id='10').
+"""WNBA game stints, in-game units, on/off and player splits (BB-D32) -- thin shim over the NBA core (league_id='10').
 
 :mod:`sportsdataverse.nba.nba_game_stints` is league-agnostic: ``league_id="10"`` reads the
 ``wnba_stats_pbp`` / ``wnba_stats_game_lineups`` / ``wnba_stats_possessions`` /
@@ -9,7 +9,12 @@ from __future__ import annotations
 
 import functools
 
-from sportsdataverse.nba.nba_game_stints import nba_game_on_off, nba_game_stints, nba_game_units
+from sportsdataverse.nba.nba_game_stints import (
+    nba_game_on_off,
+    nba_game_player_box_splits,
+    nba_game_stints,
+    nba_game_units,
+)
 from sportsdataverse.wnba._bind import wnba_doc, wnba_signature
 
 wnba_game_stints = functools.partial(nba_game_stints, league_id="10")
@@ -36,4 +41,13 @@ wnba_game_on_off.__doc__ = wnba_doc(
     nba_game_on_off,
 )
 
-__all__ = ["wnba_game_on_off", "wnba_game_stints", "wnba_game_units"]
+wnba_game_player_box_splits = functools.partial(nba_game_player_box_splits, league_id="10")
+functools.update_wrapper(wnba_game_player_box_splits, nba_game_player_box_splits)
+wnba_game_player_box_splits.__signature__ = wnba_signature(nba_game_player_box_splits)  # type: ignore[attr-defined]
+wnba_game_player_box_splits.__doc__ = wnba_doc(
+    "WNBA player box by game, period and garbage time (league_id='10'). "
+    "See sportsdataverse.nba.nba_game_stints.nba_game_player_box_splits.",
+    nba_game_player_box_splits,
+)
+
+__all__ = ["wnba_game_on_off", "wnba_game_player_box_splits", "wnba_game_stints", "wnba_game_units"]

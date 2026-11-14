@@ -11,7 +11,9 @@ whole seasons): on the 41 players over 400 possessions each way whose stats.nba.
 the team's season, the on-court net rating is a median 0.48 from stats.nba.com's and the on-off
 difference a median 0.68 (correlation 0.96). stats.nba.com's off-court covers only the games a
 player was on the roster, so for a player traded or signed mid-season its off side is shorter than
-the team's season used here. Its ORtg and DRtg each run about 3 below these: it credits a possession
+the team's season the ``_off`` columns use; the ``_off_span`` columns limit it to his first-to-last
+game with the team, and on those traded players track stats.nba.com's off side
+(``tests/nba/test_nba_player_on_off.py``). Its ORtg and DRtg each run about 3 below these: it credits a possession
 to every player on the floor during it, not only to those who started it.
 """
 
@@ -30,15 +32,31 @@ __all__ = ["nba_player_on_off", "nba_player_wowy"]
 _PLAYER = pl.Int64()
 
 
-def _rows(seasons: int | list[int], league_id: str, season_type: str) -> pl.DataFrame:
-    """The game impact rows of ``seasons``, one ``season_type`` of games."""
+def _rows_and_dates(seasons: int | list[int], league_id: str, season_type: str) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """The game impact rows of ``seasons``, one ``season_type`` of games, and those games' dates."""
     _check_league(league_id)
     if season_type not in _SEASON_TYPES:
         raise ValueError(f"season_type must be one of {list(_SEASON_TYPES)}, got {season_type!r}")
     pbp, game_lineups, possessions, schedule = _load_releases(seasons, league_id)
     if schedule.height:
         schedule = schedule.filter(pl.col("season_type") == season_type)
-    return nba_impact_rows(pbp, game_lineups, possessions, schedule, league_id=league_id)
+    rows = nba_impact_rows(pbp, game_lineups, possessions, schedule, league_id=league_id)
+    return rows, _game_dates(schedule)
+
+
+def _game_dates(schedule: pl.DataFrame) -> pl.DataFrame:
+    """``game_id`` (String) and ``game_date`` (Date) from a stats.nba.com schedule (``YYYY-MM-DD``)."""
+    if "game_date" not in schedule.columns:
+        return pl.DataFrame(schema={"game_id": pl.Utf8, "game_date": pl.Date})
+    return schedule.select(
+        pl.col("game_id").cast(pl.Utf8),
+        pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date("%Y-%m-%d", strict=False),
+    )
+
+
+def _rows(seasons: int | list[int], league_id: str, season_type: str) -> pl.DataFrame:
+    """The game impact rows of ``seasons``, one ``season_type`` of games."""
+    return _rows_and_dates(seasons, league_id, season_type)[0]
 
 
 def nba_player_on_off(
@@ -69,7 +87,13 @@ def nba_player_on_off(
         and ``off_rtg`` / ``def_rtg`` / ``net_rtg`` (per 100 possessions); ``<rating>_diff`` (on
         minus off); ``<m>_rank`` / ``<m>_pct`` for the on and diff ratings (within the season,
         among players with at least ``min_poss`` both ways) and ``<m>_n`` for every rating.
-        ``poss_on + poss_off`` is the team's possessions. Ids are the stats.nba.com ids (Int64).
+        ``poss_on + poss_off`` is the team's possessions. Then his span with the team:
+        ``team_games_span`` (the team's games from his first game for it, or the day after
+        his last for an earlier team that season, to the day before his first for a later team,
+        else the season's end, by the schedule's ``game_date``), ``span_first_date`` / ``span_last_date``, the off side over
+        that span (``<total>_off_span`` and ``<rating>_off_span``, not ranked) and
+        ``<rating>_diff_span`` (on minus it): for a player traded or signed mid-season, the
+        on/off over his time with the team. Ids are the stats.nba.com ids (Int64).
         Empty input returns that schema with zero rows.
 
     Raises:
@@ -83,9 +107,9 @@ def nba_player_on_off(
             on_off = nba_player_on_off(2025)
             on_off.sort("net_rtg_diff_rank").head()
     """
-    rows = _rows(seasons, league_id, season_type)
+    rows, dates = _rows_and_dates(seasons, league_id, season_type)
     gate = _MIN_POSS[league_id] if min_poss is None else min_poss
-    out = player_on_off(rows, player_dtype=_PLAYER, min_poss=gate, level=NBA_LEVEL[league_id])
+    out = player_on_off(rows, player_dtype=_PLAYER, min_poss=gate, level=NBA_LEVEL[league_id], game_dates=dates)
     return out.to_pandas() if return_as_pandas else out
 
 

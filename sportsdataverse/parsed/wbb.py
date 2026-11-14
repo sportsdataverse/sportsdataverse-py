@@ -381,6 +381,7 @@ from sportsdataverse.wbb import helper_wbb_schedule as helper_wbb_schedule  # no
 from sportsdataverse.wbb import helper_wbb_standings as helper_wbb_standings  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_box as helper_wbb_team_box  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_items as helper_wbb_team_items  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_team_season_opponent_stats as helper_wbb_team_season_opponent_stats  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_season_stats as helper_wbb_team_season_stats  # noqa: F401
 from sportsdataverse.wbb import herhoopstats_login as herhoopstats_login  # noqa: F401
 from sportsdataverse.wbb import herhoopstats_team_roster as herhoopstats_team_roster  # noqa: F401
@@ -451,6 +452,8 @@ from sportsdataverse.wbb import matching_player as matching_player  # noqa: F401
 from sportsdataverse.wbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.wbb import most_recent_wbb_season as most_recent_wbb_season  # noqa: F401
 from sportsdataverse.wbb import ncaa_espn_player_crosswalk as ncaa_espn_player_crosswalk  # noqa: F401
+from sportsdataverse.wbb import ncaa_espn_school_seasons as ncaa_espn_school_seasons  # noqa: F401
+from sportsdataverse.wbb import ncaa_espn_schools as ncaa_espn_schools  # noqa: F401
 from sportsdataverse.wbb import ncaa_espn_team_crosswalk as ncaa_espn_team_crosswalk  # noqa: F401
 from sportsdataverse.wbb import ncaa_wbb_box_scores as ncaa_wbb_box_scores  # noqa: F401
 from sportsdataverse.wbb import ncaa_wbb_date_games as ncaa_wbb_date_games  # noqa: F401
@@ -583,6 +586,7 @@ from sportsdataverse.wbb import wbb_epv_team_games as wbb_epv_team_games  # noqa
 from sportsdataverse.wbb import wbb_game_flow as wbb_game_flow  # noqa: F401
 from sportsdataverse.wbb import wbb_game_lineups_used as wbb_game_lineups_used  # noqa: F401
 from sportsdataverse.wbb import wbb_game_on_off as wbb_game_on_off  # noqa: F401
+from sportsdataverse.wbb import wbb_game_player_box_splits as wbb_game_player_box_splits  # noqa: F401
 from sportsdataverse.wbb import wbb_game_player_impact as wbb_game_player_impact  # noqa: F401
 from sportsdataverse.wbb import wbb_game_stints as wbb_game_stints  # noqa: F401
 from sportsdataverse.wbb import wbb_game_units as wbb_game_units  # noqa: F401
@@ -592,7 +596,9 @@ from sportsdataverse.wbb import wbb_official_seasons as wbb_official_seasons  # 
 from sportsdataverse.wbb import wbb_pbp_disk as wbb_pbp_disk  # noqa: F401
 from sportsdataverse.wbb import wbb_play_styles as wbb_play_styles  # noqa: F401
 from sportsdataverse.wbb import wbb_player_crosswalk as wbb_player_crosswalk  # noqa: F401
+from sportsdataverse.wbb import wbb_player_game_expected_box as wbb_player_game_expected_box  # noqa: F401
 from sportsdataverse.wbb import wbb_player_on_off as wbb_player_on_off  # noqa: F401
+from sportsdataverse.wbb import wbb_player_season_box_rates as wbb_player_season_box_rates  # noqa: F401
 from sportsdataverse.wbb import wbb_player_shot_zones as wbb_player_shot_zones  # noqa: F401
 from sportsdataverse.wbb import wbb_player_war as wbb_player_war  # noqa: F401
 from sportsdataverse.wbb import wbb_player_wowy as wbb_player_wowy  # noqa: F401
@@ -603,8 +609,11 @@ from sportsdataverse.wbb import wbb_season_sim as wbb_season_sim  # noqa: F401
 from sportsdataverse.wbb import wbb_situational_lineup as wbb_situational_lineup  # noqa: F401
 from sportsdataverse.wbb import wbb_situational_player as wbb_situational_player  # noqa: F401
 from sportsdataverse.wbb import wbb_situational_team as wbb_situational_team  # noqa: F401
+from sportsdataverse.wbb import wbb_situational_team_games as wbb_situational_team_games  # noqa: F401
 from sportsdataverse.wbb import wbb_strength_of_schedule as wbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.wbb import wbb_team_crosswalk as wbb_team_crosswalk  # noqa: F401
+from sportsdataverse.wbb import wbb_team_game_four_factors as wbb_team_game_four_factors  # noqa: F401
+from sportsdataverse.wbb import wbb_team_game_possessions as wbb_team_game_possessions  # noqa: F401
 from sportsdataverse.wbb import wbb_team_luck as wbb_team_luck  # noqa: F401
 from sportsdataverse.wbb import wbb_team_ratings as wbb_team_ratings  # noqa: F401
 from sportsdataverse.wbb import wbb_team_season_flow as wbb_team_season_flow  # noqa: F401
@@ -973,6 +982,7 @@ __all__ = [
     "helper_wbb_standings",
     "helper_wbb_team_box",
     "helper_wbb_team_items",
+    "helper_wbb_team_season_opponent_stats",
     "helper_wbb_team_season_stats",
     "herhoopstats_login",
     "herhoopstats_team_roster",
@@ -1043,6 +1053,8 @@ __all__ = [
     "misspellings",
     "most_recent_wbb_season",
     "ncaa_espn_player_crosswalk",
+    "ncaa_espn_school_seasons",
+    "ncaa_espn_schools",
     "ncaa_espn_team_crosswalk",
     "ncaa_wbb_box_scores",
     "ncaa_wbb_date_games",
@@ -1175,6 +1187,7 @@ __all__ = [
     "wbb_game_flow",
     "wbb_game_lineups_used",
     "wbb_game_on_off",
+    "wbb_game_player_box_splits",
     "wbb_game_player_impact",
     "wbb_game_stints",
     "wbb_game_units",
@@ -1184,7 +1197,9 @@ __all__ = [
     "wbb_pbp_disk",
     "wbb_play_styles",
     "wbb_player_crosswalk",
+    "wbb_player_game_expected_box",
     "wbb_player_on_off",
+    "wbb_player_season_box_rates",
     "wbb_player_shot_zones",
     "wbb_player_war",
     "wbb_player_wowy",
@@ -1195,8 +1210,11 @@ __all__ = [
     "wbb_situational_lineup",
     "wbb_situational_player",
     "wbb_situational_team",
+    "wbb_situational_team_games",
     "wbb_strength_of_schedule",
     "wbb_team_crosswalk",
+    "wbb_team_game_four_factors",
+    "wbb_team_game_possessions",
     "wbb_team_luck",
     "wbb_team_ratings",
     "wbb_team_season_flow",

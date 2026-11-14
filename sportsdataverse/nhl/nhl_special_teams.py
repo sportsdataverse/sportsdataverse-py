@@ -2,11 +2,19 @@
 
 Reuses ``build_stints`` filtered to power-play / penalty-kill strength states. A
 stint's ``strength_state`` (``"{home_skaters}v{away_skaters}"``) determines which side
-is on the power play (more skaters) and which is shorthanded; every on-ice skater on the
-PP side accrues ``pp_value`` off their unit's xGF rate above ``league_xg_rate_pp``, and
-every on-ice skater on the PK side accrues ``pk_value`` off their unit's xGA rate
-suppressed below ``league_xg_rate_pk`` (so *suppression* is positive value, matching
-the EV defense-RAPM sign convention).
+is on the power play (more skaters) and which is shorthanded. A unit's value is its xGF
+above ``league_xg_rate_pp`` (PP) or its xGA suppressed below ``league_xg_rate_pk`` (PK, so
+*suppression* is positive value, matching the EV defense-RAPM sign convention), and each
+skater on the ice takes an equal share of it: a fifth on a 5v4 power play, a quarter on
+the 4v5 kill. The shares add up to the unit's value, so ``nhl_skater_war`` counts each
+special-teams goal once, as the 5v5 RAPM does (``ImpactConfig.replacement_rapm``).
+
+The baseline is the league average, not a replacement level: special-teams minutes go to
+players a coach already rates above replacement, and no PP/PK replacement rate is fitted.
+``n`` is the stint's id-list length, so the shares always sum to the unit. ``build_stints``
+drops a goalie it can identify from the events; one it cannot stays in the list and takes a
+share (rare: the same events supply ``strength_state``, and a stint without one is skipped).
+A pulled-goalie ``6v5`` counts as a power play for the trailing team.
 """
 
 from __future__ import annotations
@@ -22,7 +30,7 @@ from sportsdataverse.nhl.nhl_xg import nhl_xg
 if TYPE_CHECKING:
     import pandas as pd
 
-__all__ = ["nhl_special_teams_value"]
+__all__ = ["nhl_special_teams_value", "special_teams_split"]
 
 _ST_SCHEMA = {
     "player_id": pl.Int64,
@@ -43,6 +51,33 @@ def _parse_strength_state(s: str | None) -> tuple[int, int] | None:
         return None
 
 
+def special_teams_split(rec: dict) -> tuple[str, str, float] | None:
+    """Which side of a stint is on the power play, and that side's xG (shared with the fitter).
+
+    Args:
+        rec: one ``build_stints`` row as a dict.
+
+    Returns:
+        ``(pp_ids_column, pk_ids_column, pp_xg)`` for a special-teams stint: one with
+        unequal skater counts in ``strength_state`` and a positive ``duration``. That
+        includes a pulled goalie (``6v5``), credited as a power play for the trailing
+        team. ``None`` otherwise (even strength, unparseable or missing state). The
+        power play's shots are the penalty kill's shots against, so ``pp_xg`` is both.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nhl.nhl_special_teams import special_teams_split
+            special_teams_split({"strength_state": "4v5", "duration": 60, "xgf_home": 0.0, "xgf_away": 0.2})
+    """
+    counts = _parse_strength_state(rec.get("strength_state"))
+    if counts is None or counts[0] == counts[1] or rec["duration"] <= 0:
+        return None
+    if counts[0] > counts[1]:
+        return "home_ids", "away_ids", float(rec["xgf_home"] or 0.0)
+    return "away_ids", "home_ids", float(rec["xgf_away"] or 0.0)
+
+
 def nhl_special_teams_value(
     pbp: pl.DataFrame,
     shifts: pl.DataFrame,
@@ -53,7 +88,7 @@ def nhl_special_teams_value(
     xg_scored: bool = False,
     _stints: pl.DataFrame | None = None,
 ) -> "pl.DataFrame | pd.DataFrame":
-    """Per-skater power-play/penalty-kill value (goals) above/below league baseline.
+    """Per-skater share of power-play/penalty-kill value (goals) above/below the league rate.
 
     Args:
         pbp: a ``load_nhl_pbp_full``-shaped frame.
@@ -68,8 +103,11 @@ def nhl_special_teams_value(
 
     Returns:
         polars.DataFrame: ``player_id:Int64, pp_toi_minutes:Float64,
-        pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64``. Empty input
-        returns a zero-row frame with this schema.
+        pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64``. ``*_toi_minutes`` is
+        the skater's own time on the ice; ``pp_value``/``pk_value`` are goals above the league
+        rate, each skater carrying an equal share of their unit's (a fifth on a 5v4 power
+        play), so a unit's skaters sum to its value. Empty input returns a zero-row frame with
+        this schema.
 
     Example:
         Quick start::
@@ -97,31 +135,21 @@ def nhl_special_teams_value(
     pk_stats: dict[int, dict[str, float]] = {}
 
     for rec in stints.to_dicts():
-        counts = _parse_strength_state(rec.get("strength_state"))
-        if counts is None:
+        split = special_teams_split(rec)
+        if split is None:
             continue
-        home_skaters, away_skaters = counts
-        if home_skaters == away_skaters:
-            continue  # even strength -- not a special-teams stint
+        pp_side, pk_side, xgf = split
         duration = rec["duration"]
-        if duration <= 0:
-            continue
 
-        # The shots taken by the team with the man-advantage are simultaneously "xGF
-        # for the PP side" and "xGA against the PK side" -- one xgf value serves both.
-        if home_skaters > away_skaters:
-            pp_side, pk_side, xgf = "home_ids", "away_ids", rec["xgf_home"]
-        else:
-            pp_side, pk_side, xgf = "away_ids", "home_ids", rec["xgf_away"]
-
-        for pid in rec[pp_side] or []:
-            slot = pp_stats.setdefault(pid, {"toi": 0.0, "xgf": 0.0})
-            slot["toi"] += duration
-            slot["xgf"] += float(xgf or 0.0)
-        for pid in rec[pk_side] or []:
-            slot = pk_stats.setdefault(pid, {"toi": 0.0, "xga": 0.0})
-            slot["toi"] += duration
-            slot["xga"] += float(xgf or 0.0)
+        # Each skater takes 1/n of the unit's seconds and xG, so the unit's value is split, not
+        # copied to all n (which counted every PP goal about 5x and PK goal about 4x in GAR).
+        for side, stats in ((pp_side, pp_stats), (pk_side, pk_stats)):
+            ids = rec[side] or []
+            for pid in ids:
+                slot = stats.setdefault(pid, {"toi": 0.0, "share_s": 0.0, "share_xg": 0.0})
+                slot["toi"] += duration
+                slot["share_s"] += duration / len(ids)
+                slot["share_xg"] += xgf / len(ids)
 
     all_players = set(pp_stats) | set(pk_stats)
     if not all_players:
@@ -129,21 +157,16 @@ def nhl_special_teams_value(
 
     rows = []
     for pid in all_players:
-        pp = pp_stats.get(pid, {"toi": 0.0, "xgf": 0.0})
-        pk = pk_stats.get(pid, {"toi": 0.0, "xga": 0.0})
-        pp_toi_minutes = pp["toi"] / 60.0
-        pk_toi_minutes = pk["toi"] / 60.0
-        pp_rate = pp["xgf"] * 3600.0 / pp["toi"] if pp["toi"] > 0 else cfg.league_xg_rate_pp
-        pk_rate = pk["xga"] * 3600.0 / pk["toi"] if pk["toi"] > 0 else cfg.league_xg_rate_pk
-        pp_value = (pp_rate - cfg.league_xg_rate_pp) * pp_toi_minutes / 60.0
-        pk_value = (cfg.league_xg_rate_pk - pk_rate) * pk_toi_minutes / 60.0
+        empty = {"toi": 0.0, "share_s": 0.0, "share_xg": 0.0}
+        pp = pp_stats.get(pid, empty)
+        pk = pk_stats.get(pid, empty)
         rows.append(
             {
                 "player_id": pid,
-                "pp_toi_minutes": pp_toi_minutes,
-                "pk_toi_minutes": pk_toi_minutes,
-                "pp_value": pp_value if pp["toi"] > 0 else 0.0,
-                "pk_value": pk_value if pk["toi"] > 0 else 0.0,
+                "pp_toi_minutes": pp["toi"] / 60.0,
+                "pk_toi_minutes": pk["toi"] / 60.0,
+                "pp_value": pp["share_xg"] - cfg.league_xg_rate_pp * pp["share_s"] / 3600.0,
+                "pk_value": cfg.league_xg_rate_pk * pk["share_s"] / 3600.0 - pk["share_xg"],
             }
         )
 

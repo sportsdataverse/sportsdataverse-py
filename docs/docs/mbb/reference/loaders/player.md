@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## load_mbb_player_boxscore
 
-Release: [espn_mens_college_basketball_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_boxscores/player_box_{season}.parquet`
+Release: [espn_mens_college_basketball_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_boxscores/player_box_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/player_box.md)
 ### Returns {#load_mbb_player_boxscore-returns}
 
 | col_name | type | description |
@@ -97,7 +97,7 @@ load_mbb_player_value(seasons=2025)
 
 ## load_mbb_player_season_stats
 
-Release: [espn_mens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_season_stats/player_season_stats_{season}.parquet`
+Release: [espn_mens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_season_stats/player_season_stats_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/player_season_stats.md)
 ### Returns {#load_mbb_player_season_stats-returns}
 
 | col_name | type | description |
@@ -124,7 +124,7 @@ load_mbb_player_season_stats(seasons=2025)
 
 ## load_mbb_player_crosswalk
 
-Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_player_crosswalk_{season}.parquet`
+Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_crosswalk/mbb_player_crosswalk_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/player_crosswalk.md)
 ### Returns {#load_mbb_player_crosswalk-returns}
 
 | col_name | type | description |
@@ -144,6 +144,7 @@ Release: [mbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `yahoo_player_id` | String | Yahoo player id (NA placeholder). |
 | `yahoo_player_name` | String | Yahoo player name (NA placeholder). |
 | `kp_player_id` | String | KenPom player id (string), matched by hoopR-mbb-data on the normalized name within the ESPN team (a repeated name broken by jersey), then on last name plus jersey. Null for players KenPom does not list, which includes every ESPN roster row without minutes, and for every row when the build ran without the private KenPom capture. Added by the data repo, so the live player-crosswalk builder does not emit it. |
+| `ncaa_player_id` | String | stats.ncaa.org player id for that season (string, the player_id of the load_ncaa_mbb_* releases), from the ncaa rows of load_mbb_player_aliases valid that season, preferring an id made on the row's ESPN team; null when no NCAA id matches or the match is ambiguous, and on every row of a season before 2010 (2009-10; season is the ending year). |
 | `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `match_confidence` | Float64 | Jaro-Winkler score or 1 for exact (NA if none). |
 | `match_keys` | String | NA (reserved for future use). |
@@ -154,7 +155,7 @@ load_mbb_player_crosswalk(seasons=2026)
 
 ## load_mbb_player_core
 
-Release: [espn_mens_college_basketball_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_core) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_core/player_core_{season}.parquet`
+Release: [espn_mens_college_basketball_player_core](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_core) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_mens_college_basketball_player_core/player_core_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-mbb-data/blob/main/docs/datasets/player_core.md)
 ### Returns {#load_mbb_player_core-returns}
 
 | col_name | type | description |

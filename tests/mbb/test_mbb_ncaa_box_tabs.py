@@ -34,6 +34,23 @@ def test_officials_full_crew_not_nav() -> None:
     assert not set(df.get_column("official").to_list()) & {"Box Score", "Play By Play"}
 
 
+def test_officials_comma_joined_crew_splits_into_rows() -> None:
+    # Pre-2017 pages list the crew in ONE cell: "Doug Shows, John Hampton, James Barker".
+    html = (FIX / "bkb_officials_820695.html").read_text(encoding="utf-8")
+    df = parse_ncaa_bb_officials(html, contest_id="820695")
+    assert df.get_column("official").to_list() == ["Doug Shows", "John Hampton", "James Barker"]
+
+
+def test_officials_name_suffix_stays_with_its_name() -> None:
+    from sportsdataverse.mbb.mbb_ncaa_box_tabs import _split_crew
+
+    assert _split_crew("Ted Valentine, John Smith, Jr., Bo Boroski") == [
+        "Ted Valentine",
+        "John Smith, Jr.",
+        "Bo Boroski",
+    ]
+
+
 def test_officials_empty() -> None:
     assert parse_ncaa_bb_officials("").height == 0
 

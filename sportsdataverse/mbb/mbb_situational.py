@@ -1,6 +1,7 @@
 """College situational splits (BB-D21): ``mbb.situational_{team,player,lineup}`` (and wbb).
 
-Builds the :mod:`sportsdataverse._common.situational_splits` tables from three releases:
+Builds the :mod:`sportsdataverse._common.situational_splits` tables from three releases (a fourth
+for the per-game team table):
 
 * ``ncaa_{mbb,wbb}_possessions`` -- the possessions, through BB-D3's
   :func:`~sportsdataverse.mbb.mbb_team_season_rates.ncaa_possession_rate_rows` (points, clock and
@@ -11,7 +12,9 @@ Builds the :mod:`sportsdataverse._common.situational_splits` tables from three r
 * ``mbb_ratings`` / ``wbb_ratings`` -- the published adjusted ratings (BB-D19's college source), for
   the ``opponent`` family's top 25, among teams with at least half the most games (non-D1 out).
   The ranking is the release at call time (mid-season, the ratings to date) and is hindsight: the
-  split games are in it, so it describes the schedule and is not a predictive feature.
+  split games are in it, so it describes the schedule and is not a predictive feature;
+* ``ncaa_{mbb,wbb}_pbp`` -- the events, for the box counts :func:`mbb_situational_team_games`
+  carries on its ``all`` and ``garbage`` rows (:func:`ncaa_team_game_counts`).
 
 ``game_id`` is the stats.ncaa.org ``contest_id``, ``team_id`` the ESPN team id (Int64) and
 ``player_id`` the stats.ncaa.org player id (a String), as in BB-D6. The releases carry no
@@ -32,6 +35,8 @@ from sportsdataverse._common.situational_splits import (
     situational_lineup,
     situational_player,
     situational_team,
+    situational_team_game_schema,
+    situational_team_games,
 )
 from sportsdataverse.mbb.mbb_team_season_rates import (
     _check_league,
@@ -44,12 +49,131 @@ from sportsdataverse.mbb.mbb_team_strength import _load_ratings, _ratings
 if TYPE_CHECKING:
     import pandas as pd
 
-__all__ = ["mbb_situational_lineup", "mbb_situational_player", "mbb_situational_team", "ncaa_situation_rows"]
+__all__ = [
+    "COUNT_COLUMNS",
+    "mbb_situational_lineup",
+    "mbb_situational_player",
+    "mbb_situational_team",
+    "mbb_situational_team_games",
+    "ncaa_situation_rows",
+    "ncaa_team_game_counts",
+]
 
 _PLAYER = pl.Utf8()
 _ROWS = situation_row_schema(_PLAYER)
 _TOP_N = 25
 _KEY = ["game_id", "period", "possession_number"]
+#: The box counts college ``situational_team_games`` carries on its ``all`` and ``garbage`` rows.
+COUNT_COLUMNS: tuple[str, ...] = ("fga", "fgm", "fg3a", "fg3m", "fta", "ftm", "oreb", "dreb", "tov")
+_COUNT_KEYS = ["season", "game_id", "team_id", "family", "split"]
+_COUNTS_SCHEMA: dict[str, pl.DataType] = {
+    "season": pl.Int64(),
+    "game_id": pl.Utf8(),
+    "team_id": pl.Int64(),
+    "family": pl.Utf8(),
+    "split": pl.Utf8(),
+    **dict.fromkeys(COUNT_COLUMNS, pl.Int64()),
+}
+_TEAM_GAMES = {**situational_team_game_schema(), **dict.fromkeys(COUNT_COLUMNS, pl.Int64())}
+_PBP_COLUMNS = (
+    "season",
+    "contest_id",
+    "event_team_espn_team_id",
+    "is_garbage_time",
+    "event_type",
+    "event_result",
+    "shot_value",
+)
+
+
+def ncaa_team_game_counts(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Each team's shots, free throws, rebounds and turnovers per game, whole and with garbage time split out.
+
+    Sums the stats.ncaa.org events by the team that made them (``event_team_espn_team_id``): a
+    field goal is a ``shot_value`` 2 or 3 event, a free throw a ``shot_value`` 1 event, made when
+    ``event_result`` is ``made``; ``oreb`` / ``dreb`` / ``tov`` count the ``Offensive Rebound`` /
+    ``Defensive Rebound`` / ``Turnover`` events (team rebounds and team turnovers included,
+    ``Deadball Rebound`` not). The ``garbage`` split is each event's own ``is_garbage_time``
+    (bigballR's flag, the one the possessions release carries); an event with no flag is in
+    ``all`` only.
+
+    Args:
+        pbp: ``load_ncaa_mbb_pbp`` / ``load_ncaa_wbb_pbp`` rows.
+
+    Returns:
+        One row per ``(season, game_id, team_id, family, split)``: family ``all`` (split ``all``)
+        and family ``garbage`` (``garbage_time``, ``not_garbage_time``, a split with no event of the
+        team has no row), with ``game_id`` the stats.ncaa.org contest id (Utf8), ``team_id`` the
+        ESPN team id (Int64; an event of a team without one, a non-D1 side, is dropped) and the
+        :data:`COUNT_COLUMNS` (Int64). Within a game the two garbage rows add up to the ``all`` row
+        when every event is flagged. An empty input returns that schema with zero rows.
+
+    Raises:
+        KeyError: If ``pbp`` is missing a column it reads.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
+            from sportsdataverse.mbb.mbb_situational import ncaa_team_game_counts
+            ncaa_team_game_counts(load_ncaa_mbb_pbp(2026)).filter(split="not_garbage_time").head()
+    """
+    missing = sorted(set(_PBP_COLUMNS) - set(pbp.columns))
+    if missing:
+        raise KeyError(f"pbp missing columns: {missing}")
+    made = pl.col("event_result") == "made"
+    fg, fg3, ft = pl.col("shot_value").is_in([2, 3]), pl.col("shot_value") == 3, pl.col("shot_value") == 1
+    kind = pl.col("event_type")
+    flags = {
+        "fga": fg,
+        "fgm": fg & made,
+        "fg3a": fg3,
+        "fg3m": fg3 & made,
+        "fta": ft,
+        "ftm": ft & made,
+        "oreb": kind == "Offensive Rebound",
+        "dreb": kind == "Defensive Rebound",
+        "tov": kind == "Turnover",
+    }
+    gt = pl.col("is_garbage_time").cast(pl.Boolean)
+    events = pbp.select(
+        pl.col("season").cast(pl.Int64),
+        pl.col("contest_id").cast(pl.Utf8).alias("game_id"),
+        pl.col("event_team_espn_team_id").cast(pl.Int64).alias("team_id"),
+        pl.when(gt).then(pl.lit("garbage_time")).when(~gt).then(pl.lit("not_garbage_time")).alias("_gt"),
+        *[e.fill_null(False).cast(pl.Int64).alias(c) for c, e in flags.items()],
+    ).drop_nulls("team_id")
+    keys, sums = ["season", "game_id", "team_id"], [pl.col(c).sum() for c in COUNT_COLUMNS]
+    whole = events.group_by(keys).agg(sums).with_columns(family=pl.lit("all"), split=pl.lit("all"))
+    garbage = (
+        events.drop_nulls("_gt")
+        .group_by([*keys, "_gt"])
+        .agg(sums)
+        .rename({"_gt": "split"})
+        .with_columns(family=pl.lit("garbage"))
+    )
+    out = pl.concat([whole, garbage], how="diagonal").select(list(_COUNTS_SCHEMA)).cast(_COUNTS_SCHEMA)
+    return out.sort(_COUNT_KEYS)
+
+
+def _with_counts(team_games: pl.DataFrame, counts: pl.DataFrame) -> pl.DataFrame:
+    """``team_games`` with :func:`ncaa_team_game_counts` on its ``all`` and ``garbage`` rows (null on the rest)."""
+    for k in _COUNT_KEYS:
+        if team_games.schema[k] != counts.schema[k]:
+            raise TypeError(f"{k}: {team_games.schema[k]} != {counts.schema[k]}")
+    out = team_games.with_row_index("_i").join(counts, on=_COUNT_KEYS, how="left", validate="1:1")
+    return out.sort("_i").select(list(_TEAM_GAMES)).cast(_TEAM_GAMES)
+
+
+def _load_pbp(league: str):  # type: ignore[no-untyped-def]
+    """The stats.ncaa.org pbp loader (the mens core serves wbb too)."""
+    if league == "womens":
+        from sportsdataverse.wbb.wbb_loaders import load_ncaa_wbb_pbp
+
+        return load_ncaa_wbb_pbp
+    from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
+
+    return load_ncaa_mbb_pbp
 
 
 def ncaa_situation_rows(possessions: pl.DataFrame, schedule: pl.DataFrame, *, league: str = "mens") -> pl.DataFrame:
@@ -156,6 +280,57 @@ def mbb_situational_team(
     _check(league, top_n)
     rows, ratings = _load(seasons, league)
     out = situational_team(rows, ratings, top_n=top_n)
+    return out.to_pandas() if return_as_pandas else out
+
+
+def mbb_situational_team_games(
+    seasons: int | list[int], *, league: str = "mens", top_n: int = _TOP_N, return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
+    """College team splits by situation, one game at a time: :func:`mbb_situational_team` per game.
+
+    The same possessions and labels, grouped by game too, so a team-season's rows of a split add
+    up to its :func:`mbb_situational_team` row (``games``, ``seconds``, ``poss``, ``opp_poss``,
+    ``pts``, ``opp_pts``). The ``opponent`` family keeps the season's top ``top_n``.
+
+    The ``all`` and ``garbage`` rows also carry the team's box counts in that split (the
+    :data:`COUNT_COLUMNS`: ``fga``, ``fgm``, ``fg3a``, ``fg3m``, ``fta``, ``ftm``, ``oreb``,
+    ``dreb``, ``tov``), from the season's ``ncaa_{mbb,wbb}_pbp`` events through
+    :func:`ncaa_team_game_counts`, so a page can show shooting and the four factors with garbage
+    time out without summing the events itself. They count the events by the team that made them,
+    so their points (``2 * fgm + fg3m + ftm``) can differ from ``pts``, which the possessions
+    release credits to the team with the ball, by a basket in some games. The other families' rows
+    have null counts, as does a game the pbp release lacks.
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
+        league: ``"mens"`` or ``"womens"``
+            (:func:`sportsdataverse.wbb.wbb_situational.wbb_situational_team_games`).
+        top_n: As :func:`mbb_situational_team`.
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per ``(season, team_id, game_id, family, split)``, the columns of
+        :func:`mbb_situational_team` plus ``game_id`` (the stats.ncaa.org contest id) and the nine
+        :data:`COUNT_COLUMNS` (Int64); ``games`` is 1. A split the team did not play in the game
+        has no row. Empty input returns that schema with zero rows.
+
+    Raises:
+        ValueError: If ``league`` is not ``"mens"`` or ``"womens"``, or ``top_n`` is below 1.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_situational import mbb_situational_team_games
+            mbb_situational_team_games(2026).filter(family="score").head()
+    """
+    _check(league, top_n)
+    rows, ratings = _load(seasons, league)
+    out = situational_team_games(rows, ratings, top_n=top_n)
+    if out.height:
+        counts = ncaa_team_game_counts(_load_pbp(league)(seasons).select(_PBP_COLUMNS))
+    else:  # nothing to join; skip the pbp download
+        counts = pl.DataFrame(schema=_COUNTS_SCHEMA)
+    out = _with_counts(out, counts)
     return out.to_pandas() if return_as_pandas else out
 
 

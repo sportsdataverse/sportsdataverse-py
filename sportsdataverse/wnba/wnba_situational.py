@@ -9,7 +9,12 @@ from __future__ import annotations
 
 import functools
 
-from sportsdataverse.nba.nba_situational import nba_situational_lineup, nba_situational_player, nba_situational_team
+from sportsdataverse.nba.nba_situational import (
+    nba_situational_lineup,
+    nba_situational_player,
+    nba_situational_team,
+    nba_situational_team_games,
+)
 from sportsdataverse.wnba._bind import wnba_doc, wnba_signature
 
 wnba_situational_team = functools.partial(nba_situational_team, league_id="10")
@@ -18,6 +23,15 @@ wnba_situational_team.__signature__ = wnba_signature(nba_situational_team)  # ty
 wnba_situational_team.__doc__ = wnba_doc(
     "WNBA team splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_team.",
     nba_situational_team,
+)
+
+wnba_situational_team_games = functools.partial(nba_situational_team_games, league_id="10")
+functools.update_wrapper(wnba_situational_team_games, nba_situational_team_games)
+wnba_situational_team_games.__signature__ = wnba_signature(nba_situational_team_games)  # type: ignore[attr-defined]
+wnba_situational_team_games.__doc__ = wnba_doc(
+    "WNBA team splits by situation, one game at a time (league_id='10'). "
+    "See sportsdataverse.nba.nba_situational.nba_situational_team_games.",
+    nba_situational_team_games,
 )
 
 wnba_situational_player = functools.partial(nba_situational_player, league_id="10")
@@ -38,4 +52,9 @@ wnba_situational_lineup.__doc__ = wnba_doc(
     nba_situational_lineup,
 )
 
-__all__ = ["wnba_situational_lineup", "wnba_situational_player", "wnba_situational_team"]
+__all__ = [
+    "wnba_situational_lineup",
+    "wnba_situational_player",
+    "wnba_situational_team",
+    "wnba_situational_team_games",
+]

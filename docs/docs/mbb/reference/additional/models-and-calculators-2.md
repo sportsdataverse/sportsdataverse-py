@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Models and calculators: build_player–mbb_transfer"
-sidebar_label: "Models and calculators: build_player–mbb_transfer"
+title: "Men's college basketball — additional Python functions — Models and calculators: build_player–mbb_team"
+sidebar_label: "Models and calculators: build_player–mbb_team"
 sidebar_position: 11
-description: "Men's college basketball — additional Python functions — Models and calculators: build_player–mbb_transfer — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Models and calculators: build_player–mbb_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Models and calculators: build_player–mbb_transfer
+# Men's college basketball — additional Python functions — Models and calculators: build_player–mbb_team
 
 ### build_player_context {#build_player_context}
 
@@ -779,6 +779,45 @@ from sportsdataverse.mbb.mbb_player_value_constants import load_artifact
 art = load_artifact("mbb_box_bpm")
 ```
 
+### load_preseason_prior {#load_preseason_prior}
+
+`load_preseason_prior(season: 'int', schedule: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
+
+The preseason prior for `season` from the previous season's released schedule and team box.
+
+`sportsdataverse.mbb.mbb_college_season.season_prior` over the previous season's
+release, for this season's Division I teams: the prior the season sim blends in
+(`~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | The season being rated. |
+| `schedule` | `DataFrame` |  | That season's ESPN schedule (`load_mbb_schedule` / `load_wbb_schedule` rows); its Division I teams get a prior. |
+| `league` | `str` | `'mens'` | `"mens"` / `"womens"`. |
+
+**Returns**
+
+`PRIOR_SCHEMA` rows, empty when the previous season is not released (no prior).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | The season the prior is for (named by its end year). |
+| `team_id` | String | ESPN team id of a Division I team this season. |
+| `off_dev` | Float64 | The prior's offense, points per 100 possessions above the prior season's league average; last season's final AdjO deviation times the regression factor, or half the new-team default for a program new to Division I. |
+| `def_dev` | Float64 | The prior's defense, points per 100 allowed above the prior season's league average (lower is better); last season's final AdjD deviation times the regression factor, or minus half the new-team default. |
+| `prior_avg` | Float64 | The prior season's league-average efficiency, the ratings' baseline before this season has a game. |
+| `new_team` | Boolean | True when the team was not Division I last season and starts at the new-team quantile of last season's AdjEM. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule
+from sportsdataverse.mbb.mbb_team_ratings import load_preseason_prior
+prior = load_preseason_prior(2026, load_mbb_schedule([2026]))
+```
+
 ### log_loss_score {#log_loss_score}
 
 `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'`
@@ -1081,6 +1120,69 @@ No returns table is published for this function: no capture: it needs a schedule
 from sportsdataverse.mbb.mbb_game_predict import mbb_predict_games
 from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
 preds = mbb_predict_games(games, mbb_team_ratings([2024]))
+```
+
+### mbb_pregame_projections {#mbb_pregame_projections}
+
+`mbb_pregame_projections(season: 'int', *, league: 'str' = 'mens', prior_games: 'float | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Rated pregame projection for every ESPN game of a college season, as of each game's date.
+
+The number the game page's pregame card prints: the closed form on each team's adjusted
+efficiency margin before the game, with the preseason prior blended in; see the module
+docstring for the model and the as-of boundary.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | The season, named by the year it ends (`2027` is 2026-27). |
+| `league` | `str` | `'mens'` | `"mens"` (MBB) or `"womens"` (WBB). |
+| `prior_games` | `float \| None` | `None` | The prior's weight in games; `None` (default) takes the fitted weight (4 men, 3 women), `0` turns the blend off. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per game of the ESPN schedule release (scheduled games included): `season`, `game_id`, `game_date`, `as_of_date` (the ratings use completed games dated strictly before it), `home_team_id` / `away_team_id` (ESPN ids, Utf8, the `mbb_ratings` key), `neutral_site`, each side's `rating` (AdjEM with the prior), `rank` (dense, 1 best), `games` and `rating_raw` (AdjEM without the prior), `prior_games`, `hfa` (points, 0 at a neutral site), `exp_home_margin` (points) and `rated_home_prob`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int32 | Season, named by the year it ends (2027 is 2026-27; the WNBA season is its calendar year). |
+| `game_id` | Int32 | ESPN game id (Int32). |
+| `game_date` | Date | Game date (ESPN schedule). |
+| `as_of_date` | Date | The ratings use the completed games dated strictly before this date: the game's date, or the day after the last completed game for a game not yet reached. |
+| `home_team_id` | String | ESPN home team id (Utf8, the mbb_ratings / wbb_ratings team_id key). |
+| `away_team_id` | String | ESPN away team id (Utf8). |
+| `neutral_site` | Boolean | Neutral-site flag; a neutral game gets no home term. |
+| `home_rating` | Float64 | Home team's adjusted efficiency margin before the game with the preseason prior blended in (AdjEM, points per 100 over an average opponent); its prior alone before its first game. |
+| `away_rating` | Float64 | Away team's adjusted efficiency margin before the game, on the same basis. |
+| `home_rank` | Int64 | Dense rank of home_rating among the teams rated as of the date (1 = best). |
+| `away_rank` | Int64 | Dense rank of away_rating among the teams rated as of the date. |
+| `home_games` | Int64 | Home team's games behind its rating (0 before its first game). |
+| `away_games` | Int64 | Away team's games behind its rating. |
+| `home_rating_raw` | Float64 | Home team's AdjEM before the game without the prior: the season-to-date mbb_ratings number. |
+| `away_rating_raw` | Float64 | Away team's AdjEM before the game without the prior. |
+| `prior_games` | Float64 | The preseason prior's weight in games (4 men, 3 women); 0 when the blend is off or the previous season is not released. |
+| `hfa` | Float64 | Home-court term in points (the league's fitted hfa), 0 at a neutral site. |
+| `exp_home_margin` | Float64 | Expected home margin in points, the producer's closed form on the two ratings (positive favours the home team). |
+| `rated_home_prob` | Float64 | Pregame home win probability, Phi(exp_home_margin / margin_sd) with the league's fitted margin_sd; null when a side has no rating. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_pregame_projection import mbb_pregame_projections
+out = mbb_pregame_projections(2026)
+out.select("game_id", "game_date", "exp_home_margin", "rated_home_prob").head()
+
+# Women's, with no blend
+
+mbb_pregame_projections(2026, league="womens", prior_games=0)
 ```
 
 ### mbb_recruiting_projection {#mbb_recruiting_projection}
@@ -1396,6 +1498,13 @@ Loads schedule + team boxscore for `seasons`, computes per-game efficiency,
 runs the opponent-adjustment fixed points, and adds a per-season dense
 `rank` (on `adj_em` descending) and `adj_em_z` (z-score of `adj_em`).
 
+The `_blend` columns are the same fixed point with the season sim's preseason prior
+blended in (`load_preseason_prior`): each Division I team is shrunk toward last
+season's regressed rating as if it had played `prior_games` extra games at it
+(`~sportsdataverse.mbb.mbb_prediction_constants.PRESEASON_PRIOR`: 4 men, 3 women),
+so a team with `g` games is rated about `g / (g + prior_games)` on this season. The
+raw columns are unchanged.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -1406,7 +1515,7 @@ runs the opponent-adjustment fixed points, and adds a per-season dense
 
 **Returns**
 
-One row per (season, team_id) with columns `season, team_id, adj_o, adj_d, adj_em, adj_tempo, raw_o, raw_d, games, rank, adj_em_z`. Empty input returns that schema with zero rows.
+One row per (season, team_id) with columns `season, team_id, adj_o, adj_d, adj_em, adj_tempo, raw_o, raw_d, games, rank, adj_em_z`, then `adj_o_blend, adj_d_blend, adj_em_blend, rank_blend` (dense, on `adj_em_blend`) and `prior_games`. A season whose previous season is not released has no prior: `prior_games` 0 and the blend equals the raw rating. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -1421,6 +1530,11 @@ One row per (season, team_id) with columns `season, team_id, adj_o, adj_d, adj_e
 | `games` | Int64 | Games played. |
 | `rank` | Int64 | Rank. |
 | `adj_em_z` | Float64 |  |
+| `adj_o_blend` | Float64 | Adjusted offensive efficiency with the season sim's preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season's regressed rating as if it had played prior_games extra games at it. |
+| `adj_d_blend` | Float64 | Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better). |
+| `adj_em_blend` | Float64 | adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season. |
+| `rank_blend` | Int64 | Dense rank of adj_em_blend within the season (1 = best). |
+| `prior_games` | Float64 | The preseason prior's weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it. |
 
 **Raises**
 
@@ -1434,53 +1548,4 @@ One row per (season, team_id) with columns `season, team_id, adj_o, adj_d, adj_e
 from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
 ratings = mbb_team_ratings(2024)
 ratings.sort("rank").head()
-```
-
-### mbb_transfer_projection {#mbb_transfer_projection}
-
-`mbb_transfer_projection(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Projected post-transfer box-BPM for each transfer arriving in `seasons`.
-
-Detects the transfer cohort from BOXSCORE discontinuity -- a player who
-logged qualifying minutes for different teams in consecutive seasons
-(the roster release under-reports moves ~70x, so production is the
-cohort source of record; bench-riders pre-move are excluded, which is
-fine because they carry no pre production to project from). Joins each
-player's pre-transfer (from-season) `box_bpm` and scores the bundled
-ridge. `proj_delta = proj_box_bpm - pre_box_bpm` (the expected
-move-related change; typically shrinks stars toward the mean).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `Union[int, list[int]]` |  | Destination season(s), e.g. `2026` = arrived for 2025-26. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the bundled artifact). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per transfer: `player_id:Utf8, player, from_team_id:Utf8, to_team_id:Utf8, to_season:Int64, pre_box_bpm, proj_box_bpm, proj_delta`. Transfers without a qualifying pre-season sample are dropped. Empty input returns the schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | String | Unique player identifier. |
-| `player` | String | Player name. |
-| `from_team_id` | String | Unique identifier for from team. |
-| `to_team_id` | String | Unique identifier for to team. |
-| `to_season` | Int64 |  |
-| `pre_box_bpm` | Float64 |  |
-| `proj_box_bpm` | Float64 |  |
-| `proj_delta` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.mbb import mbb_transfer_projection
-proj = mbb_transfer_projection(2026)
-
-# Pipeline next step (one line)
-
-proj.sort("proj_box_bpm", descending=True).head(15)
 ```

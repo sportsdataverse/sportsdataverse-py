@@ -87,7 +87,8 @@ def calibrate_replacement_level(
 
     Args:
         ratings: Frame with ``player_id`` and ``rating_col``.
-        poss: Frame with ``player_id`` and ``poss_col`` (total possessions played).
+        poss: Frame with ``player_id`` and ``poss_col`` (possessions played, each counted once:
+            see :func:`nba_war`).
         pts_per_win: Points of season margin per marginal win
             (``calibrate_pts_per_win``'s output).
         target_total_war: The desired sum of every player's WAR.
@@ -138,19 +139,28 @@ def nba_war(
 
     ``war_i = (rating_i - replacement_level) * poss_i / 100 / pts_per_win``.
 
+    ``poss_i`` counts each possession once, as a team's net rating per 100 does: a game is about
+    100 possessions a side, not 200. A net rating per 100 (``rapm = o_rapm + d_rapm``) spends
+    ``o_rapm`` over the offensive possessions and ``d_rapm`` over the defensive ones, so its
+    points are about ``rapm * (off_poss + def_poss) / 2 / 100``: pass ``(off_poss + def_poss) / 2``,
+    never the sum. The sum doubles every WAR. The 2025-26 NBA ``player_impact`` release was built
+    with the sum: its league WAR totals 1,582 against the 791 the halved possessions give, and a
+    team's summed WAR rose 1.55 per win (0.78 halved, under 1 as a shrunken rating's should).
+
     Args:
         ratings: Per-player rating frame with ``player_id`` and ``rating_col``
             (e.g. ``nba_rapm``'s ``rapm`` column renamed, a ``nba_ratings_panel``
             row filtered to one date, or ``nba_bpm``'s ``bpm`` column).
         poss: Per-player possession-count frame with ``player_id`` and
-            ``poss_col`` (e.g. ``off_poss + def_poss`` from ``nba_rapm``).
+            ``poss_col``: the possessions the rating is per 100 of, each counted once
+            (``(off_poss + def_poss) / 2`` from ``nba_rapm``; see above).
         replacement_level: Per-100-possession rating of a replacement-level
             player. No built-in default — calibrate via
             :func:`calibrate_replacement_level`.
         pts_per_win: Points of season point-margin per marginal win. No
             built-in default — calibrate via :func:`calibrate_pts_per_win`.
         rating_col: Column in ``ratings`` to score.
-        poss_col: Column in ``poss`` giving total possessions played.
+        poss_col: Column in ``poss`` giving the possessions played, each counted once.
         return_as_pandas: Return pandas instead of polars.
 
     Returns:

@@ -15,9 +15,14 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.mbb.mbb_situational import mbb_situational_lineup, mbb_situational_player, mbb_situational_team
+from sportsdataverse.mbb.mbb_situational import (
+    mbb_situational_lineup,
+    mbb_situational_player,
+    mbb_situational_team,
+    mbb_situational_team_games,
+)
 
-__all__ = ["wbb_situational_lineup", "wbb_situational_player", "wbb_situational_team"]
+__all__ = ["wbb_situational_lineup", "wbb_situational_player", "wbb_situational_team", "wbb_situational_team_games"]
 
 
 def wbb_situational_team(
@@ -43,6 +48,32 @@ def wbb_situational_team(
             wbb_situational_team(2026).filter(split="clutch").sort("net_rtg", descending=True).head()
     """
     return mbb_situational_team(seasons, league="womens", top_n=top_n, return_as_pandas=return_as_pandas)
+
+
+def wbb_situational_team_games(
+    seasons: int | list[int], *, top_n: int = 25, return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
+    """Women's college team splits by situation, one game at a time.
+
+    Delegates to :func:`sportsdataverse.mbb.mbb_situational.mbb_situational_team_games` with
+    ``league="womens"``.
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2026`` is 2025-26).
+        top_n: How many of the season's best teams by the published ``adj_em`` are ``vs_top``.
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per ``(season, team_id, game_id, family, split)`` with the columns of
+        :func:`sportsdataverse.mbb.mbb_situational.mbb_situational_team_games`.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wbb import wbb_situational_team_games
+            wbb_situational_team_games(2026).filter(split="clutch").head()
+    """
+    return mbb_situational_team_games(seasons, league="womens", top_n=top_n, return_as_pandas=return_as_pandas)
 
 
 def wbb_situational_player(

@@ -223,12 +223,14 @@ from sportsdataverse.wnba import load_wnba_stats_game_lineups as load_wnba_stats
 from sportsdataverse.wnba import load_wnba_stats_game_rosters as load_wnba_stats_game_rosters  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_leaguedash as load_wnba_stats_leaguedash  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_lineups as load_wnba_stats_lineups  # noqa: F401
+from sportsdataverse.wnba import load_wnba_stats_metric_curves as load_wnba_stats_metric_curves  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_officials as load_wnba_stats_officials  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_pbp as load_wnba_stats_pbp  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_player_boxscores as load_wnba_stats_player_boxscores  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_player_game_logs as load_wnba_stats_player_game_logs  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_player_season_stats as load_wnba_stats_player_season_stats  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_possessions as load_wnba_stats_possessions  # noqa: F401
+from sportsdataverse.wnba import load_wnba_stats_rolling_windows as load_wnba_stats_rolling_windows  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_rosters as load_wnba_stats_rosters  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_schedules as load_wnba_stats_schedules  # noqa: F401
 from sportsdataverse.wnba import load_wnba_stats_shots as load_wnba_stats_shots  # noqa: F401
@@ -267,6 +269,7 @@ from sportsdataverse.wnba import wnba_foul_drawing as wnba_foul_drawing  # noqa:
 from sportsdataverse.wnba import wnba_game_flow as wnba_game_flow  # noqa: F401
 from sportsdataverse.wnba import wnba_game_lineups_used as wnba_game_lineups_used  # noqa: F401
 from sportsdataverse.wnba import wnba_game_on_off as wnba_game_on_off  # noqa: F401
+from sportsdataverse.wnba import wnba_game_player_box_splits as wnba_game_player_box_splits  # noqa: F401
 from sportsdataverse.wnba import wnba_game_player_impact as wnba_game_player_impact  # noqa: F401
 from sportsdataverse.wnba import wnba_game_stints as wnba_game_stints  # noqa: F401
 from sportsdataverse.wnba import wnba_game_units as wnba_game_units  # noqa: F401
@@ -281,8 +284,10 @@ from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
 from sportsdataverse.wnba import wnba_play_context as wnba_play_context  # noqa: F401
 from sportsdataverse.wnba import wnba_player_crosswalk as wnba_player_crosswalk  # noqa: F401
 from sportsdataverse.wnba import wnba_player_factor_rapm as wnba_player_factor_rapm  # noqa: F401
+from sportsdataverse.wnba import wnba_player_game_expected_box as wnba_player_game_expected_box  # noqa: F401
 from sportsdataverse.wnba import wnba_player_on_off as wnba_player_on_off  # noqa: F401
 from sportsdataverse.wnba import wnba_player_props as wnba_player_props  # noqa: F401
+from sportsdataverse.wnba import wnba_player_season_box_rates as wnba_player_season_box_rates  # noqa: F401
 from sportsdataverse.wnba import wnba_player_shot_zones as wnba_player_shot_zones  # noqa: F401
 from sportsdataverse.wnba import wnba_player_war as wnba_player_war  # noqa: F401
 from sportsdataverse.wnba import wnba_player_wowy as wnba_player_wowy  # noqa: F401
@@ -301,8 +306,11 @@ from sportsdataverse.wnba import wnba_shot_value as wnba_shot_value  # noqa: F40
 from sportsdataverse.wnba import wnba_situational_lineup as wnba_situational_lineup  # noqa: F401
 from sportsdataverse.wnba import wnba_situational_player as wnba_situational_player  # noqa: F401
 from sportsdataverse.wnba import wnba_situational_team as wnba_situational_team  # noqa: F401
+from sportsdataverse.wnba import wnba_situational_team_games as wnba_situational_team_games  # noqa: F401
 from sportsdataverse.wnba import wnba_team_clutch as wnba_team_clutch  # noqa: F401
 from sportsdataverse.wnba import wnba_team_crosswalk as wnba_team_crosswalk  # noqa: F401
+from sportsdataverse.wnba import wnba_team_game_four_factors as wnba_team_game_four_factors  # noqa: F401
+from sportsdataverse.wnba import wnba_team_game_possessions as wnba_team_game_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_team_luck as wnba_team_luck  # noqa: F401
 from sportsdataverse.wnba import wnba_team_ratings as wnba_team_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_team_season_flow as wnba_team_season_flow  # noqa: F401
@@ -519,12 +527,14 @@ __all__ = [
     "load_wnba_stats_game_rosters",
     "load_wnba_stats_leaguedash",
     "load_wnba_stats_lineups",
+    "load_wnba_stats_metric_curves",
     "load_wnba_stats_officials",
     "load_wnba_stats_pbp",
     "load_wnba_stats_player_boxscores",
     "load_wnba_stats_player_game_logs",
     "load_wnba_stats_player_season_stats",
     "load_wnba_stats_possessions",
+    "load_wnba_stats_rolling_windows",
     "load_wnba_stats_rosters",
     "load_wnba_stats_schedules",
     "load_wnba_stats_shots",
@@ -563,6 +573,7 @@ __all__ = [
     "wnba_game_flow",
     "wnba_game_lineups_used",
     "wnba_game_on_off",
+    "wnba_game_player_box_splits",
     "wnba_game_player_impact",
     "wnba_game_stints",
     "wnba_game_units",
@@ -577,8 +588,10 @@ __all__ = [
     "wnba_play_context",
     "wnba_player_crosswalk",
     "wnba_player_factor_rapm",
+    "wnba_player_game_expected_box",
     "wnba_player_on_off",
     "wnba_player_props",
+    "wnba_player_season_box_rates",
     "wnba_player_shot_zones",
     "wnba_player_war",
     "wnba_player_wowy",
@@ -597,8 +610,11 @@ __all__ = [
     "wnba_situational_lineup",
     "wnba_situational_player",
     "wnba_situational_team",
+    "wnba_situational_team_games",
     "wnba_team_clutch",
     "wnba_team_crosswalk",
+    "wnba_team_game_four_factors",
+    "wnba_team_game_possessions",
     "wnba_team_luck",
     "wnba_team_ratings",
     "wnba_team_season_flow",

@@ -14,6 +14,19 @@ season". The current rating answers "what do we expect from him on this date", f
   ``drift_sd^2``, so older games weigh less (time decay). The four SDs are fitted by
   ``tools/fit_current_impact.py`` on 28-day forward error, NBA 2007-2013 (entry 0.98, season 0.42 per 100;
   the team-change SD and the drift come out near zero).
+* **Prior weight.** ``o_prior_weight`` / ``d_prior_weight`` / ``prior_weight`` are variance ratios: a side's
+  posterior deviation variance over the variance it would have with every game's update skipped (the same
+  entry, season, team-change and drift shocks, no data). With a fixed prior and no shock between a player's
+  games (one Gaussian rating, one season, no drift) the ratio equals the prior's weight in the posterior mean
+  (``mean = w * prior + (1 - w) * games``). A new box prior moves the mean by the whole change and leaves the
+  ratio as it was, so after one the ratio is not the current prior's coefficient. A shock between games makes
+  the two differ: it raises both variances, and the ratio stays above the prior's coefficient in the mean
+  (prior variance 1, two games of variance 1, a shock of 1 between them: ratio 0.3, coefficient 0.2). The
+  fitted drift and team-change SDs are near zero, so within a season the gap is small; the new-season shock
+  widens it for a carried player. It is 1 before a player's first game and falls toward 0 as games accumulate,
+  this season's and the earlier seasons' he carries; a shock adds the same variance to both terms, so it
+  raises a ratio below 1. ``prior_weight`` is the net rating's (``o + d``), with the offense-defense
+  covariance.
 
 With no drift and no shocks, one season and a fixed prior, the filter's mean is the prior-informed ridge
 of :func:`~sportsdataverse.nba.nba_reml_rapm.fit_reml_prior_ridge` at the penalty ``noise_var / entry_sd^2``.
@@ -25,6 +38,7 @@ import datetime as dt
 import itertools
 from collections.abc import Sequence
 from dataclasses import dataclass
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -69,7 +83,14 @@ CURRENT_IMPACT_SCHEMA: dict[str, pl.DataType | type[pl.DataType]] = {
     "off_poss": pl.Int64,
     "def_poss": pl.Int64,
     "last_game_date": pl.Date,
+    "o_prior_weight": pl.Float64,
+    "d_prior_weight": pl.Float64,
+    "prior_weight": pl.Float64,
 }
+
+#: One player's :meth:`CurrentImpactFilter.ratings` entry: o, d, o_prior, d_prior, off_poss, def_poss,
+#: last_game, and the offense / defense / net prior weights.
+Rating = tuple[float, float, float, float, int, int, Optional[dt.date], float, float, float]
 
 #: Columns of :func:`current_impact_prior`.
 CURRENT_IMPACT_PRIOR_SCHEMA: dict[str, pl.DataType | type[pl.DataType]] = {
@@ -185,7 +206,8 @@ class CurrentImpactFilter:
         self.params = p
         self._entry, self._season, self._team = ((x / 100.0) ** 2 for x in (p.entry_sd, p.season_sd, p.team_sd))
         self._drift = (p.drift_sd / 100.0) ** 2
-        self._carry: dict[int, tuple[float, float, float, float]] = {}  # pid -> (m_o, m_d, v_o, v_d)
+        # pid -> (m_o, m_d, v_o, v_d, v_0): v_0 the deviation's variance with no game updates (prior weight)
+        self._carry: dict[int, tuple[float, float, float, float, float]] = {}
         self._team_of: dict[int, int] = {}
         self._last: dict[int, dt.date] = {}
         self._prior: dict[int, tuple[float, float]] = {}
@@ -207,11 +229,13 @@ class CurrentImpactFilter:
         self.seen: np.ndarray = np.zeros(n, dtype=bool)
         self.off_poss: np.ndarray = np.zeros(n, dtype=np.int64)
         self.def_poss: np.ndarray = np.zeros(n, dtype=np.int64)
+        self.v0: np.ndarray = np.zeros(n)  # the variance each deviation would have with no game updates
         for i, p in enumerate(self.pids.tolist()):
             if p in self._carry:
-                mo, md, vo, vd = self._carry[p]
+                mo, md, vo, vd, v0 = self._carry[p]
                 self.m[i], self.m[n + i] = mo, md
                 self.cov[i, i], self.cov[n + i, n + i] = vo + self._season, vd + self._season
+                self.v0[i] = v0 + self._season
                 self.seen[i] = True
         self.m[-1] = self._level
         self.cov[-1, -1] = self.params.level_sd**2
@@ -224,7 +248,7 @@ class CurrentImpactFilter:
         n = self._P
         d = np.diag(self.cov)
         for i in np.flatnonzero(self.seen):
-            self._carry[int(self.pids[i])] = (self.m[i], self.m[n + i], d[i], d[n + i])
+            self._carry[int(self.pids[i])] = (self.m[i], self.m[n + i], d[i], d[n + i], self.v0[i])
         self._level = float(self.m[-1])
 
     def set_prior(self, prior: dict[int, tuple[float, float]]) -> None:
@@ -239,6 +263,7 @@ class CurrentImpactFilter:
         if days > 0 and self._P:
             idx = np.arange(self._L)
             self.cov[idx, idx] += self._drift * days
+            self.v0 += self._drift * days
 
     def update_game(
         self, off: np.ndarray, de: np.ndarray, points: np.ndarray, teams: dict[int, int], day: dt.date
@@ -262,10 +287,11 @@ class CurrentImpactFilter:
             if not self.seen[i]:  # league entry: a fresh deviation (no cross terms exist yet)
                 self.seen[i] = True
                 self.m[i] = self.m[n + i] = 0.0
-                self.cov[i, i] = self.cov[n + i, n + i] = self._entry
+                self.cov[i, i] = self.cov[n + i, n + i] = self.v0[i] = self._entry
             elif t is not None and self._team_of.get(p, t) != t:
                 self.cov[i, i] += self._team
                 self.cov[n + i, n + i] += self._team
+                self.v0[i] += self._team
             if t is not None:
                 self._team_of[p] = t
             self._last[p] = day
@@ -290,24 +316,40 @@ class CurrentImpactFilter:
         """Average the covariance with its transpose (rounding drift; :func:`run_current_impact` calls it daily)."""
         self.cov = 0.5 * (self.cov + self.cov.T)
 
-    def ratings(self) -> dict[int, tuple[float, float, float, float, int, int, dt.date | None]]:
-        """Every seen player's ``(o, d, o_prior, d_prior, off_poss, def_poss, last_game)``.
+    def ratings(self) -> dict[int, Rating]:
+        """Every seen player's ``(o, d, o_prior, d_prior, off_poss, def_poss, last_game, w_o, w_d, w)``.
 
         Ratings and priors per 100 (``d`` positive = good defense): the prior in force plus the deviation.
         A player carried from an earlier season who is not in this one's matrix gets his carried deviation
         plus the prior in force for him (0 when he has none). Possessions count this season's games.
+        ``w_o`` / ``w_d`` / ``w`` are the prior weights of the offense, defense and net rating (module
+        docstring): posterior variance over the no-update variance, clipped to [0, 1] against rounding.
         """
         n = self._P
-        out: dict[int, tuple[float, float, float, float, int, int, dt.date | None]] = {}
-        for p, (mo, md, _vo, _vd) in self._carry.items():
+        out: dict[int, Rating] = {}
+        for p, (mo, md, vo, vd, v0) in self._carry.items():
             po, pd_ = self._prior.get(p, (0.0, 0.0))
-            out[p] = (po + 100.0 * mo, pd_ - 100.0 * md, po, pd_, 0, 0, self._last.get(p))
+            out[p] = (po + 100.0 * mo, pd_ - 100.0 * md, po, pd_, 0, 0, self._last.get(p),
+                      *_weights(vo, vd, 0.0, v0))  # fmt: skip
         for i in np.flatnonzero(self.seen[:n]) if n else []:
             p = int(self.pids[i])
             po, pd_ = 100.0 * self.mu[i], -100.0 * self.mu[n + i]
+            c = self.cov
             out[p] = (po + 100.0 * self.m[i], pd_ - 100.0 * self.m[n + i], po, pd_,
-                      int(self.off_poss[i]), int(self.def_poss[i]), self._last.get(p))  # fmt: skip
+                      int(self.off_poss[i]), int(self.def_poss[i]), self._last.get(p),
+                      *_weights(c[i, i], c[n + i, n + i], c[i, n + i], self.v0[i]))  # fmt: skip
         return out
+
+
+def _weights(vo: float, vd: float, cod: float, v0: float) -> tuple[float, float, float]:
+    """Prior weights of offense, defense and net: each posterior variance over its no-update variance.
+
+    The state holds defense with RAPM's sign (negative = good), so the net deviation is ``o - d`` and its
+    variance ``vo + vd - 2 cov``; with no updates the two sides are independent, ``2 * v0``.
+    """
+    if not v0 > 0:
+        return (1.0, 1.0, 1.0)
+    return tuple(float(min(1.0, max(0.0, x))) for x in (vo / v0, vd / v0, (vo + vd - 2.0 * cod) / (2.0 * v0)))  # type: ignore[return-value]
 
 
 def _games(possessions: pl.DataFrame) -> pl.DataFrame:
@@ -334,7 +376,7 @@ def run_current_impact(
     as_of: Sequence[dt.date],
     *,
     params: CurrentImpactParams | None = None,
-) -> dict[dt.date, tuple[int, dict[int, tuple[float, float, float, float, int, int, dt.date | None]]]]:
+) -> dict[dt.date, tuple[int, dict[int, Rating]]]:
     """One pass of the filter over ``possessions``, snapshotting before each ``as_of`` date.
 
     Args:
@@ -356,7 +398,7 @@ def run_current_impact(
     prior_dates = pr["prior_date"].unique().sort().to_list()
     by_date = {d: {int(r[0]): (float(r[1]), float(r[2])) for r in f.select("player_id", "o_prior", "d_prior").iter_rows()}
                for (d,), f in pr.group_by("prior_date")}  # fmt: skip
-    out: dict[dt.date, tuple[int, dict[int, tuple[float, float, float, float, int, int, dt.date | None]]]] = {}
+    out: dict[dt.date, tuple[int, dict[int, Rating]]] = {}
     season, last_day, prior_in_force, si = 0, None, None, 0
     prev_noise: float | None = None
 
@@ -445,7 +487,9 @@ def nba_current_impact(
         ``d_current_impact`` / ``current_impact`` (per 100, ``d`` positive = good defense,
         ``current_impact = o + d``), the prior in force (``o_prior`` / ``d_prior``), the season-to-date
         possessions (``off_poss`` / ``def_poss``, 0 for a player who has not played this season) and the
-        player's last game date. ``season`` is that of the last game before the date.
+        player's last game date, and the prior weights ``o_prior_weight`` / ``d_prior_weight`` /
+        ``prior_weight`` (0-1: posterior over no-update variance, the module docstring's prior weight).
+        ``season`` is that of the last game before the date.
 
     Example:
         Ratings on two dates from three seasons of possessions and weekly priors::
@@ -462,9 +506,9 @@ def nba_current_impact(
     pr = priors.with_columns(pl.col("prior_date").cast(pl.Utf8).str.slice(0, 10).str.to_date())
     snaps = run_current_impact(games, pr.filter(pl.col("prior_date") <= cut), days, params=params)
     rows = [
-        (p, d, season, o, dd, o + dd, po, pd_, op, dp, last)
+        (p, d, season, o, dd, o + dd, po, pd_, op, dp, last, *w)
         for d, (season, r) in snaps.items()
-        for p, (o, dd, po, pd_, op, dp, last) in r.items()
+        for p, (o, dd, po, pd_, op, dp, last, *w) in r.items()
     ]
     out = pl.DataFrame(rows, schema=CURRENT_IMPACT_SCHEMA, orient="row").sort("as_of", "player_id")
     return out.to_pandas() if return_as_pandas else out

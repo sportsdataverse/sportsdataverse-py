@@ -503,7 +503,9 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_pbp/play_by_play_{season}.parquet
   tag: espn_mens_college_basketball_pbp
-  min_season: 2002
+  dataset_page: hoopR-mbb-data/pbp
+  min_season: 2003
+  notes: "Published seasons: every season from the floor except 2004 and 2005, which the release has no asset for; a request for one is skipped with a warning."
   example_args:
     seasons: 2024
 - fn: load_mbb_player_boxscore
@@ -511,7 +513,8 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_player_boxscores/player_box_{season}.parquet
   tag: espn_mens_college_basketball_player_boxscores
-  min_season: 2002
+  dataset_page: hoopR-mbb-data/player_box
+  min_season: 2003
   example_args:
     seasons: 2024
 - fn: load_mbb_schedule
@@ -519,6 +522,7 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_schedules/mbb_schedule_{season}.parquet
   tag: espn_mens_college_basketball_schedules
+  dataset_page: hoopR-mbb-data/schedules
   min_season: 2002
   example_args:
     seasons: 2024
@@ -527,7 +531,8 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_team_boxscores/team_box_{season}.parquet
   tag: espn_mens_college_basketball_team_boxscores
-  min_season: 2002
+  dataset_page: hoopR-mbb-data/team_box
+  min_season: 2003
   example_args:
     seasons: 2024
 - fn: load_mbb_ratings
@@ -683,6 +688,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_pbp/play_by_play_{season}.parquet
   tag: espn_nba_pbp
+  dataset_page: hoopR-nba-data/pbp
   min_season: 2002
   example_args:
     seasons: 2024
@@ -691,6 +697,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_player_boxscores/player_box_{season}.parquet
   tag: espn_nba_player_boxscores
+  dataset_page: hoopR-nba-data/player_box
   min_season: 1994
   example_args:
     seasons: 2024
@@ -699,6 +706,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_schedules/nba_schedule_{season}.parquet
   tag: espn_nba_schedules
+  dataset_page: hoopR-nba-data/schedules
   min_season: 1994
   example_args:
     seasons: 2024
@@ -707,6 +715,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_team_boxscores/team_box_{season}.parquet
   tag: espn_nba_team_boxscores
+  dataset_page: hoopR-nba-data/team_box
   min_season: 1994
   example_args:
     seasons: 2024
@@ -747,7 +756,8 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_pbp/play_by_play_{season}.parquet
   tag: espn_womens_college_basketball_pbp
-  min_season: 2002
+  dataset_page: wehoop-wbb-data/pbp
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_wbb_player_boxscore
@@ -755,7 +765,8 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_player_boxscores/player_box_{season}.parquet
   tag: espn_womens_college_basketball_player_boxscores
-  min_season: 2002
+  dataset_page: wehoop-wbb-data/player_box
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_wbb_schedule
@@ -763,6 +774,7 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_schedules/wbb_schedule_{season}.parquet
   tag: espn_womens_college_basketball_schedules
+  dataset_page: wehoop-wbb-data/schedules
   min_season: 2001
   example_args:
     seasons: 2024
@@ -771,7 +783,8 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet
   tag: espn_womens_college_basketball_team_boxscores
-  min_season: 2002
+  dataset_page: wehoop-wbb-data/team_box
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_wbb_ratings
@@ -779,7 +792,7 @@ loaders:
   base: sdv_releases
   url: wbb_ratings/wbb_ratings_{season}.parquet
   tag: wbb_ratings
-  min_season: 2008
+  min_season: 2009
   example_args:
     seasons: 2025
 - fn: load_wbb_player_value
@@ -795,6 +808,7 @@ loaders:
   base: sdv_releases
   url: espn_wnba_pbp/play_by_play_{season}.parquet
   tag: espn_wnba_pbp
+  dataset_page: wehoop-wnba-data/pbp
   min_season: 2002
   example_args:
     seasons: 2024
@@ -803,6 +817,7 @@ loaders:
   base: sdv_releases
   url: espn_wnba_player_boxscores/player_box_{season}.parquet
   tag: espn_wnba_player_boxscores
+  dataset_page: wehoop-wnba-data/player_box
   min_season: 2002
   example_args:
     seasons: 2024
@@ -811,6 +826,7 @@ loaders:
   base: sdv_releases
   url: espn_wnba_schedules/wnba_schedule_{season}.parquet
   tag: espn_wnba_schedules
+  dataset_page: wehoop-wnba-data/schedules
   min_season: 1997
   example_args:
     seasons: 2024
@@ -819,7 +835,8 @@ loaders:
   base: sdv_releases
   url: espn_wnba_team_boxscores/team_box_{season}.parquet
   tag: espn_wnba_team_boxscores
-  min_season: 2002
+  dataset_page: wehoop-wnba-data/team_box
+  min_season: 2003
   example_args:
     seasons: 2024
 - fn: load_mbb_shots
@@ -827,6 +844,7 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_shots/shots_{season}.parquet
   tag: espn_mens_college_basketball_shots
+  dataset_page: hoopR-mbb-data/shots
   min_season: 2003
   notes: "Published seasons: 2003 and 2006 onward; the release has no 2004 or 2005 asset (the MBB pbp release has the same gap). A request for either is skipped with a warning, and a request for only those returns the documented columns with zero rows."
   example_args:
@@ -836,6 +854,7 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_standings/standings_{season}.parquet
   tag: espn_mens_college_basketball_standings
+  dataset_page: hoopR-mbb-data/standings
   min_season: 2003
   example_args:
     seasons: 2025
@@ -844,7 +863,8 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_player_season_stats/player_season_stats_{season}.parquet
   tag: espn_mens_college_basketball_player_season_stats
-  min_season: 2025
+  dataset_page: hoopR-mbb-data/player_season_stats
+  min_season: 2003
   example_args:
     seasons: 2025
 - fn: load_mbb_rosters
@@ -852,6 +872,7 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_rosters/rosters_{season}.parquet
   tag: espn_mens_college_basketball_rosters
+  dataset_page: hoopR-mbb-data/rosters
   id_int32: [athlete_id]
   min_season: 2025
   example_args:
@@ -861,7 +882,9 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_officials/officials_{season}.parquet
   tag: espn_mens_college_basketball_officials
+  dataset_page: hoopR-mbb-data/officials
   min_season: 2003
+  notes: "Published seasons: every season from the floor except 2010, which the release has no asset for; a request for one is skipped with a warning."
   example_args:
     seasons: 2025
 - fn: load_mbb_game_rosters
@@ -869,6 +892,7 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_game_rosters/game_rosters_{season}.parquet
   tag: espn_mens_college_basketball_game_rosters
+  dataset_page: hoopR-mbb-data/game_rosters
   id_int32: [game_id]
   min_season: 2002
   example_args:
@@ -878,6 +902,7 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_team_season_stats/team_season_stats_{season}.parquet
   tag: espn_mens_college_basketball_team_season_stats
+  dataset_page: hoopR-mbb-data/team_season_stats
   min_season: 2003
   example_args:
     seasons: 2025
@@ -886,8 +911,9 @@ loaders:
   base: sdv_releases
   url: espn_nba_game_rosters/game_rosters_{season}.parquet
   tag: espn_nba_game_rosters
+  dataset_page: hoopR-nba-data/game_rosters
   id_int32: [game_id]
-  min_season: 2002
+  min_season: 1994
   example_args:
     seasons: 2002
 - fn: load_nba_officials
@@ -895,7 +921,8 @@ loaders:
   base: sdv_releases
   url: espn_nba_officials/officials_{season}.parquet
   tag: espn_nba_officials
-  min_season: 2002
+  dataset_page: hoopR-nba-data/officials
+  min_season: 1994
   example_args:
     seasons: 2002
 - fn: load_nba_shots
@@ -903,6 +930,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_shots/shots_{season}.parquet
   tag: espn_nba_shots
+  dataset_page: hoopR-nba-data/shots
   min_season: 2002
   example_args:
     seasons: 2002
@@ -911,6 +939,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_standings/standings_{season}.parquet
   tag: espn_nba_standings
+  dataset_page: hoopR-nba-data/standings
   min_season: 2002
   example_args:
     seasons: 2002
@@ -919,6 +948,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_player_season_stats/player_season_stats_{season}.parquet
   tag: espn_nba_player_season_stats
+  dataset_page: hoopR-nba-data/player_season_stats
   min_season: 1994
   example_args:
     seasons: 2025
@@ -927,7 +957,8 @@ loaders:
   base: sdv_releases
   url: espn_nba_team_season_stats/team_season_stats_{season}.parquet
   tag: espn_nba_team_season_stats
-  min_season: 2002
+  dataset_page: hoopR-nba-data/team_season_stats
+  min_season: 1994
   example_args:
     seasons: 2025
 - fn: load_nba_draft
@@ -935,6 +966,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_draft/draft_{season}.parquet
   tag: espn_nba_draft
+  dataset_page: hoopR-nba-data/draft
   min_season: 2003
   example_args:
     seasons: 2025
@@ -943,16 +975,28 @@ loaders:
   base: sdv_releases
   url: espn_nba_rosters/rosters_{season}.parquet
   tag: espn_nba_rosters
+  dataset_page: hoopR-nba-data/rosters
   id_int32: [athlete_id]
   min_season: 2025
   example_args:
     seasons: 2025
+- fn: load_nba_depth_charts
+  league: nba
+  base: sdv_releases
+  url: espn_nba_depthcharts/depthcharts_{season}.parquet
+  tag: espn_nba_depthcharts
+  min_season: 2027
+  notes: "ESPN team depth charts, snapshotted daily: one row per (as_of_date, team, position slot, depth rank), so filter to one as_of_date (the latest is the current chart) before counting players. The release starts with the 2026-27 season (season 2027), first snapshot 2026-09-08."
+  example_args:
+    seasons: 2027
 - fn: load_wnba_draft
   league: wnba
   base: sdv_releases
   url: espn_wnba_draft/draft_{season}.parquet
   tag: espn_wnba_draft
+  dataset_page: wehoop-wnba-data/draft
   min_season: 2018
+  notes: "ESPN has no WNBA drafts before 2018 (the site and core draft endpoints return no picks); load_wnba_stats_draft covers 1997 onward, keyed on WNBA Stats ids."
   example_args:
     seasons: 2026
 - fn: load_wnba_game_rosters
@@ -960,6 +1004,7 @@ loaders:
   base: sdv_releases
   url: espn_wnba_game_rosters/game_rosters_{season}.parquet
   tag: espn_wnba_game_rosters
+  dataset_page: wehoop-wnba-data/game_rosters
   id_int32: [game_id]
   min_season: 2002
   example_args:
@@ -969,9 +1014,9 @@ loaders:
   base: sdv_releases
   url: espn_wnba_officials/officials_{season}.parquet
   tag: espn_wnba_officials
+  dataset_page: wehoop-wnba-data/officials
   id_int32: [game_id]
   min_season: 2003
-  notes: "Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning."
   example_args:
     seasons: 2024
 - fn: load_wnba_player_season_stats
@@ -979,8 +1024,8 @@ loaders:
   base: sdv_releases
   url: espn_wnba_player_season_stats/player_season_stats_{season}.parquet
   tag: espn_wnba_player_season_stats
-  min_season: 2002
-  notes: "Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning."
+  dataset_page: wehoop-wnba-data/player_season_stats
+  min_season: 1997
   example_args:
     seasons: 2024
 - fn: load_wnba_rosters
@@ -988,8 +1033,10 @@ loaders:
   base: sdv_releases
   url: espn_wnba_rosters/rosters_{season}.parquet
   tag: espn_wnba_rosters
+  dataset_page: wehoop-wnba-data/rosters
   id_int32: [athlete_id]
   min_season: 2024
+  notes: "ESPN serves only current rosters; load_wnba_stats_rosters covers 1997 onward, keyed on WNBA Stats ids, and load_wnba_player_crosswalk maps them to ESPN athlete ids."
   example_args:
     seasons: 2024
 - fn: load_wnba_shots
@@ -997,6 +1044,7 @@ loaders:
   base: sdv_releases
   url: espn_wnba_shots/shots_{season}.parquet
   tag: espn_wnba_shots
+  dataset_page: wehoop-wnba-data/shots
   min_season: 2002
   example_args:
     seasons: 2024
@@ -1005,8 +1053,8 @@ loaders:
   base: sdv_releases
   url: espn_wnba_standings/standings_{season}.parquet
   tag: espn_wnba_standings
+  dataset_page: wehoop-wnba-data/standings
   min_season: 2002
-  notes: "Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning."
   example_args:
     seasons: 2024
 - fn: load_wnba_team_season_stats
@@ -1014,8 +1062,8 @@ loaders:
   base: sdv_releases
   url: espn_wnba_team_season_stats/team_season_stats_{season}.parquet
   tag: espn_wnba_team_season_stats
-  min_season: 2002
-  notes: "Published seasons: every season from the floor except 2022 and 2023, which the release has no asset for; a request for one is skipped with a warning."
+  dataset_page: wehoop-wnba-data/team_season_stats
+  min_season: 1997
   example_args:
     seasons: 2024
 - fn: load_wbb_game_rosters
@@ -1023,6 +1071,7 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_game_rosters/game_rosters_{season}.parquet
   tag: espn_womens_college_basketball_game_rosters
+  dataset_page: wehoop-wbb-data/game_rosters
   id_int32: [game_id]
   min_season: 2004
   example_args:
@@ -1032,8 +1081,8 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_officials/officials_{season}.parquet
   tag: espn_womens_college_basketball_officials
+  dataset_page: wehoop-wbb-data/officials
   min_season: 2014
-  notes: "Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning."
   example_args:
     seasons: 2026
 - fn: load_wbb_player_season_stats
@@ -1041,8 +1090,8 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_player_season_stats/player_season_stats_{season}.parquet
   tag: espn_womens_college_basketball_player_season_stats
-  min_season: 2006
-  notes: "Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning."
+  dataset_page: wehoop-wbb-data/player_season_stats
+  min_season: 2010
   example_args:
     seasons: 2026
 - fn: load_wbb_rosters
@@ -1050,6 +1099,7 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_rosters/rosters_{season}.parquet
   tag: espn_womens_college_basketball_rosters
+  dataset_page: wehoop-wbb-data/rosters
   min_season: 2026
   example_args:
     seasons: 2026
@@ -1058,6 +1108,7 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_shots/shots_{season}.parquet
   tag: espn_womens_college_basketball_shots
+  dataset_page: wehoop-wbb-data/shots
   min_season: 2004
   example_args:
     seasons: 2026
@@ -1066,8 +1117,8 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_standings/standings_{season}.parquet
   tag: espn_womens_college_basketball_standings
-  min_season: 2003
-  notes: "Published seasons: every season from the floor except 2005, 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning."
+  dataset_page: wehoop-wbb-data/standings
+  min_season: 2001
   example_args:
     seasons: 2026
 - fn: load_wbb_team_season_stats
@@ -1075,8 +1126,8 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_team_season_stats/team_season_stats_{season}.parquet
   tag: espn_womens_college_basketball_team_season_stats
+  dataset_page: wehoop-wbb-data/team_season_stats
   min_season: 2010
-  notes: "Published seasons: every season from the floor except 2024 and 2025, which the release has no asset for; a request for one is skipped with a warning."
   example_args:
     seasons: 2026
 - fn: load_nba_stats_schedules
@@ -1131,6 +1182,16 @@ loaders:
   tag: nba_stats_game_lineups
   deprecated_for: load_nba_stats_game_lineups
   min_season: 1996
+  example_args:
+    seasons: 2025
+- fn: load_nba_stats_metric_curves
+  league: nba
+  base: sdv_releases
+  url: nba_stats_metric_curves/metric_curves_{season + 1}.parquet
+  tag: nba_stats_metric_curves
+  id_int64: [entity_id, team_id]
+  min_season: 1996
+  notes: "One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the NBA Stats shots. entity_id and team_id are the NBA Stats team / person ids, cast to Int64: a player row's entity_id joins person_id in load_nba_stats_shots and player_id in load_nba_stats_rosters, and team_id joins their team_id."
   example_args:
     seasons: 2025
 - fn: load_nba_stats_officials
@@ -1206,6 +1267,14 @@ loaders:
   min_season: 1996
   example_args:
     seasons: 2025
+- fn: load_nba_stats_team_game_logs
+  league: nba
+  base: sdv_releases
+  url: nba_stats_team_game_logs/team_game_logs_{season + 1}.parquet
+  tag: nba_stats_team_game_logs
+  min_season: 1996
+  example_args:
+    seasons: 2025
 - fn: load_nba_stats_player_season_stats
   league: nba
   base: sdv_releases
@@ -1221,6 +1290,16 @@ loaders:
   tag: nba_stats_possessions
   deprecated_for: load_nba_stats_possessions
   min_season: 1996
+  example_args:
+    seasons: 2025
+- fn: load_nba_stats_rolling_windows
+  league: nba
+  base: sdv_releases
+  url: nba_stats_rolling_windows/rolling_windows_{season + 1}.parquet
+  tag: nba_stats_rolling_windows
+  id_int64: [entity_id, team_id]
+  min_season: 1996
+  notes: "One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the NBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the NBA Stats person / team id dtype: entity_id joins person_id in load_nba_stats_shots and player_id in load_nba_stats_rosters."
   example_args:
     seasons: 2025
 - fn: load_nba_stats_rosters
@@ -1280,8 +1359,9 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_player_crosswalk_{season}.parquet
   tag: mbb_crosswalk
+  dataset_page: hoopR-mbb-data/player_crosswalk
   id_int32: [espn_team_id, espn_athlete_id]
-  min_season: 2025
+  min_season: 2004
   example_args:
     seasons: 2026
 - fn: load_mbb_schedule_crosswalk
@@ -1289,6 +1369,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_schedule_crosswalk_{season}.parquet
   tag: mbb_crosswalk
+  dataset_page: hoopR-mbb-data/schedule_crosswalk
   id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2008
   example_args:
@@ -1298,6 +1379,7 @@ loaders:
   base: sdv_releases
   url: mbb_crosswalk/mbb_team_crosswalk_{season}.parquet
   tag: mbb_crosswalk
+  dataset_page: hoopR-mbb-data/team_crosswalk
   id_int32: [espn_team_id]
   min_season: 2002
   example_args:
@@ -1307,8 +1389,9 @@ loaders:
   base: sdv_releases
   url: wbb_crosswalk/wbb_player_crosswalk_{season}.parquet
   tag: wbb_crosswalk
+  dataset_page: wehoop-wbb-data/player_crosswalk
   id_int32: [espn_team_id, espn_athlete_id]
-  min_season: 2014
+  min_season: 2007
   example_args:
     seasons: 2026
 - fn: load_wbb_schedule_crosswalk
@@ -1316,6 +1399,7 @@ loaders:
   base: sdv_releases
   url: wbb_crosswalk/wbb_schedule_crosswalk_{season}.parquet
   tag: wbb_crosswalk
+  dataset_page: wehoop-wbb-data/schedule_crosswalk
   id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2021
   example_args:
@@ -1325,6 +1409,7 @@ loaders:
   base: sdv_releases
   url: wbb_crosswalk/wbb_team_crosswalk_{season}.parquet
   tag: wbb_crosswalk
+  dataset_page: wehoop-wbb-data/team_crosswalk
   id_int32: [espn_team_id]
   min_season: 2002
   example_args:
@@ -1334,8 +1419,11 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_player_crosswalk_{season}.parquet
   tag: nba_crosswalk
+  dataset_page: hoopR-nba-data/player_crosswalk
+  id_int64: [nba_player_id]
   id_int32: [espn_team_id, espn_athlete_id]
   min_season: 2002
+  notes: "nba_player_id is Int64, as NBA Stats ships player_id / person_id, so the bridge joins without a cast."
   example_args:
     seasons: 2026
 - fn: load_nba_schedule_crosswalk
@@ -1343,8 +1431,11 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_schedule_crosswalk_{season}.parquet
   tag: nba_crosswalk
+  dataset_page: hoopR-nba-data/schedule_crosswalk
+  id_int64: [nba_home_team_id, nba_away_team_id]
   id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2002
+  notes: "nba_game_id stays String, the zero-padded NBA Stats game id (0022300001); the nba_*_team_id bridge ids are Int64, as NBA Stats ships team_id."
   example_args:
     seasons: 2026
 - fn: load_nba_team_crosswalk
@@ -1352,8 +1443,11 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_team_crosswalk_{season}.parquet
   tag: nba_crosswalk
+  dataset_page: hoopR-nba-data/team_crosswalk
+  id_int64: [nba_team_id]
   id_int32: [espn_team_id]
   min_season: 2002
+  notes: "nba_team_id is Int64, as NBA Stats ships team_id, so the bridge joins without a cast."
   example_args:
     seasons: 2026
 - fn: load_wnba_player_crosswalk
@@ -1361,6 +1455,7 @@ loaders:
   base: sdv_releases
   url: wnba_crosswalk/wnba_player_crosswalk_{season}.parquet
   tag: wnba_crosswalk
+  dataset_page: wehoop-wnba-data/player_crosswalk
   id_int64: [wnba_player_id]
   id_int32: [espn_team_id, espn_athlete_id]
   min_season: 2002
@@ -1372,6 +1467,7 @@ loaders:
   base: sdv_releases
   url: wnba_crosswalk/wnba_schedule_crosswalk_{season}.parquet
   tag: wnba_crosswalk
+  dataset_page: wehoop-wnba-data/schedule_crosswalk
   id_int64: [wnba_home_team_id, wnba_away_team_id]
   id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2002
@@ -1383,6 +1479,7 @@ loaders:
   base: sdv_releases
   url: wnba_crosswalk/wnba_team_crosswalk_{season}.parquet
   tag: wnba_crosswalk
+  dataset_page: wehoop-wnba-data/team_crosswalk
   id_int64: [wnba_team_id]
   id_int32: [espn_team_id]
   min_season: 2002
@@ -1394,6 +1491,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_player_core/player_core_{season}.parquet
   tag: espn_nba_player_core
+  dataset_page: hoopR-nba-data/player_core
   id_int32: [athlete_id]
   min_season: 1994
   example_args:
@@ -1403,8 +1501,9 @@ loaders:
   base: sdv_releases
   url: espn_wnba_player_core/player_core_{season}.parquet
   tag: espn_wnba_player_core
+  dataset_page: wehoop-wnba-data/player_core
   id_int32: [athlete_id]
-  min_season: 2003
+  min_season: 2002
   example_args:
     seasons: 2025
 - fn: load_mbb_player_core
@@ -1412,6 +1511,7 @@ loaders:
   base: sdv_releases
   url: espn_mens_college_basketball_player_core/player_core_{season}.parquet
   tag: espn_mens_college_basketball_player_core
+  dataset_page: hoopR-mbb-data/player_core
   id_int32: [athlete_id]
   min_season: 2003
   example_args:
@@ -1421,6 +1521,7 @@ loaders:
   base: sdv_releases
   url: espn_womens_college_basketball_player_core/player_core_{season}.parquet
   tag: espn_womens_college_basketball_player_core
+  dataset_page: wehoop-wbb-data/player_core
   id_int32: [athlete_id]
   min_season: 2004
   example_args:
@@ -1516,7 +1617,7 @@ loaders:
   url: nba_player_impact/nba_player_impact_{season}.parquet
   tag: nba_player_impact
   notes: "The BOBAN (Bayesian Online Box-Augmented Net) columns boban_filtered_skill, boban_projected_rating and boban_projected_sd were renamed from darko_*; the loader returns both names for one release, so move to boban_* now (darko_* is deprecated and will be removed)."
-  min_season: 1996
+  min_season: 1997
   column_aliases:
     boban_filtered_skill: darko_filtered_skill
     boban_projected_rating: darko_projected_rating
@@ -1872,6 +1973,16 @@ loaders:
   min_season: 1997
   example_args:
     seasons: 2026
+- fn: load_wnba_stats_metric_curves
+  league: wnba
+  base: sdv_releases
+  url: wnba_stats_metric_curves/metric_curves_{season}.parquet
+  tag: wnba_stats_metric_curves
+  id_int64: [entity_id, team_id]
+  min_season: 1997
+  notes: "One row per (entity, metric, shot-distance bucket): the fg_pct_by_shot_distance curve, at league, team and player level, that sportsdataverse.analytics.metric_curves.metric_curves builds from the WNBA Stats shots. entity_id and team_id are the WNBA Stats team / person ids, cast to Int64: a player row's entity_id joins person_id in load_wnba_stats_shots and player_id in load_wnba_stats_rosters, and team_id joins their team_id."
+  example_args:
+    seasons: 2025
 - fn: load_wnba_stats_officials
   league: wnba
   base: sdv_releases
@@ -1919,6 +2030,16 @@ loaders:
   url: wnba_stats_player_game_logs/player_game_logs_{season}.parquet
   tag: wnba_stats_player_game_logs
   min_season: 1997
+  example_args:
+    seasons: 2025
+- fn: load_wnba_stats_rolling_windows
+  league: wnba
+  base: sdv_releases
+  url: wnba_stats_rolling_windows/rolling_windows_{season}.parquet
+  tag: wnba_stats_rolling_windows
+  id_int64: [entity_id, team_id]
+  min_season: 1997
+  notes: "One row per (player, metric, window unit, window size): the rolling-window shooting form (fg_pct over field-goal attempts, fg3_pct over three-point attempts) that sportsdataverse.analytics.rolling_windows.rolling_windows builds from the WNBA Stats shots through the season's last game (as_of_date). entity_id and team_id are cast to Int64, the WNBA Stats person / team id dtype: entity_id joins person_id in load_wnba_stats_shots and player_id in load_wnba_stats_rosters."
   example_args:
     seasons: 2025
 - fn: load_wnba_stats_rosters
@@ -2429,6 +2550,7 @@ loaders:
   base: sdv_releases
   url: ncaa_wbb_pbp/ncaa_wbb_pbp_{season}.parquet
   tag: ncaa_wbb_pbp
+  id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id, event_team_espn_team_id, poss_team_espn_team_id]
   min_season: 2010
   example_args:
     seasons: 2024
@@ -2445,6 +2567,7 @@ loaders:
   base: sdv_releases
   url: ncaa_wbb_player_box/ncaa_wbb_player_box_{season}.parquet
   tag: ncaa_wbb_player_box
+  id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id, team_espn_team_id]
   min_season: 2010
   example_args:
     seasons: 2024
@@ -2453,6 +2576,7 @@ loaders:
   base: sdv_releases
   url: ncaa_wbb_team_box/ncaa_wbb_team_box_{season}.parquet
   tag: ncaa_wbb_team_box
+  id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id, team_espn_team_id]
   min_season: 2010
   example_args:
     seasons: 2024
@@ -2485,6 +2609,7 @@ loaders:
   base: sdv_releases
   url: ncaa_wbb_possessions/ncaa_wbb_possessions_{season}.parquet
   tag: ncaa_wbb_possessions
+  id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id, poss_team_espn_team_id]
   min_season: 2010
   example_args:
     seasons: 2024
@@ -2509,6 +2634,7 @@ loaders:
   base: sdv_releases
   url: ncaa_wbb_shots/ncaa_wbb_shots_{season}.parquet
   tag: ncaa_wbb_shots
+  id_int32: [espn_game_id, espn_team_id]
   min_season: 2019
   example_args:
     seasons: 2024

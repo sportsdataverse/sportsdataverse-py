@@ -40,6 +40,7 @@ from sportsdataverse.wbb.wbb_season_producers import (
     _coalesce_chr,
     _frame,
     _pad,
+    _split_made_attempted,
     _to_num,
     build_athlete_identity_lookup,
     helper_wbb_rosters,
@@ -111,13 +112,19 @@ def build_nba_player_identity_lookup(player_box: pl.DataFrame) -> dict[str, dict
     Returns:
         dict: athlete_id (str) -> identity fields for
         :func:`helper_nba_player_season_stats`. When an athlete appears in
-        multiple rows (multiple games), the LAST row (by frame order) wins --
-        mirroring R's ``!duplicated(athlete_id, fromLast = TRUE)``, which
-        keeps an athlete's most recent team within the season.
+        multiple rows (multiple games), the row of the LATEST ``game_date`` wins
+        (frame order breaks ties and decides when there is no ``game_date``) --
+        R's ``!duplicated(athlete_id, fromLast = TRUE)``, which keeps an
+        athlete's most recent team within the season. The published player_box
+        is written newest game first, so frame order alone kept a traded
+        athlete's FIRST team.
     """
     lookup: dict[str, dict[str, Any]] = {}
     if player_box.is_empty() or "athlete_id" not in player_box.columns:
         return lookup
+    if "game_date" in player_box.columns:
+        # Oldest first, nulls first, stable: the loop below keeps the last write.
+        player_box = player_box.sort("game_date", nulls_last=False, maintain_order=True)
     cols = player_box.columns
     n = player_box.height
 
@@ -289,7 +296,7 @@ def helper_nba_player_season_stats(
                 }
             )
     return _frame(
-        rows,
+        _split_made_attempted(rows),
         _PLAYER_STATS_COLS,
         int32=("season", "athlete_id", "team_id"),
         float64=("value",),

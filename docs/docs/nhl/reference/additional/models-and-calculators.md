@@ -17,9 +17,9 @@ League-specific constants consumed by every player-impact engine function.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `goals_per_win` | `float` |  | goals-per-win denominator for GAR->WAR (a seeded value until it is fitted from NHL team wins vs goal differential). |
-| `replacement_ev_off` | `float` |  | EV offense replacement-level rate (xG/60), subtracted before summing GAR. |
-| `replacement_ev_def` | `float` |  | EV defense replacement-level rate (xGA/60 suppressed). |
-| `league_xg_rate_ev` | `float` |  | league-average even-strength xG rate (per 60), used as the RAPM intercept sanity check. |
+| `replacement_ev_off` | `float` |  | EV xGF/60 of a unit of five replacement-level skaters (a TEAM on-ice rate, not a RAPM coefficient; see `replacement_rapm`). |
+| `replacement_ev_def` | `float` |  | EV xGA/60 allowed by a unit of five replacement-level skaters. |
+| `league_xg_rate_ev` | `float` |  | league-average even-strength xG rate (per 60), the level the two replacement rates are measured against. |
 | `league_xg_rate_pp` | `float` |  | league-average power-play xGF rate (per 60). |
 | `league_xg_rate_pk` | `float` |  | league-average penalty-kill xGA rate (per 60). |
 | `rapm_lambda_grid` | `list[float]` | `<factory>` | candidate ridge penalties for the skater RAPM CV. |
@@ -29,6 +29,35 @@ League-specific constants consumed by every player-impact engine function.
 | `danger_high` | `dict` | `<factory>` | `{"max_distance": float, "max_angle": float}` band for "high" danger. |
 | `danger_medium` | `dict` | `<factory>` | same shape, wider band for "medium" danger; outside both -> "low". |
 | `xg_booster_league` | `str` | `'nhl'` | which league's published boosters back this league's `nhl_xg` scoring (the PWHL borrows the NHL boosters -- a documented approximation). |
+
+**Methods**
+
+#### ImpactConfig.replacement_rapm
+
+`ImpactConfig.replacement_rapm() -> 'tuple[float, float]'`
+
+Replacement level on the skater-RAPM scale: `(offense, defense)` in xG/60.
+
+The 5v5 fit `nhl_skater_war` uses (`nhl_skater_rapm(strength_states=["5v5"])`)
+gives each skater a coefficient relative to the design's intercept (about the
+league-average rate; home ice is its own column), additive over the five skaters
+on ice, with defense signed so that positive means suppression. The replacement
+rates are team on-ice levels, so each skater's share of the unit's gap to the
+league average is a fifth of it. Both rates are seeds, not fitted values, and the
+ridge pulls low-minute skaters toward 0, above this level, so fringe skaters tend
+to earn small positive EV GAR; fitting the level from the replacement pool's own
+RAPM is the open follow-up.
+
+**Returns**
+
+`((replacement_ev_off - league_xg_rate_ev) / 5, (league_xg_rate_ev - replacement_ev_def) / 5)`; both negative for a below-average replacement unit.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
+off, dfn = get_constants("nhl").replacement_rapm()  # (-0.12, -0.02)
+```
 
 ### LeagueConstants {#LeagueConstants}
 
@@ -40,7 +69,7 @@ Fitted, league-specific constants for the NHL/PWHL prediction spine.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `hfa` | `float` |  | home-ice edge, expected-goals units. |
+| `hfa` | `float` |  | home-ice edge on `exp_margin`'s own (shrunk-rating) scale. NHL: fitted jointly with `margin_sd`, so smaller than the real-goal home edge. PWHL: a seeded placeholder. |
 | `margin_sd` | `float` |  | standard deviation of the final goal margin (deliberately WIDE for hockey). |
 | `avg_xgf` | `float` |  | league mean even-strength xG-for, per game. |
 | `avg_total_goals` | `float` |  | league mean total goals per game. |
@@ -381,10 +410,10 @@ ice before the change), following fastRhockey's within-second event order
 after). So xG sums over `(start_s, end_s]` while goalie and `strength_state` read
 the events in `[start_s, end_s)`, falling back to the xG window when that is empty.
 
-Known simplification: shift-chart id lists do not distinguish position, so
-`home_ids`/`away_ids` may include the on-ice goalie's id alongside skaters;
-`home_goalie`/`away_goalie` are instead sourced from the overlapping `scored`
-events' `home_goalie_id`/`away_goalie_id` (the modal value in the interval).
+Shift-chart id lists do not distinguish position: `home_goalie`/`away_goalie` come
+from the overlapping `scored` events' `home_goalie_id`/`away_goalie_id` (the modal
+value in the interval) and are removed from `home_ids`/`away_ids`. A goalie no event
+in the interval names stays in the id list as if he were a skater.
 
 **Parameters**
 
@@ -449,29 +478,44 @@ calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
 
 `ensure_xg_models(model_dir: 'str | Path | None' = None) -> 'Path'`
 
-Return a dir holding the 3 published booster files, downloading any missing ones.
+Return a dir holding the published boosters, checked against the release manifest.
 
 Mirrors the fastRhockey/nflverse download-on-demand + cache pattern -- the documented
 exception to "no first-use download" (the boosters are a large, already-published,
-already-validated artifact; see Decision D1 in the design spec). An explicit
-`model_dir` whose files already exist (e.g. the committed offline test fixtures)
-never touches the network.
+already-validated artifact; see Decision D1 in the design spec). Each call fetches
+the release's `xg_model_meta.json` manifest and re-downloads any cached booster
+whose sha256 differs from it, so a retrained release replaces an old cache once the new
+manifest is fetched. A refresh is staged: every replacement booster is downloaded and
+verified before any file is written, and the manifest is written last, so a refresh
+that fails part-way leaves the previous manifest and boosters intact. Offline, the
+cached manifest is used. An explicit `model_dir` that already holds both
+boosters (e.g. the committed offline test fixtures) is used as-is and never touches
+the network.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `model_dir` | `str \| Path \| None` | `None` | directory to check/populate; `None` resolves via `booster_cache_dir()` (env `NHL_XG_MODEL_DIR` override, else `~/.cache/nhl_xg_models`). |
+| `model_dir` | `str \| Path \| None` | `None` | directory of local models; `None` resolves the cache via `booster_cache_dir()` (env `NHL_XG_MODEL_DIR` override, else `~/.cache/nhl_xg_models`). An explicit dir missing a booster is filled from the release like the cache. |
 
 **Returns**
 
-The resolved directory containing all 3 booster files.
+The resolved directory containing `xg_model_5v5.json`, `xg_model_st.json` and (except for local models that ship without one) `xg_model_meta.json`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The manifest could not be fetched and no copy is cached, or a downloaded booster does not match the manifest (the release may be mid-update; try again shortly). |
+| `ValueError` | Neither the fetched nor the cached manifest pins both boosters. |
+| `requests.RequestException` | A booster that is missing or stale in the cache could not be downloaded (after the retries of `download`). |
+| `NoDataError` | A missing or stale booster is not on the release (404). |
 
 **Example**
 
 ```python
 from sportsdataverse.nhl.nhl_xg import ensure_xg_models
-d = ensure_xg_models()  # downloads on first use, cached after
+d = ensure_xg_models()  # downloads on first use, re-checked every load
 ```
 
 ### get_constants {#get_constants}
@@ -513,7 +557,7 @@ Load the two published boosters (+ embedded feature names) and the penalty-shot 
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `model_dir` | `str \| Path \| None` | `None` | `None` downloads the canonical `nhl_xg_models` release on first use and caches under `booster_cache_dir()`; pass a dir to use local models (the offline test suite always passes the committed fixture dir). |
+| `model_dir` | `str \| Path \| None` | `None` | `None` uses the canonical `nhl_xg_models` release, cached under `booster_cache_dir()` and checked against the release manifest on every load (see `ensure_xg_models`); pass a dir to use local models (the offline test suite always passes the committed fixture dir). |
 
 **Returns**
 
@@ -746,7 +790,7 @@ Per-skater GAR/WAR composite -- EV + special-teams + faceoffs + penalties.
 
 **Returns**
 
-`player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64, pk:Float64, pens:Float64, faceoffs:Float64, gar:Float64, war:Float64`. `ev_off`/`ev_def` are `(5v5-only RAPM rate - replacement level) * EV TOI/60`; `gar` sums every component; `war = gar / goals_per_win`. Empty input returns a zero-row frame with this schema.
+`player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64, pk:Float64, pens:Float64, faceoffs:Float64, gar:Float64, war:Float64`. `ev_off`/`ev_def` are `(5v5-only RAPM rate - replacement level) * EV TOI/60`, the replacement level on the RAPM scale (`ImpactConfig.replacement_rapm`), so a league-average skater earns positive EV GAR; `gar` sums every component; `war = gar / goals_per_win`. Empty input returns a zero-row frame with this schema.
 
 No returns table is published for this function: no capture: it runs longer than the capture allows even on 53 games (build_stints makes one eager filter per shift change).
 

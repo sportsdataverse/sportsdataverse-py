@@ -31,6 +31,8 @@ from sportsdataverse._common.situational_splits import (
     situational_lineup_schema,
     situational_player_schema,
     situational_team,
+    situational_team_game_schema,
+    situational_team_games,
     situational_team_schema,
 )
 from sportsdataverse._common.team_season_rates import _with_clutch, team_season_rates
@@ -42,6 +44,7 @@ from sportsdataverse.nba.nba_situational import (
     nba_situational_lineup,
     nba_situational_player,
     nba_situational_team,
+    nba_situational_team_games,
 )
 from sportsdataverse.nba.nba_team_season_rates import nba_possession_rate_rows
 from sportsdataverse.wnba import wnba_loaders
@@ -396,3 +399,52 @@ def test_only_the_requested_season_type_is_flagged() -> None:
     rows = nba_situation_rows(poss, pbp, sched, league_id="10")
     assert rows["game_id"].n_unique() == 29 and other not in rows["game_id"]
     assert nba_situation_rows(poss, pbp, sched, league_id="10", season_type="play-in").height == 0
+
+
+_SIT_SUMS = ("games", "poss", "opp_poss", "pts", "opp_pts")
+
+
+def assert_situational_games_add_up(games: pl.DataFrame, season: pl.DataFrame) -> None:
+    """Per-game situational rows summed over a team-season's split reproduce the season row."""
+    assert dict(games.schema) == situational_team_game_schema()
+    assert (games["games"] == 1).all()
+    keys = ["season", "team_id", "family", "split"]
+    assert games.select(*keys, "game_id").is_duplicated().sum() == 0
+    summed = games.group_by(keys).agg(*[pl.col(c).sum() for c in (*_SIT_SUMS, "seconds")])
+    j = season.join(summed, on=keys, how="full", coalesce=True, suffix="_g", validate="1:1")
+    assert j.height == season.height == summed.height
+    for c in _SIT_SUMS:
+        assert (j[c] == j[f"{c}_g"]).all(), c
+    assert ((j["seconds"] - j["seconds_g"]).abs() < 1e-6).all()
+
+
+def test_team_games_add_up_to_the_season(tables: dict[str, pl.DataFrame], releases: tuple[pl.DataFrame, ...]) -> None:
+    """Q27: the per-game situational rows are the season table's, one game at a time (every family)."""
+    with pytest.MonkeyPatch.context() as mp:
+        _patch(mp, nba_loaders, releases, _NBA_LOADERS, [2023])
+        games = nba_situational_team_games(2024)
+    assert_situational_games_add_up(games, tables["team"])
+    # within a game a family still adds up to the game's all row
+    all_rows = games.filter(family="all").select("team_id", "game_id", *SUMS)
+    score = games.filter(family="score").group_by("team_id", "game_id").agg(pl.col(c).sum() for c in SUMS)
+    j = all_rows.join(score, on=["team_id", "game_id"], suffix="_s", validate="1:1")
+    assert j.height == all_rows.height
+    for c in ("poss", "opp_poss", "pts", "opp_pts"):
+        assert (j[c] == j[f"{c}_s"]).all(), c
+    assert games["game_id"].n_unique() == 1230
+
+
+def test_wnba_team_games_add_up(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.wnba.wnba_situational import wnba_situational_team_games
+
+    poss = pl.read_parquet(SIT / "wnba_possessions_2002.parquet")
+    pbp = pl.read_parquet(FIXTURES / "bb_possession_flags" / "wnba_pbp_2002.parquet")
+    sched = pl.read_parquet(SIT / "wnba_schedule_2002.parquet")
+    names = ("load_wnba_stats_possessions", "load_wnba_stats_pbp", "load_wnba_stats_schedules")
+    _patch(monkeypatch, wnba_loaders, (poss, pbp, sched), names, [2002])
+    assert_situational_games_add_up(wnba_situational_team_games(2002), wnba_situational_team(2002))
+
+
+def test_team_games_empty_input() -> None:
+    empty = situational_team_games(pl.DataFrame(schema=situation_row_schema(pl.Int64())), pl.DataFrame(), top_n=10)
+    assert dict(empty.schema) == situational_team_game_schema() and empty.height == 0

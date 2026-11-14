@@ -25,6 +25,7 @@ from sportsdataverse._common.player_war import (
     REPLACEMENT_LEVEL,
     _anchor,
     player_war,
+    player_war_league_averages,
     replacement_win_pct,
     season_rows,
 )
@@ -185,7 +186,7 @@ def test_mbb_player_war_reads_box_bpm_and_ratings(monkeypatch: pytest.MonkeyPatc
 
     def games(seasons: list[int]) -> pl.DataFrame:
         seen.append(("games", "womens"))
-        return _bb("mbb_box_slice_2025.parquet").clear()
+        return _bb("mbb_box_slice_2014.parquet").clear()
 
     monkeypatch.setattr(war_mod, "mbb_box_bpm", box)
     monkeypatch.setattr(war_mod, "mbb_team_ratings", ratings)
@@ -205,6 +206,11 @@ def test_mbb_player_war_reads_box_bpm_and_ratings(monkeypatch: pytest.MonkeyPatc
 
 def _bb(name: str) -> pl.DataFrame:
     return pl.read_parquet(FIX / "bb_player_war" / name)
+
+
+def _box_seasons(league: str) -> pl.DataFrame:
+    """``mbb_player_war._box`` of the whole 2024-25 box release, D1 rows (fixture README)."""
+    return _bb(f"{league}_box_2025.parquet")
 
 
 def test_game_rows_on_a_real_box_slice() -> None:
@@ -247,6 +253,7 @@ def test_the_public_college_path_ships_the_interval(monkeypatch: pytest.MonkeyPa
     monkeypatch.setattr(war_mod, "load_mbb_player_boxscore", lambda seasons: stints)
     monkeypatch.setattr(war_mod, "_war_stints", lambda box, ratings: (stints, net))
     monkeypatch.setattr(war_mod, "_game_rows", lambda box, ratings: games)
+    monkeypatch.setattr(war_mod, "_box", lambda box, ratings: None)
     out = war_mod.mbb_player_war(2025)
     assert out.height == 568 and out["war_lo"].null_count() == 0 and out["war_hi"].null_count() == 0
 
@@ -277,3 +284,35 @@ def test_a_played_row_without_an_athlete_is_dropped_on_both_sides(monkeypatch: p
     out = war_mod.mbb_player_war(2014)
     assert out.height == agg.height and out["min"].sum() == pytest.approx(agg["minutes"].sum())
     assert out["war_lo"].null_count() == 0 and out["war_hi"].null_count() == 0
+
+
+def test_box_sums_the_division_i_rows_the_ratings_count() -> None:
+    """``_box`` on every 2013-14 box row of ESPN team 2724: its played rows, the null-athlete row dropped."""
+    box, ratings = _bb("mbb_box_slice_2014.parquet"), _bb("mbb_ratings_slice_2014.parquet")
+    out = war_mod._box(box, ratings)
+    played = box.filter((pl.col("minutes") > 0) & pl.col("athlete_id").is_not_null())
+    assert out["games"].sum() == played.height and out["pts"].sum() == played["points"].sum()
+    assert (
+        out["reb"].sum() == (played["offensive_rebounds"] + played["defensive_rebounds"]).sum()
+        and out["ast"].sum() == played["assists"].sum()
+    )
+    assert out.schema["player_id"] == pl.Utf8 and out["player_id"].null_count() == 0
+    # Wichita State's 35-0 regular season: its leading scorer, Cleanthony Early, 16.4 a game
+    top = (
+        out.with_columns((pl.col("pts") / pl.col("games")).alias("ppg")).sort("ppg", descending=True).row(0, named=True)
+    )
+    names = box.select(pl.col("athlete_id").cast(pl.Int64).cast(pl.Utf8).alias("player_id"), "athlete_display_name")
+    assert names.filter(player_id=top["player_id"])["athlete_display_name"][0] == "Cleanthony Early"
+
+
+@pytest.mark.parametrize("league", ["mbb", "wbb"])
+def test_college_per_game_gate_and_cohort(league: str) -> None:
+    """The college games gate (two for rebounds and assists) and the league-average cohort on a real season."""
+    stints, net, _ = _season(league)
+    box = _box_seasons(league)
+    out = player_war(stints, net, league=league, sources=["bpm"], box=box)
+    one = out.filter(pl.col("pts_pg_n") == 1)
+    assert one.height > 0 and one["pts_pg_rank"].null_count() == 0 and one["reb_pg_rank"].null_count() == one.height
+    la = player_war_league_averages(out, league=league)
+    for m in ("war", "pts_pg", "reb_pg", "ast_pg"):
+        assert la.filter(metric=m)["n"].item() == out[f"{m}_rank"].drop_nulls().len()

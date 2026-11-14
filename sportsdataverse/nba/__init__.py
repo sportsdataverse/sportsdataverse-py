@@ -163,8 +163,16 @@ from sportsdataverse.nba.nba_lineup_seasons import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_player_on_off import nba_player_on_off, nba_player_wowy  # noqa: F401
 from sportsdataverse.nba.nba_player_impact import (  # noqa: F401
+    CURRENT_IMPACT_RANKED,
+    nba_current_impact_context,
     nba_player_impact_context,
     nba_player_impact_league_averages,
+)
+from sportsdataverse.nba.nba_player_stats_ranks import (  # noqa: F401
+    ADVANCED_LOWER_IS_BETTER,
+    ADVANCED_RANKED,
+    advanced_min_poss,
+    nba_player_stats_advanced_context,
 )
 from sportsdataverse.nba.nba_player_factor_rapm import nba_player_factor_rapm  # noqa: F401
 from sportsdataverse.nba.nba_play_style import (  # noqa: F401
@@ -184,13 +192,17 @@ from sportsdataverse.nba.nba_game_impact import (  # noqa: F401
     nba_impact_rows,
 )
 from sportsdataverse.nba.nba_game_stints import (  # noqa: F401
+    nba_box_events,
     nba_game_on_off,
+    nba_game_player_box_splits,
     nba_game_stints,
     nba_game_units,
     nba_stint_rows,
 )
 from sportsdataverse.nba.nba_team_season_rates import (  # noqa: F401
     nba_possession_rate_rows,
+    nba_team_game_four_factors,
+    nba_team_game_possessions,
     nba_team_season_rates,
 )
 from sportsdataverse.nba.nba_team_strength import nba_team_strength  # noqa: F401
@@ -199,16 +211,19 @@ from sportsdataverse.nba.nba_shot_zone_profiles import nba_player_shot_zones, nb
 from sportsdataverse.nba.nba_player_war import nba_player_war  # noqa: F401
 from sportsdataverse.nba.nba_coach_seasons import nba_coach_careers, nba_coach_seasons  # noqa: F401
 from sportsdataverse.nba.nba_official_seasons import nba_official_seasons  # noqa: F401
+from sportsdataverse.nba.nba_player_box_expected import nba_player_game_expected_box, nba_player_season_box_rates  # noqa: F401
 from sportsdataverse.nba.nba_game_flow import nba_game_flow, nba_score_rows, nba_team_season_flow  # noqa: F401
 from sportsdataverse.nba.nba_situational import (  # noqa: F401
     nba_situation_rows,
     nba_situational_lineup,
     nba_situational_player,
     nba_situational_team,
+    nba_situational_team_games,
 )
 from sportsdataverse.nba.nba_season_rules import nba_draft_lottery_odds, nba_season_standings  # noqa: F401
 from sportsdataverse.nba.nba_season_sim import nba_season_sim  # noqa: F401
 from sportsdataverse.nba.nba_rated_prior import nba_rated_priors  # noqa: F401
+from sportsdataverse.nba.nba_pregame_projection import nba_pregame_projections  # noqa: F401
 from sportsdataverse.nba.nba_cup import nba_cup_sim, nba_cup_standings  # noqa: F401
 from sportsdataverse.nba.nba_neutral_site import nba_neutral_site_games  # noqa: F401
 from sportsdataverse.nba.nba_game_predict import (  # noqa: F401

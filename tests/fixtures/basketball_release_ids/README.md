@@ -10,7 +10,7 @@
 
 Real rows sliced from the files the release producers commit and publish to sportsdataverse-data, written back
 unchanged: same columns and same dtypes (`game_rosters.game_id`, `rosters.athlete_id`, the crosswalk and NCAA
-`espn_*` ids are String, as published; so are WNBA `officials.game_id` and the WNBA crosswalk `wnba_*` team / player
+`espn_*` ids are String, as published; so are WNBA `officials.game_id` and the NBA / WNBA crosswalk `nba_*` / `wnba_*` team / player
 ids). `tests/mbb/test_basketball_release_id_joins.py` (MBB/NBA) and `tests/wnba/test_womens_release_id_joins.py`
 (WNBA/WBB) feed them to the generated loaders to check the loader-boundary id casts and the cross-loader joins offline.
 
@@ -28,6 +28,10 @@ MBB/NBA captured 2026-10-30; WNBA/WBB captured 2026-11-01.
 | `nba_schedule_2026.parquet` | hoopR-nba-data @ `e4a0559b` `nba/schedules/parquet/nba_schedule_2026.parquet` | same game |
 | `nba_player_box_2026.parquet` | hoopR-nba-data @ `e4a0559b` `nba/player_box/parquet/player_box_2026.parquet` | same game |
 | `nba_rosters_2026.parquet` | hoopR-nba-data @ `e4a0559b` `nba/rosters/parquet/rosters_2026.parquet` | the two teams in that game |
+| `nba_schedule_crosswalk_2026.parquet` | sportsdataverse-data release `nba_crosswalk`, asset `nba_schedule_crosswalk_2026.parquet` (captured 2026-11-13) | game 401809234 |
+| `nba_team_crosswalk_2026.parquet` | sportsdataverse-data release `nba_crosswalk`, asset `nba_team_crosswalk_2026.parquet` | the two teams in that game |
+| `nba_player_crosswalk_2026.parquet` | sportsdataverse-data release `nba_crosswalk`, asset `nba_player_crosswalk_2026.parquet` | the athletes in that game's player box |
+| `nba_stats_rosters_2026.parquet` | sportsdataverse-data release `nba_stats_rosters`, asset `rosters_2026.parquet` | the two teams' NBA Stats `team_id` |
 | `wnba_game_rosters_2025.parquet` | wehoop-wnba-data @ `dffea434` `wnba/game_rosters/parquet/game_rosters_2025.parquet` | game 401820329 (2025 Finals) |
 | `wnba_officials_2025.parquet` | wehoop-wnba-data @ `dffea434` `wnba/officials/parquet/officials_2025.parquet` | same game |
 | `wnba_schedule_2025.parquet` | wehoop-wnba-data @ `dffea434` `wnba/schedules/parquet/wnba_schedule_2025.parquet` | same game |
@@ -41,3 +45,7 @@ MBB/NBA captured 2026-10-30; WNBA/WBB captured 2026-11-01.
 | `wbb_player_box_2005.parquet` | wehoop-wbb-data @ `19fe2a82` `wbb/player_box/parquet/player_box_2005.parquet` | same game |
 | `wbb_schedule_crosswalk_2026.parquet` | wehoop-wbb-data @ `19fe2a82` `wbb/crosswalk/parquet/wbb_schedule_crosswalk_2026.parquet` | first row |
 | `wbb_schedule_2026.parquet` | wehoop-wbb-data @ `19fe2a82` `wbb/schedules/parquet/wbb_schedule_2026.parquet` | that row's game |
+| `ncaa_wbb_team_box_2025.parquet` | sportsdataverse-data release `ncaa_wbb_team_box`, asset `ncaa_wbb_team_box_2025.parquet` (captured 2026-11-13) | first four rows with an `espn_game_id` |
+| `nba_stats_metric_curves_2026.parquet` | sportsdataverse-data release `nba_stats_metric_curves`, asset `metric_curves_2026.parquet` (captured 2026-11-13) | first three rows of each `entity_type` |
+| `wnba_stats_rolling_windows_2025.parquet` | sportsdataverse-data release `wnba_stats_rolling_windows`, asset `rolling_windows_2025.parquet` | first four rows |
+| `nba_depthcharts_2027.parquet` | sportsdataverse-data release `espn_nba_depthcharts`, asset `depthcharts_2027.parquet` | team 1 on the latest `as_of_date` |

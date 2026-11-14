@@ -148,7 +148,7 @@ def test_skater_war_faceoffs_and_penalties_match_the_feed(pbp, shifts):
     )
     ev = ev5.join(war.select("player_id", "ev_off"), on="player_id", how="inner")
     assert ev.height == ev5.height > 0
-    expected_ev_off = (pl.col("xg_rapm_off") - cfg.replacement_ev_off) * pl.col("toi_minutes") / 60.0
+    expected_ev_off = (pl.col("xg_rapm_off") - cfg.replacement_rapm()[0]) * pl.col("toi_minutes") / 60.0
     assert ev.filter((pl.col("ev_off") - expected_ev_off).abs() > 1e-9).is_empty()
 
     fo = (

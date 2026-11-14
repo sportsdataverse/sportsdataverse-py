@@ -79,10 +79,10 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     after). So xG sums over ``(start_s, end_s]`` while goalie and ``strength_state`` read
     the events in ``[start_s, end_s)``, falling back to the xG window when that is empty.
 
-    Known simplification: shift-chart id lists do not distinguish position, so
-    ``home_ids``/``away_ids`` may include the on-ice goalie's id alongside skaters;
-    ``home_goalie``/``away_goalie`` are instead sourced from the overlapping ``scored``
-    events' ``home_goalie_id``/``away_goalie_id`` (the modal value in the interval).
+    Shift-chart id lists do not distinguish position: ``home_goalie``/``away_goalie`` come
+    from the overlapping ``scored`` events' ``home_goalie_id``/``away_goalie_id`` (the modal
+    value in the interval) and are removed from ``home_ids``/``away_ids``. A goalie no event
+    in the interval names stays in the id list as if he were a skater.
 
     Args:
         shifts: a ``load_nhl_shifts``-shaped frame. A ``team_abbr`` column, when present,

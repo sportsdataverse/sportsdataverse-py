@@ -744,7 +744,8 @@ def clean_nfl_pbp(
     )
 
     # Team-abbreviation normalization (only touch columns actually present).
-    df = df.with_columns([team_name_fn(pl.col(c)) for c in TEAM_COLUMNS if c in df.columns])
+    # cast first: a column that is null on every row of the frame is Null-typed, which `.str` rejects
+    df = df.with_columns([team_name_fn(pl.col(c).cast(pl.String)) for c in TEAM_COLUMNS if c in df.columns])
 
     # "Seb's stuff" -- per-name-per-team-per-season id mode-vote, then a
     # per-id mode-vote back onto the name. A stable row index restores

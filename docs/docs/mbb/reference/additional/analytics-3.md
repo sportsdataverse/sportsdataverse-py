@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_shot"
-sidebar_label: "Analytics: mbb_lineup–mbb_shot"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_player"
+sidebar_label: "Analytics: mbb_lineup–mbb_player"
 sidebar_position: 15
-description: "Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_shot — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_shot
+# Men's college basketball — additional Python functions — Analytics: mbb_lineup–mbb_player
 
 ### mbb_lineup_seasons {#mbb_lineup_seasons}
 
@@ -257,6 +257,60 @@ styles = mbb_play_styles(2026)
 styles.group_by("archetype").len()
 ```
 
+### mbb_player_game_expected_box {#mbb_player_game_expected_box}
+
+`mbb_player_game_expected_box(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Men's college points, rebounds and assists per player-game against his season, per minute and usage-adjusted.
+
+For every played player-game: `<s>_base` is his season per-minute rate times the game's
+minutes; `<s>_exp` scales that by the game's usage and minutes against his season's
+(a Poisson model fitted on earlier seasons, scored on later held-out ones). Both use the
+season without this game (over every game of the season), so a game is never in its own baseline.
+`<s>_exp` is null before the model's first held-out season and where a usage is unknown.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (2026 is 2025-26). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(game_id, athlete_id)`: `season`, `season_type`, `team_id`, `minutes`, `usg_pct`, `pts` / `reb` / `ast`, the season-without-the-game `rate_games` / `rate_minutes` / `rate_usg_pct`, and `pts_base` / `reb_base` / `ast_base` / `pts_exp` / `reb_exp` / `ast_exp`. A season without a release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `season_type` | Int64 | ESPN season type of the game (2 regular season, 3 postseason, 5 NBA play-in). |
+| `game_id` | Int64 | ESPN game id, the join key to the schedule and the player box score. |
+| `team_id` | Int64 | ESPN team id of the player's team in the game. |
+| `athlete_id` | Int64 | ESPN athlete id of the player, the join key to the player box score. |
+| `minutes` | Float64 | Minutes played in the game (above 0: a player who did not play has no row). |
+| `usg_pct` | Float64 | Usage: 100 x uses x (team minutes / 5) / (minutes x team uses), uses = FGA + 0.44 FTA + TOV, the team sums over that team-game's players; null where a player of the team-game lacks a count. |
+| `pts` | Int64 | Points in the game. |
+| `reb` | Int64 | Rebounds in the game. |
+| `ast` | Int64 | Assists in the game. |
+| `rate_games` | Int64 | Games of the season without this one (the pros' regular season, every college game) that the expectations read. |
+| `rate_minutes` | Float64 | Minutes of those games. |
+| `rate_usg_pct` | Float64 | Season usage without this game: 100 x sum(uses) / sum(minutes x team uses / (team minutes / 5)); null where no game of it has a usage. |
+| `pts_base` | Float64 | Expected points at the per-minute rate: the season-without-this-game points per minute times the game's minutes; null when that season has no minutes. |
+| `reb_base` | Float64 | Expected rebounds at the per-minute rate, as pts_base. |
+| `ast_base` | Float64 | Expected assists at the per-minute rate, as pts_base. |
+| `pts_exp` | Float64 | Usage-adjusted expected points: pts_base x exp(a + b_usg ln(usg_pct / rate_usg_pct) + b_min ln(minutes / rate minutes per game)), a Poisson fit on earlier seasons (sportsdataverse._common.player_box_expected); null before the model's first held-out season or without both usages. |
+| `reb_exp` | Float64 | Usage-adjusted expected rebounds, as pts_exp. |
+| `ast_exp` | Float64 | Usage-adjusted expected assists, as pts_exp. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.mbb.mbb_player_box_expected import mbb_player_game_expected_box
+games = mbb_player_game_expected_box(2026)
+games.with_columns((pl.col("pts") - pl.col("pts_exp")).alias("pts_vs_exp")).sort("pts_vs_exp").tail()
+```
+
 ### mbb_player_on_off {#mbb_player_on_off}
 
 `mbb_player_on_off(seasons: 'int | list[int]', *, league: 'str' = 'mens', min_poss: 'int' = 200, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -276,7 +330,7 @@ The definitions are in `sportsdataverse._common.player_on_off`.
 
 **Returns**
 
-One row per `(season, team_id, player_id)`: `games` on the floor and `team_games`, then for `_on` and `_off` the `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus` and `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions); `<rating>_diff` (on minus off); `<m>_rank` / `<m>_pct` for the on and diff ratings (within the season, among players with at least `min_poss` both ways) and `<m>_n` for every rating. `poss_on + poss_off` is the team's possessions. `team_id` is the ESPN team id (Int64), `player_id` the NCAA id (String). Empty input returns that schema with zero rows.
+One row per `(season, team_id, player_id)`: `games` on the floor and `team_games`, then for `_on` and `_off` the `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus` and `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions); `<rating>_diff` (on minus off); `<m>_rank` / `<m>_pct` for the on and diff ratings (within the season, among players with at least `min_poss` both ways) and `<m>_n` for every rating. `poss_on + poss_off` is the team's possessions. Then his span with the team: `team_games_span` (the team's games from his first game for it, or the day after his last for an earlier team that season, to the day before his first for a later team, else the season's end, by the pbp's `game_date`), `span_first_date` / `span_last_date`, the off side over that span (`<total>_off_span` and `<rating>_off_span`, not ranked) and `<rating>_diff_span` (on minus it). `team_id` is the ESPN team id (Int64), `player_id` the NCAA id (String). Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -340,6 +394,62 @@ One row per `(season, team_id, player_id)`: `games` on the floor and `team_games
 from sportsdataverse.mbb.mbb_player_on_off import mbb_player_on_off
 on_off = mbb_player_on_off(2025)
 on_off.sort("net_rtg_diff_rank").head()
+```
+
+### mbb_player_season_box_rates {#mbb_player_season_box_rates}
+
+`mbb_player_season_box_rates(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Men's college per-36 points, rebounds and assists per player-season, ranked, with the season usage.
+
+Over every game of the season, from ESPN's player box. `pts_per36` / `reb_per36` /
+`ast_per36` are 36 x the total / minutes, each with `_n` (the minutes) and
+`_rank` / `_pct` among the season's players whose minutes reach the rate's gate (the
+minutes at which it is half signal on odd / even games). `usg_pct` is the season usage
+(FGA + 0.44 FTA + TOV over the team's while on the floor), not ranked.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (2026 is 2025-26). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, athlete_id)` (the ESPN id): `team_id` (his last game's team), `games`, `minutes`, `pts` / `reb` / `ast`, `usg_pct` with `usg_pct_n`, and the three per-36 rates with `_n` / `_rank` / `_pct`. A season without a release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `athlete_id` | Int64 | ESPN athlete id of the player, the join key to the player box score. |
+| `team_id` | Int64 | ESPN team id of the player's last game of the season (a traded player has one row). |
+| `games` | Int64 | Games played (the pros' regular season, every college game). |
+| `minutes` | Float64 | Minutes played in those games. |
+| `pts` | Int64 | Points in those games. |
+| `reb` | Int64 | Rebounds in those games. |
+| `ast` | Int64 | Assists in those games. |
+| `usg_pct` | Float64 | Season usage: 100 x sum(uses) / sum(minutes x team uses / (team minutes / 5)), uses = FGA + 0.44 FTA + TOV; not ranked. |
+| `usg_pct_n` | Int64 | Minutes of the games with a usage behind usg_pct. |
+| `pts_per36` | Float64 | Points per 36 minutes: 36 x pts / minutes. |
+| `pts_per36_n` | Int64 | Minutes behind pts_per36. |
+| `reb_per36` | Float64 | Rebounds per 36 minutes: 36 x reb / minutes. |
+| `reb_per36_n` | Int64 | Minutes behind reb_per36. |
+| `ast_per36` | Float64 | Assists per 36 minutes: 36 x ast / minutes. |
+| `ast_per36_n` | Int64 | Minutes behind ast_per36. |
+| `pts_per36_rank` | Float64 | Rank of pts_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `pts_per36_pct` | Float64 | Percentile of pts_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+| `reb_per36_rank` | Float64 | Rank of reb_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `reb_per36_pct` | Float64 | Percentile of reb_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+| `ast_per36_rank` | Float64 | Rank of ast_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `ast_per36_pct` | Float64 | Percentile of ast_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_player_box_expected import mbb_player_season_box_rates
+rates = mbb_player_season_box_rates(2026)
+rates.sort("pts_per36_rank").select("athlete_id", "minutes", "pts_per36", "pts_per36_pct").head()
 ```
 
 ### mbb_player_shot_zones {#mbb_player_shot_zones}
@@ -495,6 +605,18 @@ One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10
 | `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
 | `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
 | `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
+| `pts_pg` | Float64 | Points per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
+| `reb_pg` | Float64 | Rebounds per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
+| `ast_pg` | Float64 | Assists per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
+| `pts_pg_rank` | Float64 | Rank of pts_pg among the season's players with at least the games gate (1 game); 1 = most, ties averaged. Null under ten ranked players. |
+| `reb_pg_rank` | Float64 | Rank of reb_pg among the season's players with at least the games gate (2 games); 1 = most, ties averaged. Null under ten ranked players. |
+| `ast_pg_rank` | Float64 | Rank of ast_pg among the season's players with at least the games gate (2 games); 1 = most, ties averaged. Null under ten ranked players. |
+| `pts_pg_pct` | Float64 | Percentile of pts_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
+| `reb_pg_pct` | Float64 | Percentile of reb_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
+| `ast_pg_pct` | Float64 | Percentile of ast_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
+| `pts_pg_n` | Int64 | Games behind pts_pg: the games he played (0 with no box line). |
+| `reb_pg_n` | Int64 | Games behind reb_pg: the games he played (0 with no box line). |
+| `ast_pg_n` | Int64 | Games behind ast_pg: the games he played (0 with no box line). |
 
 **Raises**
 
@@ -508,126 +630,4 @@ One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10
 from sportsdataverse.mbb.mbb_player_war import mbb_player_war
 war = mbb_player_war(2025)
 war.select("player_name", "poss", "rating", "vorp", "war").head(10)
-```
-
-### mbb_player_wowy {#mbb_player_wowy}
-
-`mbb_player_wowy(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-College WOWY pairs: a team's season with two teammates together, apart and both off, per pair.
-
-The definitions are in `sportsdataverse._common.player_on_off`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_player_on_off.wbb_player_wowy`). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, player_id_a, player_id_b)` (`player_id_a` sorting first as a string) for every pair of the team's players: for `_both` (together), `_a_only`, `_b_only` and `_neither` the `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus` and `off_rtg` / `def_rtg` / `net_rtg`. The four splits' totals add up to the team's season; the ratings do not add. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
-| `player_id_a` | String | The first player of the pair, the smaller id as a string. |
-| `player_id_b` | String | The second player of the pair, the larger id as a string. |
-| `minutes_both` | Float64 | Game-clock minutes of the team's season with both A and B on the floor. |
-| `poss_both` | Int64 | The team's offensive possessions with both A and B on the floor (a possession belongs to the five on the floor when it starts). |
-| `opp_poss_both` | Int64 | The team's defensive possessions with both A and B on the floor. |
-| `pts_both` | Int64 | The team's points with both A and B on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
-| `opp_pts_both` | Int64 | The opponent's points with both A and B on the floor, credited as pts_both is. |
-| `plus_minus_both` | Int64 | pts_both - opp_pts_both. |
-| `off_rtg_both` | Float64 | Offensive rating with both A and B on the floor: pts_both per 100 poss_both; null with no possessions. |
-| `def_rtg_both` | Float64 | Defensive rating with both A and B on the floor: opp_pts_both per 100 opp_poss_both; null with no possessions. |
-| `net_rtg_both` | Float64 | Net rating with both A and B on the floor: off_rtg_both - def_rtg_both; null when either is null. |
-| `minutes_a_only` | Float64 | Game-clock minutes of the team's season with A on the floor and B off. |
-| `poss_a_only` | Int64 | The team's offensive possessions with A on the floor and B off (a possession belongs to the five on the floor when it starts). |
-| `opp_poss_a_only` | Int64 | The team's defensive possessions with A on the floor and B off. |
-| `pts_a_only` | Int64 | The team's points with A on the floor and B off, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
-| `opp_pts_a_only` | Int64 | The opponent's points with A on the floor and B off, credited as pts_a_only is. |
-| `plus_minus_a_only` | Int64 | pts_a_only - opp_pts_a_only. |
-| `off_rtg_a_only` | Float64 | Offensive rating with A on the floor and B off: pts_a_only per 100 poss_a_only; null with no possessions. |
-| `def_rtg_a_only` | Float64 | Defensive rating with A on the floor and B off: opp_pts_a_only per 100 opp_poss_a_only; null with no possessions. |
-| `net_rtg_a_only` | Float64 | Net rating with A on the floor and B off: off_rtg_a_only - def_rtg_a_only; null when either is null. |
-| `minutes_b_only` | Float64 | Game-clock minutes of the team's season with B on the floor and A off. |
-| `poss_b_only` | Int64 | The team's offensive possessions with B on the floor and A off (a possession belongs to the five on the floor when it starts). |
-| `opp_poss_b_only` | Int64 | The team's defensive possessions with B on the floor and A off. |
-| `pts_b_only` | Int64 | The team's points with B on the floor and A off, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
-| `opp_pts_b_only` | Int64 | The opponent's points with B on the floor and A off, credited as pts_b_only is. |
-| `plus_minus_b_only` | Int64 | pts_b_only - opp_pts_b_only. |
-| `off_rtg_b_only` | Float64 | Offensive rating with B on the floor and A off: pts_b_only per 100 poss_b_only; null with no possessions. |
-| `def_rtg_b_only` | Float64 | Defensive rating with B on the floor and A off: opp_pts_b_only per 100 opp_poss_b_only; null with no possessions. |
-| `net_rtg_b_only` | Float64 | Net rating with B on the floor and A off: off_rtg_b_only - def_rtg_b_only; null when either is null. |
-| `minutes_neither` | Float64 | Game-clock minutes of the team's season with neither A nor B on the floor. |
-| `poss_neither` | Int64 | The team's offensive possessions with neither A nor B on the floor (a possession belongs to the five on the floor when it starts). |
-| `opp_poss_neither` | Int64 | The team's defensive possessions with neither A nor B on the floor. |
-| `pts_neither` | Int64 | The team's points with neither A nor B on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
-| `opp_pts_neither` | Int64 | The opponent's points with neither A nor B on the floor, credited as pts_neither is. |
-| `plus_minus_neither` | Int64 | pts_neither - opp_pts_neither. |
-| `off_rtg_neither` | Float64 | Offensive rating with neither A nor B on the floor: pts_neither per 100 poss_neither; null with no possessions. |
-| `def_rtg_neither` | Float64 | Defensive rating with neither A nor B on the floor: opp_pts_neither per 100 opp_poss_neither; null with no possessions. |
-| `net_rtg_neither` | Float64 | Net rating with neither A nor B on the floor: off_rtg_neither - def_rtg_neither; null when either is null. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_player_on_off import mbb_player_wowy
-pairs = mbb_player_wowy(2025)
-pairs.sort("minutes_both", descending=True).head()
-```
-
-### mbb_shot_selection {#mbb_shot_selection}
-
-`mbb_shot_selection(scored: 'pl.DataFrame', *, group: 'str' = 'shooter_id', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Per shooter/team expected points per attempt vs the league-average mix.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `scored` | `DataFrame` |  | `mbb_shot_quality` output (needs `xpoints, point_value, made` + the group column). |
-| `group` | `str` | `'shooter_id'` | `"shooter_id"` or `"team_id"`. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (interface parity; the math is league-free). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per group: `{group}:Utf8, n_shots:Int64, xppp, actual_ppp, selection_value, selection_value_total` (all value columns Float64). The attempt-weighted `selection_value` sums to zero across the league. Empty input returns the zero-row schema.
-
-| col_name | type | description |
-|---|---|---|
-| `shooter_id` | String | Unique identifier for shooter. |
-| `n_shots` | Int64 |  |
-| `xppp` | Float64 |  |
-| `actual_ppp` | Float64 |  |
-| `selection_value` | Float64 |  |
-| `selection_value_total` | Float64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | Unknown `group`. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb import mbb_shot_data, mbb_shot_quality, mbb_shot_selection
-sel = mbb_shot_selection(mbb_shot_quality(mbb_shot_data(2025)), group="team_id")
-
-# Pipeline next step (one line)
-
-sel.sort("selection_value", descending=True).head(10)
 ```

@@ -67,3 +67,6 @@ columns:
 - name: order
   type: integer
   description: ''
+- name: is_garbage_time
+  type: logical
+  description: ''

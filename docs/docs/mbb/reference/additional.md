@@ -298,6 +298,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [inject_rapm_into_players](additional/models-and-calculators-2.md#inject_rapm_into_players) | Write `pick_ridge_regression`'s RAPM predictions back onto each player. |
 | [kmeans_fit](additional/models-and-calculators-2.md#kmeans_fit) | Seeded Lloyd's KMeans, best-of-`n_init` by inertia. |
 | [load_artifact](additional/models-and-calculators-2.md#load_artifact) | Read a bundled player-value artifact (`mbb/models/<name>.json`). |
+| [load_preseason_prior](additional/models-and-calculators-2.md#load_preseason_prior) | The preseason prior for `season` from the previous season's released schedule and team box. |
 | [log_loss_score](additional/models-and-calculators-2.md#log_loss_score) | Binary cross-entropy loss between predicted probabilities and outcomes. |
 | [logistic_fit](additional/models-and-calculators-2.md#logistic_fit) | L2-penalized logistic regression via L-BFGS (intercept unpenalized). |
 | [mae](additional/models-and-calculators-2.md#mae) | Mean absolute error between two arrays. |
@@ -306,6 +307,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_draft_projection](additional/models-and-calculators-2.md#mbb_draft_projection) | Draft probability, projected pick, and pro tier per player-season. |
 | [mbb_in_game_win_prob](additional/models-and-calculators-2.md#mbb_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
 | [mbb_predict_games](additional/models-and-calculators-2.md#mbb_predict_games) | Vectorized pregame predictions for a schedule of games. |
+| [mbb_pregame_projections](additional/models-and-calculators-2.md#mbb_pregame_projections) | Rated pregame projection for every ESPN game of a college season, as of each game's date. |
 | [mbb_recruiting_projection](additional/models-and-calculators-2.md#mbb_recruiting_projection) | Expected freshman box-BPM per recruit + over/under-performance residual. |
 | [mbb_season_projections](additional/models-and-calculators-2.md#mbb_season_projections) | The daily `season_sim` table: projected W-L, conference standings, title and bid odds. |
 | [mbb_season_sim](additional/models-and-calculators-2.md#mbb_season_sim) | Monte Carlo the remaining schedule: expected wins + title odds. |
@@ -313,7 +315,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_shot_quality](additional/models-and-calculators-2.md#mbb_shot_quality) | Score each shot with `xmake` / `xpoints` from the cell table. |
 | [mbb_shot_quality_model](additional/models-and-calculators-2.md#mbb_shot_quality_model) | Empirical-Bayes `zone x type` make-rate / xPoints table. |
 | [mbb_team_ratings](additional/models-and-calculators-2.md#mbb_team_ratings) | Opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo) per team-season. |
-| [mbb_transfer_projection](additional/models-and-calculators-2.md#mbb_transfer_projection) | Projected post-transfer box-BPM for each transfer arriving in `seasons`. |
+| [mbb_transfer_projection](additional/models-and-calculators-3.md#mbb_transfer_projection) | Projected post-transfer box-BPM for each transfer arriving in `seasons`. |
 | [pick_ridge_regression](additional/models-and-calculators-3.md#pick_ridge_regression) | Adaptively pick a ridge-regression lambda and blend in the RAPM priors. |
 | [player_per100_features](additional/models-and-calculators-3.md#player_per100_features) | Per-100 / rate features for every (player_id, season). |
 | [poss_calc_fragment_sum](additional/models-and-calculators-3.md#poss_calc_fragment_sum) | Field-wise add two `PossCalcFragment`\ s |
@@ -379,32 +381,39 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_game_flow](additional/analytics-2.md#mbb_game_flow) | College game flow per team and game: runs, droughts, kills, lead changes, time leading, game control. |
 | [mbb_game_lineups_used](additional/analytics-2.md#mbb_game_lineups_used) | The college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
 | [mbb_game_on_off](additional/analytics-2.md#mbb_game_on_off) | College in-game on/off: per player and game, the team with him on the floor and the rest of its game. |
+| [mbb_game_player_box_splits](additional/analytics-2.md#mbb_game_player_box_splits) | College player box by game, period and garbage time: minutes and counts from the play-by-play. |
 | [mbb_game_player_impact](additional/analytics-2.md#mbb_game_player_impact) | The college game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
 | [mbb_game_stints](additional/analytics-2.md#mbb_game_stints) | College game stints: per player and game, every stretch on the floor with its clock, points and possessions. |
 | [mbb_game_units](additional/analytics-2.md#mbb_game_units) | College in-game units: per 1- to 5-man set of teammates and game, ratings, four factors and shot zones. |
 | [mbb_lineup_seasons](additional/analytics-3.md#mbb_lineup_seasons) | College lineup seasons: 2-, 3- and 5-man units with ratings, four factors and shot zones. |
 | [mbb_official_seasons](additional/analytics-3.md#mbb_official_seasons) | Men's college official season profiles: games, fouls and FTA per game, pace and home splits. |
 | [mbb_play_styles](additional/analytics-3.md#mbb_play_styles) | College player play-style archetypes: box, shot and lineup-role features (BB-D20). |
+| [mbb_player_game_expected_box](additional/analytics-3.md#mbb_player_game_expected_box) | Men's college points, rebounds and assists per player-game against his season, per minute and usage-adjusted. |
 | [mbb_player_on_off](additional/analytics-3.md#mbb_player_on_off) | College player on/off: each player's team with him on the floor and without him, per team-season. |
+| [mbb_player_season_box_rates](additional/analytics-3.md#mbb_player_season_box_rates) | Men's college per-36 points, rebounds and assists per player-season, ranked, with the season usage. |
 | [mbb_player_shot_zones](additional/analytics-3.md#mbb_player_shot_zones) | College season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |
 | [mbb_player_war](additional/analytics-3.md#mbb_player_war) | WAR and VORP per player-season, from our box BPM. |
-| [mbb_player_wowy](additional/analytics-3.md#mbb_player_wowy) | College WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
-| [mbb_shot_selection](additional/analytics-3.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
+| [mbb_player_wowy](additional/analytics-4.md#mbb_player_wowy) | College WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
+| [mbb_shot_selection](additional/analytics-4.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
 | [mbb_situational_lineup](additional/analytics-4.md#mbb_situational_lineup) | College five-man unit splits by situation: the team splits over the possessions each unit started. |
 | [mbb_situational_player](additional/analytics-4.md#mbb_situational_player) | College player on-floor splits by situation: the team splits over the possessions each player started. |
 | [mbb_situational_team](additional/analytics-4.md#mbb_situational_team) | College team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |
+| [mbb_situational_team_games](additional/analytics-4.md#mbb_situational_team_games) | College team splits by situation, one game at a time: `mbb_situational_team` per game. |
 | [mbb_strength_of_schedule](additional/analytics-4.md#mbb_strength_of_schedule) | The daily `strength_of_schedule` table: records, SoS, quad résumé, WAB, RPI and a NET estimate. |
+| [mbb_team_game_four_factors](additional/analytics-4.md#mbb_team_game_four_factors) | College per team and game: the four factors in points against the season's league-average offense. |
+| [mbb_team_game_possessions](additional/analytics-4.md#mbb_team_game_possessions) | Per team and game: the college possession counts behind `mbb_team_season_rates`. |
 | [mbb_team_luck](additional/analytics-4.md#mbb_team_luck) | College luck and close-game record: Pythagorean expected wins vs actual wins, and close-game W-L. |
 | [mbb_team_season_flow](additional/analytics-4.md#mbb_team_season_flow) | College game flow per team and season, with ranks, percentiles and `_n`. |
-| [mbb_team_season_rates](additional/analytics-4.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
+| [mbb_team_season_rates](additional/analytics-5.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [mbb_team_shot_zones](additional/analytics-5.md#mbb_team_shot_zones) | College season shot profile by zone per team, for and allowed: rim / mid / corner 3 / above-the-break 3. |
 | [mbb_team_strength](additional/analytics-5.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
 | [mbb_tournament_ineligible](additional/analytics-5.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
-| [ncaa_coach_stints](additional/analytics-5.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
-| [ncaa_impact_rows](additional/analytics-5.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
-| [ncaa_lineup_count_rows](additional/analytics-5.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
-| [ncaa_mbb_lineups](additional/analytics-5.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
-| [ncaa_mbb_on_off](additional/analytics-5.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
+| [ncaa_box_events](additional/analytics-5.md#ncaa_box_events) | Each player's box counts per stats.ncaa.org event, the input of the stint and split box. |
+| [ncaa_coach_stints](additional/analytics-6.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
+| [ncaa_impact_rows](additional/analytics-6.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
+| [ncaa_lineup_count_rows](additional/analytics-6.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
+| [ncaa_mbb_lineups](additional/analytics-6.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |
+| [ncaa_mbb_on_off](additional/analytics-6.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
 | [ncaa_mbb_player_combos](additional/analytics-6.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
 | [ncaa_mbb_player_lineups](additional/analytics-6.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |
 | [ncaa_possession_rate_rows](additional/analytics-6.md#ncaa_possession_rate_rows) | Map `ncaa_{mbb,wbb}_possessions` rows onto the team-season-rates possession frame. |
@@ -413,6 +422,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_stint_rows](additional/analytics-6.md#ncaa_stint_rows) | Map the stats.ncaa.org pbp and possessions onto the stint-row frame. |
 | [ncaa_team_box_count_rows](additional/analytics-6.md#ncaa_team_box_count_rows) | Map `ncaa_{mbb,wbb}_team_box` rows onto the four-factor count frame. |
 | [ncaa_team_coaches](additional/analytics-6.md#ncaa_team_coaches) | Every team-season's head coach from a raw-repo tree of stats.ncaa.org roster pages. |
+| [ncaa_team_game_counts](additional/analytics-6.md#ncaa_team_game_counts) | Each team's shots, free throws, rebounds and turnovers per game, whole and with garbage time split out. |
 | [order_lineup](additional/analytics-6.md#order_lineup) | Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order. |
 | [pos_class_to_score](additional/analytics-6.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
 | [project_bracket](additional/analytics-6.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
@@ -443,6 +453,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_team_crosswalk](additional/ids-and-crosswalks.md#mbb_team_crosswalk) | Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom / Yahoo). |
 | [name_is_initials](additional/ids-and-crosswalks.md#name_is_initials) | Detect a 2-initial name shorthand, e.g. `"A B"` or `"B, A"` |
 | [ncaa_espn_player_crosswalk](additional/ids-and-crosswalks.md#ncaa_espn_player_crosswalk) | Season crosswalk from the stats.ncaa.org player id to the ESPN athlete id. |
+| [ncaa_espn_school_seasons](additional/ids-and-crosswalks.md#ncaa_espn_school_seasons) | Per-season stats.ncaa.org team id of each NCAA school, with its ESPN team. |
+| [ncaa_espn_schools](additional/ids-and-crosswalks.md#ncaa_espn_schools) | stats.ncaa.org schools (org ids) and the ESPN team each one maps to. |
 | [ncaa_espn_team_crosswalk](additional/ids-and-crosswalks.md#ncaa_espn_team_crosswalk) | Season-keyed stats.ncaa.org -> ESPN team-id crosswalk. |
 | [ncaa_mbb_team_ids](additional/ids-and-crosswalks.md#ncaa_mbb_team_ids) | Men's-basketball `(team, season) -> stats.ncaa.org id` crosswalk. |
 | [refresh_ncaa_team_ids](additional/ids-and-crosswalks.md#refresh_ncaa_team_ids) | Extend the bundled crosswalk with a new season (update_team_ids recipe). |

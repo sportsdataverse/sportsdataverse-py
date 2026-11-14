@@ -16,7 +16,7 @@ Fitted, league-specific constants for the NHL/PWHL prediction spine.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `hfa` | `float` |  | home-ice edge, expected-goals units. |
+| `hfa` | `float` |  | home-ice edge on `exp_margin`'s own (shrunk-rating) scale. NHL: fitted jointly with `margin_sd`, so smaller than the real-goal home edge. PWHL: a seeded placeholder. |
 | `margin_sd` | `float` |  | standard deviation of the final goal margin (deliberately WIDE for hockey). |
 | `avg_xgf` | `float` |  | league mean even-strength xG-for, per game. |
 | `avg_total_goals` | `float` |  | league mean total goals per game. |
