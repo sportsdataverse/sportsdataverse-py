@@ -159,7 +159,7 @@ def nba_box_events(pbp: pl.DataFrame, schedule: pl.DataFrame) -> pl.DataFrame:
             [
                 own.select("game_id", "team_id", "person_id", _fold(x).alias("_name"))
                 for x in (pl.col("player_name"), pl.col("player_name_i"), said)
-            ]  # fmt: skip
+            ]
         )
         .filter(pl.col("_name").fill_null("") != "")
         .unique()
