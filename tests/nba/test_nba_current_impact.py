@@ -236,3 +236,47 @@ def test_window_prior_drops_a_window_game_without_possessions() -> None:
     by_hand = current_impact_prior(lp.filter(pl.col("game_id") != g0), lt.filter(pl.col("game_id") != g0), pos.filter(pl.col("game_id") != g0), bio, model, d).sort("player_id")  # fmt: skip
     assert not part.equals(base)
     assert part["player_id"].equals(by_hand["player_id"]) and (part["o_prior"] - by_hand["o_prior"]).abs().max() < 1e-9
+
+
+def test_prior_weight_is_the_posterior_over_the_entry_variance(poss, priors) -> None:
+    """No drift or shocks, one season: each prior weight is the exact Gaussian posterior variance / entry variance.
+
+    The posterior covariance of the RAPM design under the filter's prior (``entry_sd^2`` per player side, a
+    diffuse league level) is ``inv(X'X / noise + diag(1 / prior_var))``; the filter must give its diagonal
+    (and the net rating's ``o - d`` variance) over the entry variance, player by player.
+    """
+    one = poss.filter(pl.col("season") == 2015)
+    pr = priors.filter(pl.col("prior_date") == priors["prior_date"].max())
+    entry, noise, level = 2.0, 1.3, 10.0
+    par = CurrentImpactParams(entry_sd=entry, season_sd=0.0, team_sd=0.0, drift_sd=0.0, level_sd=level)
+    cut = dt.date(2014, 11, 1)
+    upto = one.filter(pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date() < cut)
+    _, r = run_current_impact(upto, pr.with_columns(pl.lit(dt.date(2000, 1, 1)).alias("prior_date")), [cut], params=par)[cut]  # fmt: skip
+    X, _, pids = build_rapm_design(upto)
+    P, ev = len(pids), (entry / 100) ** 2
+    A = np.hstack([X.toarray(), np.ones((X.shape[0], 1))])
+    cov = np.linalg.inv(A.T @ A / noise + np.diag([1 / ev] * (2 * P) + [1 / level**2]))
+    d = np.diag(cov)
+    want_o, want_d = d[:P] / ev, d[P : 2 * P] / ev
+    want = (d[:P] + d[P : 2 * P] - 2 * cov[np.arange(P), P + np.arange(P)]) / (2 * ev)
+    got = np.array([r[p][7:10] for p in pids])
+    assert np.abs(got[:, 0] - want_o).max() < 1e-6
+    assert np.abs(got[:, 1] - want_d).max() < 1e-6
+    assert np.abs(got[:, 2] - want).max() < 1e-6
+    # a week of RAPM-design data moves little off a 2-per-100 prior: starters near 0.95, a call-up near 1
+    assert want.max() > 0.99 and want.min() < 0.97
+
+
+def test_prior_weight_on_the_default_filter(poss, priors, current) -> None:
+    """Fitted SDs: weights are in [0, 1], fall with possessions, and a veteran sits under 1 on opening night."""
+    for c in ("o_prior_weight", "d_prior_weight", "prior_weight"):
+        assert current[c].is_between(0.0, 1.0).all() and current[c].null_count() == 0
+    rho = current.select(pl.corr("prior_weight", pl.col("off_poss") + pl.col("def_poss"), method="spearman")).item()
+    assert rho < -0.6  # -0.68 here: carried 2013-14 games account for the rest
+    d0 = poss.filter(pl.col("season") == 2015)["game_date"].min()
+    opening = nba_current_impact(poss, priors, d0)
+    assert opening["prior_weight"].max() < 1.0  # every listed player carries 2013-14 games
+    # more games never raise a player's weight: the filter only adds data between the two dates (drift aside)
+    later = nba_current_impact(poss, priors, _ASOF)
+    both = opening.join(later, on="player_id", suffix="_l").filter(pl.col("off_poss_l") > 200)
+    assert both.height > 80 and (both["prior_weight_l"] < both["prior_weight"]).all()

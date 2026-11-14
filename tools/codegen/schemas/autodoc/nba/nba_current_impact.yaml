@@ -35,3 +35,12 @@ columns:
 - name: last_game_date
   type: date
   description: ''
+- name: o_prior_weight
+  type: double
+  description: ''
+- name: d_prior_weight
+  type: double
+  description: ''
+- name: prior_weight
+  type: double
+  description: ''

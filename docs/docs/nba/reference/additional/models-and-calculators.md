@@ -171,13 +171,15 @@ Store each seen player's mean and variance for later seasons.
 
 #### CurrentImpactFilter.ratings
 
-`CurrentImpactFilter.ratings() -> 'dict[int, tuple[float, float, float, float, int, int, dt.date | None]]'`
+`CurrentImpactFilter.ratings() -> 'dict[int, Rating]'`
 
-Every seen player's `(o, d, o_prior, d_prior, off_poss, def_poss, last_game)`.
+Every seen player's `(o, d, o_prior, d_prior, off_poss, def_poss, last_game, w_o, w_d, w)`.
 
 Ratings and priors per 100 (`d` positive = good defense): the prior in force plus the deviation.
 A player carried from an earlier season who is not in this one's matrix gets his carried deviation
 plus the prior in force for him (0 when he has none). Possessions count this season's games.
+`w_o` / `w_d` / `w` are the prior weights of the offense, defense and net rating (module
+docstring): posterior variance over the no-update variance, clipped to [0, 1] against rounding.
 
 #### CurrentImpactFilter.set_prior
 
