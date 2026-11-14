@@ -21,6 +21,7 @@ Float64 ``value``, everything else String).
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 import polars as pl
@@ -32,6 +33,7 @@ __all__ = [
     "helper_wbb_player_season_stats",
     "helper_wbb_rosters",
     "helper_wbb_standings",
+    "helper_wbb_team_season_opponent_stats",
     "helper_wbb_team_season_stats",
 ]
 
@@ -269,6 +271,46 @@ def _pad(x: list[Any] | None, n: int) -> list[str | None]:
     return vals + [None] * (n - len(vals))
 
 
+_MADE_ATTEMPTED = re.compile(r"^(\d+(?:\.\d+)?)-(\d+(?:\.\d+)?)$")
+
+
+def _split_made_attempted(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Follow each made-attempted stat (``freeThrowsMade-freeThrowsAttempted``, ``"83-111"``) with its two counts.
+
+    ESPN ships a player's FGM/FGA, 3PM/3PA and FTM/FTA as one ``"made-attempted"`` text value whose
+    ``value`` is null. Each such row keeps its place and is followed by a ``freeThrowsMade`` row
+    (``value`` 83, label ``FTM``) and a ``freeThrowsAttempted`` row (``value`` 111, label ``FTA``),
+    the names the team table already uses. Per-game averages (``2.3-3.1``) split the same way. A row
+    whose name or value does not split into two parts, or whose parts its category already names,
+    gets nothing added.
+    """
+    seen = {(r["category"], r["stat_name"]) for r in rows}
+    out: list[dict[str, Any]] = []
+    for r in rows:
+        out.append(r)
+        names = (r["stat_name"] or "").split("-")
+        m = _MADE_ATTEMPTED.match(r["display_value"] or "")
+        if len(names) != 2 or m is None or any((r["category"], n) in seen for n in names):
+            continue
+        descs = (r["stat_description"] or "").split(".-")
+        for k, (name, suffix, value) in enumerate(zip(names, ("M", "A"), m.groups())):
+            out.append(
+                {
+                    **r,
+                    "stat_label": f"{r['stat_label']}{suffix}" if r["stat_label"] else None,
+                    "stat_name": name,
+                    "stat_display_name": (r["stat_display_name"] or "").replace(
+                        "Made-Attempted", ("Made", "Attempted")[k]
+                    )
+                    or None,
+                    "stat_description": (descs[k].rstrip(".") + ".") if len(descs) == 2 else None,
+                    "display_value": value,
+                    "value": float(value),
+                }
+            )
+    return out
+
+
 def _season_row(cat: dict, season: int, legacy: bool) -> tuple[dict | None, list[Any]]:
     """One stats category's row for ``season``: ``(the statistics[] entry or None, its values)``.
 
@@ -408,7 +450,7 @@ def helper_wbb_player_season_stats(
                 }
             )
     return _frame(
-        rows,
+        _split_made_attempted(rows),
         _PLAYER_STATS_COLS,
         int32=("season", "athlete_id", "team_id"),
         float64=("value",),
@@ -537,6 +579,93 @@ def helper_wbb_team_season_stats(payload: dict, *, season: int, team_id: int | s
                 }
             )
             rows.append(row)
+    return _frame(rows, _TEAM_STATS_COLS, int32=("season", "team_id"), float64=("value",))
+
+
+#: The opponents' totals :func:`helper_wbb_team_season_opponent_stats` sums: (``stat_name``,
+#: ``stat_label``, display name, team_box column of the opponent's row).
+_OPPONENT_STATS: tuple[tuple[str, str, str, str], ...] = (
+    ("points", "PTS", "Opponent Points", "team_score"),
+    ("fieldGoalsMade", "FGM", "Opponent Field Goals Made", "field_goals_made"),
+    ("fieldGoalsAttempted", "FGA", "Opponent Field Goals Attempted", "field_goals_attempted"),
+    ("threePointFieldGoalsMade", "3PM", "Opponent 3-Point Field Goals Made", "three_point_field_goals_made"),
+    (
+        "threePointFieldGoalsAttempted",
+        "3PA",
+        "Opponent 3-Point Field Goals Attempted",
+        "three_point_field_goals_attempted",
+    ),
+    ("freeThrowsMade", "FTM", "Opponent Free Throws Made", "free_throws_made"),
+    ("freeThrowsAttempted", "FTA", "Opponent Free Throws Attempted", "free_throws_attempted"),
+)
+_TEAM_META_COLS = _TEAM_STATS_COLS[2:9]  # team_slug .. team_logo
+
+
+def helper_wbb_team_season_opponent_stats(team_box: pl.DataFrame, *, season: int) -> pl.DataFrame:
+    """Every team's ``opponent`` rows for ``team_season_stats``: its opponents' season totals.
+
+    ESPN's team statistics carry no opponents' numbers, so these come from the season's team box:
+    for each game a team played, the other team's row of that game. One row per (team, stat) in
+    the ``team_season_stats`` long shape, ``category`` ``"opponent"``: points, field goals, threes
+    and free throws made and attempted (:data:`_OPPONENT_STATS`). Every game in ``team_box``
+    counts, regular season and postseason, the scope of ESPN's season type 0 totals that
+    ``team_season_stats`` now carries.
+
+    Args:
+        team_box: The season's team box (``load_wbb_team_boxscore`` / ``load_mbb_team_boxscore``):
+            two rows per game, with ``game_id``, ``team_id``, ``opponent_team_id``, the team
+            columns and the box counts named in :data:`_OPPONENT_STATS`.
+        season: The season to stamp on the rows.
+
+    Returns:
+        pl.DataFrame: The ``team_season_stats`` columns, ``len(_OPPONENT_STATS)`` rows per team.
+        A team whose opponent's row is missing for a game sums the games it has. Empty (zero
+        columns) when ``team_box`` is empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wbb import helper_wbb_team_season_opponent_stats, load_wbb_team_boxscore
+            opp = helper_wbb_team_season_opponent_stats(load_wbb_team_boxscore([2026]), season=2026)
+            opp.filter(stat_name="freeThrowsMade").sort("value").head()
+    """
+    if team_box.is_empty():
+        return pl.DataFrame()
+    counts = [c for *_, c in _OPPONENT_STATS]
+    them = team_box.select(
+        pl.col("game_id"), pl.col("team_id").alias("opponent_team_id"), *(pl.col(c).alias(f"_o_{c}") for c in counts)
+    ).unique(["game_id", "opponent_team_id"], keep="first")
+    tb = team_box.unique(["game_id", "team_id"], keep="first")
+    if tb.schema["opponent_team_id"] != them.schema["opponent_team_id"]:
+        them = them.with_columns(pl.col("opponent_team_id").cast(tb.schema["opponent_team_id"]))
+    sums = (
+        tb.join(them, on=["game_id", "opponent_team_id"], how="inner")
+        .group_by("team_id")
+        .agg(
+            *(pl.col(c).last() for c in _TEAM_META_COLS if c in tb.columns),
+            pl.len().alias("_games"),
+            *(pl.col(f"_o_{c}").cast(pl.Float64).sum() for c in counts),
+        )
+        .sort("team_id")
+    )
+    rows: list[dict[str, Any]] = []
+    for t in sums.iter_rows(named=True):
+        for name, label, display, col in _OPPONENT_STATS:
+            v = t[f"_o_{col}"]
+            rows.append(
+                {
+                    "season": int(season),
+                    **{c: t.get(c) for c in _TEAM_META_COLS},
+                    "team_id": t["team_id"],
+                    "category": "opponent",
+                    "stat_label": label,
+                    "stat_name": name,
+                    "stat_display_name": display,
+                    "stat_description": f"{display}: summed over the {t['_games']} games in the team box.",
+                    "display_value": f"{v:.0f}",
+                    "value": v,
+                }
+            )
     return _frame(rows, _TEAM_STATS_COLS, int32=("season", "team_id"), float64=("value",))
 
 

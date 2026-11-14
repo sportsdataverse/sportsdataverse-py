@@ -40,6 +40,7 @@ from sportsdataverse.wbb.wbb_season_producers import (
     _coalesce_chr,
     _frame,
     _pad,
+    _split_made_attempted,
     _to_num,
     build_athlete_identity_lookup,
     helper_wbb_rosters,
@@ -295,7 +296,7 @@ def helper_nba_player_season_stats(
                 }
             )
     return _frame(
-        rows,
+        _split_made_attempted(rows),
         _PLAYER_STATS_COLS,
         int32=("season", "athlete_id", "team_id"),
         float64=("value",),

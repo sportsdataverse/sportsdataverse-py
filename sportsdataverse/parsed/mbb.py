@@ -422,6 +422,7 @@ from sportsdataverse.mbb import helper_mbb_schedule as helper_mbb_schedule  # no
 from sportsdataverse.mbb import helper_mbb_standings as helper_mbb_standings  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_team_box as helper_mbb_team_box  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_team_items as helper_mbb_team_items  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_team_season_opponent_stats as helper_mbb_team_season_opponent_stats  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_team_season_stats as helper_mbb_team_season_stats  # noqa: F401
 from sportsdataverse.mbb import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.mbb import incorporate_height as incorporate_height  # noqa: F401
@@ -1076,6 +1077,7 @@ __all__ = [
     "helper_mbb_standings",
     "helper_mbb_team_box",
     "helper_mbb_team_items",
+    "helper_mbb_team_season_opponent_stats",
     "helper_mbb_team_season_stats",
     "in_game_features",
     "incorporate_height",

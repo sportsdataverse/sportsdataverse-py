@@ -47,6 +47,7 @@ from sportsdataverse.wbb.wbb_season_producers import (
     build_athlete_identity_lookup,
     helper_wbb_rosters,
     helper_wbb_standings,
+    helper_wbb_team_season_opponent_stats,
     helper_wbb_team_season_stats,
 )
 
@@ -59,6 +60,7 @@ __all__ = [
     "helper_mbb_player_season_stats",
     "helper_mbb_rosters",
     "helper_mbb_standings",
+    "helper_mbb_team_season_opponent_stats",
     "helper_mbb_team_season_stats",
 ]
 
@@ -187,6 +189,32 @@ def helper_mbb_team_season_stats(payload: dict, *, season: int, team_id: int | s
     .. _hoopR: https://hoopR.sportsdataverse.org
     """
     return helper_wbb_team_season_stats(payload, season=season, team_id=team_id)
+
+
+def helper_mbb_team_season_opponent_stats(team_box: pl.DataFrame, *, season: int) -> pl.DataFrame:
+    """Every team's ``opponent`` rows for MBB ``team_season_stats``: its opponents' season totals.
+
+    Delegates to :func:`~sportsdataverse.wbb.wbb_season_producers.helper_wbb_team_season_opponent_stats`
+    (the team box is the same shape in both college leagues). ESPN's team statistics carry no
+    opponents' numbers, so each team's opponents' points, field goals, threes and free throws (made
+    and attempted) are summed from the other team's row of every game in the season's team box.
+
+    Args:
+        team_box: The season's MBB team box (``load_mbb_team_boxscore``), two rows per game.
+        season: The season to stamp on the rows.
+
+    Returns:
+        pl.DataFrame: The ``team_season_stats`` columns, ``category`` ``"opponent"``, seven rows
+        per team; empty (zero columns) when ``team_box`` is empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb import helper_mbb_team_season_opponent_stats, load_mbb_team_boxscore
+            opp = helper_mbb_team_season_opponent_stats(load_mbb_team_boxscore([2026]), season=2026)
+            opp.filter(team_id=150)
+    """
+    return helper_wbb_team_season_opponent_stats(team_box, season=season)
 
 
 def helper_mbb_standings(payload: dict, *, season: int) -> pl.DataFrame:
