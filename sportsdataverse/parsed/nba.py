@@ -174,6 +174,7 @@ from sportsdataverse.nba import add_start_type_detail as add_start_type_detail  
 from sportsdataverse.nba import add_transition as add_transition  # noqa: F401
 from sportsdataverse.nba import adjust_efficiency as adjust_efficiency  # noqa: F401
 from sportsdataverse.nba import adjust_pace as adjust_pace  # noqa: F401
+from sportsdataverse.nba import advanced_min_poss as advanced_min_poss  # noqa: F401
 from sportsdataverse.nba import apply_box_prior as apply_box_prior  # noqa: F401
 from sportsdataverse.nba import as_of_ratings_split as as_of_ratings_split  # noqa: F401
 from sportsdataverse.nba import box_features as box_features  # noqa: F401
@@ -351,6 +352,7 @@ from sportsdataverse.nba import nba_crosswalks_from_archive as nba_crosswalks_fr
 from sportsdataverse.nba import nba_cup_sim as nba_cup_sim  # noqa: F401
 from sportsdataverse.nba import nba_cup_standings as nba_cup_standings  # noqa: F401
 from sportsdataverse.nba import nba_current_impact as nba_current_impact  # noqa: F401
+from sportsdataverse.nba import nba_current_impact_context as nba_current_impact_context  # noqa: F401
 from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_decay_rapm as nba_decay_rapm  # noqa: F401
 from sportsdataverse.nba import nba_draft_lottery_odds as nba_draft_lottery_odds  # noqa: F401
@@ -400,6 +402,7 @@ from sportsdataverse.nba import nba_player_positions as nba_player_positions  # 
 from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
 from sportsdataverse.nba import nba_player_season_box_rates as nba_player_season_box_rates  # noqa: F401
 from sportsdataverse.nba import nba_player_shot_zones as nba_player_shot_zones  # noqa: F401
+from sportsdataverse.nba import nba_player_stats_advanced_context as nba_player_stats_advanced_context  # noqa: F401
 from sportsdataverse.nba import nba_player_war as nba_player_war  # noqa: F401
 from sportsdataverse.nba import nba_player_wowy as nba_player_wowy  # noqa: F401
 from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
@@ -540,6 +543,7 @@ __all__ = [
     "add_transition",
     "adjust_efficiency",
     "adjust_pace",
+    "advanced_min_poss",
     "apply_box_prior",
     "as_of_ratings_split",
     "box_features",
@@ -841,6 +845,7 @@ __all__ = [
     "nba_cup_sim",
     "nba_cup_standings",
     "nba_current_impact",
+    "nba_current_impact_context",
     "nba_darko",
     "nba_decay_rapm",
     "nba_draft_lottery_odds",
@@ -890,6 +895,7 @@ __all__ = [
     "nba_player_props",
     "nba_player_season_box_rates",
     "nba_player_shot_zones",
+    "nba_player_stats_advanced_context",
     "nba_player_war",
     "nba_player_wowy",
     "nba_playtype_ratings",

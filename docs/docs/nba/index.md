@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 284 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 287 | — |
 
 ## ESPN {#espn}
 
@@ -105,6 +105,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`WalkForwardResult`](reference/additional/models-and-calculators#WalkForwardResult)
 - [`adjust_efficiency`](reference/additional/models-and-calculators#adjust_efficiency)
 - [`adjust_pace`](reference/additional/models-and-calculators#adjust_pace)
+- [`advanced_min_poss`](reference/additional/models-and-calculators#advanced_min_poss)
 - [`apply_box_prior`](reference/additional/models-and-calculators#apply_box_prior)
 - [`as_of_ratings_split`](reference/additional/models-and-calculators#as_of_ratings_split)
 - [`box_prior_features`](reference/additional/models-and-calculators#box_prior_features)
@@ -136,6 +137,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_bpm`](reference/additional/models-and-calculators-2#nba_bpm)
 - [`nba_career_trajectory`](reference/additional/models-and-calculators-2#nba_career_trajectory)
 - [`nba_current_impact`](reference/additional/models-and-calculators-2#nba_current_impact)
+- [`nba_current_impact_context`](reference/additional/models-and-calculators-2#nba_current_impact_context)
 - [`nba_darko`](reference/additional/models-and-calculators-2#nba_darko)
 - [`nba_decay_rapm`](reference/additional/models-and-calculators-2#nba_decay_rapm)
 - [`nba_draft_model`](reference/additional/models-and-calculators-2#nba_draft_model)
@@ -146,6 +148,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_matchup_drapm`](reference/additional/models-and-calculators-2#nba_matchup_drapm)
 - [`nba_player_impact_context`](reference/additional/models-and-calculators-3#nba_player_impact_context)
 - [`nba_player_impact_league_averages`](reference/additional/models-and-calculators-3#nba_player_impact_league_averages)
+- [`nba_player_stats_advanced_context`](reference/additional/models-and-calculators-3#nba_player_stats_advanced_context)
 - [`nba_predict_games`](reference/additional/models-and-calculators-3#nba_predict_games)
 - [`nba_reml_rapm`](reference/additional/models-and-calculators-3#nba_reml_rapm)
 - [`nba_rookie_projection`](reference/additional/models-and-calculators-3#nba_rookie_projection)
@@ -154,12 +157,12 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_war`](reference/additional/models-and-calculators-3#nba_war)
 - [`ot_adjusted_seconds`](reference/additional/models-and-calculators-3#ot_adjusted_seconds)
 - [`player_game_rates`](reference/additional/models-and-calculators-3#player_game_rates)
-- [`player_props`](reference/additional/models-and-calculators-3#player_props)
-- [`predict_margin`](reference/additional/models-and-calculators-3#predict_margin)
-- [`predict_total`](reference/additional/models-and-calculators-3#predict_total)
-- [`raw_game_efficiency`](reference/additional/models-and-calculators-3#raw_game_efficiency)
-- [`render_report`](reference/additional/models-and-calculators-3#render_report)
-- [`run_current_impact`](reference/additional/models-and-calculators-3#run_current_impact)
+- [`player_props`](reference/additional/models-and-calculators-4#player_props)
+- [`predict_margin`](reference/additional/models-and-calculators-4#predict_margin)
+- [`predict_total`](reference/additional/models-and-calculators-4#predict_total)
+- [`raw_game_efficiency`](reference/additional/models-and-calculators-4#raw_game_efficiency)
+- [`render_report`](reference/additional/models-and-calculators-4#render_report)
+- [`run_current_impact`](reference/additional/models-and-calculators-4#run_current_impact)
 - [`score_win_prob`](reference/additional/models-and-calculators-4#score_win_prob)
 - [`season_game_excitement`](reference/additional/models-and-calculators-4#season_game_excitement)
 - [`season_gram`](reference/additional/models-and-calculators-4#season_gram)

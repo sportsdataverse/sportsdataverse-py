@@ -163,8 +163,16 @@ from sportsdataverse.nba.nba_lineup_seasons import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_player_on_off import nba_player_on_off, nba_player_wowy  # noqa: F401
 from sportsdataverse.nba.nba_player_impact import (  # noqa: F401
+    CURRENT_IMPACT_RANKED,
+    nba_current_impact_context,
     nba_player_impact_context,
     nba_player_impact_league_averages,
+)
+from sportsdataverse.nba.nba_player_stats_ranks import (  # noqa: F401
+    ADVANCED_LOWER_IS_BETTER,
+    ADVANCED_RANKED,
+    advanced_min_poss,
+    nba_player_stats_advanced_context,
 )
 from sportsdataverse.nba.nba_player_factor_rapm import nba_player_factor_rapm  # noqa: F401
 from sportsdataverse.nba.nba_play_style import (  # noqa: F401

@@ -174,6 +174,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [WalkForwardResult](additional/models-and-calculators.md#WalkForwardResult) | Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline. |
 | [adjust_efficiency](additional/models-and-calculators.md#adjust_efficiency) | Iterative opponent-adjusted rating -> AdjOffRtg / AdjDefRtg / AdjNet per team-season. |
 | [adjust_pace](additional/models-and-calculators.md#adjust_pace) | Opponent-adjusted pace (possessions/game) per team-season. |
+| [advanced_min_poss](additional/models-and-calculators.md#advanced_min_poss) | The possessions (one side) a player needs to be ranked: half the on-court net gate. |
 | [apply_box_prior](additional/models-and-calculators.md#apply_box_prior) | Score box-prior features with each player's out-of-fold rule. |
 | [as_of_ratings_split](additional/models-and-calculators.md#as_of_ratings_split) | Filter a results frame to games strictly before a cutoff date (leakage boundary). |
 | [box_prior_features](additional/models-and-calculators.md#box_prior_features) | One season's box-prior features: league-relative, padded box rates plus player and lineup context. |
@@ -205,6 +206,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_bpm](additional/models-and-calculators-2.md#nba_bpm) | Faithful BPM 2.0 per player, at season or single-game granularity. |
 | [nba_career_trajectory](additional/models-and-calculators-2.md#nba_career_trajectory) | Age-adjust player-season values with the bundled aging curve. |
 | [nba_current_impact](additional/models-and-calculators-2.md#nba_current_impact) | Current impact: each player's expected offense / defense impact per 100 as of a date. |
+| [nba_current_impact_context](additional/models-and-calculators-2.md#nba_current_impact_context) | Append `<m>_n`, `<m>_rank` and `<m>_pct` to a `current_impact` table, within each `as_of` date. |
 | [nba_darko](additional/models-and-calculators-2.md#nba_darko) | Project each player's next-season rating via a per-player Kalman filter + aging curve. |
 | [nba_decay_rapm](additional/models-and-calculators-2.md#nba_decay_rapm) | Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`. |
 | [nba_draft_model](additional/models-and-calculators-2.md#nba_draft_model) | Project prospect career value + draft probability from combine measurements. |
@@ -215,6 +217,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_matchup_drapm](additional/models-and-calculators-2.md#nba_matchup_drapm) | Matchup-based defensive RAPM (offense-quality-controlled). |
 | [nba_player_impact_context](additional/models-and-calculators-3.md#nba_player_impact_context) | Append `<m>_n`, `<m>_rank` and `<m>_pct` to a `player_impact` table. |
 | [nba_player_impact_league_averages](additional/models-and-calculators-3.md#nba_player_impact_league_averages) | The league-average rows of a `player_impact` table, one block per season type. |
+| [nba_player_stats_advanced_context](additional/models-and-calculators-3.md#nba_player_stats_advanced_context) | Replace `player_stats_advanced`'s API ranks of the rated measures with gated producer ranks. |
 | [nba_predict_games](additional/models-and-calculators-3.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
 | [nba_reml_rapm](additional/models-and-calculators-3.md#nba_reml_rapm) | Season impact rating: RAPM shrunk toward a box prior, at a fixed league penalty or one chosen by REML. |
 | [nba_rookie_projection](additional/models-and-calculators-3.md#nba_rookie_projection) | Project rookie/sophomore value by composing draft x aging x availability. |
@@ -223,12 +226,12 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_war](additional/models-and-calculators-3.md#nba_war) | Points-above-replacement -> wins for each player. |
 | [ot_adjusted_seconds](additional/models-and-calculators-3.md#ot_adjusted_seconds) | Tag overtime rows and give them the overtime period clock as their seconds remaining. |
 | [player_game_rates](additional/models-and-calculators-3.md#player_game_rates) | True-shooting and usage for every boxed player of one game. |
-| [player_props](additional/models-and-calculators-3.md#player_props) | Per ESPN game x athlete x stat: the closing player-prop line, its prices and the no-vig over probability. |
-| [predict_margin](additional/models-and-calculators-3.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
-| [predict_total](additional/models-and-calculators-3.md#predict_total) | Expected total points from adjusted ratings and paces. |
-| [raw_game_efficiency](additional/models-and-calculators-3.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
-| [render_report](additional/models-and-calculators-3.md#render_report) | Render a `ValidationReport` as a human-readable markdown validation card. |
-| [run_current_impact](additional/models-and-calculators-3.md#run_current_impact) | One pass of the filter over `possessions`, snapshotting before each `as_of` date. |
+| [player_props](additional/models-and-calculators-4.md#player_props) | Per ESPN game x athlete x stat: the closing player-prop line, its prices and the no-vig over probability. |
+| [predict_margin](additional/models-and-calculators-4.md#predict_margin) | Expected home-minus-away margin from two adjusted net ratings. |
+| [predict_total](additional/models-and-calculators-4.md#predict_total) | Expected total points from adjusted ratings and paces. |
+| [raw_game_efficiency](additional/models-and-calculators-4.md#raw_game_efficiency) | Per-team, per-game possessions + raw offensive/defensive rating. |
+| [render_report](additional/models-and-calculators-4.md#render_report) | Render a `ValidationReport` as a human-readable markdown validation card. |
+| [run_current_impact](additional/models-and-calculators-4.md#run_current_impact) | One pass of the filter over `possessions`, snapshotting before each `as_of` date. |
 | [score_win_prob](additional/models-and-calculators-4.md#score_win_prob) | Per-play home win probability, its play-to-play delta, and the prior, for one game. |
 | [season_game_excitement](additional/models-and-calculators-4.md#season_game_excitement) | Every game's excitement index, lead changes and biggest swing, ranked within its season. |
 | [season_gram](additional/models-and-calculators-4.md#season_gram) | The `SeasonGram` of a possession frame (rows with a full lineup). |
