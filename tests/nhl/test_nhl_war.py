@@ -130,8 +130,8 @@ def test_nhl_skater_war_assembles_components_into_gar_and_war(monkeypatch):
     assert hasattr(war_pd, "to_dict")
 
 
-@pytest.mark.parametrize("league", ["nhl", "pwhl"])
-def test_replacement_level_is_on_the_rapm_scale(monkeypatch, league):
+@pytest.mark.parametrize(("league", "expected"), [("nhl", (-0.12, -0.02)), ("pwhl", (-0.10, -0.02))])
+def test_replacement_level_is_on_the_rapm_scale(monkeypatch, league, expected):
     # RAPM coefficients are deviations from the league average: an average skater (0, 0) must
     # earn positive EV GAR and a replacement-level skater none. The old team-rate subtraction
     # charged the average skater about -45 EV goals over 600 minutes.
@@ -139,7 +139,7 @@ def test_replacement_level_is_on_the_rapm_scale(monkeypatch, league):
 
     cfg = get_constants(league)
     rep_off, rep_def = cfg.replacement_rapm()
-    assert -0.5 < rep_off < 0 and -0.5 < rep_def <= 0
+    assert (rep_off, rep_def) == pytest.approx(expected)
     rapm = pl.DataFrame(
         {"player_id": [1, 2], "xg_rapm_off": [0.0, rep_off], "xg_rapm_def": [0.0, rep_def], "toi_minutes": [600.0] * 2}
     )

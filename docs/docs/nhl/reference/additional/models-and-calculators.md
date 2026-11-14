@@ -38,11 +38,15 @@ League-specific constants consumed by every player-impact engine function.
 
 Replacement level on the skater-RAPM scale: `(offense, defense)` in xG/60.
 
-`nhl_skater_rapm` coefficients are per-skater deviations from the league average
-(the design matrix carries an intercept), additive over the five skaters on ice,
-with defense signed so that positive means suppression. The replacement rates are
-team on-ice levels, so each skater's share of the unit's gap to the league average
-is a fifth of it.
+The 5v5 fit `nhl_skater_war` uses (`nhl_skater_rapm(strength_states=["5v5"])`)
+gives each skater a coefficient relative to the design's intercept (about the
+league-average rate; home ice is its own column), additive over the five skaters
+on ice, with defense signed so that positive means suppression. The replacement
+rates are team on-ice levels, so each skater's share of the unit's gap to the
+league average is a fifth of it. Both rates are seeds, not fitted values, and the
+ridge pulls low-minute skaters toward 0, above this level, so fringe skaters tend
+to earn small positive EV GAR; fitting the level from the replacement pool's own
+RAPM is the open follow-up.
 
 **Returns**
 

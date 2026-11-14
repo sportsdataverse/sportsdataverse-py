@@ -138,6 +138,31 @@ def test_nhl_skater_rapm_recovers_dominant_skater_ordering():
     assert top["player_id"][0] == 999
 
 
+def test_nhl_skater_rapm_defense_is_signed_as_suppression():
+    # Defender 999 is on the home ice for half the stints, and the away team's xGF collapses
+    # whenever they are: suppression must come out POSITIVE in xg_rapm_def (WAR's replacement
+    # level, ImpactConfig.replacement_rapm, assumes that sign).
+    stints = pl.DataFrame(
+        {
+            "game_id": [1] * 4,
+            "period": [1] * 4,
+            "start_s": [0, 100, 200, 300],
+            "end_s": [100, 200, 300, 400],
+            "duration": [100] * 4,
+            "home_ids": [[1, 2, 999], [3, 4, 999], [1, 2, 5], [3, 4, 5]],
+            "away_ids": [[50, 51, 52]] * 4,
+            "home_goalie": [None] * 4,
+            "away_goalie": [None] * 4,
+            "strength_state": ["5v5"] * 4,
+            "xgf_home": [0.5] * 4,
+            "xgf_away": [0.1, 0.1, 3.0, 3.0],
+        }
+    )
+    rapm = nhl_skater_rapm(pl.DataFrame(), pl.DataFrame(), _stints=stints, lam=10.0)
+    d = dict(zip(rapm["player_id"].to_list(), rapm["xg_rapm_def"].to_list()))
+    assert d[999] > 0 > d[5]
+
+
 def test_nhl_skater_rapm_empty_input_returns_zero_row_frame():
     out = nhl_skater_rapm(pl.DataFrame(), pl.DataFrame())
     assert out.height == 0
