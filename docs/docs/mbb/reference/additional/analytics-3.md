@@ -605,6 +605,18 @@ One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10
 | `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
 | `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
 | `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
+| `pts_pg` | Float64 | Points per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
+| `reb_pg` | Float64 | Rebounds per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
+| `ast_pg` | Float64 | Assists per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
+| `pts_pg_rank` | Float64 | Rank of pts_pg among the season's players with at least the games gate (1 game); 1 = most, ties averaged. Null under ten ranked players. |
+| `reb_pg_rank` | Float64 | Rank of reb_pg among the season's players with at least the games gate (2 games); 1 = most, ties averaged. Null under ten ranked players. |
+| `ast_pg_rank` | Float64 | Rank of ast_pg among the season's players with at least the games gate (2 games); 1 = most, ties averaged. Null under ten ranked players. |
+| `pts_pg_pct` | Float64 | Percentile of pts_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
+| `reb_pg_pct` | Float64 | Percentile of reb_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
+| `ast_pg_pct` | Float64 | Percentile of ast_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
+| `pts_pg_n` | Int64 | Games behind pts_pg: the games he played (0 with no box line). |
+| `reb_pg_n` | Int64 | Games behind reb_pg: the games he played (0 with no box line). |
+| `ast_pg_n` | Int64 | Games behind ast_pg: the games he played (0 with no box line). |
 
 **Raises**
 

@@ -678,6 +678,61 @@ from sportsdataverse.wbb import wbb_game_on_off
 wbb_game_on_off(2025).head()
 ```
 
+### wbb_game_player_box_splits {#wbb_game_player_box_splits}
+
+`wbb_game_player_box_splits(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college player box by game, period and garbage time.
+
+Delegates to `sportsdataverse.mbb.mbb_game_stints.mbb_game_player_box_splits` with
+`league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+Per `(season, game_id, team_id, player_id)`: the `all`, `period` (with `on_floor_at_end`) and `garbage` rows, each with minutes and the box counts. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `player_id` | String | stats.ncaa.org player id. |
+| `family` | String | Split family: all (the game), period (one row per period he played) or garbage (garbage time in and out). |
+| `split` | String | The split: all; p1, p2, ... for a period (periods past regulation are the overtimes); garbage_time or not_garbage_time (his box with garbage time removed). |
+| `period` | Int64 | The period of a period row; null on the other families. |
+| `seconds` | Float64 | Game-clock seconds he was on the floor in the split (an action's clock goes to the lineup at it). |
+| `minutes` | Float64 | Game-clock minutes on the floor in the split (seconds / 60). |
+| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goals attempted. |
+| `fg3m` | Int64 | Three-pointers made. |
+| `fg3a` | Int64 | Three-pointers attempted. |
+| `ftm` | Int64 | Free throws made. |
+| `fta` | Int64 | Free throws attempted. |
+| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's). |
+| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's). |
+| `reb` | Int64 | Total rebounds: oreb + dreb. |
+| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on. |
+| `stl` | Int64 | Steals he is credited with. |
+| `blk` | Int64 | Shots he blocked. |
+| `tov` | Int64 | Turnovers (a team turnover is no player's). |
+| `pf` | Int64 | Personal fouls (technicals are not counted). |
+| `on_floor_at_end` | Boolean | On a period row, whether he was in his side's lineup at the period's last action; null on the other families. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_game_player_box_splits
+wbb_game_player_box_splits(2025).filter(family="period").head()
+```
+
 ### wbb_game_player_impact {#wbb_game_player_impact}
 
 `wbb_game_player_impact(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -763,6 +818,21 @@ One row per `(season, game_id, team_id, player_id, stint_number)`: `opp_team_id`
 | `pts` | Int64 | The team's points during the stint, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
 | `opp_pts` | Int64 | The opponent's points during the stint, credited as pts is. |
 | `plus_minus` | Int64 | The stint's +/-: pts - opp_pts. |
+| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw, his own, on the stint's actions. |
+| `fgm` | Int64 | Field goals made, his own, on the stint's actions. |
+| `fga` | Int64 | Field goals attempted, his own, on the stint's actions. |
+| `fg3m` | Int64 | Three-pointers made, his own, on the stint's actions. |
+| `fg3a` | Int64 | Three-pointers attempted, his own, on the stint's actions. |
+| `ftm` | Int64 | Free throws made, his own, on the stint's actions. |
+| `fta` | Int64 | Free throws attempted, his own, on the stint's actions. |
+| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
+| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
+| `reb` | Int64 | Total rebounds in the stint: oreb + dreb. |
+| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on, his own, on the stint's actions. |
+| `stl` | Int64 | Steals, his own, on the stint's actions. |
+| `blk` | Int64 | Blocked shots, his own, on the stint's actions. |
+| `tov` | Int64 | Turnovers (a team turnover is no player's), his own, on the stint's actions. |
+| `pf` | Int64 | Personal fouls (technicals are not counted), his own, on the stint's actions. |
 
 **Example**
 

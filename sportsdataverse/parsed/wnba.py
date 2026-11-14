@@ -269,6 +269,7 @@ from sportsdataverse.wnba import wnba_foul_drawing as wnba_foul_drawing  # noqa:
 from sportsdataverse.wnba import wnba_game_flow as wnba_game_flow  # noqa: F401
 from sportsdataverse.wnba import wnba_game_lineups_used as wnba_game_lineups_used  # noqa: F401
 from sportsdataverse.wnba import wnba_game_on_off as wnba_game_on_off  # noqa: F401
+from sportsdataverse.wnba import wnba_game_player_box_splits as wnba_game_player_box_splits  # noqa: F401
 from sportsdataverse.wnba import wnba_game_player_impact as wnba_game_player_impact  # noqa: F401
 from sportsdataverse.wnba import wnba_game_stints as wnba_game_stints  # noqa: F401
 from sportsdataverse.wnba import wnba_game_units as wnba_game_units  # noqa: F401
@@ -572,6 +573,7 @@ __all__ = [
     "wnba_game_flow",
     "wnba_game_lineups_used",
     "wnba_game_on_off",
+    "wnba_game_player_box_splits",
     "wnba_game_player_impact",
     "wnba_game_stints",
     "wnba_game_units",

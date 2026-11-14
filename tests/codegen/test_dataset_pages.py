@@ -13,12 +13,12 @@ from tools.codegen import generate, spec
 
 _LOADERS = spec.load_releases(generate.ENDPOINTS / "releases.yaml").loaders
 _PAGED = [ld for ld in _LOADERS if ld.dataset_page]
-_PRODUCERS = {"mbb": "hoopR-mbb-data", "wbb": "wehoop-wbb-data", "wnba": "wehoop-wnba-data"}
+_PRODUCERS = {"mbb": "hoopR-mbb-data", "nba": "hoopR-nba-data", "wbb": "wehoop-wbb-data", "wnba": "wehoop-wnba-data"}
 _TAG = "https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/"
 
 
 def test_every_espn_basketball_producer_page_is_linked() -> None:
-    assert len(_PAGED) == 46
+    assert len(_PAGED) == 62
     for ld in _PAGED:
         repo, dataset = ld.dataset_page.split("/")
         assert repo == _PRODUCERS[ld.league], ld.fn

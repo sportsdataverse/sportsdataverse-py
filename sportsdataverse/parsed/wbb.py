@@ -381,6 +381,7 @@ from sportsdataverse.wbb import helper_wbb_schedule as helper_wbb_schedule  # no
 from sportsdataverse.wbb import helper_wbb_standings as helper_wbb_standings  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_box as helper_wbb_team_box  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_items as helper_wbb_team_items  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_team_season_opponent_stats as helper_wbb_team_season_opponent_stats  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_season_stats as helper_wbb_team_season_stats  # noqa: F401
 from sportsdataverse.wbb import herhoopstats_login as herhoopstats_login  # noqa: F401
 from sportsdataverse.wbb import herhoopstats_team_roster as herhoopstats_team_roster  # noqa: F401
@@ -585,6 +586,7 @@ from sportsdataverse.wbb import wbb_epv_team_games as wbb_epv_team_games  # noqa
 from sportsdataverse.wbb import wbb_game_flow as wbb_game_flow  # noqa: F401
 from sportsdataverse.wbb import wbb_game_lineups_used as wbb_game_lineups_used  # noqa: F401
 from sportsdataverse.wbb import wbb_game_on_off as wbb_game_on_off  # noqa: F401
+from sportsdataverse.wbb import wbb_game_player_box_splits as wbb_game_player_box_splits  # noqa: F401
 from sportsdataverse.wbb import wbb_game_player_impact as wbb_game_player_impact  # noqa: F401
 from sportsdataverse.wbb import wbb_game_stints as wbb_game_stints  # noqa: F401
 from sportsdataverse.wbb import wbb_game_units as wbb_game_units  # noqa: F401
@@ -980,6 +982,7 @@ __all__ = [
     "helper_wbb_standings",
     "helper_wbb_team_box",
     "helper_wbb_team_items",
+    "helper_wbb_team_season_opponent_stats",
     "helper_wbb_team_season_stats",
     "herhoopstats_login",
     "herhoopstats_team_roster",
@@ -1184,6 +1187,7 @@ __all__ = [
     "wbb_game_flow",
     "wbb_game_lineups_used",
     "wbb_game_on_off",
+    "wbb_game_player_box_splits",
     "wbb_game_player_impact",
     "wbb_game_stints",
     "wbb_game_units",

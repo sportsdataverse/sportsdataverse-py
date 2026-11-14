@@ -381,6 +381,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_game_flow](additional/analytics-2.md#mbb_game_flow) | College game flow per team and game: runs, droughts, kills, lead changes, time leading, game control. |
 | [mbb_game_lineups_used](additional/analytics-2.md#mbb_game_lineups_used) | The college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
 | [mbb_game_on_off](additional/analytics-2.md#mbb_game_on_off) | College in-game on/off: per player and game, the team with him on the floor and the rest of its game. |
+| [mbb_game_player_box_splits](additional/analytics-2.md#mbb_game_player_box_splits) | College player box by game, period and garbage time: minutes and counts from the play-by-play. |
 | [mbb_game_player_impact](additional/analytics-2.md#mbb_game_player_impact) | The college game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
 | [mbb_game_stints](additional/analytics-2.md#mbb_game_stints) | College game stints: per player and game, every stretch on the floor with its clock, points and possessions. |
 | [mbb_game_units](additional/analytics-2.md#mbb_game_units) | College in-game units: per 1- to 5-man set of teammates and game, ratings, four factors and shot zones. |
@@ -407,7 +408,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_team_shot_zones](additional/analytics-5.md#mbb_team_shot_zones) | College season shot profile by zone per team, for and allowed: rim / mid / corner 3 / above-the-break 3. |
 | [mbb_team_strength](additional/analytics-5.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
 | [mbb_tournament_ineligible](additional/analytics-5.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
-| [ncaa_coach_stints](additional/analytics-5.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
+| [ncaa_box_events](additional/analytics-5.md#ncaa_box_events) | Each player's box counts per stats.ncaa.org event, the input of the stint and split box. |
+| [ncaa_coach_stints](additional/analytics-6.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
 | [ncaa_impact_rows](additional/analytics-6.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
 | [ncaa_lineup_count_rows](additional/analytics-6.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |
 | [ncaa_mbb_lineups](additional/analytics-6.md#ncaa_mbb_lineups) | Aggregate bigballR-contract play-by-play into per-lineup stats. |

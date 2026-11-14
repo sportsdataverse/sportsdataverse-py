@@ -29,7 +29,13 @@ from sportsdataverse._common.game_stints import (
 )
 from sportsdataverse.nba import nba_loaders
 from sportsdataverse.nba.nba_game_impact import nba_impact_rows
-from sportsdataverse.nba.nba_game_stints import nba_game_on_off, nba_game_stints, nba_game_units, nba_stint_rows
+from sportsdataverse.nba.nba_game_stints import (
+    nba_box_events,
+    nba_game_on_off,
+    nba_game_stints,
+    nba_game_units,
+    nba_stint_rows,
+)
 from sportsdataverse.nba.nba_lineup_seasons import nba_lineup_count_rows
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures"
@@ -54,7 +60,9 @@ def _inputs(lg: str) -> tuple[pl.DataFrame, ...]:
 
 
 def _stints(lg: str) -> pl.DataFrame:
-    return game_stints(nba_stint_rows(*_inputs(lg), league_id=LEAGUES[lg][1]), player_dtype=PLAYER)
+    pbp, _, _, schedule = inputs = _inputs(lg)
+    rows = nba_stint_rows(*inputs, league_id=LEAGUES[lg][1])
+    return game_stints(rows, player_dtype=PLAYER, events=nba_box_events(pbp, schedule))
 
 
 def _rows(lg: str) -> pl.DataFrame:

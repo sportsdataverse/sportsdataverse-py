@@ -356,6 +356,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_game_flow](additional/analytics-2.md#wbb_game_flow) | Women's college game flow per team and game: runs, droughts, kills, lead changes, time leading, game control. |
 | [wbb_game_lineups_used](additional/analytics-2.md#wbb_game_lineups_used) | Women's college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
 | [wbb_game_on_off](additional/analytics-2.md#wbb_game_on_off) | Women's college in-game on/off: per player and game, the team with her on the floor and without her. |
+| [wbb_game_player_box_splits](additional/analytics-2.md#wbb_game_player_box_splits) | Women's college player box by game, period and garbage time. |
 | [wbb_game_player_impact](additional/analytics-2.md#wbb_game_player_impact) | Women's college game impact box: per player and game, minutes, possessions, +/- and ratings. |
 | [wbb_game_stints](additional/analytics-2.md#wbb_game_stints) | Women's college game stints: per player and game, every stretch on the floor. |
 | [wbb_game_units](additional/analytics-2.md#wbb_game_units) | Women's college in-game units: per 1- to 5-man set of teammates and game, ratings, four factors and shot zones. |
@@ -367,7 +368,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_player_season_box_rates](additional/analytics-3.md#wbb_player_season_box_rates) | Women's college per-36 points, rebounds and assists per player-season, ranked, with the season usage. |
 | [wbb_player_shot_zones](additional/analytics-3.md#wbb_player_shot_zones) | Women's college season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |
 | [wbb_player_war](additional/analytics-3.md#wbb_player_war) | Women's college WAR and VORP per player-season, from our box BPM. |
-| [wbb_player_wowy](additional/analytics-3.md#wbb_player_wowy) | Women's college WOWY pairs: a team's season with two teammates together, apart and both off. |
+| [wbb_player_wowy](additional/analytics-4.md#wbb_player_wowy) | Women's college WOWY pairs: a team's season with two teammates together, apart and both off. |
 | [wbb_situational_lineup](additional/analytics-4.md#wbb_situational_lineup) | Women's college five-man unit splits by situation. |
 | [wbb_situational_player](additional/analytics-4.md#wbb_situational_player) | Women's college player on-floor splits by situation. |
 | [wbb_situational_team](additional/analytics-4.md#wbb_situational_team) | Women's college team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |

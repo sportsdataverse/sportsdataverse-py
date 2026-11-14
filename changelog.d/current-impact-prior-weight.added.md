@@ -1,2 +1,2 @@
-- **NBA:** `nba_current_impact` adds `o_prior_weight` / `d_prior_weight` / `prior_weight`: the share of each
-  estimate that is the box prior (0-1), the posterior variance over the variance with no game updates. (#1196)
+- **NBA:** `nba_current_impact` adds `o_prior_weight` / `d_prior_weight` / `prior_weight` (0-1): each side's
+  posterior over no-update variance, the prior's weight in the estimate when no shock falls between games. (#1196)

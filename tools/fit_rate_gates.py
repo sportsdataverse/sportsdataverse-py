@@ -21,6 +21,11 @@ holdout seasons the median rate is about half signal at its gate (single rates s
   is that estimate; the table's ``net_rtg_n`` counts both sides, so its curve is scaled by 2. Pace
   is fitted per game; the table counts the clock in regulation games, so an overtime game counts a
   little over 1 there (about 0.6% more clock in an NBA season: the gate is that much lenient).
+* **Player box per game** (``PLAYER_BOX_MIN_N``): the ESPN player box scores
+  (``load_{lg}_player_boxscore``, regular season, games he played: minutes over 0). A player-season's
+  games are ordered by date and split odd / even; the unit is games, so ``n`` is a count of games and
+  the rate is points, rebounds or assists per game. ``r(n)`` correlates the two halves across
+  player-seasons (each half demeaned within its season), the way the team curve does across teams.
 * **Player on/off** (``ON_OFF_MIN_N``): the BB-D6 game impact box (``{nba,mbb}_game_player_impact``);
   the team's game totals are its on-court sums over five players. Halves are the team's odd / even
   games in ``game_id`` order (the impact box carries no date; any split that ignores the results is
@@ -56,6 +61,13 @@ SPANS: dict[str, dict[str, tuple[range, range]]] = {
     "mbb": {"team": (range(2022, 2025), range(2025, 2027)), "on_off": (range(2022, 2025), range(2025, 2027))},
     "wbb": {"team": (range(2022, 2025), range(2025, 2027)), "on_off": (range(2022, 2025), range(2025, 2027))},
 }
+# the per-game box rates use each league's team spans
+for _lg in SPANS:
+    SPANS[_lg]["player_box"] = SPANS[_lg]["team"]
+#: Per-game player rate -> its count column; the unit (``_n``) is games.
+PLAYER_RATES: dict[str, str] = {"pts_pg": "pts", "reb_pg": "reb", "ast_pg": "ast"}
+#: Player-seasons at a grid point of the player curve.
+MIN_PLAYERS = 100
 #: Team rate -> (numerator, denominator, the ``_n`` unit, the table's ``_n`` per unit).
 TEAM_RATES: dict[str, tuple[str, str, str, int]] = {
     "off_rtg": ("pts", "poss", "poss", 1),
@@ -245,6 +257,57 @@ def team_curve(t: pl.DataFrame, rate: str) -> list[tuple[float, float, int]]:
     return pts
 
 
+def _player_box(league: str, season: int) -> pl.DataFrame:
+    from sportsdataverse.mbb.mbb_loaders import load_mbb_player_boxscore
+    from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore
+    from sportsdataverse.wbb.wbb_loaders import load_wbb_player_boxscore
+    from sportsdataverse.wnba.wnba_loaders import load_wnba_player_boxscore
+
+    load = {
+        "nba": load_nba_player_boxscore,
+        "wnba": load_wnba_player_boxscore,
+        "mbb": load_mbb_player_boxscore,
+        "wbb": load_wbb_player_boxscore,
+    }[league]
+    keep = ["game_id", "season", "season_type", "game_date", "athlete_id", "minutes", "points", "rebounds", "assists"]
+    return load([season]).select(keep)
+
+
+def player_games(league: str, seasons: range, data: Path | None = None) -> pl.DataFrame:
+    """One row per regular-season player-game he played (minutes over 0): ``pts`` / ``reb`` / ``ast``.
+
+    The player key sits in ``team_id`` so the team curve's halving (:func:`_halves`, :func:`_half_rates`)
+    runs on it unchanged: a player-season is one entity, whatever teams he played for.
+    """
+    frames = []
+    for s in seasons:
+        b = _cached(data, f"{league}_player_box_{s}.parquet", lambda s=s: _player_box(league, s))
+        frames.append(
+            b.filter((pl.col("season_type").cast(pl.Int64) == 2) & (pl.col("minutes").cast(pl.Float64) > 0)).select(
+                pl.col("game_id").cast(pl.Int64),
+                pl.col("season").cast(pl.Int64),
+                "game_date",
+                pl.col("athlete_id").cast(pl.Int64).alias("team_id"),
+                pl.col("points").cast(pl.Float64).alias("pts"),
+                pl.col("rebounds").cast(pl.Float64).alias("reb"),
+                pl.col("assists").cast(pl.Float64).alias("ast"),
+                pl.lit(1.0).alias("games"),
+            )
+        )
+    return pl.concat(frames).drop_nulls(["team_id", "pts", "reb", "ast"])
+
+
+def player_curve(t: pl.DataFrame, rate: str) -> list[tuple[float, float, int]]:
+    """``(n, r, player-seasons)`` for ``n`` = 1, 2, 3, ... games per half, while enough players reach it."""
+    t = _halves(t)
+    pts = []
+    for n in (1, 2, 3, 4, 6, 8, 12, 16, 24, 32):
+        w = _half_rates(t, PLAYER_RATES[rate], "games", "games", float(n))
+        if w.height >= MIN_PLAYERS:
+            pts.append((float(n), _corr(w["a"], w["b"]), w.height))
+    return pts
+
+
 def _impact(league: str, season: int) -> pl.DataFrame:
     if league in ("mbb", "wbb"):
         from sportsdataverse.mbb.mbb_game_impact import mbb_game_player_impact
@@ -314,16 +377,27 @@ def on_off_curve(h: pl.DataFrame, rate: str, *, bins: int, min_bin: int) -> list
     )
 
 
-def fit_league(league: str, data: Path | None = None) -> pl.DataFrame:
-    """Every curve and ``M`` of a league: one row per (kind, rate, span)."""
+KINDS = ("team", "on_off", "player_box")
+
+
+def fit_league(league: str, data: Path | None = None, kinds: tuple[str, ...] = KINDS) -> pl.DataFrame:
+    """Every curve and ``M`` of a league's ``kinds``: one row per (kind, rate, span)."""
     rows = []
     for span, seasons in zip(("train", "holdout"), SPANS[league]["team"], strict=True):
+        if "team" not in kinds:
+            break
         t = team_games(league, seasons, data)
         for rate in TEAM_RATES:
             pts = team_curve(t, rate)
             rows.append(_row("team", league, rate, span, seasons, pts))
+    for span, seasons in zip(("train", "holdout"), SPANS[league]["player_box"], strict=True):
+        if "player_box" not in kinds:
+            break
+        g = player_games(league, seasons, data)
+        for rate in PLAYER_RATES:
+            rows.append(_row("player_box", league, rate, span, seasons, player_curve(g, rate)))
     bins, min_bin = ON_OFF_BINS[league]
-    for span, seasons in zip(("train", "holdout"), SPANS[league]["on_off"], strict=True):
+    for span, seasons in zip(("train", "holdout"), SPANS[league]["on_off"] if "on_off" in kinds else (), strict=False):
         h = on_off_halves(league, seasons, data)
         for rate in ON_OFF_RATES:
             rows.append(_row("on_off", league, rate, span, seasons, on_off_curve(h, rate, bins=bins, min_bin=min_bin)))
@@ -354,8 +428,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--league", choices=sorted(SPANS), required=True)
     ap.add_argument("--data", type=Path, default=None, help="cache the downloaded box scores here")
     ap.add_argument("--write", action="store_true", help=f"save the curves to {FIXTURES}")
+    ap.add_argument(
+        "--kind", choices=KINDS, action="append", help="fit only these kinds; --write keeps the other kinds' rows"
+    )
     args = ap.parse_args(argv)
-    fits = fit_league(args.league, args.data)
+    kinds = tuple(args.kind or KINDS)
+    fits = fit_league(args.league, args.data, kinds)
     train = fits.filter(pl.col("span") == "train")
     for r in train.iter_rows(named=True):
         hold = fits.filter(
@@ -367,7 +445,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{r['kind']:7} {r['rate']:13} M={r['m']:9.1f} gate={g} holdout M={mh:9.1f} holdout r at gate={rel:.2f}")
     if args.write:
         FIXTURES.mkdir(parents=True, exist_ok=True)
-        fits.write_csv(FIXTURES / f"{args.league}_fits.csv")
+        out = FIXTURES / f"{args.league}_fits.csv"
+        if out.exists() and set(kinds) != set(KINDS):
+            fits = pl.concat([pl.read_csv(out).filter(~pl.col("kind").is_in(kinds)), fits], how="vertical_relaxed")
+        fits.write_csv(out)
     return 0
 
 

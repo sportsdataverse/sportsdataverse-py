@@ -192,7 +192,9 @@ from sportsdataverse.nba.nba_game_impact import (  # noqa: F401
     nba_impact_rows,
 )
 from sportsdataverse.nba.nba_game_stints import (  # noqa: F401
+    nba_box_events,
     nba_game_on_off,
+    nba_game_player_box_splits,
     nba_game_stints,
     nba_game_units,
     nba_stint_rows,
