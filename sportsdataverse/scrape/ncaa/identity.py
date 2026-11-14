@@ -227,6 +227,86 @@ def load_team_index(root: str, league: str, season: int) -> Dict[str, Dict[str, 
 
 
 @lru_cache(maxsize=8)
+def load_contest_sides(root: str, league: str, season: int) -> dict[str, tuple[str | None, str | None]]:
+    """``contest_id -> (home, away)`` as the season's team list names them.
+
+    Read from the per-team schedule files (``{root}/{lg}/schedules/json/{season}/{team_id}.json``).
+    A game page shows a school's CURRENT short name even on old games ("FDU" for Fairleigh
+    Dickinson, "IU Indy" for IUPUI, "Saint Francis" for Saint Francis (PA)), and so does the
+    OPPONENT's schedule row; only a team's own row names it as the team list does (its ``team``,
+    which equals its own ``home`` / ``away`` label). So each side comes from its own team's row,
+    never from the other team's labels. A side no row owns (a non-D-I opponent) is ``None``.
+    Empty when the season's schedules were never built.
+    """
+    sched_dir = Path(root) / league / "schedules" / "json" / str(season)
+    sides: dict[str, dict[str, str]] = {}
+    if not sched_dir.is_dir():
+        return {}
+    for path in sorted(sched_dir.glob("*.json")):
+        try:
+            rows = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        for row in rows if isinstance(rows, list) else []:
+            if not isinstance(row, dict):
+                continue
+            cid, own = _utf8_id(row.get("contest_id")), row.get("team")
+            if not cid or not own:
+                continue
+            side = "home" if row.get("home") == own else "away" if row.get("away") == own else None
+            if side:
+                sides.setdefault(cid, {}).setdefault(side, own)
+    return {cid: (s.get("home"), s.get("away")) for cid, s in sides.items()}
+
+
+def _schedule_aliases(
+    teams: dict[str, dict[str, str | None]],
+    sides: list[tuple[str, str | None]],
+    scheduled: tuple[str | None, str | None] | None,
+) -> dict[str, dict[str, str | None]]:
+    """``page name -> team-index row`` for the sides whose page name the index lacks.
+
+    A side is aliased to the schedule's team for the same side only when that team is in the
+    index, is not the team the OTHER side already resolves to, and the other side does not
+    contradict the schedule, so a game whose home/away disagree with the schedule never gets
+    swapped ids or both sides on one team.
+    """
+    if not scheduled:
+        return {}
+    aliases: dict[str, dict[str, str | None]] = {}
+    for i, (_side, name) in enumerate(sides):
+        sched_name = scheduled[i]
+        if not name or name in teams or not sched_name or sched_name not in teams:
+            continue
+        other_name, other_sched = sides[1 - i][1], scheduled[1 - i]
+        target = teams[sched_name]
+        if other_name in teams and teams[other_name] is target:
+            # The schedule puts the OTHER side's team here: home/away disagree with the page
+            # (contest 1606172, 2019: page LIU at home, UAlbany's own row says UAlbany at home).
+            continue
+        if other_name in teams and other_sched in teams and teams[other_name] is not teams[other_sched]:
+            continue
+        aliases[name] = target
+    return aliases
+
+
+def _with_renamed_sides(
+    teams: dict[str, dict[str, str | None]],
+    sides: list[tuple[str, str | None]],
+    root: str | Path | None,
+    league: str,
+    season: int | None,
+    contest_id: Any,
+) -> dict[str, dict[str, str | None]]:
+    """The team index plus this game's renamed sides (see :func:`_schedule_aliases`)."""
+    if season is None or not teams:
+        return teams
+    scheduled = load_contest_sides(str(root), league, season).get(_utf8_id(contest_id) or "")
+    aliases = _schedule_aliases(teams, sides, scheduled)
+    return {**teams, **aliases} if aliases else teams
+
+
+@lru_cache(maxsize=8)
 def load_roster_index(root: str, league: str, season: int) -> Dict[str, Dict[str, Dict[str, Tuple[str, str]]]]:
     """``team_id -> {"names": {key_name: (player_id, clean_name)}, "codes": {...}}``.
 
@@ -409,9 +489,9 @@ def enrich_parsed(
         )
 
     pbp = parsed.get("pbp") or []
-    home = pbp[0].get("home") if pbp else None
-    away = pbp[0].get("away") if pbp else None
+    home, away = (pbp[0].get("home"), pbp[0].get("away")) if pbp else (None, None)
     sides = [("home", home), ("away", away)]
+    teams = _with_renamed_sides(teams, sides, root, league, season, parsed.get("contest_id"))
     team_ids = [teams[n]["ncaa_team_id"] for _, n in sides if n and n in teams and teams[n]["ncaa_team_id"]]
     names, codes = _game_player_index(rosters, [t for t in team_ids if t])
 
