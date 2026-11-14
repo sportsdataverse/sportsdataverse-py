@@ -5217,6 +5217,7 @@
   "nba_cup_sim": "analytics-2",
   "nba_cup_standings": "analytics-2",
   "nba_current_impact": "models-and-calculators-2",
+  "nba_current_impact_context": "models-and-calculators-2",
   "nba_darko": "models-and-calculators-2",
   "nba_decay_rapm": "models-and-calculators-2",
   "nba_draft_lottery_odds": "analytics-2",

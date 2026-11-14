@@ -206,6 +206,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_bpm](additional/models-and-calculators-2.md#nba_bpm) | Faithful BPM 2.0 per player, at season or single-game granularity. |
 | [nba_career_trajectory](additional/models-and-calculators-2.md#nba_career_trajectory) | Age-adjust player-season values with the bundled aging curve. |
 | [nba_current_impact](additional/models-and-calculators-2.md#nba_current_impact) | Current impact: each player's expected offense / defense impact per 100 as of a date. |
+| [nba_current_impact_context](additional/models-and-calculators-2.md#nba_current_impact_context) | Append `<m>_n`, `<m>_rank` and `<m>_pct` to a `current_impact` table, within each `as_of` date. |
 | [nba_darko](additional/models-and-calculators-2.md#nba_darko) | Project each player's next-season rating via a per-player Kalman filter + aging curve. |
 | [nba_decay_rapm](additional/models-and-calculators-2.md#nba_decay_rapm) | Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`. |
 | [nba_draft_model](additional/models-and-calculators-2.md#nba_draft_model) | Project prospect career value + draft probability from combine measurements. |

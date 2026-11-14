@@ -351,6 +351,7 @@ from sportsdataverse.nba import nba_crosswalks_from_archive as nba_crosswalks_fr
 from sportsdataverse.nba import nba_cup_sim as nba_cup_sim  # noqa: F401
 from sportsdataverse.nba import nba_cup_standings as nba_cup_standings  # noqa: F401
 from sportsdataverse.nba import nba_current_impact as nba_current_impact  # noqa: F401
+from sportsdataverse.nba import nba_current_impact_context as nba_current_impact_context  # noqa: F401
 from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_decay_rapm as nba_decay_rapm  # noqa: F401
 from sportsdataverse.nba import nba_draft_lottery_odds as nba_draft_lottery_odds  # noqa: F401
@@ -840,6 +841,7 @@ __all__ = [
     "nba_cup_sim",
     "nba_cup_standings",
     "nba_current_impact",
+    "nba_current_impact_context",
     "nba_darko",
     "nba_decay_rapm",
     "nba_draft_lottery_odds",

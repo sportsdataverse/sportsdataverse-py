@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 283 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 284 | — |
 
 ## ESPN {#espn}
 
@@ -137,6 +137,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_bpm`](reference/additional/models-and-calculators-2#nba_bpm)
 - [`nba_career_trajectory`](reference/additional/models-and-calculators-2#nba_career_trajectory)
 - [`nba_current_impact`](reference/additional/models-and-calculators-2#nba_current_impact)
+- [`nba_current_impact_context`](reference/additional/models-and-calculators-2#nba_current_impact_context)
 - [`nba_darko`](reference/additional/models-and-calculators-2#nba_darko)
 - [`nba_decay_rapm`](reference/additional/models-and-calculators-2#nba_decay_rapm)
 - [`nba_draft_model`](reference/additional/models-and-calculators-2#nba_draft_model)
