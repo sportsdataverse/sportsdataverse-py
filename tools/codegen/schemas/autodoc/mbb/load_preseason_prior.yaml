@@ -1,0 +1,22 @@
+schema: load_preseason_prior
+kind: dataframe
+hand_authored: true
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: off_dev
+  type: double
+  description: ''
+- name: def_dev
+  type: double
+  description: ''
+- name: prior_avg
+  type: double
+  description: ''
+- name: new_team
+  type: logical
+  description: ''

@@ -75876,6 +75876,15 @@ preseason_prior:
     season's final AdjD deviation times the regression factor, or minus half the new-team default.
   prior_avg: The prior season's league-average efficiency, the ratings' baseline before this season has a game.
   new_team: True when the team was not Division I last season and starts at the new-team quantile of last season's AdjEM.
+load_preseason_prior:
+  season: The season the prior is for (named by its end year).
+  team_id: ESPN team id of a Division I team this season.
+  off_dev: The prior's offense, points per 100 possessions above the prior season's league average; last season's final
+    AdjO deviation times the regression factor, or half the new-team default for a program new to Division I.
+  def_dev: The prior's defense, points per 100 allowed above the prior season's league average (lower is better); last
+    season's final AdjD deviation times the regression factor, or minus half the new-team default.
+  prior_avg: The prior season's league-average efficiency, the ratings' baseline before this season has a game.
+  new_team: True when the team was not Division I last season and starts at the new-team quantile of last season's AdjEM.
 nbadraft_mock_draft:
   round: Draft round of the pick, 1 or 2 (NBADraft.net's first two pick tables).
 rotowire_injuries:
@@ -81166,9 +81175,9 @@ ncaa_stint_rows:
 nba_player_game_expected_box:
   season: "Season, named by the year it ends (the WNBA season is its calendar year)."
   season_type: "ESPN season type of the game (2 regular season, 3 postseason, 5 NBA play-in)."
-  game_id: "ESPN game id."
+  game_id: "ESPN game id, the join key to the schedule and the player box score."
   team_id: "ESPN team id of the player's team in the game."
-  athlete_id: "ESPN athlete id."
+  athlete_id: "ESPN athlete id of the player, the join key to the player box score."
   minutes: "Minutes played in the game (above 0: a player who did not play has no row)."
   usg_pct: "Usage: 100 x uses x (team minutes / 5) / (minutes x team uses), uses = FGA + 0.44 FTA + TOV, the team sums over that team-game's players; null where a player of the team-game lacks a count."
   pts: "Points in the game."
@@ -81185,7 +81194,7 @@ nba_player_game_expected_box:
   ast_exp: "Usage-adjusted expected assists, as pts_exp."
 nba_player_season_box_rates:
   season: "Season, named by the year it ends (the WNBA season is its calendar year)."
-  athlete_id: "ESPN athlete id."
+  athlete_id: "ESPN athlete id of the player, the join key to the player box score."
   team_id: "ESPN team id of the player's last game of the season (a traded player has one row)."
   games: "Games played (the pros' regular season, every college game)."
   minutes: "Minutes played in those games."
@@ -81209,9 +81218,9 @@ nba_player_season_box_rates:
 wnba_player_game_expected_box:
   season: "Season, named by the year it ends (the WNBA season is its calendar year)."
   season_type: "ESPN season type of the game (2 regular season, 3 postseason, 5 NBA play-in)."
-  game_id: "ESPN game id."
+  game_id: "ESPN game id, the join key to the schedule and the player box score."
   team_id: "ESPN team id of the player's team in the game."
-  athlete_id: "ESPN athlete id."
+  athlete_id: "ESPN athlete id of the player, the join key to the player box score."
   minutes: "Minutes played in the game (above 0: a player who did not play has no row)."
   usg_pct: "Usage: 100 x uses x (team minutes / 5) / (minutes x team uses), uses = FGA + 0.44 FTA + TOV, the team sums over that team-game's players; null where a player of the team-game lacks a count."
   pts: "Points in the game."
@@ -81228,7 +81237,7 @@ wnba_player_game_expected_box:
   ast_exp: "Usage-adjusted expected assists, as pts_exp."
 wnba_player_season_box_rates:
   season: "Season, named by the year it ends (the WNBA season is its calendar year)."
-  athlete_id: "ESPN athlete id."
+  athlete_id: "ESPN athlete id of the player, the join key to the player box score."
   team_id: "ESPN team id of the player's last game of the season (a traded player has one row)."
   games: "Games played (the pros' regular season, every college game)."
   minutes: "Minutes played in those games."
@@ -81252,9 +81261,9 @@ wnba_player_season_box_rates:
 mbb_player_game_expected_box:
   season: "Season, named by the year it ends (the WNBA season is its calendar year)."
   season_type: "ESPN season type of the game (2 regular season, 3 postseason, 5 NBA play-in)."
-  game_id: "ESPN game id."
+  game_id: "ESPN game id, the join key to the schedule and the player box score."
   team_id: "ESPN team id of the player's team in the game."
-  athlete_id: "ESPN athlete id."
+  athlete_id: "ESPN athlete id of the player, the join key to the player box score."
   minutes: "Minutes played in the game (above 0: a player who did not play has no row)."
   usg_pct: "Usage: 100 x uses x (team minutes / 5) / (minutes x team uses), uses = FGA + 0.44 FTA + TOV, the team sums over that team-game's players; null where a player of the team-game lacks a count."
   pts: "Points in the game."
@@ -81271,7 +81280,7 @@ mbb_player_game_expected_box:
   ast_exp: "Usage-adjusted expected assists, as pts_exp."
 mbb_player_season_box_rates:
   season: "Season, named by the year it ends (the WNBA season is its calendar year)."
-  athlete_id: "ESPN athlete id."
+  athlete_id: "ESPN athlete id of the player, the join key to the player box score."
   team_id: "ESPN team id of the player's last game of the season (a traded player has one row)."
   games: "Games played (the pros' regular season, every college game)."
   minutes: "Minutes played in those games."
@@ -81295,9 +81304,9 @@ mbb_player_season_box_rates:
 wbb_player_game_expected_box:
   season: "Season, named by the year it ends (the WNBA season is its calendar year)."
   season_type: "ESPN season type of the game (2 regular season, 3 postseason, 5 NBA play-in)."
-  game_id: "ESPN game id."
+  game_id: "ESPN game id, the join key to the schedule and the player box score."
   team_id: "ESPN team id of the player's team in the game."
-  athlete_id: "ESPN athlete id."
+  athlete_id: "ESPN athlete id of the player, the join key to the player box score."
   minutes: "Minutes played in the game (above 0: a player who did not play has no row)."
   usg_pct: "Usage: 100 x uses x (team minutes / 5) / (minutes x team uses), uses = FGA + 0.44 FTA + TOV, the team sums over that team-game's players; null where a player of the team-game lacks a count."
   pts: "Points in the game."
@@ -81314,7 +81323,7 @@ wbb_player_game_expected_box:
   ast_exp: "Usage-adjusted expected assists, as pts_exp."
 wbb_player_season_box_rates:
   season: "Season, named by the year it ends (the WNBA season is its calendar year)."
-  athlete_id: "ESPN athlete id."
+  athlete_id: "ESPN athlete id of the player, the join key to the player box score."
   team_id: "ESPN team id of the player's last game of the season (a traded player has one row)."
   games: "Games played (the pros' regular season, every college game)."
   minutes: "Minutes played in those games."

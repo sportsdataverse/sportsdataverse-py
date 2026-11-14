@@ -801,6 +801,15 @@ release, for this season's Division I teams: the prior the season sim blends in
 
 `PRIOR_SCHEMA` rows, empty when the previous season is not released (no prior).
 
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | The season the prior is for (named by its end year). |
+| `team_id` | String | ESPN team id of a Division I team this season. |
+| `off_dev` | Float64 | The prior's offense, points per 100 possessions above the prior season's league average; last season's final AdjO deviation times the regression factor, or half the new-team default for a program new to Division I. |
+| `def_dev` | Float64 | The prior's defense, points per 100 allowed above the prior season's league average (lower is better); last season's final AdjD deviation times the regression factor, or minus half the new-team default. |
+| `prior_avg` | Float64 | The prior season's league-average efficiency, the ratings' baseline before this season has a game. |
+| `new_team` | Boolean | True when the team was not Division I last season and starts at the new-team quantile of last season's AdjEM. |
+
 **Example**
 
 ```python

@@ -468,6 +468,7 @@ mbb:
   mbb_shot_selection: {scored: {$call: mbb.mbb_shot_quality, args: {shots: {$call: mbb.mbb_shot_data, args: {seasons: 2025}}}}}  # 4116 rows x 6 cols
   shot_events_to_frame: {events: [], season: 2025}  # 0 rows x 14 cols (empty list gives the declared schema; see NOTES 4)
   as_of_ratings_split: {results: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2024}}}}, cutoff_date: 2024-01-15}  # 3278 rows x 83 cols
+  load_preseason_prior: {season: 2026, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: [2026]}}}
   # B-GB-25: the NCAA league-RAPM chain (stack_seasons takes a dict of frames: hand-authored schema)
   build_player_xwalk: {team_rosters: {$call: mbb.load_ncaa_mbb_team_rosters, args: {seasons: 2024}}}
   build_person_keys: {team_rosters: {$call: mbb.load_ncaa_mbb_team_rosters, args: {seasons: 2024}}}
