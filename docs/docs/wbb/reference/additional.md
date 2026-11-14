@@ -367,7 +367,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_player_season_box_rates](additional/analytics-3.md#wbb_player_season_box_rates) | Women's college per-36 points, rebounds and assists per player-season, ranked, with the season usage. |
 | [wbb_player_shot_zones](additional/analytics-3.md#wbb_player_shot_zones) | Women's college season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |
 | [wbb_player_war](additional/analytics-3.md#wbb_player_war) | Women's college WAR and VORP per player-season, from our box BPM. |
-| [wbb_player_wowy](additional/analytics-3.md#wbb_player_wowy) | Women's college WOWY pairs: a team's season with two teammates together, apart and both off. |
+| [wbb_player_wowy](additional/analytics-4.md#wbb_player_wowy) | Women's college WOWY pairs: a team's season with two teammates together, apart and both off. |
 | [wbb_situational_lineup](additional/analytics-4.md#wbb_situational_lineup) | Women's college five-man unit splits by situation. |
 | [wbb_situational_player](additional/analytics-4.md#wbb_situational_player) | Women's college player on-floor splits by situation. |
 | [wbb_situational_team](additional/analytics-4.md#wbb_situational_team) | Women's college team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type. |

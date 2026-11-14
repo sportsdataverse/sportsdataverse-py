@@ -21,6 +21,7 @@ import pytest
 from scipy.stats import spearmanr
 
 from sportsdataverse._common.player_war import (
+    PER_GAME,
     PTS_PER_WIN,
     REPLACEMENT_LEVEL,
     _anchor,
@@ -28,11 +29,12 @@ from sportsdataverse._common.player_war import (
     _draw_counts,
     _replicate_war,
     player_war,
+    player_war_league_averages,
     repair_bpm_team_constant,
     replacement_win_pct,
     season_rows,
 )
-from sportsdataverse.nba.nba_player_war import _possession_games, _rating_stints, nba_player_war
+from sportsdataverse.nba.nba_player_war import _box, _possession_games, _rating_stints, nba_player_war
 
 war_module = importlib.import_module("sportsdataverse.nba.nba_player_war")
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "bb_player_war"
@@ -75,7 +77,10 @@ def _season(league: str) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
     stints, net, impact = _inputs(league)
     rated = _rating_stints(stints, net, impact)
     team_games, player_games = _games(league)
-    out = player_war(rated, net, league=league, sources=SOURCES, team_games=team_games, player_games=player_games)
+    box = _read(f"{league}_box_2025.parquet")
+    out = player_war(
+        rated, net, league=league, sources=SOURCES, team_games=team_games, player_games=player_games, box=box
+    )
     return rated, net, out
 
 
@@ -301,8 +306,13 @@ def test_nba_player_war_reads_the_three_releases(monkeypatch: pytest.MonkeyPatch
 
     monkeypatch.setattr(war_module, "_league_loaders", lambda lid: (loader("poss", raw), loader("sched", sched), 1))
     monkeypatch.setattr("sportsdataverse.nba.nba_loaders.load_nba_player_impact", loader("impact", impact))
+    logs = _read("nba_game_logs_slice_2025.parquet")
+    monkeypatch.setattr("sportsdataverse.nba.nba_loaders.load_nba_stats_player_game_logs", loader("logs", logs))
     out = nba_player_war(2025)
-    assert calls == {"poss": [2024], "sched": [2024], "impact": [2025]}  # loaders take the start year
+    # loaders take the start year
+    assert calls == {"poss": [2024], "sched": [2024], "impact": [2025], "logs": [2024]}
+    boxed = out.filter(pl.col("pts_pg_n") > 0)  # only the slice's three players have a box line
+    assert 0 < boxed.height <= 3 and boxed["player_id"].is_in([1628983, 203999, 1630169]).all()
     assert out.height > 0 and set(out["season"]) == {2025}
     assert out["war_lo"].null_count() == 0  # the public path always ships the interval
     with pytest.raises(ValueError, match="league_id"):
@@ -415,3 +425,50 @@ def test_stints_without_their_game_rows_are_refused() -> None:
             team_games=team_games,
             player_games=player_games.filter(pl.col("team_id") != one_team),
         )
+
+
+def test_box_counts_the_regular_season_games_he_played() -> None:
+    """``_box`` on every 2024-25 game log of three players: playoffs out, totals over the games he played."""
+    logs = _read("nba_game_logs_slice_2025.parquet")
+    box = _box(logs).sort("player_id")
+    reg = logs.filter(pl.col("season_type") == "regular-season")
+    assert reg.height < logs.height  # the slice holds playoff rows, and they are dropped
+    want = reg.group_by("player_id").agg(pl.len().alias("games"), pl.col("pts").sum()).sort("player_id")
+    assert box["games"].to_list() == want["games"].to_list() and box["pts"].to_list() == want["pts"].to_list()
+    sga = box.filter(pl.col("player_id") == 1628983).row(0, named=True)
+    assert (sga["games"], sga["pts"]) == (76, 2484.0)  # 32.68 points a game, the 2024-25 scoring title
+
+
+@LEAGUES
+def test_per_game_columns(league: str) -> None:
+    """pts_pg / reb_pg / ast_pg are the box totals over games, ``_n`` the games, ranked over the games gate."""
+    out = _season(league)[2]
+    box = _read(f"{league}_box_2025.parquet")
+    j = out.join(box, on=["season", "player_id"], how="inner", validate="1:1")
+    # every player WAR rates who played a regular-season game has a box line (observed: all but 0 / 1)
+    assert j.height >= out.height - 1
+    for m, c in PER_GAME.items():
+        assert np.allclose(j[m], j[c] / j["games"]) and (j[f"{m}_n"] == j["games"]).all()
+    missing = out.join(box, on=["season", "player_id"], how="anti")
+    assert (missing["pts_pg_n"] == 0).all() and missing["pts_pg"].null_count() == missing.height
+    top = out.sort("pts_pg_rank").row(0, named=True)
+    assert top["pts_pg_rank"] == 1.0
+    if league == "nba":
+        assert top["player_name"] == "Shai Gilgeous-Alexander" and top["pts_pg"] == pytest.approx(32.684, abs=1e-3)
+        assert out.sort("ast_pg_rank")["player_name"][0] == "Trae Young"
+
+
+@LEAGUES
+def test_league_average_n_is_the_ranked_cohort(league: str) -> None:
+    """``player_war_league_averages`` ``n`` equals the rows each column ranks, and inverts its ``_pct``."""
+    out = _season(league)[2]
+    la = player_war_league_averages(out, league=league)
+    assert set(la["metric"]) == {"vorp", "war", *PER_GAME} and (la["category"] == "player_war").all()
+    for r in la.iter_rows(named=True):
+        ranked = out.filter(pl.col(f"{r['metric']}_rank").is_not_null())
+        assert r["n"] == ranked.height > 10, r["metric"]  # the count a rank is out of
+        n = r["n"]
+        assert np.allclose(ranked[f"{r['metric']}_pct"], 100 * (n + 1 - ranked[f"{r['metric']}_rank"]) / (n + 1))
+    # war ranks every player of the season; the per-game columns every player with a game (the pro gate is 1)
+    assert la.filter(metric="war")["n"].item() == out.height
+    assert la.filter(metric="pts_pg")["n"].item() == out.filter(pl.col("pts_pg_n") >= 1).height

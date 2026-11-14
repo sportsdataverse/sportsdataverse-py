@@ -23,6 +23,10 @@ in sportsdataverse-py #1126.
   three-point rates (college lineups only) mostly never do. A lineup's rate spreads at
   least as widely as a team's (on the NBA 2017-2026 possessions the five-man ``M`` is 0.3 to 0.9
   times the team one), so the team gate is a conservative lineup gate.
+* :data:`PLAYER_BOX_MIN_N` gates the per-game box columns of ``{lg}_player_war`` (``pts_pg`` /
+  ``reb_pg`` / ``ast_pg``, ``_n`` = games), fitted on the ESPN player box scores. A player's scoring,
+  rebounding and passing role shows in one or two games (``M`` 0.6-1.3 games), so the gate is one
+  game in the pros and one or two in college: nearly every player who played is ranked.
 * :data:`ON_OFF_MIN_N` gates ``{lg}_player_on_off``. The on-court ratings clear it for most
   rotation players; an on/off difference rarely does, and in college no difference is ever ranked
   (its curve never comes near half signal), so most difference ranks are null.
@@ -35,7 +39,17 @@ from __future__ import annotations
 import math
 from collections.abc import Iterable, Mapping
 
-__all__ = ["LEVELS", "NBA_LEVEL", "NCAA_LEVEL", "ON_OFF_MIN_N", "TEAM_MIN_N", "on_off_gates", "team_gates"]
+__all__ = [
+    "LEVELS",
+    "NBA_LEVEL",
+    "NCAA_LEVEL",
+    "ON_OFF_MIN_N",
+    "PLAYER_BOX_MIN_N",
+    "TEAM_MIN_N",
+    "on_off_gates",
+    "player_box_gates",
+    "team_gates",
+]
 
 #: The population labels a gate table is keyed by.
 LEVELS: tuple[str, ...] = ("nba", "wnba", "mbb", "wbb")
@@ -96,6 +110,14 @@ ON_OFF_MIN_N: dict[str, dict[str, float]] = {
             "off_rtg_diff": math.inf, "def_rtg_diff": math.inf, "net_rtg_diff": math.inf},
 }  # fmt: skip
 
+#: Level -> per-game box rate -> the fewest games (``<m>_n``) it is ranked on.
+PLAYER_BOX_MIN_N: dict[str, dict[str, float]] = {
+    "nba": {"pts_pg": 1, "reb_pg": 1, "ast_pg": 1},
+    "wnba": {"pts_pg": 1, "reb_pg": 1, "ast_pg": 1},
+    "mbb": {"pts_pg": 1, "reb_pg": 2, "ast_pg": 2},
+    "wbb": {"pts_pg": 1, "reb_pg": 2, "ast_pg": 2},
+}
+
 
 def _gates(table: Mapping[str, Mapping[str, float]], level: str | None, metrics: Iterable[str]) -> dict[str, float]:
     if level is None:
@@ -147,3 +169,25 @@ def on_off_gates(level: str | None, metrics: Iterable[str]) -> dict[str, float]:
             on_off_gates("wbb", ["net_rtg_on", "net_rtg_diff"])
     """
     return _gates(ON_OFF_MIN_N, level, metrics)
+
+
+def player_box_gates(level: str | None, metrics: Iterable[str]) -> dict[str, float]:
+    """The :data:`PLAYER_BOX_MIN_N` gates of ``level`` for the ``metrics`` that have one (``None``: no gates).
+
+    Args:
+        level: ``"nba"``, ``"wnba"``, ``"mbb"``, ``"wbb"``, or ``None`` for no sample gate.
+        metrics: The ranked per-game box rates.
+
+    Returns:
+        Metric -> the fewest games it is ranked on, for the metrics with a gate.
+
+    Raises:
+        KeyError: If ``level`` is not one of :data:`LEVELS`.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._common.rate_gates import player_box_gates
+            player_box_gates("mbb", ["pts_pg", "reb_pg"])
+    """
+    return _gates(PLAYER_BOX_MIN_N, level, metrics)

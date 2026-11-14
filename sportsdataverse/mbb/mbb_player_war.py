@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING
 
 import polars as pl
 
-from sportsdataverse._common.player_war import player_war
+from sportsdataverse._common.player_war import box_seasons, player_war
 from sportsdataverse.mbb.mbb_loaders import load_mbb_player_boxscore
 from sportsdataverse.mbb.mbb_box_bpm import mbb_box_bpm
 from sportsdataverse.mbb.mbb_player_value_constants import _played_rows
@@ -105,6 +105,21 @@ def _game_rows(box: pl.DataFrame, ratings: pl.DataFrame) -> tuple[pl.DataFrame, 
     return player_games, team_games
 
 
+def _box(box: pl.DataFrame, ratings: pl.DataFrame) -> pl.DataFrame:
+    """:func:`~sportsdataverse._common.player_war.box_seasons` of the rows :func:`_game_rows` counts (D1 teams)."""
+    d1 = ratings.filter(_D1).select(pl.col("season").cast(pl.Int64), pl.col("team_id").cast(pl.Utf8))
+    rows = _played_rows(box).join(d1, on=["season", "team_id"], how="semi")
+    return box_seasons(
+        rows.select(
+            "season",
+            "player_id",
+            pl.col("points").alias("pts"),
+            (pl.col("offensive_rebounds") + pl.col("defensive_rebounds")).alias("reb"),  # every release has both
+            pl.col("assists").alias("ast"),
+        )
+    )
+
+
 def mbb_player_war(
     seasons: int | list[int], *, league: str = "mens", return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:
@@ -155,8 +170,15 @@ def mbb_player_war(
         from sportsdataverse.wbb.wbb_loaders import load_wbb_player_boxscore as load_box
     else:
         load_box = load_mbb_player_boxscore
-    player_games, team_games = _game_rows(load_box(seasons_list), ratings)
+    box = load_box(seasons_list)
+    player_games, team_games = _game_rows(box, ratings)
     out = player_war(
-        stints, net, league=_LEAGUE[league], sources=["bpm"], team_games=team_games, player_games=player_games
+        stints,
+        net,
+        league=_LEAGUE[league],
+        sources=["bpm"],
+        team_games=team_games,
+        player_games=player_games,
+        box=_box(box, ratings),
     )
     return out.to_pandas() if return_as_pandas else out

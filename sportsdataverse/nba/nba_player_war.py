@@ -8,7 +8,8 @@ and the minutes basis. ``league_id="10"`` reads the WNBA releases;
 
 The ``nba_stats_possessions`` release gives each player's on-court possessions per team and each
 team's margin; the ``nba_stats_schedules`` release picks the regular-season games (BB-D3's
-choice: NBA Cup group and knockout games count, the Cup final does not).
+choice: NBA Cup group and knockout games count, the Cup final does not). The per-game box columns
+sum the ``nba_stats`` regular-season player game logs (``load_nba_stats_player_game_logs``).
 
 Two producer issues are handled here rather than read through: the ``bpm`` of releases fit before
 sportsdataverse-py #1148 targets a team mean of the full net rating, five times BPM 2.0's (repaired by
@@ -23,7 +24,7 @@ from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
 
-from sportsdataverse._common.player_war import player_war, repair_bpm_team_constant, season_rows
+from sportsdataverse._common.player_war import box_seasons, player_war, repair_bpm_team_constant, season_rows
 from sportsdataverse.nba.nba_team_season_rates import _league_loaders
 
 if TYPE_CHECKING:
@@ -82,6 +83,14 @@ def _possession_games(possessions: pl.DataFrame, schedule: pl.DataFrame) -> tupl
     )
     keys = {"season": pl.Int64, "team_id": pl.Int64}
     return player_games.cast({**keys, "player_id": pl.Int64}), team_games.cast(keys)
+
+
+def _box(logs: pl.DataFrame) -> pl.DataFrame:
+    """:func:`~sportsdataverse._common.player_war.box_seasons` of the regular-season games he played."""
+    rows = logs.filter((pl.col("season_type") == "regular-season") & (pl.col("min").cast(pl.Float64) > 0))
+    return box_seasons(
+        rows.select(pl.col("season").cast(pl.Int64), pl.col("player_id").cast(pl.Int64), "pts", "reb", "ast")
+    )
 
 
 def _rating_stints(stints: pl.DataFrame, net: pl.DataFrame, impact: pl.DataFrame) -> pl.DataFrame:
@@ -180,8 +189,10 @@ def nba_player_war(
     load_possessions, load_schedule, offset = _league_loaders(league_id)
     if league_id == "10":
         from sportsdataverse.wnba.wnba_loaders import load_wnba_player_impact as load_impact
+        from sportsdataverse.wnba.wnba_loaders import load_wnba_stats_player_game_logs as load_logs
     else:
         from sportsdataverse.nba.nba_loaders import load_nba_player_impact as load_impact
+        from sportsdataverse.nba.nba_loaders import load_nba_stats_player_game_logs as load_logs
     loader_seasons = [s - offset for s in seasons_list]
     player_games, team_games = _possession_games(load_possessions(loader_seasons), load_schedule(loader_seasons))
     stints, net = season_rows(player_games, team_games)
@@ -193,5 +204,6 @@ def nba_player_war(
         sources=list(_SOURCES.values()),
         team_games=team_games,
         player_games=player_games,
+        box=_box(load_logs(loader_seasons)),
     )
     return out.to_pandas() if return_as_pandas else out

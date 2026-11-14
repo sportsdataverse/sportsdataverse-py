@@ -234,7 +234,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`wbb_player_season_box_rates`](reference/additional/analytics-3#wbb_player_season_box_rates)
 - [`wbb_player_shot_zones`](reference/additional/analytics-3#wbb_player_shot_zones)
 - [`wbb_player_war`](reference/additional/analytics-3#wbb_player_war)
-- [`wbb_player_wowy`](reference/additional/analytics-3#wbb_player_wowy)
+- [`wbb_player_wowy`](reference/additional/analytics-4#wbb_player_wowy)
 - [`wbb_situational_lineup`](reference/additional/analytics-4#wbb_situational_lineup)
 - [`wbb_situational_player`](reference/additional/analytics-4#wbb_situational_player)
 - [`wbb_situational_team`](reference/additional/analytics-4#wbb_situational_team)
