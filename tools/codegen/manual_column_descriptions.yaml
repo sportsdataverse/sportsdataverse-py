@@ -47156,7 +47156,7 @@ load_nfl_model_pbp:
   pass_epa: EPA credited to the play's passing component (clipped at -5).
   pass_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
   passer: Name of the passer as nflfastR clean_pbp derives it (scrambles included) -- parsed from desc, then the name its id
-    carries most often; on a 1999-2005 charted scramble the scrambling QB (nflfastR #536).
+    carries most often; on a 1999-2005 charted scramble the scrambling QB (nflfastR PR 536).
   passer_id: GSIS id of the passer as nflfastR clean_pbp derives it -- the most frequent passer_player_id of that name within
     the possession team and season.
   pen_epa: EPA credited to the play's penalty component (clipped at -5).
@@ -47172,9 +47172,11 @@ load_nfl_model_pbp:
   receive_2h_ko: Binary indicator (1/0) that the play is in the first half and the possession team is the team receiving the
     second-half kickoff (the game's opening defense); mirrors nflfastR helper_add_ep_wp.R.
   receiver: Name of the targeted receiver as nflfastR clean_pbp derives it -- parsed from desc, then the name the id carries
-    most often; also set on 2003-2008 incompletions, whose NFL.com stats name no target. Null when no pass names one.
+    most often; also set on 2003-2008 incompletions, whose NFL.com stats name no target. Null when no pass names one, or
+    when no play of that name in the possession team's season carries a receiver_player_id.
   receiver_id: GSIS id of the targeted receiver as nflfastR clean_pbp derives it -- the most frequent receiver_player_id
-    of that name within the possession team and season, so it is filled where receiver_player_id is null.
+    of that name within the possession team and season, so it is filled where receiver_player_id is null as long as
+    another play of that name carries one (otherwise null, and receiver with it).
   rush_epa: EPA credited to the play's rushing component (clipped at -5).
   rush_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
   rusher: Name of the rusher as nflfastR clean_pbp derives it (no scrambles) -- parsed from desc, null when the play has a
