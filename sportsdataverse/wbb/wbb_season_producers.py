@@ -293,7 +293,7 @@ def _split_made_attempted(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if len(names) != 2 or m is None or any((r["category"], n) in seen for n in names):
             continue
         descs = (r["stat_description"] or "").split(".-")
-        for k, (name, suffix, value) in enumerate(zip(names, ("M", "A"), m.groups())):
+        for k, (name, suffix, value) in enumerate(zip(names, ("M", "A"), m.groups(), strict=True)):
             out.append(
                 {
                     **r,
