@@ -688,6 +688,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_pbp/play_by_play_{season}.parquet
   tag: espn_nba_pbp
+  dataset_page: hoopR-nba-data/pbp
   min_season: 2002
   example_args:
     seasons: 2024
@@ -696,6 +697,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_player_boxscores/player_box_{season}.parquet
   tag: espn_nba_player_boxscores
+  dataset_page: hoopR-nba-data/player_box
   min_season: 1994
   example_args:
     seasons: 2024
@@ -704,6 +706,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_schedules/nba_schedule_{season}.parquet
   tag: espn_nba_schedules
+  dataset_page: hoopR-nba-data/schedules
   min_season: 1994
   example_args:
     seasons: 2024
@@ -712,6 +715,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_team_boxscores/team_box_{season}.parquet
   tag: espn_nba_team_boxscores
+  dataset_page: hoopR-nba-data/team_box
   min_season: 1994
   example_args:
     seasons: 2024
@@ -907,6 +911,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_game_rosters/game_rosters_{season}.parquet
   tag: espn_nba_game_rosters
+  dataset_page: hoopR-nba-data/game_rosters
   id_int32: [game_id]
   min_season: 1994
   example_args:
@@ -916,6 +921,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_officials/officials_{season}.parquet
   tag: espn_nba_officials
+  dataset_page: hoopR-nba-data/officials
   min_season: 1994
   example_args:
     seasons: 2002
@@ -924,6 +930,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_shots/shots_{season}.parquet
   tag: espn_nba_shots
+  dataset_page: hoopR-nba-data/shots
   min_season: 2002
   example_args:
     seasons: 2002
@@ -932,6 +939,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_standings/standings_{season}.parquet
   tag: espn_nba_standings
+  dataset_page: hoopR-nba-data/standings
   min_season: 2002
   example_args:
     seasons: 2002
@@ -940,6 +948,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_player_season_stats/player_season_stats_{season}.parquet
   tag: espn_nba_player_season_stats
+  dataset_page: hoopR-nba-data/player_season_stats
   min_season: 1994
   example_args:
     seasons: 2025
@@ -948,6 +957,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_team_season_stats/team_season_stats_{season}.parquet
   tag: espn_nba_team_season_stats
+  dataset_page: hoopR-nba-data/team_season_stats
   min_season: 1994
   example_args:
     seasons: 2025
@@ -956,6 +966,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_draft/draft_{season}.parquet
   tag: espn_nba_draft
+  dataset_page: hoopR-nba-data/draft
   min_season: 2003
   example_args:
     seasons: 2025
@@ -964,6 +975,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_rosters/rosters_{season}.parquet
   tag: espn_nba_rosters
+  dataset_page: hoopR-nba-data/rosters
   id_int32: [athlete_id]
   min_season: 2025
   example_args:
@@ -1407,6 +1419,7 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_player_crosswalk_{season}.parquet
   tag: nba_crosswalk
+  dataset_page: hoopR-nba-data/player_crosswalk
   id_int64: [nba_player_id]
   id_int32: [espn_team_id, espn_athlete_id]
   min_season: 2002
@@ -1418,6 +1431,7 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_schedule_crosswalk_{season}.parquet
   tag: nba_crosswalk
+  dataset_page: hoopR-nba-data/schedule_crosswalk
   id_int64: [nba_home_team_id, nba_away_team_id]
   id_int32: [espn_game_id, home_espn_team_id, away_espn_team_id]
   min_season: 2002
@@ -1429,6 +1443,7 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_team_crosswalk_{season}.parquet
   tag: nba_crosswalk
+  dataset_page: hoopR-nba-data/team_crosswalk
   id_int64: [nba_team_id]
   id_int32: [espn_team_id]
   min_season: 2002
@@ -1476,6 +1491,7 @@ loaders:
   base: sdv_releases
   url: espn_nba_player_core/player_core_{season}.parquet
   tag: espn_nba_player_core
+  dataset_page: hoopR-nba-data/player_core
   id_int32: [athlete_id]
   min_season: 1994
   example_args:

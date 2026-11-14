@@ -75,6 +75,7 @@ def load_nba_pbp(seasons, return_as_pandas: bool = False):
     """Load espn_nba_pbp (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_pbp
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/pbp.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -187,6 +188,7 @@ def load_nba_player_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_nba_player_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_player_boxscores
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/player_box.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1994).
@@ -292,6 +294,7 @@ def load_nba_schedule(seasons, return_as_pandas: bool = False):
     """Load espn_nba_schedules (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_schedules
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/schedules.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1994).
@@ -415,6 +418,7 @@ def load_nba_team_boxscore(seasons, return_as_pandas: bool = False):
     """Load espn_nba_team_boxscores (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_team_boxscores
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/team_box.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1994).
@@ -522,6 +526,7 @@ def load_nba_game_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_nba_game_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_game_rosters
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/game_rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1994).
@@ -595,6 +600,7 @@ def load_nba_officials(seasons, return_as_pandas: bool = False):
     """Load espn_nba_officials (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_officials
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/officials.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1994).
@@ -648,6 +654,7 @@ def load_nba_shots(seasons, return_as_pandas: bool = False):
     """Load espn_nba_shots (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_shots
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/shots.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -712,6 +719,7 @@ def load_nba_standings(seasons, return_as_pandas: bool = False):
     """Load espn_nba_standings (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_standings
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/standings.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -782,6 +790,7 @@ def load_nba_player_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_nba_player_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_player_season_stats
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/player_season_stats.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1994).
@@ -845,6 +854,7 @@ def load_nba_team_season_stats(seasons, return_as_pandas: bool = False):
     """Load espn_nba_team_season_stats (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_team_season_stats
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/team_season_stats.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1994).
@@ -909,6 +919,7 @@ def load_nba_draft(seasons, return_as_pandas: bool = False):
     """Load espn_nba_draft (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_draft
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/draft.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2003).
@@ -988,6 +999,7 @@ def load_nba_rosters(seasons, return_as_pandas: bool = False):
     """Load espn_nba_rosters (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_rosters
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/rosters.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2025).
@@ -3849,6 +3861,7 @@ def load_nba_player_crosswalk(seasons, return_as_pandas: bool = False):
     """Load nba_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/player_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -3927,6 +3940,7 @@ def load_nba_schedule_crosswalk(seasons, return_as_pandas: bool = False):
     """Load nba_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/schedule_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -4000,6 +4014,7 @@ def load_nba_team_crosswalk(seasons, return_as_pandas: bool = False):
     """Load nba_crosswalk (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/team_crosswalk.md
 
     Args:
         seasons: an int or iterable of seasons (>= 2002).
@@ -4078,6 +4093,7 @@ def load_nba_player_core(seasons, return_as_pandas: bool = False):
     """Load espn_nba_player_core (sportsdataverse-data release).
 
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_player_core
+    Dataset page: https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/player_core.md
 
     Args:
         seasons: an int or iterable of seasons (>= 1994).
