@@ -69,7 +69,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 |---|---|
 | [load_nba_player_boxscore](loaders/player.md#load_nba_player_boxscore) | Release: espn_nba_player_boxscores · asset … |
 | [load_nba_player_season_stats](loaders/player.md#load_nba_player_season_stats) | Release: espn_nba_player_season_stats · asset … |
-| [load_nba_player_crosswalk](loaders/player.md#load_nba_player_crosswalk) | Release: nba_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_player_crosswalk_{season}.parquet` |
+| [load_nba_player_crosswalk](loaders/player.md#load_nba_player_crosswalk) | Release: nba_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_player_crosswalk_{season}.parquet` … |
 | [load_nba_player_core](loaders/player.md#load_nba_player_core) | Release: espn_nba_player_core · asset … |
 | [load_nba_player_impact](loaders/player.md#load_nba_player_impact) | Release: nba_player_impact · asset … |
 | [load_nba_player_aliases](loaders/player.md#load_nba_player_aliases) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_player_aliases.parquet` |
@@ -110,7 +110,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 |---|---|
 | [load_nba_team_boxscore](loaders/team.md#load_nba_team_boxscore) | Release: espn_nba_team_boxscores · asset … |
 | [load_nba_team_season_stats](loaders/team.md#load_nba_team_season_stats) | Release: espn_nba_team_season_stats · asset … |
-| [load_nba_team_crosswalk](loaders/team.md#load_nba_team_crosswalk) | Release: nba_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_team_crosswalk_{season}.parquet` |
+| [load_nba_team_crosswalk](loaders/team.md#load_nba_team_crosswalk) | Release: nba_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_team_crosswalk_{season}.parquet` · … |
 | [load_nba_team_group_seasons](loaders/team.md#load_nba_team_group_seasons) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_team_group_seasons_{season}.parquet` |
 | [load_nba_team_aliases](loaders/team.md#load_nba_team_aliases) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_team_aliases.parquet` |
 
@@ -118,16 +118,16 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 
 | Function | Summary |
 |---|---|
-| [load_nba_pbp](loaders/other.md#load_nba_pbp) | Release: espn_nba_pbp · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_pbp/play_by_play_{season}.parquet` |
-| [load_nba_schedule](loaders/other.md#load_nba_schedule) | Release: espn_nba_schedules · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_schedules/nba_schedule_{season}.parquet` |
+| [load_nba_pbp](loaders/other.md#load_nba_pbp) | Release: espn_nba_pbp · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_pbp/play_by_play_{season}.parquet` · dataset … |
+| [load_nba_schedule](loaders/other.md#load_nba_schedule) | Release: espn_nba_schedules · asset … |
 | [load_nba_game_rosters](loaders/other.md#load_nba_game_rosters) | Release: espn_nba_game_rosters · asset … |
-| [load_nba_officials](loaders/other.md#load_nba_officials) | Release: espn_nba_officials · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_officials/officials_{season}.parquet` |
-| [load_nba_shots](loaders/other.md#load_nba_shots) | Release: espn_nba_shots · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_shots/shots_{season}.parquet` |
-| [load_nba_standings](loaders/other.md#load_nba_standings) | Release: espn_nba_standings · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_standings/standings_{season}.parquet` |
-| [load_nba_draft](loaders/other.md#load_nba_draft) | Release: espn_nba_draft · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_draft/draft_{season}.parquet` |
-| [load_nba_rosters](loaders/other.md#load_nba_rosters) | Release: espn_nba_rosters · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_rosters/rosters_{season}.parquet` |
+| [load_nba_officials](loaders/other.md#load_nba_officials) | Release: espn_nba_officials · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_officials/officials_{season}.parquet` · … |
+| [load_nba_shots](loaders/other.md#load_nba_shots) | Release: espn_nba_shots · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_shots/shots_{season}.parquet` · dataset page |
+| [load_nba_standings](loaders/other.md#load_nba_standings) | Release: espn_nba_standings · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_standings/standings_{season}.parquet` · … |
+| [load_nba_draft](loaders/other.md#load_nba_draft) | Release: espn_nba_draft · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_draft/draft_{season}.parquet` · dataset page |
+| [load_nba_rosters](loaders/other.md#load_nba_rosters) | Release: espn_nba_rosters · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_rosters/rosters_{season}.parquet` · … |
 | [load_nba_depth_charts](loaders/other.md#load_nba_depth_charts) | Release: espn_nba_depthcharts · asset … |
-| [load_nba_schedule_crosswalk](loaders/other.md#load_nba_schedule_crosswalk) | Release: nba_crosswalk · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_schedule_crosswalk_{season}.parquet` |
+| [load_nba_schedule_crosswalk](loaders/other.md#load_nba_schedule_crosswalk) | Release: nba_crosswalk · asset … |
 | [load_nba_groups](loaders/other.md#load_nba_groups) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_groups.parquet` |
 | [load_nba_group_seasons](loaders/other.md#load_nba_group_seasons) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_group_seasons.parquet` |
 | [load_nba_group_aliases](loaders/other.md#load_nba_group_aliases) | Release: nba_groups · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_groups/nba_group_aliases.parquet` |

@@ -9,7 +9,7 @@ toc_max_heading_level: 2
 
 ## load_nba_pbp
 
-Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_pbp/play_by_play_{season}.parquet`
+Release: [espn_nba_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_pbp/play_by_play_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/pbp.md)
 ### Returns {#load_nba_pbp-returns}
 
 | col_name | type | description |
@@ -89,7 +89,7 @@ load_nba_pbp(seasons=2024)
 
 ## load_nba_schedule
 
-Release: [espn_nba_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_schedules/nba_schedule_{season}.parquet`
+Release: [espn_nba_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_schedules/nba_schedule_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/schedules.md)
 ### Returns {#load_nba_schedule-returns}
 
 | col_name | type | description |
@@ -178,7 +178,7 @@ load_nba_schedule(seasons=2024)
 
 ## load_nba_game_rosters
 
-Release: [espn_nba_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_game_rosters/game_rosters_{season}.parquet`
+Release: [espn_nba_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_game_rosters/game_rosters_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/game_rosters.md)
 ### Returns {#load_nba_game_rosters-returns}
 
 | col_name | type | description |
@@ -212,7 +212,7 @@ load_nba_game_rosters(seasons=2002)
 
 ## load_nba_officials
 
-Release: [espn_nba_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_officials/officials_{season}.parquet`
+Release: [espn_nba_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_officials/officials_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/officials.md)
 ### Returns {#load_nba_officials-returns}
 
 | col_name | type | description |
@@ -231,7 +231,7 @@ load_nba_officials(seasons=2002)
 
 ## load_nba_shots
 
-Release: [espn_nba_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_shots/shots_{season}.parquet`
+Release: [espn_nba_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_shots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_shots/shots_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/shots.md)
 ### Returns {#load_nba_shots-returns}
 
 | col_name | type | description |
@@ -263,7 +263,7 @@ load_nba_shots(seasons=2002)
 
 ## load_nba_standings
 
-Release: [espn_nba_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_standings/standings_{season}.parquet`
+Release: [espn_nba_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_standings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_standings/standings_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/standings.md)
 ### Returns {#load_nba_standings-returns}
 
 | col_name | type | description |
@@ -299,7 +299,7 @@ load_nba_standings(seasons=2002)
 
 ## load_nba_draft
 
-Release: [espn_nba_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_draft) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_draft/draft_{season}.parquet`
+Release: [espn_nba_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_draft) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_draft/draft_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/draft.md)
 ### Returns {#load_nba_draft-returns}
 
 | col_name | type | description |
@@ -346,7 +346,7 @@ load_nba_draft(seasons=2025)
 
 ## load_nba_rosters
 
-Release: [espn_nba_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_rosters/rosters_{season}.parquet`
+Release: [espn_nba_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_rosters/rosters_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/rosters.md)
 ### Returns {#load_nba_rosters-returns}
 
 | col_name | type | description |
@@ -429,7 +429,7 @@ load_nba_depth_charts(seasons=2027)
 
 ## load_nba_schedule_crosswalk
 
-Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_schedule_crosswalk_{season}.parquet`
+Release: [nba_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_schedule_crosswalk_{season}.parquet` · [dataset page](https://github.com/sportsdataverse/hoopR-nba-data/blob/main/docs/datasets/schedule_crosswalk.md)
 
 :::caution[Coverage]
 nba_game_id stays String, the zero-padded NBA Stats game id (0022300001); the nba_*_team_id bridge ids are Int64, as NBA Stats ships team_id.
