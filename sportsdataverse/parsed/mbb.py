@@ -512,7 +512,9 @@ from sportsdataverse.mbb import mbb_official_seasons as mbb_official_seasons  # 
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import mbb_play_styles as mbb_play_styles  # noqa: F401
 from sportsdataverse.mbb import mbb_player_crosswalk as mbb_player_crosswalk  # noqa: F401
+from sportsdataverse.mbb import mbb_player_game_expected_box as mbb_player_game_expected_box  # noqa: F401
 from sportsdataverse.mbb import mbb_player_on_off as mbb_player_on_off  # noqa: F401
+from sportsdataverse.mbb import mbb_player_season_box_rates as mbb_player_season_box_rates  # noqa: F401
 from sportsdataverse.mbb import mbb_player_shot_zones as mbb_player_shot_zones  # noqa: F401
 from sportsdataverse.mbb import mbb_player_war as mbb_player_war  # noqa: F401
 from sportsdataverse.mbb import mbb_player_wowy as mbb_player_wowy  # noqa: F401
@@ -533,6 +535,7 @@ from sportsdataverse.mbb import mbb_situational_team as mbb_situational_team  # 
 from sportsdataverse.mbb import mbb_situational_team_games as mbb_situational_team_games  # noqa: F401
 from sportsdataverse.mbb import mbb_strength_of_schedule as mbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.mbb import mbb_team_crosswalk as mbb_team_crosswalk  # noqa: F401
+from sportsdataverse.mbb import mbb_team_game_four_factors as mbb_team_game_four_factors  # noqa: F401
 from sportsdataverse.mbb import mbb_team_game_possessions as mbb_team_game_possessions  # noqa: F401
 from sportsdataverse.mbb import mbb_team_luck as mbb_team_luck  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
@@ -1198,7 +1201,9 @@ __all__ = [
     "mbb_pbp_disk",
     "mbb_play_styles",
     "mbb_player_crosswalk",
+    "mbb_player_game_expected_box",
     "mbb_player_on_off",
+    "mbb_player_season_box_rates",
     "mbb_player_shot_zones",
     "mbb_player_war",
     "mbb_player_wowy",
@@ -1219,6 +1224,7 @@ __all__ = [
     "mbb_situational_team_games",
     "mbb_strength_of_schedule",
     "mbb_team_crosswalk",
+    "mbb_team_game_four_factors",
     "mbb_team_game_possessions",
     "mbb_team_luck",
     "mbb_team_ratings",

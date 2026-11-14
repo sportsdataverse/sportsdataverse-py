@@ -1,10 +1,132 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_possession–nba_team"
-sidebar_label: "Analytics: nba_possession–nba_team"
+title: "NBA — additional Python functions — Analytics: nba_player–nba_situational"
+sidebar_label: "Analytics: nba_player–nba_situational"
 sidebar_position: 19
-description: "NBA — additional Python functions — Analytics: nba_possession–nba_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_player–nba_situational — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_possession–nba_team
+# NBA — additional Python functions — Analytics: nba_player–nba_situational
+
+### nba_player_wowy {#nba_player_wowy}
+
+`nba_player_wowy(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WOWY pairs: a team's season with two teammates together, apart and both off, per pair.
+
+The definitions are in `sportsdataverse._common.player_on_off`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, player_id_a, player_id_b)` (`player_id_a` the smaller id) for every pair of the team's players: for `_both` (together), `_a_only`, `_b_only` and `_neither` the `minutes`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus` and `off_rtg` / `def_rtg` / `net_rtg`. The four splits' totals add up to the team's season; the ratings do not add. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `player_id_a` | Int64 | The first player of the pair, the smaller id. |
+| `player_id_b` | Int64 | The second player of the pair, the larger id. |
+| `minutes_both` | Float64 | Game-clock minutes of the team's season with both A and B on the floor. |
+| `poss_both` | Int64 | The team's offensive possessions with both A and B on the floor (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_both` | Int64 | The team's defensive possessions with both A and B on the floor. |
+| `pts_both` | Int64 | The team's points with both A and B on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_both` | Int64 | The opponent's points with both A and B on the floor, credited as pts_both is. |
+| `plus_minus_both` | Int64 | pts_both - opp_pts_both. |
+| `off_rtg_both` | Float64 | Offensive rating with both A and B on the floor: pts_both per 100 poss_both; null with no possessions. |
+| `def_rtg_both` | Float64 | Defensive rating with both A and B on the floor: opp_pts_both per 100 opp_poss_both; null with no possessions. |
+| `net_rtg_both` | Float64 | Net rating with both A and B on the floor: off_rtg_both - def_rtg_both; null when either is null. |
+| `minutes_a_only` | Float64 | Game-clock minutes of the team's season with A on the floor and B off. |
+| `poss_a_only` | Int64 | The team's offensive possessions with A on the floor and B off (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_a_only` | Int64 | The team's defensive possessions with A on the floor and B off. |
+| `pts_a_only` | Int64 | The team's points with A on the floor and B off, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_a_only` | Int64 | The opponent's points with A on the floor and B off, credited as pts_a_only is. |
+| `plus_minus_a_only` | Int64 | pts_a_only - opp_pts_a_only. |
+| `off_rtg_a_only` | Float64 | Offensive rating with A on the floor and B off: pts_a_only per 100 poss_a_only; null with no possessions. |
+| `def_rtg_a_only` | Float64 | Defensive rating with A on the floor and B off: opp_pts_a_only per 100 opp_poss_a_only; null with no possessions. |
+| `net_rtg_a_only` | Float64 | Net rating with A on the floor and B off: off_rtg_a_only - def_rtg_a_only; null when either is null. |
+| `minutes_b_only` | Float64 | Game-clock minutes of the team's season with B on the floor and A off. |
+| `poss_b_only` | Int64 | The team's offensive possessions with B on the floor and A off (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_b_only` | Int64 | The team's defensive possessions with B on the floor and A off. |
+| `pts_b_only` | Int64 | The team's points with B on the floor and A off, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_b_only` | Int64 | The opponent's points with B on the floor and A off, credited as pts_b_only is. |
+| `plus_minus_b_only` | Int64 | pts_b_only - opp_pts_b_only. |
+| `off_rtg_b_only` | Float64 | Offensive rating with B on the floor and A off: pts_b_only per 100 poss_b_only; null with no possessions. |
+| `def_rtg_b_only` | Float64 | Defensive rating with B on the floor and A off: opp_pts_b_only per 100 opp_poss_b_only; null with no possessions. |
+| `net_rtg_b_only` | Float64 | Net rating with B on the floor and A off: off_rtg_b_only - def_rtg_b_only; null when either is null. |
+| `minutes_neither` | Float64 | Game-clock minutes of the team's season with neither A nor B on the floor. |
+| `poss_neither` | Int64 | The team's offensive possessions with neither A nor B on the floor (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_neither` | Int64 | The team's defensive possessions with neither A nor B on the floor. |
+| `pts_neither` | Int64 | The team's points with neither A nor B on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_neither` | Int64 | The opponent's points with neither A nor B on the floor, credited as pts_neither is. |
+| `plus_minus_neither` | Int64 | pts_neither - opp_pts_neither. |
+| `off_rtg_neither` | Float64 | Offensive rating with neither A nor B on the floor: pts_neither per 100 poss_neither; null with no possessions. |
+| `def_rtg_neither` | Float64 | Defensive rating with neither A nor B on the floor: opp_pts_neither per 100 opp_poss_neither; null with no possessions. |
+| `net_rtg_neither` | Float64 | Net rating with neither A nor B on the floor: off_rtg_neither - def_rtg_neither; null when either is null. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"` or `season_type` is not one of the four above. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_on_off import nba_player_wowy
+pairs = nba_player_wowy(2025)
+pairs.filter(team_id=1610612738).head()
+```
+
+### nba_playtype_ratings {#nba_playtype_ratings}
+
+`nba_playtype_ratings(season: 'str', *, league_id: 'str' = '00', off_team: 'Optional[pl.DataFrame]' = None, def_team: 'Optional[pl.DataFrame]' = None, schedule: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Season play-type-adjusted offensive/defensive team ratings.
+
+Fetches (or uses injected) Synergy offensive/defensive team frames plus the
+league schedule, computes raw per-type efficiency
+(`raw_playtype_efficiency`), opponent-adjusts it
+(`adjust_playtype_efficiency`), then rolls up to one row per team.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `off_team` | `Optional[DataFrame]` | `None` | Injected Synergy offensive team frame (bypasses the live fetch -- used for tests / oracle fixtures). |
+| `def_team` | `Optional[DataFrame]` | `None` | Injected Synergy defensive team frame. |
+| `schedule` | `Optional[DataFrame]` | `None` | Injected `team_id`/`opp_team_id` schedule frame. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team: `team_id` (Int64), `adj_off`/`adj_def`/`adj_net` (Float64) roll-ups, plus per-type wide columns `adj_off_ppp_<playtype>`/`adj_def_ppp_<playtype>`/`off_freq_<playtype>` (Float64) for each play type present in the data. `adj_off = Σ_t off_freq_t · adj_off_ppp_t · 100` (symmetric for `adj_def` off `def_freq_t`); `adj_net = adj_off - adj_def`. Returns a zero-row frame with the base roll-up schema when the upstream fetch is empty (sparse-coverage leagues never raise).
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_playtype_ratings
+r = nba_playtype_ratings("2023-24")
+print(r.sort("adj_off", descending=True).head(10))
+
+# Injected offline (oracle / test) path
+
+r = nba_playtype_ratings("2023-24", off_team=off_df, def_team=def_df, schedule=sched_df)
+
+# Pipeline next step
+
+r.filter(pl.col("adj_net") > 0).sort("adj_net", descending=True)
+```
 
 ### nba_possession_rate_rows {#nba_possession_rate_rows}
 
@@ -54,6 +176,7 @@ One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_
 | `fgm` | Float64 | Offense field goals made on the possession. |
 | `fg3m` | Float64 | Offense three-pointers made on the possession. |
 | `fta` | Float64 | Offense free-throw attempts on the possession. |
+| `ftm` | Float64 | Offense free throws made on the possession. |
 | `oreb` | Float64 | Offense offensive rebounds on the possession. |
 | `dreb` | Float64 | Defense defensive rebounds on the possession (the other half of the offensive-rebound chances). |
 | `tov` | Float64 | Offense turnovers on the possession. |
@@ -691,6 +814,7 @@ One row per possession in `~sportsdataverse._common.situational_splits.situation
 | `fgm` | Float64 | Offense field goals made on the possession. |
 | `fg3m` | Float64 | Offense three-pointers made on the possession. |
 | `fta` | Float64 | Offense free-throw attempts on the possession. |
+| `ftm` | Float64 | Offense free throws made on the possession. |
 | `oreb` | Float64 | Offense offensive rebounds on the possession. |
 | `dreb` | Float64 | Defense defensive rebounds on the possession (the other half of the offensive-rebound chances). |
 | `tov` | Float64 | Offense turnovers on the possession. |
@@ -898,213 +1022,4 @@ One row per `(season, team_id, family, split)`: `games`, `minutes` / `seconds`, 
 from sportsdataverse.nba.nba_situational import nba_situational_team
 splits = nba_situational_team(2026)
 splits.filter(split="clutch").sort("net_rtg", descending=True).head()
-```
-
-### nba_situational_team_games {#nba_situational_team_games}
-
-`nba_situational_team_games(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', top_n: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Team splits by situation, one game at a time: `nba_situational_team` per game.
-
-The same possessions and labels, grouped by game too, so a team-season's rows of a split add
-up to its `nba_situational_team` row (`games`, `seconds`, `poss`, `opp_poss`,
-`pts`, `opp_pts`). The `opponent` family keeps the season's top `top_n`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`. |
-| `top_n` | `int \| None` | `None` | As `nba_situational_team`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, game_id, family, split)`, the columns of `nba_situational_team` plus `game_id` (the stats.nba.com game id); `games` is 1. A split the team did not play in the game has no row. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `game_id` | String | stats.nba.com game id. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
-| `games` | Int64 | 1: the row is one game (summed over a team-season's rows it is the season row's games). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id`, `season_type` or `top_n` is invalid. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_situational import nba_situational_team_games
-game = nba_situational_team_games(2026).filter(game_id="0022500001")
-game.filter(family="score").select("team_id", "split", "poss", "pts", "opp_pts")
-```
-
-### nba_stint_rows {#nba_stint_rows}
-
-`nba_stint_rows(pbp: 'pl.DataFrame', game_lineups: 'pl.DataFrame', possessions: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'pl.DataFrame'`
-
-Map the stats.nba.com releases onto the stint-row frame.
-
-One row per play-by-play action in game order, on the lineup at that action: its clock, its
-points (a free throw's on the row of the game's last foul) and the possessions that start at
-it. Games not in `schedule` are dropped, and so are possessions whose offense is neither team.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | `load_nba_stats_pbp` / `load_wnba_stats_pbp` rows (`game_id`, `order_index`, `action_number`, `period`, `seconds_remaining`, `score_home`, `score_away`, `is_free_throw`, `is_foul`, `event_type`, `season`). |
-| `game_lineups` | `DataFrame` |  | `load_nba_stats_game_lineups` / `load_wnba_stats_game_lineups` rows. |
-| `possessions` | `DataFrame` |  | `load_nba_stats_possessions` / `load_wnba_stats_possessions` rows, every possession of each game (the columns BB-D7's `~sportsdataverse.nba.nba_possession_flags.add_possession_flags` reads). |
-| `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows (`game_id`, `home_team_id`, `away_team_id`). |
-| `league_id` | `str` | `'00'` | `"00"` NBA (12-minute quarters) or `"10"` WNBA (10-minute quarters). |
-
-**Returns**
-
-Rows in `sportsdataverse._common.game_stints.stint_row_schema` with Int64 player ids: `period`, `clock` (the action's `seconds_remaining`), `order` (its `order_index`) and `is_garbage_time` (null in a game with no possessions).
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season of the action. |
-| `game_id` | String | stats.nba.com game id. |
-| `home_team_id` | Int64 | stats.nba.com team id of the home team, from the schedule. |
-| `away_team_id` | Int64 | stats.nba.com team id of the away team, from the schedule. |
-| `home_1` | Int64 | Home player 1 on the floor. |
-| `home_2` | Int64 | Home player 2 on the floor. |
-| `home_3` | Int64 | Home player 3 on the floor. |
-| `home_4` | Int64 | Home player 4 on the floor. |
-| `home_5` | Int64 | Home player 5 on the floor. |
-| `away_1` | Int64 | Away player 1 on the floor. |
-| `away_2` | Int64 | Away player 2 on the floor. |
-| `away_3` | Int64 | Away player 3 on the floor. |
-| `away_4` | Int64 | Away player 4 on the floor. |
-| `away_5` | Int64 | Away player 5 on the floor. |
-| `seconds` | Float64 | Game clock that ran into this action (from the previous action of the period). |
-| `home_pts` | Int64 | Points the home team scored on this action; a free throw's points sit on the row of the game's last foul. |
-| `away_pts` | Int64 | Points the away team scored on this action; a free throw's points sit on the row of the game's last foul. |
-| `home_poss` | Int64 | Possessions of the home team that start at this action. |
-| `away_poss` | Int64 | Possessions of the away team that start at this action. |
-| `period` | Int64 | Period of the action. |
-| `clock` | Float64 | Period clock (seconds left) after the action. |
-| `order` | Int64 | The action's order_index (its place in the game). |
-| `is_garbage_time` | Boolean | Whether the action is in garbage time: its possession's BB-D7 flag, which stays on from the possession that triggers it to the game's end. Null in a game with no possessions. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `pbp` has no action for a possession (BB-D7's check). |
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_loaders as L
-from sportsdataverse.nba.nba_game_stints import nba_stint_rows
-rows = nba_stint_rows(L.load_nba_stats_pbp(2025), L.load_nba_stats_game_lineups(2025),
-                      L.load_nba_stats_possessions(2025), L.load_nba_stats_schedules(2025))
-```
-
-### nba_team_clutch {#nba_team_clutch}
-
-`nba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team.
-
-Loads the season's clutch net rating (`nba_stats_leaguedashteamclutch`)
-and full-game net baseline (`nba_stats_leaguedashteamstats`), computes
-`clutch_delta`, and applies `shrink_clutch`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  | End year of the season (e.g. `2024` for 2023-24). |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_clutch import nba_team_clutch
-skill = nba_team_clutch(2024)
-skill.sort("clutch_skill_shrunk", descending=True).head()
-```
-
-### nba_team_game_possessions {#nba_team_game_possessions}
-
-`nba_team_game_possessions(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Per team and game: the possession counts behind `nba_team_season_rates`.
-
-The season table's `poss` / `opp_poss` / `pts` / `opp_pts` one game at a time, from the
-same possessions, so a team-season's rows of a split add up to its season row exactly (their
-count is `games`). Rate any set of games the same way: sum the rows, then divide once
-(`off_rtg = 100 * pts / poss`; pace `48 * 60 * (poss + opp_poss) / 2 / seconds`, 40 in the
-WNBA). The definitions are in `sportsdataverse._common.team_season_rates`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `home` or `away` row (neither at a neutral site) and, when it has clutch possessions, `close` and `clutch` rows. `team_id` is the stats.nba.com team id (Int64), `game_id` the stats.nba.com game id. `poss` / `opp_poss` are the team's offensive / defensive possessions, `pts` / `opp_pts` their points and `seconds` the game clock they used. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
-| `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
-| `game_id` | String | stats.nba.com game id. The game this row's possessions are from. |
-| `split` | String | The season table's split this game is in: all (every game); home or away (neither at a neutral site); close and clutch when the game has clutch possessions. A team-season's rows of a split add up to its nba_team_season_rates row. |
-| `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
-| `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
-| `pts` | Int64 | Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free throws. |
-| `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
-| `seconds` | Float64 | Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60 x (poss + opp_poss) / 2 / summed seconds. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above. |
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nba.nba_team_season_rates import nba_team_game_possessions
-games = nba_team_game_possessions(2026).filter(split="all")
-games.group_by("team_id").agg(pl.col("pts").sum() * 100 / pl.col("poss").sum())
 ```

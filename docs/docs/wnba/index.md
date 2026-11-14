@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 43 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 122 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 125 | — |
 
 ## ESPN {#espn}
 
@@ -99,9 +99,11 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_matchup_drapm`](reference/additional/analytics-2#wnba_matchup_drapm)
 - [`wnba_official_seasons`](reference/additional/analytics-2#wnba_official_seasons)
 - [`wnba_player_factor_rapm`](reference/additional/analytics-2#wnba_player_factor_rapm)
+- [`wnba_player_game_expected_box`](reference/additional/analytics-2#wnba_player_game_expected_box)
 - [`wnba_player_on_off`](reference/additional/analytics-2#wnba_player_on_off)
 - [`wnba_player_props`](reference/additional/analytics-2#wnba_player_props)
-- [`wnba_player_shot_zones`](reference/additional/analytics-2#wnba_player_shot_zones)
+- [`wnba_player_season_box_rates`](reference/additional/analytics-2#wnba_player_season_box_rates)
+- [`wnba_player_shot_zones`](reference/additional/analytics-3#wnba_player_shot_zones)
 - [`wnba_player_war`](reference/additional/analytics-3#wnba_player_war)
 - [`wnba_player_wowy`](reference/additional/analytics-3#wnba_player_wowy)
 - [`wnba_playtype_ratings`](reference/additional/analytics-3#wnba_playtype_ratings)
@@ -114,17 +116,18 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_situational_team`](reference/additional/analytics-3#wnba_situational_team)
 - [`wnba_situational_team_games`](reference/additional/analytics-3#wnba_situational_team_games)
 - [`wnba_team_clutch`](reference/additional/analytics-3#wnba_team_clutch)
+- [`wnba_team_game_four_factors`](reference/additional/analytics-3#wnba_team_game_four_factors)
 - [`wnba_team_game_possessions`](reference/additional/analytics-3#wnba_team_game_possessions)
 - [`wnba_team_luck`](reference/additional/analytics-3#wnba_team_luck)
-- [`wnba_team_season_flow`](reference/additional/analytics-3#wnba_team_season_flow)
+- [`wnba_team_season_flow`](reference/additional/analytics-4#wnba_team_season_flow)
 - [`wnba_team_season_rates`](reference/additional/analytics-4#wnba_team_season_rates)
 - [`wnba_team_shot_zones`](reference/additional/analytics-4#wnba_team_shot_zones)
 - [`wnba_team_strength`](reference/additional/analytics-4#wnba_team_strength)
 - [`wnba_tracking_drive_value`](reference/additional/analytics-4#wnba_tracking_drive_value)
-- [`wnba_tracking_pass_value`](reference/additional/analytics-4#wnba_tracking_pass_value)
-- [`wnba_tracking_reb_oe`](reference/additional/analytics-4#wnba_tracking_reb_oe)
-- [`wnba_tracking_rim_protect_value`](reference/additional/analytics-4#wnba_tracking_rim_protect_value)
-- [`wnba_tracking_shot_diet_value`](reference/additional/analytics-4#wnba_tracking_shot_diet_value)
+- [`wnba_tracking_pass_value`](reference/additional/analytics-5#wnba_tracking_pass_value)
+- [`wnba_tracking_reb_oe`](reference/additional/analytics-5#wnba_tracking_reb_oe)
+- [`wnba_tracking_rim_protect_value`](reference/additional/analytics-5#wnba_tracking_rim_protect_value)
+- [`wnba_tracking_shot_diet_value`](reference/additional/analytics-5#wnba_tracking_shot_diet_value)
 - [`wnba_tracking_touch_value`](reference/additional/analytics-5#wnba_tracking_touch_value)
 - [`zone_value_map`](reference/additional/analytics-5#zone_value_map)
 

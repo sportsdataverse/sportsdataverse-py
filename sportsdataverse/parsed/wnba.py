@@ -284,8 +284,10 @@ from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
 from sportsdataverse.wnba import wnba_play_context as wnba_play_context  # noqa: F401
 from sportsdataverse.wnba import wnba_player_crosswalk as wnba_player_crosswalk  # noqa: F401
 from sportsdataverse.wnba import wnba_player_factor_rapm as wnba_player_factor_rapm  # noqa: F401
+from sportsdataverse.wnba import wnba_player_game_expected_box as wnba_player_game_expected_box  # noqa: F401
 from sportsdataverse.wnba import wnba_player_on_off as wnba_player_on_off  # noqa: F401
 from sportsdataverse.wnba import wnba_player_props as wnba_player_props  # noqa: F401
+from sportsdataverse.wnba import wnba_player_season_box_rates as wnba_player_season_box_rates  # noqa: F401
 from sportsdataverse.wnba import wnba_player_shot_zones as wnba_player_shot_zones  # noqa: F401
 from sportsdataverse.wnba import wnba_player_war as wnba_player_war  # noqa: F401
 from sportsdataverse.wnba import wnba_player_wowy as wnba_player_wowy  # noqa: F401
@@ -307,6 +309,7 @@ from sportsdataverse.wnba import wnba_situational_team as wnba_situational_team 
 from sportsdataverse.wnba import wnba_situational_team_games as wnba_situational_team_games  # noqa: F401
 from sportsdataverse.wnba import wnba_team_clutch as wnba_team_clutch  # noqa: F401
 from sportsdataverse.wnba import wnba_team_crosswalk as wnba_team_crosswalk  # noqa: F401
+from sportsdataverse.wnba import wnba_team_game_four_factors as wnba_team_game_four_factors  # noqa: F401
 from sportsdataverse.wnba import wnba_team_game_possessions as wnba_team_game_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_team_luck as wnba_team_luck  # noqa: F401
 from sportsdataverse.wnba import wnba_team_ratings as wnba_team_ratings  # noqa: F401
@@ -585,8 +588,10 @@ __all__ = [
     "wnba_play_context",
     "wnba_player_crosswalk",
     "wnba_player_factor_rapm",
+    "wnba_player_game_expected_box",
     "wnba_player_on_off",
     "wnba_player_props",
+    "wnba_player_season_box_rates",
     "wnba_player_shot_zones",
     "wnba_player_war",
     "wnba_player_wowy",
@@ -608,6 +613,7 @@ __all__ = [
     "wnba_situational_team_games",
     "wnba_team_clutch",
     "wnba_team_crosswalk",
+    "wnba_team_game_four_factors",
     "wnba_team_game_possessions",
     "wnba_team_luck",
     "wnba_team_ratings",
