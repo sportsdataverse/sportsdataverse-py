@@ -138,6 +138,44 @@ def _possession_rows(league_id: str, season: int) -> tuple[pl.DataFrame, pl.Data
     return rows, games
 
 
+def _espn_matched(season: int, league_id: str, games: pl.DataFrame) -> pl.DataFrame:
+    """The ESPN schedule release's games matched to the stats games on (date, home name, away name).
+
+    One row per ESPN game: ``season, game_id, game_date, home_team_id, away_team_id`` (ESPN,
+    Int32), ``neutral_site`` (:mod:`~sportsdataverse.nba.nba_neutral_site`'s flag for a matched
+    game, ESPN's otherwise), ``stats_game_id`` and the stats team ids ``_hs`` / ``_as`` (null
+    when unmatched), ``season_type`` and the name keys ``_h`` / ``_a``.
+    """
+    if league_id == "10":
+        from sportsdataverse.wnba.wnba_loaders import load_wnba_schedule as load_espn
+    else:
+        from sportsdataverse.nba.nba_loaders import load_nba_schedule as load_espn
+    espn = (
+        load_espn([season])
+        .select(
+            pl.col("season").cast(pl.Int32),
+            pl.col("game_id").cast(pl.Int32),
+            pl.col("game_date").cast(pl.Date),
+            pl.col("home_id").cast(pl.Int32).alias("home_team_id"),
+            pl.col("away_id").cast(pl.Int32).alias("away_team_id"),
+            pl.col("neutral_site").fill_null(False),
+            pl.col("home_display_name").str.to_lowercase().alias("_h"),
+            pl.col("away_display_name").str.to_lowercase().alias("_a"),
+        )
+        .unique("game_id", keep="first", maintain_order=True)
+    )  # one row per game, as the pbp release has
+    keyed = games.unique(["game_date", "_h", "_a"], keep="none")  # a doubled key would match the wrong game
+    stats = keyed.select("game_date", "_h", "_a", "stats_game_id", "home_team_id", "away_team_id", "season_type")
+    return espn.join(
+        stats.rename({"home_team_id": "_hs", "away_team_id": "_as"}), on=["game_date", "_h", "_a"], how="left"
+    ).with_columns(  # ESPN's flag is wrong both ways (misses the bubble, flags All-Star games): ours wins
+        pl.when(pl.col("stats_game_id").is_not_null())
+        .then(nba_neutral_site._neutral_site(espn, league_id, "stats_game_id"))
+        .otherwise(pl.col("neutral_site"))
+        .alias("neutral_site")
+    )
+
+
 @overload
 def nba_rated_priors(
     season: int, *, league_id: str = "00", return_as_pandas: Literal[False] = False
@@ -188,10 +226,6 @@ def nba_rated_priors(
     """
     if league_id not in ("00", "10"):
         raise ValueError(f"league_id must be '00' or '10', got {league_id!r}")
-    if league_id == "10":
-        from sportsdataverse.wnba.wnba_loaders import load_wnba_schedule as load_espn
-    else:
-        from sportsdataverse.nba.nba_loaders import load_nba_schedule as load_espn
     rows, games = _possession_rows(league_id, season)
     prior = None
     try:
@@ -204,30 +238,7 @@ def nba_rated_priors(
         )
     except SeasonNotFoundError:  # the season before the release floor: average until possessions arrive
         pass
-    espn = (
-        load_espn([season])
-        .select(
-            pl.col("season").cast(pl.Int32),
-            pl.col("game_id").cast(pl.Int32),
-            pl.col("game_date").cast(pl.Date),
-            pl.col("home_id").cast(pl.Int32).alias("home_team_id"),
-            pl.col("away_id").cast(pl.Int32).alias("away_team_id"),
-            pl.col("neutral_site").fill_null(False),
-            pl.col("home_display_name").str.to_lowercase().alias("_h"),
-            pl.col("away_display_name").str.to_lowercase().alias("_a"),
-        )
-        .unique("game_id", keep="first", maintain_order=True)
-    )  # one row per game, as the pbp release has
-    keyed = games.unique(["game_date", "_h", "_a"], keep="none")  # a doubled key would match the wrong game
-    stats = keyed.select("game_date", "_h", "_a", "stats_game_id", "home_team_id", "away_team_id", "season_type")
-    matched = espn.join(
-        stats.rename({"home_team_id": "_hs", "away_team_id": "_as"}), on=["game_date", "_h", "_a"], how="left"
-    ).with_columns(  # ESPN's flag is wrong both ways (misses the bubble, flags All-Star games): ours wins
-        pl.when(pl.col("stats_game_id").is_not_null())
-        .then(nba_neutral_site._neutral_site(espn, league_id, "stats_game_id"))
-        .otherwise(pl.col("neutral_site"))
-        .alias("neutral_site")
-    )
+    matched = _espn_matched(season, league_id, games)
     to_rate = matched.filter(pl.col("stats_game_id").is_not_null()).select(
         "game_id", "game_date", "neutral_site", pl.col("_hs").alias("home_team_id"), pl.col("_as").alias("away_team_id")
     )

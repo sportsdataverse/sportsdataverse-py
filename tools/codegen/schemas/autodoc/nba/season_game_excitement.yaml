@@ -29,3 +29,15 @@ columns:
 - name: gei_n
   type: integer
   description: ''
+- name: winner_team_id
+  type: integer
+  description: ''
+- name: winner_low_wp
+  type: double
+  description: ''
+- name: winner_low_period
+  type: integer
+  description: ''
+- name: winner_low_clock
+  type: character
+  description: ''

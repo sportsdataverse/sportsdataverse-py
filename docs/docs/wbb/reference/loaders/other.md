@@ -37,7 +37,7 @@ Release: [espn_womens_college_basketball_pbp](https://github.com/sportsdataverse
 | `athlete_id_1` | Int32 | Primary athlete identifier (e.g. shooter). |
 | `athlete_id_2` | Int32 | Secondary athlete identifier (e.g. assister / fouler). |
 | `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `home_team_id` | Int32 | Unique identifier for the home team. |
 | `home_team_name` | String | Home team name. |
@@ -97,7 +97,7 @@ Release: [wbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `team_id` | String | Unique team identifier. |
 | `adj_o` | Float64 | Adj o. |
 | `adj_d` | Float64 | Adj d. |
@@ -108,6 +108,11 @@ Release: [wbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `games` | Int64 | Games played. |
 | `rank` | Int64 | Rank. |
 | `adj_em_z` | Float64 | Within-season z-score of adj_em, computed as adj_em minus the season mean divided by the season standard deviation over every team in the frame, so it is mean 0 and standard deviation 1 per season. |
+| `adj_o_blend` | Float64 | Adjusted offensive efficiency with the season sim's preseason prior blended in: the same fixed point as adj_o, each Division I team shrunk toward last season's regressed rating as if it had played prior_games extra games at it. |
+| `adj_d_blend` | Float64 | Adjusted defensive efficiency with the preseason prior blended in, on the same basis as adj_o_blend (lower is better). |
+| `adj_em_blend` | Float64 | adj_o_blend - adj_d_blend: the adjusted efficiency margin with the preseason prior, the rating the pregame projection uses. A team with g games is rated about g / (g + prior_games) on this season. |
+| `rank_blend` | Int64 | Dense rank of adj_em_blend within the season (1 = best). |
+| `prior_games` | Float64 | The preseason prior's weight in games (4 men, 3 women, fit by tools/fit_preseason_prior.py); 0 when the previous season is not released, and the blend then equals the raw rating. The five blend columns are in season assets built after 2026-11-13 (#1193); an asset published before then lacks them until the producer rebuilds it. |
 
 ```python
 load_wbb_ratings(seasons=2025)
@@ -120,7 +125,7 @@ Release: [espn_womens_college_basketball_game_rosters](https://github.com/sports
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `game_id` | Int32 | Unique game identifier. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
@@ -154,7 +159,7 @@ Release: [espn_womens_college_basketball_officials](https://github.com/sportsdat
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `game_id` | Int32 | Unique game identifier. |
 | `official_id` | Int32 | Unique official / referee identifier. |
 | `official_uid` | String | ESPN's globally unique resource identifier for the official, read from the core-api items[] uid key; that payload never ships it, so the column is null for every published row. |
@@ -177,7 +182,7 @@ Release: [espn_womens_college_basketball_rosters](https://github.com/sportsdatav
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
@@ -226,7 +231,7 @@ Release: [espn_womens_college_basketball_shots](https://github.com/sportsdataver
 | col_name | type | description |
 |---|---|---|
 | `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `period_number` | Int32 | Numeric period (1-4 for quarters; 5+ for OT). |
 | `clock_display_value` | String | Game clock display string (e.g. '8:32'). |
 | `team_id` | Int32 | Unique team identifier. |
@@ -257,7 +262,7 @@ Release: [espn_womens_college_basketball_standings](https://github.com/sportsdat
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `group_id` | Int32 | ESPN group id. |
 | `group_name` | String |  |
 | `group_abbreviation` | String |  |

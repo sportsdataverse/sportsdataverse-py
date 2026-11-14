@@ -194,6 +194,7 @@ nba:
   nba_team_ratings: {seasons: 2024}  # 32 rows x 33 cols
   nba_team_season_rates: {seasons: 2026}  # 150 rows x 56 cols
   nba_team_game_possessions: {seasons: 2026}
+  nba_team_game_four_factors: {seasons: 2026}
   nba_game_player_impact: {seasons: 2026}  # 30817 rows x 18 cols
   nba_epv_plays: {seasons: 2026}
   nba_epv_player_games: {seasons: 2026}
@@ -221,6 +222,8 @@ nba:
   nba_coach_seasons: {seasons: 2026}
   nba_coach_careers: {seasons: 2026}
   nba_official_seasons: {seasons: 2026}
+  nba_player_game_expected_box: {seasons: 2026}
+  nba_player_season_box_rates: {seasons: 2026}
   nba_game_flow: {seasons: 2026}
   nba_team_season_flow: {seasons: 2026}
   nba_situational_team: {seasons: 2026}
@@ -229,6 +232,7 @@ nba:
   nba_situational_lineup: {seasons: 2026}
   nba_season_sim: {season: 2026, as_of_date: 2026-01-16}  # 30 rows x 43 cols
   nba_rated_priors: {season: 2026}
+  nba_pregame_projections: {season: 2026}
   nba_cup_standings: {season: 2026}  # 30 rows x 17 cols (stats.nba.com scheduleleaguev2)
   nba_cup_sim: {season: 2026, as_of_date: 2025-11-14}  # 30 rows x 23 cols
   nba_neutral_site_games: {seasons: [2026]}  # 6 rows x 12 cols
@@ -322,6 +326,7 @@ wnba:
   wnba_team_ratings: {seasons: 2024}  # 14 rows x 33 cols
   wnba_team_season_rates: {seasons: 2025}  # 65 rows x 56 cols
   wnba_team_game_possessions: {seasons: 2025}
+  wnba_team_game_four_factors: {seasons: 2025}
   wnba_game_player_impact: {seasons: 2026}  # 7008 rows x 18 cols
   wnba_game_lineups_used: {seasons: 2026}  # 10481 rows x 23 cols
   wnba_game_stints: {seasons: 2026}
@@ -339,6 +344,8 @@ wnba:
   wnba_coach_seasons: {seasons: 2025}
   wnba_coach_careers: {seasons: 2025}
   wnba_official_seasons: {seasons: 2025}
+  wnba_player_game_expected_box: {seasons: 2025}
+  wnba_player_season_box_rates: {seasons: 2025}
   wnba_game_flow: {seasons: 2025}
   wnba_epv_plays: {seasons: 2026}
   wnba_epv_player_games: {seasons: 2026}
@@ -390,9 +397,11 @@ mbb:
   ncaa_mbb_join_pbp_shots: {pbp: {$call: mbb.ncaa_mbb_play_by_play, args: {game_ids: ["6470186"]}}, shots: {$call: mbb.ncaa_mbb_shot_locations, args: {game_ids: ["6470186"]}}}  # 529 rows x 40 cols
   in_game_features: {pbp: {$call: mbb.helper_mbb_play_by_play, args: {final: {$call: mbb.espn_mbb_pbp, args: {game_id: 401638643, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 279 rows x 7 cols
   mbb_in_game_win_prob: {pbp: {$call: mbb.helper_mbb_play_by_play, args: {final: {$call: mbb.espn_mbb_pbp, args: {game_id: 401638643, return_parsed: false}}}}, pregame_home_prob: 0.62}  # 279 rows x 8 cols
-  mbb_team_ratings: {seasons: 2024}  # 717 rows x 11 cols
+  mbb_team_ratings: {seasons: 2024}  # 717 rows x 16 cols
+  mbb_pregame_projections: {season: 2026}
   mbb_team_season_rates: {seasons: 2025}
   mbb_team_game_possessions: {seasons: 2025}
+  mbb_team_game_four_factors: {seasons: 2025}
   mbb_game_player_impact: {seasons: 2025}
   mbb_game_lineups_used: {seasons: 2025}
   mbb_game_stints: {seasons: 2025}
@@ -408,6 +417,8 @@ mbb:
   mbb_player_shot_zones: {seasons: 2025}
   mbb_team_shot_zones: {seasons: 2025}
   mbb_official_seasons: {seasons: 2026}
+  mbb_player_game_expected_box: {seasons: 2026}
+  mbb_player_season_box_rates: {seasons: 2026}
   mbb_player_war: {seasons: 2025}
   mbb_game_flow: {seasons: 2026}
   mbb_epv_plays: {seasons: 2026}
@@ -424,6 +435,7 @@ mbb:
   mbb_tournament_ineligible: {seasons: [2024]}  # 22 rows x 8 cols
   mbb_season_projections: {season: 2025, n_sims: 500}  # 364 rows x 40 cols
   ncaa_possession_rate_rows: {possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2025}}}
+  ncaa_team_game_counts: {pbp: {$call: mbb.load_ncaa_mbb_pbp, args: {seasons: 2025}}}
   ncaa_situation_rows: {possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2025}}}
   ncaa_score_rows: {pbp: {$call: mbb.load_ncaa_mbb_pbp, args: {seasons: 2026}}, schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2026}}}
   ncaa_impact_rows: {pbp: {$call: mbb.load_ncaa_mbb_pbp, args: {seasons: 2025}}, possessions: {$call: mbb.load_ncaa_mbb_possessions, args: {seasons: 2025}}}
@@ -484,6 +496,7 @@ wbb:
   wbb_team_ratings: {seasons: 2024}  # 621 rows x 11 cols
   wbb_team_season_rates: {seasons: 2025}
   wbb_team_game_possessions: {seasons: 2025}
+  wbb_team_game_four_factors: {seasons: 2025}
   wbb_game_player_impact: {seasons: 2025}
   wbb_game_lineups_used: {seasons: 2025}
   wbb_game_stints: {seasons: 2025}
@@ -498,6 +511,8 @@ wbb:
   wbb_player_shot_zones: {seasons: 2025}
   wbb_team_shot_zones: {seasons: 2025}
   wbb_official_seasons: {seasons: 2026}
+  wbb_player_game_expected_box: {seasons: 2026}
+  wbb_player_season_box_rates: {seasons: 2026}
   wbb_player_war: {seasons: 2025}
   wbb_game_flow: {seasons: 2026}
   wbb_epv_plays: {seasons: 2026}

@@ -80,6 +80,7 @@ from sportsdataverse.mbb.mbb_shot_quality import *
 from sportsdataverse.mbb.mbb_shot_selection import *
 from sportsdataverse.mbb.mbb_shots_adapter import *
 from sportsdataverse.mbb.mbb_team_ratings import *
+from sportsdataverse.mbb.mbb_pregame_projection import mbb_pregame_projections  # noqa: F401
 from sportsdataverse.mbb.mbb_game_impact import *
 from sportsdataverse.mbb.mbb_game_stints import *
 from sportsdataverse.mbb.mbb_lineup_seasons import *
@@ -95,5 +96,6 @@ from sportsdataverse.mbb.mbb_shot_zone_profiles import *
 from sportsdataverse.mbb.mbb_player_war import *
 from sportsdataverse.mbb.mbb_coach_seasons import *
 from sportsdataverse.mbb.mbb_official_seasons import mbb_official_seasons  # noqa: F401
+from sportsdataverse.mbb.mbb_player_box_expected import mbb_player_game_expected_box, mbb_player_season_box_rates  # noqa: F401
 from sportsdataverse.mbb.mbb_teams import *
 from sportsdataverse.mbb.mbb_win_prob import *
