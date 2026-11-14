@@ -11,6 +11,10 @@ special-teams goal once, as the 5v5 RAPM does (``ImpactConfig.replacement_rapm``
 
 The baseline is the league average, not a replacement level: special-teams minutes go to
 players a coach already rates above replacement, and no PP/PK replacement rate is fitted.
+``n`` is the stint's id-list length, so the shares always sum to the unit. ``build_stints``
+drops a goalie it can identify from the events; one it cannot stays in the list and takes a
+share (rare: the same events supply ``strength_state``, and a stint without one is skipped).
+A pulled-goalie ``6v5`` counts as a power play for the trailing team.
 """
 
 from __future__ import annotations
@@ -26,7 +30,7 @@ from sportsdataverse.nhl.nhl_xg import nhl_xg
 if TYPE_CHECKING:
     import pandas as pd
 
-__all__ = ["nhl_special_teams_value"]
+__all__ = ["nhl_special_teams_value", "special_teams_split"]
 
 _ST_SCHEMA = {
     "player_id": pl.Int64,
@@ -45,6 +49,33 @@ def _parse_strength_state(s: str | None) -> tuple[int, int] | None:
         return int(a), int(b)
     except ValueError:
         return None
+
+
+def special_teams_split(rec: dict) -> tuple[str, str, float] | None:
+    """Which side of a stint is on the power play, and that side's xG (shared with the fitter).
+
+    Args:
+        rec: one ``build_stints`` row as a dict.
+
+    Returns:
+        ``(pp_ids_column, pk_ids_column, pp_xg)`` for a special-teams stint: one with
+        unequal skater counts in ``strength_state`` and a positive ``duration``. That
+        includes a pulled goalie (``6v5``), credited as a power play for the trailing
+        team. ``None`` otherwise (even strength, unparseable or missing state). The
+        power play's shots are the penalty kill's shots against, so ``pp_xg`` is both.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nhl.nhl_special_teams import special_teams_split
+            special_teams_split({"strength_state": "4v5", "duration": 60, "xgf_home": 0.0, "xgf_away": 0.2})
+    """
+    counts = _parse_strength_state(rec.get("strength_state"))
+    if counts is None or counts[0] == counts[1] or rec["duration"] <= 0:
+        return None
+    if counts[0] > counts[1]:
+        return "home_ids", "away_ids", float(rec["xgf_home"] or 0.0)
+    return "away_ids", "home_ids", float(rec["xgf_away"] or 0.0)
 
 
 def nhl_special_teams_value(
@@ -104,22 +135,11 @@ def nhl_special_teams_value(
     pk_stats: dict[int, dict[str, float]] = {}
 
     for rec in stints.to_dicts():
-        counts = _parse_strength_state(rec.get("strength_state"))
-        if counts is None:
+        split = special_teams_split(rec)
+        if split is None:
             continue
-        home_skaters, away_skaters = counts
-        if home_skaters == away_skaters:
-            continue  # even strength -- not a special-teams stint
+        pp_side, pk_side, xgf = split
         duration = rec["duration"]
-        if duration <= 0:
-            continue
-
-        # The shots taken by the team with the man-advantage are simultaneously "xGF
-        # for the PP side" and "xGA against the PK side" -- one xgf value serves both.
-        if home_skaters > away_skaters:
-            pp_side, pk_side, xgf = "home_ids", "away_ids", rec["xgf_home"]
-        else:
-            pp_side, pk_side, xgf = "away_ids", "home_ids", rec["xgf_away"]
 
         # Each skater takes 1/n of the unit's seconds and xG, so the unit's value is split, not
         # copied to all n (which counted every PP goal about 5x and PK goal about 4x in GAR).
@@ -129,7 +149,7 @@ def nhl_special_teams_value(
                 slot = stats.setdefault(pid, {"toi": 0.0, "share_s": 0.0, "share_xg": 0.0})
                 slot["toi"] += duration
                 slot["share_s"] += duration / len(ids)
-                slot["share_xg"] += float(xgf or 0.0) / len(ids)
+                slot["share_xg"] += xgf / len(ids)
 
     all_players = set(pp_stats) | set(pk_stats)
     if not all_players:

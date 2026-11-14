@@ -23,7 +23,7 @@ import time
 
 from sportsdataverse.nhl.nhl_loaders import load_nhl_pbp_full, load_nhl_shifts
 from sportsdataverse.nhl.nhl_rapm import build_stints
-from sportsdataverse.nhl.nhl_special_teams import _parse_strength_state
+from sportsdataverse.nhl.nhl_special_teams import special_teams_split
 from sportsdataverse.nhl.nhl_xg import nhl_xg
 
 
@@ -31,11 +31,10 @@ def pp_rate(stints) -> tuple[float, float]:
     """Pooled PP xGF per 60 over the special-teams stints, and their total seconds."""
     xg = secs = 0.0
     for rec in stints.select("strength_state", "duration", "xgf_home", "xgf_away").iter_rows(named=True):
-        counts = _parse_strength_state(rec["strength_state"])
-        if counts is None or counts[0] == counts[1] or rec["duration"] <= 0:
-            continue
-        xg += float((rec["xgf_home"] if counts[0] > counts[1] else rec["xgf_away"]) or 0.0)
-        secs += rec["duration"]
+        split = special_teams_split(rec)  # the runtime's own stint filter and PP-side choice
+        if split is not None:
+            xg += split[2]
+            secs += rec["duration"]
     return (xg * 3600.0 / secs if secs else float("nan")), secs
 
 
@@ -48,6 +47,9 @@ def main(argv: list[str] | None = None) -> int:
         t0 = time.time()
         stints = build_stints(load_nhl_shifts([season]), nhl_xg(load_nhl_pbp_full([season])))
         rate, secs = pp_rate(stints)
+        if secs <= 0:  # a missing shifts/pbp asset loads empty: fail, never average a NaN in
+            print(f"{season}: no power-play stints (missing release asset?)", file=sys.stderr)
+            return 1
         rates.append(rate)
         print(f"{season}: PP xGF/60 = {rate:.3f} over {secs / 3600:.0f} h ({time.time() - t0:.0f}s)", flush=True)
     print(f"mean = {sum(rates) / len(rates):.3f}")
