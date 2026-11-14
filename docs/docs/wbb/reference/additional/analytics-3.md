@@ -1,10 +1,10 @@
 ---
-title: "Women's college basketball — additional Python functions — Analytics: wbb_lineup–wbb_situational"
-sidebar_label: "Analytics: wbb_lineup–wbb_situational"
+title: "Women's college basketball — additional Python functions — Analytics: wbb_lineup–wbb_player"
+sidebar_label: "Analytics: wbb_lineup–wbb_player"
 sidebar_position: 13
-description: "Women's college basketball — additional Python functions — Analytics: wbb_lineup–wbb_situational — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Analytics: wbb_lineup–wbb_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Women's college basketball — additional Python functions — Analytics: wbb_lineup–wbb_situational
+# Women's college basketball — additional Python functions — Analytics: wbb_lineup–wbb_player
 
 ### wbb_lineup_seasons {#wbb_lineup_seasons}
 
@@ -246,6 +246,60 @@ from sportsdataverse.wbb import wbb_play_styles
 wbb_play_styles(2026).group_by("archetype").len()
 ```
 
+### wbb_player_game_expected_box {#wbb_player_game_expected_box}
+
+`wbb_player_game_expected_box(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college points, rebounds and assists per player-game against his season, per minute and usage-adjusted.
+
+For every played player-game: `<s>_base` is his season per-minute rate times the game's
+minutes; `<s>_exp` scales that by the game's usage and minutes against his season's
+(a Poisson model fitted on earlier seasons, scored on later held-out ones). Both use the
+season without this game (over every game of the season), so a game is never in its own baseline.
+`<s>_exp` is null before the model's first held-out season and where a usage is unknown.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (2026 is 2025-26). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(game_id, athlete_id)`: `season`, `season_type`, `team_id`, `minutes`, `usg_pct`, `pts` / `reb` / `ast`, the season-without-the-game `rate_games` / `rate_minutes` / `rate_usg_pct`, and `pts_base` / `reb_base` / `ast_base` / `pts_exp` / `reb_exp` / `ast_exp`. A season without a release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `season_type` | Int64 | ESPN season type of the game (2 regular season, 3 postseason, 5 NBA play-in). |
+| `game_id` | Int64 | ESPN game id. |
+| `team_id` | Int64 | ESPN team id of the player's team in the game. |
+| `athlete_id` | Int64 | ESPN athlete id. |
+| `minutes` | Float64 | Minutes played in the game (above 0: a player who did not play has no row). |
+| `usg_pct` | Float64 | Usage: 100 x uses x (team minutes / 5) / (minutes x team uses), uses = FGA + 0.44 FTA + TOV, the team sums over that team-game's players; null where a player of the team-game lacks a count. |
+| `pts` | Int64 | Points in the game. |
+| `reb` | Int64 | Rebounds in the game. |
+| `ast` | Int64 | Assists in the game. |
+| `rate_games` | Int64 | Games of the season without this one (the pros' regular season, every college game) that the expectations read. |
+| `rate_minutes` | Float64 | Minutes of those games. |
+| `rate_usg_pct` | Float64 | Season usage without this game: 100 x sum(uses) / sum(minutes x team uses / (team minutes / 5)); null where no game of it has a usage. |
+| `pts_base` | Float64 | Expected points at the per-minute rate: the season-without-this-game points per minute times the game's minutes; null when that season has no minutes. |
+| `reb_base` | Float64 | Expected rebounds at the per-minute rate, as pts_base. |
+| `ast_base` | Float64 | Expected assists at the per-minute rate, as pts_base. |
+| `pts_exp` | Float64 | Usage-adjusted expected points: pts_base x exp(a + b_usg ln(usg_pct / rate_usg_pct) + b_min ln(minutes / rate minutes per game)), a Poisson fit on earlier seasons (sportsdataverse._common.player_box_expected); null before the model's first held-out season or without both usages. |
+| `reb_exp` | Float64 | Usage-adjusted expected rebounds, as pts_exp. |
+| `ast_exp` | Float64 | Usage-adjusted expected assists, as pts_exp. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.wbb.wbb_player_box_expected import wbb_player_game_expected_box
+games = wbb_player_game_expected_box(2026)
+games.with_columns((pl.col("pts") - pl.col("pts_exp")).alias("pts_vs_exp")).sort("pts_vs_exp").tail()
+```
+
 ### wbb_player_on_off {#wbb_player_on_off}
 
 `wbb_player_on_off(seasons: 'int | list[int]', *, min_poss: 'int' = 200, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -322,6 +376,62 @@ One row per `(season, team_id, player_id)`: `games`, `team_games`, the `_on` and
 ```python
 from sportsdataverse.wbb import wbb_player_on_off
 wbb_player_on_off(2025).sort("net_rtg_diff_rank").head()
+```
+
+### wbb_player_season_box_rates {#wbb_player_season_box_rates}
+
+`wbb_player_season_box_rates(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college per-36 points, rebounds and assists per player-season, ranked, with the season usage.
+
+Over every game of the season, from ESPN's player box. `pts_per36` / `reb_per36` /
+`ast_per36` are 36 x the total / minutes, each with `_n` (the minutes) and
+`_rank` / `_pct` among the season's players whose minutes reach the rate's gate (the
+minutes at which it is half signal on odd / even games). `usg_pct` is the season usage
+(FGA + 0.44 FTA + TOV over the team's while on the floor), not ranked.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (2026 is 2025-26). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, athlete_id)` (the ESPN id): `team_id` (his last game's team), `games`, `minutes`, `pts` / `reb` / `ast`, `usg_pct` with `usg_pct_n`, and the three per-36 rates with `_n` / `_rank` / `_pct`. A season without a release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `athlete_id` | Int64 | ESPN athlete id. |
+| `team_id` | Int64 | ESPN team id of the player's last game of the season (a traded player has one row). |
+| `games` | Int64 | Games played (the pros' regular season, every college game). |
+| `minutes` | Float64 | Minutes played in those games. |
+| `pts` | Int64 | Points in those games. |
+| `reb` | Int64 | Rebounds in those games. |
+| `ast` | Int64 | Assists in those games. |
+| `usg_pct` | Float64 | Season usage: 100 x sum(uses) / sum(minutes x team uses / (team minutes / 5)), uses = FGA + 0.44 FTA + TOV; not ranked. |
+| `usg_pct_n` | Int64 | Minutes of the games with a usage behind usg_pct. |
+| `pts_per36` | Float64 | Points per 36 minutes: 36 x pts / minutes. |
+| `pts_per36_n` | Int64 | Minutes behind pts_per36. |
+| `reb_per36` | Float64 | Rebounds per 36 minutes: 36 x reb / minutes. |
+| `reb_per36_n` | Int64 | Minutes behind reb_per36. |
+| `ast_per36` | Float64 | Assists per 36 minutes: 36 x ast / minutes. |
+| `ast_per36_n` | Int64 | Minutes behind ast_per36. |
+| `pts_per36_rank` | Float64 | Rank of pts_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `pts_per36_pct` | Float64 | Percentile of pts_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+| `reb_per36_rank` | Float64 | Rank of reb_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `reb_per36_pct` | Float64 | Percentile of reb_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+| `ast_per36_rank` | Float64 | Rank of ast_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `ast_per36_pct` | Float64 | Percentile of ast_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+
+**Example**
+
+```python
+from sportsdataverse.wbb.wbb_player_box_expected import wbb_player_season_box_rates
+rates = wbb_player_season_box_rates(2026)
+rates.sort("pts_per36_rank").select("athlete_id", "minutes", "pts_per36", "pts_per36_pct").head()
 ```
 
 ### wbb_player_shot_zones {#wbb_player_shot_zones}
@@ -538,107 +648,4 @@ One row per `(season, team_id, player_id_a, player_id_b)`: the `_both`, `_a_only
 ```python
 from sportsdataverse.wbb import wbb_player_wowy
 wbb_player_wowy(2025).sort("minutes_both", descending=True).head()
-```
-
-### wbb_situational_lineup {#wbb_situational_lineup}
-
-`wbb_situational_lineup(seasons: 'int | list[int]', *, top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Women's college five-man unit splits by situation.
-
-Delegates to `sportsdataverse.mbb.mbb_situational.mbb_situational_lineup` with `league="womens"`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
-| `top_n` | `int` | `25` | As `wbb_situational_team`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, lineup_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_lineup` (String player ids).
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | ESPN team id of the team (Int64). |
-| `lineup_id` | String | The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id). |
-| `player_1` | String | Player 1 of the unit, in lineup_id order. |
-| `player_2` | String | Player 2 of the unit, in lineup_id order. |
-| `player_3` | String | Player 3 of the unit, in lineup_id order. |
-| `player_4` | String | Player 4 of the unit, in lineup_id order. |
-| `player_5` | String | Player 5 of the unit, in lineup_id order. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-**Example**
-
-```python
-from sportsdataverse.wbb import wbb_situational_lineup
-wbb_situational_lineup(2026).filter(split="transition").sort("poss", descending=True).head()
-```
-
-### wbb_situational_player {#wbb_situational_player}
-
-`wbb_situational_player(seasons: 'int | list[int]', *, top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Women's college player on-floor splits by situation.
-
-Delegates to `sportsdataverse.mbb.mbb_situational.mbb_situational_player` with `league="womens"`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
-| `top_n` | `int` | `25` | As `wbb_situational_team`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, player_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_player` (String player ids).
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | ESPN team id of the team (Int64). |
-| `player_id` | String | stats.ncaa.org player id (no NCAA-to-ESPN player crosswalk yet). A possession counts for the five on the floor as it starts, with all its points. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-**Example**
-
-```python
-from sportsdataverse.wbb import wbb_situational_player
-wbb_situational_player(2026).filter(split="clutch").sort("net_rtg_n", descending=True).head()
 ```

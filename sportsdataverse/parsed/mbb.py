@@ -511,7 +511,9 @@ from sportsdataverse.mbb import mbb_official_seasons as mbb_official_seasons  # 
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import mbb_play_styles as mbb_play_styles  # noqa: F401
 from sportsdataverse.mbb import mbb_player_crosswalk as mbb_player_crosswalk  # noqa: F401
+from sportsdataverse.mbb import mbb_player_game_expected_box as mbb_player_game_expected_box  # noqa: F401
 from sportsdataverse.mbb import mbb_player_on_off as mbb_player_on_off  # noqa: F401
+from sportsdataverse.mbb import mbb_player_season_box_rates as mbb_player_season_box_rates  # noqa: F401
 from sportsdataverse.mbb import mbb_player_shot_zones as mbb_player_shot_zones  # noqa: F401
 from sportsdataverse.mbb import mbb_player_war as mbb_player_war  # noqa: F401
 from sportsdataverse.mbb import mbb_player_wowy as mbb_player_wowy  # noqa: F401
@@ -575,6 +577,7 @@ from sportsdataverse.mbb import ncaa_situation_rows as ncaa_situation_rows  # no
 from sportsdataverse.mbb import ncaa_stint_rows as ncaa_stint_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_team_box_count_rows as ncaa_team_box_count_rows  # noqa: F401
 from sportsdataverse.mbb import ncaa_team_coaches as ncaa_team_coaches  # noqa: F401
+from sportsdataverse.mbb import ncaa_team_game_counts as ncaa_team_game_counts  # noqa: F401
 from sportsdataverse.mbb import normalize_player_key as normalize_player_key  # noqa: F401
 from sportsdataverse.mbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.mbb import observed_pairs as observed_pairs  # noqa: F401
@@ -1195,7 +1198,9 @@ __all__ = [
     "mbb_pbp_disk",
     "mbb_play_styles",
     "mbb_player_crosswalk",
+    "mbb_player_game_expected_box",
     "mbb_player_on_off",
+    "mbb_player_season_box_rates",
     "mbb_player_shot_zones",
     "mbb_player_war",
     "mbb_player_wowy",
@@ -1259,6 +1264,7 @@ __all__ = [
     "ncaa_stint_rows",
     "ncaa_team_box_count_rows",
     "ncaa_team_coaches",
+    "ncaa_team_game_counts",
     "normalize_player_key",
     "normalize_team_roster_columns",
     "observed_pairs",

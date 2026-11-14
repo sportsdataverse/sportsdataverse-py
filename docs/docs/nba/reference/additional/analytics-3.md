@@ -692,6 +692,60 @@ six = split.select(
 )
 ```
 
+### nba_player_game_expected_box {#nba_player_game_expected_box}
+
+`nba_player_game_expected_box(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+NBA points, rebounds and assists per player-game against his season, per minute and usage-adjusted.
+
+For every played player-game: `<s>_base` is his season per-minute rate times the game's
+minutes; `<s>_exp` scales that by the game's usage and minutes against his season's
+(a Poisson model fitted on earlier seasons, scored on later held-out ones). Both use the
+season without this game (over the regular season (a playoff or play-in game is measured against it)), so a game is never in its own baseline.
+`<s>_exp` is null before the model's first held-out season and where a usage is unknown.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (2026 is 2025-26). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(game_id, athlete_id)`: `season`, `season_type`, `team_id`, `minutes`, `usg_pct`, `pts` / `reb` / `ast`, the season-without-the-game `rate_games` / `rate_minutes` / `rate_usg_pct`, and `pts_base` / `reb_base` / `ast_base` / `pts_exp` / `reb_exp` / `ast_exp`. A season without a release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `season_type` | Int64 | ESPN season type of the game (2 regular season, 3 postseason, 5 NBA play-in). |
+| `game_id` | Int64 | ESPN game id. |
+| `team_id` | Int64 | ESPN team id of the player's team in the game. |
+| `athlete_id` | Int64 | ESPN athlete id. |
+| `minutes` | Float64 | Minutes played in the game (above 0: a player who did not play has no row). |
+| `usg_pct` | Float64 | Usage: 100 x uses x (team minutes / 5) / (minutes x team uses), uses = FGA + 0.44 FTA + TOV, the team sums over that team-game's players; null where a player of the team-game lacks a count. |
+| `pts` | Int64 | Points in the game. |
+| `reb` | Int64 | Rebounds in the game. |
+| `ast` | Int64 | Assists in the game. |
+| `rate_games` | Int64 | Games of the season without this one (the pros' regular season, every college game) that the expectations read. |
+| `rate_minutes` | Float64 | Minutes of those games. |
+| `rate_usg_pct` | Float64 | Season usage without this game: 100 x sum(uses) / sum(minutes x team uses / (team minutes / 5)); null where no game of it has a usage. |
+| `pts_base` | Float64 | Expected points at the per-minute rate: the season-without-this-game points per minute times the game's minutes; null when that season has no minutes. |
+| `reb_base` | Float64 | Expected rebounds at the per-minute rate, as pts_base. |
+| `ast_base` | Float64 | Expected assists at the per-minute rate, as pts_base. |
+| `pts_exp` | Float64 | Usage-adjusted expected points: pts_base x exp(a + b_usg ln(usg_pct / rate_usg_pct) + b_min ln(minutes / rate minutes per game)), a Poisson fit on earlier seasons (sportsdataverse._common.player_box_expected); null before the model's first held-out season or without both usages. |
+| `reb_exp` | Float64 | Usage-adjusted expected rebounds, as pts_exp. |
+| `ast_exp` | Float64 | Usage-adjusted expected assists, as pts_exp. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_player_box_expected import nba_player_game_expected_box
+games = nba_player_game_expected_box(2026)
+games.with_columns((pl.col("pts") - pl.col("pts_exp")).alias("pts_vs_exp")).sort("pts_vs_exp").tail()
+```
+
 ### nba_player_identity {#nba_player_identity}
 
 `nba_player_identity(player_logs: 'pl.DataFrame') -> 'pl.DataFrame'`

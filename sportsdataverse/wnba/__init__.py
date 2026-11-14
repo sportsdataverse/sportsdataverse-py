@@ -70,6 +70,7 @@ from sportsdataverse.wnba.wnba_shot_zone_profiles import wnba_player_shot_zones,
 from sportsdataverse.wnba.wnba_player_war import wnba_player_war  # noqa: F401
 from sportsdataverse.wnba.wnba_coach_seasons import wnba_coach_careers, wnba_coach_seasons  # noqa: F401
 from sportsdataverse.wnba.wnba_official_seasons import wnba_official_seasons  # noqa: F401
+from sportsdataverse.wnba.wnba_player_box_expected import wnba_player_game_expected_box, wnba_player_season_box_rates  # noqa: F401
 from sportsdataverse.wnba.wnba_season_sim import (  # noqa: F401
     wnba_draft_lottery_odds,
     wnba_season_sim,

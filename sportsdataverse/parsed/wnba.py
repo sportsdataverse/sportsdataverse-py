@@ -283,8 +283,10 @@ from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
 from sportsdataverse.wnba import wnba_play_context as wnba_play_context  # noqa: F401
 from sportsdataverse.wnba import wnba_player_crosswalk as wnba_player_crosswalk  # noqa: F401
 from sportsdataverse.wnba import wnba_player_factor_rapm as wnba_player_factor_rapm  # noqa: F401
+from sportsdataverse.wnba import wnba_player_game_expected_box as wnba_player_game_expected_box  # noqa: F401
 from sportsdataverse.wnba import wnba_player_on_off as wnba_player_on_off  # noqa: F401
 from sportsdataverse.wnba import wnba_player_props as wnba_player_props  # noqa: F401
+from sportsdataverse.wnba import wnba_player_season_box_rates as wnba_player_season_box_rates  # noqa: F401
 from sportsdataverse.wnba import wnba_player_shot_zones as wnba_player_shot_zones  # noqa: F401
 from sportsdataverse.wnba import wnba_player_war as wnba_player_war  # noqa: F401
 from sportsdataverse.wnba import wnba_player_wowy as wnba_player_wowy  # noqa: F401
@@ -584,8 +586,10 @@ __all__ = [
     "wnba_play_context",
     "wnba_player_crosswalk",
     "wnba_player_factor_rapm",
+    "wnba_player_game_expected_box",
     "wnba_player_on_off",
     "wnba_player_props",
+    "wnba_player_season_box_rates",
     "wnba_player_shot_zones",
     "wnba_player_war",
     "wnba_player_wowy",

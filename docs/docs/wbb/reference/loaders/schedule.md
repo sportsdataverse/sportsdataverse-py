@@ -85,7 +85,7 @@ Release: [espn_womens_college_basketball_schedules](https://github.com/sportsdat
 | `away_linescores` | String | Period-by-period scores for the away team as a delimited string from ESPN's schedule feed. |
 | `away_records` | String | Record strings (overall and split records) for the away team from ESPN's schedule feed. |
 | `game_id` | Int32 | Unique game identifier. |
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `status_type_alt_detail` | String | Status type alt detail. |
 | `tournament_id` | Int32 | ESPN tournament identifier. |
