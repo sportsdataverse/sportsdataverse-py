@@ -678,9 +678,9 @@ the same frame.
 | `off_poss` | Int64 | Offensive possessions this season before as_of (0 for a player carried from an earlier season who has not played in this one). |
 | `def_poss` | Int64 | Defensive possessions this season before as_of. |
 | `last_game_date` | Date | Date of the player's last game before as_of in the input. |
-| `o_prior_weight` | Float64 | Share of o_current_impact that is the box prior (0-1): the offensive deviation's posterior variance over its variance with no game updates. 1 before his first game; falls as his games (this season's and carried earlier ones) accumulate. |
-| `d_prior_weight` | Float64 | Share of d_current_impact that is the box prior (0-1), computed the same way for the defensive deviation. |
-| `prior_weight` | Float64 | Share of current_impact that is the box prior (0-1): the net (offense + defense) deviation's posterior variance over its no-update variance. |
+| `o_prior_weight` | Float64 | Prior weight of o_current_impact (0-1): the offensive deviation's posterior variance over its variance with no game updates. Equals the box prior's weight in the estimate while the prior is fixed and no shock falls between his games, and sits above it with shocks. 1 before his first game; falls as his games (this season's and carried earlier ones) accumulate, and a season, team-change or drift shock raises it. |
+| `d_prior_weight` | Float64 | Prior weight of d_current_impact (0-1): the same variance ratio for the defensive deviation. |
+| `prior_weight` | Float64 | Prior weight of current_impact (0-1): the net (offense + defense) deviation's posterior variance over its no-update variance. |
 | `o_current_impact_n` | Int64 | Possessions o_current_impact is ranked on: this season's off_poss before as_of. A rank needs at least 1 (he has played this season). |
 | `d_current_impact_n` | Int64 | Possessions d_current_impact is ranked on: this season's def_poss before as_of. A rank needs at least 1 (he has played this season). |
 | `current_impact_n` | Int64 | Possessions current_impact is ranked on: this season's off_poss + def_poss before as_of. A rank needs at least 1 (he has played this season). |
