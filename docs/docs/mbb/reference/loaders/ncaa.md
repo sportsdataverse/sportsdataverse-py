@@ -678,7 +678,7 @@ Release: [ncaa_mbb_rapm](https://github.com/sportsdataverse/sportsdataverse-data
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season` | Int32 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `player_id` | String | Unique player identifier. |
 | `person_id` | String | Unique player identifier (V3 endpoints). |
 | `player` | String | Player name. |

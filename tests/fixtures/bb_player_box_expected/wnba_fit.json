@@ -1,0 +1,67 @@
+{
+  "league": "wnba",
+  "train": "2021-2023",
+  "holdout": "2024-2026",
+  "coefs": {
+    "pts": [
+      -0.016,
+      1.0841,
+      0.2295
+    ],
+    "reb": [
+      0.0074,
+      0.1772,
+      0.0061
+    ],
+    "ast": [
+      -0.0096,
+      -0.1035,
+      0.0738
+    ]
+  },
+  "holdout_scores": {
+    "pts": {
+      "rows": 17635,
+      "mean": 8.7973,
+      "base_mae": 3.3343,
+      "exp_mae": 2.5863,
+      "base_rmse": 4.4807,
+      "exp_rmse": 3.4932,
+      "base_bias": 0.0518,
+      "exp_bias": 0.0587
+    },
+    "reb": {
+      "rows": 17635,
+      "mean": 3.5659,
+      "base_mae": 1.4688,
+      "exp_mae": 1.4568,
+      "base_rmse": 1.9719,
+      "exp_rmse": 1.9603,
+      "base_bias": 0.0115,
+      "exp_bias": 0.0091
+    },
+    "ast": {
+      "rows": 17635,
+      "mean": 2.1486,
+      "base_mae": 1.0883,
+      "exp_mae": 1.0887,
+      "base_rmse": 1.4922,
+      "exp_rmse": 1.4912,
+      "base_bias": 0.027,
+      "exp_bias": 0.0274
+    }
+  },
+  "per36_gates": {
+    "pts_per36": 82,
+    "reb_per36": 27,
+    "ast_per36": 46
+  },
+  "gate_m": {
+    "pts_per36:train": 81.08211214998431,
+    "reb_per36:train": 26.954013992723972,
+    "ast_per36:train": 45.954692928274305,
+    "pts_per36:holdout": 73.95999218954401,
+    "reb_per36:holdout": 36.03170462175475,
+    "ast_per36:holdout": 38.188411260545216
+  }
+}

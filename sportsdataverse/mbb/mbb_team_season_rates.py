@@ -29,6 +29,7 @@ from sportsdataverse._common.team_season_rates import (
     COUNT_ROWS_SCHEMA,
     RATE_ROWS_SCHEMA,
     TEAM_SEASON_RATES_SCHEMA,
+    team_game_four_factors,
     team_game_possessions,
     team_season_rates,
 )
@@ -38,6 +39,7 @@ if TYPE_CHECKING:
     import pandas as pd
 
 __all__ = [
+    "mbb_team_game_four_factors",
     "mbb_team_game_possessions",
     "mbb_team_season_rates",
     "ncaa_possession_rate_rows",
@@ -122,7 +124,10 @@ def ncaa_possession_rate_rows(
             is_home.alias("offense_is_home"),
             pl.col("neutral_site").fill_null(False),
             pl.col("pts").cast(pl.Int64).alias("points"),
-            *[pl.lit(None, dtype=pl.Float64).alias(c) for c in ("fga", "fgm", "fg3m", "fta", "oreb", "dreb", "tov")],
+            *[
+                pl.lit(None, dtype=pl.Float64).alias(c)
+                for c in ("fga", "fgm", "fg3m", "fta", "ftm", "oreb", "dreb", "tov")
+            ],
             pl.lit(None, dtype=pl.Float64).alias("ff_poss"),
         )
         .cast(RATE_ROWS_SCHEMA)
@@ -132,7 +137,7 @@ def ncaa_possession_rate_rows(
 def ncaa_team_box_count_rows(team_box: pl.DataFrame) -> pl.DataFrame:
     """Map ``ncaa_{mbb,wbb}_team_box`` rows onto the four-factor count frame.
 
-    Each row is one team's offense in one game: its FGA, FGM, 3PM, FTA, offensive rebounds and
+    Each row is one team's offense in one game: its FGA, FGM, 3PM, FTA, FTM, offensive rebounds and
     turnovers, the opponent's defensive rebounds (``d_drb``) and its own possessions (``o_poss``).
     ``offense_is_home`` is the box's own home designation (``team == home``).
 
@@ -167,6 +172,7 @@ def ncaa_team_box_count_rows(team_box: pl.DataFrame) -> pl.DataFrame:
         "fgm",
         pl.col("tpm").alias("fg3m"),
         "fta",
+        "ftm",
         pl.col("orb").alias("oreb"),
         pl.col("d_drb").alias("dreb"),
         pl.col("to").alias("tov"),
@@ -277,4 +283,50 @@ def mbb_team_game_possessions(
     load_possessions, _, load_schedule = _league_loaders(league)
     rows = ncaa_possession_rate_rows(load_possessions(seasons), load_schedule(seasons), league=league)
     out = team_game_possessions(rows)
+    return out.to_pandas() if return_as_pandas else out
+
+
+def mbb_team_game_four_factors(
+    seasons: int | list[int], *, league: str = "mens", return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
+    """College per team and game: the four factors in points against the season's league-average offense.
+
+    ``pts_vs_exp`` (play-by-play points less a league-average offense on the same counted
+    possessions) split exactly into ``shooting_pts``, ``turnover_pts``, ``rebounding_pts``,
+    ``free_throw_pts`` and ``residual_pts``. The factors come from the NCAA team box, the points
+    and possessions from the play-by-play, so the residual is the possession count's distance from
+    the box estimate plus the play-by-play points' from the box's, each beyond the league's. The
+    prices and the residual's formula are in
+    :func:`sportsdataverse._common.team_season_rates.team_game_four_factors`; every league value is
+    the season's, pooled over the D-I games of the releases, and is on each row.
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
+        league: ``"mens"`` or ``"womens"``
+            (:func:`sportsdataverse.wbb.wbb_team_season_rates.wbb_team_game_four_factors`).
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per ``(season, team_id, game_id)``. ``team_id`` is the ESPN team id (Int64),
+        ``game_id`` the stats.ncaa.org contest id. ``poss`` / ``pts`` are the team's counted
+        possessions and points, ``exp_pts`` is ``lg_ppp * poss`` and ``pts_vs_exp`` the
+        difference; the five ``*_pts`` columns add up to it (null when the game has no team-box
+        row). ``lg_ppp``, ``lg_efg_pct``, ``lg_tov_pct``, ``lg_orb_pct``, ``lg_ft_rate``,
+        ``lg_ft_pct`` and ``chance_pts`` are the season's league values. A non-D1 opponent gets no
+        row. Empty input returns that schema with zero rows.
+
+    Raises:
+        ValueError: If ``league`` is not ``"mens"`` or ``"womens"``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_team_season_rates import mbb_team_game_four_factors
+            books = mbb_team_game_four_factors(2025)
+            books.sort("pts_vs_exp", descending=True).head()
+    """
+    _check_league(league)
+    load_possessions, load_team_box, load_schedule = _league_loaders(league)
+    rows = ncaa_possession_rate_rows(load_possessions(seasons), load_schedule(seasons), league=league)
+    out = team_game_four_factors(rows, counts=ncaa_team_box_count_rows(load_team_box(seasons)))
     return out.to_pandas() if return_as_pandas else out

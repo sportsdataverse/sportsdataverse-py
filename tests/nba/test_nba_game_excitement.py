@@ -199,6 +199,47 @@ def test_season_ranks(monkeypatch: pytest.MonkeyPatch) -> None:
     assert stub["game_id"].to_list() == [401856600]
     assert stub["gei"][0] is not None
     assert stub.select("gei_rank", "gei_pct", "gei_n").row(0) == (None, None, None)
+    # a game still going has no winner yet, so no comeback low
+    assert stub.select(*gp._WINNER_LOW).row(0) == (None,) * 4
+    # the gate: each published low is the minimum of the producer's own WP series for that winner
+    for gid in done["game_id"]:
+        scored = gp.score_win_prob(pbp.filter(pl.col("game_id") == gid), league="mbb")
+        assert done.filter(pl.col("game_id") == gid).select(*gp._WINNER_LOW).row(0) == _winner_low(scored)
+
+
+def _winner_low(scored: pl.DataFrame) -> tuple:
+    """The comeback low restated in plain Python: the winner's WP after each play, the earliest minimum."""
+    h, a = (scored[c].fill_null(strategy="forward").fill_null(0)[-1] for c in ("home_score", "away_score"))
+    home = h > a
+    wp = [w if home else 1 - w for w in scored["home_win_prob"].to_list()]
+    i = wp.index(min(wp))
+    team = scored["home_team_id" if home else "away_team_id"][0]
+    return team, wp[i], scored["period_number"][i], scored["clock_display_value"][i]
+
+
+@pytest.mark.parametrize(("lg", "name"), GAMES)
+def test_winner_low_on_real_games(monkeypatch: pytest.MonkeyPatch, lg: str, name: str) -> None:
+    scored = _scored(monkeypatch, lg, name)
+    got = gp.game_excitement(scored, league=lg)
+    assert tuple(got[k] for k in gp._WINNER_LOW) == _winner_low(scored)
+    # the winner is the box's: the team with more points on the final play
+    team_box = _frames(monkeypatch, lg, name)[2]
+    best = team_box.sort("team_score", descending=True)["team_id"][0]
+    assert got["winner_team_id"] == best
+
+
+def test_winner_low_names_the_comeback(monkeypatch: pytest.MonkeyPatch) -> None:
+    lows = {name: gp.game_excitement(_scored(monkeypatch, lg, name), league=lg) for lg, name in GAMES}
+    # at least one of these winners came back from below an even game
+    assert min(v["winner_low_wp"] for v in lows.values()) < 0.5
+    # a tie at the end of the plays has no winner
+    scored = _scored(monkeypatch, "mbb", "summary_mbb.json")
+    tied = scored.with_columns(pl.col("home_score").alias("away_score"))
+    assert tuple(gp.game_excitement(tied, league="mbb", completed=True)[k] for k in gp._WINNER_LOW) == (None,) * 4
+    # without the team id and clock columns the low is still published, unnamed
+    bare = gp.game_excitement(scored.drop("home_team_id", "away_team_id", "clock_display_value"), league="mbb")
+    assert bare["winner_low_wp"] == pytest.approx(lows["summary_mbb.json"]["winner_low_wp"])
+    assert (bare["winner_team_id"], bare["winner_low_clock"]) == (None, None)
 
 
 def test_season_ranks_are_per_season(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -236,6 +277,7 @@ def test_empty_and_bad_input(monkeypatch: pytest.MonkeyPatch) -> None:
         "lead_changes": 0,
         "max_swing_pts": None,
         "completed": False,
+        **dict.fromkeys(gp._WINNER_LOW),
     }
     two = _mbb_season(monkeypatch, MBB_2026[:2])
     with pytest.raises(ValueError, match="one game"):

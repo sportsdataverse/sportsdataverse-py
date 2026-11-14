@@ -1,10 +1,134 @@
 ---
-title: "Women's college basketball — additional Python functions — Analytics: wbb_situational–wbb_team"
-sidebar_label: "Analytics: wbb_situational–wbb_team"
+title: "Women's college basketball — additional Python functions — Analytics: wbb_player–wbb_team"
+sidebar_label: "Analytics: wbb_player–wbb_team"
 sidebar_position: 14
-description: "Women's college basketball — additional Python functions — Analytics: wbb_situational–wbb_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Analytics: wbb_player–wbb_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Women's college basketball — additional Python functions — Analytics: wbb_situational–wbb_team
+# Women's college basketball — additional Python functions — Analytics: wbb_player–wbb_team
+
+### wbb_player_wowy {#wbb_player_wowy}
+
+`wbb_player_wowy(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college WOWY pairs: a team's season with two teammates together, apart and both off.
+
+Delegates to `sportsdataverse.mbb.mbb_player_on_off.mbb_player_wowy` with
+`league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, player_id_a, player_id_b)`: the `_both`, `_a_only`, `_b_only` and `_neither` totals, which add up to the team's season, and ratings (not additive: recompute them from summed totals). See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `player_id_a` | String | The first player of the pair, the smaller id as a string. |
+| `player_id_b` | String | The second player of the pair, the larger id as a string. |
+| `minutes_both` | Float64 | Game-clock minutes of the team's season with both A and B on the floor. |
+| `poss_both` | Int64 | The team's offensive possessions with both A and B on the floor (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_both` | Int64 | The team's defensive possessions with both A and B on the floor. |
+| `pts_both` | Int64 | The team's points with both A and B on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_both` | Int64 | The opponent's points with both A and B on the floor, credited as pts_both is. |
+| `plus_minus_both` | Int64 | pts_both - opp_pts_both. |
+| `off_rtg_both` | Float64 | Offensive rating with both A and B on the floor: pts_both per 100 poss_both; null with no possessions. |
+| `def_rtg_both` | Float64 | Defensive rating with both A and B on the floor: opp_pts_both per 100 opp_poss_both; null with no possessions. |
+| `net_rtg_both` | Float64 | Net rating with both A and B on the floor: off_rtg_both - def_rtg_both; null when either is null. |
+| `minutes_a_only` | Float64 | Game-clock minutes of the team's season with A on the floor and B off. |
+| `poss_a_only` | Int64 | The team's offensive possessions with A on the floor and B off (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_a_only` | Int64 | The team's defensive possessions with A on the floor and B off. |
+| `pts_a_only` | Int64 | The team's points with A on the floor and B off, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_a_only` | Int64 | The opponent's points with A on the floor and B off, credited as pts_a_only is. |
+| `plus_minus_a_only` | Int64 | pts_a_only - opp_pts_a_only. |
+| `off_rtg_a_only` | Float64 | Offensive rating with A on the floor and B off: pts_a_only per 100 poss_a_only; null with no possessions. |
+| `def_rtg_a_only` | Float64 | Defensive rating with A on the floor and B off: opp_pts_a_only per 100 opp_poss_a_only; null with no possessions. |
+| `net_rtg_a_only` | Float64 | Net rating with A on the floor and B off: off_rtg_a_only - def_rtg_a_only; null when either is null. |
+| `minutes_b_only` | Float64 | Game-clock minutes of the team's season with B on the floor and A off. |
+| `poss_b_only` | Int64 | The team's offensive possessions with B on the floor and A off (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_b_only` | Int64 | The team's defensive possessions with B on the floor and A off. |
+| `pts_b_only` | Int64 | The team's points with B on the floor and A off, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_b_only` | Int64 | The opponent's points with B on the floor and A off, credited as pts_b_only is. |
+| `plus_minus_b_only` | Int64 | pts_b_only - opp_pts_b_only. |
+| `off_rtg_b_only` | Float64 | Offensive rating with B on the floor and A off: pts_b_only per 100 poss_b_only; null with no possessions. |
+| `def_rtg_b_only` | Float64 | Defensive rating with B on the floor and A off: opp_pts_b_only per 100 opp_poss_b_only; null with no possessions. |
+| `net_rtg_b_only` | Float64 | Net rating with B on the floor and A off: off_rtg_b_only - def_rtg_b_only; null when either is null. |
+| `minutes_neither` | Float64 | Game-clock minutes of the team's season with neither A nor B on the floor. |
+| `poss_neither` | Int64 | The team's offensive possessions with neither A nor B on the floor (a possession belongs to the five on the floor when it starts). |
+| `opp_poss_neither` | Int64 | The team's defensive possessions with neither A nor B on the floor. |
+| `pts_neither` | Int64 | The team's points with neither A nor B on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts_neither` | Int64 | The opponent's points with neither A nor B on the floor, credited as pts_neither is. |
+| `plus_minus_neither` | Int64 | pts_neither - opp_pts_neither. |
+| `off_rtg_neither` | Float64 | Offensive rating with neither A nor B on the floor: pts_neither per 100 poss_neither; null with no possessions. |
+| `def_rtg_neither` | Float64 | Defensive rating with neither A nor B on the floor: opp_pts_neither per 100 opp_poss_neither; null with no possessions. |
+| `net_rtg_neither` | Float64 | Net rating with neither A nor B on the floor: off_rtg_neither - def_rtg_neither; null when either is null. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_player_wowy
+wbb_player_wowy(2025).sort("minutes_both", descending=True).head()
+```
+
+### wbb_situational_lineup {#wbb_situational_lineup}
+
+`wbb_situational_lineup(seasons: 'int | list[int]', *, top_n: 'int' = 25, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college five-man unit splits by situation.
+
+Delegates to `sportsdataverse.mbb.mbb_situational.mbb_situational_lineup` with `league="womens"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
+| `top_n` | `int` | `25` | As `wbb_situational_team`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, lineup_id, family, split)` with the columns of `sportsdataverse.nba.nba_situational.nba_situational_lineup` (String player ids).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `team_id` | Int64 | ESPN team id of the team (Int64). |
+| `lineup_id` | String | The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id). |
+| `player_1` | String | Player 1 of the unit, in lineup_id order. |
+| `player_2` | String | Player 2 of the unit, in lineup_id order. |
+| `player_3` | String | Player 3 of the unit, in lineup_id order. |
+| `player_4` | String | Player 4 of the unit, in lineup_id order. |
+| `player_5` | String | Player 5 of the unit, in lineup_id order. |
+| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent or play_type (college has no second-chance flag, so no chance family); within a family the splits add up to the all row. |
+| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot (p1, p2 for halves); h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court. |
+| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
+| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
+| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
+| `poss` | Int64 | Offensive possessions in the split. |
+| `opp_poss` | Int64 | Defensive possessions in the split. |
+| `pts` | Int64 | Points scored on the offensive possessions. |
+| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
+| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
+| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
+| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
+| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_situational_lineup
+wbb_situational_lineup(2026).filter(split="transition").sort("poss", descending=True).head()
+```
 
 ### wbb_situational_player {#wbb_situational_player}
 
@@ -145,6 +269,15 @@ One row per `(season, team_id, game_id, family, split)` with the columns of `spo
 | `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+| `fga` | Int64 | Field-goal attempts in the split: the team's shot_value 2 and 3 events in the ncaa pbp; null on the families other than all and garbage. |
+| `fgm` | Int64 | Made field goals in the split (event_result made); null on the families other than all and garbage. |
+| `fg3a` | Int64 | Three-point attempts in the split (shot_value 3); null on the families other than all and garbage. |
+| `fg3m` | Int64 | Made threes in the split; null on the families other than all and garbage. |
+| `fta` | Int64 | Free-throw attempts in the split (shot_value 1); null on the families other than all and garbage. |
+| `ftm` | Int64 | Made free throws in the split; null on the families other than all and garbage. |
+| `oreb` | Int64 | Offensive rebounds in the split (Offensive Rebound events, team rebounds included); null on the families other than all and garbage. |
+| `dreb` | Int64 | Defensive rebounds in the split (Defensive Rebound events, team rebounds included); null on the families other than all and garbage. |
+| `tov` | Int64 | Turnovers in the split (Turnover events, team turnovers included); null on the families other than all and garbage. |
 
 **Example**
 
@@ -230,6 +363,56 @@ One row per Division I (season, team_id) -- see the mbb core for the full contra
 ```python
 from sportsdataverse.wbb import wbb_strength_of_schedule
 wbb_strength_of_schedule([2024]).sort("rpi_rank").head(20)
+```
+
+### wbb_team_game_four_factors {#wbb_team_game_four_factors}
+
+`wbb_team_game_four_factors(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Women's college per team and game: the four factors in points against the season's league average.
+
+Delegates to `sportsdataverse.mbb.mbb_team_season_rates.mbb_team_game_four_factors` with
+`league="womens"`. The five `*_pts` columns add up to `pts_vs_exp` exactly; a game with
+no team-box row has `exp_pts` but null factors.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, team_id, game_id)`: `poss`, `pts`, `exp_pts`, `pts_vs_exp`, the five `*_pts` columns and the season's league values. See the mbb core for the definitions.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id (a non-D1 opponent gets no row). |
+| `game_id` | String | The stats.ncaa.org contest id. |
+| `poss` | Int64 | The team's offensive possessions in the game, counted from possession rows. |
+| `pts` | Int64 | Points scored on the team's offensive possessions in the game. From the play-by-play. |
+| `exp_pts` | Float64 | Points a league-average offense scores on the team's counted possessions, lg_ppp x poss. |
+| `pts_vs_exp` | Float64 | Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly; they are null (and do not) when a league value they use has a zero denominator or the game has no counts. |
+| `shooting_pts` | Float64 | Points from shooting: 2 x (eFG% - lg_efg_pct) x FGA, the same shots above a league-average shooter, plus chance_pts x lg_orb_pct x the rebound chances above the league's per FGA: the misses a league-average offense gets back. |
+| `turnover_pts` | Float64 | Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance. |
+| `rebounding_pts` | Float64 | Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team's own rebound chances, each a new chance. |
+| `free_throw_pts` | Float64 | Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%. |
+| `residual_pts` | Float64 | The remainder, exactly (pts - box_pts - FGA x the league's pooled (pts - box_pts) / FGA) + chance_pts x (box_poss - poss - FGA x the league's pooled (box_poss - poss) / FGA), box_pts = 2 FGM + 3PM + FTM, box_poss = FGA - OREB + TOV + 0.44 FTA: the play-by-play points' and possessions' distance from the team box beyond the league's. Sums to zero over the league. |
+| `lg_ppp` | Float64 | League points per counted possession in the season, over the priced team-games (those with all their counts). |
+| `lg_efg_pct` | Float64 | League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts). |
+| `lg_tov_pct` | Float64 | League turnovers per counted possession in the season, over the priced team-games (those with all their counts). |
+| `lg_orb_pct` | Float64 | League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts). |
+| `lg_ft_rate` | Float64 | League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts). |
+| `lg_ft_pct` | Float64 | League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts). |
+| `chance_pts` | Float64 | Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_team_game_four_factors
+wbb_team_game_four_factors(2025).sort("pts_vs_exp").head()
 ```
 
 ### wbb_team_game_possessions {#wbb_team_game_possessions}
@@ -497,6 +680,7 @@ One row per `(season, team_id, split)`: `games`, `poss`, `opp_poss`, `pts`, `opp
 | `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: the opponents' NCAA team-box possessions in the split, 0 when the rate is null. |
 | `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponents' offensive-rebound chances in the split, 0 when the rate is null. |
 | `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponents' field-goal attempts in the split, 0 when the rate is null. |
+| `lg_ft_pct` | Float64 | League free-throw percentage in the season and split: every team's FTM over every team's FTA, so free throws can be priced without a second read. From the NCAA team box; null in the clutch split. |
 | `plus_minus` | Int64 | Point margin in the split: pts - opp_pts. |
 | `pts_pg` | Float64 | Per game: points scored divided by games (BB-G8's per-game basis). |
 | `opp_pts_pg` | Float64 | Per game: points allowed divided by games (BB-G8's per-game basis). |

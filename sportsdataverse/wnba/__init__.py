@@ -41,7 +41,11 @@ from sportsdataverse.wnba.wnba_engine import (  # noqa: F401
 )
 from sportsdataverse.wnba.wnba_shot_value import *
 from sportsdataverse.wnba.wnba_playtype_impact import *
-from sportsdataverse.wnba.wnba_team_season_rates import wnba_team_game_possessions, wnba_team_season_rates  # noqa: F401
+from sportsdataverse.wnba.wnba_team_season_rates import (  # noqa: F401
+    wnba_team_game_four_factors,
+    wnba_team_game_possessions,
+    wnba_team_season_rates,
+)
 from sportsdataverse.wnba.wnba_game_impact import wnba_game_lineups_used, wnba_game_player_impact  # noqa: F401
 from sportsdataverse.wnba.wnba_game_stints import wnba_game_on_off, wnba_game_stints, wnba_game_units  # noqa: F401
 from sportsdataverse.wnba.wnba_lineup_seasons import wnba_lineup_seasons  # noqa: F401
@@ -66,6 +70,7 @@ from sportsdataverse.wnba.wnba_shot_zone_profiles import wnba_player_shot_zones,
 from sportsdataverse.wnba.wnba_player_war import wnba_player_war  # noqa: F401
 from sportsdataverse.wnba.wnba_coach_seasons import wnba_coach_careers, wnba_coach_seasons  # noqa: F401
 from sportsdataverse.wnba.wnba_official_seasons import wnba_official_seasons  # noqa: F401
+from sportsdataverse.wnba.wnba_player_box_expected import wnba_player_game_expected_box, wnba_player_season_box_rates  # noqa: F401
 from sportsdataverse.wnba.wnba_season_sim import (  # noqa: F401
     wnba_draft_lottery_odds,
     wnba_season_sim,

@@ -235,6 +235,62 @@ import datetime as dt
 props = nba_player_props(2024, "401585828", "2", "6", as_of_date=dt.date(2024, 1, 15))
 ```
 
+### nba_player_season_box_rates {#nba_player_season_box_rates}
+
+`nba_player_season_box_rates(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+NBA per-36 points, rebounds and assists per player-season, ranked, with the season usage.
+
+Over the regular season (a playoff or play-in game is measured against it), from ESPN's player box. `pts_per36` / `reb_per36` /
+`ast_per36` are 36 x the total / minutes, each with `_n` (the minutes) and
+`_rank` / `_pct` among the season's players whose minutes reach the rate's gate (the
+minutes at which it is half signal on odd / even games). `usg_pct` is the season usage
+(FGA + 0.44 FTA + TOV over the team's while on the floor), not ranked.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (2026 is 2025-26). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, athlete_id)` (the ESPN id): `team_id` (his last game's team), `games`, `minutes`, `pts` / `reb` / `ast`, `usg_pct` with `usg_pct_n`, and the three per-36 rates with `_n` / `_rank` / `_pct`. A season without a release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `athlete_id` | Int64 | ESPN athlete id. |
+| `team_id` | Int64 | ESPN team id of the player's last game of the season (a traded player has one row). |
+| `games` | Int64 | Games played (the pros' regular season, every college game). |
+| `minutes` | Float64 | Minutes played in those games. |
+| `pts` | Int64 | Points in those games. |
+| `reb` | Int64 | Rebounds in those games. |
+| `ast` | Int64 | Assists in those games. |
+| `usg_pct` | Float64 | Season usage: 100 x sum(uses) / sum(minutes x team uses / (team minutes / 5)), uses = FGA + 0.44 FTA + TOV; not ranked. |
+| `usg_pct_n` | Int64 | Minutes of the games with a usage behind usg_pct. |
+| `pts_per36` | Float64 | Points per 36 minutes: 36 x pts / minutes. |
+| `pts_per36_n` | Int64 | Minutes behind pts_per36. |
+| `reb_per36` | Float64 | Rebounds per 36 minutes: 36 x reb / minutes. |
+| `reb_per36_n` | Int64 | Minutes behind reb_per36. |
+| `ast_per36` | Float64 | Assists per 36 minutes: 36 x ast / minutes. |
+| `ast_per36_n` | Int64 | Minutes behind ast_per36. |
+| `pts_per36_rank` | Float64 | Rank of pts_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `pts_per36_pct` | Float64 | Percentile of pts_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+| `reb_per36_rank` | Float64 | Rank of reb_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `reb_per36_pct` | Float64 | Percentile of reb_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+| `ast_per36_rank` | Float64 | Rank of ast_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `ast_per36_pct` | Float64 | Percentile of ast_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_box_expected import nba_player_season_box_rates
+rates = nba_player_season_box_rates(2026)
+rates.sort("pts_per36_rank").select("athlete_id", "minutes", "pts_per36", "pts_per36_pct").head()
+```
+
 ### nba_player_shot_zones {#nba_player_shot_zones}
 
 `nba_player_shot_zones(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -601,6 +657,7 @@ One row per possession in `~sportsdataverse._common.team_season_rates.RATE_ROWS_
 | `fgm` | Float64 | Offense field goals made on the possession. |
 | `fg3m` | Float64 | Offense three-pointers made on the possession. |
 | `fta` | Float64 | Offense free-throw attempts on the possession. |
+| `ftm` | Float64 | Offense free throws made on the possession. |
 | `oreb` | Float64 | Offense offensive rebounds on the possession. |
 | `dreb` | Float64 | Defense defensive rebounds on the possession (the other half of the offensive-rebound chances). |
 | `tov` | Float64 | Offense turnovers on the possession. |

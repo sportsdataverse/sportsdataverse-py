@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 279 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 282 | — |
 
 ## ESPN {#espn}
 
@@ -218,11 +218,13 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_play_style_features`](reference/additional/analytics-3#nba_play_style_features)
 - [`nba_player_ages`](reference/additional/analytics-3#nba_player_ages)
 - [`nba_player_factor_rapm`](reference/additional/analytics-3#nba_player_factor_rapm)
+- [`nba_player_game_expected_box`](reference/additional/analytics-3#nba_player_game_expected_box)
 - [`nba_player_identity`](reference/additional/analytics-3#nba_player_identity)
 - [`nba_player_on_off`](reference/additional/analytics-4#nba_player_on_off)
 - [`nba_player_play_styles`](reference/additional/analytics-4#nba_player_play_styles)
 - [`nba_player_positions`](reference/additional/analytics-4#nba_player_positions)
 - [`nba_player_props`](reference/additional/analytics-4#nba_player_props)
+- [`nba_player_season_box_rates`](reference/additional/analytics-4#nba_player_season_box_rates)
 - [`nba_player_shot_zones`](reference/additional/analytics-4#nba_player_shot_zones)
 - [`nba_player_war`](reference/additional/analytics-4#nba_player_war)
 - [`nba_player_wowy`](reference/additional/analytics-4#nba_player_wowy)
@@ -245,13 +247,14 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_situational_team_games`](reference/additional/analytics-5#nba_situational_team_games)
 - [`nba_stint_rows`](reference/additional/analytics-5#nba_stint_rows)
 - [`nba_team_clutch`](reference/additional/analytics-5#nba_team_clutch)
+- [`nba_team_game_four_factors`](reference/additional/analytics-5#nba_team_game_four_factors)
 - [`nba_team_game_possessions`](reference/additional/analytics-5#nba_team_game_possessions)
 - [`nba_team_luck`](reference/additional/analytics-5#nba_team_luck)
 - [`nba_team_play_styles`](reference/additional/analytics-5#nba_team_play_styles)
 - [`nba_team_season_flow`](reference/additional/analytics-6#nba_team_season_flow)
 - [`nba_team_season_rates`](reference/additional/analytics-6#nba_team_season_rates)
 - [`nba_team_shot_zones`](reference/additional/analytics-6#nba_team_shot_zones)
-- [`nba_team_strength`](reference/additional/analytics-6#nba_team_strength)
+- [`nba_team_strength`](reference/additional/analytics-7#nba_team_strength)
 - [`nba_tracking_drive_value`](reference/additional/analytics-7#nba_tracking_drive_value)
 - [`nba_tracking_pass_value`](reference/additional/analytics-7#nba_tracking_pass_value)
 - [`nba_tracking_reb_oe`](reference/additional/analytics-7#nba_tracking_reb_oe)
@@ -275,10 +278,10 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`shrink_clutch`](reference/additional/analytics-7#shrink_clutch)
 - [`spotrac_team_cap`](reference/additional/analytics-7#spotrac_team_cap)
 - [`starters_on_court_counts`](reference/additional/analytics-7#starters_on_court_counts)
-- [`team_pace_projection`](reference/additional/analytics-7#team_pace_projection)
-- [`team_play_context`](reference/additional/analytics-7#team_play_context)
-- [`xpoints_baseline`](reference/additional/analytics-7#xpoints_baseline)
-- [`zone_value_map`](reference/additional/analytics-7#zone_value_map)
+- [`team_pace_projection`](reference/additional/analytics-8#team_pace_projection)
+- [`team_play_context`](reference/additional/analytics-8#team_play_context)
+- [`xpoints_baseline`](reference/additional/analytics-8#xpoints_baseline)
+- [`zone_value_map`](reference/additional/analytics-8#zone_value_map)
 
 ### Dates and seasons {#dates-and-seasons}
 
