@@ -13,7 +13,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 43 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 124 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 125 | — |
 
 ## ESPN {#espn}
 
@@ -91,6 +91,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 - [`wnba_game_flow`](reference/additional/analytics#wnba_game_flow)
 - [`wnba_game_lineups_used`](reference/additional/analytics#wnba_game_lineups_used)
 - [`wnba_game_on_off`](reference/additional/analytics#wnba_game_on_off)
+- [`wnba_game_player_box_splits`](reference/additional/analytics#wnba_game_player_box_splits)
 - [`wnba_game_player_impact`](reference/additional/analytics#wnba_game_player_impact)
 - [`wnba_game_stints`](reference/additional/analytics#wnba_game_stints)
 - [`wnba_game_units`](reference/additional/analytics-2#wnba_game_units)

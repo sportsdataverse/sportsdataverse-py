@@ -356,6 +356,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_game_flow](additional/analytics-2.md#wbb_game_flow) | Women's college game flow per team and game: runs, droughts, kills, lead changes, time leading, game control. |
 | [wbb_game_lineups_used](additional/analytics-2.md#wbb_game_lineups_used) | Women's college lineups used: per five-man unit and game, minutes, possessions, +/- and ratings. |
 | [wbb_game_on_off](additional/analytics-2.md#wbb_game_on_off) | Women's college in-game on/off: per player and game, the team with her on the floor and without her. |
+| [wbb_game_player_box_splits](additional/analytics-2.md#wbb_game_player_box_splits) | Women's college player box by game, period and garbage time. |
 | [wbb_game_player_impact](additional/analytics-2.md#wbb_game_player_impact) | Women's college game impact box: per player and game, minutes, possessions, +/- and ratings. |
 | [wbb_game_stints](additional/analytics-2.md#wbb_game_stints) | Women's college game stints: per player and game, every stretch on the floor. |
 | [wbb_game_units](additional/analytics-2.md#wbb_game_units) | Women's college in-game units: per 1- to 5-man set of teammates and game, ratings, four factors and shot zones. |

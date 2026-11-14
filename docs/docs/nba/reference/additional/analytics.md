@@ -982,6 +982,53 @@ proj = nba_availability(2019)
 print(proj.sort("avail_pct").head())
 ```
 
+### nba_box_events {#nba_box_events}
+
+`nba_box_events(pbp: 'pl.DataFrame', schedule: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Each player's box counts per stats.nba.com action, the input of the stint and split box.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_nba_stats_pbp` / `load_wnba_stats_pbp` rows (`season`, `game_id`, `order_index`, `team_id`, `person_id`, `player_name`, `player_name_i`, `action_type`, `sub_type`, `description`, `shot_value`). |
+| `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows (`game_id`, `home_team_id`, `away_team_id`). |
+
+**Returns**
+
+Rows in `sportsdataverse._common.game_stints.box_event_schema` (Int64 player ids), `order` the action's `order_index`: one per player action with a count, and one per assist on the made shot's action. An assist whose passer matches no single teammate's name in the game has no row. Games not in `schedule` are dropped.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `player_id` | Int64 | stats.nba.com player (person) id. |
+| `order` | Int64 | The action's place in the game: the stint rows' order (stats.nba.com order_index; for college the event's row in the pbp release). |
+| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goals attempted. |
+| `fg3m` | Int64 | Three-pointers made. |
+| `fg3a` | Int64 | Three-pointers attempted. |
+| `ftm` | Int64 | Free throws made. |
+| `fta` | Int64 | Free throws attempted. |
+| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's). |
+| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's). |
+| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on. |
+| `stl` | Int64 | Steals he is credited with. |
+| `blk` | Int64 | Shots he blocked. |
+| `tov` | Int64 | Turnovers (a team turnover is no player's). |
+| `pf` | Int64 | Personal fouls (technicals are not counted). |
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_loaders as L
+from sportsdataverse.nba.nba_game_stints import nba_box_events
+nba_box_events(L.load_nba_stats_pbp(2025), L.load_nba_stats_schedules(2025)).head()
+```
+
 ### nba_box_logs {#nba_box_logs}
 
 `nba_box_logs(season: 'str', *, league_id: 'str' = '00', season_type: 'str' = 'Regular Season', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'Dict[str, pl.DataFrame]'`

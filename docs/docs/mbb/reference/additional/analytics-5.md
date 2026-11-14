@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_coach"
-sidebar_label: "Analytics: mbb_team–ncaa_coach"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_box"
+sidebar_label: "Analytics: mbb_team–ncaa_box"
 sidebar_position: 17
-description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_coach — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_box — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_coach
+# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_box
 
 ### mbb_team_season_rates {#mbb_team_season_rates}
 
@@ -485,43 +485,48 @@ barred = mbb_tournament_ineligible([2023], league="mens")
 barred.filter(pl.col("reason") == "reclassifying").get_column("team").to_list()
 ```
 
-### ncaa_coach_stints {#ncaa_coach_stints}
+### ncaa_box_events {#ncaa_box_events}
 
-`ncaa_coach_stints(coaches: 'pl.DataFrame', records: 'pl.DataFrame') -> 'pl.DataFrame'`
+`ncaa_box_events(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
 
-The card coach of each team-season as a whole-season stint, unless the card says the season changed hands.
-
-A card whose season record (`coach_season_records`) is short of the team's by more than
-a game and more than a loss marks a mid-season change, and its figures are not the card
-coach's own games: on Sports-Reference they are the other coach's (Ole Miss 2017-18's card
-names Andy Kennedy with 1-4, Tony Madlock's five games; Kennedy went 11-16). Such a team-season
-gets no stint, so it stays uncredited (and is counted in a log line). Otherwise -- the record
-matches, is a loss off, drops vacated wins (never losses), or cannot be computed -- the card
-coach has the whole season.
+Each player's box counts per stats.ncaa.org event, the input of the stint and split box.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `coaches` | `DataFrame` |  | `ncaa_team_coaches` rows, with the season before each wanted one for the record difference. |
-| `records` | `DataFrame` |  | The teams' season records: `season`, `team_id`, `games`, `losses` (as `sportsdataverse._common.team_luck.season_records` gives them). |
+| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release order (`season`, `contest_id`, `event_team_espn_team_id`, `player_1_id`, `player_2_id`, `event_type`, `event_result`, `shot_value`). |
 
 **Returns**
 
-Stints in `~sportsdataverse._common.coach_seasons.STINTS_SCHEMA` with no counts and `position="any"`, one per team-season with a card, an ESPN team id (cards with none are counted in a log line) and no mid-season change.
+Rows in `sportsdataverse._common.game_stints.box_event_schema` (String player ids), `order` the event's row in the release (the stint rows' `order`): one per event with a count for its `player_1_id`, and one per assisted field goal for its `player_2_id`. An event with no player id or no ESPN team id (a non-D1 side) has no row.
 
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `team_id` | Int64 | ESPN team id of the school (from the card's NCAA team-season crosswalk). |
-| `coach_id` | Int64 | NCAA person id of the card's head coach (stats.ncaa.org /people/{id}). |
-| `coach` | String | Head coach's name on the card. |
-| `games` | Int64 | Always null here; the card coach has the whole season (a season the card shows changing hands has no stint). |
-| `wins` | Int64 | Always null here, as games. |
-| `position` | String | Always any; one whole-season stint per team-season. |
+| `game_id` | String | stats.ncaa.org contest id. |
+| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
+| `player_id` | String | stats.ncaa.org player id. |
+| `order` | Int64 | The action's place in the game: the stint rows' order (stats.nba.com order_index; for college the event's row in the pbp release). |
+| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goals attempted. |
+| `fg3m` | Int64 | Three-pointers made. |
+| `fg3a` | Int64 | Three-pointers attempted. |
+| `ftm` | Int64 | Free throws made. |
+| `fta` | Int64 | Free throws attempted. |
+| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's). |
+| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's). |
+| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on. |
+| `stl` | Int64 | Steals he is credited with. |
+| `blk` | Int64 | Shots he blocked. |
+| `tov` | Int64 | Turnovers (a team turnover is no player's). |
+| `pf` | Int64 | Personal fouls (technicals are not counted). |
 
-**Raises**
+**Example**
 
-| Exception | Description |
-|---|---|
-| `ValueError` | If two cards name a coach for the same (season, team_id). |
+```python
+from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
+from sportsdataverse.mbb.mbb_game_stints import ncaa_box_events
+ncaa_box_events(load_ncaa_mbb_pbp(2025)).head()
+```

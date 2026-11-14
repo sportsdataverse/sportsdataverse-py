@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_coach–nba_impact"
-sidebar_label: "Analytics: nba_coach–nba_impact"
+title: "NBA — additional Python functions — Analytics: nba_coach–nba_game"
+sidebar_label: "Analytics: nba_coach–nba_game"
 sidebar_position: 16
-description: "NBA — additional Python functions — Analytics: nba_coach–nba_impact — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_coach–nba_game — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_coach–nba_impact
+# NBA — additional Python functions — Analytics: nba_coach–nba_game
 
 ### nba_coach_seasons {#nba_coach_seasons}
 
@@ -768,6 +768,69 @@ from sportsdataverse.nba.nba_game_stints import nba_game_on_off
 nba_game_on_off(2026).filter(game_id="0022500101")
 ```
 
+### nba_game_player_box_splits {#nba_game_player_box_splits}
+
+`nba_game_player_box_splits(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Player box by game, period and garbage time: minutes and counts from the play-by-play.
+
+The definitions are in `sportsdataverse._common.game_stints`
+(`~sportsdataverse._common.game_stints.game_player_box_splits`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+Per `(season, game_id, team_id, player_id)`: the `family="all"` row (the game), one `family="period"` row per period played (`split` `p1` .. `p4`, `p5` on for the overtimes; `period`; `on_floor_at_end`) and the two `family="garbage"` rows (`garbage_time`, `not_garbage_time`: the box with garbage time out is the latter). Each has `seconds` / `minutes` on the floor and `points`, `fgm` / `fga`, `fg3m` / `fg3a`, `ftm` / `fta`, `oreb` / `dreb` / `reb`, `ast`, `stl`, `blk`, `tov` and `pf`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `player_id` | Int64 | stats.nba.com player (person) id. |
+| `family` | String | Split family: all (the game), period (one row per period he played) or garbage (garbage time in and out). |
+| `split` | String | The split: all; p1, p2, ... for a period (periods past regulation are the overtimes); garbage_time or not_garbage_time (his box with garbage time removed). |
+| `period` | Int64 | The period of a period row; null on the other families. |
+| `seconds` | Float64 | Game-clock seconds he was on the floor in the split (an action's clock goes to the lineup at it). |
+| `minutes` | Float64 | Game-clock minutes on the floor in the split (seconds / 60). |
+| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw. |
+| `fgm` | Int64 | Field goals made. |
+| `fga` | Int64 | Field goals attempted. |
+| `fg3m` | Int64 | Three-pointers made. |
+| `fg3a` | Int64 | Three-pointers attempted. |
+| `ftm` | Int64 | Free throws made. |
+| `fta` | Int64 | Free throws attempted. |
+| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's). |
+| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's). |
+| `reb` | Int64 | Total rebounds: oreb + dreb. |
+| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on. |
+| `stl` | Int64 | Steals he is credited with. |
+| `blk` | Int64 | Shots he blocked. |
+| `tov` | Int64 | Turnovers (a team turnover is no player's). |
+| `pf` | Int64 | Personal fouls (technicals are not counted). |
+| `on_floor_at_end` | Boolean | On a period row, whether he was in his side's lineup at the period's last action; null on the other families. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_stints import nba_game_player_box_splits
+splits = nba_game_player_box_splits(2026)
+splits.filter(family="garbage", split="not_garbage_time").head()
+```
+
 ### nba_game_player_impact {#nba_game_player_impact}
 
 `nba_game_player_impact(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -843,7 +906,7 @@ The definitions are in `sportsdataverse._common.game_stints`.
 
 **Returns**
 
-One row per `(season, game_id, team_id, player_id, stint_number)`: `opp_team_id`, `stint_number` (1 = his first in the game), `period`, `clock_in` / `clock_out` (the period clock, seconds left, when the stint began and ended), `seconds` / `minutes` on the floor, `poss` / `opp_poss` (offensive / defensive possessions started), `pts` / `opp_pts` (points scored / allowed) and `plus_minus`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
+One row per `(season, game_id, team_id, player_id, stint_number)`: `opp_team_id`, `stint_number` (1 = his first in the game), `period`, `clock_in` / `clock_out` (the period clock, seconds left, when the stint began and ended), `seconds` / `minutes` on the floor, `poss` / `opp_poss` (offensive / defensive possessions started), `pts` / `opp_pts` (team points scored / allowed), `plus_minus` and the player's own box in the stint (`nba_box_events`): `points`, `fgm` / `fga`, `fg3m` / `fg3a`, `ftm` / `fta`, `oreb` / `dreb` / `reb`, `ast`, `stl`, `blk`, `tov` and `pf`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -863,6 +926,21 @@ One row per `(season, game_id, team_id, player_id, stint_number)`: `opp_team_id`
 | `pts` | Int64 | The team's points during the stint, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
 | `opp_pts` | Int64 | The opponent's points during the stint, credited as pts is. |
 | `plus_minus` | Int64 | The stint's +/-: pts - opp_pts. |
+| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw, his own, on the stint's actions. |
+| `fgm` | Int64 | Field goals made, his own, on the stint's actions. |
+| `fga` | Int64 | Field goals attempted, his own, on the stint's actions. |
+| `fg3m` | Int64 | Three-pointers made, his own, on the stint's actions. |
+| `fg3a` | Int64 | Three-pointers attempted, his own, on the stint's actions. |
+| `ftm` | Int64 | Free throws made, his own, on the stint's actions. |
+| `fta` | Int64 | Free throws attempted, his own, on the stint's actions. |
+| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
+| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
+| `reb` | Int64 | Total rebounds in the stint: oreb + dreb. |
+| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on, his own, on the stint's actions. |
+| `stl` | Int64 | Steals, his own, on the stint's actions. |
+| `blk` | Int64 | Blocked shots, his own, on the stint's actions. |
+| `tov` | Int64 | Turnovers (a team turnover is no player's), his own, on the stint's actions. |
+| `pf` | Int64 | Personal fouls (technicals are not counted), his own, on the stint's actions. |
 
 **Raises**
 
@@ -876,167 +954,4 @@ One row per `(season, game_id, team_id, player_id, stint_number)`: `opp_team_id`
 from sportsdataverse.nba.nba_game_stints import nba_game_stints
 stints = nba_game_stints(2026)
 stints.filter(game_id="0022500101")
-```
-
-### nba_game_units {#nba_game_units}
-
-`nba_game_units(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-In-game units: per 1- to 5-man set of teammates and game, minutes, ratings, four factors and shot zones.
-
-The definitions are in `sportsdataverse._common.game_stints`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, game_id, team_id, n_players, lineup_id)`: `opp_team_id`, `n_players` (1 to 5), `lineup_id` (the player ids sorted and joined with `-`), `player_1..5`, `minutes` / `seconds`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions), the four factors for (`efg_pct`, `tov_pct`, `orb_pct`, `ft_rate`) and against (`opp_*`), the shot zones for and against (`rim_rate`, `mid_rate`, `fg3_rate` shares of field-goal attempts, `rim_pct`, `mid_pct`, `fg3_pct` make rates, `opp_*`) as fractions, and every rate's `<m>_n`. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `opp_team_id` | Int64 | The opponent's team id. |
-| `n_players` | Int64 | Unit size: 1 to 5 players. |
-| `lineup_id` | String | The unit's player ids, sorted and joined with '-'. |
-| `player_1` | Int64 | Player 1 of the unit, in lineup_id order; null past n_players. |
-| `player_2` | Int64 | Player 2 of the unit, in lineup_id order; null past n_players. |
-| `player_3` | Int64 | Player 3 of the unit, in lineup_id order; null past n_players. |
-| `player_4` | Int64 | Player 4 of the unit, in lineup_id order; null past n_players. |
-| `player_5` | Int64 | Player 5 of the unit, in lineup_id order; null past n_players. |
-| `minutes` | Float64 | Game-clock minutes the unit's players were all on the floor together (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds the unit's players were all on the floor together. |
-| `poss` | Int64 | Offensive possessions with the unit on the floor (a possession counts for the five on the floor when it starts). |
-| `opp_poss` | Int64 | Defensive possessions with the unit on the floor, counted as poss is. |
-| `pts` | Int64 | The team's points with the unit on the floor, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
-| `opp_pts` | Int64 | The opponent's points with the unit on the floor, credited as pts is. |
-| `plus_minus` | Int64 | The unit's +/- in the game: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss. Null with a zero denominator. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. |
-| `tov_pct` | Float64 | Turnovers per offensive possession, as a fraction. Null with a zero denominator. |
-| `orb_pct` | Float64 | Offensive-rebound rate: own offensive rebounds over own offensive rebounds plus the opponent's defensive rebounds. Null with a zero denominator. |
-| `ft_rate` | Float64 | Free-throw rate: FTA / FGA. Null with a zero denominator. |
-| `opp_efg_pct` | Float64 | The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. |
-| `opp_tov_pct` | Float64 | The opponent's turnovers per defensive possession, as a fraction. Null with a zero denominator. |
-| `opp_orb_pct` | Float64 | The opponent's offensive-rebound rate with the unit on the floor. Null with a zero denominator. |
-| `opp_ft_rate` | Float64 | The opponent's free-throw rate: FTA / FGA. Null with a zero denominator. |
-| `rim_rate` | Float64 | Share of the unit's field-goal attempts at the rim (a two under 4 feet). Null with a zero denominator. |
-| `mid_rate` | Float64 | Share of the unit's field-goal attempts that are other twos (mid-range). Null with a zero denominator. |
-| `fg3_rate` | Float64 | Share of the unit's field-goal attempts that are threes. Null with a zero denominator. |
-| `rim_pct` | Float64 | Field-goal percentage at the rim, as a fraction. Null with a zero denominator. |
-| `mid_pct` | Float64 | Mid-range field-goal percentage, as a fraction. Null with a zero denominator. |
-| `fg3_pct` | Float64 | Three-point percentage, as a fraction. Null with a zero denominator. |
-| `opp_rim_rate` | Float64 | Share of the opponent's field-goal attempts at the rim with the unit on the floor. Null with a zero denominator. |
-| `opp_mid_rate` | Float64 | Share of the opponent's field-goal attempts that are mid-range twos. Null with a zero denominator. |
-| `opp_fg3_rate` | Float64 | Share of the opponent's field-goal attempts that are threes. Null with a zero denominator. |
-| `opp_rim_pct` | Float64 | The opponent's field-goal percentage at the rim. Null with a zero denominator. |
-| `opp_mid_pct` | Float64 | The opponent's mid-range field-goal percentage with the unit on the floor. Null with a zero denominator. |
-| `opp_fg3_pct` | Float64 | The opponent's three-point percentage with the unit on the floor. Null with a zero denominator. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-| `efg_pct_n` | Int64 | Sample size of efg_pct: the unit's field-goal attempts. |
-| `tov_pct_n` | Int64 | Sample size of tov_pct: poss. |
-| `orb_pct_n` | Int64 | Sample size of orb_pct: the unit's offensive-rebound chances. |
-| `ft_rate_n` | Int64 | Sample size of ft_rate: the unit's field-goal attempts. |
-| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: the opponent's field-goal attempts. |
-| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opp_poss. |
-| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: the opponent's offensive-rebound chances. |
-| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: the opponent's field-goal attempts. |
-| `rim_rate_n` | Int64 | Sample size of rim_rate: the unit's field-goal attempts. |
-| `mid_rate_n` | Int64 | Sample size of mid_rate: the unit's field-goal attempts. |
-| `fg3_rate_n` | Int64 | Sample size of fg3_rate: the unit's field-goal attempts. |
-| `rim_pct_n` | Int64 | Sample size of rim_pct: the unit's rim attempts. |
-| `mid_pct_n` | Int64 | Sample size of mid_pct: the unit's mid-range attempts. |
-| `fg3_pct_n` | Int64 | Sample size of fg3_pct: the unit's three-point attempts. |
-| `opp_rim_rate_n` | Int64 | Sample size of opp_rim_rate: the opponent's field-goal attempts. |
-| `opp_mid_rate_n` | Int64 | Sample size of opp_mid_rate: the opponent's field-goal attempts. |
-| `opp_fg3_rate_n` | Int64 | Sample size of opp_fg3_rate: the opponent's field-goal attempts. |
-| `opp_rim_pct_n` | Int64 | Sample size of opp_rim_pct: the opponent's rim attempts. |
-| `opp_mid_pct_n` | Int64 | Sample size of opp_mid_pct: the opponent's mid-range attempts. |
-| `opp_fg3_pct_n` | Int64 | Sample size of opp_fg3_pct: the opponent's three-point attempts. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or the possessions carry a null shot, free-throw, rebound or turnover count. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_stints import nba_game_units
-units = nba_game_units(2026)
-units.filter(game_id="0022500101", n_players=2).head()
-```
-
-### nba_impact_rows {#nba_impact_rows}
-
-`nba_impact_rows(pbp: 'pl.DataFrame', game_lineups: 'pl.DataFrame', possessions: 'pl.DataFrame', schedule: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'pl.DataFrame'`
-
-Map the stats.nba.com releases onto the game-impact row frame.
-
-One row per play-by-play action (its clock and points, on the lineup at that action; a free
-throw on the lineup at the last foul) and one per possession (its lineup and which side had
-the ball). Games not in `schedule` are dropped, and so are the possessions of a game with
-no play-by-play actions and those whose offense is neither team.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | `load_nba_stats_pbp` / `load_wnba_stats_pbp` rows (`game_id`, `order_index`, `action_number`, `period`, `seconds_remaining`, `score_home`, `score_away`, `is_free_throw`, `is_foul`, `season`). |
-| `game_lineups` | `DataFrame` |  | `load_nba_stats_game_lineups` / `load_wnba_stats_game_lineups` rows. |
-| `possessions` | `DataFrame` |  | `load_nba_stats_possessions` / `load_wnba_stats_possessions` rows. |
-| `schedule` | `DataFrame` |  | `load_nba_stats_schedules` / `load_wnba_stats_schedules` rows (`game_id`, `home_team_id`, `away_team_id`), every season type. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (12-minute quarters) or `"10"` WNBA (10-minute quarters). |
-
-**Returns**
-
-Rows in `sportsdataverse._common.game_impact.impact_row_schema` with Int64 player ids.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season of the action or possession. |
-| `game_id` | String | stats.nba.com game id. |
-| `home_team_id` | Int64 | stats.nba.com team id of the home team, from the schedule. |
-| `away_team_id` | Int64 | stats.nba.com team id of the away team, from the schedule. |
-| `home_1` | Int64 | Home player 1 on the floor (on a free throw, the player on the floor at the last foul). |
-| `home_2` | Int64 | Home player 2 on the floor (on a free throw, the player on the floor at the last foul). |
-| `home_3` | Int64 | Home player 3 on the floor (on a free throw, the player on the floor at the last foul). |
-| `home_4` | Int64 | Home player 4 on the floor (on a free throw, the player on the floor at the last foul). |
-| `home_5` | Int64 | Home player 5 on the floor (on a free throw, the player on the floor at the last foul). |
-| `away_1` | Int64 | Away player 1 on the floor (on a free throw, the player on the floor at the last foul). |
-| `away_2` | Int64 | Away player 2 on the floor (on a free throw, the player on the floor at the last foul). |
-| `away_3` | Int64 | Away player 3 on the floor (on a free throw, the player on the floor at the last foul). |
-| `away_4` | Int64 | Away player 4 on the floor (on a free throw, the player on the floor at the last foul). |
-| `away_5` | Int64 | Away player 5 on the floor (on a free throw, the player on the floor at the last foul). |
-| `seconds` | Float64 | Game clock that ran into this action (0 on a possession row). |
-| `home_pts` | Int64 | Points the home team scored on this action (0 on a possession row). |
-| `away_pts` | Int64 | Points the away team scored on this action (0 on a possession row). |
-| `home_poss` | Int64 | 1 on a possession row where the home team has the ball, else 0. |
-| `away_poss` | Int64 | 1 on a possession row where the away team has the ball, else 0. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_loaders as L
-from sportsdataverse.nba.nba_game_impact import nba_impact_rows
-rows = nba_impact_rows(L.load_nba_stats_pbp(2025), L.load_nba_stats_game_lineups(2025),
-                       L.load_nba_stats_possessions(2025), L.load_nba_stats_schedules(2025))
 ```

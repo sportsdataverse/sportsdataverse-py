@@ -1,10 +1,51 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: ncaa_impact–weighted_avg"
-sidebar_label: "Analytics: ncaa_impact–weighted_avg"
+title: "Men's college basketball — additional Python functions — Analytics: ncaa_coach–weighted_avg"
+sidebar_label: "Analytics: ncaa_coach–weighted_avg"
 sidebar_position: 18
-description: "Men's college basketball — additional Python functions — Analytics: ncaa_impact–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: ncaa_coach–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: ncaa_impact–weighted_avg
+# Men's college basketball — additional Python functions — Analytics: ncaa_coach–weighted_avg
+
+### ncaa_coach_stints {#ncaa_coach_stints}
+
+`ncaa_coach_stints(coaches: 'pl.DataFrame', records: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+The card coach of each team-season as a whole-season stint, unless the card says the season changed hands.
+
+A card whose season record (`coach_season_records`) is short of the team's by more than
+a game and more than a loss marks a mid-season change, and its figures are not the card
+coach's own games: on Sports-Reference they are the other coach's (Ole Miss 2017-18's card
+names Andy Kennedy with 1-4, Tony Madlock's five games; Kennedy went 11-16). Such a team-season
+gets no stint, so it stays uncredited (and is counted in a log line). Otherwise -- the record
+matches, is a loss off, drops vacated wins (never losses), or cannot be computed -- the card
+coach has the whole season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `coaches` | `DataFrame` |  | `ncaa_team_coaches` rows, with the season before each wanted one for the record difference. |
+| `records` | `DataFrame` |  | The teams' season records: `season`, `team_id`, `games`, `losses` (as `sportsdataverse._common.team_luck.season_records` gives them). |
+
+**Returns**
+
+Stints in `~sportsdataverse._common.coach_seasons.STINTS_SCHEMA` with no counts and `position="any"`, one per team-season with a card, an ESPN team id (cards with none are counted in a log line) and no mid-season change.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `team_id` | Int64 | ESPN team id of the school (from the card's NCAA team-season crosswalk). |
+| `coach_id` | Int64 | NCAA person id of the card's head coach (stats.ncaa.org /people/{id}). |
+| `coach` | String | Head coach's name on the card. |
+| `games` | Int64 | Always null here; the card coach has the whole season (a season the card shows changing hands has no stint). |
+| `wins` | Int64 | Always null here, as games. |
+| `position` | String | Always any; one whole-season stint per team-season. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If two cards name a coach for the same (season, team_id). |
 
 ### ncaa_impact_rows {#ncaa_impact_rows}
 
@@ -831,7 +872,7 @@ at the first event of its `poss_num`; one whose `poss_team` is neither side is d
 
 **Returns**
 
-Rows in `sportsdataverse._common.game_stints.stint_row_schema` with String player ids: `period`, `clock` (seconds left in the period after the event) and `order` (the event's row in the release).
+Rows in `sportsdataverse._common.game_stints.stint_row_schema` with String player ids: `period`, `clock` (seconds left in the period after the event), `order` (the event's row in the release) and `is_garbage_time` (the event's own flag).
 
 | col_name | type | description |
 |---|---|---|
@@ -857,6 +898,7 @@ Rows in `sportsdataverse._common.game_stints.stint_row_schema` with String playe
 | `period` | Int64 | Period of the action. |
 | `clock` | Float64 | Period clock (seconds left) after the event; 0 on the period's last event, which takes the period's tail. |
 | `order` | Int64 | The event's row in the pbp release (its place in the game). |
+| `is_garbage_time` | Boolean | Whether the event is in garbage time: the release's own is_garbage_time (bigballR's rule). |
 
 **Raises**
 

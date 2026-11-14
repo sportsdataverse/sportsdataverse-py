@@ -15,9 +15,14 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.mbb.mbb_game_stints import mbb_game_on_off, mbb_game_stints, mbb_game_units
+from sportsdataverse.mbb.mbb_game_stints import (
+    mbb_game_on_off,
+    mbb_game_player_box_splits,
+    mbb_game_stints,
+    mbb_game_units,
+)
 
-__all__ = ["wbb_game_on_off", "wbb_game_stints", "wbb_game_units"]
+__all__ = ["wbb_game_on_off", "wbb_game_player_box_splits", "wbb_game_stints", "wbb_game_units"]
 
 
 def wbb_game_stints(seasons: int | list[int], *, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
@@ -85,3 +90,29 @@ def wbb_game_on_off(seasons: int | list[int], *, return_as_pandas: bool = False)
             wbb_game_on_off(2025).head()
     """
     return mbb_game_on_off(seasons, league="womens", return_as_pandas=return_as_pandas)
+
+
+def wbb_game_player_box_splits(
+    seasons: int | list[int], *, return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
+    """Women's college player box by game, period and garbage time.
+
+    Delegates to :func:`sportsdataverse.mbb.mbb_game_stints.mbb_game_player_box_splits` with
+    ``league="womens"``.
+
+    Args:
+        seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        Per ``(season, game_id, team_id, player_id)``: the ``all``, ``period`` (with
+        ``on_floor_at_end``) and ``garbage`` rows, each with minutes and the box counts. See the
+        mbb core for the definitions.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wbb import wbb_game_player_box_splits
+            wbb_game_player_box_splits(2025).filter(family="period").head()
+    """
+    return mbb_game_player_box_splits(seasons, league="womens", return_as_pandas=return_as_pandas)

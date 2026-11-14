@@ -341,6 +341,7 @@ from sportsdataverse.nba import most_recent_nba_season as most_recent_nba_season
 from sportsdataverse.nba import nba_adj_rapm as nba_adj_rapm  # noqa: F401
 from sportsdataverse.nba import nba_aging_curve as nba_aging_curve  # noqa: F401
 from sportsdataverse.nba import nba_availability as nba_availability  # noqa: F401
+from sportsdataverse.nba import nba_box_events as nba_box_events  # noqa: F401
 from sportsdataverse.nba import nba_box_logs as nba_box_logs  # noqa: F401
 from sportsdataverse.nba import nba_bpm as nba_bpm  # noqa: F401
 from sportsdataverse.nba import nba_career_trajectory as nba_career_trajectory  # noqa: F401
@@ -364,6 +365,7 @@ from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # 
 from sportsdataverse.nba import nba_game_flow as nba_game_flow  # noqa: F401
 from sportsdataverse.nba import nba_game_lineups_used as nba_game_lineups_used  # noqa: F401
 from sportsdataverse.nba import nba_game_on_off as nba_game_on_off  # noqa: F401
+from sportsdataverse.nba import nba_game_player_box_splits as nba_game_player_box_splits  # noqa: F401
 from sportsdataverse.nba import nba_game_player_impact as nba_game_player_impact  # noqa: F401
 from sportsdataverse.nba import nba_game_stints as nba_game_stints  # noqa: F401
 from sportsdataverse.nba import nba_game_units as nba_game_units  # noqa: F401
@@ -829,6 +831,7 @@ __all__ = [
     "nba_adj_rapm",
     "nba_aging_curve",
     "nba_availability",
+    "nba_box_events",
     "nba_box_logs",
     "nba_bpm",
     "nba_career_trajectory",
@@ -852,6 +855,7 @@ __all__ = [
     "nba_game_flow",
     "nba_game_lineups_used",
     "nba_game_on_off",
+    "nba_game_player_box_splits",
     "nba_game_player_impact",
     "nba_game_stints",
     "nba_game_units",
