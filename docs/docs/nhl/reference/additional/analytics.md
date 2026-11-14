@@ -379,7 +379,7 @@ print(preds.sort("home_win_prob", descending=True).head())
 
 `nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, xg_scored: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
 
-Per-skater power-play/penalty-kill value (goals) above/below league baseline.
+Per-skater share of power-play/penalty-kill value (goals) above/below the league rate.
 
 **Parameters**
 
@@ -395,7 +395,7 @@ Per-skater power-play/penalty-kill value (goals) above/below league baseline.
 
 **Returns**
 
-`player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. Empty input returns a zero-row frame with this schema.
+`player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. `*_toi_minutes` is the skater's own time on the ice; `pp_value`/`pk_value` are goals above the league rate, each skater carrying an equal share of their unit's (a fifth on a 5v4 power play), so a unit's skaters sum to its value. Empty input returns a zero-row frame with this schema.
 
 | col_name | type | description |
 |---|---|---|

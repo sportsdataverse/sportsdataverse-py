@@ -128,7 +128,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nhl_penalty_value](additional/analytics.md#nhl_penalty_value) | Per-player net penalty drawn/taken value. |
 | [nhl_player_props](additional/analytics.md#nhl_player_props) | Empirical-Bayes shots/points player-prop projections. |
 | [nhl_predict_games](additional/analytics.md#nhl_predict_games) | Vectorized pregame margin/win-prob/total (+ market edge) over a schedule. |
-| [nhl_special_teams_value](additional/analytics.md#nhl_special_teams_value) | Per-skater power-play/penalty-kill value (goals) above/below league baseline. |
+| [nhl_special_teams_value](additional/analytics.md#nhl_special_teams_value) | Per-skater share of power-play/penalty-kill value (goals) above/below the league rate. |
 | [nhl_zone_transitions](additional/analytics.md#nhl_zone_transitions) | Per-player controlled/dump entry & exit rates + xG-weighted values. |
 | [predict_margin](additional/analytics.md#predict_margin) | Expected home-minus-away goal margin. |
 | [predict_total](additional/analytics.md#predict_total) | Expected total goals, variance-corrected by the fitted `total_scale`. |
