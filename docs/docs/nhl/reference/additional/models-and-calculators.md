@@ -43,10 +43,9 @@ gives each skater a coefficient relative to the design's intercept (about the
 league-average rate; home ice is its own column), additive over the five skaters
 on ice, with defense signed so that positive means suppression. The replacement
 rates are team on-ice levels, so each skater's share of the unit's gap to the
-league average is a fifth of it. Both rates are seeds, not fitted values, and the
-ridge pulls low-minute skaters toward 0, above this level, so fringe skaters tend
-to earn small positive EV GAR; fitting the level from the replacement pool's own
-RAPM is the open follow-up.
+league average is a fifth of it. For the NHL both rates are fitted from the
+replacement pool's own RAPM (`tools/fit_nhl_replacement_level.py`), so the pool as
+a whole earns zero EV GAR; the PWHL rates are seeds.
 
 **Returns**
 
@@ -56,7 +55,7 @@ RAPM is the open follow-up.
 
 ```python
 from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
-off, dfn = get_constants("nhl").replacement_rapm()  # (-0.12, -0.02)
+off, dfn = get_constants("nhl").replacement_rapm()  # (-0.052, -0.08)
 ```
 
 ### LeagueConstants {#LeagueConstants}
