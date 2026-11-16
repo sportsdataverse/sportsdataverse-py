@@ -195,7 +195,7 @@ pl.DataFrame(rows)  # same columns, same shape — one contract, four leagues
     │ str    ┆ str               ┆ i64     ┆ i64    │
     ╞════════╪═══════════════════╪═════════╪════════╡
     │ NBA    ┆ espn_nba_teams()  ┆ 30      ┆ 14     │
-    │ WNBA   ┆ espn_wnba_teams() ┆ 15      ┆ 14     │
+    │ WNBA   ┆ espn_wnba_teams() ┆ 14      ┆ 14     │
     │ NHL    ┆ espn_nhl_teams()  ┆ 32      ┆ 14     │
     │ MLB    ┆ espn_mlb_teams()  ┆ 30      ┆ 14     │
     └────────┴───────────────────┴─────────┴────────┘
@@ -219,7 +219,7 @@ print("NFL scoreboard rows:", None if board is None else board.height,
 
     ✅ espn_nfl_scoreboard
     ✅ espn_nba_standings
-    NFL scoreboard rows: 15 | NBA standings rows: 30
+    NFL scoreboard rows: 14 | NBA standings rows: 30
 
 
 ### 📦 The loaders follow one pattern too
@@ -382,11 +382,11 @@ pl.DataFrame({"league": list(counts.keys()), "n_functions": list(counts.values()
     │ ---          ┆ ---         │
     │ str          ┆ i64         │
     ╞══════════════╪═════════════╡
-    │ mbb          ┆ 697         │
-    │ wbb          ┆ 601         │
-    │ nba          ┆ 584         │
+    │ mbb          ┆ 718         │
+    │ nba          ┆ 625         │
+    │ wbb          ┆ 617         │
     │ cfb          ┆ 469         │
-    │ nhl          ┆ 407         │
+    │ wnba         ┆ 417         │
     │ …            ┆ …           │
     │ vijhl        ┆ 14          │
     │ kijhl        ┆ 14          │
@@ -556,9 +556,9 @@ pl.DataFrame(rows)
 ```
 
     ✅ espn_nba_standings
+
+
     ✅ espn_nhl_standings
-
-
     ✅ espn_mlb_standings
 
 
@@ -597,8 +597,6 @@ for nm, lg in [("Patriots", "nfl"), ("Yankees", "mlb"), ("Bruins", "nhl"), ("Cri
 
 
     nhl  Bruins         -> Boston Bruins (id=1)
-
-
     cfb  Crimson Tide   -> Alabama Crimson Tide (id=333)
 
 
@@ -656,6 +654,10 @@ if lal is not None:
     │         ┆ a:5113969  ┆ f2e0-334d ┆           ┆   ┆           ┆           ┆           ┆           │
     │         ┆            ┆ -942f-3d3 ┆           ┆   ┆           ┆           ┆           ┆           │
     │         ┆            ┆ 689…      ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 5105817 ┆ s:40~l:46~ ┆ 4301d7f9- ┆ Carson    ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
+    │         ┆ a:5105817  ┆ 821f-3d29 ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆            ┆ -8707-1b6 ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆            ┆ 2a0…      ┆           ┆   ┆           ┆           ┆           ┆           │
     │ 3945274 ┆ s:40~l:46~ ┆ 583794eb- ┆ Luka      ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
     │         ┆ a:3945274  ┆ 0f38-9bbd ┆           ┆   ┆           ┆           ┆           ┆           │
     │         ┆            ┆ -3e25-9dd ┆           ┆   ┆           ┆           ┆           ┆           │
@@ -668,10 +670,6 @@ if lal is not None:
     │         ┆ a:4868423  ┆ e2b5-33c4 ┆           ┆   ┆           ┆           ┆           ┆           │
     │         ┆            ┆ -b4e7-7ac ┆           ┆   ┆           ┆           ┆           ┆           │
     │         ┆            ┆ a3e…      ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 4683774 ┆ s:40~l:46~ ┆ 456f71fd- ┆ Bronny    ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
-    │         ┆ a:4683774  ┆ 2ce5-3f50 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ -8d0d-f30 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ c01…      ┆           ┆   ┆           ┆           ┆           ┆           │
     └─────────┴────────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
 
 
@@ -691,8 +689,8 @@ print("pandas:", type(teams_pd).__name__, None if teams_pd is None else teams_pd
 
     ✅ espn_wnba_teams (polars)
     ✅ espn_wnba_teams (pandas)
-    polars: DataFrame (15, 14)
-    pandas: DataFrame (15, 14)
+    polars: DataFrame (14, 14)
+    pandas: DataFrame (14, 14)
 
 
 ### Recipe 10 — The `return_parsed` toggle on a native API 🎛️
@@ -830,15 +828,15 @@ show = [c for c in ["game_date", "player_name", "pitch_type", "release_speed",
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 96.3         ┆ 73.3         ┆ 20.0         ┆ null      │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 97.2         ┆ null         ┆ null         ┆ null      │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.6         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.8         ┆ null         ┆ null         ┆ null      │
     │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 97.4         ┆ null         ┆ null         ┆ strikeout │
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
-    │ 2024-07-01 ┆ Varsho,       ┆ KC         ┆ 84.0         ┆ 94.3         ┆ -12.0        ┆ null      │
-    │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
+    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.8         ┆ null         ┆ null         ┆ null      │
     │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 97.5         ┆ null         ┆ null         ┆ strikeout │
     │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
-    │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 96.2         ┆ null         ┆ null         ┆ null      │
+    │ 2024-07-01 ┆ Varsho,       ┆ KC         ┆ 84.0         ┆ 94.3         ┆ -12.0        ┆ null      │
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
+    │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 96.6         ┆ null         ┆ null         ┆ null      │
+    │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
     └────────────┴───────────────┴────────────┴──────────────┴──────────────┴──────────────┴───────────┘
 
 
@@ -869,14 +867,14 @@ keep = ["team_abbrev", "team_name", "wins", "losses", "ot_losses", "points",
     │ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---             ┆ ---           │
     │ i64  ┆ i64    ┆ i64       ┆ i64    ┆ str             ┆ str           │
     ╞══════╪════════╪═══════════╪════════╪═════════════════╪═══════════════╡
-    │ 14   ┆ 3      ┆ 2         ┆ 30     ┆ Eastern         ┆ Metropolitan  │
-    │ 12   ┆ 3      ┆ 4         ┆ 28     ┆ Western         ┆ Central       │
-    │ 13   ┆ 4      ┆ 1         ┆ 27     ┆ Eastern         ┆ Atlantic      │
-    │ 12   ┆ 3      ┆ 3         ┆ 27     ┆ Western         ┆ Pacific       │
-    │ 13   ┆ 5      ┆ 0         ┆ 26     ┆ Eastern         ┆ Metropolitan  │
-    │ 12   ┆ 5      ┆ 2         ┆ 26     ┆ Western         ┆ Pacific       │
-    │ 11   ┆ 3      ┆ 3         ┆ 25     ┆ Eastern         ┆ Atlantic      │
-    │ 11   ┆ 4      ┆ 2         ┆ 24     ┆ Eastern         ┆ Atlantic      │
+    │ 16   ┆ 3      ┆ 3         ┆ 35     ┆ Western         ┆ Pacific       │
+    │ 16   ┆ 3      ┆ 2         ┆ 34     ┆ Eastern         ┆ Metropolitan  │
+    │ 15   ┆ 3      ┆ 4         ┆ 34     ┆ Western         ┆ Central       │
+    │ 15   ┆ 6      ┆ 0         ┆ 30     ┆ Eastern         ┆ Metropolitan  │
+    │ 13   ┆ 6      ┆ 3         ┆ 29     ┆ Western         ┆ Pacific       │
+    │ 13   ┆ 5      ┆ 2         ┆ 28     ┆ Eastern         ┆ Atlantic      │
+    │ 12   ┆ 4      ┆ 4         ┆ 28     ┆ Eastern         ┆ Atlantic      │
+    │ 13   ┆ 6      ┆ 2         ┆ 28     ┆ Eastern         ┆ Atlantic      │
     └──────┴────────┴───────────┴────────┴─────────────────┴───────────────┘
 
 
@@ -1034,7 +1032,6 @@ out
     │ ---                             ┆ ---               ┆ ---                       │
     │ str                             ┆ str               ┆ str                       │
     ╞═════════════════════════════════╪═══════════════════╪═══════════════════════════╡
-    │ americanfootball_cfl            ┆ American Football ┆ CFL                       │
     │ americanfootball_ncaaf          ┆ American Football ┆ NCAAF                     │
     │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner │
     │ americanfootball_nfl            ┆ American Football ┆ NFL                       │
@@ -1044,6 +1041,7 @@ out
     │ basketball_euroleague           ┆ Basketball        ┆ Basketball Euroleague     │
     │ basketball_nba                  ┆ Basketball        ┆ NBA                       │
     │ basketball_nba_championship_wi… ┆ Basketball        ┆ NBA Championship Winner   │
+    │ basketball_nbl                  ┆ Basketball        ┆ NBL                       │
     └─────────────────────────────────┴───────────────────┴───────────────────────────┘
 
 
@@ -1073,32 +1071,32 @@ out
 
 
     shape: (10, 6)
-    ┌───────────┬───────────────┬────────────────┬────────────┬───────────────────┬───────────────┐
-    │ home_team ┆ away_team     ┆ bookmaker_key  ┆ market_key ┆ outcome_name      ┆ outcome_price │
-    │ ---       ┆ ---           ┆ ---            ┆ ---        ┆ ---               ┆ ---           │
-    │ str       ┆ str           ┆ str            ┆ str        ┆ str               ┆ i64           │
-    ╞═══════════╪═══════════════╪════════════════╪════════════╪═══════════════════╪═══════════════╡
-    │ Minnesota ┆ Buffalo Bills ┆ draftkings     ┆ h2h        ┆ Buffalo Bills     ┆ -198          │
-    │ Vikings   ┆               ┆                ┆            ┆                   ┆               │
-    │ Minnesota ┆ Buffalo Bills ┆ draftkings     ┆ h2h        ┆ Minnesota Vikings ┆ 164           │
-    │ Vikings   ┆               ┆                ┆            ┆                   ┆               │
-    │ Minnesota ┆ Buffalo Bills ┆ williamhill_us ┆ h2h        ┆ Buffalo Bills     ┆ -193          │
-    │ Vikings   ┆               ┆                ┆            ┆                   ┆               │
-    │ Minnesota ┆ Buffalo Bills ┆ williamhill_us ┆ h2h        ┆ Minnesota Vikings ┆ 161           │
-    │ Vikings   ┆               ┆                ┆            ┆                   ┆               │
-    │ Minnesota ┆ Buffalo Bills ┆ fanduel        ┆ h2h        ┆ Buffalo Bills     ┆ -188          │
-    │ Vikings   ┆               ┆                ┆            ┆                   ┆               │
-    │ Minnesota ┆ Buffalo Bills ┆ fanduel        ┆ h2h        ┆ Minnesota Vikings ┆ 158           │
-    │ Vikings   ┆               ┆                ┆            ┆                   ┆               │
-    │ Minnesota ┆ Buffalo Bills ┆ betus          ┆ h2h        ┆ Buffalo Bills     ┆ -190          │
-    │ Vikings   ┆               ┆                ┆            ┆                   ┆               │
-    │ Minnesota ┆ Buffalo Bills ┆ betus          ┆ h2h        ┆ Minnesota Vikings ┆ 163           │
-    │ Vikings   ┆               ┆                ┆            ┆                   ┆               │
-    │ Minnesota ┆ Buffalo Bills ┆ betonlineag    ┆ h2h        ┆ Buffalo Bills     ┆ -194          │
-    │ Vikings   ┆               ┆                ┆            ┆                   ┆               │
-    │ Minnesota ┆ Buffalo Bills ┆ betonlineag    ┆ h2h        ┆ Minnesota Vikings ┆ 169           │
-    │ Vikings   ┆               ┆                ┆            ┆                   ┆               │
-    └───────────┴───────────────┴────────────────┴────────────┴───────────────────┴───────────────┘
+    ┌───────────┬─────────────┬────────────────┬────────────┬──────────────────────┬───────────────┐
+    │ home_team ┆ away_team   ┆ bookmaker_key  ┆ market_key ┆ outcome_name         ┆ outcome_price │
+    │ ---       ┆ ---         ┆ ---            ┆ ---        ┆ ---                  ┆ ---           │
+    │ str       ┆ str         ┆ str            ┆ str        ┆ str                  ┆ i64           │
+    ╞═══════════╪═════════════╪════════════════╪════════════╪══════════════════════╪═══════════════╡
+    │ Baltimore ┆ Los Angeles ┆ draftkings     ┆ h2h        ┆ Baltimore Ravens     ┆ -225          │
+    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Los Angeles ┆ draftkings     ┆ h2h        ┆ Los Angeles Chargers ┆ 185           │
+    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Los Angeles ┆ williamhill_us ┆ h2h        ┆ Baltimore Ravens     ┆ -225          │
+    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Los Angeles ┆ williamhill_us ┆ h2h        ┆ Los Angeles Chargers ┆ 185           │
+    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Los Angeles ┆ betus          ┆ h2h        ┆ Baltimore Ravens     ┆ -215          │
+    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Los Angeles ┆ betus          ┆ h2h        ┆ Los Angeles Chargers ┆ 183           │
+    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Los Angeles ┆ fanduel        ┆ h2h        ┆ Baltimore Ravens     ┆ -230          │
+    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Los Angeles ┆ fanduel        ┆ h2h        ┆ Los Angeles Chargers ┆ 190           │
+    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Los Angeles ┆ lowvig         ┆ h2h        ┆ Baltimore Ravens     ┆ -210          │
+    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
+    │ Baltimore ┆ Los Angeles ┆ lowvig         ┆ h2h        ┆ Los Angeles Chargers ┆ 180           │
+    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
+    └───────────┴─────────────┴────────────────┴────────────┴──────────────────────┴───────────────┘
 
 
 
@@ -1117,7 +1115,7 @@ print("Total wrappers across the counted leagues:", sum(counts.values()))
 df
 ```
 
-    Total wrappers across the counted leagues: 10043
+    Total wrappers across the counted leagues: 10136
 
 
 
@@ -1129,11 +1127,11 @@ df
     │ ---          ┆ ---         │
     │ str          ┆ i64         │
     ╞══════════════╪═════════════╡
-    │ mbb          ┆ 697         │
-    │ wbb          ┆ 601         │
-    │ nba          ┆ 584         │
+    │ mbb          ┆ 718         │
+    │ nba          ┆ 625         │
+    │ wbb          ┆ 617         │
     │ cfb          ┆ 469         │
-    │ nhl          ┆ 407         │
+    │ wnba         ┆ 417         │
     │ …            ┆ …           │
     │ vijhl        ┆ 14          │
     │ kijhl        ┆ 14          │

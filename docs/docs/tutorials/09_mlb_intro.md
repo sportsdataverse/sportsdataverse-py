@@ -492,8 +492,8 @@ spcols = ["last_name, first_name", "team", "position", "competitive_runs", "spri
     │ Witt Jr., Bobby       ┆ KC   ┆ SS       ┆ 298              ┆ 30.5         │
     │ Rojas, Johan          ┆ PHI  ┆ CF       ┆ 176              ┆ 30.1         │
     │ De La Cruz, Elly      ┆ CIN  ┆ SS       ┆ 249              ┆ 30.0         │
-    │ Clase, Jonatan        ┆ TOR  ┆ LF       ┆ 20               ┆ 30.0         │
     │ Fitzgerald, Tyler     ┆ SF   ┆ SS       ┆ 99               ┆ 30.0         │
+    │ Clase, Jonatan        ┆ TOR  ┆ LF       ┆ 20               ┆ 30.0         │
     │ Crow-Armstrong, Pete  ┆ CHC  ┆ CF       ┆ 149              ┆ 30.0         │
     │ Scott II, Victor      ┆ STL  ┆ CF       ┆ 62               ┆ 30.0         │
     │ Mateo, Jorge          ┆ BAL  ┆ 2B       ┆ 77               ┆ 29.9         │
@@ -620,10 +620,10 @@ out
     │ Flyout       ┆ 7     │
     │ Walk         ┆ 6     │
     │ Lineout      ┆ 4     │
-    │ Single       ┆ 3     │
     │ Home Run     ┆ 3     │
+    │ Single       ┆ 3     │
     │ Double       ┆ 2     │
-    │ Forceout     ┆ 1     │
+    │ Hit By Pitch ┆ 1     │
     └──────────────┴───────┘
 
 

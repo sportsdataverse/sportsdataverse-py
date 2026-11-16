@@ -297,16 +297,16 @@ out
     │ ---     ┆ --- ┆ ---  ┆ ---  ┆ ---  │
     │ str     ┆ str ┆ str  ┆ str  ┆ str  │
     ╞═════════╪═════╪══════╪══════╪══════╡
-    │ 1       ┆ 4   ┆ null ┆ null ┆ null │
-    │ 2       ┆ 4   ┆ null ┆ null ┆ null │
-    │ 3       ┆ 4   ┆ null ┆ null ┆ null │
-    │ 4       ┆ 4   ┆ null ┆ null ┆ null │
-    │ 5       ┆ 4   ┆ null ┆ null ┆ null │
-    │ 6       ┆ 4   ┆ null ┆ null ┆ null │
-    │ 7       ┆ 4   ┆ null ┆ null ┆ null │
-    │ 8       ┆ 4   ┆ null ┆ null ┆ null │
-    │ 9       ┆ 4   ┆ null ┆ null ┆ null │
-    │ 10      ┆ 4   ┆ null ┆ null ┆ null │
+    │ 1       ┆ 6   ┆ null ┆ null ┆ null │
+    │ 2       ┆ 6   ┆ null ┆ null ┆ null │
+    │ 3       ┆ 6   ┆ null ┆ null ┆ null │
+    │ 4       ┆ 6   ┆ null ┆ null ┆ null │
+    │ 5       ┆ 6   ┆ null ┆ null ┆ null │
+    │ 6       ┆ 6   ┆ null ┆ null ┆ null │
+    │ 7       ┆ 6   ┆ null ┆ null ┆ null │
+    │ 8       ┆ 6   ┆ null ┆ null ┆ null │
+    │ 9       ┆ 6   ┆ null ┆ null ┆ null │
+    │ 10      ┆ 6   ┆ null ┆ null ┆ null │
     └─────────┴─────┴──────┴──────┴──────┘
 
 
@@ -600,8 +600,8 @@ pbox = sdv.mbb.load_mbb_player_boxscore(seasons=[2024])
     │ Ryan Kalkbrenner     ┆ CREI              ┆ 35  ┆ 604.0 ┆ 68.9   │
     │ Cedric Coward        ┆ EWU               ┆ 32  ┆ 494.0 ┆ 68.3   │
     │ Jaylin Williams      ┆ AUB               ┆ 34  ┆ 422.0 ┆ 68.2   │
-    │ Zach Edey            ┆ PUR               ┆ 39  ┆ 983.0 ┆ 67.3   │
     │ Chaz Lanier          ┆ UNF               ┆ 32  ┆ 629.0 ┆ 67.3   │
+    │ Zach Edey            ┆ PUR               ┆ 39  ┆ 983.0 ┆ 67.3   │
     └──────────────────────┴───────────────────┴─────┴───────┴────────┘
 
 
@@ -738,16 +738,16 @@ out
     │ ---   ┆ --- ┆ --- ┆ --- ┆ ---  ┆ ---      │
     │ str   ┆ str ┆ str ┆ str ┆ str  ┆ str      │
     ╞═══════╪═════╪═════╪═════╪══════╪══════════╡
-    │ 1     ┆ 4   ┆ 1   ┆ 3   ┆ null ┆ null     │
-    │ 2     ┆ 3   ┆ 2   ┆ 1   ┆ null ┆ null     │
-    │ 3     ┆ 3   ┆ 0   ┆ 3   ┆ null ┆ null     │
-    │ 4     ┆ 3   ┆ 0   ┆ 3   ┆ null ┆ null     │
-    │ 5     ┆ 3   ┆ 2   ┆ 1   ┆ null ┆ null     │
-    │ 6     ┆ 3   ┆ 1   ┆ 2   ┆ null ┆ null     │
-    │ 7     ┆ 3   ┆ 1   ┆ 2   ┆ null ┆ null     │
-    │ 8     ┆ 3   ┆ 2   ┆ 1   ┆ null ┆ null     │
-    │ 9     ┆ 3   ┆ 2   ┆ 1   ┆ null ┆ null     │
-    │ 10    ┆ 3   ┆ 1   ┆ 2   ┆ null ┆ null     │
+    │ 1     ┆ 6   ┆ 2   ┆ 4   ┆ null ┆ null     │
+    │ 2     ┆ 6   ┆ 1   ┆ 5   ┆ null ┆ null     │
+    │ 3     ┆ 6   ┆ 1   ┆ 5   ┆ null ┆ null     │
+    │ 4     ┆ 6   ┆ 2   ┆ 4   ┆ null ┆ null     │
+    │ 5     ┆ 6   ┆ 1   ┆ 5   ┆ null ┆ null     │
+    │ 6     ┆ 6   ┆ 2   ┆ 4   ┆ null ┆ null     │
+    │ 7     ┆ 5   ┆ 3   ┆ 2   ┆ null ┆ null     │
+    │ 8     ┆ 5   ┆ 3   ┆ 2   ┆ null ┆ null     │
+    │ 9     ┆ 5   ┆ 0   ┆ 5   ┆ null ┆ null     │
+    │ 10    ┆ 5   ┆ 1   ┆ 4   ┆ null ┆ null     │
     └───────┴─────┴─────┴─────┴──────┴──────────┘
 
 
@@ -839,10 +839,10 @@ pbox_pd["is_dd"] = (pbox_pd[["points", "rebounds", "assists"]] >= 10).sum(axis=1
     3              DJ Burns               YSU              22
     4           Oumar Ballo              ARIZ              20
     5         Armando Bacot               UNC              19
-    6         Fardaws Aimaq               CAL              19
-    7       Yaxel Lendeborg               UAB              19
-    8          Saint Thomas              UNCO              19
-    9           Riley Minix              MORE              19
+    6          Saint Thomas              UNCO              19
+    7         Fardaws Aimaq               CAL              19
+    8           Riley Minix              MORE              19
+    9       Yaxel Lendeborg               UAB              19
 
 
 

@@ -97,13 +97,13 @@ print('shape:', None if teams is None else teams.shape)
 ```
 
     ✅ WNBA teams
-    shape: (15, 14)
+    shape: (14, 14)
 
 
 
 
 
-    shape: (15, 5)
+    shape: (14, 5)
     ┌─────────┬───────────────┬───────────┬───────────────────┬────────────────────────┐
     │ team_id ┆ team_location ┆ team_name ┆ team_abbreviation ┆ team_display_name      │
     │ ---     ┆ ---           ┆ ---       ┆ ---               ┆ ---                    │
@@ -111,9 +111,9 @@ print('shape:', None if teams is None else teams.shape)
     ╞═════════╪═══════════════╪═══════════╪═══════════════════╪════════════════════════╡
     │ 20      ┆ Atlanta       ┆ Dream     ┆ ATL               ┆ Atlanta Dream          │
     │ 19      ┆ Chicago       ┆ Sky       ┆ CHI               ┆ Chicago Sky            │
-    │ 18      ┆ Connecticut   ┆ Sun       ┆ CON               ┆ Connecticut Sun        │
     │ 3       ┆ Dallas        ┆ Wings     ┆ DAL               ┆ Dallas Wings           │
     │ 129689  ┆ Golden State  ┆ Valkyries ┆ GS                ┆ Golden State Valkyries │
+    │ 5       ┆ Indiana       ┆ Fever     ┆ IND               ┆ Indiana Fever          │
     │ …       ┆ …             ┆ …         ┆ …                 ┆ …                      │
     │ 11      ┆ Phoenix       ┆ Mercury   ┆ PHX               ┆ Phoenix Mercury        │
     │ 132052  ┆ Portland      ┆ Fire      ┆ POR               ┆ Portland Fire          │
@@ -486,8 +486,8 @@ top_scorers
     │ Napheesa Collier     ┆ MIN               ┆ 47    ┆ 1000         ┆ 21.3 ┆ 3.4 │
     │ Kahleah Copper       ┆ PHX               ┆ 39    ┆ 811          ┆ 20.8 ┆ 2.3 │
     │ Breanna Stewart      ┆ NY                ┆ 50    ┆ 1014         ┆ 20.3 ┆ 3.5 │
-    │ Kelsey Mitchell      ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 1.9 │
     │ Caitlin Clark        ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 8.4 │
+    │ Kelsey Mitchell      ┆ IND               ┆ 42    ┆ 805          ┆ 19.2 ┆ 1.9 │
     │ Jewell Loyd          ┆ SEA               ┆ 39    ┆ 744          ┆ 19.1 ┆ 3.6 │
     │ Sabrina Ionescu      ┆ NY                ┆ 50    ┆ 900          ┆ 18.0 ┆ 5.9 │
     │ Brittney Griner      ┆ PHX               ┆ 32    ┆ 568          ┆ 17.8 ┆ 2.2 │
@@ -944,16 +944,16 @@ scoring_leaders
     │ ---                  ┆ ---               ┆ ---                           ┆ ---  │
     │ str                  ┆ str               ┆ str                           ┆ f64  │
     ╞══════════════════════╪═══════════════════╪═══════════════════════════════╪══════╡
-    │ A'ja Wilson          ┆ Las Vegas Aces    ┆ C                             ┆ 21.4 │
-    │ Olivia Miles         ┆ Minnesota Lynx    ┆ G                             ┆ 21.0 │
-    │ Breanna Stewart      ┆ Seattle Storm     ┆ F                             ┆ 20.5 │
-    │ Arike Ogunbowale     ┆ Dallas Wings      ┆ G                             ┆ 19.9 │
-    │ Paige Bueckers       ┆ Dallas Wings      ┆ G                             ┆ 19.2 │
-    │ Caitlin Clark        ┆ Indiana Fever     ┆ G                             ┆ 18.6 │
-    │ Napheesa Collier     ┆ Minnesota Lynx    ┆ F                             ┆ 18.4 │
-    │ Jovana Nogic         ┆ Phoenix Mercury   ┆ G                             ┆ 17.5 │
-    │ Kelsey Mitchell      ┆ Indiana Fever     ┆ G                             ┆ 17.4 │
-    │ Rhyne Howard         ┆ Atlanta Dream     ┆ G                             ┆ 17.1 │
+    │ A'ja Wilson          ┆ Las Vegas Aces    ┆ C                             ┆ 26.9 │
+    │ Arike Ogunbowale     ┆ Dallas Wings      ┆ G                             ┆ 22.2 │
+    │ Kahleah Copper       ┆ Phoenix Mercury   ┆ G                             ┆ 21.1 │
+    │ Breanna Stewart      ┆ New York Liberty  ┆ F                             ┆ 20.4 │
+    │ Napheesa Collier     ┆ Minnesota Lynx    ┆ F                             ┆ 20.4 │
+    │ Jewell Loyd          ┆ Seattle Storm     ┆ G                             ┆ 19.7 │
+    │ Kelsey Mitchell      ┆ Indiana Fever     ┆ G                             ┆ 19.2 │
+    │ Caitlin Clark        ┆ Indiana Fever     ┆ G                             ┆ 19.2 │
+    │ Sabrina Ionescu      ┆ New York Liberty  ┆ G                             ┆ 18.2 │
+    │ Satou Sabally        ┆ Dallas Wings      ┆ F                             ┆ 17.9 │
     └──────────────────────┴───────────────────┴───────────────────────────────┴──────┘
 
 
