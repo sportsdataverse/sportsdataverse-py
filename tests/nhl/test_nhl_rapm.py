@@ -88,6 +88,39 @@ def test_build_stints_empty_shifts_returns_zero_row_frame():
     assert out.height == 0
 
 
+def test_build_stints_eventless_interval_keeps_the_previous_state():
+    # 773 of the NHL sample's 1,241 intervals hold no event (line-change transients); they read a null
+    # strength_state and fell out of every strength filter: 2,424 of 10,803 s, 5v5 time 6,744 s and its
+    # xG rate 3.50/60. They now carry the previous interval's strength and goalies.
+    from sportsdataverse.nhl.nhl_xg import nhl_xg
+
+    shifts = pl.read_parquet(FIX / "shifts_sample.parquet")
+    scored = nhl_xg(pl.read_parquet(FIX / "pbp_sample.parquet"), model_dir=str(MODELS))
+    stints = build_stints(shifts, scored).sort("game_id", "start_s")
+    assert stints.height == 1241 and stints["duration"].sum() == 10803
+    assert stints.filter(pl.col("strength_state").is_null()).is_empty()
+    s5 = stints.filter(pl.col("strength_state") == "5v5")
+    assert s5["duration"].sum() == 8749
+    assert (s5["xgf_home"] + s5["xgf_away"]).sum() * 3600 / (2 * s5["duration"].sum()) < 2.8
+    # an eventless interval repeats the one before it, and its goalies are out of the skater lists
+    state = ["strength_state", "home_goalie", "away_goalie"]
+    stints = stints.with_row_index("_i").with_columns(pl.col(state).shift().over("game_id").name.prefix("p_"))
+    with_event = (
+        stints.join(scored.select("game_id", s="game_seconds"), on="game_id")
+        .filter((pl.col("s") >= pl.col("start_s")) & (pl.col("s") <= pl.col("end_s")))["_i"]
+        .unique()
+    )
+    eventless = stints.filter(~pl.col("_i").is_in(with_event.implode()))
+    assert eventless.height == 773
+    for c in state:
+        assert eventless.filter(pl.col(c).ne_missing(pl.col(f"p_{c}"))).is_empty(), c
+    goalie_skating = stints.filter(
+        pl.col("home_ids").list.contains(pl.col("home_goalie"))
+        | pl.col("away_ids").list.contains(pl.col("away_goalie"))
+    )
+    assert goalie_skating.is_empty()
+
+
 def test_build_design_two_rows_per_stint_weighted_by_duration():
     stints = pl.DataFrame(
         {

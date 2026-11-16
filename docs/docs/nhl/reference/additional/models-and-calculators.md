@@ -408,7 +408,9 @@ at a change second credits its xG to the interval that ends there (the players o
 ice before the change), following fastRhockey's within-second event order
 (`R/nhl_game_feed.R`: shots, goals, stops and penalties before a CHANGE, faceoffs
 after). So xG sums over `(start_s, end_s]` while goalie and `strength_state` read
-the events in `[start_s, end_s)`, falling back to the xG window when that is empty.
+the events in `[start_s, end_s)`, falling back to the xG window when that is empty, and to
+the previous interval's when both are (an interval no event falls in, typically a
+line-change transient).
 
 Shift-chart id lists do not distinguish position: `home_goalie`/`away_goalie` come
 from the overlapping `scored` events' `home_goalie_id`/`away_goalie_id` (the modal

@@ -77,7 +77,9 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     ice before the change), following fastRhockey's within-second event order
     (``R/nhl_game_feed.R``: shots, goals, stops and penalties before a CHANGE, faceoffs
     after). So xG sums over ``(start_s, end_s]`` while goalie and ``strength_state`` read
-    the events in ``[start_s, end_s)``, falling back to the xG window when that is empty.
+    the events in ``[start_s, end_s)``, falling back to the xG window when that is empty, and to
+    the previous interval's when both are (an interval no event falls in, typically a
+    line-change transient).
 
     Shift-chart id lists do not distinguish position: ``home_goalie``/``away_goalie`` come
     from the overlapping ``scored`` events' ``home_goalie_id``/``away_goalie_id`` (the modal
@@ -157,6 +159,7 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
             if not boundaries or end_boundary > boundaries[-1]:
                 boundaries.append(end_boundary)
 
+        last_state: tuple[int | None, int | None, str | None] = (None, None, None)
         running: dict[str, set[int]] = {"home": set(), "away": set()}
         period_at: dict[int, int] = {}
         snapshot_at: dict[int, tuple[set[int], set[int]]] = {}
@@ -205,9 +208,14 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
             if xg_window.height > 0:
                 xgf_home = float(xg_window.filter(pl.col("event_team_abbr") == home_abbr)["xg"].sum() or 0.0)
                 xgf_away = float(xg_window.filter(pl.col("event_team_abbr") == away_abbr)["xg"].sum() or 0.0)
-            home_goalie = away_goalie = None
-            strength_state = None
+            # An interval with no event at all (most are seconds-long line-change transients) keeps the
+            # previous interval's goalies and strength: no event has changed them. Left null, it fell out
+            # of every strength filter -- about 23% of NHL game time, so 5v5 TOI and every per-60 rate
+            # read off the survivors were biased -- and its goalies stayed in the id lists as skaters.
+            home_goalie, away_goalie, strength_state = last_state
             if window.height > 0:
+                home_goalie = away_goalie = None
+                strength_state = None
                 # .mode() returns ALL tied-most-frequent values in an unspecified
                 # order, so a bare .mode()[0] is nondeterministic when a window has two
                 # equally-common goalies / strength states (e.g. a line change or
@@ -225,6 +233,7 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
                 if "strength_state" in window.columns:
                     ss = window["strength_state"].drop_nulls()
                     strength_state = str(ss.mode().sort()[0]) if ss.len() > 0 else None
+                last_state = (home_goalie, away_goalie, strength_state)
             rows.append(
                 {
                     "game_id": gid,
