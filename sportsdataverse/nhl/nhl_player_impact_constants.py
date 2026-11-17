@@ -95,10 +95,9 @@ class ImpactConfig:
         league-average rate; home ice is its own column), additive over the five skaters
         on ice, with defense signed so that positive means suppression. The replacement
         rates are team on-ice levels, so each skater's share of the unit's gap to the
-        league average is a fifth of it. Both rates are seeds, not fitted values, and the
-        ridge pulls low-minute skaters toward 0, above this level, so fringe skaters tend
-        to earn small positive EV GAR; fitting the level from the replacement pool's own
-        RAPM is the open follow-up.
+        league average is a fifth of it. For the NHL both rates are fitted from the
+        replacement pool's own RAPM (``tools/fit_nhl_replacement_level.py``), so the pool as
+        a whole earns zero EV GAR; the PWHL rates are seeds.
 
         Returns:
             ``((replacement_ev_off - league_xg_rate_ev) / 5,
@@ -109,7 +108,7 @@ class ImpactConfig:
             Quick start::
 
                 from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
-                off, dfn = get_constants("nhl").replacement_rapm()  # (-0.12, -0.02)
+                off, dfn = get_constants("nhl").replacement_rapm()  # (-0.052, -0.08)
         """
         return (
             (self.replacement_ev_off - self.league_xg_rate_ev) / 5.0,
@@ -125,22 +124,31 @@ class ImpactConfig:
 # team NAME, which is the LOCATION ("New York", "Los Angeles"), so the Rangers and
 # Islanders collapse into one "New York" row -> 31 rows for 32 teams. Benign for a
 # goals-per-win slope (both NY teams' goal-diff/wins just sum into one point) and it
-# doesn't move 6.596; not worth an id-keyed rewrite of a one-shot dev fit. Every other
-# NHL constant below remains a documented seed pending its own fitting task.
+# doesn't move 6.596; not worth an id-keyed rewrite of a one-shot dev fit. The EV replacement
+# levels and the special-teams rates below are fitted too, each citing its tool.
 LEAGUE_CONSTANTS: dict[str, ImpactConfig] = {
     "nhl": ImpactConfig(
         goals_per_win=6.596,
-        replacement_ev_off=1.9,
-        replacement_ev_def=2.6,
-        league_xg_rate_ev=2.5,
-        # Fitted by `tools/fit_nhl_special_teams_rates.py` (2026-11-14) on the retrained xG: pooled
-        # PP xGF/60 per season 5.824 / 6.129 / 5.693 / 6.007 (2022-23..2025-26), mean 5.91. One
-        # number for both: the PP's shots are the PK's shots against. Was a 6.2 seed. Refit after
+        # Fitted by `tools/fit_nhl_replacement_level.py` (2026-11-15) on the published xG and the
+        # stints that keep eventless intervals: league = pooled 5v5 xGF/60 per team, 2.687 / 2.499 /
+        # 2.420 / 2.552 (2022-23..2025-26), mean 2.540; the replacement pool (skaters below the top
+        # 18 * n_teams by 5v5 TOI, league-wide) has TOI-weighted RAPM off -0.021 / -0.018 / -0.080 / -0.092 and
+        # def -0.108 / -0.099 / -0.044 / -0.066, means -0.0526 / -0.0792, so rep_off = league +
+        # 5 * off = 2.28 and rep_def = league - 5 * def = 2.94 (replacement_rapm -0.052 / -0.08).
+        # Were 1.9 / 2.6 / 2.5 seeds (-0.12 / -0.02). Refit after every xG retrain.
+        replacement_ev_off=2.28,
+        replacement_ev_def=2.94,
+        league_xg_rate_ev=2.54,
+        # Fitted by `tools/fit_nhl_special_teams_rates.py` (2026-11-15) on the published xG and the
+        # stints that keep eventless intervals: pooled PP xGF/60 per season 4.690 / 4.976 / 4.571 /
+        # 4.850 (2022-23..2025-26), mean 4.77. One number for both: the PP's shots are the PK's
+        # shots against. Was 5.91, fitted on stints that dropped eventless time, before that a 6.2
+        # seed. Refit after
         # every xG retrain. A pooled mean, so one season's league PP value need not sum to zero
         # (2024-25 runs about -0.22 xG per PP hour), and it is on the published boosters' scale:
         # a caller passing its own xG (`xg_scored=True`) compares against a rate of another model.
-        league_xg_rate_pp=5.91,
-        league_xg_rate_pk=5.91,
+        league_xg_rate_pp=4.77,
+        league_xg_rate_pk=4.77,
         xg_booster_league="nhl",
     ),
     "pwhl": ImpactConfig(
