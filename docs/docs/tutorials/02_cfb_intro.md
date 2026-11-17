@@ -499,8 +499,8 @@ out
     │ …          ┆ …     ┆ …            │
     │ Alabama    ┆ 1030  ┆ 0.147        │
     │ Michigan   ┆ 1036  ┆ 0.143        │
-    │ Notre Dame ┆ 917   ┆ 0.141        │
     │ Missouri   ┆ 1004  ┆ 0.141        │
+    │ Notre Dame ┆ 917   ┆ 0.141        │
     │ Texas      ┆ 1106  ┆ 0.14         │
     └────────────┴───────┴──────────────┘
 
@@ -545,8 +545,8 @@ out
     ╞═══════════════════╪═════════╡
     │ Defensive Back    ┆ 26      │
     │ Offensive Lineman ┆ 21      │
-    │ Wide Receiver     ┆ 18      │
     │ Linebacker        ┆ 18      │
+    │ Wide Receiver     ┆ 18      │
     │ Defensive End     ┆ 12      │
     │ Defensive Lineman ┆ 12      │
     │ Running Back      ┆ 11      │
@@ -651,15 +651,15 @@ standings_tbl.head(10)
     │ str                      ┆ u32  ┆ u32    ┆ f64     │
     ╞══════════════════════════╪══════╪════════╪═════════╡
     │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
-    │ Harding                  ┆ 15   ┆ 0      ┆ 1.0     │
     │ Michigan                 ┆ 15   ┆ 0      ┆ 1.0     │
+    │ Harding                  ┆ 15   ┆ 0      ┆ 1.0     │
     │ Colorado School of Mines ┆ 14   ┆ 1      ┆ 0.933   │
     │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
     │ SUNY Cortland            ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
     │ Randolph Macon           ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Liberty                  ┆ 13   ┆ 1      ┆ 0.929   │
     │ Florida State            ┆ 13   ┆ 1      ┆ 0.929   │
-    │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
     └──────────────────────────┴──────┴────────┴─────────┘
 
 
@@ -750,9 +750,9 @@ gamelog.head(16) if gamelog.height else f'no games found for {team}'
     │ ---  ┆ ---           ┆ ---     ┆ ---         ┆ ---    ┆ ---          │
     │ i64  ┆ str           ┆ i64     ┆ i64         ┆ i64    ┆ bool         │
     ╞══════╪═══════════════╪═════════╪═════════════╪════════╪══════════════╡
-    │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
-    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
     │ 1    ┆ Alabama       ┆ 27      ┆ 20          ┆ 7      ┆ true         │
+    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
+    │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
     │ 2    ┆ UNLV          ┆ 35      ┆ 7           ┆ 28     ┆ false        │
     │ 3    ┆ Bowling Green ┆ 31      ┆ 6           ┆ 25     ┆ false        │
     │ …    ┆ …             ┆ …       ┆ …           ┆ …      ┆ …            │
@@ -808,7 +808,7 @@ out
     │ Tahj Brooks        ┆ 290     ┆ 1576     ┆ 0.216        │
     │ Omarion Hampton    ┆ 244     ┆ 1520     ┆ 0.148        │
     │ …                  ┆ …       ┆ …        ┆ …            │
-    │ Makhi Hughes       ┆ 255     ┆ 1365     ┆ 0.048        │
+    │ Antario Brown      ┆ 211     ┆ 1365     ┆ 0.135        │
     │ Ismail Mahdi       ┆ 217     ┆ 1362     ┆ 0.134        │
     │ Jaydn Ott          ┆ 245     ┆ 1350     ┆ -0.006       │
     │ Ashton Jeanty      ┆ 213     ┆ 1341     ┆ 0.111        │
@@ -984,8 +984,8 @@ out
     │ ---                            ┆ ---        ┆ ---        │
     │ str                            ┆ str        ┆ f64        │
     ╞════════════════════════════════╪════════════╪════════════╡
-    │ Arkansas-Pine Bluff@Texas Tech ┆ Texas Tech ┆ -54.5      │
     │ Bethune-Cookman@Miami          ┆ Miami      ┆ -54.5      │
+    │ Arkansas-Pine Bluff@Texas Tech ┆ Texas Tech ┆ -54.5      │
     │ Samford@Texas A&M              ┆ Texas A&M  ┆ -54.2      │
     │ Grambling@Ohio State           ┆ Ohio State ┆ -53.5      │
     │ Samford@Baylor                 ┆ Baylor     ┆ -52.0      │
@@ -993,7 +993,7 @@ out
     │ Eastern Illinois@Alabama       ┆ Alabama    ┆ -51.3      │
     │ East Texas A&M@SMU             ┆ SMU        ┆ -50.8      │
     │ SE Louisiana@LSU               ┆ LSU        ┆ -48.8      │
-    │ Western Illinois@Illinois      ┆ Illinois   ┆ -48.5      │
+    │ Northwestern State@Cincinnati  ┆ Cincinnati ┆ -48.5      │
     └────────────────────────────────┴────────────┴────────────┘
 
 
@@ -1057,8 +1057,6 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
 ```
 
     ✅ ESPN standings
-
-
     ✅ ESPN rankings (polls)
 
 
@@ -1073,15 +1071,15 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
     │            ┆ str        ┆         ┆            ┆   ┆ str        ┆           ┆ str       ┆ ---    │
     │            ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆ str    │
     ╞════════════╪════════════╪═════════╪════════════╪═══╪════════════╪═══════════╪═══════════╪════════╡
-    │ American   ┆ American   ┆ 249     ┆ Mean Green ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
-    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 235     ┆ Tigers     ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
-    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
     │ American   ┆ American   ┆ 2636    ┆ Roadrunner ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆ s          ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 2226    ┆ Owls       ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ American   ┆ American   ┆ 235     ┆ Tigers     ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 58      ┆ Bulls      ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ American   ┆ American   ┆ 249     ┆ Mean Green ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 5       ┆ Blazers    ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 151     ┆ Pirates    ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
     └────────────┴────────────┴─────────┴────────────┴───┴────────────┴───────────┴───────────┴────────┘
 

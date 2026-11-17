@@ -861,6 +861,8 @@ out
     ✅ NGS schedule
 
 
+
+
     ✅ NGS gamecenter 2024090500
 
 
@@ -1000,8 +1002,8 @@ third
     │ ---     ┆ ---         ┆ ---      ┆ ---      │
     │ str     ┆ f64         ┆ u32      ┆ f64      │
     ╞═════════╪═════════════╪══════════╪══════════╡
-    │ BAL     ┆ 109.0       ┆ 214      ┆ 50.9     │
     │ TB      ┆ 115.0       ┆ 226      ┆ 50.9     │
+    │ BAL     ┆ 109.0       ┆ 214      ┆ 50.9     │
     │ KC      ┆ 123.0       ┆ 255      ┆ 48.2     │
     │ DET     ┆ 101.0       ┆ 213      ┆ 47.4     │
     │ CIN     ┆ 100.0       ┆ 214      ┆ 46.7     │
@@ -1266,7 +1268,7 @@ calendar; `most_recent_nfl_season()` gives the latest season with data.
 
 
 
-    {'current_season': 2026, 'current_week': 9, 'most_recent_season': 2026}
+    {'current_season': 2026, 'current_week': 10, 'most_recent_season': 2026}
 
 
 
