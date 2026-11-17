@@ -77,14 +77,15 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     ice before the change), following fastRhockey's within-second event order
     (``R/nhl_game_feed.R``: shots, goals, stops and penalties before a CHANGE, faceoffs
     after). So xG sums over ``(start_s, end_s]`` while goalie and ``strength_state`` read
-    the events in ``[start_s, end_s)``, falling back to the xG window when that is empty, and to
-    the previous interval's when both are (an interval no event falls in, typically a
-    line-change transient).
+    the events in ``[start_s, end_s)``, falling back to the xG window when that is empty. An
+    interval no event falls in (typically a line-change transient) keeps the goalies and
+    strength of the latest event before it (the game's first event, for an opening one), unless
+    a goalie the game's events name came on or went off at its start: then both stay null.
 
     Shift-chart id lists do not distinguish position: ``home_goalie``/``away_goalie`` come
     from the overlapping ``scored`` events' ``home_goalie_id``/``away_goalie_id`` (the modal
-    value in the interval) and are removed from ``home_ids``/``away_ids``. A goalie no event
-    in the interval names stays in the id list as if he were a skater.
+    value in the interval, or the carried one) and are removed from ``home_ids``/``away_ids``.
+    A null goalie leaves the id list as it is.
 
     Args:
         shifts: a ``load_nhl_shifts``-shaped frame. A ``team_abbr`` column, when present,
@@ -92,7 +93,7 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
         scored: an ``nhl_xg``-scored frame (for the game's ``home_abbr``/``away_abbr``
             and each interval's on-ice xG-for and goalie).
         as_of: an optional per-game ``game_seconds`` cutoff -- intervals starting at or
-            after ``as_of`` are dropped. This is the leakage boundary for any
+            after ``as_of`` are dropped and one that straddles it ends at ``as_of``. This is the leakage boundary for any
             forward-looking use: features for a game/date must use only stints strictly
             before that game's cutoff.
 
@@ -159,7 +160,23 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
             if not boundaries or end_boundary > boundaries[-1]:
                 boundaries.append(end_boundary)
 
-        last_state: tuple[int | None, int | None, str | None] = (None, None, None)
+        state_cols = ("home_goalie_id", "away_goalie_id", "strength_state")
+        game_goalies: set[int] = set()
+        for c in state_cols[:2]:
+            if c in game_scored.columns:
+                game_goalies |= {int(g) for g in game_scored[c].drop_nulls().to_list()}
+
+        def _state(frame: pl.DataFrame, pick: int, prev: tuple) -> tuple:
+            # each component at the frame's first (pick=0) or latest (pick=-1) event that names it
+            frame = frame.sort("game_seconds", maintain_order=True)
+            out = []
+            for c, p in zip(state_cols, prev):
+                v = frame[c].drop_nulls() if c in frame.columns else pl.Series([])
+                out.append(v[pick] if v.len() else p)
+            return tuple(out)
+
+        last_state: tuple = _state(game_scored, 0, (None, None, None)) if game_scored.height else (None,) * 3
+        last_goalies_on: set[int] | None = None
         running: dict[str, set[int]] = {"home": set(), "away": set()}
         period_at: dict[int, int] = {}
         snapshot_at: dict[int, tuple[set[int], set[int]]] = {}
@@ -212,6 +229,13 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
             # previous interval's goalies and strength: no event has changed them. Left null, it fell out
             # of every strength filter -- about 23% of NHL game time, so 5v5 TOI and every per-60 rate
             # read off the survivors were biased -- and its goalies stayed in the id lists as skaters.
+            # A goalie coming on or off at the boundary (a pull, a substitution) changes both, so the
+            # carry would label six skaters 5v5 or fit the new goalie as a skater: leave those null.
+            goalies_on = (home_at_start | away_at_start) & game_goalies
+            carry = last_goalies_on is None or goalies_on == last_goalies_on
+            last_goalies_on = goalies_on
+            if not carry:  # the pre-change state is stale for every eventless interval until the next event
+                last_state = (None, None, None)
             home_goalie, away_goalie, strength_state = last_state
             if window.height > 0:
                 home_goalie = away_goalie = None
@@ -233,7 +257,7 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
                 if "strength_state" in window.columns:
                     ss = window["strength_state"].drop_nulls()
                     strength_state = str(ss.mode().sort()[0]) if ss.len() > 0 else None
-                last_state = (home_goalie, away_goalie, strength_state)
+                last_state = _state(window, -1, last_state)
             rows.append(
                 {
                     "game_id": gid,
@@ -256,7 +280,9 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
 
     out = pl.DataFrame(rows, schema=_STINTS_SCHEMA)
     if as_of is not None:
-        out = out.filter(pl.col("start_s") < as_of)
+        # a straddling stint keeps only its pre-cutoff seconds, or its TOI weight leaks past as_of
+        out = out.filter(pl.col("start_s") < as_of).with_columns(end_s=pl.min_horizontal("end_s", pl.lit(as_of)))
+        out = out.with_columns(duration=pl.col("end_s") - pl.col("start_s"))
     return out
 
 

@@ -407,14 +407,15 @@ at a change second credits its xG to the interval that ends there (the players o
 ice before the change), following fastRhockey's within-second event order
 (`R/nhl_game_feed.R`: shots, goals, stops and penalties before a CHANGE, faceoffs
 after). So xG sums over `(start_s, end_s]` while goalie and `strength_state` read
-the events in `[start_s, end_s)`, falling back to the xG window when that is empty, and to
-the previous interval's when both are (an interval no event falls in, typically a
-line-change transient).
+the events in `[start_s, end_s)`, falling back to the xG window when that is empty. An
+interval no event falls in (typically a line-change transient) keeps the goalies and
+strength of the latest event before it (the game's first event, for an opening one), unless
+a goalie the game's events name came on or went off at its start: then both stay null.
 
 Shift-chart id lists do not distinguish position: `home_goalie`/`away_goalie` come
 from the overlapping `scored` events' `home_goalie_id`/`away_goalie_id` (the modal
-value in the interval) and are removed from `home_ids`/`away_ids`. A goalie no event
-in the interval names stays in the id list as if he were a skater.
+value in the interval, or the carried one) and are removed from `home_ids`/`away_ids`.
+A null goalie leaves the id list as it is.
 
 **Parameters**
 
@@ -422,7 +423,7 @@ in the interval names stays in the id list as if he were a skater.
 |---|---|---|---|
 | `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. A `team_abbr` column, when present, names each row's team directly (the PWHL adapter supplies it). |
 | `scored` | `DataFrame` |  | an `nhl_xg`-scored frame (for the game's `home_abbr`/`away_abbr` and each interval's on-ice xG-for and goalie). |
-| `as_of` | `int \| None` | `None` | an optional per-game `game_seconds` cutoff -- intervals starting at or after `as_of` are dropped. This is the leakage boundary for any forward-looking use: features for a game/date must use only stints strictly before that game's cutoff. |
+| `as_of` | `int \| None` | `None` | an optional per-game `game_seconds` cutoff -- intervals starting at or after `as_of` are dropped and one that straddles it ends at `as_of`. This is the leakage boundary for any forward-looking use: features for a game/date must use only stints strictly before that game's cutoff. |
 
 **Returns**
 

@@ -25,6 +25,7 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import math
 import sys
 import time
 
@@ -71,10 +72,16 @@ def main(argv: list[str] | None = None) -> int:
         if secs <= 0:  # a missing shifts/pbp asset loads empty: fail, never average a NaN in
             print(f"{season}: no 5v5 stints (missing release asset?)", file=sys.stderr)
             return 1
+        if not league > 0:  # 5v5 time but no scored shot: a feature/schema break, not a zero-xG season
+            print(f"{season}: no 5v5 xG over {secs / 3600:.0f} h (did nhl_xg score any shot?)", file=sys.stderr)
+            return 1
         rapm = nhl_skater_rapm(pl.DataFrame(), pl.DataFrame(), strength_states=["5v5"], _stints=stints)
         n_teams = scored["home_abbr"].drop_nulls().n_unique()
         n_reg = REGULARS_PER_TEAM * n_teams
         off, dfn, n_pool = replacement_pool(rapm, n_reg)
+        if n_pool == 0 or not (math.isfinite(off) and math.isfinite(dfn)):
+            print(f"{season}: no replacement pool below the top {n_reg} of {rapm.height} skaters", file=sys.stderr)
+            return 1
         fits.append((league, off, dfn))
         # the pool earns zero EV GAR against its own level; against the current constants it earns
         # (off - seed_off + def - seed_def) xG per pool skater-hour

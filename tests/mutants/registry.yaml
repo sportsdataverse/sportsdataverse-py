@@ -11410,3 +11410,34 @@
   test: tests/nba/test_nba_rest_travel.py::test_rest_and_travel_improve_the_game_model
   expected: kill
   note: The tired side's penalty given to its opponent makes the margin worse on 2023-24 and 2025-26.
+
+# --- #1213: build_stints eventless intervals ---------------------------------------------------------
+- id: nhl-stints-eventless-dropped
+  group: nhl-stints-eventless
+  finding: gh-1213
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: '            home_goalie, away_goalie, strength_state = last_state'
+  mutant: '            home_goalie, away_goalie, strength_state = (None, None, None)'
+  test: tests/nhl/test_nhl_rapm.py::test_build_stints_eventless_interval_keeps_the_previous_state
+  expected: kill
+  note: The pre-fix behaviour, 773 eventless intervals (2,424 of 10,803 s) fell out of every strength filter.
+
+- id: nhl-stints-goalie-change-carried
+  group: nhl-stints-eventless
+  finding: gh-1213
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: 'carry = last_goalies_on is None or goalies_on == last_goalies_on'
+  mutant: 'carry = True'
+  test: tests/nhl/test_nhl_rapm.py::test_build_stints_eventless_goalie_pull_is_not_carried
+  expected: kill
+  note: A goalie pull with no event after it would carry 5v5 onto six skaters.
+
+- id: nhl-stints-as-of-unclipped
+  group: nhl-stints-eventless
+  finding: gh-1213
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: 'end_s=pl.min_horizontal("end_s", pl.lit(as_of))'
+  mutant: 'end_s=pl.col("end_s")'
+  test: tests/nhl/test_nhl_rapm.py::test_build_stints_as_of_clips_a_straddling_stint
+  expected: kill
+  note: A stint straddling as_of would weight its post-cutoff seconds into the RAPM fit.
