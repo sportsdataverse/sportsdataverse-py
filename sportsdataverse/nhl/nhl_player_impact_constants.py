@@ -108,7 +108,7 @@ class ImpactConfig:
             Quick start::
 
                 from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
-                off, dfn = get_constants("nhl").replacement_rapm()  # (-0.052, -0.08)
+                off, dfn = get_constants("nhl").replacement_rapm()  # (-0.058, -0.072)
         """
         return (
             (self.replacement_ev_off - self.league_xg_rate_ev) / 5.0,
@@ -129,26 +129,26 @@ class ImpactConfig:
 LEAGUE_CONSTANTS: dict[str, ImpactConfig] = {
     "nhl": ImpactConfig(
         goals_per_win=6.596,
-        # Fitted by `tools/fit_nhl_replacement_level.py` (2026-11-15) on the published xG and the
-        # stints that keep eventless intervals: league = pooled 5v5 xGF/60 per team, 2.687 / 2.499 /
-        # 2.420 / 2.552 (2022-23..2025-26), mean 2.540; the replacement pool (skaters below the top
-        # 18 * n_teams by 5v5 TOI, league-wide) has TOI-weighted RAPM off -0.021 / -0.018 / -0.080 / -0.092 and
-        # def -0.108 / -0.099 / -0.044 / -0.066, means -0.0526 / -0.0792, so rep_off = league +
-        # 5 * off = 2.28 and rep_def = league - 5 * def = 2.94 (replacement_rapm -0.052 / -0.08).
+        # Fitted by `tools/fit_nhl_replacement_level.py` (2026-11-17) on the published xG and the
+        # stints that keep eventless intervals: league = pooled 5v5 xGF/60 per team, 2.698 / 2.510 /
+        # 2.430 / 2.564 (2022-23..2025-26), mean 2.551; the replacement pool (skaters below the top
+        # 18 * n_teams by 5v5 TOI, league-wide) has TOI-weighted RAPM off -0.029 / -0.025 / -0.084 / -0.095 and
+        # def -0.100 / -0.091 / -0.039 / -0.060, means -0.0582 / -0.0726, so rep_off = league +
+        # 5 * off = 2.26 and rep_def = league - 5 * def = 2.91 (replacement_rapm -0.058 / -0.072).
         # Were 1.9 / 2.6 / 2.5 seeds (-0.12 / -0.02). Refit after every xG retrain.
-        replacement_ev_off=2.28,
-        replacement_ev_def=2.94,
-        league_xg_rate_ev=2.54,
-        # Fitted by `tools/fit_nhl_special_teams_rates.py` (2026-11-15) on the published xG and the
-        # stints that keep eventless intervals: pooled PP xGF/60 per season 4.690 / 4.976 / 4.571 /
-        # 4.850 (2022-23..2025-26), mean 4.77. One number for both: the PP's shots are the PK's
-        # shots against. Was 5.91, fitted on stints that dropped eventless time, before that a 6.2
-        # seed. Refit after
-        # every xG retrain. A pooled mean, so one season's league PP value need not sum to zero
-        # (2024-25 runs about -0.22 xG per PP hour), and it is on the published boosters' scale:
-        # a caller passing its own xG (`xg_scored=True`) compares against a rate of another model.
-        league_xg_rate_pp=4.77,
-        league_xg_rate_pk=4.77,
+        replacement_ev_off=2.26,
+        replacement_ev_def=2.91,
+        league_xg_rate_ev=2.55,
+        # Fitted by `tools/fit_nhl_special_teams_rates.py` (2026-11-17) on the published xG and the
+        # stints that keep eventless intervals and drop a strength no event explains: pooled PP
+        # xGF/60 per season 4.911 / 5.198 / 4.771 / 5.074 (2022-23..2025-26), mean 4.99. One number
+        # for both: the PP's shots are the PK's shots against. Was 4.77 before the skater-count
+        # guard, 5.91 on stints that dropped eventless time, before that a 6.2 seed. Refit after
+        # every xG retrain. A pooled mean, so one season's league PP value need not sum to zero,
+        # and it is on the published boosters' scale: a caller passing its own xG
+        # (`xg_scored=True`) compares against a rate of another model.
+        league_xg_rate_pp=4.99,
+        league_xg_rate_pk=4.99,
         xg_booster_league="nhl",
     ),
     "pwhl": ImpactConfig(
