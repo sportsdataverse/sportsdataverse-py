@@ -410,7 +410,9 @@ after). So xG sums over `(start_s, end_s]` while goalie and `strength_state` rea
 the events in `[start_s, end_s)`, falling back to the xG window when that is empty. An
 interval no event falls in (typically a line-change transient) keeps the goalies and
 strength of the latest event before it (the game's first event, for an opening one), unless
-a goalie the game's events name came on or went off at its start: then both stay null.
+a goalie the game's events name came on or went off at its start (then both stay null until the
+next event), and its strength stays null when its skater counts match neither the label nor the
+interval that set it (a penalty that expired with no event).
 
 Shift-chart id lists do not distinguish position: `home_goalie`/`away_goalie` come
 from the overlapping `scored` events' `home_goalie_id`/`away_goalie_id` (the modal

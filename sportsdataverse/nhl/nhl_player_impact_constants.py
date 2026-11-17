@@ -132,7 +132,7 @@ LEAGUE_CONSTANTS: dict[str, ImpactConfig] = {
         # Fitted by `tools/fit_nhl_replacement_level.py` (2026-11-15) on the published xG and the
         # stints that keep eventless intervals: league = pooled 5v5 xGF/60 per team, 2.687 / 2.499 /
         # 2.420 / 2.552 (2022-23..2025-26), mean 2.540; the replacement pool (skaters below the top
-        # 18 per team by 5v5 TOI) has TOI-weighted RAPM off -0.021 / -0.018 / -0.080 / -0.092 and
+        # 18 * n_teams by 5v5 TOI, league-wide) has TOI-weighted RAPM off -0.021 / -0.018 / -0.080 / -0.092 and
         # def -0.108 / -0.099 / -0.044 / -0.066, means -0.0526 / -0.0792, so rep_off = league +
         # 5 * off = 2.28 and rep_def = league - 5 * def = 2.94 (replacement_rapm -0.052 / -0.08).
         # Were 1.9 / 2.6 / 2.5 seeds (-0.12 / -0.02). Refit after every xG retrain.

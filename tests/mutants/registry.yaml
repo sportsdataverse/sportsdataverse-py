@@ -11426,8 +11426,8 @@
   group: nhl-stints-eventless
   finding: gh-1213
   file: sportsdataverse/nhl/nhl_rapm.py
-  snippet: 'carry = last_goalies_on is None or goalies_on == last_goalies_on'
-  mutant: 'carry = True'
+  snippet: 'if last_goalies_on is not None and goalies_on != last_goalies_on:'
+  mutant: 'if False:'
   test: tests/nhl/test_nhl_rapm.py::test_build_stints_eventless_goalie_pull_is_not_carried
   expected: kill
   note: A goalie pull with no event after it would carry 5v5 onto six skaters.
@@ -11441,3 +11441,13 @@
   test: tests/nhl/test_nhl_rapm.py::test_build_stints_as_of_clips_a_straddling_stint
   expected: kill
   note: A stint straddling as_of would weight its post-cutoff seconds into the RAPM fit.
+
+- id: nhl-stints-count-change-carried
+  group: nhl-stints-eventless
+  finding: gh-1213
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: '                strength_state = None  # skaters changed without an event'
+  mutant: '                pass  # skaters changed without an event'
+  test: tests/nhl/test_nhl_rapm.py::test_build_stints_eventless_penalty_expiry_is_not_carried
+  expected: kill
+  note: An expired penalty with no event after it would carry 4v5 onto five skaters a side.

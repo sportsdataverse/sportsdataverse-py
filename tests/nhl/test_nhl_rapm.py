@@ -93,18 +93,18 @@ def test_build_stints_eventless_interval_keeps_the_previous_state():
     # 773 of the NHL sample's 1,241 intervals hold no event (line-change transients); they read a null
     # strength_state and fell out of every strength filter: 2,424 of 10,803 s, 5v5 time 6,744 s and its
     # xG rate 3.50/60. They now carry the latest strength and goalies, except where a goalie came on or
-    # went off at the boundary, until the next event: 10 intervals (28 s) stay null.
+    # went off at the boundary, or the skater counts changed under the label: 55 intervals (170 s) stay null.
     from sportsdataverse.nhl.nhl_xg import nhl_xg
 
     shifts = pl.read_parquet(FIX / "shifts_sample.parquet")
     scored = nhl_xg(pl.read_parquet(FIX / "pbp_sample.parquet"), model_dir=str(MODELS))
     stints = build_stints(shifts, scored).sort("game_id", "start_s")
     assert stints.height == 1241 and stints["duration"].sum() == 10803
-    assert stints.filter(pl.col("strength_state").is_null())["duration"].sum() == 28
+    assert stints.filter(pl.col("strength_state").is_null())["duration"].sum() == 170
     s5 = stints.filter(pl.col("strength_state") == "5v5")
-    assert s5["duration"].sum() == 8721
+    assert s5["duration"].sum() == 8687
     assert (s5["xgf_home"] + s5["xgf_away"]).sum() * 3600 / (2 * s5["duration"].sum()) == pytest.approx(
-        2.706, abs=0.002
+        2.717, abs=0.002
     )
     # an eventless interval carries each state column's value at the latest event before it
     state = {"strength_state": "strength_state", "home_goalie": "home_goalie_id", "away_goalie": "away_goalie_id"}
@@ -117,7 +117,7 @@ def test_build_stints_eventless_interval_keeps_the_previous_state():
     eventless = stints.filter(~pl.col("_i").is_in(with_event.implode()))
     assert eventless.height == 773
     eventless = eventless.filter(pl.col("strength_state").is_not_null()).with_columns(key=pl.col("start_s") - 1)
-    assert eventless.height == 763
+    assert eventless.height == 718
     for out_col, ev_col in state.items():
         ev = (  # the play-by-play order breaks ties within a second
             scored.select("game_id", "game_seconds", latest=ev_col)
@@ -157,6 +157,27 @@ def test_build_stints_eventless_goalie_pull_is_not_carried():
     assert pulled["strength_state"] is None and pulled["home_goalie"] is None
     assert len(pulled["home_ids"]) == 6 and 111 not in pulled["home_ids"]
     assert last["strength_state"] == "6v5"
+
+
+def test_build_stints_eventless_penalty_expiry_is_not_carried():
+    # A home penalty ends at t=100 (a fifth skater comes on) with no event until t=250: carrying the 4v5
+    # label would count 5v5 time as special teams, so the eventless interval stays null.
+    shifts = pl.DataFrame(
+        {
+            "game_id": [999] * 4,
+            "period": [1] * 4,
+            "game_seconds": [0, 0, 100, 200],
+            "event_team": ["Buffalo Sabres", "New Jersey Devils", "Buffalo Sabres", "New Jersey Devils"],
+            "ids_on": ["1, 2, 3, 4, 111", "6, 7, 8, 9, 10, 222", "5", "13"],
+            "ids_off": ["0", "0", "0", "6"],
+        }
+    ).with_columns(pl.col("game_id").cast(pl.Int64))
+    scored = pl.concat([_synthetic_scored().with_columns(game_seconds=pl.lit(50, dtype=pl.Int64)), _synthetic_scored()])
+    scored = scored.with_columns(strength_state=pl.Series(["4v5", "5v5"]))
+    first, expired, last = build_stints(shifts, scored).sort("start_s").to_dicts()
+    assert first["strength_state"] == "4v5"
+    assert expired["strength_state"] is None and expired["home_goalie"] == 111
+    assert last["strength_state"] == "5v5"
 
 
 def test_build_stints_as_of_clips_a_straddling_stint():

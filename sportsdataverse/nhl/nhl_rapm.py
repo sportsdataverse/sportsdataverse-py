@@ -109,7 +109,9 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     the events in ``[start_s, end_s)``, falling back to the xG window when that is empty. An
     interval no event falls in (typically a line-change transient) keeps the goalies and
     strength of the latest event before it (the game's first event, for an opening one), unless
-    a goalie the game's events name came on or went off at its start: then both stay null.
+    a goalie the game's events name came on or went off at its start (then both stay null until the
+    next event), and its strength stays null when its skater counts match neither the label nor the
+    interval that set it (a penalty that expired with no event).
 
     Shift-chart id lists do not distinguish position: ``home_goalie``/``away_goalie`` come
     from the overlapping ``scored`` events' ``home_goalie_id``/``away_goalie_id`` (the modal
@@ -194,6 +196,7 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
         }
         last_state: tuple = _state(game_scored, 0, (None, None, None)) if game_scored.height else (None,) * 3
         last_goalies_on: set[int] | None = None
+        last_counts: tuple[int, int] | None = None
         running: dict[str, set[int]] = {"home": set(), "away": set()}
         period_at: dict[int, int] = {}
         snapshot_at: dict[int, tuple[set[int], set[int]]] = {}
@@ -242,21 +245,24 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
             if xg_window.height > 0:
                 xgf_home = float(xg_window.filter(pl.col("event_team_abbr") == home_abbr)["xg"].sum() or 0.0)
                 xgf_away = float(xg_window.filter(pl.col("event_team_abbr") == away_abbr)["xg"].sum() or 0.0)
-            # An interval with no event at all (most are seconds-long line-change transients) keeps the
-            # previous interval's goalies and strength: no event has changed them. Left null, it fell out
-            # of every strength filter -- about 23% of NHL game time, so 5v5 TOI and every per-60 rate
-            # read off the survivors were biased -- and its goalies stayed in the id lists as skaters.
-            # A goalie coming on or off at the boundary (a pull, a substitution) changes both, so the
-            # carry would label six skaters 5v5 or fit the new goalie as a skater: leave those null.
+            # An interval with no event (most are seconds-long line-change transients) keeps the latest
+            # event's goalies and strength; left null it fell out of every strength filter (~23% of NHL
+            # game time) and its goalies stayed in the id lists as skaters. A goalie coming on or off at the
+            # boundary (a pull, a substitution) makes the carry stale until the next event: leave it null.
             goalies_on = (home_at_start | away_at_start) & game_goalies
-            carry = last_goalies_on is None or goalies_on == last_goalies_on
-            last_goalies_on = goalies_on
-            if not carry:  # the pre-change state is stale for every eventless interval until the next event
+            if last_goalies_on is not None and goalies_on != last_goalies_on:
                 last_state = (None, None, None)
+            last_goalies_on = goalies_on
             home_goalie, away_goalie, strength_state = last_state
+            counts = (len(home_at_start - game_goalies), len(away_at_start - game_goalies))
             if window.height > 0:
                 home_goalie, away_goalie, strength_state = _modal_state(window)
-                last_state = _state(window, -1, last_state)
+                last_state, last_counts = _state(window, -1, last_state), counts
+            elif counts != last_counts and strength_state not in (
+                f"{counts[0]}v{counts[1]}",
+                f"{counts[1]}v{counts[0]}",
+            ):
+                strength_state = None  # skaters changed without an event (an expired penalty): label unknown
             rows.append(
                 {
                     "game_id": gid,
