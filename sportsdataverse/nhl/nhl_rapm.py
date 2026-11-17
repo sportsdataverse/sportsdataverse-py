@@ -64,6 +64,35 @@ def _parse_ids(s: str | None) -> list[int]:
     return [int(x) for x in s.split(", ") if x and x.strip() != "0"]
 
 
+_STATE_COLS = ("home_goalie_id", "away_goalie_id", "strength_state")
+
+
+def _state(frame: pl.DataFrame, pick: int, prev: tuple) -> tuple:
+    """Each ``_STATE_COLS`` value at the frame's first (``pick=0``) or latest (``-1``) event naming it, else ``prev``'s."""
+    frame = frame.sort("game_seconds", maintain_order=True)
+    out = []
+    for c, p in zip(_STATE_COLS, prev, strict=True):
+        v = frame[c].drop_nulls() if c in frame.columns else pl.Series([])
+        out.append(v[pick] if v.len() else p)
+    return tuple(out)
+
+
+def _modal_state(frame: pl.DataFrame) -> tuple:
+    """Each ``_STATE_COLS`` column's modal value in ``frame`` (None when it names none).
+
+    ``.mode()`` returns ALL tied-most-frequent values in an unspecified order, so a bare
+    ``.mode()[0]`` is nondeterministic when a window has two equally-common goalies / strength
+    states (a line change or goalie pull mid-interval). The smallest is a stable tiebreak: without
+    it ~9/1241 stints' strength_state flip run-to-run ("5v4" vs "5v6"), which flips which stints
+    survive a ``strength_states=["5v5"]`` filter and makes the whole RAPM/WAR fit nonreproducible.
+    """
+    out = []
+    for c in _STATE_COLS:
+        v = frame[c].drop_nulls() if c in frame.columns else pl.Series([])
+        out.append(v.mode().sort()[0] if v.len() else None)
+    return tuple(out)
+
+
 def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | None = None) -> pl.DataFrame:
     """Fold ``load_nhl_shifts`` CHANGE events into contiguous constant-personnel intervals.
 
@@ -160,21 +189,9 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
             if not boundaries or end_boundary > boundaries[-1]:
                 boundaries.append(end_boundary)
 
-        state_cols = ("home_goalie_id", "away_goalie_id", "strength_state")
-        game_goalies: set[int] = set()
-        for c in state_cols[:2]:
-            if c in game_scored.columns:
-                game_goalies |= {int(g) for g in game_scored[c].drop_nulls().to_list()}
-
-        def _state(frame: pl.DataFrame, pick: int, prev: tuple) -> tuple:
-            # each component at the frame's first (pick=0) or latest (pick=-1) event that names it
-            frame = frame.sort("game_seconds", maintain_order=True)
-            out = []
-            for c, p in zip(state_cols, prev):
-                v = frame[c].drop_nulls() if c in frame.columns else pl.Series([])
-                out.append(v[pick] if v.len() else p)
-            return tuple(out)
-
+        game_goalies = {
+            int(g) for c in _STATE_COLS[:2] if c in game_scored.columns for g in game_scored[c].drop_nulls().to_list()
+        }
         last_state: tuple = _state(game_scored, 0, (None, None, None)) if game_scored.height else (None,) * 3
         last_goalies_on: set[int] | None = None
         running: dict[str, set[int]] = {"home": set(), "away": set()}
@@ -238,25 +255,7 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
                 last_state = (None, None, None)
             home_goalie, away_goalie, strength_state = last_state
             if window.height > 0:
-                home_goalie = away_goalie = None
-                strength_state = None
-                # .mode() returns ALL tied-most-frequent values in an unspecified
-                # order, so a bare .mode()[0] is nondeterministic when a window has two
-                # equally-common goalies / strength states (e.g. a line change or
-                # goalie pull mid-interval). Sort first and take the smallest as a
-                # stable tiebreak: without this, ~9/1241 stints' strength_state flip
-                # run-to-run (e.g. "5v4" vs "5v6"), which flips which stints survive a
-                # strength_states=["5v5"] filter and makes the whole RAPM/WAR fit
-                # nonreproducible.
-                if "home_goalie_id" in window.columns:
-                    hg = window["home_goalie_id"].drop_nulls()
-                    home_goalie = int(hg.mode().sort()[0]) if hg.len() > 0 else None
-                if "away_goalie_id" in window.columns:
-                    ag = window["away_goalie_id"].drop_nulls()
-                    away_goalie = int(ag.mode().sort()[0]) if ag.len() > 0 else None
-                if "strength_state" in window.columns:
-                    ss = window["strength_state"].drop_nulls()
-                    strength_state = str(ss.mode().sort()[0]) if ss.len() > 0 else None
+                home_goalie, away_goalie, strength_state = _modal_state(window)
                 last_state = _state(window, -1, last_state)
             rows.append(
                 {
