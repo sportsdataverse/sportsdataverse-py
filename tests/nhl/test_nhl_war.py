@@ -154,7 +154,8 @@ def test_replacement_level_is_on_the_rapm_scale(monkeypatch, league, expected):
     war = nhl_skater_war(pl.DataFrame({"a": [1]}), pl.DataFrame({"a": [1]}), league=league)
     avg = war.filter(pl.col("player_id") == 1)
     rep = war.filter(pl.col("player_id") == 2)
-    assert 0 < avg["ev_off"][0] < 5 and 0 <= avg["ev_def"][0] < 5
+    assert 0 < avg["ev_off"][0] < 5 and 0 < avg["ev_def"][0] < 5
+    assert abs(rep["ev_off"][0]) < 1e-9 and abs(rep["ev_def"][0]) < 1e-9
     assert abs(rep["gar"][0]) < 1e-9
 
 
