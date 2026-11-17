@@ -55,7 +55,7 @@ a whole earns zero EV GAR; the PWHL rates are seeds.
 
 ```python
 from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
-off, dfn = get_constants("nhl").replacement_rapm()  # (-0.052, -0.08)
+off, dfn = get_constants("nhl").replacement_rapm()  # (-0.058, -0.072)
 ```
 
 ### LeagueConstants {#LeagueConstants}
