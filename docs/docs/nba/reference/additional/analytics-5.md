@@ -216,7 +216,7 @@ boundary.
 
 **Returns**
 
-One row per game of the ESPN schedule release (scheduled games included): `season`, `game_id`, `game_date`, `as_of_date` (the ratings use regular-season possessions dated strictly before it), `home_team_id` / `away_team_id` (ESPN ids, Int32), `neutral_site`, `stats_game_id`, each side's `rating` (`adj_net_rtg`, per 100), `rank` (`adj_net_rtg_rank`), `games` and `pace`, `hfa` (points, 0 at a neutral site), `exp_home_margin` (points) and `rated_home_prob`. The ratings and prediction are null for a game with no stats match or a side with no rating yet. Then the in-game WP prior (BB-D25, see the module docstring): `wp_prior_home_rating` / `wp_prior_away_rating` (per 100) and their ranks, `wp_prior_poss`, `wp_prior_hfa` (points, 0 at a neutral site), `wp_prior_margin_sd`, `wp_prior_exp_home_margin` and `wp_prior_home_prob`; null for a game with no stats match. The ranks are also null before any team is rated (opening day of a season with no prior season released).
+One row per game of the season in the ESPN schedule release (scheduled games included; a row the release labels with another season is dropped): `season`, `game_id`, `game_date`, `as_of_date` (the ratings use regular-season possessions dated strictly before it), `home_team_id` / `away_team_id` (ESPN ids, Int32), `neutral_site`, `stats_game_id`, each side's `rating` (`adj_net_rtg`, per 100), `rank` (`adj_net_rtg_rank`), `games` and `pace`, `hfa` (points, 0 at a neutral site), `exp_home_margin` (points) and `rated_home_prob`. The ratings and prediction are null for a game with no stats match or a side with no rating yet. Then the in-game WP prior (BB-D25, see the module docstring): `wp_prior_home_rating` / `wp_prior_away_rating` (per 100) and their ranks, `wp_prior_poss`, `wp_prior_hfa` (points, 0 at a neutral site), `wp_prior_margin_sd`, `wp_prior_exp_home_margin` and `wp_prior_home_prob`; null for a game with no stats match. The ranks are also null before any team is rated (opening day of a season with no prior season released).
 
 | col_name | type | description |
 |---|---|---|
@@ -287,7 +287,7 @@ docstring for the model and the as-of boundary.
 
 **Returns**
 
-One row per game of the ESPN schedule release (scheduled games included): `season`, `game_id`, `game_date`, `home_team_id`, `away_team_id` (ESPN ids, Int32, as in the pbp release), `neutral_site`, `stats_game_id`, the two teams' adjusted net ratings before the game (`home_adj_net_rtg`, `away_adj_net_rtg`, per 100), the home term `hfa` (per 100, applied to both offenses), `exp_home_margin` (points) and `rated_home_prob`. The last six are null for a game with no stats.nba.com match (All-Star games and the WNBA Commissioner's Cup final).
+One row per game of the season in the ESPN schedule release (scheduled games included; a row the release labels with another season is dropped): `season`, `game_id`, `game_date`, `home_team_id`, `away_team_id` (ESPN ids, Int32, as in the pbp release), `neutral_site`, `stats_game_id`, the two teams' adjusted net ratings before the game (`home_adj_net_rtg`, `away_adj_net_rtg`, per 100), the home term `hfa` (per 100, applied to both offenses), `exp_home_margin` (points) and `rated_home_prob`. The last six are null for a game with no stats.nba.com match (All-Star games and the WNBA Commissioner's Cup final).
 
 | col_name | type | description |
 |---|---|---|

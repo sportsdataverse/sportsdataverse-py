@@ -129,6 +129,30 @@ def test_wiring_keys_the_espn_game(monkeypatch: pytest.MonkeyPatch) -> None:
         nba_pregame_projections(2025, league_id="20")
 
 
+def test_another_seasons_espn_game_is_dropped(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A release row labeled with another season (the 1998-99 lockout games sit in both files) is not this season's."""
+    espn = GAMES.select(
+        pl.lit(2025).alias("season"),
+        (pl.int_range(pl.len()) + 401_000_000).alias("game_id"),
+        "game_date",
+        (pl.int_range(pl.len()) + 1).alias("home_id"),
+        (pl.int_range(pl.len()) + 100).alias("away_id"),
+        pl.lit(False).alias("neutral_site"),
+        pl.col("_h").alias("home_display_name"),
+        pl.col("_a").alias("away_display_name"),
+    )
+    espn = espn.with_columns(
+        pl.when(pl.col("game_id") == 401_000_000).then(2024).otherwise(pl.col("season")).alias("season")
+    )
+    from sportsdataverse.wnba import wnba_loaders
+
+    monkeypatch.setattr(wnba_loaders, "load_wnba_schedule", lambda seasons: espn)
+    monkeypatch.setattr(nba_pregame_projection, "_possession_rows", lambda league_id, season: (ROWS, GAMES))
+    full = nba_pregame_projections(2025, league_id="10")
+    assert full.height == GAMES.height - 1 and 401_000_000 not in full["game_id"].to_list()
+    assert (full["season"] == 2025).all()
+
+
 def test_wp_prior_columns_are_the_boosters_prior(monkeypatch: pytest.MonkeyPatch) -> None:
     """``wp_prior_*`` is BB-D25's number (``nba_rated_priors``) to the bit, home term included."""
     from sportsdataverse.nba import nba_rated_prior

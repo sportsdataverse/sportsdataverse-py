@@ -216,6 +216,9 @@ def _espn_matched(season: int, league_id: str, games: pl.DataFrame) -> pl.DataFr
             pl.col("home_display_name").str.to_lowercase().alias("_h"),
             pl.col("away_display_name").str.to_lowercase().alias("_a"),
         )
+        # a release file can carry another season's games (ESPN filed the 1998-99 lockout games under
+        # both 1999 and 2000); the season's table must not, and its partition rejects them
+        .filter(pl.col("season") == season)
         .unique("game_id", keep="first", maintain_order=True)
     )  # one row per game, as the pbp release has
     keyed = games.unique(["game_date", "_h", "_a"], keep="none")  # a doubled key would match the wrong game
@@ -256,7 +259,8 @@ def nba_rated_priors(
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
-        One row per game of the ESPN schedule release (scheduled games included): ``season``,
+        One row per game of the season in the ESPN schedule release (scheduled games included; a
+        row the release labels with another season is dropped): ``season``,
         ``game_id``, ``game_date``, ``home_team_id``, ``away_team_id`` (ESPN ids, Int32, as in the
         pbp release), ``neutral_site``, ``stats_game_id``, the two teams' adjusted net ratings
         before the game (``home_adj_net_rtg``, ``away_adj_net_rtg``, per 100), the home term
