@@ -520,3 +520,131 @@ from sportsdataverse.odds import toa_sports, toa_usage
 _ = toa_sports()
 toa_usage()
 ```
+
+## IDs and crosswalks
+
+### MarketLeague {#MarketLeague}
+
+`MarketLeague(espn_path: 'str', kalshi_series: 'str', gamma_series_id: 'Optional[str]', draw_possible: 'bool' = False) -> None`
+
+Where one league's games live on each venue.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `espn_path` | `str` |  | `{sport}/{league}` on ESPN's Site v2 API. |
+| `kalshi_series` | `str` |  | the Kalshi series of game-winner markets. |
+| `gamma_series_id` | `Optional[str]` |  | the Polymarket Gamma `series_id` of the league's game events. |
+| `draw_possible` | `bool` | `False` | a game can end level, so a two-way price is incomplete. |
+
+### join_espn_kalshi {#join_espn_kalshi}
+
+`join_espn_kalshi(espn: 'pl.DataFrame', kalshi: 'pl.DataFrame', league: 'str', *, max_date_gap_days: 'int' = 3, method: 'str' = 'multiplicative', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+
+Join ESPN games to Kalshi game-winner markets, one row per ESPN game.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `espn` | `DataFrame` |  | a parsed ESPN scoreboard (`espn_<league>_scoreboard(dates=...)`). |
+| `kalshi` | `DataFrame` |  | parsed Kalshi markets of the league's winner series (`kalshi_markets(params={"series_ticker": MARKET_LEAGUES[league].kalshi_series, "status": "open"})`, every page). |
+| `league` | `str` |  | a key of `MARKET_LEAGUES` (`nba`, `nfl`, `nhl`). |
+| `max_date_gap_days` | `int` | `3` | the furthest a ticker's scheduled date may sit from the game's Eastern date and still match (a postponed game keeps its ticker). |
+| `method` | `str` | `'multiplicative'` | de-vig method for `home_prob` / `away_prob` (`multiplicative` or `shin`, as in `sportsdataverse.wexp.market`). |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per ESPN game: `game_id`, `game_date_et`, `away_abbreviation`, `home_abbreviation`, `kalshi_event_ticker`, `kalshi_scheduled_date`, `kalshi_away_ticker`, `kalshi_home_ticker`, the four `*_yes_bid` / `*_yes_ask` prices (0 to 1), `home_prob` / `away_prob` (de-vigged bid/ask midpoints), `prob_note` (why the probabilities are null) and `matched_by`. A game no market matched keeps its row with null market columns.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | ESPN game (event) id, in the dtype of the ESPN scoreboard frame passed in, so the result joins back to it. |
+| `game_date_et` | Date | The game's start as a US-Eastern calendar date; the day a Kalshi ticker or Gamma eventDate names. |
+| `away_abbreviation` | String | ESPN abbreviation of the away team (the scoreboard's away side, even when the venue lists it as home). |
+| `home_abbreviation` | String | ESPN abbreviation of the home team. |
+| `kalshi_event_ticker` | String | Kalshi event ticker of the matched game, e.g. KXNBAGAME-26NOV22BOSGSW; null when no market matched. |
+| `kalshi_scheduled_date` | Date | Date in the Kalshi ticker: the day the game was first scheduled for, kept when it is postponed. |
+| `kalshi_away_ticker` | String | Kalshi market ticker that pays out if the away team wins. |
+| `kalshi_home_ticker` | String | Kalshi market ticker that pays out if the home team wins. |
+| `away_yes_bid` | Float64 | Best bid for YES on the away team's market, in dollars from 0 to 1 (Kalshi yes_bid_dollars). |
+| `away_yes_ask` | Float64 | Best ask for YES on the away team's market, in dollars from 0 to 1 (Kalshi yes_ask_dollars). |
+| `home_yes_bid` | Float64 | Best bid for YES on the home team's market, in dollars from 0 to 1 (Kalshi yes_bid_dollars). |
+| `home_yes_ask` | Float64 | Best ask for YES on the home team's market, in dollars from 0 to 1 (Kalshi yes_ask_dollars). |
+| `home_prob` | Float64 | Home win probability: the two bid/ask midpoints de-vigged together (multiplicative unless method='shin'); null with a prob_note when a side has no two-sided book. |
+| `away_prob` | Float64 | Away win probability, de-vigged with home_prob so the two sum to 1. |
+| `prob_note` | String | Why home_prob and away_prob are null (a missing price, or a draw that is possible but unpriced); null when they are set. |
+| `matched_by` | String | How the row was joined, '+'-separated: the team rule (code, alias or name), the date rule (scheduled_date, nearest_date, event_date or start_time) and 'swapped' when the venue lists the teams in the other order; null when nothing matched. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `league` is not in `MARKET_LEAGUES`, or `espn` lacks the scoreboard columns. |
+
+**Example**
+
+```python
+import polars as pl
+
+from sportsdataverse.nba import espn_nba_scoreboard
+from sportsdataverse.odds import join_espn_kalshi, kalshi_markets
+
+games = espn_nba_scoreboard(dates="20261122")
+markets = kalshi_markets(limit="1000", params={"series_ticker": "KXNBAGAME", "status": "open"})
+joined = join_espn_kalshi(games, markets, "nba")
+
+# Pipeline next step (one line)
+
+joined.filter(pl.col("matched_by").is_null())
+```
+
+### join_espn_polymarket {#join_espn_polymarket}
+
+`join_espn_polymarket(espn: 'pl.DataFrame', gamma_events: 'pl.DataFrame', league: 'str', *, max_start_gap_hours: 'float' = 6.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+
+Join ESPN games to Polymarket Gamma game events, one row per ESPN game.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `espn` | `DataFrame` |  | a parsed ESPN scoreboard (`espn_<league>_scoreboard(dates=...)`). |
+| `gamma_events` | `DataFrame` |  | parsed Gamma events of the league's series (`polymarket_gamma_events(params={"series_id": MARKET_LEAGUES[league].gamma_series_id})`). Their `teams` column is the JSON list Gamma sends. |
+| `league` | `str` |  | a key of `MARKET_LEAGUES`. |
+| `max_start_gap_hours` | `float` | `6.0` | how far Gamma's `startTime` may sit from ESPN's start when the event date does not match. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per ESPN game: `game_id`, `game_date_et`, `away_abbreviation`, `home_abbreviation`, `gamma_event_id`, `gamma_slug`, `polymarket_us_slug` (Gamma's `usId` as the Polymarket US gateway's market slug, `aec-nba-sa-sac-2026-11-06`) and `matched_by`. A game no event matched keeps its row with nulls.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | ESPN game (event) id, in the dtype of the ESPN scoreboard frame passed in, so the result joins back to it. |
+| `game_date_et` | Date | The game's start as a US-Eastern calendar date; the day a Kalshi ticker or Gamma eventDate names. |
+| `away_abbreviation` | String | ESPN abbreviation of the away team (the scoreboard's away side, even when the venue lists it as home). |
+| `home_abbreviation` | String | ESPN abbreviation of the home team. |
+| `gamma_event_id` | String | Polymarket Gamma event id of the matched game, as text. |
+| `gamma_slug` | String | Polymarket Gamma event slug, e.g. nba-sas-sac-2026-11-06. |
+| `polymarket_us_slug` | String | Polymarket US gateway market slug built from the Gamma usId, e.g. aec-nba-sa-sac-2026-11-06; null when Gamma carries no usId. |
+| `matched_by` | String | How the row was joined, '+'-separated: the team rule (code, alias or name), the date rule (scheduled_date, nearest_date, event_date or start_time) and 'swapped' when the venue lists the teams in the other order; null when nothing matched. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `league` is not in `MARKET_LEAGUES`, or `espn` lacks the scoreboard columns. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import espn_nfl_scoreboard
+from sportsdataverse.odds import join_espn_polymarket, polymarket_gamma_events
+
+games = espn_nfl_scoreboard(dates="20261122")
+events = polymarket_gamma_events(closed="false", limit="100", params={"series_id": "12185"})
+joined = join_espn_polymarket(games, events, "nfl")
+```

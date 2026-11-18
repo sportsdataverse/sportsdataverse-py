@@ -1,0 +1,1010 @@
+[
+ {
+  "id": "1282887",
+  "slug": "nfl-ind-hou-2026-11-20",
+  "title": "Colts vs. Texans",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T01:15:00Z",
+  "usId": "nfl-ind-hou-2026-11-19",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ind",
+    "alias": "Colts",
+    "name": "Indianapolis Colts",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "hou",
+    "alias": "Texans",
+    "name": "Houston Texans",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301063",
+  "slug": "nfl-min-sf-2026-11-23",
+  "title": "Vikings vs. 49ers",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-23T01:20:00Z",
+  "usId": "nfl-min-sf-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Vikings",
+    "name": "Minnesota Vikings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sf",
+    "alias": "49ers",
+    "name": "San Francisco 49ers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301064",
+  "slug": "nfl-mia-buf-2026-11-22",
+  "title": "Dolphins vs. Bills",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": "nfl-mia-buf-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mia",
+    "alias": "Dolphins",
+    "name": "Miami Dolphins",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "buf",
+    "alias": "Bills",
+    "name": "Buffalo Bills",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301066",
+  "slug": "nfl-bal-car-2026-11-22",
+  "title": "Ravens vs. Panthers",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": "nfl-bal-car-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bal",
+    "alias": "Ravens",
+    "name": "Baltimore Ravens",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "car",
+    "alias": "Panthers",
+    "name": "Carolina Panthers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301069",
+  "slug": "nfl-no-chi-2026-11-22",
+  "title": "Saints vs. Bears",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": "nfl-no-chi-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "no",
+    "alias": "Saints",
+    "name": "New Orleans Saints",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Bears",
+    "name": "Chicago Bears",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301071",
+  "slug": "nfl-ten-dal-2026-11-22",
+  "title": "Titans vs. Cowboys",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": "nfl-ten-dal-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ten",
+    "alias": "Titans",
+    "name": "Tennessee Titans",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "dal",
+    "alias": "Cowboys",
+    "name": "Dallas Cowboys",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301073",
+  "slug": "nfl-tb-det-2026-11-22",
+  "title": "Buccaneers vs. Lions",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": "nfl-tb-det-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tb",
+    "alias": "Buccaneers",
+    "name": "Tampa Bay Buccaneers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Lions",
+    "name": "Detroit Lions",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301075",
+  "slug": "nfl-ari-kc-2026-11-22",
+  "title": "Cardinals vs. Chiefs",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": "nfl-ari-kc-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ari",
+    "alias": "Cardinals",
+    "name": "Arizona Cardinals",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "kc",
+    "alias": "Chiefs",
+    "name": "Kansas City Chiefs",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301077",
+  "slug": "nfl-jax-nyg-2026-11-22",
+  "title": "Jaguars vs. Giants",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T21:25:00Z",
+  "usId": "nfl-jax-nyg-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "jax",
+    "alias": "Jaguars",
+    "name": "Jacksonville Jaguars",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyg",
+    "alias": "Giants",
+    "name": "New York Giants",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301078",
+  "slug": "nfl-nyj-lac-2026-11-22",
+  "title": "Jets vs. Chargers",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T21:05:00Z",
+  "usId": "nfl-nyj-lac-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyj",
+    "alias": "Jets",
+    "name": "New York Jets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lac",
+    "alias": "Chargers",
+    "name": "Los Angeles Chargers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301081",
+  "slug": "nfl-lv-den-2026-11-22",
+  "title": "Raiders vs. Broncos",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T21:25:00Z",
+  "usId": "nfl-lv-den-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lv",
+    "alias": "Raiders",
+    "name": "Las Vegas Raiders",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "den",
+    "alias": "Broncos",
+    "name": "Denver Broncos",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1301082",
+  "slug": "nfl-pit-phi-2026-11-22",
+  "title": "Steelers vs. Eagles",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": "nfl-pit-phi-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "pit",
+    "alias": "Steelers",
+    "name": "Pittsburgh Steelers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phi",
+    "alias": "Eagles",
+    "name": "Philadelphia Eagles",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1307694",
+  "slug": "nfl-cin-was-2026-11-24",
+  "title": "Bengals vs. Commanders",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T01:15:00Z",
+  "usId": "nfl-cin-was-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cin",
+    "alias": "Bengals",
+    "name": "Cincinnati Bengals",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "was",
+    "alias": "Commanders",
+    "name": "Washington Commanders",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1319644",
+  "slug": "nfl-gb-la-2026-11-26",
+  "title": "Packers vs. Rams",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T01:00:00Z",
+  "usId": "nfl-gb-lar-2026-11-25",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "gb",
+    "alias": "Packers",
+    "name": "Green Bay Packers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "la",
+    "alias": "Rams",
+    "name": "Los Angeles Rams",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1324977",
+  "slug": "nfl-phi-dal-2026-11-26",
+  "title": "Eagles vs. Cowboys",
+  "eventDate": "2026-11-26",
+  "startTime": "2026-11-26T21:30:00Z",
+  "usId": "nfl-phi-dal-2026-11-26",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phi",
+    "alias": "Eagles",
+    "name": "Philadelphia Eagles",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "dal",
+    "alias": "Cowboys",
+    "name": "Dallas Cowboys",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1324980",
+  "slug": "nfl-chi-det-2026-11-26",
+  "title": "Bears vs. Lions",
+  "eventDate": "2026-11-26",
+  "startTime": "2026-11-26T18:00:00Z",
+  "usId": "nfl-chi-det-2026-11-26",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Bears",
+    "name": "Chicago Bears",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Lions",
+    "name": "Detroit Lions",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1324982",
+  "slug": "nfl-kc-buf-2026-11-27",
+  "title": "Chiefs vs. Bills",
+  "eventDate": "2026-11-26",
+  "startTime": "2026-11-27T01:20:00Z",
+  "usId": "nfl-kc-buf-2026-11-26",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "kc",
+    "alias": "Chiefs",
+    "name": "Kansas City Chiefs",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "buf",
+    "alias": "Bills",
+    "name": "Buffalo Bills",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1332035",
+  "slug": "nfl-den-pit-2026-11-27",
+  "title": "Broncos vs. Steelers",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T20:00:00Z",
+  "usId": "nfl-den-pit-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "den",
+    "alias": "Broncos",
+    "name": "Denver Broncos",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "pit",
+    "alias": "Steelers",
+    "name": "Pittsburgh Steelers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1348796",
+  "slug": "nfl-no-cin-2026-11-29",
+  "title": "Saints vs. Bengals",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T18:00:00Z",
+  "usId": "nfl-no-cin-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "no",
+    "alias": "Saints",
+    "name": "New Orleans Saints",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cin",
+    "alias": "Bengals",
+    "name": "Cincinnati Bengals",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1348798",
+  "slug": "nfl-lv-cle-2026-11-29",
+  "title": "Raiders vs. Browns",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-30T01:20:00Z",
+  "usId": "nfl-lv-cle-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lv",
+    "alias": "Raiders",
+    "name": "Las Vegas Raiders",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cle",
+    "alias": "Browns",
+    "name": "Cleveland Browns",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1348799",
+  "slug": "nfl-bal-hou-2026-11-29",
+  "title": "Ravens vs. Texans",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T18:00:00Z",
+  "usId": "nfl-bal-hou-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bal",
+    "alias": "Ravens",
+    "name": "Baltimore Ravens",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "hou",
+    "alias": "Texans",
+    "name": "Houston Texans",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1348803",
+  "slug": "nfl-nyg-ind-2026-11-29",
+  "title": "Giants vs. Colts",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T18:00:00Z",
+  "usId": "nfl-nyg-ind-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyg",
+    "alias": "Giants",
+    "name": "New York Giants",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ind",
+    "alias": "Colts",
+    "name": "Indianapolis Colts",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1348805",
+  "slug": "nfl-nyj-mia-2026-11-29",
+  "title": "Jets vs. Dolphins",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T18:00:00Z",
+  "usId": "nfl-nyj-mia-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyj",
+    "alias": "Jets",
+    "name": "New York Jets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mia",
+    "alias": "Dolphins",
+    "name": "Miami Dolphins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1348807",
+  "slug": "nfl-atl-min-2026-11-29",
+  "title": "Falcons vs. Vikings",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T18:00:00Z",
+  "usId": "nfl-atl-min-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "atl",
+    "alias": "Falcons",
+    "name": "Atlanta Falcons",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "min",
+    "alias": "Vikings",
+    "name": "Minnesota Vikings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1348810",
+  "slug": "nfl-ten-jax-2026-11-29",
+  "title": "Titans vs. Jaguars",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T18:00:00Z",
+  "usId": "nfl-ten-jax-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ten",
+    "alias": "Titans",
+    "name": "Tennessee Titans",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "jax",
+    "alias": "Jaguars",
+    "name": "Jacksonville Jaguars",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1348822",
+  "slug": "nfl-was-ari-2026-11-29",
+  "title": "Commanders vs. Cardinals",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T21:25:00Z",
+  "usId": "nfl-was-ari-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "was",
+    "alias": "Commanders",
+    "name": "Washington Commanders",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ari",
+    "alias": "Cardinals",
+    "name": "Arizona Cardinals",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1348836",
+  "slug": "nfl-sea-sf-2026-11-29",
+  "title": "Seahawks vs. 49ers",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T21:25:00Z",
+  "usId": "nfl-sea-sf-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sea",
+    "alias": "Seahawks",
+    "name": "Seattle Seahawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sf",
+    "alias": "49ers",
+    "name": "San Francisco 49ers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1348838",
+  "slug": "nfl-ne-lac-2026-11-30",
+  "title": "Patriots vs. Chargers",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T21:05:00Z",
+  "usId": "nfl-ne-lac-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ne",
+    "alias": "Patriots",
+    "name": "New England Patriots",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lac",
+    "alias": "Chargers",
+    "name": "Los Angeles Chargers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1356417",
+  "slug": "nfl-car-tb-2026-12-01",
+  "title": "Panthers vs. Buccaneers",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T01:15:00Z",
+  "usId": "nfl-car-tb-2026-11-30",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "car",
+    "alias": "Panthers",
+    "name": "Carolina Panthers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tb",
+    "alias": "Buccaneers",
+    "name": "Tampa Bay Buccaneers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1404879",
+  "slug": "nfl-ind-hou-2026-11-20-first-td-scorer",
+  "title": "Colts vs. Texans - First Touchdown Scorer",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T01:15:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ind",
+    "alias": "Colts",
+    "name": "Indianapolis Colts",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "hou",
+    "alias": "Texans",
+    "name": "Houston Texans",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1404880",
+  "slug": "nfl-ind-hou-2026-11-20-player-props",
+  "title": "Colts vs. Texans - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-20T01:15:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ind",
+    "alias": "Colts",
+    "name": "Indianapolis Colts",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "hou",
+    "alias": "Texans",
+    "name": "Houston Texans",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1410997",
+  "slug": "nfl-pit-phi-2026-11-22-player-props",
+  "title": "Steelers vs. Eagles - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "pit",
+    "alias": "Steelers",
+    "name": "Pittsburgh Steelers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phi",
+    "alias": "Eagles",
+    "name": "Philadelphia Eagles",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1410998",
+  "slug": "nfl-ari-kc-2026-11-22-player-props",
+  "title": "Cardinals vs. Chiefs - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ari",
+    "alias": "Cardinals",
+    "name": "Arizona Cardinals",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "kc",
+    "alias": "Chiefs",
+    "name": "Kansas City Chiefs",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1410999",
+  "slug": "nfl-tb-det-2026-11-22-player-props",
+  "title": "Buccaneers vs. Lions - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tb",
+    "alias": "Buccaneers",
+    "name": "Tampa Bay Buccaneers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Lions",
+    "name": "Detroit Lions",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1411008",
+  "slug": "nfl-ten-dal-2026-11-22-player-props",
+  "title": "Titans vs. Cowboys - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ten",
+    "alias": "Titans",
+    "name": "Tennessee Titans",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "dal",
+    "alias": "Cowboys",
+    "name": "Dallas Cowboys",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1411009",
+  "slug": "nfl-no-chi-2026-11-22-player-props",
+  "title": "Saints vs. Bears - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "no",
+    "alias": "Saints",
+    "name": "New Orleans Saints",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Bears",
+    "name": "Chicago Bears",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1411010",
+  "slug": "nfl-mia-buf-2026-11-22-player-props",
+  "title": "Dolphins vs. Bills - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mia",
+    "alias": "Dolphins",
+    "name": "Miami Dolphins",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "buf",
+    "alias": "Bills",
+    "name": "Buffalo Bills",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1412284",
+  "slug": "nfl-lv-den-2026-11-22-player-props",
+  "title": "Raiders vs. Broncos - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-22T21:25:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lv",
+    "alias": "Raiders",
+    "name": "Las Vegas Raiders",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "den",
+    "alias": "Broncos",
+    "name": "Denver Broncos",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1412285",
+  "slug": "nfl-jax-nyg-2026-11-22-player-props",
+  "title": "Jaguars vs. Giants - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-22T21:25:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "jax",
+    "alias": "Jaguars",
+    "name": "Jacksonville Jaguars",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyg",
+    "alias": "Giants",
+    "name": "New York Giants",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1413445",
+  "slug": "nfl-min-sf-2026-11-23-player-props",
+  "title": "Vikings vs. 49ers - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-23T01:20:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Vikings",
+    "name": "Minnesota Vikings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sf",
+    "alias": "49ers",
+    "name": "San Francisco 49ers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414233",
+  "slug": "nfl-nyj-lac-2026-11-22-player-props",
+  "title": "Jets vs. Chargers - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-22T21:05:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyj",
+    "alias": "Jets",
+    "name": "New York Jets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lac",
+    "alias": "Chargers",
+    "name": "Los Angeles Chargers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414234",
+  "slug": "nfl-bal-car-2026-11-22-player-props",
+  "title": "Ravens vs. Panthers - Player Props",
+  "eventDate": null,
+  "startTime": "2026-11-22T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bal",
+    "alias": "Ravens",
+    "name": "Baltimore Ravens",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "car",
+    "alias": "Panthers",
+    "name": "Carolina Panthers",
+    "ordering": "home"
+   }
+  ]
+ }
+]

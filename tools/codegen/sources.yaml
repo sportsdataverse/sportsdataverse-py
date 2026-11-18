@@ -475,7 +475,7 @@ providers:
     label: Polymarket
     featured: true
     home: https://polymarket.com
-    auth: none (read-only Gamma metadata + CLOB order-book routes)
+    auth: none (read-only Gamma metadata, CLOB order-book and Polymarket US gateway routes)
     flat_apis: [polymarket]
 
   kalshi:
@@ -1121,6 +1121,7 @@ categories:
       - sportsdataverse.nfl.nfl_players
       - sportsdataverse.find
       - sportsdataverse.discover
+      - sportsdataverse.odds.market_join
     functions:
       - "*_team_ids"
 

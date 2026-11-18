@@ -81832,3 +81832,36 @@ ncaa_box_events:
   blk: 'Shots he blocked.'
   tov: 'Turnovers (a team turnover is no player''s).'
   pf: 'Personal fouls (technicals are not counted).'
+join_espn_kalshi:
+  away_abbreviation: ESPN abbreviation of the away team (the scoreboard's away side, even when the venue lists it as home).
+  away_prob: Away win probability, de-vigged with home_prob so the two sum to 1.
+  away_yes_ask: Best ask for YES on the away team's market, in dollars from 0 to 1 (Kalshi yes_ask_dollars).
+  away_yes_bid: Best bid for YES on the away team's market, in dollars from 0 to 1 (Kalshi yes_bid_dollars).
+  game_date_et: The game's start as a US-Eastern calendar date; the day a Kalshi ticker or Gamma eventDate names.
+  game_id: ESPN game (event) id, in the dtype of the ESPN scoreboard frame passed in, so the result joins back to it.
+  home_abbreviation: ESPN abbreviation of the home team.
+  home_prob: 'Home win probability: the two bid/ask midpoints de-vigged together (multiplicative unless method=''shin'');
+    null with a prob_note when a side has no two-sided book.'
+  home_yes_ask: Best ask for YES on the home team's market, in dollars from 0 to 1 (Kalshi yes_ask_dollars).
+  home_yes_bid: Best bid for YES on the home team's market, in dollars from 0 to 1 (Kalshi yes_bid_dollars).
+  kalshi_away_ticker: Kalshi market ticker that pays out if the away team wins.
+  kalshi_event_ticker: Kalshi event ticker of the matched game, e.g. KXNBAGAME-26NOV22BOSGSW; null when no market matched.
+  kalshi_home_ticker: Kalshi market ticker that pays out if the home team wins.
+  kalshi_scheduled_date: 'Date in the Kalshi ticker: the day the game was first scheduled for, kept when it is postponed.'
+  matched_by: 'How the row was joined, ''+''-separated: the team rule (code, alias or name), the date rule (scheduled_date,
+    nearest_date, event_date or start_time) and ''swapped'' when the venue lists the teams in the other order; null when nothing
+    matched.'
+  prob_note: Why home_prob and away_prob are null (a missing price, or a draw that is possible but unpriced); null when they
+    are set.
+join_espn_polymarket:
+  away_abbreviation: ESPN abbreviation of the away team (the scoreboard's away side, even when the venue lists it as home).
+  game_date_et: The game's start as a US-Eastern calendar date; the day a Kalshi ticker or Gamma eventDate names.
+  game_id: ESPN game (event) id, in the dtype of the ESPN scoreboard frame passed in, so the result joins back to it.
+  gamma_event_id: Polymarket Gamma event id of the matched game, as text.
+  gamma_slug: Polymarket Gamma event slug, e.g. nba-sas-sac-2026-11-06.
+  home_abbreviation: ESPN abbreviation of the home team.
+  matched_by: 'How the row was joined, ''+''-separated: the team rule (code, alias or name), the date rule (scheduled_date,
+    nearest_date, event_date or start_time) and ''swapped'' when the venue lists the teams in the other order; null when nothing
+    matched.'
+  polymarket_us_slug: Polymarket US gateway market slug built from the Gamma usId, e.g. aec-nba-sa-sac-2026-11-06; null when
+    Gamma carries no usId.
