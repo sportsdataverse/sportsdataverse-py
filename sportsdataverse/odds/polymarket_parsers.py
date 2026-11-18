@@ -52,6 +52,8 @@ _ID = re.compile(r"(^|_)(id|code|ticker)$")
 # envelope's own scalars (next_cursor, limit, count) never become a row.
 _DATA_KEY = "data"
 _BOOK_SIDES = {"bids": "bid", "asks": "ask"}
+# The single keys that wrap a payload; only these are unwrapped, so a future one-key body is never guessed at.
+_ENVELOPE_KEYS = {"markets", "events", "marketData"}
 
 
 def _book_rows(raw: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -76,9 +78,9 @@ def _as_rows(raw: Any) -> List[Dict[str, Any]]:
         return _book_rows(body)
     if isinstance(body.get(_DATA_KEY), list):
         return [r for r in body[_DATA_KEY] if isinstance(r, dict)]
-    if len(body) == 1:
-        # A single-key envelope wraps the payload (US ``{"markets": [...]}``, ``{"marketData": {...}}``).
-        # A one-value scalar dict (clob ``{"mid": "0.5"}``) falls through and stays one row.
+    if len(body) == 1 and set(body) <= _ENVELOPE_KEYS:
+        # A known single-key envelope wraps the payload (US ``{"markets": [...]}``, ``{"marketData": {...}}``).
+        # Any other one-key body (clob ``{"mid": "0.5"}``, an ``{"error": {...}}`` object) stays one row.
         (inner,) = body.values()
         if isinstance(inner, list):
             return [r for r in inner if isinstance(r, dict)]

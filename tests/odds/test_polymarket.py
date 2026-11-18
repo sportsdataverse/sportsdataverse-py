@@ -130,6 +130,26 @@ def test_single_key_scalar_and_empty_envelopes():
         assert parse_polymarket(payload).height == 0, payload
 
 
+def test_only_known_envelope_keys_are_unwrapped():
+    """An unknown one-key object (a nested error) is one row with its prefix, never unwrapped."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    df = parse_polymarket({"error": {"code": "not_found", "message": "no market"}})
+    assert df.height == 1 and {"error_code", "error_message"} <= set(df.columns)
+
+
+@pytest.mark.parametrize(
+    "fixture,schema", [("gateway__v1__markets", "us_markets"), ("gateway__v1__markets__slug__bbo", "us_market_bbo")]
+)
+def test_us_returns_schema_matches_the_parser_on_its_capture(fixture, schema):
+    """The committed returns table is the parser's output on the committed capture (names and order)."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    path = YAML_PATH.parents[1] / "schemas" / "native" / "polymarket" / f"{schema}.yaml"
+    columns = [c["name"] for c in yaml.safe_load(path.read_text(encoding="utf-8"))["columns"]]
+    assert columns == parse_polymarket(load(fixture)).columns
+
+
 def test_empty_payload_is_zero_rows():
     from sportsdataverse.odds.polymarket_parsers import parse_polymarket
 
