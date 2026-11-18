@@ -81938,7 +81938,12 @@ us_market_book:
 us_market_settlement:
   slug: Market slug the settlement is for (the `slug` argument).
   settlement: Price per contract the market settled at, in dollars, as Float64 (the captured expired game settled at
-    1, its book's settlementPx). A market that has not settled answers HTTP 404, raised as NoDataError.
+    1, its book's settlementPx). Polymarket's own schema declares a 404 for this route, answered for a market that has
+    not settled (probed 2026-11-18) and raised as NoDataError.
+us_market_by_id:
+  id: Polymarket US market id, a numeric string (the `id` argument); its own namespace, not a Gamma market id.
+us_market_by_slug:
+  id: Polymarket US market id, a numeric string and the key for `polymarket_us_market_by_id`; not a Gamma market id.
 join_espn_kalshi:
   away_abbreviation: ESPN abbreviation of the away team (the scoreboard's away side, even when the venue lists it as home).
   away_prob: Away win probability, de-vigged with home_prob so the two sum to 1.

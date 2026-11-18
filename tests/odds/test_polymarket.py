@@ -191,7 +191,26 @@ def test_us_settlement_is_one_float_row():
 
     df = parse_polymarket(load("gateway__v1__markets__slug__settlement"))
     assert df.rows() == [("aec-nba-sa-sac-2026-11-06", 1.0)] and df.schema["settlement"] == pl.Float64
-    assert parse_polymarket({"slug": "s", "settlement": 0.5})["settlement"].to_list() == [0.5]
+    zero = parse_polymarket({"slug": "s", "settlement": 0})  # an int body still comes out Float64
+    assert zero.schema["settlement"] == pl.Float64 and zero["settlement"].to_list() == [0.0]
+
+
+@pytest.mark.parametrize("bad", ["N/A", True])
+def test_us_settlement_that_is_not_a_number_is_kept_and_warned(bad):
+    """A value the Float64 cast would null (or a boolean it would turn into a price) is refused, not forced."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    with pytest.warns(SchemaDriftWarning, match="settlement"):
+        df = parse_polymarket({"slug": "s", "settlement": bad})
+    assert df["settlement"].to_list() == [bad]
+
+
+def test_us_book_with_a_malformed_side_is_zero_rows():
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    assert parse_polymarket({"marketData": {"bids": 5, "offers": []}}).height == 0
+    assert parse_polymarket({"bids": 5, "asks": None}).height == 0
 
 
 def test_us_single_market_is_the_listing_row():

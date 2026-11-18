@@ -712,7 +712,7 @@ One Polymarket US market by its gateway id.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | String | Polymarket US market id, a numeric string and the key for `polymarket_us_market_by_id` (the captured unfiltered page started at "1"); not a Gamma market id. |
+| `id` | String | Polymarket US market id, a numeric string (the `id` argument); its own namespace, not a Gamma market id. |
 | `question` | String | Market title as Polymarket US displays it (e.g. "Los Angeles vs. Tennessee"). |
 | `slug` | String | Market slug, the key for `polymarket_us_market_bbo`, `_book`, `_settlement` and `_by_slug`. A game-winner (moneyline) market's is "aec-" plus the Gamma event's usId (e.g. "aec-nfl-lac-ten-2025-11-02"); futures have their own ("tec-"), so pass the listing's slug rather than building one. |
 | `end_date` | String | ISO-8601 UTC time the market is scheduled to close. |
@@ -795,7 +795,7 @@ One Polymarket US market by its slug.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | String | Polymarket US market id, a numeric string and the key for `polymarket_us_market_by_id` (the captured unfiltered page started at "1"); not a Gamma market id. |
+| `id` | String | Polymarket US market id, a numeric string and the key for `polymarket_us_market_by_id`; not a Gamma market id. |
 | `question` | String | Market title as Polymarket US displays it (e.g. "Los Angeles vs. Tennessee"). |
 | `slug` | String | Market slug, the key for `polymarket_us_market_bbo`, `_book`, `_settlement` and `_by_slug`. A game-winner (moneyline) market's is "aec-" plus the Gamma event's usId (e.g. "aec-nfl-lac-ten-2025-11-02"); futures have their own ("tec-"), so pass the listing's slug rather than building one. |
 | `end_date` | String | ISO-8601 UTC time the market is scheduled to close. |
@@ -879,7 +879,7 @@ Settlement price of one Polymarket US market slug, once the market has settled.
 | col_name | type | description |
 |---|---|---|
 | `slug` | String | Market slug the settlement is for (the `slug` argument). |
-| `settlement` | Float64 | Price per contract the market settled at, in dollars, as Float64 (the captured expired game settled at 1, its book's settlementPx). A market that has not settled answers HTTP 404, raised as NoDataError. |
+| `settlement` | Float64 | Price per contract the market settled at, in dollars, as Float64 (the captured expired game settled at 1, its book's settlementPx). Polymarket's own schema declares a 404 for this route, answered for a market that has not settled (probed 2026-11-18) and raised as NoDataError. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

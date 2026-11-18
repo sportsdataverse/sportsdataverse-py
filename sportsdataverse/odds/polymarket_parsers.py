@@ -41,13 +41,14 @@ from __future__ import annotations
 
 import json
 import re
+import warnings
 from typing import Any, Dict, List, Union
 
 import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _data_only
+from sportsdataverse.errors import SchemaDriftWarning, _data_only
 
 __all__ = ["parse_polymarket"]
 
@@ -72,7 +73,8 @@ def _book_rows(raw: Dict[str, Any]) -> List[Dict[str, Any]]:
     scalars = {k: v for k, v in raw.items() if k not in _BOOK_SIDES and not isinstance(v, (list, dict))}
     rows: List[Dict[str, Any]] = []
     for key, side in _BOOK_SIDES.items():
-        for level in raw.get(key) or []:
+        levels = raw.get(key)
+        for level in levels if isinstance(levels, list) else []:  # a malformed side is no levels, never a raise
             if isinstance(level, dict):
                 rows.append({**scalars, "side": side, **level})
     return rows
@@ -139,8 +141,27 @@ def _to_frame(rows: List[Dict[str, Any]]) -> pl.DataFrame:
         if dtype.is_float():
             expr = expr.cast(pl.Int64, strict=False)
         ids.append(expr.cast(pl.String).alias(name))
-    ids += [pl.col(c).cast(pl.Float64, strict=False) for c in _FLOAT_COLS & set(df.columns)]
-    return df.with_columns(ids) if ids else df
+    df = df.with_columns(ids) if ids else df
+    return _pin_floats(df)
+
+
+def _pin_floats(df: pl.DataFrame) -> pl.DataFrame:
+    """Cast :data:`_FLOAT_COLS` to Float64; refuse (keep as sent, warn) a column the cast would null or a boolean."""
+    pinned, refused = [], []
+    for name in sorted(_FLOAT_COLS & set(df.columns)):
+        src = df[name]
+        out = src.cast(pl.Float64, strict=False)
+        if src.dtype == pl.Boolean or out.null_count() != src.null_count():
+            refused.append(name)
+        else:
+            pinned.append(out)
+    if refused:
+        warnings.warn(
+            f"parse_polymarket: columns {refused} hold values that are not numbers; kept as they came",
+            SchemaDriftWarning,
+            stacklevel=5,  # _pin_floats < _to_frame < parse_polymarket < _data_only < caller
+        )
+    return df.with_columns(pinned) if pinned else df
 
 
 @_data_only
