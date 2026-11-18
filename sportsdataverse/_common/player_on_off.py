@@ -260,7 +260,8 @@ def player_on_off(
             columns. ``None`` leaves them null (the league adapters always pass it).
         tenure: Count the off side over his span with the team (stats.nba.com's window; the
             NBA / WNBA adapters) instead of the team's whole season (college). It needs
-            ``game_dates``; a player with no span keeps the whole season.
+            ``game_dates``; a player with no span, and every player of a team-season with an
+            undated game, keeps the whole season.
 
     Returns:
         One row per ``(season, team_id, player_id)`` in :func:`player_on_off_schema`: ``games`` he
@@ -300,8 +301,19 @@ def player_on_off(
     else:
         span = _span_off(rows, game_dates)
     out = out.join(span, on=[*keys, "player_id"], how="left", validate="1:1")
-    if tenure:  # stats.nba.com's window: the team's games in his span, not its whole season
-        out = out.with_columns(pl.coalesce(f"{c}_off_span", f"{c}_off").alias(f"{c}_off") for c in _TOTALS)
+    if tenure and game_dates is not None:  # stats.nba.com's window: his span, not the team's season
+        # a team-season with an undated game cannot place it in any span: keep its whole season, so
+        # the on and off sides never count different games
+        dated = game_dates.select(pl.col("game_id").cast(pl.Utf8)).drop_nulls().unique()
+        team_game = _sides(games_with_possessions(rows)).select(*keys, pl.col("game_id").cast(pl.Utf8)).unique()
+        undated = team_game.join(dated, on="game_id", how="anti").select(keys).unique()
+        out = out.join(undated.with_columns(pl.lit(True).alias("_undated")), on=keys, how="left").with_columns(
+            pl.when(pl.col("_undated").is_null())
+            .then(pl.coalesce(f"{c}_off_span", f"{c}_off"))
+            .otherwise(pl.col(f"{c}_off"))
+            .alias(f"{c}_off")
+            for c in _TOTALS
+        )
     out = _side_rates(_side_rates(_side_rates(out, "on"), "off"), "off_span").with_columns(
         *[(pl.col(f"{r}_on") - pl.col(f"{r}_off")).alias(f"{r}_diff") for r in _RATINGS],
         *[(pl.col(f"{r}_on") - pl.col(f"{r}_off_span")).alias(f"{r}_diff_span") for r in _RATINGS],

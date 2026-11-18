@@ -283,6 +283,27 @@ def test_span_columns_are_null_without_dates() -> None:
     assert player_on_off(_rows(), player_dtype=pl.Int64(), min_poss=400, tenure=True).equals(out)
 
 
+def test_an_undated_game_keeps_its_team_on_the_whole_season() -> None:
+    """With one game undated its team cannot place it in a span, so on and off stay on the same games."""
+    dates = adapter._game_dates(_read("schedule"))
+    team = NBA_TEAMS[0]
+    sides = _rows().filter((pl.col("home_team_id") == team) | (pl.col("away_team_id") == team))
+    gone = sides["game_id"].cast(pl.Utf8).unique().sort()[0]
+    out = player_on_off(
+        _rows(),
+        player_dtype=pl.Int64(),
+        min_poss=400,
+        game_dates=dates.filter(pl.col("game_id") != gone),
+        tenure=True,
+    )
+    season, tenure = _on_off(tenure=False), _on_off()
+    cols = [f"{c}_off" for c in ("poss", "opp_poss", "pts", "opp_pts")]
+    same = out.filter(team_id=team).select("player_id", *cols).sort("player_id")
+    assert same.equals(season.filter(team_id=team).select("player_id", *cols).sort("player_id"))
+    other = NBA_TEAMS[1]
+    assert out.filter(team_id=other).select(cols).equals(tenure.filter(team_id=other).select(cols))
+
+
 def test_wowy_splits_add_up_to_the_team() -> None:
     w = _wowy().filter(pl.col("team_id").is_in(NBA_TEAMS))
     team = _team_totals()
