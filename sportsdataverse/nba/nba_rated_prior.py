@@ -29,7 +29,7 @@ which the stats schedule does not list. The holdout's match counts are pinned in
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal, overload
+from typing import TYPE_CHECKING, Callable, Literal, overload
 
 import polars as pl
 from scipy.stats import norm
@@ -61,6 +61,19 @@ RATED_PRIOR_SCHEMA: dict[str, pl.DataType] = {
 }
 
 _STATS_GAME_TYPES = ("regular-season", "play-in", "playoffs", "nba-cup")
+#: The columns :func:`rated_home_probs` adds.
+_RATED_COLS = (
+    "home_adj_net_rtg",
+    "home_adj_net_rtg_rank",
+    "away_adj_net_rtg",
+    "away_adj_net_rtg_rank",
+    "hfa",
+    "home_term_pts",
+    "poss",
+    "margin_sd",
+    "exp_home_margin",
+    "rated_home_prob",
+)
 
 
 def rated_home_probs(
@@ -78,24 +91,36 @@ def rated_home_probs(
             None rates every team average until it has possessions.
 
     Returns:
-        ``games`` plus ``home_adj_net_rtg``, ``away_adj_net_rtg``, ``hfa`` (per 100),
-        ``exp_home_margin`` (points) and ``rated_home_prob``. A team with no rating yet is average.
+        ``games`` plus ``home_adj_net_rtg``, ``away_adj_net_rtg``, their ranks among the as-of
+        ratings (``home_adj_net_rtg_rank`` / ``away_adj_net_rtg_rank``, 1 the best; null with no
+        ratings), ``hfa`` (per 100), ``home_term_pts`` (the home term the margin adds, in points:
+        ``2 * hfa * poss / 100``, 0 at a neutral site), ``poss`` (possessions per team per game), ``margin_sd``
+        (points), ``exp_home_margin`` (points) and ``rated_home_prob``. A team with no rating yet is
+        average.
     """
     out = []
     for (day,), sub in games.group_by("game_date", maintain_order=True):
         model = as_of_game_model(rows.filter(pl.col("game_date") < day), league_id=league_id, prior=prior)
         assert model.ratings.schema["team_id"] == sub.schema["home_team_id"], "team_id dtype differs"
-        net = model.ratings.select("team_id", "adj_net_rtg")
-        rated = sub.join(
-            net.rename({"team_id": "home_team_id", "adj_net_rtg": "home_adj_net_rtg"}), on="home_team_id", how="left"
-        ).join(
-            net.rename({"team_id": "away_team_id", "adj_net_rtg": "away_adj_net_rtg"}), on="away_team_id", how="left"
+        net = model.ratings.select(
+            "team_id",
+            "adj_net_rtg",
+            pl.col("adj_net_rtg").rank("min", descending=True).cast(pl.Float64).alias("adj_net_rtg_rank"),
         )
+        rated = sub
+        for side in ("home", "away"):
+            rated = rated.join(net.rename({c: f"{side}_{c}" for c in net.columns}), on=f"{side}_team_id", how="left")
         home_term = pl.when(pl.col("neutral_site").fill_null(False)).then(0.0).otherwise(2.0 * model.hfa)
         margin = (pl.col("home_adj_net_rtg").fill_null(0.0) - pl.col("away_adj_net_rtg").fill_null(0.0) + home_term) * (
             model.poss / 100.0
         )
-        rated = rated.with_columns(pl.lit(model.hfa).alias("hfa"), margin.alias("exp_home_margin"))
+        rated = rated.with_columns(
+            pl.lit(model.hfa).alias("hfa"),
+            (home_term * model.poss / 100.0).alias("home_term_pts"),
+            pl.lit(model.poss).alias("poss"),
+            pl.lit(model.margin_sd).alias("margin_sd"),
+            margin.alias("exp_home_margin"),
+        )
         out.append(
             rated.with_columns(
                 pl.Series("rated_home_prob", norm.cdf(rated["exp_home_margin"].to_numpy() / model.margin_sd))
@@ -103,9 +128,7 @@ def rated_home_probs(
         )
     if not out:
         return games.with_columns(
-            *(pl.lit(None, dtype=pl.Float64).alias(c) for c in ("home_adj_net_rtg", "away_adj_net_rtg", "hfa")),
-            pl.lit(None, dtype=pl.Float64).alias("exp_home_margin"),
-            pl.lit(None, dtype=pl.Float64).alias("rated_home_prob"),
+            *(pl.lit(None, dtype=pl.Float64).alias(c) for c in _RATED_COLS),
         )
     return pl.concat(out).sort("game_date", maintain_order=True)
 
@@ -136,6 +159,27 @@ def _possession_rows(league_id: str, season: int) -> tuple[pl.DataFrame, pl.Data
         games.select(pl.col("stats_game_id").alias("game_id"), "game_date"), on="game_id", how="inner", validate="m:1"
     )
     return rows, games
+
+
+def _teams(games: pl.DataFrame) -> list[int]:
+    return sorted(set(games["home_team_id"].to_list()) | set(games["away_team_id"].to_list()))
+
+
+def _season_prior(
+    possession_rows: Callable[[str, int], tuple[pl.DataFrame, pl.DataFrame]],
+    league_id: str,
+    season: int,
+    games: pl.DataFrame,
+) -> PreseasonPrior | None:
+    """The season's preseason prior from last season's possessions (``possession_rows(league_id, season - 1)``).
+
+    None before the release floor: every team is average until it has possessions.
+    """
+    try:
+        prev_rows, prev_games = possession_rows(league_id, season - 1)
+    except SeasonNotFoundError:
+        return None
+    return preseason_prior(prev_rows, _teams(games), league_id=league_id, prev_teams=_teams(prev_games))
 
 
 def _espn_matched(season: int, league_id: str, games: pl.DataFrame) -> pl.DataFrame:
@@ -227,17 +271,7 @@ def nba_rated_priors(
     if league_id not in ("00", "10"):
         raise ValueError(f"league_id must be '00' or '10', got {league_id!r}")
     rows, games = _possession_rows(league_id, season)
-    prior = None
-    try:
-        prev_rows, prev_games = _possession_rows(league_id, season - 1)
-        prior = preseason_prior(
-            prev_rows,
-            sorted(set(games["home_team_id"].to_list()) | set(games["away_team_id"].to_list())),
-            league_id=league_id,
-            prev_teams=sorted(set(prev_games["home_team_id"].to_list()) | set(prev_games["away_team_id"].to_list())),
-        )
-    except SeasonNotFoundError:  # the season before the release floor: average until possessions arrive
-        pass
+    prior = _season_prior(_possession_rows, league_id, season, games)
     matched = _espn_matched(season, league_id, games)
     to_rate = matched.filter(pl.col("stats_game_id").is_not_null()).select(
         "game_id", "game_date", "neutral_site", pl.col("_hs").alias("home_team_id"), pl.col("_as").alias("away_team_id")

@@ -58,3 +58,30 @@ columns:
 - name: rated_home_prob
   type: double
   description: ''
+- name: wp_prior_home_rating
+  type: double
+  description: ''
+- name: wp_prior_away_rating
+  type: double
+  description: ''
+- name: wp_prior_home_rank
+  type: double
+  description: ''
+- name: wp_prior_away_rank
+  type: double
+  description: ''
+- name: wp_prior_poss
+  type: double
+  description: ''
+- name: wp_prior_hfa
+  type: double
+  description: ''
+- name: wp_prior_margin_sd
+  type: double
+  description: ''
+- name: wp_prior_exp_home_margin
+  type: double
+  description: ''
+- name: wp_prior_home_prob
+  type: double
+  description: ''
