@@ -70,6 +70,7 @@ import polars as pl
 
 from sportsdataverse._common.game_impact import credit_free_throws_to_foul_lineup
 from sportsdataverse.nba.nba_possession_flags import TRANSITION_START_TYPES, add_possession_flags
+from sportsdataverse.nba.nba_possession_rules import credit_defense_scoring
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -334,6 +335,54 @@ def _event_states(ev: pl.DataFrame, poss: pl.DataFrame, window: float) -> pl.Dat
     )
 
 
+def _carried_points(possessions: pl.DataFrame, events: pl.DataFrame) -> pl.DataFrame:
+    """``_carried``: what each possession's team scored on defense and the release credits to it.
+
+    A score by the defense inside a possession (a technical or flagrant free throw, or a basket a
+    misplaced boundary puts there) is not the offense's, so no event's ``points`` holds it. The
+    possessions release credits it to the scoring team's next possession
+    (:func:`~sportsdataverse.nba.nba_possession_rules.credit_defense_scoring`, the same rule here),
+    so a game's possession points add up to its final score. ``count_as_possession`` is read when
+    the frame has it (the pro releases do), else every possession counts; in the 2025 and 2026
+    NBA and WNBA releases it moves none of the 604 carries. The rule's fallback to an earlier
+    possession (no later one in the period) can put a score made after a possession into its
+    start's label; it is rare (6 of 272 carries in 2025).
+    """
+    home = pl.col("offense_team_id") == pl.col("home_team_id")
+    scored = (
+        events.group_by(_KEY)
+        .agg(pl.when(home).then(pl.col("_da")).otherwise(pl.col("_dh")).sum().alias("_def"))
+        .filter(pl.col("_def") != 0)
+    )
+    if scored.is_empty():
+        return pl.DataFrame(schema={"game_id": pl.Utf8, "possession_number": pl.Int64, "_carried": pl.Int64})
+    counted = "count_as_possession" in possessions.columns
+    recs = (
+        possessions.select(
+            pl.col("game_id").cast(pl.Utf8),
+            "possession_number",
+            "period",
+            "offense_team_id",
+            "defense_team_id",
+            (pl.col("count_as_possession").fill_null(True) if counted else pl.lit(True)).alias("count_as_possession"),
+        )
+        .join(scored.select("game_id").unique(), on="game_id", how="semi")
+        .join(scored, on=_KEY, how="left")
+        .sort(_KEY)
+    )
+    out: list[tuple[str, int, int]] = []
+    for (_,), g in recs.group_by("game_id"):
+        rows = [{**r, "points": 0} for r in g.sort("possession_number").to_dicts()]
+        carries: list[tuple[int, int, int, dict[str, int]]] = [
+            (i, r["defense_team_id"], r["_def"], {}) for i, r in enumerate(rows) if r["_def"]
+        ]
+        credit_defense_scoring(rows, carries)
+        out += [(r["game_id"], r["possession_number"], r["points"]) for r in rows if r["points"]]
+    return pl.DataFrame(
+        out, schema={"game_id": pl.Utf8, "possession_number": pl.Int64, "_carried": pl.Int64}, orient="row"
+    )
+
+
 def _start_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
     """One state row per possession: its start, at the clock of the change of possession."""
     pre = ev.select(
@@ -358,7 +407,9 @@ def epv_states(
             ``wnba_stats_possessions``): ``game_id``, ``period``, ``possession_number``,
             ``number_in_period``, ``start_order_index``, ``end_order_index``,
             ``start_seconds_remaining``, ``end_seconds_remaining``, ``possession_start_type``,
-            ``offense_team_id``, ``defense_team_id`` and ``off_player_1..5`` / ``def_player_1..5``.
+            ``offense_team_id``, ``defense_team_id`` and ``off_player_1..5`` / ``def_player_1..5``;
+            ``count_as_possession`` too when it has it (without it every possession counts for
+            where a score by the defense is credited, ``remaining_points`` below).
         pbp: Their play-by-play (``nba_stats_pbp`` / ``wnba_stats_pbp``): ``season``, ``game_id``,
             ``order_index``, ``period``, ``seconds_remaining``, ``event_type``, ``sub_type``,
             ``description``, ``shot_distance``, ``shot_value``, ``team_id``, ``person_id``,
@@ -372,7 +423,11 @@ def epv_states(
         One row per state, in game order: ``step`` 0 is the possession's start (no event columns),
         then one row per event. Carries :data:`EPV_FEATURES`, ``points`` (the offense's points on
         the event), ``remaining_points`` (the offense's points after the state, to the end of the
-        possession: the model's label), ``is_last`` (the possession's last event),
+        possession: the model's label). The start's label is the possessions release's ``points``:
+        it also holds a score the team made on defense (a technical free throw, say), which is no
+        event's ``points`` and which the release credits to the team's next possession in the
+        period (else an earlier one), so it is not only points scored from that state.
+        ``is_last`` (the possession's last event),
         ``next_in_period`` and the event's ``team_id`` / ``person_id`` / ``event_type`` / ``sub_type`` /
         ``description`` / player slots.
 
@@ -417,7 +472,8 @@ def epv_states(
     out = pl.concat(
         [starts.join(start_margin, on=_KEY), events.join(start_margin, on=_KEY, how="inner")],
         how="diagonal_relaxed",
-    )
+    ).join(_carried_points(possessions, events), on=_KEY, how="left")
+    after = pl.col("points").sum().over(_KEY) - pl.col("points").cum_sum().over(_KEY)
     return (
         out.with_columns(
             pl.col("period").clip(upper_bound=5).cast(pl.Int32),
@@ -426,7 +482,10 @@ def epv_states(
         )
         .sort("game_id", "possession_number", "step")
         .with_columns(
-            (pl.col("points").sum().over(_KEY) - pl.col("points").cum_sum().over(_KEY)).alias("remaining_points"),
+            pl.when(pl.col("step") == 0)
+            .then(after + pl.col("_carried").fill_null(0))
+            .otherwise(after)
+            .alias("remaining_points"),
             ((pl.col("step") == pl.col("step").max().over(_KEY)) & (pl.col("step") > 0)).alias("is_last"),
             pl.col("_next_in_period").alias("next_in_period"),
         )
