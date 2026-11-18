@@ -10039,8 +10039,8 @@
   group: bb-player-on-off
   finding: BB-D5
   file: sportsdataverse/_common/player_on_off.py
-  snippet: '    if tenure:  # stats.nba.com''s window: the team''s games in his span, not its whole season'
-  mutant: '    if False:  # stats.nba.com''s window: the team''s games in his span, not its whole season'
+  snippet: '    if tenure and game_dates is not None:  # stats.nba.com''s window: his span, not the team''s season'
+  mutant: '    if False:  # stats.nba.com''s window: his span, not the team''s season'
   test: tests/nba/test_nba_player_on_off.py::test_span_follows_traded_players_like_stats_nba
   expected: kill
   note: The pros' off side counts only the team's games in his span (stats.nba.com's window); the whole season would credit a traded player with the games before he joined.
