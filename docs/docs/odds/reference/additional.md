@@ -562,7 +562,7 @@ One row per ESPN game: `game_id`, `game_date_et`, `away_abbreviation`, `home_abb
 | col_name | type | description |
 |---|---|---|
 | `game_id` | Int64 | ESPN game (event) id, in the dtype of the ESPN scoreboard frame passed in, so the result joins back to it. |
-| `game_date_et` | Date | The game's start as a US-Eastern calendar date; the day a Kalshi ticker or Gamma eventDate names. |
+| `game_date_et` | Date | ESPN's start time as a US-Eastern calendar date. An exact match has the venue's date equal to it; a nearest_date or start_time match (see matched_by) can carry a different venue date. |
 | `away_abbreviation` | String | ESPN abbreviation of the away team (the scoreboard's away side, even when the venue lists it as home). |
 | `home_abbreviation` | String | ESPN abbreviation of the home team. |
 | `kalshi_event_ticker` | String | Kalshi event ticker of the matched game, e.g. KXNBAGAME-26NOV22BOSGSW; null when no market matched. |
@@ -573,9 +573,9 @@ One row per ESPN game: `game_id`, `game_date_et`, `away_abbreviation`, `home_abb
 | `away_yes_ask` | Float64 | Best ask for YES on the away team's market, in dollars from 0 to 1 (Kalshi yes_ask_dollars). |
 | `home_yes_bid` | Float64 | Best bid for YES on the home team's market, in dollars from 0 to 1 (Kalshi yes_bid_dollars). |
 | `home_yes_ask` | Float64 | Best ask for YES on the home team's market, in dollars from 0 to 1 (Kalshi yes_ask_dollars). |
-| `home_prob` | Float64 | Home win probability: the two bid/ask midpoints de-vigged together (multiplicative unless method='shin'); null with a prob_note when a side has no two-sided book. |
+| `home_prob` | Float64 | Home win probability: the two bid/ask midpoints de-vigged together (multiplicative unless method='shin'). Kalshi pays $0.50 on each side of a tied NFL game, so there it counts a tie as half a win. Null when no market matched or a side has no two-sided book (see prob_note). |
 | `away_prob` | Float64 | Away win probability, de-vigged with home_prob so the two sum to 1. |
-| `prob_note` | String | Why home_prob and away_prob are null (a missing price, or a draw that is possible but unpriced); null when they are set. |
+| `prob_note` | String | Why home_prob and away_prob are null for a matched game (a missing or one-sided price, or a draw that is possible but unpriced); null when they are set, and null for an unmatched game (check matched_by). |
 | `matched_by` | String | How the row was joined, '+'-separated: the team rule (code, alias or name), the date rule (scheduled_date, nearest_date, event_date or start_time) and 'swapped' when the venue lists the teams in the other order; null when nothing matched. |
 
 **Raises**
@@ -624,7 +624,7 @@ One row per ESPN game: `game_id`, `game_date_et`, `away_abbreviation`, `home_abb
 | col_name | type | description |
 |---|---|---|
 | `game_id` | Int64 | ESPN game (event) id, in the dtype of the ESPN scoreboard frame passed in, so the result joins back to it. |
-| `game_date_et` | Date | The game's start as a US-Eastern calendar date; the day a Kalshi ticker or Gamma eventDate names. |
+| `game_date_et` | Date | ESPN's start time as a US-Eastern calendar date. An exact match has the venue's date equal to it; a nearest_date or start_time match (see matched_by) can carry a different venue date. |
 | `away_abbreviation` | String | ESPN abbreviation of the away team (the scoreboard's away side, even when the venue lists it as home). |
 | `home_abbreviation` | String | ESPN abbreviation of the home team. |
 | `gamma_event_id` | String | Polymarket Gamma event id of the matched game, as text. |

@@ -15,7 +15,13 @@ and the day. The rules:
   ``max_date_gap_days`` is the fallback, nearest first.
 * **Polymarket Gamma** events carry ``eventDate`` (the local game date) and
   ``startTime`` (UTC). The event date must equal the Eastern date, or the start
-  time must fall within ``max_start_gap_hours`` of ESPN's.
+  time must fall within ``max_start_gap_hours`` of ESPN's. Only game events count
+  (slug ``{sport}-{away}-{home}-{date}``); the derivative events Gamma files in the
+  same series (``-exact-margin``, ``-player-props``) are skipped.
+* **Ties.** Kalshi settles a tied NFL game at $0.50 on each team's contract, so
+  the tie is priced into both sides and ``home_prob`` reads as a win counting a tie
+  as half. A league where a draw needs its own price sets ``draw_possible``, and
+  its probabilities stay null without one.
 
 Each ESPN game gets at most one market event and each market event serves at most
 one game. ``matched_by`` says how a row was joined, ``+``-separated: how the teams
@@ -503,11 +509,18 @@ def join_espn_polymarket(
     return _frame(rows, _GAMMA_SCHEMA, espn, return_as_pandas)
 
 
+#: A Gamma game event's slug: ``{sport}-{away}-{home}-{YYYY-MM-DD}``. The series also holds derivative
+#: events on the same teams and date (``...-exact-margin``, ``...-player-props``), which are not the game.
+_GAMMA_GAME_SLUG = re.compile(r"^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-\d{4}-\d{2}-\d{2}$")
+
+
 def _gamma_events(gamma: pl.DataFrame) -> list[dict]:
     if gamma.is_empty() or "teams" not in gamma.columns:
         return []
     out = []
     for row in gamma.to_dicts():
+        if not _GAMMA_GAME_SLUG.match(str(row.get("slug") or "")):
+            continue
         teams = row.get("teams")
         if isinstance(teams, str):
             try:

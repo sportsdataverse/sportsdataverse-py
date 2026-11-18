@@ -82,7 +82,22 @@ def test_gamma_join_matches_every_game(recorded):
     hit = out.filter(pl.col("matched_by").is_not_null())
     assert hit["gamma_slug"].n_unique() == hit.height
     assert hit.height == espn.height  # Gamma lists the whole recorded week in all three leagues
-    assert hit["polymarket_us_slug"].str.starts_with("aec-").all()
+    # Every matched event Gamma gave a usId carries its US slug (.all() alone would skip nulls);
+    # the recorded NHL series carries no usId at all.
+    with_us = gamma.filter(pl.col("us_id").is_not_null())["slug"].to_list() if "us_id" in gamma.columns else []
+    has_us = hit.filter(pl.col("gamma_slug").is_in(with_us))
+    assert has_us["polymarket_us_slug"].null_count() == 0
+    assert has_us["polymarket_us_slug"].str.starts_with("aec-").all()
+    assert (has_us.height > 0) == (league != "nhl")
+    # Only game events: the series' -exact-margin / -player-props events share the teams and date.
+    assert hit["gamma_slug"].str.contains(r"^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-\d{4}-\d{2}-\d{2}$").all()
+
+
+def test_gamma_join_does_not_depend_on_event_order(recorded):
+    league, espn, _, gamma = recorded
+    forward = join_espn_polymarket(espn, gamma, league)
+    backward = join_espn_polymarket(espn, gamma.reverse(), league)
+    assert forward.equals(backward)
 
 
 def test_aliases_are_what_joins_the_differing_codes():

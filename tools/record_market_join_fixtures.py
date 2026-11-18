@@ -16,8 +16,7 @@ import json
 import pathlib
 import time
 
-import requests
-
+from sportsdataverse._codegen_runtime import _get as _fetch
 from sportsdataverse.odds.market_join import MARKET_LEAGUES
 
 ESPN = "https://site.api.espn.com/apis/site/v2/sports"
@@ -40,14 +39,14 @@ _KALSHI_KEYS = (
 )
 _GAMMA_KEYS = ("id", "slug", "title", "eventDate", "startTime", "usId", "active", "closed")
 _GAMMA_TEAM_KEYS = ("abbreviation", "alias", "name", "ordering")
+_MAX_GAMMA_PAGES = 20  # a series still full at this many pages raises instead of writing a short fixture
 _ESPN_TEAM_KEYS = ("id", "abbreviation", "displayName", "shortDisplayName", "name", "location")
 
 
-def _get(session: requests.Session, url: str, **params: str):
+def _get(url: str, **params: str):
+    """One paced request through the package's retrying ``download()`` and error vocabulary."""
     time.sleep(0.5)
-    resp = session.get(url, params=params, timeout=30)
-    resp.raise_for_status()
-    return resp.json()
+    return _fetch(url, params=params)
 
 
 def _espn_event(event: dict) -> dict:
@@ -73,7 +72,7 @@ def _espn_event(event: dict) -> dict:
     }
 
 
-def record(session: requests.Session, league: str, start: dt.date, days: int) -> None:
+def record(league: str, start: dt.date, days: int) -> None:
     cfg = MARKET_LEAGUES[league]
     out = OUT / league
     out.mkdir(parents=True, exist_ok=True)
@@ -81,14 +80,14 @@ def record(session: requests.Session, league: str, start: dt.date, days: int) ->
     events = []
     for i in range(days):
         day = (start + dt.timedelta(days=i)).strftime("%Y%m%d")
-        body = _get(session, f"{ESPN}/{cfg.espn_path}/scoreboard", dates=day, limit="500")
+        body = _get(f"{ESPN}/{cfg.espn_path}/scoreboard", dates=day, limit="500")
         events += [_espn_event(e) for e in body.get("events", [])]
     (out / "espn_scoreboard.json").write_text(json.dumps({"events": events}, indent=1) + "\n", encoding="utf-8")
 
     markets, cursor = [], ""
     for _ in range(20):
         page = {"cursor": cursor} if cursor else {}
-        body = _get(session, f"{KALSHI}/markets", series_ticker=cfg.kalshi_series, status="open", limit="1000", **page)
+        body = _get(f"{KALSHI}/markets", series_ticker=cfg.kalshi_series, status="open", limit="1000", **page)
         markets += [{k: m.get(k) for k in _KALSHI_KEYS} for m in body.get("markets", [])]
         cursor = body.get("cursor") or ""
         if not cursor:
@@ -96,9 +95,12 @@ def record(session: requests.Session, league: str, start: dt.date, days: int) ->
     (out / "kalshi_markets.json").write_text(json.dumps({"markets": markets}, indent=1) + "\n", encoding="utf-8")
 
     gamma = []
-    for page_no in range(6):
+    for page_no in range(_MAX_GAMMA_PAGES + 1):
+        if page_no == _MAX_GAMMA_PAGES:
+            raise RuntimeError(
+                f"{league}: Gamma series {cfg.gamma_series_id} still had a full page at offset {page_no * 100}"
+            )
         batch = _get(
-            session,
             f"{GAMMA}/events",
             series_id=str(cfg.gamma_series_id),
             active="true",
@@ -123,10 +125,8 @@ def main() -> None:
     ap.add_argument("--leagues", nargs="+", default=sorted(MARKET_LEAGUES))
     args = ap.parse_args()
     start = dt.datetime.strptime(args.start, "%Y%m%d").date()
-    session = requests.Session()
-    session.headers["User-Agent"] = "sportsdataverse-py fixture recorder"
     for league in args.leagues:
-        record(session, league, start, args.days)
+        record(league, start, args.days)
 
 
 if __name__ == "__main__":
