@@ -17,7 +17,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
+| `dates` | `dates` |  |  | `Y` | One day (YYYYMMDD) or one calendar year (YYYY). A range (YYYYMMDD-YYYYMMDD) is rejected with HTTP 400; request each day, or use the Core v2 ``events`` wrapper. |
 | `week` | `week` |  |  | `Y` | Week number within the season. |
 | `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `groups` | `groups` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |

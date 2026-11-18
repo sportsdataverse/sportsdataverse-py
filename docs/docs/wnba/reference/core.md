@@ -106,6 +106,6 @@ toc_max_heading_level: 2
 | [espn_wnba_awards](core/other.md#espn_wnba_awards) | ESPN endpoint. |
 | [espn_wnba_award](core/other.md#espn_wnba_award) | ESPN endpoint. |
 | [espn_wnba_standings_core](core/other.md#espn_wnba_standings_core) | ESPN endpoint. |
-| [espn_wnba_leaders_core](core/other.md#espn_wnba_leaders_core) | ESPN endpoint. |
+| [espn_wnba_leaders_core](core/other.md#espn_wnba_leaders_core) | All-time league leaders. ESPN ignores `season` here (nba with and without `season=2015` returned the same career totals, 2026-11-17). |
 | [espn_wnba_league_notes](core/other.md#espn_wnba_league_notes) | ESPN endpoint. |
 | [espn_wnba_talentpicks](core/other.md#espn_wnba_talentpicks) | ESPN endpoint. |

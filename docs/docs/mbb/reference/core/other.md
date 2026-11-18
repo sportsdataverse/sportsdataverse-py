@@ -909,7 +909,7 @@ espn_mbb_standings_core()
 
 ## espn_mbb_leaders_core
 
-ESPN endpoint.
+All-time league leaders. ESPN ignores `season` here (nba with and without `season=2015` returned the same career totals, 2026-11-17).
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/leaders`
 

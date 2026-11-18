@@ -98,6 +98,16 @@ class Endpoint:
     # that dict INSTEAD of ``example_args`` (not merged), so a league that ignores a
     # default example param (football and ``date``) can swap in ones it honours.
     league_example_args: Dict[str, Dict[str, object]] = field(default_factory=dict)
+    # Per-league override of a query param's DEFAULT, keyed by league prefix
+    # (``{"mbb": {"groups": 50}}``). Unlike ``league_example_args`` this changes the
+    # generated signature: ESPN's college basketball scoreboard without ``groups`` is a
+    # short featured list, so the mbb / wbb wrappers default to Division I.
+    league_defaults: Dict[str, Dict[str, object]] = field(default_factory=dict)
+    # ``{replacement: <short>, note: <text>}``: the wrapper still works but warns
+    # DeprecationWarning on every call (removed in LOADER_DEPRECATION_REMOVED_IN).
+    # ``replacement`` names an ESPN endpoint short in any family; the generator resolves
+    # it to that league's wrapper name. Omit it when nothing replaces the route.
+    deprecated: Dict[str, object] = field(default_factory=dict)
     # HTTP method the family's getter sends (``get`` | ``post``). Docs only: the
     # rendered call is the same ``_get(url, params=...)`` either way, and a POST
     # family's runtime ``_get`` sends ``params`` as the request body. ``post`` makes
@@ -466,6 +476,8 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         fixed_params=dict(e.get("fixed_params") or {}),
         docstring=dict(e.get("docstring") or {}),
         league_example_args={k: dict(v or {}) for k, v in (e.get("league_example_args") or {}).items()},
+        league_defaults={k: dict(v or {}) for k, v in (e.get("league_defaults") or {}).items()},
+        deprecated=dict(e.get("deprecated") or {}),
         method=str(e.get("method") or "get").lower(),
         body=body,
         fixed_in_query=list(e.get("fixed_in_query") or []),
@@ -522,9 +534,23 @@ def validate_league_keys(apis: List[EspnApi], cfg: "LeaguesConfig") -> None:
     known = {lg.prefix for lg in cfg.leagues}
     for api in apis:
         for ep in api.endpoints:
-            bad = (set(ep.include_prefixes) | set(ep.league_example_args)) - known
+            bad = (set(ep.include_prefixes) | set(ep.league_example_args) | set(ep.league_defaults)) - known
             if bad:
                 raise SpecError(f"{api.api}.{ep.short}: unknown league prefix(es) {sorted(bad)}")
+            params = {p.python_name for p in ep.query_params}
+            for prefix, values in ep.league_defaults.items():
+                if set(values) - params:
+                    raise SpecError(
+                        f"{api.api}.{ep.short}: league_defaults[{prefix}] names unknown query param(s) "
+                        f"{sorted(set(values) - params)}"
+                    )
+            if set(ep.deprecated) - {"replacement", "note"}:
+                raise SpecError(f"{api.api}.{ep.short}: deprecated takes only replacement / note")
+            shorts = {e.short for a in apis for e in a.endpoints}
+            if ep.deprecated.get("replacement") and ep.deprecated["replacement"] not in shorts:
+                raise SpecError(
+                    f"{api.api}.{ep.short}: deprecated replacement {ep.deprecated['replacement']!r} is no endpoint"
+                )
 
 
 def _on_missing(ld: dict) -> str:

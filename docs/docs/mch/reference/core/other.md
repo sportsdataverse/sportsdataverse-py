@@ -913,7 +913,7 @@ espn_mch_standings_core()
 
 ## espn_mch_leaders_core
 
-ESPN endpoint.
+All-time league leaders. ESPN ignores `season` here (nba with and without `season=2015` returned the same career totals, 2026-11-17).
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/mens-college-hockey/leaders`
 
