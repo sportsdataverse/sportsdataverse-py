@@ -139,3 +139,13 @@ def test_no_markets_keeps_every_game_with_null_market_columns():
     out = join_espn_kalshi(espn, pl.DataFrame(), "nhl")
     assert out.height == espn.height and out["matched_by"].null_count() == out.height
     assert out.schema["game_id"] == espn.schema["game_id"]
+
+
+def test_a_day_with_no_games_returns_the_documented_empty_frame():
+    """parse_scoreboard turns an empty ``events`` list into a zero-column frame; the join must not raise on it."""
+    empty = parse_scoreboard({"events": []})
+    kalshi = parse_kalshi(_load("nba", "kalshi_markets"))
+    out = join_espn_kalshi(empty, kalshi, "nba")
+    assert out.height == 0 and out.schema["game_id"] == pl.Int64 and "matched_by" in out.columns
+    out = join_espn_polymarket(empty, parse_polymarket(_load("nba", "gamma_events")), "nba")
+    assert out.height == 0 and "polymarket_us_slug" in out.columns

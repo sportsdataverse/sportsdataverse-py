@@ -213,6 +213,8 @@ _ESPN_COLUMNS = ("game_id", "date", "home_abbreviation", "away_abbreviation")
 
 def _espn_games(espn: pl.DataFrame) -> list[_Game]:
     """Games from an ESPN scoreboard frame (``espn_<league>_scoreboard()``, parsed)."""
+    if espn.height == 0:  # a day with no games parses to a zero-column frame
+        return []
     missing = [c for c in _ESPN_COLUMNS if c not in espn.columns]
     if missing:
         raise ValueError(f"the ESPN frame lacks {missing}; pass a parsed espn_<league>_scoreboard() frame")
@@ -574,6 +576,6 @@ _GAMMA_SCHEMA = {
 
 def _frame(rows: list[dict], schema: dict[str, Any], espn: pl.DataFrame, as_pandas: bool) -> Any:
     """Rows in the documented schema; ``game_id`` keeps the ESPN frame's dtype, so it joins back."""
-    full = {"game_id": espn.schema["game_id"], **schema}
+    full = {"game_id": espn.schema.get("game_id", pl.Int64), **schema}
     df = pl.DataFrame([{k: r.get(k) for k in full} for r in rows], schema=full, orient="row")
     return df.to_pandas() if as_pandas else df
