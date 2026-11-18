@@ -37,45 +37,45 @@ columns:
 - name: game_processed
   type: character
   description: ''
-- name: stat_0
+- name: minutes
   type: character
   description: ''
-- name: stat_1
+- name: field_goals_made_field_goals_attempted
   type: character
   description: ''
-- name: stat_2
+- name: field_goal_pct
   type: character
   description: ''
-- name: stat_3
+- name: three_point_field_goals_made_three_point_field_goals_attempted
   type: character
   description: ''
-- name: stat_4
+- name: three_point_pct
   type: character
   description: ''
-- name: stat_5
+- name: free_throws_made_free_throws_attempted
   type: character
   description: ''
-- name: stat_6
+- name: free_throw_pct
   type: character
   description: ''
-- name: stat_7
+- name: total_rebounds
   type: character
   description: ''
-- name: stat_8
+- name: assists
   type: character
   description: ''
-- name: stat_9
+- name: blocks
   type: character
   description: ''
-- name: stat_10
+- name: steals
   type: character
   description: ''
-- name: stat_11
+- name: fouls
   type: character
   description: ''
-- name: stat_12
+- name: turnovers
   type: character
   description: ''
-- name: stat_13
+- name: points
   type: character
   description: ''
