@@ -298,10 +298,23 @@ def _excerpt(text: str) -> str:
     return " ".join((text or "").split())[:200]
 
 
+def _espn_not_supported(url: str, text: str) -> bool:
+    """ESPN's 400 for a resource it does not publish here, which is "nothing here", not a bad request.
+
+    Core v2 answers ``{"error": {"message": "... not supported ...", "code": 400}}`` for the
+    probabilities of a game not yet started, or of any NHL / soccer game ("Probabilities are not
+    supported for sport: ..."), and for all-time leaders outside the four pro leagues
+    ("getLeadersAllTime not supported for ..."). Checked 2026-11-17.
+    """
+    host = urlsplit(url).netloc.lower()
+    return (host == "espn.com" or host.endswith(".espn.com")) and "not supported" in (text or "").lower()
+
+
 def _check_status(url: str, status: Any, text: str = "", *, label: Optional[str] = None) -> None:
     """Raise unless ``status`` is 2xx, so a failed fetch never reaches a parser as data.
 
     * 404 -> :class:`~sportsdataverse.errors.NoDataError`: the host answered "nothing here".
+      So does an ESPN 400 saying the resource is "not supported" (:func:`_espn_not_supported`).
     * 400 / 422 -> :class:`ValueError`: the request itself is wrong; retrying cannot help.
     * anything else (a 401/403/429/5xx that outlived the retries) ->
       :class:`~sportsdataverse.errors.AssetFetchError`: the answer is unknown.
@@ -315,6 +328,8 @@ def _check_status(url: str, status: Any, text: str = "", *, label: Optional[str]
     where = label or _where(url)
     if status == 404:
         raise NoDataError(f"{where} answered HTTP 404")
+    if status == 400 and _espn_not_supported(url, text):
+        raise NoDataError(f"{where} answered HTTP 400: {_excerpt(text)}")
     if status in (400, 422):
         raise ValueError(_redact_secrets(f"{where} rejected the request: HTTP {status}: {_excerpt(text)}"))
     raise AssetFetchError(f"{where} answered HTTP {status}: {_excerpt(text)}")
@@ -596,7 +611,8 @@ def _get(
     :func:`_no_content_transport` to see a 204 / 205 instead of its ``{}``).
 
     Raises:
-        NoDataError: the host answered 404 (or ESPN 200 with ``code: 404``).
+        NoDataError: the host answered 404 (or ESPN 200 with ``code: 404``, or an ESPN 400
+            saying the resource is "not supported").
         ValueError: the host answered 400 / 422 -- the request is wrong.
         AssetFetchError: any other non-2xx after retries, a connection failure after
             retries, or a 2xx whose body is empty (not 204/205) or not JSON.

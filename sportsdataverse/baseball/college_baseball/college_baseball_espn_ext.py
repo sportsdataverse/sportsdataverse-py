@@ -12,6 +12,7 @@ import pandas as pd  # noqa: F401
 import polars as pl  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _check_kwargs, _get, _path_seg, bool_str
+from sportsdataverse._deprecation import warn_deprecated
 from sportsdataverse._common_espn_parsers import (
     parse_athlete_gamelog,
     parse_athlete_overview,
@@ -189,7 +190,7 @@ def espn_college_baseball_scoreboard(
     Example URL: https://site.api.espn.com/apis/site/v2/sports/baseball/college-baseball/scoreboard?dates=20240115&limit=500
 
     Args:
-        dates: Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).
+        dates: One day (YYYYMMDD) or one calendar year (YYYY). A range (YYYYMMDD-YYYYMMDD) is rejected with HTTP 400; request each day, or use the Core v2 ``events`` wrapper.
         week: Week number within the season.
         season_type: Season phase: 1=preseason, 2=regular season, 3=postseason.
         groups: Conference or group id filter (e.g. an ESPN conference id).
@@ -391,6 +392,7 @@ def espn_college_baseball_injuries(
     Args:
         return_parsed: parse the payload through parse_injuries -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -405,6 +407,9 @@ def espn_college_baseball_injuries(
         Quick start::
 
             espn_college_baseball_injuries()
+
+    Notes:
+        * Current injuries only, for every team in one request. College baseball and softball answered HTTP 500 on 2026-11-17 (out of season), which raises ``AssetFetchError``.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_college_baseball_injuries", kwargs)
@@ -809,7 +814,7 @@ def espn_college_baseball_team_record(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """
+    """Deprecated: ESPN answers this team route with an empty object.
 
     Bound to sport='baseball', league='college-baseball'.
 
@@ -820,6 +825,7 @@ def espn_college_baseball_team_record(
         team_id: team_id path parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -834,7 +840,16 @@ def espn_college_baseball_team_record(
         Quick start::
 
             espn_college_baseball_team_record(team_id='4')
+
+    Notes:
+        * Deprecated: removed in 0.4.0; use ``espn_college_baseball_team`` instead. ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The team document carries the record (its ``record.items``).
     """
+    warn_deprecated(
+        "espn_college_baseball_team_record",
+        replacement="espn_college_baseball_team",
+        removed_in="0.4.0",
+        extra="ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The team document carries the record (its record.items).",
+    )
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_college_baseball_team_record", kwargs)
     _params = {}
@@ -903,7 +918,7 @@ def espn_college_baseball_team_injuries(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """
+    """Deprecated: ESPN answers this team route with an empty object.
 
     Bound to sport='baseball', league='college-baseball'.
 
@@ -914,6 +929,7 @@ def espn_college_baseball_team_injuries(
         team_id: team_id path parameter.
         return_parsed: parse the payload through parse_injuries -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -928,7 +944,16 @@ def espn_college_baseball_team_injuries(
         Quick start::
 
             espn_college_baseball_team_injuries(team_id='4')
+
+    Notes:
+        * Deprecated: removed in 0.4.0; use ``espn_college_baseball_injuries`` instead. ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The league feed lists every team; filter it by team.
     """
+    warn_deprecated(
+        "espn_college_baseball_team_injuries",
+        replacement="espn_college_baseball_injuries",
+        removed_in="0.4.0",
+        extra="ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The league feed lists every team; filter it by team.",
+    )
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_college_baseball_team_injuries", kwargs)
     _params = {}
@@ -950,7 +975,7 @@ def espn_college_baseball_team_transactions(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """
+    """Deprecated: ESPN answers this team route with an empty object.
 
     Bound to sport='baseball', league='college-baseball'.
 
@@ -961,6 +986,7 @@ def espn_college_baseball_team_transactions(
         team_id: team_id path parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -975,7 +1001,16 @@ def espn_college_baseball_team_transactions(
         Quick start::
 
             espn_college_baseball_team_transactions(team_id='4')
+
+    Notes:
+        * Deprecated: removed in 0.4.0; use ``espn_college_baseball_transactions`` instead. ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The league feed lists every team; filter it by team.
     """
+    warn_deprecated(
+        "espn_college_baseball_team_transactions",
+        replacement="espn_college_baseball_transactions",
+        removed_in="0.4.0",
+        extra="ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The league feed lists every team; filter it by team.",
+    )
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_college_baseball_team_transactions", kwargs)
     _params = {}
@@ -997,7 +1032,7 @@ def espn_college_baseball_team_history(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """
+    """Deprecated: ESPN answers this team route with an empty object.
 
     Bound to sport='baseball', league='college-baseball'.
 
@@ -1008,6 +1043,7 @@ def espn_college_baseball_team_history(
         team_id: team_id path parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -1022,7 +1058,16 @@ def espn_college_baseball_team_history(
         Quick start::
 
             espn_college_baseball_team_history(team_id='4')
+
+    Notes:
+        * Deprecated: removed in 0.4.0. ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). ESPN publishes no season-by-season team history route.
     """
+    warn_deprecated(
+        "espn_college_baseball_team_history",
+        replacement=None,
+        removed_in="0.4.0",
+        extra="ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). ESPN publishes no season-by-season team history route.",
+    )
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_college_baseball_team_history", kwargs)
     _params = {}
@@ -1045,7 +1090,7 @@ def espn_college_baseball_team_news(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """
+    """Deprecated: ESPN answers this team route with an empty object.
 
     Bound to sport='baseball', league='college-baseball'.
 
@@ -1057,6 +1102,7 @@ def espn_college_baseball_team_news(
         limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_news -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -1071,7 +1117,16 @@ def espn_college_baseball_team_news(
         Quick start::
 
             espn_college_baseball_team_news(team_id='4')
+
+    Notes:
+        * Deprecated: removed in 0.4.0; use ``espn_college_baseball_news`` instead. ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The league feed takes ``params={'team': <team_id>}``.
     """
+    warn_deprecated(
+        "espn_college_baseball_team_news",
+        replacement="espn_college_baseball_news",
+        removed_in="0.4.0",
+        extra="ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The league feed takes params={'team': <team_id>}.",
+    )
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_college_baseball_team_news", kwargs)
     _params = {
@@ -1095,7 +1150,7 @@ def espn_college_baseball_team_leaders(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """
+    """Deprecated: ESPN answers this team route with an empty object.
 
     Bound to sport='baseball', league='college-baseball'.
 
@@ -1106,6 +1161,7 @@ def espn_college_baseball_team_leaders(
         team_id: team_id path parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -1120,7 +1176,16 @@ def espn_college_baseball_team_leaders(
         Quick start::
 
             espn_college_baseball_team_leaders(team_id='4')
+
+    Notes:
+        * Deprecated: removed in 0.4.0; use ``espn_college_baseball_season_type_leaders`` instead. ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). That is the league list; ESPN's per-team leaders are on the Core v2 route seasons/{season}/types/{type}/teams/{team_id}/leaders.
     """
+    warn_deprecated(
+        "espn_college_baseball_team_leaders",
+        replacement="espn_college_baseball_season_type_leaders",
+        removed_in="0.4.0",
+        extra="ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). That is the league list; ESPN's per-team leaders are on the Core v2 route seasons/{season}/types/{type}/teams/{team_id}/leaders.",
+    )
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_college_baseball_team_leaders", kwargs)
     _params = {}
@@ -2152,6 +2217,7 @@ def espn_college_baseball_season_type_leaders(
         season_type: season_type path parameter.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -2166,6 +2232,9 @@ def espn_college_baseball_season_type_leaders(
         Quick start::
 
             espn_college_baseball_season_type_leaders(season=2024, season_type=2)
+
+    Notes:
+        * Soccer publishes its season leaders under season type 1, not 2 (eng.1 2025: type 1 answered, type 2 was 404, 2026-11-17).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_college_baseball_season_type_leaders", kwargs)
@@ -4169,6 +4238,7 @@ def espn_college_baseball_game_probabilities(
         limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -4183,6 +4253,9 @@ def espn_college_baseball_game_probabilities(
         Quick start::
 
             espn_college_baseball_game_probabilities(event_id='401584793')
+
+    Notes:
+        * ESPN answers HTTP 400 "Probabilities are not supported" for a game that has not started (nba, nfl, college football) and for NHL and soccer games even when final (checked 2026-11-17). That answer raises ``NoDataError``, like a 404.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_college_baseball_game_probabilities", kwargs)
@@ -5603,7 +5676,7 @@ def espn_college_baseball_leaders_core(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """
+    """All-time league leaders. ESPN ignores ``season`` here (nba with and without ``season=2015`` returned the same career totals, 2026-11-17).
 
     Bound to sport='baseball', league='college-baseball'.
 
@@ -5613,6 +5686,7 @@ def espn_college_baseball_leaders_core(
     Args:
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -5627,6 +5701,9 @@ def espn_college_baseball_leaders_core(
         Quick start::
 
             espn_college_baseball_leaders_core()
+
+    Notes:
+        * Published for nba, nfl, nhl and mlb. College football, college basketball and soccer answer HTTP 400 ("getLeadersAllTime not supported") and the WNBA 404, both raised as ``NoDataError``. For one season use the ``season_type_leaders`` wrapper.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_college_baseball_leaders_core", kwargs)

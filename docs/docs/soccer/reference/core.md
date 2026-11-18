@@ -107,6 +107,6 @@ toc_max_heading_level: 2
 | [espn_soccer_awards](core/other.md#espn_soccer_awards) | ESPN endpoint. |
 | [espn_soccer_award](core/other.md#espn_soccer_award) | ESPN endpoint. |
 | [espn_soccer_standings_core](core/other.md#espn_soccer_standings_core) | ESPN endpoint. |
-| [espn_soccer_leaders_core](core/other.md#espn_soccer_leaders_core) | ESPN endpoint. |
+| [espn_soccer_leaders_core](core/other.md#espn_soccer_leaders_core) | All-time league leaders. ESPN ignores `season` here (nba with and without `season=2015` returned the same career totals, 2026-11-17). |
 | [espn_soccer_league_notes](core/other.md#espn_soccer_league_notes) | ESPN endpoint. |
 | [espn_soccer_talentpicks](core/other.md#espn_soccer_talentpicks) | ESPN endpoint. |

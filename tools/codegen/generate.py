@@ -1770,6 +1770,7 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
     base_names = {b for _, _, b, _ in collected}
 
     views: list[_EndpointView] = []
+    pending: list[tuple] = []
     used: set[str] = set()
     for ep, ep_host, base, api_name in collected:
         fn_name = base
@@ -1799,6 +1800,7 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
         if ep.short in overrides:
             ep = dataclasses.replace(ep, parser=overrides[ep.short])
             schema_league = league.sport
+        ep = _with_league_defaults(ep, league.prefix)
         doc_extras = ep.docstring
         if renamed_from:  # say why two functions exist (R903-5)
             doc_extras = dict(ep.docstring or {})
@@ -1808,11 +1810,48 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
                 f"function. This generated ESPN wrapper used that name inside ``{league.prefix}_espn_ext``; "
                 "importing it from there under the old name is deprecated.",
             ]
+        pending.append((ep, fn_name, ep_host, doc_extras, schema_league, api_name, renamed_from))
+    # A deprecated endpoint names its replacement by short; only now is every wrapper name known.
+    by_short = {ep.short: fn_name for ep, fn_name, *_ in pending}
+    for ep, fn_name, ep_host, doc_extras, schema_league, api_name, renamed_from in pending:
+        deprecation, doc_extras = _deprecation(ep, by_short, doc_extras)
         view = _EndpointView(ep, fn_name, ep_host, league, doc_extras=doc_extras, schema_league=schema_league)
         view.api_name = api_name
         view.renamed_from = renamed_from
+        view.deprecation = deprecation
         views.append(view)
     return views
+
+
+def _with_league_defaults(ep: spec.Endpoint, prefix: str) -> spec.Endpoint:
+    """``ep`` with this league's ``league_defaults`` swapped into its query-param defaults."""
+    defaults = ep.league_defaults.get(prefix)
+    if not defaults:
+        return ep
+    params = [
+        dataclasses.replace(p, default=defaults[p.python_name]) if p.python_name in defaults else p
+        for p in ep.query_params
+    ]
+    return dataclasses.replace(ep, query_params=params)
+
+
+def _deprecation(ep: spec.Endpoint, by_short: dict, doc_extras: dict | None) -> tuple[dict | None, dict | None]:
+    """The ``warn_deprecated`` arguments of a deprecated endpoint, plus its docstring notes with the notice first.
+
+    ``by_short`` maps every endpoint short in the league to its final wrapper name, so the
+    replacement is named as this league spells it (``espn_nba_team``)."""
+    if not ep.deprecated:
+        return None, doc_extras
+    replacement = by_short.get(str(ep.deprecated.get("replacement") or "")) or None
+    note = " ".join(str(ep.deprecated.get("note") or "").split()) or None
+    extras = dict(doc_extras or {})
+    extras["notes"] = [
+        f"Deprecated: removed in {LOADER_DEPRECATION_REMOVED_IN}"
+        + (f"; use ``{replacement}`` instead." if replacement else ".")
+        + (f" {note}" if note else ""),
+        *(extras.get("notes") or []),
+    ]
+    return {"replacement": replacement, "extra": note.replace("``", "") if note else None}, extras
 
 
 def _documented_espn_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
@@ -1855,6 +1894,7 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         sport_parser_module=sport_parser_module,
         runtime_imports=runtime_imports,
         renamed={v.renamed_from: v.fn_name for v in views if v.renamed_from},
+        removed_in=LOADER_DEPRECATION_REMOVED_IN,
     )
 
 

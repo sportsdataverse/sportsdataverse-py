@@ -17,13 +17,13 @@ toc_max_heading_level: 2
 | [espn_cfb_team](site/team.md#espn_cfb_team) | ESPN endpoint. |
 | [espn_cfb_team_roster](site/team.md#espn_cfb_team_roster) | ESPN endpoint. |
 | [espn_cfb_team_schedule](site/team.md#espn_cfb_team_schedule) | ESPN endpoint. |
-| [espn_cfb_team_record](site/team.md#espn_cfb_team_record) | ESPN endpoint. |
+| [espn_cfb_team_record](site/team.md#espn_cfb_team_record) | Deprecated: ESPN answers this team route with an empty object. |
 | [espn_cfb_team_depthcharts](site/team.md#espn_cfb_team_depthcharts) | ESPN endpoint. |
-| [espn_cfb_team_injuries](site/team.md#espn_cfb_team_injuries) | ESPN endpoint. |
-| [espn_cfb_team_transactions](site/team.md#espn_cfb_team_transactions) | ESPN endpoint. |
-| [espn_cfb_team_history](site/team.md#espn_cfb_team_history) | ESPN endpoint. |
-| [espn_cfb_team_news](site/team.md#espn_cfb_team_news) | ESPN endpoint. |
-| [espn_cfb_team_leaders](site/team.md#espn_cfb_team_leaders) | ESPN endpoint. |
+| [espn_cfb_team_injuries](site/team.md#espn_cfb_team_injuries) | Deprecated: ESPN answers this team route with an empty object. |
+| [espn_cfb_team_transactions](site/team.md#espn_cfb_team_transactions) | Deprecated: ESPN answers this team route with an empty object. |
+| [espn_cfb_team_history](site/team.md#espn_cfb_team_history) | Deprecated: ESPN answers this team route with an empty object. |
+| [espn_cfb_team_news](site/team.md#espn_cfb_team_news) | Deprecated: ESPN answers this team route with an empty object. |
+| [espn_cfb_team_leaders](site/team.md#espn_cfb_team_leaders) | Deprecated: ESPN answers this team route with an empty object. |
 
 ## Other
 

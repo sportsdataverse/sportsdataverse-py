@@ -15,11 +15,11 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20240115&limit=500](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20240115&limit=500)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20240115&groups=50&limit=500](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20240115&groups=50&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
+| `dates` | `dates` |  |  | `Y` | One day (YYYYMMDD) or one calendar year (YYYY). A range (YYYYMMDD-YYYYMMDD) is rejected with HTTP 400; request each day, or use the Core v2 ``events`` wrapper. |
 | `week` | `week` |  |  | `Y` | Week number within the season. |
 | `seasontype` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `groups` | `groups` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
@@ -898,7 +898,7 @@ espn_mbb_team_schedule(team_id='4')
 
 ## espn_mbb_team_record
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}/record`
 
@@ -966,7 +966,7 @@ espn_mbb_team_depthcharts(team_id='4')
 
 ## espn_mbb_team_injuries
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}/injuries`
 
@@ -1004,7 +1004,7 @@ espn_mbb_team_injuries(team_id='4')
 
 ## espn_mbb_team_transactions
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}/transactions`
 
@@ -1038,7 +1038,7 @@ espn_mbb_team_transactions(team_id='4')
 
 ## espn_mbb_team_history
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}/history`
 
@@ -1072,7 +1072,7 @@ espn_mbb_team_history(team_id='4')
 
 ## espn_mbb_team_news
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}/news`
 
@@ -1129,7 +1129,7 @@ espn_mbb_team_news(team_id='4')
 
 ## espn_mbb_team_leaders
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}/leaders`
 

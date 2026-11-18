@@ -275,7 +275,7 @@ espn_cfb_team_schedule(team_id='4')
 
 ## espn_cfb_team_record
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/{team_id}/record`
 
@@ -343,7 +343,7 @@ espn_cfb_team_depthcharts(team_id='4')
 
 ## espn_cfb_team_injuries
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/{team_id}/injuries`
 
@@ -381,7 +381,7 @@ espn_cfb_team_injuries(team_id='4')
 
 ## espn_cfb_team_transactions
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/{team_id}/transactions`
 
@@ -415,7 +415,7 @@ espn_cfb_team_transactions(team_id='4')
 
 ## espn_cfb_team_history
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/{team_id}/history`
 
@@ -449,7 +449,7 @@ espn_cfb_team_history(team_id='4')
 
 ## espn_cfb_team_news
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/{team_id}/news`
 
@@ -506,7 +506,7 @@ espn_cfb_team_news(team_id='4')
 
 ## espn_cfb_team_leaders
 
-ESPN endpoint.
+Deprecated: ESPN answers this team route with an empty object.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/{team_id}/leaders`
 

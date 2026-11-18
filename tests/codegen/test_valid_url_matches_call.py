@@ -54,7 +54,11 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
                 fn(**kwargs)
             continue
         seen.clear()
-        fn(**kwargs)
+        if getattr(v, "deprecation", None):  # a deprecated wrapper still requests the same URL, and says so
+            with pytest.warns(DeprecationWarning, match=rf"{v.fn_name} is deprecated and will be removed"):
+                fn(**kwargs)
+        else:
+            fn(**kwargs)
         query = {k: val for k, val in seen["params"].items() if val is not None}
         if build is not None:
             built = build(query)

@@ -11,6 +11,9 @@ import pandas as pd  # noqa: F401
 import polars as pl  # noqa: F401
 
 from sportsdataverse._codegen_runtime import {{ runtime_imports|join(", ") }}
+{% if endpoints|selectattr("deprecation")|list %}
+from sportsdataverse._deprecation import warn_deprecated
+{% endif %}
 {% if parser_imports %}
 from sportsdataverse._common_espn_parsers import {{ parser_imports|join(", ") }}
 {% endif %}
@@ -58,6 +61,14 @@ def {{ ep.fn_name }}(
 ) -> {{ ep.raw_annotation }}:
 {% endif %}
 {{ ep.docstring }}
+{% if ep.deprecation %}
+    warn_deprecated(
+        "{{ ep.fn_name }}",
+        replacement={{ ep.deprecation.replacement|py_repr }},
+        removed_in="{{ removed_in }}",
+        extra={{ ep.deprecation.extra|py_repr }},
+    )
+{% endif %}
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("{{ ep.fn_name }}", kwargs)
     _params = {

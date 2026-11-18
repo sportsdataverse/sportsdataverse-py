@@ -6,9 +6,15 @@ endpoints:
   scope: universal
   path: /{sport}/{league}/scoreboard
   extra_params:
+  # A range (YYYYMMDD-YYYYMMDD) is HTTP 400 "Failed to get events endpoint." on every
+  # league scoreboard (nba, nfl, nhl, mlb, cfb, mbb, eng.1; checked 2026-11-17). The
+  # Core v2 ``events`` route does take a range.
   - name: dates
     query_key: dates
     type: int|str
+    description: >-
+      One day (YYYYMMDD) or one calendar year (YYYY). A range (YYYYMMDD-YYYYMMDD) is
+      rejected with HTTP 400; request each day, or use the Core v2 ``events`` wrapper.
   - name: week
     query_key: week
     type: int
@@ -22,6 +28,14 @@ endpoints:
     query_key: limit
     type: int
     default: 500
+  # Without ``groups`` the college basketball scoreboard is a short featured list: on
+  # 2026-11-15 it held 6 of 44 Division I men's games and 12 of 72 women's. ``groups=50``
+  # is Division I in both leagues (the hand-written mbb/wbb schedules already send it).
+  league_defaults:
+    mbb:
+      groups: 50
+    wbb:
+      groups: 50
   parser: parse_scoreboard
   returns_schema: scoreboard
   example_args:
@@ -63,6 +77,11 @@ endpoints:
   path: /{sport}/{league}/injuries
   parser: parse_injuries
   returns_schema: injuries
+  docstring:
+    notes:
+    - >-
+      Current injuries only, for every team in one request. College baseball and softball
+      answered HTTP 500 on 2026-11-17 (out of season), which raises ``AssetFetchError``.
 - short: transactions
   returns_schema: transactions
   scope: universal
@@ -147,6 +166,12 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_record
+  summary: >-
+    Deprecated: ESPN answers this team route with an empty object.
+  deprecated:
+    replacement: team
+    note: >-
+      ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The team document carries the record (its ``record.items``).
   returns_schema: team_record
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/record
@@ -169,6 +194,12 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_injuries
+  summary: >-
+    Deprecated: ESPN answers this team route with an empty object.
+  deprecated:
+    replacement: injuries
+    note: >-
+      ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The league feed lists every team; filter it by team.
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/injuries
   path_params:
@@ -180,6 +211,12 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_transactions
+  summary: >-
+    Deprecated: ESPN answers this team route with an empty object.
+  deprecated:
+    replacement: transactions
+    note: >-
+      ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The league feed lists every team; filter it by team.
   returns_schema: team_transactions
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/transactions
@@ -191,6 +228,11 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_history
+  summary: >-
+    Deprecated: ESPN answers this team route with an empty object.
+  deprecated:
+    note: >-
+      ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). ESPN publishes no season-by-season team history route.
   returns_schema: team_history
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/history
@@ -202,6 +244,12 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_news
+  summary: >-
+    Deprecated: ESPN answers this team route with an empty object.
+  deprecated:
+    replacement: news
+    note: >-
+      ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). The league feed takes ``params={'team': <team_id>}``.
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/news
   path_params:
@@ -218,6 +266,12 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_leaders
+  summary: >-
+    Deprecated: ESPN answers this team route with an empty object.
+  deprecated:
+    replacement: season_type_leaders
+    note: >-
+      ESPN answered HTTP 200 with an empty object for nba, nfl and college-football (2026-11-17). That is the league list; ESPN's per-team leaders are on the Core v2 route seasons/{season}/types/{type}/teams/{team_id}/leaders.
   returns_schema: team_leaders
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/leaders
