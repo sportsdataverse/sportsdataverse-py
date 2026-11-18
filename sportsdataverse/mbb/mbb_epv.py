@@ -327,7 +327,9 @@ def ncaa_epv_inputs(pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame, pl.D
         2 away; player ids the stats.ncaa.org ids as Int64), the ten on the floor at each row
         (``game_id``, ``action_number``, ``home_player_1..5``, ``away_player_1..5``), and one row
         per game with ``game_order`` (its date) and the sides' ESPN team ids (``home_espn_team_id``,
-        ``away_espn_team_id``).
+        ``away_espn_team_id``). Build their states with
+        ``epv_states(possessions, pbp, transition_seconds=COLLEGE_EPV_TRANSITION_SECONDS)``: the
+        college boosters were fitted on 10 seconds, not the pros' default 8.
 
     Raises:
         ValueError: If a needed column is missing.
@@ -391,7 +393,11 @@ def _load(seasons: int | list[int], league: str) -> tuple[pl.DataFrame, pl.DataF
     else:
         from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp as load_pbp
     poss, pbp, tens, games = ncaa_epv_inputs(load_pbp(seasons))
-    plays = E.add_epv(E.epv_states(poss, pbp), league_id=lg, game_order=games.select("game_id", "game_order"))
+    plays = E.add_epv(
+        E.epv_states(poss, pbp, transition_seconds=E.COLLEGE_EPV_TRANSITION_SECONDS),
+        league_id=lg,
+        game_order=games.select("game_id", "game_order"),
+    )
     return plays, tens, games
 
 

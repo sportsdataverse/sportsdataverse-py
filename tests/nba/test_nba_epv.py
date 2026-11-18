@@ -19,6 +19,7 @@ from polars.testing import assert_frame_equal
 from sportsdataverse.nba import nba_epv
 from sportsdataverse.nba.nba_epv import (
     EPV_FEATURES,
+    EPV_TRANSITION_SECONDS,
     START_TYPES,
     add_epv,
     epv_lineup_games,
@@ -35,9 +36,9 @@ LEAGUE = {"nba": "00"}
 HOLDOUT = 2025
 KEY = ["game_id", "possession_number"]
 SLOTS = [f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)]
-#: The transition window the bundled boosters were fitted on (10 s; BB-D7's published flag moved to
-#: ``TRANSITION_SECONDS`` = 8 s without a refit, so the EPV state must keep this one).
-BOOSTER_WINDOW = 10.0
+#: The transition window the bundled pro boosters were fitted on: 8 s since the 2026-11-17 refit, the
+#: published flag's ``TRANSITION_SECONDS`` (they were first fitted on 10 s).
+BOOSTER_WINDOW = 8.0
 
 
 @lru_cache(maxsize=2)
@@ -120,9 +121,13 @@ def test_start_margin_is_the_lead_before_the_first_event(lg: str) -> None:
 def test_transition_state_is_known_as_of_each_event(lg: str) -> None:
     """``transition`` 2 only once the first shot is taken; 1 only before it, on a live start, inside the window.
 
-    The window is the boosters' 10 s, not the published flag's :data:`TRANSITION_SECONDS`.
+    The window is the boosters' 8 s, which is the published flag's :data:`TRANSITION_SECONDS` too.
     """
-    assert TRANSITION_SECONDS != BOOSTER_WINDOW  # else this test cannot tell the two apart
+    assert EPV_TRANSITION_SECONDS == TRANSITION_SECONDS == BOOSTER_WINDOW
+    # the bundled boosters say which window they were fitted on: the states must use it
+    for league_id in ("00", "10"):
+        assert float(load_epv_model(league_id).attr("transition_seconds")) == EPV_TRANSITION_SECONDS
+
     poss, pbp = _raw(lg)
     flags = (
         add_possession_flags(poss, pbp, transition_seconds=BOOSTER_WINDOW)
@@ -154,18 +159,21 @@ def test_transition_state_is_known_as_of_each_event(lg: str) -> None:
     assert (window["number_in_period"] > 1).all()
     open_for = window["_ball_clock"] - window["seconds_remaining"]
     assert (open_for <= BOOSTER_WINDOW).all()
-    assert (open_for > TRANSITION_SECONDS).any()  # open past the published 8 s, to the boosters' 10
+    assert (open_for > BOOSTER_WINDOW - 2).any()  # and open to the window's end, not a shorter cutoff
     shut = before.filter(
         pl.col("possession_start_type").is_in(["OffMadeShot", "OffMissedShot", "OffLiveBallTurnover"])
         & (pl.col("number_in_period") > 1)
         & ((pl.col("_ball_clock") - pl.col("seconds_remaining")) > BOOSTER_WINDOW)
     )
-    assert shut.height > 0 and (shut["transition"] == 0).all()  # the window closes after 10 s
-    # state 2 is a strict superset of the published (8 s) flag
+    assert shut.height > 0 and (shut["transition"] == 0).all()  # the window closes after 8 s
+    # state 2 is the published (8 s) flag, possession for possession
     published = add_possession_flags(poss, pbp).filter(pl.col("is_transition")).select(KEY)
     state2 = s.filter(pl.col("transition") == 2).select(KEY).unique()
     assert published.join(state2, on=KEY, how="anti").is_empty()
-    assert state2.join(published, on=KEY, how="anti").height > 0
+    assert state2.join(published, on=KEY, how="anti").is_empty()
+    # the window is the argument: college's 10 s keeps it open longer on the same possessions
+    wide = epv_states(poss, pbp, transition_seconds=10.0)
+    assert wide.filter(pl.col("transition") == 1).height > _states(lg).filter(pl.col("transition") == 1).height
 
 
 def test_features_do_not_see_later_events() -> None:
@@ -597,3 +605,14 @@ def test_season_loaders_take_the_start_year(monkeypatch: pytest.MonkeyPatch) -> 
     _same(pg, epv_player_games(_plays("nba"), _tens("nba")))
     _same(nba_epv.nba_epv_lineup_games(HOLDOUT), epv_lineup_games(_plays("nba"), _tens("nba")))
     assert nba_epv.nba_epv_plays(HOLDOUT, return_as_pandas=True).shape[0] == _plays("nba").height
+
+
+def test_a_booster_on_another_window_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A bundled booster fitted on 10 s must not score the pros' 8 s states."""
+    from sportsdataverse.nba import nba_epv
+
+    old = load_epv_model("00").copy()
+    old.set_attr(transition_seconds=None)  # the pre-refit boosters carried no window: 10 s
+    monkeypatch.setattr(nba_epv, "load_epv_model", lambda league_id: old)
+    with pytest.raises(ValueError, match="10 s transition window"):
+        add_epv(_states("nba"))

@@ -594,7 +594,7 @@ The columns of `sportsdataverse.nba.nba_epv.nba_epv_plays`, one row per event in
 | `period` | Int64 | State: the period, overtimes folded to 5. |
 | `seconds_remaining` | Float64 | State: seconds left in the period after the event. |
 | `start_margin` | Float64 | State: the offense's lead when the possession started (before its first event). |
-| `transition` | Int64 | State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot. |
+| `transition` | Int64 | State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 8 s), 2 a transition possession after its first shot. |
 | `last_event` | Int64 | State: the event just processed, coded by its index in nba_epv.LAST_EVENTS (11 the start). |
 | `ft_pending` | Int64 | State: free throws still to come in the trip. |
 | `shot_zone` | Int64 | State: zone of the possession's latest shot, 0 none, 1 rim, 2 short, 3 mid two, 4 three. |
