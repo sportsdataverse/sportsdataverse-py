@@ -237,6 +237,24 @@ def _span_off(rows: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _tenure_off(out: pl.DataFrame, rows: pl.DataFrame, game_dates: pl.DataFrame, keys: list[str]) -> pl.DataFrame:
+    """Replace each ``<total>_off`` with its span value, where the player has one.
+
+    A team-season with an undated game cannot place that game in any span, so it keeps its whole
+    season: the on and off sides never count different games.
+    """
+    dated = game_dates.select(pl.col("game_id").cast(pl.Utf8)).drop_nulls().unique()
+    team_game = _sides(games_with_possessions(rows)).select(*keys, pl.col("game_id").cast(pl.Utf8)).unique()
+    undated = team_game.join(dated, on="game_id", how="anti").select(keys).unique()
+    return out.join(undated.with_columns(pl.lit(True).alias("_undated")), on=keys, how="left").with_columns(
+        pl.when(pl.col("_undated").is_null())
+        .then(pl.coalesce(f"{c}_off_span", f"{c}_off"))
+        .otherwise(pl.col(f"{c}_off"))
+        .alias(f"{c}_off")
+        for c in _TOTALS
+    )
+
+
 def player_on_off(
     rows: pl.DataFrame,
     *,
@@ -302,18 +320,7 @@ def player_on_off(
         span = _span_off(rows, game_dates)
     out = out.join(span, on=[*keys, "player_id"], how="left", validate="1:1")
     if tenure and game_dates is not None:  # stats.nba.com's window: his span, not the team's season
-        # a team-season with an undated game cannot place it in any span: keep its whole season, so
-        # the on and off sides never count different games
-        dated = game_dates.select(pl.col("game_id").cast(pl.Utf8)).drop_nulls().unique()
-        team_game = _sides(games_with_possessions(rows)).select(*keys, pl.col("game_id").cast(pl.Utf8)).unique()
-        undated = team_game.join(dated, on="game_id", how="anti").select(keys).unique()
-        out = out.join(undated.with_columns(pl.lit(True).alias("_undated")), on=keys, how="left").with_columns(
-            pl.when(pl.col("_undated").is_null())
-            .then(pl.coalesce(f"{c}_off_span", f"{c}_off"))
-            .otherwise(pl.col(f"{c}_off"))
-            .alias(f"{c}_off")
-            for c in _TOTALS
-        )
+        out = _tenure_off(out, rows, game_dates, keys)
     out = _side_rates(_side_rates(_side_rates(out, "on"), "off"), "off_span").with_columns(
         *[(pl.col(f"{r}_on") - pl.col(f"{r}_off")).alias(f"{r}_diff") for r in _RATINGS],
         *[(pl.col(f"{r}_on") - pl.col(f"{r}_off_span")).alias(f"{r}_diff_span") for r in _RATINGS],

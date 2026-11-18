@@ -60,14 +60,45 @@ def _plays(lg: str) -> pl.DataFrame:
 
 @pytest.mark.parametrize("lg", list(LEAGUE))
 def test_labels_sum_to_the_engine_points(lg: str) -> None:
-    """Each possession's event points sum to the possessions release's ``points``; the start's label is all of it."""
+    """The start's label is the possessions release's ``points``; its events hold all of it but a defense score.
+
+    A score by the defense (a technical or flagrant free throw, a basket a misplaced boundary puts
+    there) is no event's ``points``; the release credits it to the team's next possession, and so
+    does that start's label. Four possessions of the fixture carry one.
+    """
     poss, _ = _raw(lg)
     s = _states(lg)
     got = s.group_by(KEY).agg(pl.col("points").sum(), pl.col("remaining_points").filter(pl.col("step") == 0).first())
     j = got.join(poss.select(*KEY, pl.col("points").alias("engine")), on=KEY)
     assert j.height == poss.height
-    assert (j["points"] == j["engine"]).all()
     assert (j["remaining_points"] == j["engine"]).all()
+    short = j.filter(pl.col("points") != pl.col("engine")).sort(KEY)
+    assert short.select(*KEY, (pl.col("engine") - pl.col("points")).alias("carried")).rows() == [
+        ("0022400002", 210, 1),
+        ("0022400019", 209, 1),
+        ("0022400022", 133, 1),
+        ("0022400030", 93, 1),
+    ]
+
+
+def test_a_defense_score_with_no_later_possession_in_the_period_goes_to_an_earlier_one() -> None:
+    """The release's fallbacks (``credit_defense_scoring``), on two real games of the 2024-25 release.
+
+    ``0022400770``: the defense scores in Q2's last possession (97) and has no later Q2 possession, so
+    the point goes to its earlier Q2 one (96), not to Q3's 99. ``0022400267``: the scoring team has no
+    later possession at all (197 is the game's last), so it goes to its 195.
+    """
+    poss = pl.read_parquet(D / f"nba_possessions_{HOLDOUT}_carries.parquet")
+    s = epv_states(poss, pl.read_parquet(D / f"nba_pbp_{HOLDOUT}_carries.parquet"))
+    got = s.group_by(KEY).agg(pl.col("points").sum(), pl.col("remaining_points").filter(pl.col("step") == 0).first())
+    j = got.join(poss.select(*KEY, pl.col("points").alias("engine")), on=KEY)
+    assert j.height == poss.height
+    assert (j["remaining_points"] == j["engine"]).all()
+    short = j.filter(pl.col("points") != pl.col("engine")).sort(KEY)
+    assert short.select(*KEY, (pl.col("engine") - pl.col("points")).alias("carried")).rows() == [
+        ("0022400267", 195, 1),
+        ("0022400770", 96, 1),
+    ]
 
 
 def _oracle_margins(pbp: pl.DataFrame) -> dict[tuple[str, int], int]:

@@ -23,6 +23,12 @@ the refit, under its threshold, so :data:`ACCEPTED_BUCKET_EXCEPTIONS` is empty. 
 the republished WNBA possessions, not the window: a 10-second control refit on the same data has it at
 +0.098, also a pass.
 
+**The start label.** Both pro boosters were refit again the same day after the start label
+(``remaining_points`` at ``step`` 0) took in a score by the defense that the possessions release
+credits to the scoring team's next possession (``nba_epv._carried_points``; about 1 possession in
+1,050 NBA and 1 in 1,150 WNBA in 2025). Every gate still passes with the thresholds unchanged; the
+WNBA bucket above is +0.081 (allowed 0.117). The fixtures were recaptured from that day's releases.
+
 The WNBA and college boosters carry an as-of scoring level (``nba_epv.epv_level``): a season's
 points per possession move (men's college rose from 1.011 in 2022 to 1.075 in 2026), and a booster
 alone predicts its training seasons' level. Its weight ``level_k`` is fitted on seasons before the
@@ -222,7 +228,8 @@ _FIXTURE_SCHEDULE = ["game_id", "season", "season_type", "game_date"]
 _FIXTURE_POSS = [
     "game_id", "period", "possession_number", "number_in_period", "start_order_index", "end_order_index",
     "start_seconds_remaining", "end_seconds_remaining", "possession_start_type", "offense_team_id",
-    "defense_team_id", "points", *[f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)],
+    "defense_team_id", "points", "count_as_possession",
+    *[f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)],
 ]  # fmt: skip
 
 
@@ -714,7 +721,10 @@ def epv_card(cfg: dict[str, Any], report: dict[str, Any], booster_path: Path) ->
     return {
         "model_type": f"{cfg['lg']}_epv",
         "objective": report["params"]["objective"],
-        "label": "the offense's points from the state to the end of the possession (remaining_points)",
+        "label": (
+            "the offense's points from the state to the end of the possession (remaining_points); a start "
+            "state's also holds a score the team made on defense, credited as the possessions release credits it"
+        ),
         "features": report["features"],
         "training_seasons": cfg["train"],
         "early_stopping": {"validation_season": max(cfg["train"]), "refit_on_all_training_seasons": True},

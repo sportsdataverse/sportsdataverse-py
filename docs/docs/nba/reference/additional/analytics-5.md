@@ -216,7 +216,7 @@ boundary.
 
 **Returns**
 
-One row per game of the ESPN schedule release (scheduled games included): `season`, `game_id`, `game_date`, `as_of_date` (the ratings use regular-season possessions dated strictly before it), `home_team_id` / `away_team_id` (ESPN ids, Int32), `neutral_site`, `stats_game_id`, each side's `rating` (`adj_net_rtg`, per 100), `rank` (`adj_net_rtg_rank`), `games` and `pace`, `hfa` (points, 0 at a neutral site), `exp_home_margin` (points) and `rated_home_prob`. The ratings and prediction are null for a game with no stats match or a side with no rating yet.
+One row per game of the ESPN schedule release (scheduled games included): `season`, `game_id`, `game_date`, `as_of_date` (the ratings use regular-season possessions dated strictly before it), `home_team_id` / `away_team_id` (ESPN ids, Int32), `neutral_site`, `stats_game_id`, each side's `rating` (`adj_net_rtg`, per 100), `rank` (`adj_net_rtg_rank`), `games` and `pace`, `hfa` (points, 0 at a neutral site), `exp_home_margin` (points) and `rated_home_prob`. The ratings and prediction are null for a game with no stats match or a side with no rating yet. Then the in-game WP prior (BB-D25, see the module docstring): `wp_prior_home_rating` / `wp_prior_away_rating` (per 100) and their ranks, `wp_prior_poss`, `wp_prior_hfa` (points, 0 at a neutral site), `wp_prior_margin_sd`, `wp_prior_exp_home_margin` and `wp_prior_home_prob`; null for a game with no stats match. The ranks are also null before any team is rated (opening day of a season with no prior season released).
 
 | col_name | type | description |
 |---|---|---|
@@ -239,6 +239,15 @@ One row per game of the ESPN schedule release (scheduled games included): `seaso
 | `hfa` | Float64 | Home-court term in points (the league's fitted hfa: 2.184 NBA, 1.184 WNBA), 0 at a neutral site. |
 | `exp_home_margin` | Float64 | Expected home margin in points, the producer's closed form on the two ratings (positive favours the home team). |
 | `rated_home_prob` | Float64 | Pregame home win probability, Phi(exp_home_margin / margin_sd) with the league's fitted margin_sd; null when a side has no rating. |
+| `wp_prior_home_rating` | Float64 | In-game WP prior (BB-D25, nba_rated_priors): the home team's adj_net_rtg in the season sim's game model before the game, points per 100, shrunk toward last season's regressed rating (0 = average, which an unrated team is). |
+| `wp_prior_away_rating` | Float64 | In-game WP prior: the away team's game-model adj_net_rtg before the game, on the same basis. |
+| `wp_prior_home_rank` | Float64 | Home team's rank by wp_prior_home_rating among the game model's teams as of the date (1 = best; tied teams share the better, smaller rank); null before any team is rated (opening day with no prior season). |
+| `wp_prior_away_rank` | Float64 | Away team's rank by wp_prior_away_rating as of the date. |
+| `wp_prior_poss` | Float64 | In-game WP prior: the game model's possessions per team per game as of the date (last season's before any game; 100 on opening day when no previous season is released). |
+| `wp_prior_hfa` | Float64 | In-game WP prior: the game model's home term in points, 2 x its per-100 home term x wp_prior_poss / 100; 0 at a neutral site. It is refit every day, so it is noisy in a season's first days. |
+| `wp_prior_margin_sd` | Float64 | In-game WP prior: the probit scale of a game's margin in points (the season sim's). |
+| `wp_prior_exp_home_margin` | Float64 | In-game WP prior's expected home margin in points: (wp_prior_home_rating - wp_prior_away_rating) x wp_prior_poss / 100 + wp_prior_hfa. |
+| `wp_prior_home_prob` | Float64 | The pregame home win probability the in-game win-probability booster starts from when there is no line (BB-D25): Phi(wp_prior_exp_home_margin / wp_prior_margin_sd). Null only for a game with no stats match. |
 
 **Raises**
 
