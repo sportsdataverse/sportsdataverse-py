@@ -204,7 +204,8 @@ def nba_pregame_projections(
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
-        One row per game of the ESPN schedule release (scheduled games included): ``season``,
+        One row per game of the season in the ESPN schedule release (scheduled games included; a
+        row the release labels with another season is dropped): ``season``,
         ``game_id``, ``game_date``, ``as_of_date`` (the ratings use regular-season possessions
         dated strictly before it), ``home_team_id`` / ``away_team_id`` (ESPN ids, Int32),
         ``neutral_site``, ``stats_game_id``, each side's ``rating`` (``adj_net_rtg``, per 100),

@@ -259,7 +259,8 @@ def nba_rated_priors(
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
-        One row per game of the ESPN schedule release (scheduled games included): ``season``,
+        One row per game of the season in the ESPN schedule release (scheduled games included; a
+        row the release labels with another season is dropped): ``season``,
         ``game_id``, ``game_date``, ``home_team_id``, ``away_team_id`` (ESPN ids, Int32, as in the
         pbp release), ``neutral_site``, ``stats_game_id``, the two teams' adjusted net ratings
         before the game (``home_adj_net_rtg``, ``away_adj_net_rtg``, per 100), the home term
