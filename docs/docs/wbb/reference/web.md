@@ -178,20 +178,20 @@ ESPN endpoint.
 | `opponent_display_name` | String |  |
 | `game_result` | String |  |
 | `game_processed` | String |  |
-| `stat_0` | String |  |
-| `stat_1` | String |  |
-| `stat_2` | String |  |
-| `stat_3` | String |  |
-| `stat_4` | String |  |
-| `stat_5` | String |  |
-| `stat_6` | String |  |
-| `stat_7` | String |  |
-| `stat_8` | String |  |
-| `stat_9` | String |  |
-| `stat_10` | String |  |
-| `stat_11` | String |  |
-| `stat_12` | String |  |
-| `stat_13` | String |  |
+| `minutes` | String | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `field_goals_made_field_goals_attempted` | String | Field Goals Made-Attempted. |
+| `field_goal_pct` | String | Field goal percentage (0-1). |
+| `three_point_field_goals_made_three_point_field_goals_attempted` | String | 3-Point Field Goals Made-Attempted. |
+| `three_point_pct` | String |  |
+| `free_throws_made_free_throws_attempted` | String | Free Throws Made-Attempted. |
+| `free_throw_pct` | String | Free throw percentage (0-1). |
+| `total_rebounds` | String | Total rebounds. |
+| `assists` | String | Total assists. |
+| `blocks` | String | Total blocks. |
+| `steals` | String | Total steals. |
+| `fouls` | String | Personal fouls. |
+| `turnovers` | String | Total turnovers. |
+| `points` | String | Points scored. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -139,20 +139,20 @@ ESPN endpoint.
 | `opponent_display_name` | String |  |
 | `game_result` | String | Game result for the player's team (W/L/OT). |
 | `game_processed` | String |  |
-| `stat_0` | String |  |
-| `stat_1` | String |  |
-| `stat_2` | String |  |
-| `stat_3` | String |  |
-| `stat_4` | String |  |
-| `stat_5` | String |  |
-| `stat_6` | String |  |
-| `stat_7` | String |  |
-| `stat_8` | String |  |
-| `stat_9` | String |  |
-| `stat_10` | String |  |
-| `stat_11` | String |  |
-| `stat_12` | String |  |
-| `stat_13` | String |  |
+| `minutes` | String | Penalty length in minutes. |
+| `field_goals_made_field_goals_attempted` | String |  |
+| `field_goal_pct` | String |  |
+| `three_point_field_goals_made_three_point_field_goals_attempted` | String |  |
+| `three_point_pct` | String |  |
+| `free_throws_made_free_throws_attempted` | String |  |
+| `free_throw_pct` | String |  |
+| `total_rebounds` | String |  |
+| `assists` | String | Assists. |
+| `blocks` | String |  |
+| `steals` | String |  |
+| `fouls` | String |  |
+| `turnovers` | String | Turnovers committed. |
+| `points` | String | Total points (goals + assists). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
