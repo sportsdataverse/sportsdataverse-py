@@ -216,6 +216,9 @@ def _espn_matched(season: int, league_id: str, games: pl.DataFrame) -> pl.DataFr
             pl.col("home_display_name").str.to_lowercase().alias("_h"),
             pl.col("away_display_name").str.to_lowercase().alias("_a"),
         )
+        # a release file can carry another season's games (ESPN filed the 1998-99 lockout games under
+        # both 1999 and 2000); the season's table must not, and its partition rejects them
+        .filter(pl.col("season") == season)
         .unique("game_id", keep="first", maintain_order=True)
     )  # one row per game, as the pbp release has
     keyed = games.unique(["game_date", "_h", "_a"], keep="none")  # a doubled key would match the wrong game
