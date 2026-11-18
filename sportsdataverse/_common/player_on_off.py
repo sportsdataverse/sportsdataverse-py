@@ -6,12 +6,14 @@ the lineup at the scoring action, free throws to the lineup at the foul. So ever
 team is on the floor for exactly one set of its players, and
 
 * **on/off** (:func:`player_on_off`): a player's ``*_on`` totals are the stints he was on the floor
-  for, his ``*_off`` totals the rest of his team's season. ``poss_on + poss_off`` is the team's
-  possessions, and so are ``opp_poss``, ``pts``, ``opp_pts`` and ``minutes``. The off side covers
-  the team's whole season, the games he missed included, and so the games before he joined or after
-  he left: for a player traded or signed mid-season (``games`` well short of ``team_games``) the
-  on-off difference also carries how the team changed over the season. He has one row per team.
-  The ``*_off_span`` columns limit the off side to his span with the team, an approximation of
+  for, his ``*_off`` totals the rest of his team's games. Which games: with ``tenure=True`` (the
+  NBA / WNBA adapters, as stats.nba.com counts it) only those of his span with the team, below; with
+  ``tenure=False`` (college, whose rosters hold all season) the team's whole season. Either way the
+  games he missed inside the window count, and ``poss_on + poss_off`` is the team's possessions over
+  it (``opp_poss``, ``pts``, ``opp_pts`` and ``minutes`` too). Over the whole season, a player traded
+  or signed mid-season (``games`` well short of ``team_games``) would carry how the team changed over
+  the season in his on-off difference; the span keeps that out. He has one row per team.
+  The ``*_off_span`` columns are the off side over his span with the team, an approximation of
   his time on its roster (the window stats.nba.com's on/off uses) from the game dates: it opens
   at his first game for the team, or the day after his last game for a team he played for
   earlier that season (traded in), and closes the day before his first game for a later team
@@ -21,7 +23,9 @@ team is on the floor for exactly one set of its players, and
   ``team_games_span`` counts the span's team games and ``span_first_date`` /
   ``span_last_date`` are its first and last. A game with no date is left out of the span (the
   ``*_on`` totals keep it). A player with one team and a debut in its first game has a span of
-  the whole season (``*_off_span`` equals ``*_off``).
+  the whole season. With ``tenure=True`` the ``*_off`` columns are the ``*_off_span`` ones wherever
+  a span exists (a player with no dated game keeps the whole season); the ``*_span`` columns stay for
+  readers that select them.
 * **WOWY** (:func:`player_wowy`): for two teammates A and B, the team's season split four ways:
   both on the floor (``_both``), A without B (``_a_only``), B without A (``_b_only``) and neither
   (``_neither``). The four splits' totals add up to the team's (the ratings are not additive). Every pair of the team's players is a row,
@@ -240,6 +244,7 @@ def player_on_off(
     min_poss: int,
     level: str | None = None,
     game_dates: pl.DataFrame | None = None,
+    tenure: bool = False,
 ) -> pl.DataFrame:
     """Per player and team-season: the team with him on the floor and without him.
 
@@ -253,6 +258,9 @@ def player_on_off(
             gate. ``None`` applies no sample gate (the league adapters always pass one).
         game_dates: ``game_id`` (String) and ``game_date`` (Date) of the games, for the span
             columns. ``None`` leaves them null (the league adapters always pass it).
+        tenure: Count the off side over his span with the team (stats.nba.com's window; the
+            NBA / WNBA adapters) instead of the team's whole season (college). It needs
+            ``game_dates``; a player with no span keeps the whole season.
 
     Returns:
         One row per ``(season, team_id, player_id)`` in :func:`player_on_off_schema`: ``games`` he
@@ -260,7 +268,8 @@ def player_on_off(
         minus off), the ranks and the sample sizes, then his span with the team
         (``team_games_span``, ``span_first_date`` / ``span_last_date``) and the off side limited
         to it (``<total>_off_span``, ``<rating>_off_span``, ``<rating>_diff_span``; not ranked).
-        ``<total>_on + <total>_off`` is the team's season total. Sorted by season, team and
+        ``<total>_on + <total>_off`` is the team's total over his span (``tenure=True``) or its
+        season (``tenure=False``). Sorted by season, team and
         minutes on (most first). Empty input returns that schema with zero rows.
 
     Raises:
@@ -291,6 +300,8 @@ def player_on_off(
     else:
         span = _span_off(rows, game_dates)
     out = out.join(span, on=[*keys, "player_id"], how="left", validate="1:1")
+    if tenure:  # stats.nba.com's window: the team's games in his span, not its whole season
+        out = out.with_columns(pl.coalesce(f"{c}_off_span", f"{c}_off").alias(f"{c}_off") for c in _TOTALS)
     out = _side_rates(_side_rates(_side_rates(out, "on"), "off"), "off_span").with_columns(
         *[(pl.col(f"{r}_on") - pl.col(f"{r}_off")).alias(f"{r}_diff") for r in _RATINGS],
         *[(pl.col(f"{r}_on") - pl.col(f"{r}_off_span")).alias(f"{r}_diff_span") for r in _RATINGS],
