@@ -243,7 +243,7 @@ One row per game of the ESPN schedule release (scheduled games included): `seaso
 | `wp_prior_away_rating` | Float64 | In-game WP prior: the away team's game-model adj_net_rtg before the game, on the same basis. |
 | `wp_prior_home_rank` | Float64 | Home team's rank by wp_prior_home_rating among the game model's teams as of the date (1 = best; tied teams share the better, smaller rank); null before any team is rated (opening day with no prior season). |
 | `wp_prior_away_rank` | Float64 | Away team's rank by wp_prior_away_rating as of the date. |
-| `wp_prior_poss` | Float64 | In-game WP prior: the game model's possessions per team per game as of the date (last season's before any game). |
+| `wp_prior_poss` | Float64 | In-game WP prior: the game model's possessions per team per game as of the date (last season's before any game; 100 on opening day when no previous season is released). |
 | `wp_prior_hfa` | Float64 | In-game WP prior: the game model's home term in points, 2 x its per-100 home term x wp_prior_poss / 100; 0 at a neutral site. It is refit every day, so it is noisy in a season's first days. |
 | `wp_prior_margin_sd` | Float64 | In-game WP prior: the probit scale of a game's margin in points (the season sim's). |
 | `wp_prior_exp_home_margin` | Float64 | In-game WP prior's expected home margin in points: (wp_prior_home_rating - wp_prior_away_rating) x wp_prior_poss / 100 + wp_prior_hfa. |

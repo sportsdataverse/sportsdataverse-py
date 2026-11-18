@@ -255,6 +255,7 @@ def nba_pregame_projections(
         pl.col("rated_home_prob").alias("wp_prior_home_prob"),
     )
     last = rows.get_column("game_date").max() if rows.height else None
+    assert matched.schema["game_id"] == rated.schema["game_id"] == wp.schema["game_id"], "game_id dtypes differ"
     out = (
         matched.join(rated, on="game_id", how="left", validate="1:1")
         .join(wp, on="game_id", how="left", validate="1:1")

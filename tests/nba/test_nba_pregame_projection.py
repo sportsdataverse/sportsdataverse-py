@@ -17,7 +17,6 @@ from sportsdataverse._common.team_season_rates import team_season_rates
 from sportsdataverse._common.team_strength import GAMES_SCHEMA, RIDGE_LAMBDA, possession_ridge_ratings, team_strength
 from sportsdataverse.nba import nba_pregame_projection
 from sportsdataverse.nba.nba_game_predict import predict_margin, win_prob_from_margin
-from sportsdataverse.nba.nba_rated_prior import rated_home_probs
 from sportsdataverse.nba.nba_pregame_projection import (
     PREGAME_PROJECTION_SCHEMA,
     nba_pregame_projections,
@@ -171,11 +170,12 @@ def test_wp_prior_columns_are_the_boosters_prior(monkeypatch: pytest.MonkeyPatch
     # no neutral game in the fixture, so every game carries the model's as-of home term (it is refit each
     # day, and a few days in it is noisy: -6.5 points on one early date of this fixture)
     assert (out["wp_prior_hfa"] != 0).all()
-    # at a neutral site the home term is 0 and the margin is the rating gap alone
-    neutral = rated_home_probs(
-        ROWS, _games(GAMES.tail(1)).with_columns(pl.lit(True).alias("neutral_site")), league_id="10"
-    )
-    assert neutral["home_term_pts"].to_list() == [0.0]
+    # at a neutral site the home term is 0 and the margin is the rating gap alone, end to end
+    monkeypatch.setattr(nba_rated_prior.nba_neutral_site, "_neutral_site", lambda *a, **k: pl.lit(True))
+    neutral = nba_pregame_projections(2025, league_id="10").filter(pl.col("stats_game_id").is_not_null())
+    assert neutral.height == GAMES.height and (neutral["wp_prior_hfa"] == 0.0).all()
+    gap_only = (pl.col("wp_prior_home_rating") - pl.col("wp_prior_away_rating")) * pl.col("wp_prior_poss") / 100
+    assert neutral.select((gap_only - pl.col("wp_prior_exp_home_margin")).abs().max()).item() < 1e-9
     assert out["wp_prior_home_rank"].min() == 1.0
     # no team_strength rating on opening night, but the booster's prior rates it from last season
     first = out.filter(pl.col("game_date") == GAMES["game_date"].min())
