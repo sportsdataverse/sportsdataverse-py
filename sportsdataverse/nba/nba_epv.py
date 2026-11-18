@@ -398,6 +398,30 @@ def _start_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+# epv_states' output columns, in order
+_STATE_COLUMNS: Final[list[str]] = [
+    "season",
+    *_KEY,
+    "step",
+    "order_index",
+    "action_number",
+    "offense_team_id",
+    "defense_team_id",
+    "home_team_id",
+    "team_id",
+    "person_id",
+    "event_type",
+    "sub_type",
+    "description",
+    *_SLOTS,
+    *EPV_FEATURES,
+    "points",
+    "remaining_points",
+    "is_last",
+    "next_in_period",
+]
+
+
 def epv_states(
     possessions: pl.DataFrame, pbp: pl.DataFrame, *, transition_seconds: float = EPV_TRANSITION_SECONDS
 ) -> pl.DataFrame:
@@ -490,27 +514,7 @@ def epv_states(
             ((pl.col("step") == pl.col("step").max().over(_KEY)) & (pl.col("step") > 0)).alias("is_last"),
             pl.col("_next_in_period").alias("next_in_period"),
         )
-        .select(
-            "season",
-            *_KEY,
-            "step",
-            "order_index",
-            "action_number",
-            "offense_team_id",
-            "defense_team_id",
-            "home_team_id",
-            "team_id",
-            "person_id",
-            "event_type",
-            "sub_type",
-            "description",
-            *_SLOTS,
-            *EPV_FEATURES,
-            "points",
-            "remaining_points",
-            "is_last",
-            "next_in_period",
-        )
+        .select(_STATE_COLUMNS)
     )
 
 
