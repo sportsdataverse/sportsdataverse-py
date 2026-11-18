@@ -81882,6 +81882,17 @@ us_markets:
   singles_rfq_config_quote_windows: JSON-encoded list of the time windows in which request for quote is open.
   singles_rfq_config_rule_name: Name of the request-for-quote rule set applied (e.g. "default").
   singles_rfq_config_version: Version label of the request-for-quote configuration (e.g. "singles-half-markets-v2").
+  title: Display title of the market's subject on an open market (e.g. "Vancouver Whitecaps FC" on an MLS Cup future);
+    closed game markets omit it, like the other open-market display fields.
+  subtitle: Secondary display line on an open market, such as the team's record ("10-2-2").
+  title_short: Short display title of the market's subject on an open market.
+  color: Hex display color of the market's subject on an open market (e.g. "#00245E").
+  event_subcategory: Sport subcategory of the market's event on an open market (e.g. "SOCCER").
+  image: URL of the market's subject image (a team logo) on an open market.
+  best_bid_quote_value: Highest bid in dollars per contract, as a decimal string. Present on an open market only.
+  best_bid_quote_currency: Currency of `best_bid_quote_value` (e.g. "USD").
+  best_ask_quote_value: Lowest ask in dollars per contract, as a decimal string. Present on an open market only.
+  best_ask_quote_currency: Currency of `best_ask_quote_value` (e.g. "USD").
 us_market_bbo:
   market_slug: Market slug the quote is for (the `slug` argument).
   shares_traded: Contracts traded over the market's life, as a decimal string.

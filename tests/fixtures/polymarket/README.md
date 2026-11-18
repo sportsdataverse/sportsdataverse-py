@@ -23,8 +23,10 @@ captured **2026-11-18**), copied byte-for-byte from the maintainers' captures.
 | `clob__book.json` | `clob.polymarket.com` | `/book` (`bids` + `asks` plus scalar siblings) |
 | `clob__midpoint.json` | `clob.polymarket.com` | `/midpoint` (`{"mid": "..."}`) |
 | `clob__price.json` | `clob.polymarket.com` | `/price` (`{"price": "..."}`) |
-| `gateway__v1__markets.json` | `gateway.polymarket.us` | `/v1/markets` (`{"markets": [...]}` envelope) |
-| `gateway__v1__markets__slug__bbo.json` | `gateway.polymarket.us` | `/v1/markets/{slug}/bbo` (`{"marketData": {...}}`) |
+| `gateway__v1__markets.json` | `gateway.polymarket.us` | `/v1/markets?closed=false&active=true` (`{"markets": [...]}` envelope; open MLS Cup futures) |
+| `gateway__v1__markets__closed.json` | `gateway.polymarket.us` | `/v1/markets` unfiltered first page (closed 2025 game markets; no `title` / `bestBidQuote` / ...) |
+| `gateway__v1__markets__slug__bbo.json` | `gateway.polymarket.us` | `/v1/markets/{slug}/bbo` (`{"marketData": {...}}`; open market) |
+| `gateway__v1__markets__slug__bbo__expired.json` | `gateway.polymarket.us` | `/v1/markets/aec-nba-sa-sac-2026-11-06/bbo` (expired: `bestBid` / `bestAsk` null, no quotes) |
 
 Pinned examples: Gamma market `608565` ("Will Lionel Messi win the 2026 Ballon
 d'Or?", event `ballon-dor-winner-2026`) and its first `clobTokenIds` entry, the

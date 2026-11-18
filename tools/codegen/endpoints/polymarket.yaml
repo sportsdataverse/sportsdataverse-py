@@ -190,6 +190,8 @@ endpoints:
   summary: Best bid and offer, last trade and volume for one Polymarket US market
     slug.
 - example_args:
+    active: 'true'
+    closed: 'false'
     limit: '3'
   extra_params:
   - description: Page size.
@@ -197,9 +199,9 @@ endpoints:
     query_key: limit
     required: false
     type: str
-  - description: Row offset; offset=1 shifts the page (verified 2026-11-18).
-    name: offset
-    query_key: offset
+  - description: Filter closed markets/events (true/false).
+    name: closed
+    query_key: closed
     required: false
     type: str
   - description: Filter active markets (true/false).
@@ -207,9 +209,9 @@ endpoints:
     query_key: active
     required: false
     type: str
-  - description: Filter closed markets/events (true/false).
-    name: closed
-    query_key: closed
+  - description: Row offset; offset=1 shifts the page (verified 2026-11-18).
+    name: offset
+    query_key: offset
     required: false
     type: str
   host: https://gateway.polymarket.us

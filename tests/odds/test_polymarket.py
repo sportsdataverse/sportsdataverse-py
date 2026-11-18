@@ -98,6 +98,28 @@ def test_us_bbo_is_one_row_with_flattened_prices():
     assert df["best_bid_currency"][0] == "USD"
 
 
+def test_us_expired_bbo_keeps_the_null_bests_and_drops_the_quotes():
+    """An expired market answers bestBid/bestAsk null and no longQuote/shortQuote: one row, no invented columns."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    inner = load("gateway__v1__markets__slug__bbo__expired")["marketData"]
+    assert inner["bestBid"] is None and "longQuote" not in inner
+    df = parse_polymarket({"marketData": inner})
+    assert df.height == 1 and df["state"][0] == "MARKET_STATE_EXPIRED"
+    assert df["best_bid"][0] is None and "best_bid_value" not in df.columns
+    assert not any(c.startswith("long_quote") for c in df.columns)
+
+
+def test_us_closed_markets_page_parses_like_the_open_one():
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    body = load("gateway__v1__markets__closed")
+    df = parse_polymarket(body)
+    assert df.height == len(body["markets"])
+    assert df["closed"].to_list() == [True] * df.height
+    assert all(s.startswith("aec-") for s in df["slug"].to_list())  # closed game markets carry aec- slugs
+
+
 def test_single_key_scalar_and_empty_envelopes():
     """A one-value scalar dict is still one row; an empty single-key envelope is zero rows."""
     from sportsdataverse.odds.polymarket_parsers import parse_polymarket

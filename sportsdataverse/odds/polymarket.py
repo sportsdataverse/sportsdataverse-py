@@ -521,9 +521,9 @@ def polymarket_us_market_bbo(
 
 def polymarket_us_markets(
     limit: Optional[str] = None,
-    offset: Optional[str] = None,
-    active: Optional[str] = None,
     closed: Optional[str] = None,
+    active: Optional[str] = None,
+    offset: Optional[str] = None,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -532,13 +532,13 @@ def polymarket_us_markets(
     """Markets on the Polymarket US exchange, offset-paged and filterable by active or closed.
 
     Endpoint: ``GET https://gateway.polymarket.us/v1/markets``
-    Example URL: https://gateway.polymarket.us/v1/markets?limit=3
+    Example URL: https://gateway.polymarket.us/v1/markets?limit=3&closed=false&active=true
 
     Args:
         limit: Page size.
-        offset: Row offset; offset=1 shifts the page (verified 2026-11-18).
-        active: Filter active markets (true/false).
         closed: Filter closed markets/events (true/false).
+        active: Filter active markets (true/false).
+        offset: Row offset; offset=1 shifts the page (verified 2026-11-18).
         return_parsed: parse the payload through parse_polymarket -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -555,7 +555,7 @@ def polymarket_us_markets(
         Quick start::
 
             from sportsdataverse.odds import polymarket_us_markets
-            polymarket_us_markets(limit='3')
+            polymarket_us_markets(active='true', closed='false', limit='3')
 
         See Also:
             * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
@@ -565,9 +565,9 @@ def polymarket_us_markets(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "limit": limit,
-        "offset": offset,
-        "active": active,
         "closed": closed,
+        "active": active,
+        "offset": offset,
     }
     _params.update(_caller_params)
     raw = _get(

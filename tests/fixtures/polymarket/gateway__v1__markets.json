@@ -1,442 +1,474 @@
 {
   "markets": [
     {
-      "id": "1",
-      "question": "Los Angeles vs. Tennessee",
-      "slug": "aec-nfl-lac-ten-2025-11-02",
-      "endDate": "2025-11-03T18:00:00Z",
+      "id": "7974",
+      "question": "Major League Soccer Champion",
+      "slug": "tec-mls-winner-2026-11-07-vwh",
+      "endDate": "2027-01-01T21:20:09Z",
       "category": "sports",
-      "startDate": "2025-10-29T22:00:01Z",
-      "description": "In the upcoming american football game, scheduled for November 2 at 1:00PM ET:\nIf Los Angeles wins, the market will resolve to “Los Angeles”.\nIf Tennessee wins, the market will resolve to “Tennessee”.\nIf the game is postponed, this market will remain open until the game has been completed.\nIf the game is canceled entirely, with no make-up game, this market will resolve 50-50.",
-      "active": false,
-      "marketType": "moneyline",
-      "closed": true,
-      "createdAt": "2026-03-07T02:30:00Z",
-      "updatedAt": "2026-09-25T18:39:25Z",
+      "startDate": "2026-03-19T21:25:04Z",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
+      "description": "Will Vancouver Whitecaps FC win the 2026 MLS Cup, scheduled to conclude December 18, 2026? If the event is postponed, delayed, or rescheduled, the expiration date will be amended to align with the new event date. If the event is not rescheduled within two weeks of the originally scheduled date, the instrument may settle at last fair market prices. If the event is canceled, the instrument may settle at last fair market prices. If the team is eliminated from contention, the instrument will settle to $0.00. If multiple teams are declared as having attained victory, holders receive $1.00 divided by the number of such teams, rounded down to the nearest tick.",
+      "active": true,
+      "marketType": "futures",
+      "closed": false,
+      "createdAt": "2026-03-19T21:31:54Z",
+      "updatedAt": "2026-11-18T06:27:42Z",
       "archived": false,
       "orderPriceMinTickSize": 0.001,
-      "gameStartTime": "2025-11-02T18:00:00Z",
+      "gameStartTime": "2026-02-21T00:00:00Z",
       "manualActivation": false,
-      "sportsMarketType": "moneyline",
+      "sportsMarketType": "futures",
       "marketSides": [
         {
-          "id": "1",
+          "id": "15947",
           "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
-          "identifier": "aec-nfl-lac-ten-2025-11-02",
-          "createdAt": "2025-10-30T00:23:45Z",
-          "updatedAt": "2025-10-30T00:23:45Z",
-          "description": "Chargers",
-          "price": "1",
-          "marketId": 1,
+          "identifier": "tec-mls-winner-2026-11-07-vwh",
+          "createdAt": "2026-03-19T21:31:54Z",
+          "updatedAt": "2026-03-19T21:31:54Z",
+          "description": "Yes",
+          "price": "0.1700",
+          "marketId": 7974,
           "long": true,
-          "teamId": 65,
+          "teamId": 2282,
           "team": {
-            "id": 65,
-            "name": "Los Angeles Chargers",
-            "abbreviation": "lac",
-            "league": "nfl",
-            "record": "1-8",
-            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/NFL+Team+Logos/LAC.png",
-            "alias": "Chargers",
-            "safeName": "LA Chargers",
-            "homeIcon": "https://static.polymarket.us/images/teams/nfl-lac/LAC_home.png",
-            "awayIcon": "https://static.polymarket.us/images/teams/nfl-lac/LAC_away.png",
-            "colorPrimary": "#0080C6",
-            "providerId": 29,
-            "ordering": "away",
-            "longIcon": "https://static.polymarket.us/images/teams/nfl-lac/LAC_home.png",
-            "shortIcon": "https://static.polymarket.us/images/teams/nfl-lac/LAC_away.png",
-            "displayAbbreviation": "LAC",
-            "conference": "",
+            "id": 2282,
+            "name": "Vancouver Whitecaps FC",
+            "abbreviation": "vwh",
+            "league": "mls",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
+            "alias": "Caps",
+            "safeName": "Vancouver Whitecaps FC",
+            "colorPrimary": "#00245E",
+            "providerId": 713,
+            "ordering": "home",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
+            "displayAbbreviation": "VWH",
             "providerIds": [
               {
-                "provider": "PROVIDER_SPORTSDATAIO",
-                "providerId": "29"
-              },
-              {
                 "provider": "PROVIDER_SPORTRADAR",
-                "providerId": "1f6dcffb-9823-43cd-9ff4-e7a8466749b5"
+                "providerId": "sr:competitor:22010"
               },
               {
-                "provider": "PROVIDER_OPTICODDS",
-                "providerId": "A283836CDF6E"
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "713"
               }
             ],
-            "longIconDark": "https://static.polymarket.us/images/teams/nfl-lac/LAC_home.png",
-            "shortIconDark": "https://static.polymarket.us/images/teams/nfl-lac/LAC_away.png",
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
             "color": {
-              "light": "#0080C6",
-              "dark": "#0080C6"
+              "light": "#00245E",
+              "dark": "#00245E"
             },
             "imageDisplayType": "IMAGE_DISPLAY_TYPE_LOGO"
+          },
+          "quote": {
+            "value": "0.1700",
+            "currency": "USD"
           },
           "tradable": true
         },
         {
-          "id": "2",
+          "id": "15948",
           "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
-          "identifier": "aec-nfl-lac-ten-2025-11-02",
-          "createdAt": "2025-10-30T00:23:45Z",
-          "updatedAt": "2025-10-30T00:23:45Z",
-          "description": "Titans",
-          "price": "0",
-          "marketId": 1,
+          "identifier": "tec-mls-winner-2026-11-07-vwh",
+          "createdAt": "2026-03-19T21:31:54Z",
+          "updatedAt": "2026-03-19T21:31:54Z",
+          "description": "No",
+          "price": "0.831",
+          "marketId": 7974,
           "long": false,
-          "teamId": 78,
+          "teamId": 2282,
           "team": {
-            "id": 78,
-            "name": "Tennessee Titans",
-            "abbreviation": "ten",
-            "league": "nfl",
-            "record": "1-8",
-            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/NFL+Team+Logos/TEN.png",
-            "alias": "Titans",
-            "safeName": "TEN Titans",
-            "homeIcon": "https://static.polymarket.us/images/teams/nfl-ten/TEN_home.png",
-            "awayIcon": "https://static.polymarket.us/images/teams/nfl-ten/TEN_away.png",
-            "colorPrimary": "#4B92DB",
-            "providerId": 34,
-            "ordering": "home",
-            "longIcon": "https://static.polymarket.us/images/teams/nfl-ten/TEN_home.png",
-            "shortIcon": "https://static.polymarket.us/images/teams/nfl-ten/TEN_away.png",
-            "displayAbbreviation": "TEN",
-            "conference": "",
+            "id": 2282,
+            "name": "Vancouver Whitecaps FC",
+            "abbreviation": "vwh",
+            "league": "mls",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
+            "alias": "Caps",
+            "safeName": "Vancouver Whitecaps FC",
+            "colorPrimary": "#00245E",
+            "providerId": 713,
+            "ordering": "away",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
+            "displayAbbreviation": "VWH",
             "providerIds": [
               {
-                "provider": "PROVIDER_SPORTSDATAIO",
-                "providerId": "34"
-              },
-              {
                 "provider": "PROVIDER_SPORTRADAR",
-                "providerId": "d26a1ca5-722d-4274-8f97-c92e49c96315"
+                "providerId": "sr:competitor:22010"
               },
               {
-                "provider": "PROVIDER_OPTICODDS",
-                "providerId": "24988863B4CB"
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "713"
               }
             ],
-            "longIconDark": "https://static.polymarket.us/images/teams/nfl-ten/TEN_home.png",
-            "shortIconDark": "https://static.polymarket.us/images/teams/nfl-ten/TEN_away.png",
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DVancouver+Whitecaps.png",
             "color": {
-              "light": "#4B92DB",
-              "dark": "#4B92DB"
+              "light": "#00245E",
+              "dark": "#00245E"
             },
             "imageDisplayType": "IMAGE_DISPLAY_TYPE_LOGO"
+          },
+          "quote": {
+            "value": "0.831",
+            "currency": "USD"
           },
           "tradable": true
         }
       ],
-      "outcomes": "[\"Chargers\",\"Titans\"]",
-      "outcomePrices": "[\"1\",\"0\"]",
-      "ep3Status": "EXPIRED",
-      "status": "MARKET_STATUS_RESOLVED",
+      "outcomes": "[\"No\",\"Yes\"]",
+      "outcomePrices": "[\"0.1700\",\"0.831\"]",
+      "ep3Status": "OPEN",
+      "status": "MARKET_STATUS_OPEN",
       "assetPriceTerms": null,
-      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_MONEYLINE",
+      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_FUTURE",
       "hidden": false,
       "tags": [],
+      "title": "Vancouver Whitecaps FC",
+      "subtitle": "10-2-2",
+      "color": "#00245E",
       "feeCoefficient": 0.095,
-      "ep3SyncedAt": "2026-09-25T18:39:25Z",
+      "bestBidQuote": {
+        "value": "0.1690",
+        "currency": "USD"
+      },
+      "bestAskQuote": {
+        "value": "0.1700",
+        "currency": "USD"
+      },
+      "titleShort": "Vancouver Whitecaps FC",
+      "ep3SyncedAt": "2026-10-29T12:04:57Z",
       "minimumTradeQty": 1,
-      "comboEnabled": true,
+      "comboEnabled": false,
       "politics": null,
+      "eventSubcategory": "SOCCER",
       "singlesRfqConfig": {
-        "enabled": false,
-        "midpointDeviation": 0,
-        "minOrderValueUsd": 0,
-        "maxQuoteAgeSeconds": 0,
-        "quoteWindows": [],
-        "ruleName": "default",
+        "enabled": true,
+        "midpointDeviation": 0.2,
+        "minOrderValueUsd": 500,
+        "maxQuoteAgeSeconds": 30,
+        "quoteWindows": [
+          {
+            "windowMs": "400"
+          }
+        ],
+        "ruleName": "singles-rfq-half-markets",
         "version": "singles-half-markets-v2"
       }
     },
     {
-      "id": "2",
-      "question": "Carolina vs. Green Bay",
-      "slug": "aec-nfl-car-gb-2025-11-02",
-      "endDate": "2025-11-03T18:00:00Z",
+      "id": "7976",
+      "question": "Major League Soccer Champion",
+      "slug": "tec-mls-winner-2026-11-07-clb",
+      "endDate": "2027-01-01T21:20:09Z",
       "category": "sports",
-      "startDate": "2025-10-29T22:00:01Z",
-      "description": "In the upcoming american football game, scheduled for November 2 at 1:00PM ET:\nIf Carolina wins, the market will resolve to “Carolina”.\nIf Green Bay wins, the market will resolve to “Green Bay”.\nIf the game is postponed, this market will remain open until the game has been completed.\nIf the game is canceled entirely, with no make-up game, this market will resolve 50-50.",
-      "active": false,
-      "marketType": "moneyline",
-      "closed": true,
-      "createdAt": "2026-03-07T02:30:00Z",
-      "updatedAt": "2026-09-25T18:40:55Z",
+      "startDate": "2026-03-19T21:25:04Z",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
+      "description": "Will Columbus Crew win the 2026 MLS Cup, scheduled to conclude December 18, 2026? If the event is postponed, delayed, or rescheduled, the expiration date will be amended to align with the new event date. If the event is not rescheduled within two weeks of the originally scheduled date, the instrument may settle at last fair market prices. If the event is canceled, the instrument may settle at last fair market prices. If the team is eliminated from contention, the instrument will settle to $0.00. If multiple teams are declared as having attained victory, holders receive $1.00 divided by the number of such teams, rounded down to the nearest tick.",
+      "active": true,
+      "marketType": "futures",
+      "closed": false,
+      "createdAt": "2026-03-19T21:31:54Z",
+      "updatedAt": "2026-11-18T05:42:57Z",
       "archived": false,
       "orderPriceMinTickSize": 0.001,
-      "gameStartTime": "2025-11-02T18:00:00Z",
+      "gameStartTime": "2026-02-21T00:00:00Z",
       "manualActivation": false,
-      "sportsMarketType": "moneyline",
+      "sportsMarketType": "futures",
       "marketSides": [
         {
-          "id": "3",
+          "id": "15951",
           "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
-          "identifier": "aec-nfl-car-gb-2025-11-02",
-          "createdAt": "2025-10-30T00:23:45Z",
-          "updatedAt": "2025-10-30T00:23:45Z",
-          "description": "Panthers",
-          "price": "1",
-          "marketId": 2,
+          "identifier": "tec-mls-winner-2026-11-07-clb",
+          "createdAt": "2026-03-19T21:31:54Z",
+          "updatedAt": "2026-03-19T21:31:54Z",
+          "description": "Yes",
+          "price": "0.0220",
+          "marketId": 7976,
           "long": true,
-          "teamId": 52,
+          "teamId": 2265,
           "team": {
-            "id": 52,
-            "name": "Carolina Panthers",
-            "abbreviation": "car",
-            "league": "nfl",
-            "record": "4-5",
-            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/NFL+Team+Logos/CAR.png",
-            "alias": "Panthers",
-            "safeName": "CAR Panthers",
-            "homeIcon": "https://static.polymarket.us/images/teams/nfl-car/CAR_home.png",
-            "awayIcon": "https://static.polymarket.us/images/teams/nfl-car/CAR_away.png",
-            "colorPrimary": "#0085CA",
-            "providerId": 5,
-            "ordering": "away",
-            "longIcon": "https://static.polymarket.us/images/teams/nfl-car/CAR_home.png",
-            "shortIcon": "https://static.polymarket.us/images/teams/nfl-car/CAR_away.png",
-            "displayAbbreviation": "CAR",
-            "conference": "",
+            "id": 2265,
+            "name": "Columbus Crew",
+            "abbreviation": "clb",
+            "league": "mls",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
+            "alias": "The Crew",
+            "safeName": "Columbus Crew",
+            "colorPrimary": "#2B2707",
+            "providerId": 696,
+            "ordering": "home",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
+            "displayAbbreviation": "CLB",
             "providerIds": [
               {
-                "provider": "PROVIDER_SPORTSDATAIO",
-                "providerId": "5"
-              },
-              {
                 "provider": "PROVIDER_SPORTRADAR",
-                "providerId": "f14bf5cc-9a82-4a38-bc15-d39f75ed5314"
+                "providerId": "sr:competitor:2504"
               },
               {
-                "provider": "PROVIDER_OPTICODDS",
-                "providerId": "EB5E972AB475"
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "696"
               }
             ],
-            "longIconDark": "https://static.polymarket.us/images/teams/nfl-car/CAR_home.png",
-            "shortIconDark": "https://static.polymarket.us/images/teams/nfl-car/CAR_away.png",
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
             "color": {
-              "light": "#0085CA",
-              "dark": "#0085CA"
+              "light": "#2B2707",
+              "dark": "#2B2707"
             },
             "imageDisplayType": "IMAGE_DISPLAY_TYPE_LOGO"
+          },
+          "quote": {
+            "value": "0.0220",
+            "currency": "USD"
           },
           "tradable": true
         },
         {
-          "id": "4",
+          "id": "15952",
           "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
-          "identifier": "aec-nfl-car-gb-2025-11-02",
-          "createdAt": "2025-10-30T00:23:45Z",
-          "updatedAt": "2025-10-30T00:23:45Z",
-          "description": "Packers",
-          "price": "0",
-          "marketId": 2,
+          "identifier": "tec-mls-winner-2026-11-07-clb",
+          "createdAt": "2026-03-19T21:31:54Z",
+          "updatedAt": "2026-03-19T21:31:54Z",
+          "description": "No",
+          "price": "0.987",
+          "marketId": 7976,
           "long": false,
-          "teamId": 59,
+          "teamId": 2265,
           "team": {
-            "id": 59,
-            "name": "Green Bay Packers",
-            "abbreviation": "gb",
-            "league": "nfl",
-            "record": "6-4",
-            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/NFL+Team+Logos/GB.png",
-            "alias": "Packers",
-            "safeName": "GB Packers",
-            "homeIcon": "https://static.polymarket.us/images/teams/nfl-gb/GB_home.png",
-            "awayIcon": "https://static.polymarket.us/images/teams/nfl-gb/GB_away.png",
-            "colorPrimary": "#203731",
-            "providerId": 12,
-            "ordering": "home",
-            "longIcon": "https://static.polymarket.us/images/teams/nfl-gb/GB_home.png",
-            "shortIcon": "https://static.polymarket.us/images/teams/nfl-gb/GB_away.png",
-            "displayAbbreviation": "GB",
-            "conference": "",
+            "id": 2265,
+            "name": "Columbus Crew",
+            "abbreviation": "clb",
+            "league": "mls",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
+            "alias": "The Crew",
+            "safeName": "Columbus Crew",
+            "colorPrimary": "#2B2707",
+            "providerId": 696,
+            "ordering": "away",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
+            "displayAbbreviation": "CLB",
             "providerIds": [
               {
-                "provider": "PROVIDER_SPORTSDATAIO",
-                "providerId": "12"
-              },
-              {
                 "provider": "PROVIDER_SPORTRADAR",
-                "providerId": "a20471b4-a8d9-40c7-95ad-90cc30e46932"
+                "providerId": "sr:competitor:2504"
               },
               {
-                "provider": "PROVIDER_OPTICODDS",
-                "providerId": "2C6CB429C60C"
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "696"
               }
             ],
-            "longIconDark": "https://static.polymarket.us/images/teams/nfl-gb/GB_home.png",
-            "shortIconDark": "https://static.polymarket.us/images/teams/nfl-gb/GB_away.png",
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DColumbus+Crew.png",
             "color": {
-              "light": "#203731",
-              "dark": "#203731"
+              "light": "#2B2707",
+              "dark": "#2B2707"
             },
             "imageDisplayType": "IMAGE_DISPLAY_TYPE_LOGO"
+          },
+          "quote": {
+            "value": "0.987",
+            "currency": "USD"
           },
           "tradable": true
         }
       ],
-      "outcomes": "[\"Panthers\",\"Packers\"]",
-      "outcomePrices": "[\"1\",\"0\"]",
-      "ep3Status": "EXPIRED",
-      "status": "MARKET_STATUS_RESOLVED",
+      "outcomes": "[\"Yes\",\"No\"]",
+      "outcomePrices": "[\"0.0220\",\"0.987\"]",
+      "ep3Status": "OPEN",
+      "status": "MARKET_STATUS_OPEN",
       "assetPriceTerms": null,
-      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_MONEYLINE",
+      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_FUTURE",
       "hidden": false,
       "tags": [],
+      "title": "Columbus Crew",
+      "subtitle": "4-4-7",
+      "color": "#2B2707",
       "feeCoefficient": 0.095,
-      "ep3SyncedAt": "2026-09-25T18:40:55Z",
+      "bestBidQuote": {
+        "value": "0.0130",
+        "currency": "USD"
+      },
+      "bestAskQuote": {
+        "value": "0.0220",
+        "currency": "USD"
+      },
+      "titleShort": "Columbus Crew",
+      "ep3SyncedAt": "2026-10-29T12:04:57Z",
       "minimumTradeQty": 1,
-      "comboEnabled": true,
+      "comboEnabled": false,
       "politics": null,
+      "eventSubcategory": "SOCCER",
       "singlesRfqConfig": {
-        "enabled": false,
-        "midpointDeviation": 0,
-        "minOrderValueUsd": 0,
-        "maxQuoteAgeSeconds": 0,
-        "quoteWindows": [],
-        "ruleName": "default",
+        "enabled": true,
+        "midpointDeviation": 0.2,
+        "minOrderValueUsd": 500,
+        "maxQuoteAgeSeconds": 30,
+        "quoteWindows": [
+          {
+            "windowMs": "400"
+          }
+        ],
+        "ruleName": "singles-rfq-half-markets",
         "version": "singles-half-markets-v2"
       }
     },
     {
-      "id": "3",
-      "question": "Minnesota vs. Detroit",
-      "slug": "aec-nfl-min-det-2025-11-02",
-      "endDate": "2025-11-03T18:00:00Z",
+      "id": "7978",
+      "question": "Major League Soccer Champion",
+      "slug": "tec-mls-winner-2026-11-07-orl",
+      "endDate": "2027-01-01T21:20:09Z",
       "category": "sports",
-      "startDate": "2025-10-29T22:00:01Z",
-      "description": "In the upcoming american football game, scheduled for November 2 at 1:00PM ET:\nIf Minnesota wins, the market will resolve to “Minnesota”.\nIf Detroit wins, the market will resolve to “Detroit”.\nIf the game is postponed, this market will remain open until the game has been completed.\nIf the game is canceled entirely, with no make-up game, this market will resolve 50-50.",
-      "active": false,
-      "marketType": "moneyline",
-      "closed": true,
-      "createdAt": "2026-03-07T02:30:00Z",
-      "updatedAt": "2026-09-25T18:39:29Z",
+      "startDate": "2026-03-19T21:25:04Z",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
+      "description": "Will Orlando City SC win the 2026 MLS Cup, scheduled to conclude December 18, 2026? If the event is postponed, delayed, or rescheduled, the expiration date will be amended to align with the new event date. If the event is not rescheduled within two weeks of the originally scheduled date, the instrument may settle at last fair market prices. If the event is canceled, the instrument may settle at last fair market prices. If the team is eliminated from contention, the instrument will settle to $0.00. If multiple teams are declared as having attained victory, holders receive $1.00 divided by the number of such teams, rounded down to the nearest tick.",
+      "active": true,
+      "marketType": "futures",
+      "closed": false,
+      "createdAt": "2026-03-19T21:31:54Z",
+      "updatedAt": "2026-11-18T05:42:57Z",
       "archived": false,
       "orderPriceMinTickSize": 0.001,
-      "gameStartTime": "2025-11-02T18:00:00Z",
+      "gameStartTime": "2026-02-21T00:00:00Z",
       "manualActivation": false,
-      "sportsMarketType": "moneyline",
+      "sportsMarketType": "futures",
       "marketSides": [
         {
-          "id": "5",
+          "id": "15955",
           "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
-          "identifier": "aec-nfl-min-det-2025-11-02",
-          "createdAt": "2025-10-30T00:23:45Z",
-          "updatedAt": "2025-10-30T00:23:45Z",
-          "description": "Vikings",
-          "price": "1",
-          "marketId": 3,
+          "identifier": "tec-mls-winner-2026-11-07-orl",
+          "createdAt": "2026-03-19T21:31:54Z",
+          "updatedAt": "2026-03-19T21:31:54Z",
+          "description": "Yes",
+          "price": "0.0200",
+          "marketId": 7978,
           "long": true,
-          "teamId": 68,
+          "teamId": 2274,
           "team": {
-            "id": 68,
-            "name": "Minnesota Vikings",
-            "abbreviation": "min",
-            "league": "nfl",
-            "record": "7-2",
-            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/NFL+Team+Logos/MIN.png",
-            "alias": "Vikings",
-            "safeName": "MIN Vikings",
-            "homeIcon": "https://static.polymarket.us/images/teams/nfl-min/MIN_home.png",
-            "awayIcon": "https://static.polymarket.us/images/teams/nfl-min/MIN_away.png",
-            "colorPrimary": "#4F2683",
-            "providerId": 20,
-            "ordering": "away",
-            "longIcon": "https://static.polymarket.us/images/teams/nfl-min/MIN_home.png",
-            "shortIcon": "https://static.polymarket.us/images/teams/nfl-min/MIN_away.png",
-            "displayAbbreviation": "MIN",
-            "conference": "",
+            "id": 2274,
+            "name": "Orlando City SC",
+            "abbreviation": "orl",
+            "league": "mls",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
+            "alias": "The Lions",
+            "safeName": "Orlando City SC",
+            "colorPrimary": "#633492",
+            "providerId": 705,
+            "ordering": "home",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
+            "displayAbbreviation": "ORL",
             "providerIds": [
               {
-                "provider": "PROVIDER_SPORTSDATAIO",
-                "providerId": "20"
-              },
-              {
                 "provider": "PROVIDER_SPORTRADAR",
-                "providerId": "33405046-04ee-4058-a950-d606f8c30852"
+                "providerId": "sr:competitor:52237"
               },
               {
-                "provider": "PROVIDER_OPTICODDS",
-                "providerId": "24E4EA618C5E"
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "705"
               }
             ],
-            "longIconDark": "https://static.polymarket.us/images/teams/nfl-min/MIN_home.png",
-            "shortIconDark": "https://static.polymarket.us/images/teams/nfl-min/MIN_away.png",
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
             "color": {
-              "light": "#4F2683",
-              "dark": "#4F2683"
+              "light": "#633492",
+              "dark": "#633492"
             },
             "imageDisplayType": "IMAGE_DISPLAY_TYPE_LOGO"
+          },
+          "quote": {
+            "value": "0.0200",
+            "currency": "USD"
           },
           "tradable": true
         },
         {
-          "id": "6",
+          "id": "15956",
           "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
-          "identifier": "aec-nfl-min-det-2025-11-02",
-          "createdAt": "2025-10-30T00:23:45Z",
-          "updatedAt": "2025-10-30T00:23:45Z",
-          "description": "Lions",
-          "price": "0",
-          "marketId": 3,
+          "identifier": "tec-mls-winner-2026-11-07-orl",
+          "createdAt": "2026-03-19T21:31:54Z",
+          "updatedAt": "2026-03-19T21:31:54Z",
+          "description": "No",
+          "price": "0.989",
+          "marketId": 7978,
           "long": false,
-          "teamId": 58,
+          "teamId": 2274,
           "team": {
-            "id": 58,
-            "name": "Detroit Lions",
-            "abbreviation": "det",
-            "league": "nfl",
-            "record": "7-2",
-            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/NFL+Team+Logos/DET.png",
-            "alias": "Lions",
-            "safeName": "DET Lions",
-            "homeIcon": "https://static.polymarket.us/images/teams/nfl-det/DET_home.png",
-            "awayIcon": "https://static.polymarket.us/images/teams/nfl-det/DET_away.png",
-            "colorPrimary": "#0076B6",
-            "providerId": 11,
-            "ordering": "home",
-            "longIcon": "https://static.polymarket.us/images/teams/nfl-det/DET_home.png",
-            "shortIcon": "https://static.polymarket.us/images/teams/nfl-det/DET_away.png",
-            "displayAbbreviation": "DET",
-            "conference": "",
+            "id": 2274,
+            "name": "Orlando City SC",
+            "abbreviation": "orl",
+            "league": "mls",
+            "record": "",
+            "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
+            "alias": "The Lions",
+            "safeName": "Orlando City SC",
+            "colorPrimary": "#633492",
+            "providerId": 705,
+            "ordering": "away",
+            "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
+            "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
+            "displayAbbreviation": "ORL",
             "providerIds": [
               {
-                "provider": "PROVIDER_SPORTSDATAIO",
-                "providerId": "11"
-              },
-              {
                 "provider": "PROVIDER_SPORTRADAR",
-                "providerId": "c5a59daa-53a7-4de0-851f-fb12be893e9e"
+                "providerId": "sr:competitor:52237"
               },
               {
-                "provider": "PROVIDER_OPTICODDS",
-                "providerId": "43412DC9CDCA"
+                "provider": "PROVIDER_SPORTSDATAIO",
+                "providerId": "705"
               }
             ],
-            "longIconDark": "https://static.polymarket.us/images/teams/nfl-det/DET_home.png",
-            "shortIconDark": "https://static.polymarket.us/images/teams/nfl-det/DET_away.png",
+            "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
+            "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DOrlando+City+SC.png",
             "color": {
-              "light": "#0076B6",
-              "dark": "#0076B6"
+              "light": "#633492",
+              "dark": "#633492"
             },
             "imageDisplayType": "IMAGE_DISPLAY_TYPE_LOGO"
+          },
+          "quote": {
+            "value": "0.989",
+            "currency": "USD"
           },
           "tradable": true
         }
       ],
-      "outcomes": "[\"Vikings\",\"Lions\"]",
-      "outcomePrices": "[\"1\",\"0\"]",
-      "ep3Status": "EXPIRED",
-      "status": "MARKET_STATUS_RESOLVED",
+      "outcomes": "[\"Yes\",\"No\"]",
+      "outcomePrices": "[\"0.0200\",\"0.989\"]",
+      "ep3Status": "OPEN",
+      "status": "MARKET_STATUS_OPEN",
       "assetPriceTerms": null,
-      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_MONEYLINE",
+      "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_FUTURE",
       "hidden": false,
       "tags": [],
+      "title": "Orlando City SC",
+      "subtitle": "4-2-9",
+      "color": "#633492",
       "feeCoefficient": 0.095,
-      "ep3SyncedAt": "2026-09-25T18:39:29Z",
+      "bestBidQuote": {
+        "value": "0.0110",
+        "currency": "USD"
+      },
+      "bestAskQuote": {
+        "value": "0.0200",
+        "currency": "USD"
+      },
+      "titleShort": "Orlando City SC",
+      "ep3SyncedAt": "2026-10-29T12:04:57Z",
       "minimumTradeQty": 1,
-      "comboEnabled": true,
+      "comboEnabled": false,
       "politics": null,
+      "eventSubcategory": "SOCCER",
       "singlesRfqConfig": {
         "enabled": true,
         "midpointDeviation": 0.2,

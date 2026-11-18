@@ -18,6 +18,9 @@ columns:
   name: start_date
   type: character
 - description: ''
+  name: image
+  type: character
+- description: ''
   name: description
   type: character
 - description: ''
@@ -78,8 +81,20 @@ columns:
   name: tags
   type: character
 - description: ''
+  name: title
+  type: character
+- description: ''
+  name: subtitle
+  type: character
+- description: ''
+  name: color
+  type: character
+- description: ''
   name: fee_coefficient
   type: numeric
+- description: ''
+  name: title_short
+  type: character
 - description: ''
   name: ep3_synced_at
   type: character
@@ -91,6 +106,21 @@ columns:
   type: logical
 - description: ''
   name: politics
+  type: character
+- description: ''
+  name: event_subcategory
+  type: character
+- description: ''
+  name: best_bid_quote_value
+  type: character
+- description: ''
+  name: best_bid_quote_currency
+  type: character
+- description: ''
+  name: best_ask_quote_value
+  type: character
+- description: ''
+  name: best_ask_quote_currency
   type: character
 - description: ''
   name: singles_rfq_config_enabled

@@ -658,14 +658,14 @@ Markets on the Polymarket US exchange, offset-paged and filterable by active or 
 
 **Endpoint URL:** `GET https://gateway.polymarket.us/v1/markets`
 
-**Valid URL:** [https://gateway.polymarket.us/v1/markets?limit=3](https://gateway.polymarket.us/v1/markets?limit=3)
+**Valid URL:** [https://gateway.polymarket.us/v1/markets?limit=3&closed=false&active=true](https://gateway.polymarket.us/v1/markets?limit=3&closed=false&active=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `limit` | `limit` |  |  | `Y` | Page size. |
-| `offset` | `offset` |  |  | `Y` | Row offset; offset=1 shifts the page (verified 2026-11-18). |
-| `active` | `active` |  |  | `Y` | Filter active markets (true/false). |
 | `closed` | `closed` |  |  | `Y` | Filter closed markets/events (true/false). |
+| `active` | `active` |  |  | `Y` | Filter active markets (true/false). |
+| `offset` | `offset` |  |  | `Y` | Row offset; offset=1 shifts the page (verified 2026-11-18). |
 
 ### Returns {#polymarket_us_markets-returns}
 
@@ -679,6 +679,7 @@ Markets on the Polymarket US exchange, offset-paged and filterable by active or 
 | `end_date` | String | ISO-8601 UTC time the market is scheduled to close. |
 | `category` | String | Top-level market category (e.g. "sports"). |
 | `start_date` | String | ISO-8601 UTC time the market opened for trading. |
+| `image` | String | URL of the market's subject image (a team logo) on an open market. |
 | `description` | String | Resolution rules in prose, including what happens if the game is postponed or canceled. |
 | `active` | Boolean | Whether the market is active; the `active` filter matches on it. |
 | `market_type` | String | Market type (e.g. "moneyline", "futures"). |
@@ -699,11 +700,20 @@ Markets on the Polymarket US exchange, offset-paged and filterable by active or 
 | `sports_market_type_v2` | String | Sports market type as an enum code (e.g. "SPORTS_MARKET_TYPE_MONEYLINE"). |
 | `hidden` | Boolean | Whether the market is hidden from the Polymarket US front end. |
 | `tags` | String | JSON-encoded list of the market's tags; empty on the captured sports markets. |
+| `title` | String | Display title of the market's subject on an open market (e.g. "Vancouver Whitecaps FC" on an MLS Cup future); closed game markets omit it, like the other open-market display fields. |
+| `subtitle` | String | Secondary display line on an open market, such as the team's record ("10-2-2"). |
+| `color` | String | Hex display color of the market's subject on an open market (e.g. "#00245E"). |
 | `fee_coefficient` | Float64 | Coefficient of the exchange's trading-fee formula for this market (e.g. 0.095). |
+| `title_short` | String | Short display title of the market's subject on an open market. |
 | `ep3_synced_at` | String | ISO-8601 UTC time the market last synced with Polymarket US's EP3 system. |
 | `minimum_trade_qty` | Int64 | Smallest number of contracts a single trade may be for. |
 | `combo_enabled` | Boolean | Whether the market can be used as a leg of a combination (parlay) order. |
 | `politics` | String | JSON-encoded politics metadata; null for sports markets. |
+| `event_subcategory` | String | Sport subcategory of the market's event on an open market (e.g. "SOCCER"). |
+| `best_bid_quote_value` | String | Highest bid in dollars per contract, as a decimal string. Present on an open market only. |
+| `best_bid_quote_currency` | String | Currency of `best_bid_quote_value` (e.g. "USD"). |
+| `best_ask_quote_value` | String | Lowest ask in dollars per contract, as a decimal string. Present on an open market only. |
+| `best_ask_quote_currency` | String | Currency of `best_ask_quote_value` (e.g. "USD"). |
 | `singles_rfq_config_enabled` | Boolean | Whether single-market request-for-quote trading is enabled. |
 | `singles_rfq_config_midpoint_deviation` | Float64 | Largest deviation from the midpoint a request-for-quote reply may have. |
 | `singles_rfq_config_min_order_value_usd` | Int64 | Smallest order value, in US dollars, accepted by request for quote. |
@@ -725,5 +735,5 @@ Markets on the Polymarket US exchange, offset-paged and filterable by active or 
 ### Example {#polymarket_us_markets-example}
 
 ```python
-polymarket_us_markets(limit='3')
+polymarket_us_markets(active='true', closed='false', limit='3')
 ```
