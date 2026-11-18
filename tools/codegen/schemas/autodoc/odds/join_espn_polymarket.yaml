@@ -1,0 +1,27 @@
+schema: join_espn_polymarket
+kind: dataframe
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: game_date_et
+  type: date
+  description: ''
+- name: away_abbreviation
+  type: character
+  description: ''
+- name: home_abbreviation
+  type: character
+  description: ''
+- name: gamma_event_id
+  type: character
+  description: ''
+- name: gamma_slug
+  type: character
+  description: ''
+- name: polymarket_us_slug
+  type: character
+  description: ''
+- name: matched_by
+  type: character
+  description: ''

@@ -85,3 +85,25 @@ def test_moneyline_pair_prob_multiplicative_default():
     assert p_shin != p
     with pytest.raises(ValueError):
         moneyline_pair_prob(-150, 130, method="nope")
+
+
+def test_fair_win_probs_two_way_and_three_way():
+    from sportsdataverse.wexp.market import fair_win_probs
+
+    probs, note = fair_win_probs(0.55, 0.50)
+    assert note is None and probs == pytest.approx([0.55 / 1.05, 0.50 / 1.05])
+    probs, note = fair_win_probs(0.45, 0.30, 0.30, draw_possible=True)
+    assert note is None and sum(probs) == pytest.approx(1.0) and len(probs) == 3
+
+
+def test_fair_win_probs_refuses_an_unpriced_draw():
+    """A two-way de-vig where a draw is possible would push the draw's share onto both teams."""
+    from sportsdataverse.wexp.market import fair_win_probs
+
+    probs, note = fair_win_probs(0.45, 0.30, draw_possible=True)
+    assert probs is None and "draw is possible" in note
+    assert fair_win_probs(None, 0.5) == (None, "missing home price")
+    assert fair_win_probs(0.5, None) == (None, "missing away price")
+    assert fair_win_probs(1.0, 0.1)[0] is None
+    with pytest.raises(ValueError, match="unknown devig method"):
+        fair_win_probs(0.5, 0.5, method="power")

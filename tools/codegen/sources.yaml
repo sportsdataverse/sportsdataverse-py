@@ -1121,6 +1121,7 @@ categories:
       - sportsdataverse.nfl.nfl_players
       - sportsdataverse.find
       - sportsdataverse.discover
+      - sportsdataverse.odds.market_join
     functions:
       - "*_team_ids"
 

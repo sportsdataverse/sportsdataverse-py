@@ -1,0 +1,3698 @@
+[
+ {
+  "id": "1230078",
+  "slug": "nhl-dal-las-2026-11-17",
+  "title": "Stars vs. Golden Knights",
+  "eventDate": "2026-11-17",
+  "startTime": "2026-11-18T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "dal",
+    "alias": "Stars",
+    "name": "Stars",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "las",
+    "alias": "Golden Knights",
+    "name": "Golden Knights",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1230079",
+  "slug": "nhl-cal-sj-2026-11-17",
+  "title": "Flames vs. Sharks",
+  "eventDate": "2026-11-17",
+  "startTime": "2026-11-18T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1235675",
+  "slug": "nhl-mon-nj-2026-11-18",
+  "title": "Canadiens vs. Devils",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nj",
+    "alias": "Devils",
+    "name": "Devils",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1235676",
+  "slug": "nhl-bos-det-2026-11-18",
+  "title": "Bruins vs. Red Wings",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bos",
+    "alias": "Bruins",
+    "name": "Bruins",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Red Wings",
+    "name": "Red Wings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1235677",
+  "slug": "nhl-col-utah-2026-11-18",
+  "title": "Avalanche vs. Utah",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T02:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "col",
+    "alias": "Avalanche",
+    "name": "Avalanche",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "utah",
+    "alias": "Utah",
+    "name": "Mammoth",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241059",
+  "slug": "nhl-buf-wsh-2026-11-19",
+  "title": "Sabres vs. Capitals",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "buf",
+    "alias": "Sabres",
+    "name": "Sabres",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "wsh",
+    "alias": "Capitals",
+    "name": "Capitals",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241060",
+  "slug": "nhl-lak-tor-2026-11-19",
+  "title": "Kings vs. Maple Leafs",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lak",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tor",
+    "alias": "Maple Leafs",
+    "name": "Maple Leafs",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241061",
+  "slug": "nhl-edm-tb-2026-11-19",
+  "title": "Oilers vs. Lightning",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "edm",
+    "alias": "Oilers",
+    "name": "Oilers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tb",
+    "alias": "Lightning",
+    "name": "Lightning",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241062",
+  "slug": "nhl-stl-pit-2026-11-19",
+  "title": "Blues vs. Penguins",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "stl",
+    "alias": "Blues",
+    "name": "Blues",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241063",
+  "slug": "nhl-phi-ott-2026-11-19",
+  "title": "Flyers vs. Senators",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phi",
+    "alias": "Flyers",
+    "name": "Flyers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241064",
+  "slug": "nhl-mon-car-2026-11-19",
+  "title": "Canadiens vs. Hurricanes",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "car",
+    "alias": "Hurricanes",
+    "name": "Hurricanes",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241065",
+  "slug": "nhl-nyi-wpg-2026-11-19",
+  "title": "Islanders vs. Jets",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyi",
+    "alias": "Islanders",
+    "name": "Islanders",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241066",
+  "slug": "nhl-cbj-chi-2026-11-19",
+  "title": "Blue Jackets vs. Blackhawks",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cbj",
+    "alias": "Blue Jackets",
+    "name": "Blue Jackets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241067",
+  "slug": "nhl-min-cal-2026-11-19",
+  "title": "Wild vs. Flames",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Wild",
+    "name": "Wild",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241068",
+  "slug": "nhl-ana-col-2026-11-19",
+  "title": "Ducks vs. Avalanche",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T02:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ana",
+    "alias": "Ducks",
+    "name": "Ducks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "col",
+    "alias": "Avalanche",
+    "name": "Avalanche",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241069",
+  "slug": "nhl-van-sea-2026-11-19",
+  "title": "Canucks vs. Kraken",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T02:40:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "van",
+    "alias": "Canucks",
+    "name": "Canucks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1241070",
+  "slug": "nhl-dal-las-2026-11-19",
+  "title": "Stars vs. Golden Knights",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "dal",
+    "alias": "Stars",
+    "name": "Stars",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "las",
+    "alias": "Golden Knights",
+    "name": "Golden Knights",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253143",
+  "slug": "nhl-edm-car-2026-11-21",
+  "title": "Oilers vs. Hurricanes",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-21T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "edm",
+    "alias": "Oilers",
+    "name": "Oilers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "car",
+    "alias": "Hurricanes",
+    "name": "Hurricanes",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253144",
+  "slug": "nhl-chi-cal-2026-11-21",
+  "title": "Blackhawks vs. Flames",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-21T20:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253145",
+  "slug": "nhl-pit-nsh-2026-11-21",
+  "title": "Penguins vs. Predators",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-21T23:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nsh",
+    "alias": "Predators",
+    "name": "Predators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253146",
+  "slug": "nhl-buf-fla-2026-11-21",
+  "title": "Sabres vs. Panthers",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-21T23:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "buf",
+    "alias": "Sabres",
+    "name": "Sabres",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "fla",
+    "alias": "Panthers",
+    "name": "Panthers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253147",
+  "slug": "nhl-las-wpg-2026-11-21",
+  "title": "Golden Knights vs. Jets",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "las",
+    "alias": "Golden Knights",
+    "name": "Golden Knights",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253148",
+  "slug": "nhl-cbj-tor-2026-11-21",
+  "title": "Blue Jackets vs. Maple Leafs",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cbj",
+    "alias": "Blue Jackets",
+    "name": "Blue Jackets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tor",
+    "alias": "Maple Leafs",
+    "name": "Maple Leafs",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253149",
+  "slug": "nhl-nj-stl-2026-11-21",
+  "title": "Devils vs. Blues",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nj",
+    "alias": "Devils",
+    "name": "Devils",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "stl",
+    "alias": "Blues",
+    "name": "Blues",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253150",
+  "slug": "nhl-lak-ott-2026-11-21",
+  "title": "Kings vs. Senators",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lak",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253151",
+  "slug": "nhl-phi-mon-2026-11-21",
+  "title": "Flyers vs. Canadiens",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phi",
+    "alias": "Flyers",
+    "name": "Flyers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253152",
+  "slug": "nhl-nyi-det-2026-11-21",
+  "title": "Islanders vs. Red Wings",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyi",
+    "alias": "Islanders",
+    "name": "Islanders",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Red Wings",
+    "name": "Red Wings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253153",
+  "slug": "nhl-wsh-bos-2026-11-21",
+  "title": "Capitals vs. Bruins",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wsh",
+    "alias": "Capitals",
+    "name": "Capitals",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bos",
+    "alias": "Bruins",
+    "name": "Bruins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253154",
+  "slug": "nhl-ana-utah-2026-11-21",
+  "title": "Ducks vs. Utah",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T02:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ana",
+    "alias": "Ducks",
+    "name": "Ducks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "utah",
+    "alias": "Utah",
+    "name": "Mammoth",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253155",
+  "slug": "nhl-min-van-2026-11-21",
+  "title": "Wild vs. Canucks",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Wild",
+    "name": "Wild",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "van",
+    "alias": "Canucks",
+    "name": "Canucks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1253156",
+  "slug": "nhl-sea-sj-2026-11-21",
+  "title": "Kraken vs. Sharks",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1259699",
+  "slug": "nhl-car-nyr-2026-11-22",
+  "title": "Hurricanes vs. Rangers",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T17:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "car",
+    "alias": "Hurricanes",
+    "name": "Hurricanes",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyr",
+    "alias": "Rangers",
+    "name": "Rangers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1259700",
+  "slug": "nhl-buf-tb-2026-11-22",
+  "title": "Sabres vs. Lightning",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T22:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "buf",
+    "alias": "Sabres",
+    "name": "Sabres",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tb",
+    "alias": "Lightning",
+    "name": "Lightning",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1259701",
+  "slug": "nhl-edm-stl-2026-11-22",
+  "title": "Oilers vs. Blues",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-23T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "edm",
+    "alias": "Oilers",
+    "name": "Oilers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "stl",
+    "alias": "Blues",
+    "name": "Blues",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1259702",
+  "slug": "nhl-pit-dal-2026-11-22",
+  "title": "Penguins vs. Stars",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-23T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "dal",
+    "alias": "Stars",
+    "name": "Stars",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1259703",
+  "slug": "nhl-chi-van-2026-11-22",
+  "title": "Blackhawks vs. Canucks",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-23T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "van",
+    "alias": "Canucks",
+    "name": "Canucks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1266570",
+  "slug": "nhl-cbj-nj-2026-11-23",
+  "title": "Blue Jackets vs. Devils",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cbj",
+    "alias": "Blue Jackets",
+    "name": "Blue Jackets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nj",
+    "alias": "Devils",
+    "name": "Devils",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1266571",
+  "slug": "nhl-utah-wpg-2026-11-23",
+  "title": "Utah vs. Jets",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "utah",
+    "alias": "Utah",
+    "name": "Mammoth",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1266572",
+  "slug": "nhl-cal-ott-2026-11-23",
+  "title": "Flames vs. Senators",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1266573",
+  "slug": "nhl-tor-nyi-2026-11-23",
+  "title": "Maple Leafs vs. Islanders",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tor",
+    "alias": "Maple Leafs",
+    "name": "Maple Leafs",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyi",
+    "alias": "Islanders",
+    "name": "Islanders",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1266574",
+  "slug": "nhl-lak-mon-2026-11-23",
+  "title": "Kings vs. Canadiens",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lak",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1266575",
+  "slug": "nhl-ana-sea-2026-11-23",
+  "title": "Ducks vs. Kraken",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T02:40:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ana",
+    "alias": "Ducks",
+    "name": "Ducks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1266576",
+  "slug": "nhl-min-sj-2026-11-23",
+  "title": "Wild vs. Sharks",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Wild",
+    "name": "Wild",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1272411",
+  "slug": "nhl-las-edm-2026-11-24",
+  "title": "Golden Knights vs. Oilers",
+  "eventDate": "2026-11-24",
+  "startTime": "2026-11-25T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "las",
+    "alias": "Golden Knights",
+    "name": "Golden Knights",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "edm",
+    "alias": "Oilers",
+    "name": "Oilers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278247",
+  "slug": "nhl-nj-cbj-2026-11-25",
+  "title": "Devils vs. Blue Jackets",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nj",
+    "alias": "Devils",
+    "name": "Devils",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cbj",
+    "alias": "Blue Jackets",
+    "name": "Blue Jackets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278248",
+  "slug": "nhl-phi-wsh-2026-11-25",
+  "title": "Flyers vs. Capitals",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phi",
+    "alias": "Flyers",
+    "name": "Flyers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "wsh",
+    "alias": "Capitals",
+    "name": "Capitals",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278249",
+  "slug": "nhl-ott-fla-2026-11-25",
+  "title": "Senators vs. Panthers",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "fla",
+    "alias": "Panthers",
+    "name": "Panthers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278250",
+  "slug": "nhl-car-tb-2026-11-25",
+  "title": "Hurricanes vs. Lightning",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "car",
+    "alias": "Hurricanes",
+    "name": "Hurricanes",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tb",
+    "alias": "Lightning",
+    "name": "Lightning",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278251",
+  "slug": "nhl-cal-pit-2026-11-25",
+  "title": "Flames vs. Penguins",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278252",
+  "slug": "nhl-stl-nyi-2026-11-25",
+  "title": "Blues vs. Islanders",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "stl",
+    "alias": "Blues",
+    "name": "Blues",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyi",
+    "alias": "Islanders",
+    "name": "Islanders",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278253",
+  "slug": "nhl-nyr-buf-2026-11-25",
+  "title": "Rangers vs. Sabres",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyr",
+    "alias": "Rangers",
+    "name": "Rangers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "buf",
+    "alias": "Sabres",
+    "name": "Sabres",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278254",
+  "slug": "nhl-wpg-bos-2026-11-25",
+  "title": "Jets vs. Bruins",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bos",
+    "alias": "Bruins",
+    "name": "Bruins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278255",
+  "slug": "nhl-van-det-2026-11-25",
+  "title": "Canucks vs. Red Wings",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "van",
+    "alias": "Canucks",
+    "name": "Canucks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Red Wings",
+    "name": "Red Wings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278256",
+  "slug": "nhl-utah-min-2026-11-25",
+  "title": "Utah vs. Wild",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "utah",
+    "alias": "Utah",
+    "name": "Mammoth",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "min",
+    "alias": "Wild",
+    "name": "Wild",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278257",
+  "slug": "nhl-nsh-dal-2026-11-25",
+  "title": "Predators vs. Stars",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nsh",
+    "alias": "Predators",
+    "name": "Predators",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "dal",
+    "alias": "Stars",
+    "name": "Stars",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278258",
+  "slug": "nhl-sj-ana-2026-11-25",
+  "title": "Sharks vs. Ducks",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ana",
+    "alias": "Ducks",
+    "name": "Ducks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278259",
+  "slug": "nhl-mon-col-2026-11-25",
+  "title": "Canadiens vs. Avalanche",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T02:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "col",
+    "alias": "Avalanche",
+    "name": "Avalanche",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1278260",
+  "slug": "nhl-chi-sea-2026-11-25",
+  "title": "Blackhawks vs. Kraken",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T02:40:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289069",
+  "slug": "nhl-utah-nsh-2026-11-27",
+  "title": "Utah vs. Predators",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "utah",
+    "alias": "Utah",
+    "name": "Mammoth",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nsh",
+    "alias": "Predators",
+    "name": "Predators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289070",
+  "slug": "nhl-cal-nj-2026-11-27",
+  "title": "Flames vs. Devils",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nj",
+    "alias": "Devils",
+    "name": "Devils",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289071",
+  "slug": "nhl-tor-bos-2026-11-27",
+  "title": "Maple Leafs vs. Bruins",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tor",
+    "alias": "Maple Leafs",
+    "name": "Maple Leafs",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bos",
+    "alias": "Bruins",
+    "name": "Bruins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289072",
+  "slug": "nhl-dal-stl-2026-11-27",
+  "title": "Stars vs. Blues",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T19:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "dal",
+    "alias": "Stars",
+    "name": "Stars",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "stl",
+    "alias": "Blues",
+    "name": "Blues",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289073",
+  "slug": "nhl-det-cbj-2026-11-27",
+  "title": "Red Wings vs. Blue Jackets",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T20:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "det",
+    "alias": "Red Wings",
+    "name": "Red Wings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cbj",
+    "alias": "Blue Jackets",
+    "name": "Blue Jackets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289074",
+  "slug": "nhl-fla-wsh-2026-11-27",
+  "title": "Panthers vs. Capitals",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T20:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "fla",
+    "alias": "Panthers",
+    "name": "Panthers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "wsh",
+    "alias": "Capitals",
+    "name": "Capitals",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289075",
+  "slug": "nhl-ott-tb-2026-11-27",
+  "title": "Senators vs. Lightning",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T20:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tb",
+    "alias": "Lightning",
+    "name": "Lightning",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289076",
+  "slug": "nhl-van-phi-2026-11-27",
+  "title": "Canucks vs. Flyers",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T20:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "van",
+    "alias": "Canucks",
+    "name": "Canucks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phi",
+    "alias": "Flyers",
+    "name": "Flyers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289077",
+  "slug": "nhl-col-min-2026-11-27",
+  "title": "Avalanche vs. Wild",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T21:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "col",
+    "alias": "Avalanche",
+    "name": "Avalanche",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "min",
+    "alias": "Wild",
+    "name": "Wild",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289078",
+  "slug": "nhl-lak-ana-2026-11-27",
+  "title": "Kings vs. Ducks",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T21:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lak",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ana",
+    "alias": "Ducks",
+    "name": "Ducks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289079",
+  "slug": "nhl-las-sj-2026-11-27",
+  "title": "Golden Knights vs. Sharks",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T21:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "las",
+    "alias": "Golden Knights",
+    "name": "Golden Knights",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289080",
+  "slug": "nhl-nyr-chi-2026-11-27",
+  "title": "Rangers vs. Blackhawks",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-27T22:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyr",
+    "alias": "Rangers",
+    "name": "Rangers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289081",
+  "slug": "nhl-wpg-nyi-2026-11-27",
+  "title": "Jets vs. Islanders",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyi",
+    "alias": "Islanders",
+    "name": "Islanders",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289082",
+  "slug": "nhl-sea-edm-2026-11-27",
+  "title": "Kraken vs. Oilers",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "edm",
+    "alias": "Oilers",
+    "name": "Oilers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1289083",
+  "slug": "nhl-pit-buf-2026-11-27",
+  "title": "Penguins vs. Sabres",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "buf",
+    "alias": "Sabres",
+    "name": "Sabres",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295675",
+  "slug": "nhl-mon-las-2026-11-28",
+  "title": "Canadiens vs. Golden Knights",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-28T21:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "las",
+    "alias": "Golden Knights",
+    "name": "Golden Knights",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295676",
+  "slug": "nhl-tb-fla-2026-11-28",
+  "title": "Lightning vs. Panthers",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-28T23:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tb",
+    "alias": "Lightning",
+    "name": "Lightning",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "fla",
+    "alias": "Panthers",
+    "name": "Panthers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295677",
+  "slug": "nhl-wsh-stl-2026-11-28",
+  "title": "Capitals vs. Blues",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wsh",
+    "alias": "Capitals",
+    "name": "Capitals",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "stl",
+    "alias": "Blues",
+    "name": "Blues",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295678",
+  "slug": "nhl-tor-pit-2026-11-28",
+  "title": "Maple Leafs vs. Penguins",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tor",
+    "alias": "Maple Leafs",
+    "name": "Maple Leafs",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295679",
+  "slug": "nhl-cal-nyr-2026-11-28",
+  "title": "Flames vs. Rangers",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyr",
+    "alias": "Rangers",
+    "name": "Rangers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295680",
+  "slug": "nhl-wpg-nj-2026-11-28",
+  "title": "Jets vs. Devils",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nj",
+    "alias": "Devils",
+    "name": "Devils",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295681",
+  "slug": "nhl-ott-car-2026-11-28",
+  "title": "Senators vs. Hurricanes",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "car",
+    "alias": "Hurricanes",
+    "name": "Hurricanes",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295682",
+  "slug": "nhl-nsh-det-2026-11-28",
+  "title": "Predators vs. Red Wings",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nsh",
+    "alias": "Predators",
+    "name": "Predators",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Red Wings",
+    "name": "Red Wings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295683",
+  "slug": "nhl-nyi-phi-2026-11-28",
+  "title": "Islanders vs. Flyers",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyi",
+    "alias": "Islanders",
+    "name": "Islanders",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phi",
+    "alias": "Flyers",
+    "name": "Flyers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295684",
+  "slug": "nhl-utah-dal-2026-11-28",
+  "title": "Utah vs. Stars",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "utah",
+    "alias": "Utah",
+    "name": "Mammoth",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "dal",
+    "alias": "Stars",
+    "name": "Stars",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295685",
+  "slug": "nhl-sj-col-2026-11-28",
+  "title": "Sharks vs. Avalanche",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T02:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "col",
+    "alias": "Avalanche",
+    "name": "Avalanche",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295686",
+  "slug": "nhl-ana-lak-2026-11-28",
+  "title": "Ducks vs. Kings",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T02:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ana",
+    "alias": "Ducks",
+    "name": "Ducks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lak",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1295687",
+  "slug": "nhl-edm-sea-2026-11-28",
+  "title": "Oilers vs. Kraken",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "edm",
+    "alias": "Oilers",
+    "name": "Oilers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1302039",
+  "slug": "nhl-min-chi-2026-11-29",
+  "title": "Wild vs. Blackhawks",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T19:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Wild",
+    "name": "Wild",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1302040",
+  "slug": "nhl-van-bos-2026-11-29",
+  "title": "Canucks vs. Bruins",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T22:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "van",
+    "alias": "Canucks",
+    "name": "Canucks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bos",
+    "alias": "Bruins",
+    "name": "Bruins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1308626",
+  "slug": "nhl-ott-nsh-2026-11-30",
+  "title": "Senators vs. Predators",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-11-30T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nsh",
+    "alias": "Predators",
+    "name": "Predators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1308627",
+  "slug": "nhl-cbj-pit-2026-11-30",
+  "title": "Blue Jackets vs. Penguins",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cbj",
+    "alias": "Blue Jackets",
+    "name": "Blue Jackets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1308628",
+  "slug": "nhl-car-nyr-2026-11-30",
+  "title": "Hurricanes vs. Rangers",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "car",
+    "alias": "Hurricanes",
+    "name": "Hurricanes",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyr",
+    "alias": "Rangers",
+    "name": "Rangers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1308629",
+  "slug": "nhl-chi-wpg-2026-11-30",
+  "title": "Blackhawks vs. Jets",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1308630",
+  "slug": "nhl-phi-tor-2026-11-30",
+  "title": "Flyers vs. Maple Leafs",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phi",
+    "alias": "Flyers",
+    "name": "Flyers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tor",
+    "alias": "Maple Leafs",
+    "name": "Maple Leafs",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1308631",
+  "slug": "nhl-mon-utah-2026-11-30",
+  "title": "Canadiens vs. Utah",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T02:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "utah",
+    "alias": "Utah",
+    "name": "Mammoth",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1314574",
+  "slug": "nhl-van-wsh-2026-12-01",
+  "title": "Canucks vs. Capitals",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "van",
+    "alias": "Canucks",
+    "name": "Canucks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "wsh",
+    "alias": "Capitals",
+    "name": "Capitals",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1314575",
+  "slug": "nhl-fla-nyi-2026-12-01",
+  "title": "Panthers vs. Islanders",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "fla",
+    "alias": "Panthers",
+    "name": "Panthers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyi",
+    "alias": "Islanders",
+    "name": "Islanders",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1314576",
+  "slug": "nhl-sj-nj-2026-12-01",
+  "title": "Sharks vs. Devils",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nj",
+    "alias": "Devils",
+    "name": "Devils",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1314577",
+  "slug": "nhl-cal-det-2026-12-01",
+  "title": "Flames vs. Red Wings",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Red Wings",
+    "name": "Red Wings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1314578",
+  "slug": "nhl-col-bos-2026-12-01",
+  "title": "Avalanche vs. Bruins",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "col",
+    "alias": "Avalanche",
+    "name": "Avalanche",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bos",
+    "alias": "Bruins",
+    "name": "Bruins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1314579",
+  "slug": "nhl-buf-edm-2026-12-01",
+  "title": "Sabres vs. Oilers",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "buf",
+    "alias": "Sabres",
+    "name": "Sabres",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "edm",
+    "alias": "Oilers",
+    "name": "Oilers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1314580",
+  "slug": "nhl-dal-sea-2026-12-01",
+  "title": "Stars vs. Kraken",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T02:40:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "dal",
+    "alias": "Stars",
+    "name": "Stars",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1314581",
+  "slug": "nhl-min-ana-2026-12-01",
+  "title": "Wild vs. Ducks",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Wild",
+    "name": "Wild",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ana",
+    "alias": "Ducks",
+    "name": "Ducks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1314582",
+  "slug": "nhl-las-lak-2026-12-01",
+  "title": "Golden Knights vs. Kings",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "las",
+    "alias": "Golden Knights",
+    "name": "Golden Knights",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lak",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1320506",
+  "slug": "nhl-tb-mon-2026-12-02",
+  "title": "Lightning vs. Canadiens",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tb",
+    "alias": "Lightning",
+    "name": "Lightning",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1320507",
+  "slug": "nhl-pit-stl-2026-12-02",
+  "title": "Penguins vs. Blues",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "stl",
+    "alias": "Blues",
+    "name": "Blues",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1320508",
+  "slug": "nhl-wpg-utah-2026-12-02",
+  "title": "Jets vs. Utah",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T02:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "utah",
+    "alias": "Utah",
+    "name": "Mammoth",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325752",
+  "slug": "nhl-fla-tor-2026-12-03",
+  "title": "Panthers vs. Maple Leafs",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "fla",
+    "alias": "Panthers",
+    "name": "Panthers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tor",
+    "alias": "Maple Leafs",
+    "name": "Maple Leafs",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325753",
+  "slug": "nhl-nyi-phi-2026-12-03",
+  "title": "Islanders vs. Flyers",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyi",
+    "alias": "Islanders",
+    "name": "Islanders",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phi",
+    "alias": "Flyers",
+    "name": "Flyers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325754",
+  "slug": "nhl-nj-ott-2026-12-03",
+  "title": "Devils vs. Senators",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nj",
+    "alias": "Devils",
+    "name": "Devils",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325755",
+  "slug": "nhl-sj-nyr-2026-12-03",
+  "title": "Sharks vs. Rangers",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyr",
+    "alias": "Rangers",
+    "name": "Rangers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325756",
+  "slug": "nhl-cbj-car-2026-12-03",
+  "title": "Blue Jackets vs. Hurricanes",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cbj",
+    "alias": "Blue Jackets",
+    "name": "Blue Jackets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "car",
+    "alias": "Hurricanes",
+    "name": "Hurricanes",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325757",
+  "slug": "nhl-col-det-2026-12-03",
+  "title": "Avalanche vs. Red Wings",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "col",
+    "alias": "Avalanche",
+    "name": "Avalanche",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Red Wings",
+    "name": "Red Wings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325758",
+  "slug": "nhl-chi-nsh-2026-12-03",
+  "title": "Blackhawks vs. Predators",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nsh",
+    "alias": "Predators",
+    "name": "Predators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325759",
+  "slug": "nhl-wsh-edm-2026-12-03",
+  "title": "Capitals vs. Oilers",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wsh",
+    "alias": "Capitals",
+    "name": "Capitals",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "edm",
+    "alias": "Oilers",
+    "name": "Oilers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325760",
+  "slug": "nhl-buf-cal-2026-12-03",
+  "title": "Sabres vs. Flames",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "buf",
+    "alias": "Sabres",
+    "name": "Sabres",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325761",
+  "slug": "nhl-dal-sea-2026-12-03",
+  "title": "Stars vs. Kraken",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "dal",
+    "alias": "Stars",
+    "name": "Stars",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325762",
+  "slug": "nhl-utah-las-2026-12-03",
+  "title": "Utah vs. Golden Knights",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "utah",
+    "alias": "Utah",
+    "name": "Mammoth",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "las",
+    "alias": "Golden Knights",
+    "name": "Golden Knights",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1325763",
+  "slug": "nhl-min-lak-2026-12-03",
+  "title": "Wild vs. Kings",
+  "eventDate": "2026-12-03",
+  "startTime": "2026-12-04T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Wild",
+    "name": "Wild",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lak",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1333212",
+  "slug": "nhl-sj-nyi-2026-12-04",
+  "title": "Sharks vs. Islanders",
+  "eventDate": "2026-12-04",
+  "startTime": "2026-12-05T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyi",
+    "alias": "Islanders",
+    "name": "Islanders",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1333213",
+  "slug": "nhl-chi-stl-2026-12-04",
+  "title": "Blackhawks vs. Blues",
+  "eventDate": "2026-12-04",
+  "startTime": "2026-12-05T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "stl",
+    "alias": "Blues",
+    "name": "Blues",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1333214",
+  "slug": "nhl-buf-van-2026-12-04",
+  "title": "Sabres vs. Canucks",
+  "eventDate": "2026-12-04",
+  "startTime": "2026-12-05T02:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "buf",
+    "alias": "Sabres",
+    "name": "Sabres",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "van",
+    "alias": "Canucks",
+    "name": "Canucks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1333215",
+  "slug": "nhl-sea-ana-2026-12-04",
+  "title": "Kraken vs. Ducks",
+  "eventDate": "2026-12-04",
+  "startTime": "2026-12-05T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ana",
+    "alias": "Ducks",
+    "name": "Ducks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342050",
+  "slug": "nhl-fla-mon-2026-12-05",
+  "title": "Panthers vs. Canadiens",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-05T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "fla",
+    "alias": "Panthers",
+    "name": "Panthers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342051",
+  "slug": "nhl-det-bos-2026-12-05",
+  "title": "Red Wings vs. Bruins",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-05T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "det",
+    "alias": "Red Wings",
+    "name": "Red Wings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bos",
+    "alias": "Bruins",
+    "name": "Bruins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342052",
+  "slug": "nhl-cbj-nsh-2026-12-05",
+  "title": "Blue Jackets vs. Predators",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-05T19:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cbj",
+    "alias": "Blue Jackets",
+    "name": "Blue Jackets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nsh",
+    "alias": "Predators",
+    "name": "Predators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342053",
+  "slug": "nhl-nj-pit-2026-12-05",
+  "title": "Devils vs. Penguins",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-05T20:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nj",
+    "alias": "Devils",
+    "name": "Devils",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342054",
+  "slug": "nhl-wsh-cal-2026-12-05",
+  "title": "Capitals vs. Flames",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-05T20:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wsh",
+    "alias": "Capitals",
+    "name": "Capitals",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342055",
+  "slug": "nhl-wpg-las-2026-12-05",
+  "title": "Jets vs. Golden Knights",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-06T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "las",
+    "alias": "Golden Knights",
+    "name": "Golden Knights",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342056",
+  "slug": "nhl-tb-ott-2026-12-05",
+  "title": "Lightning vs. Senators",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-06T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tb",
+    "alias": "Lightning",
+    "name": "Lightning",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342057",
+  "slug": "nhl-col-nyr-2026-12-05",
+  "title": "Avalanche vs. Rangers",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-06T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "col",
+    "alias": "Avalanche",
+    "name": "Avalanche",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyr",
+    "alias": "Rangers",
+    "name": "Rangers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342058",
+  "slug": "nhl-tor-car-2026-12-05",
+  "title": "Maple Leafs vs. Hurricanes",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-06T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tor",
+    "alias": "Maple Leafs",
+    "name": "Maple Leafs",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "car",
+    "alias": "Hurricanes",
+    "name": "Hurricanes",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342059",
+  "slug": "nhl-phi-min-2026-12-05",
+  "title": "Flyers vs. Wild",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-06T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phi",
+    "alias": "Flyers",
+    "name": "Flyers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "min",
+    "alias": "Wild",
+    "name": "Wild",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342060",
+  "slug": "nhl-dal-van-2026-12-05",
+  "title": "Stars vs. Canucks",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-06T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "dal",
+    "alias": "Stars",
+    "name": "Stars",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "van",
+    "alias": "Canucks",
+    "name": "Canucks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1342061",
+  "slug": "nhl-utah-lak-2026-12-05",
+  "title": "Utah vs. Kings",
+  "eventDate": "2026-12-05",
+  "startTime": "2026-12-06T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "utah",
+    "alias": "Utah",
+    "name": "Mammoth",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lak",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1350048",
+  "slug": "nhl-sj-pit-2026-12-06",
+  "title": "Sharks vs. Penguins",
+  "eventDate": "2026-12-06",
+  "startTime": "2026-12-06T20:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1350059",
+  "slug": "nhl-nsh-stl-2026-12-06",
+  "title": "Predators vs. Blues",
+  "eventDate": "2026-12-06",
+  "startTime": "2026-12-06T22:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nsh",
+    "alias": "Predators",
+    "name": "Predators",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "stl",
+    "alias": "Blues",
+    "name": "Blues",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1350064",
+  "slug": "nhl-ott-mon-2026-12-06",
+  "title": "Senators vs. Canadiens",
+  "eventDate": "2026-12-06",
+  "startTime": "2026-12-07T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1350065",
+  "slug": "nhl-edm-chi-2026-12-06",
+  "title": "Oilers vs. Blackhawks",
+  "eventDate": "2026-12-06",
+  "startTime": "2026-12-07T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "edm",
+    "alias": "Oilers",
+    "name": "Oilers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1350066",
+  "slug": "nhl-buf-sea-2026-12-06",
+  "title": "Sabres vs. Kraken",
+  "eventDate": "2026-12-06",
+  "startTime": "2026-12-07T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "buf",
+    "alias": "Sabres",
+    "name": "Sabres",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1350067",
+  "slug": "nhl-wpg-ana-2026-12-06",
+  "title": "Jets vs. Ducks",
+  "eventDate": "2026-12-06",
+  "startTime": "2026-12-07T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ana",
+    "alias": "Ducks",
+    "name": "Ducks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1357581",
+  "slug": "nhl-col-nyi-2026-12-07",
+  "title": "Avalanche vs. Islanders",
+  "eventDate": "2026-12-07",
+  "startTime": "2026-12-07T18:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "col",
+    "alias": "Avalanche",
+    "name": "Avalanche",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyi",
+    "alias": "Islanders",
+    "name": "Islanders",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1357594",
+  "slug": "nhl-cbj-tb-2026-12-07",
+  "title": "Blue Jackets vs. Lightning",
+  "eventDate": "2026-12-07",
+  "startTime": "2026-12-08T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cbj",
+    "alias": "Blue Jackets",
+    "name": "Blue Jackets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tb",
+    "alias": "Lightning",
+    "name": "Lightning",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1357595",
+  "slug": "nhl-nj-nyr-2026-12-07",
+  "title": "Devils vs. Rangers",
+  "eventDate": "2026-12-07",
+  "startTime": "2026-12-08T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nj",
+    "alias": "Devils",
+    "name": "Devils",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyr",
+    "alias": "Rangers",
+    "name": "Rangers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1357596",
+  "slug": "nhl-wsh-van-2026-12-07",
+  "title": "Capitals vs. Canucks",
+  "eventDate": "2026-12-07",
+  "startTime": "2026-12-08T02:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "wsh",
+    "alias": "Capitals",
+    "name": "Capitals",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "van",
+    "alias": "Canucks",
+    "name": "Canucks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1365045",
+  "slug": "nhl-bos-fla-2026-12-08",
+  "title": "Bruins vs. Panthers",
+  "eventDate": "2026-12-08",
+  "startTime": "2026-12-09T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bos",
+    "alias": "Bruins",
+    "name": "Bruins",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "fla",
+    "alias": "Panthers",
+    "name": "Panthers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1365046",
+  "slug": "nhl-chi-pit-2026-12-08",
+  "title": "Blackhawks vs. Penguins",
+  "eventDate": "2026-12-08",
+  "startTime": "2026-12-09T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Blackhawks",
+    "name": "Blackhawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "pit",
+    "alias": "Penguins",
+    "name": "Penguins",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1365047",
+  "slug": "nhl-ana-ott-2026-12-08",
+  "title": "Ducks vs. Senators",
+  "eventDate": "2026-12-08",
+  "startTime": "2026-12-09T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ana",
+    "alias": "Ducks",
+    "name": "Ducks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ott",
+    "alias": "Senators",
+    "name": "Senators",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1365048",
+  "slug": "nhl-las-mon-2026-12-08",
+  "title": "Golden Knights vs. Canadiens",
+  "eventDate": "2026-12-08",
+  "startTime": "2026-12-09T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "las",
+    "alias": "Golden Knights",
+    "name": "Golden Knights",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mon",
+    "alias": "Canadiens",
+    "name": "Canadiens",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1365049",
+  "slug": "nhl-nyr-car-2026-12-08",
+  "title": "Rangers vs. Hurricanes",
+  "eventDate": "2026-12-08",
+  "startTime": "2026-12-09T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyr",
+    "alias": "Rangers",
+    "name": "Rangers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "car",
+    "alias": "Hurricanes",
+    "name": "Hurricanes",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1365050",
+  "slug": "nhl-phi-wpg-2026-12-08",
+  "title": "Flyers vs. Jets",
+  "eventDate": "2026-12-08",
+  "startTime": "2026-12-09T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phi",
+    "alias": "Flyers",
+    "name": "Flyers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "wpg",
+    "alias": "Jets",
+    "name": "Jets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1365051",
+  "slug": "nhl-col-stl-2026-12-08",
+  "title": "Avalanche vs. Blues",
+  "eventDate": "2026-12-08",
+  "startTime": "2026-12-09T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "col",
+    "alias": "Avalanche",
+    "name": "Avalanche",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "stl",
+    "alias": "Blues",
+    "name": "Blues",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1365052",
+  "slug": "nhl-nsh-cal-2026-12-08",
+  "title": "Predators vs. Flames",
+  "eventDate": "2026-12-08",
+  "startTime": "2026-12-09T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nsh",
+    "alias": "Predators",
+    "name": "Predators",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cal",
+    "alias": "Flames",
+    "name": "Flames",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1365053",
+  "slug": "nhl-edm-min-2026-12-08",
+  "title": "Oilers vs. Wild",
+  "eventDate": "2026-12-08",
+  "startTime": "2026-12-09T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "edm",
+    "alias": "Oilers",
+    "name": "Oilers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "min",
+    "alias": "Wild",
+    "name": "Wild",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1365068",
+  "slug": "nhl-sea-sj-2026-12-08",
+  "title": "Kraken vs. Sharks",
+  "eventDate": "2026-12-08",
+  "startTime": "2026-12-09T03:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sea",
+    "alias": "Kraken",
+    "name": "Kraken",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sj",
+    "alias": "Sharks",
+    "name": "Sharks",
+    "ordering": "home"
+   }
+  ]
+ }
+]

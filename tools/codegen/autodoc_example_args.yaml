@@ -746,6 +746,8 @@ odds:
   toa_event_markets: {sport: americanfootball_nfl, event_id: f122527f003276d3bca19efa48c902c1}  # 18 rows x 10 cols (WAS@SF on 2026-10-20; stale after kickoff)
   toa_event_odds: {sport: americanfootball_nfl, event_id: f122527f003276d3bca19efa48c902c1}  # 6 rows x 17 cols (same event; stale after kickoff)
   toa_event_odds_history: {sport: americanfootball_nfl, event_id: b2eeb176fc9adfc63b9098b313905792, date: "2023-11-29T22:45:00Z"}  # 30 rows x 20 cols
+  join_espn_kalshi: {espn: {$call: nba.espn_nba_scoreboard, args: {dates: "20261119"}}, kalshi: {$call: odds.kalshi_markets, args: {limit: "1000", params: {series_ticker: KXNBAGAME, status: open}}}, league: nba}  # 4 rows x 16 cols (2026-11-18; stale once the games settle)
+  join_espn_polymarket: {espn: {$call: nfl.espn_nfl_scoreboard, args: {dates: "20261122"}}, gamma_events: {$call: odds.polymarket_gamma_events, args: {closed: "false", limit: "100", params: {series_id: "12185"}}}, league: nfl}  # 11 rows x 8 cols
 
 soccer:
   soccer_open_events: {provider: statsbomb, match_id: 8658}  # 3036 rows x 24 cols

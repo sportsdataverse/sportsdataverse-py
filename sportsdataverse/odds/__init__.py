@@ -19,3 +19,4 @@ from sportsdataverse.odds.kalshi import *  # noqa: F401,F403,E402
 from sportsdataverse.odds.kalshi_parsers import *  # noqa: F401,F403,E402
 from sportsdataverse.odds.polymarket import *  # noqa: F401,F403,E402
 from sportsdataverse.odds.polymarket_parsers import *  # noqa: F401,F403,E402
+from sportsdataverse.odds.market_join import *  # noqa: F401,F403,E402

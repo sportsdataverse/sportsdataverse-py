@@ -22,6 +22,7 @@ from scipy.stats import norm
 __all__ = [
     "devig_multiplicative",
     "devig_shin",
+    "fair_win_probs",
     "logit_blend",
     "moneyline_pair_prob",
     "prob_from_american",
@@ -215,3 +216,58 @@ def moneyline_pair_prob(home_price: float, away_price: float, method: str = "mul
     if method == "shin":
         return devig_shin(raw)[0]
     raise ValueError(f"unknown devig method: {method!r}")
+
+
+def fair_win_probs(
+    home: float | None,
+    away: float | None,
+    draw: float | None = None,
+    *,
+    draw_possible: bool = False,
+    method: str = "multiplicative",
+) -> tuple[list[float] | None, str | None]:
+    """Vig-removed win probabilities from raw implied ones, or ``None`` and the reason.
+
+    The guard is the point: where a game can end level and no draw price is
+    posted, the home and away prices alone do not cover every outcome, and
+    normalizing them to 1 would push the draw's share onto both teams. That
+    returns ``None`` with a reason instead of a biased pair.
+
+    Args:
+        home: raw implied home win probability (a price already in 0-1, from
+            :func:`prob_from_american`, :func:`prob_from_decimal` or a
+            prediction-market midpoint).
+        away: raw implied away win probability.
+        draw: raw implied draw probability, when one is posted.
+        draw_possible: the league's games can end level (soccer).
+        method: ``"multiplicative"`` (default) or ``"shin"``.
+
+    Returns:
+        ``([home, away], None)``, or ``([home, away, draw], None)`` when a draw
+        price is given; ``(None, reason)`` when a needed price is missing or not
+        a probability.
+
+    Raises:
+        ValueError: If ``method`` is not recognized.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wexp.market import fair_win_probs
+            fair_win_probs(0.55, 0.50)                    # ([0.5238, 0.4762], None)
+            fair_win_probs(0.45, 0.30, draw_possible=True)  # (None, "draw is possible ...")
+    """
+    if method not in ("multiplicative", "shin"):
+        raise ValueError(f"unknown devig method: {method!r}")
+    if home is None and away is None:
+        return None, "no home or away price"
+    if home is None:
+        return None, "missing home price"
+    if away is None:
+        return None, "missing away price"
+    if draw_possible and draw is None:
+        return None, "draw is possible but no draw price is posted; a two-way de-vig would be biased"
+    raw = [home, away] if draw is None else [home, away, draw]
+    if any(not (0 < p < 1) for p in raw):
+        return None, "a price is not a probability between 0 and 1"
+    return (devig_multiplicative(raw) if method == "multiplicative" else devig_shin(raw)), None

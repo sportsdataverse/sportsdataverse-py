@@ -1,0 +1,2272 @@
+{
+ "events": [
+  {
+   "id": "401892739",
+   "uid": "s:70~l:90~e:401892739",
+   "date": "2026-11-19T00:30Z",
+   "name": "Boston Bruins at Detroit Red Wings",
+   "shortName": "BOS @ DET",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 7:30 PM EST",
+     "shortDetail": "11/18 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892739",
+     "date": "2026-11-19T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "5",
+       "homeAway": "home",
+       "team": {
+        "id": "5",
+        "abbreviation": "DET",
+        "displayName": "Detroit Red Wings",
+        "shortDisplayName": "Red Wings",
+        "name": "Red Wings",
+        "location": "Detroit"
+       }
+      },
+      {
+       "id": "1",
+       "homeAway": "away",
+       "team": {
+        "id": "1",
+        "abbreviation": "BOS",
+        "displayName": "Boston Bruins",
+        "shortDisplayName": "Bruins",
+        "name": "Bruins",
+        "location": "Boston"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892740",
+   "uid": "s:70~l:90~e:401892740",
+   "date": "2026-11-19T00:30Z",
+   "name": "Montreal Canadiens at New Jersey Devils",
+   "shortName": "MTL @ NJ",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 7:30 PM EST",
+     "shortDetail": "11/18 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892740",
+     "date": "2026-11-19T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "11",
+       "homeAway": "home",
+       "team": {
+        "id": "11",
+        "abbreviation": "NJ",
+        "displayName": "New Jersey Devils",
+        "shortDisplayName": "Devils",
+        "name": "Devils",
+        "location": "New Jersey"
+       }
+      },
+      {
+       "id": "10",
+       "homeAway": "away",
+       "team": {
+        "id": "10",
+        "abbreviation": "MTL",
+        "displayName": "Montreal Canadiens",
+        "shortDisplayName": "Canadiens",
+        "name": "Canadiens",
+        "location": "Montreal"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892741",
+   "uid": "s:70~l:90~e:401892741",
+   "date": "2026-11-19T03:00Z",
+   "name": "Colorado Avalanche at Utah Mammoth",
+   "shortName": "COL @ UTA",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 10:00 PM EST",
+     "shortDetail": "11/18 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892741",
+     "date": "2026-11-19T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "129764",
+       "homeAway": "home",
+       "team": {
+        "id": "129764",
+        "abbreviation": "UTA",
+        "displayName": "Utah Mammoth",
+        "shortDisplayName": "Mammoth",
+        "name": "Mammoth",
+        "location": "Utah"
+       }
+      },
+      {
+       "id": "17",
+       "homeAway": "away",
+       "team": {
+        "id": "17",
+        "abbreviation": "COL",
+        "displayName": "Colorado Avalanche",
+        "shortDisplayName": "Avalanche",
+        "name": "Avalanche",
+        "location": "Colorado"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892742",
+   "uid": "s:70~l:90~e:401892742",
+   "date": "2026-11-20T00:00Z",
+   "name": "Los Angeles Kings at Toronto Maple Leafs",
+   "shortName": "LA @ TOR",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 7:00 PM EST",
+     "shortDetail": "11/19 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892742",
+     "date": "2026-11-20T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "21",
+       "homeAway": "home",
+       "team": {
+        "id": "21",
+        "abbreviation": "TOR",
+        "displayName": "Toronto Maple Leafs",
+        "shortDisplayName": "Maple Leafs",
+        "name": "Maple Leafs",
+        "location": "Toronto"
+       }
+      },
+      {
+       "id": "8",
+       "homeAway": "away",
+       "team": {
+        "id": "8",
+        "abbreviation": "LA",
+        "displayName": "Los Angeles Kings",
+        "shortDisplayName": "Kings",
+        "name": "Kings",
+        "location": "Los Angeles"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892743",
+   "uid": "s:70~l:90~e:401892743",
+   "date": "2026-11-20T00:00Z",
+   "name": "Philadelphia Flyers at Ottawa Senators",
+   "shortName": "PHI @ OTT",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 7:00 PM EST",
+     "shortDetail": "11/19 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892743",
+     "date": "2026-11-20T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "14",
+       "homeAway": "home",
+       "team": {
+        "id": "14",
+        "abbreviation": "OTT",
+        "displayName": "Ottawa Senators",
+        "shortDisplayName": "Senators",
+        "name": "Senators",
+        "location": "Ottawa"
+       }
+      },
+      {
+       "id": "15",
+       "homeAway": "away",
+       "team": {
+        "id": "15",
+        "abbreviation": "PHI",
+        "displayName": "Philadelphia Flyers",
+        "shortDisplayName": "Flyers",
+        "name": "Flyers",
+        "location": "Philadelphia"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892745",
+   "uid": "s:70~l:90~e:401892745",
+   "date": "2026-11-20T00:00Z",
+   "name": "St. Louis Blues at Pittsburgh Penguins",
+   "shortName": "STL @ PIT",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 7:00 PM EST",
+     "shortDetail": "11/19 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892745",
+     "date": "2026-11-20T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "16",
+       "homeAway": "home",
+       "team": {
+        "id": "16",
+        "abbreviation": "PIT",
+        "displayName": "Pittsburgh Penguins",
+        "shortDisplayName": "Penguins",
+        "name": "Penguins",
+        "location": "Pittsburgh"
+       }
+      },
+      {
+       "id": "19",
+       "homeAway": "away",
+       "team": {
+        "id": "19",
+        "abbreviation": "STL",
+        "displayName": "St. Louis Blues",
+        "shortDisplayName": "Blues",
+        "name": "Blues",
+        "location": "St. Louis"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892746",
+   "uid": "s:70~l:90~e:401892746",
+   "date": "2026-11-20T00:00Z",
+   "name": "Buffalo Sabres at Washington Capitals",
+   "shortName": "BUF @ WSH",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 7:00 PM EST",
+     "shortDetail": "11/19 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892746",
+     "date": "2026-11-20T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "23",
+       "homeAway": "home",
+       "team": {
+        "id": "23",
+        "abbreviation": "WSH",
+        "displayName": "Washington Capitals",
+        "shortDisplayName": "Capitals",
+        "name": "Capitals",
+        "location": "Washington"
+       }
+      },
+      {
+       "id": "2",
+       "homeAway": "away",
+       "team": {
+        "id": "2",
+        "abbreviation": "BUF",
+        "displayName": "Buffalo Sabres",
+        "shortDisplayName": "Sabres",
+        "name": "Sabres",
+        "location": "Buffalo"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892747",
+   "uid": "s:70~l:90~e:401892747",
+   "date": "2026-11-20T00:00Z",
+   "name": "Montreal Canadiens at Carolina Hurricanes",
+   "shortName": "MTL @ CAR",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 7:00 PM EST",
+     "shortDetail": "11/19 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892747",
+     "date": "2026-11-20T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "7",
+       "homeAway": "home",
+       "team": {
+        "id": "7",
+        "abbreviation": "CAR",
+        "displayName": "Carolina Hurricanes",
+        "shortDisplayName": "Hurricanes",
+        "name": "Hurricanes",
+        "location": "Carolina"
+       }
+      },
+      {
+       "id": "10",
+       "homeAway": "away",
+       "team": {
+        "id": "10",
+        "abbreviation": "MTL",
+        "displayName": "Montreal Canadiens",
+        "shortDisplayName": "Canadiens",
+        "name": "Canadiens",
+        "location": "Montreal"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892749",
+   "uid": "s:70~l:90~e:401892749",
+   "date": "2026-11-20T00:00Z",
+   "name": "New York Islanders at Winnipeg Jets",
+   "shortName": "NYI @ WPG",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 7:00 PM EST",
+     "shortDetail": "11/19 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892749",
+     "date": "2026-11-20T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "28",
+       "homeAway": "home",
+       "team": {
+        "id": "28",
+        "abbreviation": "WPG",
+        "displayName": "Winnipeg Jets",
+        "shortDisplayName": "Jets",
+        "name": "Jets",
+        "location": "Winnipeg"
+       }
+      },
+      {
+       "id": "12",
+       "homeAway": "away",
+       "team": {
+        "id": "12",
+        "abbreviation": "NYI",
+        "displayName": "New York Islanders",
+        "shortDisplayName": "Islanders",
+        "name": "Islanders",
+        "location": "New York"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892744",
+   "uid": "s:70~l:90~e:401892744",
+   "date": "2026-11-20T00:30Z",
+   "name": "Edmonton Oilers at Tampa Bay Lightning",
+   "shortName": "EDM @ TB",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 7:30 PM EST",
+     "shortDetail": "11/19 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892744",
+     "date": "2026-11-20T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "20",
+       "homeAway": "home",
+       "team": {
+        "id": "20",
+        "abbreviation": "TB",
+        "displayName": "Tampa Bay Lightning",
+        "shortDisplayName": "Lightning",
+        "name": "Lightning",
+        "location": "Tampa Bay"
+       }
+      },
+      {
+       "id": "6",
+       "homeAway": "away",
+       "team": {
+        "id": "6",
+        "abbreviation": "EDM",
+        "displayName": "Edmonton Oilers",
+        "shortDisplayName": "Oilers",
+        "name": "Oilers",
+        "location": "Edmonton"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892748",
+   "uid": "s:70~l:90~e:401892748",
+   "date": "2026-11-20T01:00Z",
+   "name": "Columbus Blue Jackets at Chicago Blackhawks",
+   "shortName": "CBJ @ CHI",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 8:00 PM EST",
+     "shortDetail": "11/19 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892748",
+     "date": "2026-11-20T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "4",
+       "homeAway": "home",
+       "team": {
+        "id": "4",
+        "abbreviation": "CHI",
+        "displayName": "Chicago Blackhawks",
+        "shortDisplayName": "Blackhawks",
+        "name": "Blackhawks",
+        "location": "Chicago"
+       }
+      },
+      {
+       "id": "29",
+       "homeAway": "away",
+       "team": {
+        "id": "29",
+        "abbreviation": "CBJ",
+        "displayName": "Columbus Blue Jackets",
+        "shortDisplayName": "Blue Jackets",
+        "name": "Blue Jackets",
+        "location": "Columbus"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892750",
+   "uid": "s:70~l:90~e:401892750",
+   "date": "2026-11-20T01:00Z",
+   "name": "Minnesota Wild at Calgary Flames",
+   "shortName": "MIN @ CGY",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 8:00 PM EST",
+     "shortDetail": "11/19 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892750",
+     "date": "2026-11-20T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "3",
+       "homeAway": "home",
+       "team": {
+        "id": "3",
+        "abbreviation": "CGY",
+        "displayName": "Calgary Flames",
+        "shortDisplayName": "Flames",
+        "name": "Flames",
+        "location": "Calgary"
+       }
+      },
+      {
+       "id": "30",
+       "homeAway": "away",
+       "team": {
+        "id": "30",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota Wild",
+        "shortDisplayName": "Wild",
+        "name": "Wild",
+        "location": "Minnesota"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892751",
+   "uid": "s:70~l:90~e:401892751",
+   "date": "2026-11-20T02:00Z",
+   "name": "Anaheim Ducks at Colorado Avalanche",
+   "shortName": "ANA @ COL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 9:00 PM EST",
+     "shortDetail": "11/19 - 9:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892751",
+     "date": "2026-11-20T02:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "17",
+       "homeAway": "home",
+       "team": {
+        "id": "17",
+        "abbreviation": "COL",
+        "displayName": "Colorado Avalanche",
+        "shortDisplayName": "Avalanche",
+        "name": "Avalanche",
+        "location": "Colorado"
+       }
+      },
+      {
+       "id": "25",
+       "homeAway": "away",
+       "team": {
+        "id": "25",
+        "abbreviation": "ANA",
+        "displayName": "Anaheim Ducks",
+        "shortDisplayName": "Ducks",
+        "name": "Ducks",
+        "location": "Anaheim"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892752",
+   "uid": "s:70~l:90~e:401892752",
+   "date": "2026-11-20T02:40Z",
+   "name": "Vancouver Canucks at Seattle Kraken",
+   "shortName": "VAN @ SEA",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 9:40 PM EST",
+     "shortDetail": "11/19 - 9:40 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892752",
+     "date": "2026-11-20T02:40Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "124292",
+       "homeAway": "home",
+       "team": {
+        "id": "124292",
+        "abbreviation": "SEA",
+        "displayName": "Seattle Kraken",
+        "shortDisplayName": "Kraken",
+        "name": "Kraken",
+        "location": "Seattle"
+       }
+      },
+      {
+       "id": "22",
+       "homeAway": "away",
+       "team": {
+        "id": "22",
+        "abbreviation": "VAN",
+        "displayName": "Vancouver Canucks",
+        "shortDisplayName": "Canucks",
+        "name": "Canucks",
+        "location": "Vancouver"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892753",
+   "uid": "s:70~l:90~e:401892753",
+   "date": "2026-11-20T03:00Z",
+   "name": "Dallas Stars at Vegas Golden Knights",
+   "shortName": "DAL @ VGK",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 10:00 PM EST",
+     "shortDetail": "11/19 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892753",
+     "date": "2026-11-20T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "37",
+       "homeAway": "home",
+       "team": {
+        "id": "37",
+        "abbreviation": "VGK",
+        "displayName": "Vegas Golden Knights",
+        "shortDisplayName": "Golden Knights",
+        "name": "Golden Knights",
+        "location": "Vegas"
+       }
+      },
+      {
+       "id": "9",
+       "homeAway": "away",
+       "team": {
+        "id": "9",
+        "abbreviation": "DAL",
+        "displayName": "Dallas Stars",
+        "shortDisplayName": "Stars",
+        "name": "Stars",
+        "location": "Dallas"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892754",
+   "uid": "s:70~l:90~e:401892754",
+   "date": "2026-11-21T18:00Z",
+   "name": "Edmonton Oilers at Carolina Hurricanes",
+   "shortName": "EDM @ CAR",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 1:00 PM EST",
+     "shortDetail": "11/21 - 1:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892754",
+     "date": "2026-11-21T18:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "7",
+       "homeAway": "home",
+       "team": {
+        "id": "7",
+        "abbreviation": "CAR",
+        "displayName": "Carolina Hurricanes",
+        "shortDisplayName": "Hurricanes",
+        "name": "Hurricanes",
+        "location": "Carolina"
+       }
+      },
+      {
+       "id": "6",
+       "homeAway": "away",
+       "team": {
+        "id": "6",
+        "abbreviation": "EDM",
+        "displayName": "Edmonton Oilers",
+        "shortDisplayName": "Oilers",
+        "name": "Oilers",
+        "location": "Edmonton"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892755",
+   "uid": "s:70~l:90~e:401892755",
+   "date": "2026-11-21T20:30Z",
+   "name": "Chicago Blackhawks at Calgary Flames",
+   "shortName": "CHI @ CGY",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 3:30 PM EST",
+     "shortDetail": "11/21 - 3:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892755",
+     "date": "2026-11-21T20:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "3",
+       "homeAway": "home",
+       "team": {
+        "id": "3",
+        "abbreviation": "CGY",
+        "displayName": "Calgary Flames",
+        "shortDisplayName": "Flames",
+        "name": "Flames",
+        "location": "Calgary"
+       }
+      },
+      {
+       "id": "4",
+       "homeAway": "away",
+       "team": {
+        "id": "4",
+        "abbreviation": "CHI",
+        "displayName": "Chicago Blackhawks",
+        "shortDisplayName": "Blackhawks",
+        "name": "Blackhawks",
+        "location": "Chicago"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892756",
+   "uid": "s:70~l:90~e:401892756",
+   "date": "2026-11-21T23:00Z",
+   "name": "Buffalo Sabres at Florida Panthers",
+   "shortName": "BUF @ FLA",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 6:00 PM EST",
+     "shortDetail": "11/21 - 6:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892756",
+     "date": "2026-11-21T23:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "26",
+       "homeAway": "home",
+       "team": {
+        "id": "26",
+        "abbreviation": "FLA",
+        "displayName": "Florida Panthers",
+        "shortDisplayName": "Panthers",
+        "name": "Panthers",
+        "location": "Florida"
+       }
+      },
+      {
+       "id": "2",
+       "homeAway": "away",
+       "team": {
+        "id": "2",
+        "abbreviation": "BUF",
+        "displayName": "Buffalo Sabres",
+        "shortDisplayName": "Sabres",
+        "name": "Sabres",
+        "location": "Buffalo"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892757",
+   "uid": "s:70~l:90~e:401892757",
+   "date": "2026-11-21T23:00Z",
+   "name": "Pittsburgh Penguins at Nashville Predators",
+   "shortName": "PIT @ NSH",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 6:00 PM EST",
+     "shortDetail": "11/21 - 6:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892757",
+     "date": "2026-11-21T23:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "27",
+       "homeAway": "home",
+       "team": {
+        "id": "27",
+        "abbreviation": "NSH",
+        "displayName": "Nashville Predators",
+        "shortDisplayName": "Predators",
+        "name": "Predators",
+        "location": "Nashville"
+       }
+      },
+      {
+       "id": "16",
+       "homeAway": "away",
+       "team": {
+        "id": "16",
+        "abbreviation": "PIT",
+        "displayName": "Pittsburgh Penguins",
+        "shortDisplayName": "Penguins",
+        "name": "Penguins",
+        "location": "Pittsburgh"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892758",
+   "uid": "s:70~l:90~e:401892758",
+   "date": "2026-11-22T00:00Z",
+   "name": "Washington Capitals at Boston Bruins",
+   "shortName": "WSH @ BOS",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 7:00 PM EST",
+     "shortDetail": "11/21 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892758",
+     "date": "2026-11-22T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "1",
+       "homeAway": "home",
+       "team": {
+        "id": "1",
+        "abbreviation": "BOS",
+        "displayName": "Boston Bruins",
+        "shortDisplayName": "Bruins",
+        "name": "Bruins",
+        "location": "Boston"
+       }
+      },
+      {
+       "id": "23",
+       "homeAway": "away",
+       "team": {
+        "id": "23",
+        "abbreviation": "WSH",
+        "displayName": "Washington Capitals",
+        "shortDisplayName": "Capitals",
+        "name": "Capitals",
+        "location": "Washington"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892759",
+   "uid": "s:70~l:90~e:401892759",
+   "date": "2026-11-22T00:00Z",
+   "name": "Columbus Blue Jackets at Toronto Maple Leafs",
+   "shortName": "CBJ @ TOR",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 7:00 PM EST",
+     "shortDetail": "11/21 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892759",
+     "date": "2026-11-22T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "21",
+       "homeAway": "home",
+       "team": {
+        "id": "21",
+        "abbreviation": "TOR",
+        "displayName": "Toronto Maple Leafs",
+        "shortDisplayName": "Maple Leafs",
+        "name": "Maple Leafs",
+        "location": "Toronto"
+       }
+      },
+      {
+       "id": "29",
+       "homeAway": "away",
+       "team": {
+        "id": "29",
+        "abbreviation": "CBJ",
+        "displayName": "Columbus Blue Jackets",
+        "shortDisplayName": "Blue Jackets",
+        "name": "Blue Jackets",
+        "location": "Columbus"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892760",
+   "uid": "s:70~l:90~e:401892760",
+   "date": "2026-11-22T00:00Z",
+   "name": "Philadelphia Flyers at Montreal Canadiens",
+   "shortName": "PHI @ MTL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 7:00 PM EST",
+     "shortDetail": "11/21 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892760",
+     "date": "2026-11-22T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "10",
+       "homeAway": "home",
+       "team": {
+        "id": "10",
+        "abbreviation": "MTL",
+        "displayName": "Montreal Canadiens",
+        "shortDisplayName": "Canadiens",
+        "name": "Canadiens",
+        "location": "Montreal"
+       }
+      },
+      {
+       "id": "15",
+       "homeAway": "away",
+       "team": {
+        "id": "15",
+        "abbreviation": "PHI",
+        "displayName": "Philadelphia Flyers",
+        "shortDisplayName": "Flyers",
+        "name": "Flyers",
+        "location": "Philadelphia"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892761",
+   "uid": "s:70~l:90~e:401892761",
+   "date": "2026-11-22T00:00Z",
+   "name": "Los Angeles Kings at Ottawa Senators",
+   "shortName": "LA @ OTT",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 7:00 PM EST",
+     "shortDetail": "11/21 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892761",
+     "date": "2026-11-22T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "14",
+       "homeAway": "home",
+       "team": {
+        "id": "14",
+        "abbreviation": "OTT",
+        "displayName": "Ottawa Senators",
+        "shortDisplayName": "Senators",
+        "name": "Senators",
+        "location": "Ottawa"
+       }
+      },
+      {
+       "id": "8",
+       "homeAway": "away",
+       "team": {
+        "id": "8",
+        "abbreviation": "LA",
+        "displayName": "Los Angeles Kings",
+        "shortDisplayName": "Kings",
+        "name": "Kings",
+        "location": "Los Angeles"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892762",
+   "uid": "s:70~l:90~e:401892762",
+   "date": "2026-11-22T00:00Z",
+   "name": "New York Islanders at Detroit Red Wings",
+   "shortName": "NYI @ DET",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 7:00 PM EST",
+     "shortDetail": "11/21 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892762",
+     "date": "2026-11-22T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "5",
+       "homeAway": "home",
+       "team": {
+        "id": "5",
+        "abbreviation": "DET",
+        "displayName": "Detroit Red Wings",
+        "shortDisplayName": "Red Wings",
+        "name": "Red Wings",
+        "location": "Detroit"
+       }
+      },
+      {
+       "id": "12",
+       "homeAway": "away",
+       "team": {
+        "id": "12",
+        "abbreviation": "NYI",
+        "displayName": "New York Islanders",
+        "shortDisplayName": "Islanders",
+        "name": "Islanders",
+        "location": "New York"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892763",
+   "uid": "s:70~l:90~e:401892763",
+   "date": "2026-11-22T00:00Z",
+   "name": "New Jersey Devils at St. Louis Blues",
+   "shortName": "NJ @ STL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 7:00 PM EST",
+     "shortDetail": "11/21 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892763",
+     "date": "2026-11-22T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "19",
+       "homeAway": "home",
+       "team": {
+        "id": "19",
+        "abbreviation": "STL",
+        "displayName": "St. Louis Blues",
+        "shortDisplayName": "Blues",
+        "name": "Blues",
+        "location": "St. Louis"
+       }
+      },
+      {
+       "id": "11",
+       "homeAway": "away",
+       "team": {
+        "id": "11",
+        "abbreviation": "NJ",
+        "displayName": "New Jersey Devils",
+        "shortDisplayName": "Devils",
+        "name": "Devils",
+        "location": "New Jersey"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892764",
+   "uid": "s:70~l:90~e:401892764",
+   "date": "2026-11-22T00:00Z",
+   "name": "Vegas Golden Knights at Winnipeg Jets",
+   "shortName": "VGK @ WPG",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 7:00 PM EST",
+     "shortDetail": "11/21 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892764",
+     "date": "2026-11-22T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "28",
+       "homeAway": "home",
+       "team": {
+        "id": "28",
+        "abbreviation": "WPG",
+        "displayName": "Winnipeg Jets",
+        "shortDisplayName": "Jets",
+        "name": "Jets",
+        "location": "Winnipeg"
+       }
+      },
+      {
+       "id": "37",
+       "homeAway": "away",
+       "team": {
+        "id": "37",
+        "abbreviation": "VGK",
+        "displayName": "Vegas Golden Knights",
+        "shortDisplayName": "Golden Knights",
+        "name": "Golden Knights",
+        "location": "Vegas"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892765",
+   "uid": "s:70~l:90~e:401892765",
+   "date": "2026-11-22T02:00Z",
+   "name": "Anaheim Ducks at Utah Mammoth",
+   "shortName": "ANA @ UTA",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 9:00 PM EST",
+     "shortDetail": "11/21 - 9:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892765",
+     "date": "2026-11-22T02:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "129764",
+       "homeAway": "home",
+       "team": {
+        "id": "129764",
+        "abbreviation": "UTA",
+        "displayName": "Utah Mammoth",
+        "shortDisplayName": "Mammoth",
+        "name": "Mammoth",
+        "location": "Utah"
+       }
+      },
+      {
+       "id": "25",
+       "homeAway": "away",
+       "team": {
+        "id": "25",
+        "abbreviation": "ANA",
+        "displayName": "Anaheim Ducks",
+        "shortDisplayName": "Ducks",
+        "name": "Ducks",
+        "location": "Anaheim"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892766",
+   "uid": "s:70~l:90~e:401892766",
+   "date": "2026-11-22T03:00Z",
+   "name": "Minnesota Wild at Vancouver Canucks",
+   "shortName": "MIN @ VAN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 10:00 PM EST",
+     "shortDetail": "11/21 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892766",
+     "date": "2026-11-22T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "22",
+       "homeAway": "home",
+       "team": {
+        "id": "22",
+        "abbreviation": "VAN",
+        "displayName": "Vancouver Canucks",
+        "shortDisplayName": "Canucks",
+        "name": "Canucks",
+        "location": "Vancouver"
+       }
+      },
+      {
+       "id": "30",
+       "homeAway": "away",
+       "team": {
+        "id": "30",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota Wild",
+        "shortDisplayName": "Wild",
+        "name": "Wild",
+        "location": "Minnesota"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892767",
+   "uid": "s:70~l:90~e:401892767",
+   "date": "2026-11-22T03:00Z",
+   "name": "Seattle Kraken at San Jose Sharks",
+   "shortName": "SEA @ SJ",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 10:00 PM EST",
+     "shortDetail": "11/21 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892767",
+     "date": "2026-11-22T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "18",
+       "homeAway": "home",
+       "team": {
+        "id": "18",
+        "abbreviation": "SJ",
+        "displayName": "San Jose Sharks",
+        "shortDisplayName": "Sharks",
+        "name": "Sharks",
+        "location": "San Jose"
+       }
+      },
+      {
+       "id": "124292",
+       "homeAway": "away",
+       "team": {
+        "id": "124292",
+        "abbreviation": "SEA",
+        "displayName": "Seattle Kraken",
+        "shortDisplayName": "Kraken",
+        "name": "Kraken",
+        "location": "Seattle"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892768",
+   "uid": "s:70~l:90~e:401892768",
+   "date": "2026-11-22T17:30Z",
+   "name": "Carolina Hurricanes at New York Rangers",
+   "shortName": "CAR @ NYR",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 12:30 PM EST",
+     "shortDetail": "11/22 - 12:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892768",
+     "date": "2026-11-22T17:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "13",
+       "homeAway": "home",
+       "team": {
+        "id": "13",
+        "abbreviation": "NYR",
+        "displayName": "New York Rangers",
+        "shortDisplayName": "Rangers",
+        "name": "Rangers",
+        "location": "New York"
+       }
+      },
+      {
+       "id": "7",
+       "homeAway": "away",
+       "team": {
+        "id": "7",
+        "abbreviation": "CAR",
+        "displayName": "Carolina Hurricanes",
+        "shortDisplayName": "Hurricanes",
+        "name": "Hurricanes",
+        "location": "Carolina"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892769",
+   "uid": "s:70~l:90~e:401892769",
+   "date": "2026-11-22T22:00Z",
+   "name": "Buffalo Sabres at Tampa Bay Lightning",
+   "shortName": "BUF @ TB",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 5:00 PM EST",
+     "shortDetail": "11/22 - 5:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892769",
+     "date": "2026-11-22T22:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "20",
+       "homeAway": "home",
+       "team": {
+        "id": "20",
+        "abbreviation": "TB",
+        "displayName": "Tampa Bay Lightning",
+        "shortDisplayName": "Lightning",
+        "name": "Lightning",
+        "location": "Tampa Bay"
+       }
+      },
+      {
+       "id": "2",
+       "homeAway": "away",
+       "team": {
+        "id": "2",
+        "abbreviation": "BUF",
+        "displayName": "Buffalo Sabres",
+        "shortDisplayName": "Sabres",
+        "name": "Sabres",
+        "location": "Buffalo"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892770",
+   "uid": "s:70~l:90~e:401892770",
+   "date": "2026-11-23T00:00Z",
+   "name": "Edmonton Oilers at St. Louis Blues",
+   "shortName": "EDM @ STL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 7:00 PM EST",
+     "shortDetail": "11/22 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892770",
+     "date": "2026-11-23T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "19",
+       "homeAway": "home",
+       "team": {
+        "id": "19",
+        "abbreviation": "STL",
+        "displayName": "St. Louis Blues",
+        "shortDisplayName": "Blues",
+        "name": "Blues",
+        "location": "St. Louis"
+       }
+      },
+      {
+       "id": "6",
+       "homeAway": "away",
+       "team": {
+        "id": "6",
+        "abbreviation": "EDM",
+        "displayName": "Edmonton Oilers",
+        "shortDisplayName": "Oilers",
+        "name": "Oilers",
+        "location": "Edmonton"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892771",
+   "uid": "s:70~l:90~e:401892771",
+   "date": "2026-11-23T00:00Z",
+   "name": "Pittsburgh Penguins at Dallas Stars",
+   "shortName": "PIT @ DAL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 7:00 PM EST",
+     "shortDetail": "11/22 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892771",
+     "date": "2026-11-23T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "9",
+       "homeAway": "home",
+       "team": {
+        "id": "9",
+        "abbreviation": "DAL",
+        "displayName": "Dallas Stars",
+        "shortDisplayName": "Stars",
+        "name": "Stars",
+        "location": "Dallas"
+       }
+      },
+      {
+       "id": "16",
+       "homeAway": "away",
+       "team": {
+        "id": "16",
+        "abbreviation": "PIT",
+        "displayName": "Pittsburgh Penguins",
+        "shortDisplayName": "Penguins",
+        "name": "Penguins",
+        "location": "Pittsburgh"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892772",
+   "uid": "s:70~l:90~e:401892772",
+   "date": "2026-11-23T01:00Z",
+   "name": "Chicago Blackhawks at Vancouver Canucks",
+   "shortName": "CHI @ VAN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 8:00 PM EST",
+     "shortDetail": "11/22 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892772",
+     "date": "2026-11-23T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "22",
+       "homeAway": "home",
+       "team": {
+        "id": "22",
+        "abbreviation": "VAN",
+        "displayName": "Vancouver Canucks",
+        "shortDisplayName": "Canucks",
+        "name": "Canucks",
+        "location": "Vancouver"
+       }
+      },
+      {
+       "id": "4",
+       "homeAway": "away",
+       "team": {
+        "id": "4",
+        "abbreviation": "CHI",
+        "displayName": "Chicago Blackhawks",
+        "shortDisplayName": "Blackhawks",
+        "name": "Blackhawks",
+        "location": "Chicago"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892773",
+   "uid": "s:70~l:90~e:401892773",
+   "date": "2026-11-24T00:00Z",
+   "name": "Columbus Blue Jackets at New Jersey Devils",
+   "shortName": "CBJ @ NJ",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 7:00 PM EST",
+     "shortDetail": "11/23 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892773",
+     "date": "2026-11-24T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "11",
+       "homeAway": "home",
+       "team": {
+        "id": "11",
+        "abbreviation": "NJ",
+        "displayName": "New Jersey Devils",
+        "shortDisplayName": "Devils",
+        "name": "Devils",
+        "location": "New Jersey"
+       }
+      },
+      {
+       "id": "29",
+       "homeAway": "away",
+       "team": {
+        "id": "29",
+        "abbreviation": "CBJ",
+        "displayName": "Columbus Blue Jackets",
+        "shortDisplayName": "Blue Jackets",
+        "name": "Blue Jackets",
+        "location": "Columbus"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892774",
+   "uid": "s:70~l:90~e:401892774",
+   "date": "2026-11-24T00:30Z",
+   "name": "Los Angeles Kings at Montreal Canadiens",
+   "shortName": "LA @ MTL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 7:30 PM EST",
+     "shortDetail": "11/23 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892774",
+     "date": "2026-11-24T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "10",
+       "homeAway": "home",
+       "team": {
+        "id": "10",
+        "abbreviation": "MTL",
+        "displayName": "Montreal Canadiens",
+        "shortDisplayName": "Canadiens",
+        "name": "Canadiens",
+        "location": "Montreal"
+       }
+      },
+      {
+       "id": "8",
+       "homeAway": "away",
+       "team": {
+        "id": "8",
+        "abbreviation": "LA",
+        "displayName": "Los Angeles Kings",
+        "shortDisplayName": "Kings",
+        "name": "Kings",
+        "location": "Los Angeles"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892775",
+   "uid": "s:70~l:90~e:401892775",
+   "date": "2026-11-24T00:30Z",
+   "name": "Calgary Flames at Ottawa Senators",
+   "shortName": "CGY @ OTT",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 7:30 PM EST",
+     "shortDetail": "11/23 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892775",
+     "date": "2026-11-24T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "14",
+       "homeAway": "home",
+       "team": {
+        "id": "14",
+        "abbreviation": "OTT",
+        "displayName": "Ottawa Senators",
+        "shortDisplayName": "Senators",
+        "name": "Senators",
+        "location": "Ottawa"
+       }
+      },
+      {
+       "id": "3",
+       "homeAway": "away",
+       "team": {
+        "id": "3",
+        "abbreviation": "CGY",
+        "displayName": "Calgary Flames",
+        "shortDisplayName": "Flames",
+        "name": "Flames",
+        "location": "Calgary"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892776",
+   "uid": "s:70~l:90~e:401892776",
+   "date": "2026-11-24T00:30Z",
+   "name": "Toronto Maple Leafs at New York Islanders",
+   "shortName": "TOR @ NYI",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 7:30 PM EST",
+     "shortDetail": "11/23 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892776",
+     "date": "2026-11-24T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "12",
+       "homeAway": "home",
+       "team": {
+        "id": "12",
+        "abbreviation": "NYI",
+        "displayName": "New York Islanders",
+        "shortDisplayName": "Islanders",
+        "name": "Islanders",
+        "location": "New York"
+       }
+      },
+      {
+       "id": "21",
+       "homeAway": "away",
+       "team": {
+        "id": "21",
+        "abbreviation": "TOR",
+        "displayName": "Toronto Maple Leafs",
+        "shortDisplayName": "Maple Leafs",
+        "name": "Maple Leafs",
+        "location": "Toronto"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892777",
+   "uid": "s:70~l:90~e:401892777",
+   "date": "2026-11-24T00:30Z",
+   "name": "Utah Mammoth at Winnipeg Jets",
+   "shortName": "UTA @ WPG",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 7:30 PM EST",
+     "shortDetail": "11/23 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892777",
+     "date": "2026-11-24T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "28",
+       "homeAway": "home",
+       "team": {
+        "id": "28",
+        "abbreviation": "WPG",
+        "displayName": "Winnipeg Jets",
+        "shortDisplayName": "Jets",
+        "name": "Jets",
+        "location": "Winnipeg"
+       }
+      },
+      {
+       "id": "129764",
+       "homeAway": "away",
+       "team": {
+        "id": "129764",
+        "abbreviation": "UTA",
+        "displayName": "Utah Mammoth",
+        "shortDisplayName": "Mammoth",
+        "name": "Mammoth",
+        "location": "Utah"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892778",
+   "uid": "s:70~l:90~e:401892778",
+   "date": "2026-11-24T02:40Z",
+   "name": "Anaheim Ducks at Seattle Kraken",
+   "shortName": "ANA @ SEA",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 9:40 PM EST",
+     "shortDetail": "11/23 - 9:40 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892778",
+     "date": "2026-11-24T02:40Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "124292",
+       "homeAway": "home",
+       "team": {
+        "id": "124292",
+        "abbreviation": "SEA",
+        "displayName": "Seattle Kraken",
+        "shortDisplayName": "Kraken",
+        "name": "Kraken",
+        "location": "Seattle"
+       }
+      },
+      {
+       "id": "25",
+       "homeAway": "away",
+       "team": {
+        "id": "25",
+        "abbreviation": "ANA",
+        "displayName": "Anaheim Ducks",
+        "shortDisplayName": "Ducks",
+        "name": "Ducks",
+        "location": "Anaheim"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892779",
+   "uid": "s:70~l:90~e:401892779",
+   "date": "2026-11-24T03:00Z",
+   "name": "Minnesota Wild at San Jose Sharks",
+   "shortName": "MIN @ SJ",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 10:00 PM EST",
+     "shortDetail": "11/23 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892779",
+     "date": "2026-11-24T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "18",
+       "homeAway": "home",
+       "team": {
+        "id": "18",
+        "abbreviation": "SJ",
+        "displayName": "San Jose Sharks",
+        "shortDisplayName": "Sharks",
+        "name": "Sharks",
+        "location": "San Jose"
+       }
+      },
+      {
+       "id": "30",
+       "homeAway": "away",
+       "team": {
+        "id": "30",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota Wild",
+        "shortDisplayName": "Wild",
+        "name": "Wild",
+        "location": "Minnesota"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401892780",
+   "uid": "s:70~l:90~e:401892780",
+   "date": "2026-11-25T01:00Z",
+   "name": "Vegas Golden Knights at Edmonton Oilers",
+   "shortName": "VGK @ EDM",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Tue, November 24th at 8:00 PM EST",
+     "shortDetail": "11/24 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401892780",
+     "date": "2026-11-25T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "6",
+       "homeAway": "home",
+       "team": {
+        "id": "6",
+        "abbreviation": "EDM",
+        "displayName": "Edmonton Oilers",
+        "shortDisplayName": "Oilers",
+        "name": "Oilers",
+        "location": "Edmonton"
+       }
+      },
+      {
+       "id": "37",
+       "homeAway": "away",
+       "team": {
+        "id": "37",
+        "abbreviation": "VGK",
+        "displayName": "Vegas Golden Knights",
+        "shortDisplayName": "Golden Knights",
+        "name": "Golden Knights",
+        "location": "Vegas"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

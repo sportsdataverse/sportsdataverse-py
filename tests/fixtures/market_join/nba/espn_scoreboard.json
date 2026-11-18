@@ -1,0 +1,2758 @@
+{
+ "events": [
+  {
+   "id": "401910007",
+   "uid": "s:40~l:46~e:401910007",
+   "date": "2026-11-19T00:00Z",
+   "name": "Memphis Grizzlies at Cleveland Cavaliers",
+   "shortName": "MEM @ CLE",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 7:00 PM EST",
+     "shortDetail": "11/18 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910007",
+     "date": "2026-11-19T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "5",
+       "homeAway": "home",
+       "team": {
+        "id": "5",
+        "abbreviation": "CLE",
+        "displayName": "Cleveland Cavaliers",
+        "shortDisplayName": "Cavaliers",
+        "name": "Cavaliers",
+        "location": "Cleveland"
+       }
+      },
+      {
+       "id": "29",
+       "homeAway": "away",
+       "team": {
+        "id": "29",
+        "abbreviation": "MEM",
+        "displayName": "Memphis Grizzlies",
+        "shortDisplayName": "Grizzlies",
+        "name": "Grizzlies",
+        "location": "Memphis"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910008",
+   "uid": "s:40~l:46~e:401910008",
+   "date": "2026-11-19T00:00Z",
+   "name": "Houston Rockets at Indiana Pacers",
+   "shortName": "HOU @ IND",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 7:00 PM EST",
+     "shortDetail": "11/18 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910008",
+     "date": "2026-11-19T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "11",
+       "homeAway": "home",
+       "team": {
+        "id": "11",
+        "abbreviation": "IND",
+        "displayName": "Indiana Pacers",
+        "shortDisplayName": "Pacers",
+        "name": "Pacers",
+        "location": "Indiana"
+       }
+      },
+      {
+       "id": "10",
+       "homeAway": "away",
+       "team": {
+        "id": "10",
+        "abbreviation": "HOU",
+        "displayName": "Houston Rockets",
+        "shortDisplayName": "Rockets",
+        "name": "Rockets",
+        "location": "Houston"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910009",
+   "uid": "s:40~l:46~e:401910009",
+   "date": "2026-11-19T00:00Z",
+   "name": "Milwaukee Bucks at Miami Heat",
+   "shortName": "MIL @ MIA",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 7:00 PM EST",
+     "shortDetail": "11/18 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910009",
+     "date": "2026-11-19T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "14",
+       "homeAway": "home",
+       "team": {
+        "id": "14",
+        "abbreviation": "MIA",
+        "displayName": "Miami Heat",
+        "shortDisplayName": "Heat",
+        "name": "Heat",
+        "location": "Miami"
+       }
+      },
+      {
+       "id": "15",
+       "homeAway": "away",
+       "team": {
+        "id": "15",
+        "abbreviation": "MIL",
+        "displayName": "Milwaukee Bucks",
+        "shortDisplayName": "Bucks",
+        "name": "Bucks",
+        "location": "Milwaukee"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910010",
+   "uid": "s:40~l:46~e:401910010",
+   "date": "2026-11-19T00:00Z",
+   "name": "Philadelphia 76ers at Orlando Magic",
+   "shortName": "PHI @ ORL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 7:00 PM EST",
+     "shortDetail": "11/18 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910010",
+     "date": "2026-11-19T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "19",
+       "homeAway": "home",
+       "team": {
+        "id": "19",
+        "abbreviation": "ORL",
+        "displayName": "Orlando Magic",
+        "shortDisplayName": "Magic",
+        "name": "Magic",
+        "location": "Orlando"
+       }
+      },
+      {
+       "id": "20",
+       "homeAway": "away",
+       "team": {
+        "id": "20",
+        "abbreviation": "PHI",
+        "displayName": "Philadelphia 76ers",
+        "shortDisplayName": "76ers",
+        "name": "76ers",
+        "location": "Philadelphia"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910011",
+   "uid": "s:40~l:46~e:401910011",
+   "date": "2026-11-19T00:30Z",
+   "name": "Chicago Bulls at Brooklyn Nets",
+   "shortName": "CHI @ BKN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 7:30 PM EST",
+     "shortDetail": "11/18 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910011",
+     "date": "2026-11-19T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "17",
+       "homeAway": "home",
+       "team": {
+        "id": "17",
+        "abbreviation": "BKN",
+        "displayName": "Brooklyn Nets",
+        "shortDisplayName": "Nets",
+        "name": "Nets",
+        "location": "Brooklyn"
+       }
+      },
+      {
+       "id": "4",
+       "homeAway": "away",
+       "team": {
+        "id": "4",
+        "abbreviation": "CHI",
+        "displayName": "Chicago Bulls",
+        "shortDisplayName": "Bulls",
+        "name": "Bulls",
+        "location": "Chicago"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910012",
+   "uid": "s:40~l:46~e:401910012",
+   "date": "2026-11-19T00:30Z",
+   "name": "Washington Wizards at Toronto Raptors",
+   "shortName": "WSH @ TOR",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 7:30 PM EST",
+     "shortDetail": "11/18 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910012",
+     "date": "2026-11-19T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "28",
+       "homeAway": "home",
+       "team": {
+        "id": "28",
+        "abbreviation": "TOR",
+        "displayName": "Toronto Raptors",
+        "shortDisplayName": "Raptors",
+        "name": "Raptors",
+        "location": "Toronto"
+       }
+      },
+      {
+       "id": "27",
+       "homeAway": "away",
+       "team": {
+        "id": "27",
+        "abbreviation": "WSH",
+        "displayName": "Washington Wizards",
+        "shortDisplayName": "Wizards",
+        "name": "Wizards",
+        "location": "Washington"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910013",
+   "uid": "s:40~l:46~e:401910013",
+   "date": "2026-11-19T01:00Z",
+   "name": "Detroit Pistons at New Orleans Pelicans",
+   "shortName": "DET @ NO",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 8:00 PM EST",
+     "shortDetail": "11/18 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910013",
+     "date": "2026-11-19T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "3",
+       "homeAway": "home",
+       "team": {
+        "id": "3",
+        "abbreviation": "NO",
+        "displayName": "New Orleans Pelicans",
+        "shortDisplayName": "Pelicans",
+        "name": "Pelicans",
+        "location": "New Orleans"
+       }
+      },
+      {
+       "id": "8",
+       "homeAway": "away",
+       "team": {
+        "id": "8",
+        "abbreviation": "DET",
+        "displayName": "Detroit Pistons",
+        "shortDisplayName": "Pistons",
+        "name": "Pistons",
+        "location": "Detroit"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910014",
+   "uid": "s:40~l:46~e:401910014",
+   "date": "2026-11-19T01:00Z",
+   "name": "Atlanta Hawks at Oklahoma City Thunder",
+   "shortName": "ATL @ OKC",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 8:00 PM EST",
+     "shortDetail": "11/18 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910014",
+     "date": "2026-11-19T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "25",
+       "homeAway": "home",
+       "team": {
+        "id": "25",
+        "abbreviation": "OKC",
+        "displayName": "Oklahoma City Thunder",
+        "shortDisplayName": "Thunder",
+        "name": "Thunder",
+        "location": "Oklahoma City"
+       }
+      },
+      {
+       "id": "1",
+       "homeAway": "away",
+       "team": {
+        "id": "1",
+        "abbreviation": "ATL",
+        "displayName": "Atlanta Hawks",
+        "shortDisplayName": "Hawks",
+        "name": "Hawks",
+        "location": "Atlanta"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910016",
+   "uid": "s:40~l:46~e:401910016",
+   "date": "2026-11-19T01:00Z",
+   "name": "Golden State Warriors at Dallas Mavericks",
+   "shortName": "GS @ DAL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 8:00 PM EST",
+     "shortDetail": "11/18 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910016",
+     "date": "2026-11-19T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "6",
+       "homeAway": "home",
+       "team": {
+        "id": "6",
+        "abbreviation": "DAL",
+        "displayName": "Dallas Mavericks",
+        "shortDisplayName": "Mavericks",
+        "name": "Mavericks",
+        "location": "Dallas"
+       }
+      },
+      {
+       "id": "9",
+       "homeAway": "away",
+       "team": {
+        "id": "9",
+        "abbreviation": "GS",
+        "displayName": "Golden State Warriors",
+        "shortDisplayName": "Warriors",
+        "name": "Warriors",
+        "location": "Golden State"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910015",
+   "uid": "s:40~l:46~e:401910015",
+   "date": "2026-11-19T02:30Z",
+   "name": "Boston Celtics at Denver Nuggets",
+   "shortName": "BOS @ DEN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 9:30 PM EST",
+     "shortDetail": "11/18 - 9:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910015",
+     "date": "2026-11-19T02:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "7",
+       "homeAway": "home",
+       "team": {
+        "id": "7",
+        "abbreviation": "DEN",
+        "displayName": "Denver Nuggets",
+        "shortDisplayName": "Nuggets",
+        "name": "Nuggets",
+        "location": "Denver"
+       }
+      },
+      {
+       "id": "2",
+       "homeAway": "away",
+       "team": {
+        "id": "2",
+        "abbreviation": "BOS",
+        "displayName": "Boston Celtics",
+        "shortDisplayName": "Celtics",
+        "name": "Celtics",
+        "location": "Boston"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910017",
+   "uid": "s:40~l:46~e:401910017",
+   "date": "2026-11-19T03:00Z",
+   "name": "Utah Jazz at Los Angeles Lakers",
+   "shortName": "UTAH @ LAL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 10:00 PM EST",
+     "shortDetail": "11/18 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910017",
+     "date": "2026-11-19T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "13",
+       "homeAway": "home",
+       "team": {
+        "id": "13",
+        "abbreviation": "LAL",
+        "displayName": "Los Angeles Lakers",
+        "shortDisplayName": "Lakers",
+        "name": "Lakers",
+        "location": "Los Angeles"
+       }
+      },
+      {
+       "id": "26",
+       "homeAway": "away",
+       "team": {
+        "id": "26",
+        "abbreviation": "UTAH",
+        "displayName": "Utah Jazz",
+        "shortDisplayName": "Jazz",
+        "name": "Jazz",
+        "location": "Utah"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910018",
+   "uid": "s:40~l:46~e:401910018",
+   "date": "2026-11-19T03:00Z",
+   "name": "Phoenix Suns at Sacramento Kings",
+   "shortName": "PHX @ SAC",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Wed, November 18th at 10:00 PM EST",
+     "shortDetail": "11/18 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910018",
+     "date": "2026-11-19T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "23",
+       "homeAway": "home",
+       "team": {
+        "id": "23",
+        "abbreviation": "SAC",
+        "displayName": "Sacramento Kings",
+        "shortDisplayName": "Kings",
+        "name": "Kings",
+        "location": "Sacramento"
+       }
+      },
+      {
+       "id": "21",
+       "homeAway": "away",
+       "team": {
+        "id": "21",
+        "abbreviation": "PHX",
+        "displayName": "Phoenix Suns",
+        "shortDisplayName": "Suns",
+        "name": "Suns",
+        "location": "Phoenix"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910019",
+   "uid": "s:40~l:46~e:401910019",
+   "date": "2026-11-20T01:00Z",
+   "name": "Golden State Warriors at Memphis Grizzlies",
+   "shortName": "GS @ MEM",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 8:00 PM EST",
+     "shortDetail": "11/19 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910019",
+     "date": "2026-11-20T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "29",
+       "homeAway": "home",
+       "team": {
+        "id": "29",
+        "abbreviation": "MEM",
+        "displayName": "Memphis Grizzlies",
+        "shortDisplayName": "Grizzlies",
+        "name": "Grizzlies",
+        "location": "Memphis"
+       }
+      },
+      {
+       "id": "9",
+       "homeAway": "away",
+       "team": {
+        "id": "9",
+        "abbreviation": "GS",
+        "displayName": "Golden State Warriors",
+        "shortDisplayName": "Warriors",
+        "name": "Warriors",
+        "location": "Golden State"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910020",
+   "uid": "s:40~l:46~e:401910020",
+   "date": "2026-11-20T01:00Z",
+   "name": "Portland Trail Blazers at Milwaukee Bucks",
+   "shortName": "POR @ MIL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 8:00 PM EST",
+     "shortDetail": "11/19 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910020",
+     "date": "2026-11-20T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "15",
+       "homeAway": "home",
+       "team": {
+        "id": "15",
+        "abbreviation": "MIL",
+        "displayName": "Milwaukee Bucks",
+        "shortDisplayName": "Bucks",
+        "name": "Bucks",
+        "location": "Milwaukee"
+       }
+      },
+      {
+       "id": "22",
+       "homeAway": "away",
+       "team": {
+        "id": "22",
+        "abbreviation": "POR",
+        "displayName": "Portland Trail Blazers",
+        "shortDisplayName": "Trail Blazers",
+        "name": "Trail Blazers",
+        "location": "Portland"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910021",
+   "uid": "s:40~l:46~e:401910021",
+   "date": "2026-11-20T01:00Z",
+   "name": "New York Knicks at Minnesota Timberwolves",
+   "shortName": "NY @ MIN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 8:00 PM EST",
+     "shortDetail": "11/19 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910021",
+     "date": "2026-11-20T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "16",
+       "homeAway": "home",
+       "team": {
+        "id": "16",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota Timberwolves",
+        "shortDisplayName": "Timberwolves",
+        "name": "Timberwolves",
+        "location": "Minnesota"
+       }
+      },
+      {
+       "id": "18",
+       "homeAway": "away",
+       "team": {
+        "id": "18",
+        "abbreviation": "NY",
+        "displayName": "New York Knicks",
+        "shortDisplayName": "Knicks",
+        "name": "Knicks",
+        "location": "New York"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910022",
+   "uid": "s:40~l:46~e:401910022",
+   "date": "2026-11-20T01:00Z",
+   "name": "LA Clippers at San Antonio Spurs",
+   "shortName": "LAC @ SA",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 8:00 PM EST",
+     "shortDetail": "11/19 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910022",
+     "date": "2026-11-20T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "24",
+       "homeAway": "home",
+       "team": {
+        "id": "24",
+        "abbreviation": "SA",
+        "displayName": "San Antonio Spurs",
+        "shortDisplayName": "Spurs",
+        "name": "Spurs",
+        "location": "San Antonio"
+       }
+      },
+      {
+       "id": "12",
+       "homeAway": "away",
+       "team": {
+        "id": "12",
+        "abbreviation": "LAC",
+        "displayName": "LA Clippers",
+        "shortDisplayName": "Clippers",
+        "name": "Clippers",
+        "location": "LA"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909305",
+   "uid": "s:40~l:46~e:401909305",
+   "date": "2026-11-21T00:00Z",
+   "name": "Charlotte Hornets at Atlanta Hawks",
+   "shortName": "CHA @ ATL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Fri, November 20th at 7:00 PM EST",
+     "shortDetail": "11/20 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909305",
+     "date": "2026-11-21T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "1",
+       "homeAway": "home",
+       "team": {
+        "id": "1",
+        "abbreviation": "ATL",
+        "displayName": "Atlanta Hawks",
+        "shortDisplayName": "Hawks",
+        "name": "Hawks",
+        "location": "Atlanta"
+       }
+      },
+      {
+       "id": "30",
+       "homeAway": "away",
+       "team": {
+        "id": "30",
+        "abbreviation": "CHA",
+        "displayName": "Charlotte Hornets",
+        "shortDisplayName": "Hornets",
+        "name": "Hornets",
+        "location": "Charlotte"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909306",
+   "uid": "s:40~l:46~e:401909306",
+   "date": "2026-11-21T00:30Z",
+   "name": "Orlando Magic at Brooklyn Nets",
+   "shortName": "ORL @ BKN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Fri, November 20th at 7:30 PM EST",
+     "shortDetail": "11/20 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909306",
+     "date": "2026-11-21T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "17",
+       "homeAway": "home",
+       "team": {
+        "id": "17",
+        "abbreviation": "BKN",
+        "displayName": "Brooklyn Nets",
+        "shortDisplayName": "Nets",
+        "name": "Nets",
+        "location": "Brooklyn"
+       }
+      },
+      {
+       "id": "19",
+       "homeAway": "away",
+       "team": {
+        "id": "19",
+        "abbreviation": "ORL",
+        "displayName": "Orlando Magic",
+        "shortDisplayName": "Magic",
+        "name": "Magic",
+        "location": "Orlando"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909307",
+   "uid": "s:40~l:46~e:401909307",
+   "date": "2026-11-21T00:30Z",
+   "name": "Indiana Pacers at Cleveland Cavaliers",
+   "shortName": "IND @ CLE",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Fri, November 20th at 7:30 PM EST",
+     "shortDetail": "11/20 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909307",
+     "date": "2026-11-21T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "5",
+       "homeAway": "home",
+       "team": {
+        "id": "5",
+        "abbreviation": "CLE",
+        "displayName": "Cleveland Cavaliers",
+        "shortDisplayName": "Cavaliers",
+        "name": "Cavaliers",
+        "location": "Cleveland"
+       }
+      },
+      {
+       "id": "11",
+       "homeAway": "away",
+       "team": {
+        "id": "11",
+        "abbreviation": "IND",
+        "displayName": "Indiana Pacers",
+        "shortDisplayName": "Pacers",
+        "name": "Pacers",
+        "location": "Indiana"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909308",
+   "uid": "s:40~l:46~e:401909308",
+   "date": "2026-11-21T00:30Z",
+   "name": "Toronto Raptors at Detroit Pistons",
+   "shortName": "TOR @ DET",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Fri, November 20th at 7:30 PM EST",
+     "shortDetail": "11/20 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909308",
+     "date": "2026-11-21T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "8",
+       "homeAway": "home",
+       "team": {
+        "id": "8",
+        "abbreviation": "DET",
+        "displayName": "Detroit Pistons",
+        "shortDisplayName": "Pistons",
+        "name": "Pistons",
+        "location": "Detroit"
+       }
+      },
+      {
+       "id": "28",
+       "homeAway": "away",
+       "team": {
+        "id": "28",
+        "abbreviation": "TOR",
+        "displayName": "Toronto Raptors",
+        "shortDisplayName": "Raptors",
+        "name": "Raptors",
+        "location": "Toronto"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909309",
+   "uid": "s:40~l:46~e:401909309",
+   "date": "2026-11-21T01:00Z",
+   "name": "Washington Wizards at Chicago Bulls",
+   "shortName": "WSH @ CHI",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Fri, November 20th at 8:00 PM EST",
+     "shortDetail": "11/20 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909309",
+     "date": "2026-11-21T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "4",
+       "homeAway": "home",
+       "team": {
+        "id": "4",
+        "abbreviation": "CHI",
+        "displayName": "Chicago Bulls",
+        "shortDisplayName": "Bulls",
+        "name": "Bulls",
+        "location": "Chicago"
+       }
+      },
+      {
+       "id": "27",
+       "homeAway": "away",
+       "team": {
+        "id": "27",
+        "abbreviation": "WSH",
+        "displayName": "Washington Wizards",
+        "shortDisplayName": "Wizards",
+        "name": "Wizards",
+        "location": "Washington"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909310",
+   "uid": "s:40~l:46~e:401909310",
+   "date": "2026-11-21T01:00Z",
+   "name": "New Orleans Pelicans at Oklahoma City Thunder",
+   "shortName": "NO @ OKC",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Fri, November 20th at 8:00 PM EST",
+     "shortDetail": "11/20 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909310",
+     "date": "2026-11-21T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "25",
+       "homeAway": "home",
+       "team": {
+        "id": "25",
+        "abbreviation": "OKC",
+        "displayName": "Oklahoma City Thunder",
+        "shortDisplayName": "Thunder",
+        "name": "Thunder",
+        "location": "Oklahoma City"
+       }
+      },
+      {
+       "id": "3",
+       "homeAway": "away",
+       "team": {
+        "id": "3",
+        "abbreviation": "NO",
+        "displayName": "New Orleans Pelicans",
+        "shortDisplayName": "Pelicans",
+        "name": "Pelicans",
+        "location": "New Orleans"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909311",
+   "uid": "s:40~l:46~e:401909311",
+   "date": "2026-11-21T02:30Z",
+   "name": "Phoenix Suns at Utah Jazz",
+   "shortName": "PHX @ UTAH",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Fri, November 20th at 9:30 PM EST",
+     "shortDetail": "11/20 - 9:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909311",
+     "date": "2026-11-21T02:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "26",
+       "homeAway": "home",
+       "team": {
+        "id": "26",
+        "abbreviation": "UTAH",
+        "displayName": "Utah Jazz",
+        "shortDisplayName": "Jazz",
+        "name": "Jazz",
+        "location": "Utah"
+       }
+      },
+      {
+       "id": "21",
+       "homeAway": "away",
+       "team": {
+        "id": "21",
+        "abbreviation": "PHX",
+        "displayName": "Phoenix Suns",
+        "shortDisplayName": "Suns",
+        "name": "Suns",
+        "location": "Phoenix"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909312",
+   "uid": "s:40~l:46~e:401909312",
+   "date": "2026-11-21T03:00Z",
+   "name": "Houston Rockets at Denver Nuggets",
+   "shortName": "HOU @ DEN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Fri, November 20th at 10:00 PM EST",
+     "shortDetail": "11/20 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909312",
+     "date": "2026-11-21T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "7",
+       "homeAway": "home",
+       "team": {
+        "id": "7",
+        "abbreviation": "DEN",
+        "displayName": "Denver Nuggets",
+        "shortDisplayName": "Nuggets",
+        "name": "Nuggets",
+        "location": "Denver"
+       }
+      },
+      {
+       "id": "10",
+       "homeAway": "away",
+       "team": {
+        "id": "10",
+        "abbreviation": "HOU",
+        "displayName": "Houston Rockets",
+        "shortDisplayName": "Rockets",
+        "name": "Rockets",
+        "location": "Houston"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909313",
+   "uid": "s:40~l:46~e:401909313",
+   "date": "2026-11-21T03:00Z",
+   "name": "Sacramento Kings at Los Angeles Lakers",
+   "shortName": "SAC @ LAL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Fri, November 20th at 10:00 PM EST",
+     "shortDetail": "11/20 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909313",
+     "date": "2026-11-21T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "13",
+       "homeAway": "home",
+       "team": {
+        "id": "13",
+        "abbreviation": "LAL",
+        "displayName": "Los Angeles Lakers",
+        "shortDisplayName": "Lakers",
+        "name": "Lakers",
+        "location": "Los Angeles"
+       }
+      },
+      {
+       "id": "23",
+       "homeAway": "away",
+       "team": {
+        "id": "23",
+        "abbreviation": "SAC",
+        "displayName": "Sacramento Kings",
+        "shortDisplayName": "Kings",
+        "name": "Kings",
+        "location": "Sacramento"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910023",
+   "uid": "s:40~l:46~e:401910023",
+   "date": "2026-11-21T18:00Z",
+   "name": "Milwaukee Bucks at Philadelphia 76ers",
+   "shortName": "MIL @ PHI",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 1:00 PM EST",
+     "shortDetail": "11/21 - 1:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910023",
+     "date": "2026-11-21T18:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "20",
+       "homeAway": "home",
+       "team": {
+        "id": "20",
+        "abbreviation": "PHI",
+        "displayName": "Philadelphia 76ers",
+        "shortDisplayName": "76ers",
+        "name": "76ers",
+        "location": "Philadelphia"
+       }
+      },
+      {
+       "id": "15",
+       "homeAway": "away",
+       "team": {
+        "id": "15",
+        "abbreviation": "MIL",
+        "displayName": "Milwaukee Bucks",
+        "shortDisplayName": "Bucks",
+        "name": "Bucks",
+        "location": "Milwaukee"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910024",
+   "uid": "s:40~l:46~e:401910024",
+   "date": "2026-11-22T00:30Z",
+   "name": "Portland Trail Blazers at New York Knicks",
+   "shortName": "POR @ NY",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 7:30 PM EST",
+     "shortDetail": "11/21 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910024",
+     "date": "2026-11-22T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "18",
+       "homeAway": "home",
+       "team": {
+        "id": "18",
+        "abbreviation": "NY",
+        "displayName": "New York Knicks",
+        "shortDisplayName": "Knicks",
+        "name": "Knicks",
+        "location": "New York"
+       }
+      },
+      {
+       "id": "22",
+       "homeAway": "away",
+       "team": {
+        "id": "22",
+        "abbreviation": "POR",
+        "displayName": "Portland Trail Blazers",
+        "shortDisplayName": "Trail Blazers",
+        "name": "Trail Blazers",
+        "location": "Portland"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910025",
+   "uid": "s:40~l:46~e:401910025",
+   "date": "2026-11-22T01:00Z",
+   "name": "LA Clippers at Dallas Mavericks",
+   "shortName": "LAC @ DAL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 8:00 PM EST",
+     "shortDetail": "11/21 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910025",
+     "date": "2026-11-22T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "6",
+       "homeAway": "home",
+       "team": {
+        "id": "6",
+        "abbreviation": "DAL",
+        "displayName": "Dallas Mavericks",
+        "shortDisplayName": "Mavericks",
+        "name": "Mavericks",
+        "location": "Dallas"
+       }
+      },
+      {
+       "id": "12",
+       "homeAway": "away",
+       "team": {
+        "id": "12",
+        "abbreviation": "LAC",
+        "displayName": "LA Clippers",
+        "shortDisplayName": "Clippers",
+        "name": "Clippers",
+        "location": "LA"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910026",
+   "uid": "s:40~l:46~e:401910026",
+   "date": "2026-11-22T01:00Z",
+   "name": "Memphis Grizzlies at Minnesota Timberwolves",
+   "shortName": "MEM @ MIN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 8:00 PM EST",
+     "shortDetail": "11/21 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910026",
+     "date": "2026-11-22T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "16",
+       "homeAway": "home",
+       "team": {
+        "id": "16",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota Timberwolves",
+        "shortDisplayName": "Timberwolves",
+        "name": "Timberwolves",
+        "location": "Minnesota"
+       }
+      },
+      {
+       "id": "29",
+       "homeAway": "away",
+       "team": {
+        "id": "29",
+        "abbreviation": "MEM",
+        "displayName": "Memphis Grizzlies",
+        "shortDisplayName": "Grizzlies",
+        "name": "Grizzlies",
+        "location": "Memphis"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910027",
+   "uid": "s:40~l:46~e:401910027",
+   "date": "2026-11-22T01:00Z",
+   "name": "New Orleans Pelicans at San Antonio Spurs",
+   "shortName": "NO @ SA",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 8:00 PM EST",
+     "shortDetail": "11/21 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910027",
+     "date": "2026-11-22T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "24",
+       "homeAway": "home",
+       "team": {
+        "id": "24",
+        "abbreviation": "SA",
+        "displayName": "San Antonio Spurs",
+        "shortDisplayName": "Spurs",
+        "name": "Spurs",
+        "location": "San Antonio"
+       }
+      },
+      {
+       "id": "3",
+       "homeAway": "away",
+       "team": {
+        "id": "3",
+        "abbreviation": "NO",
+        "displayName": "New Orleans Pelicans",
+        "shortDisplayName": "Pelicans",
+        "name": "Pelicans",
+        "location": "New Orleans"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910028",
+   "uid": "s:40~l:46~e:401910028",
+   "date": "2026-11-22T03:00Z",
+   "name": "Boston Celtics at Sacramento Kings",
+   "shortName": "BOS @ SAC",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sat, November 21st at 10:00 PM EST",
+     "shortDetail": "11/21 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910028",
+     "date": "2026-11-22T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "23",
+       "homeAway": "home",
+       "team": {
+        "id": "23",
+        "abbreviation": "SAC",
+        "displayName": "Sacramento Kings",
+        "shortDisplayName": "Kings",
+        "name": "Kings",
+        "location": "Sacramento"
+       }
+      },
+      {
+       "id": "2",
+       "homeAway": "away",
+       "team": {
+        "id": "2",
+        "abbreviation": "BOS",
+        "displayName": "Boston Celtics",
+        "shortDisplayName": "Celtics",
+        "name": "Celtics",
+        "location": "Boston"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910029",
+   "uid": "s:40~l:46~e:401910029",
+   "date": "2026-11-22T20:30Z",
+   "name": "Detroit Pistons at Atlanta Hawks",
+   "shortName": "DET @ ATL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 3:30 PM EST",
+     "shortDetail": "11/22 - 3:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910029",
+     "date": "2026-11-22T20:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "1",
+       "homeAway": "home",
+       "team": {
+        "id": "1",
+        "abbreviation": "ATL",
+        "displayName": "Atlanta Hawks",
+        "shortDisplayName": "Hawks",
+        "name": "Hawks",
+        "location": "Atlanta"
+       }
+      },
+      {
+       "id": "8",
+       "homeAway": "away",
+       "team": {
+        "id": "8",
+        "abbreviation": "DET",
+        "displayName": "Detroit Pistons",
+        "shortDisplayName": "Pistons",
+        "name": "Pistons",
+        "location": "Detroit"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910030",
+   "uid": "s:40~l:46~e:401910030",
+   "date": "2026-11-22T23:00Z",
+   "name": "Oklahoma City Thunder at Miami Heat",
+   "shortName": "OKC @ MIA",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 6:00 PM EST",
+     "shortDetail": "11/22 - 6:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910030",
+     "date": "2026-11-22T23:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "14",
+       "homeAway": "home",
+       "team": {
+        "id": "14",
+        "abbreviation": "MIA",
+        "displayName": "Miami Heat",
+        "shortDisplayName": "Heat",
+        "name": "Heat",
+        "location": "Miami"
+       }
+      },
+      {
+       "id": "25",
+       "homeAway": "away",
+       "team": {
+        "id": "25",
+        "abbreviation": "OKC",
+        "displayName": "Oklahoma City Thunder",
+        "shortDisplayName": "Thunder",
+        "name": "Thunder",
+        "location": "Oklahoma City"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910031",
+   "uid": "s:40~l:46~e:401910031",
+   "date": "2026-11-23T00:00Z",
+   "name": "Orlando Magic at Washington Wizards",
+   "shortName": "ORL @ WSH",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 7:00 PM EST",
+     "shortDetail": "11/22 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910031",
+     "date": "2026-11-23T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "27",
+       "homeAway": "home",
+       "team": {
+        "id": "27",
+        "abbreviation": "WSH",
+        "displayName": "Washington Wizards",
+        "shortDisplayName": "Wizards",
+        "name": "Wizards",
+        "location": "Washington"
+       }
+      },
+      {
+       "id": "19",
+       "homeAway": "away",
+       "team": {
+        "id": "19",
+        "abbreviation": "ORL",
+        "displayName": "Orlando Magic",
+        "shortDisplayName": "Magic",
+        "name": "Magic",
+        "location": "Orlando"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910032",
+   "uid": "s:40~l:46~e:401910032",
+   "date": "2026-11-23T00:00Z",
+   "name": "Denver Nuggets at Chicago Bulls",
+   "shortName": "DEN @ CHI",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 7:00 PM EST",
+     "shortDetail": "11/22 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910032",
+     "date": "2026-11-23T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "4",
+       "homeAway": "home",
+       "team": {
+        "id": "4",
+        "abbreviation": "CHI",
+        "displayName": "Chicago Bulls",
+        "shortDisplayName": "Bulls",
+        "name": "Bulls",
+        "location": "Chicago"
+       }
+      },
+      {
+       "id": "7",
+       "homeAway": "away",
+       "team": {
+        "id": "7",
+        "abbreviation": "DEN",
+        "displayName": "Denver Nuggets",
+        "shortDisplayName": "Nuggets",
+        "name": "Nuggets",
+        "location": "Denver"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910033",
+   "uid": "s:40~l:46~e:401910033",
+   "date": "2026-11-23T00:00Z",
+   "name": "Dallas Mavericks at Utah Jazz",
+   "shortName": "DAL @ UTAH",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 7:00 PM EST",
+     "shortDetail": "11/22 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910033",
+     "date": "2026-11-23T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "26",
+       "homeAway": "home",
+       "team": {
+        "id": "26",
+        "abbreviation": "UTAH",
+        "displayName": "Utah Jazz",
+        "shortDisplayName": "Jazz",
+        "name": "Jazz",
+        "location": "Utah"
+       }
+      },
+      {
+       "id": "6",
+       "homeAway": "away",
+       "team": {
+        "id": "6",
+        "abbreviation": "DAL",
+        "displayName": "Dallas Mavericks",
+        "shortDisplayName": "Mavericks",
+        "name": "Mavericks",
+        "location": "Dallas"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910034",
+   "uid": "s:40~l:46~e:401910034",
+   "date": "2026-11-23T01:00Z",
+   "name": "Indiana Pacers at New York Knicks",
+   "shortName": "IND @ NY",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 8:00 PM EST",
+     "shortDetail": "11/22 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910034",
+     "date": "2026-11-23T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "18",
+       "homeAway": "home",
+       "team": {
+        "id": "18",
+        "abbreviation": "NY",
+        "displayName": "New York Knicks",
+        "shortDisplayName": "Knicks",
+        "name": "Knicks",
+        "location": "New York"
+       }
+      },
+      {
+       "id": "11",
+       "homeAway": "away",
+       "team": {
+        "id": "11",
+        "abbreviation": "IND",
+        "displayName": "Indiana Pacers",
+        "shortDisplayName": "Pacers",
+        "name": "Pacers",
+        "location": "Indiana"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910035",
+   "uid": "s:40~l:46~e:401910035",
+   "date": "2026-11-23T01:30Z",
+   "name": "Boston Celtics at Golden State Warriors",
+   "shortName": "BOS @ GS",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 8:30 PM EST",
+     "shortDetail": "11/22 - 8:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910035",
+     "date": "2026-11-23T01:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "9",
+       "homeAway": "home",
+       "team": {
+        "id": "9",
+        "abbreviation": "GS",
+        "displayName": "Golden State Warriors",
+        "shortDisplayName": "Warriors",
+        "name": "Warriors",
+        "location": "Golden State"
+       }
+      },
+      {
+       "id": "2",
+       "homeAway": "away",
+       "team": {
+        "id": "2",
+        "abbreviation": "BOS",
+        "displayName": "Boston Celtics",
+        "shortDisplayName": "Celtics",
+        "name": "Celtics",
+        "location": "Boston"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910036",
+   "uid": "s:40~l:46~e:401910036",
+   "date": "2026-11-24T00:00Z",
+   "name": "Memphis Grizzlies at Charlotte Hornets",
+   "shortName": "MEM @ CHA",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 7:00 PM EST",
+     "shortDetail": "11/23 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910036",
+     "date": "2026-11-24T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "30",
+       "homeAway": "home",
+       "team": {
+        "id": "30",
+        "abbreviation": "CHA",
+        "displayName": "Charlotte Hornets",
+        "shortDisplayName": "Hornets",
+        "name": "Hornets",
+        "location": "Charlotte"
+       }
+      },
+      {
+       "id": "29",
+       "homeAway": "away",
+       "team": {
+        "id": "29",
+        "abbreviation": "MEM",
+        "displayName": "Memphis Grizzlies",
+        "shortDisplayName": "Grizzlies",
+        "name": "Grizzlies",
+        "location": "Memphis"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910037",
+   "uid": "s:40~l:46~e:401910037",
+   "date": "2026-11-24T00:00Z",
+   "name": "Portland Trail Blazers at Philadelphia 76ers",
+   "shortName": "POR @ PHI",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 7:00 PM EST",
+     "shortDetail": "11/23 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910037",
+     "date": "2026-11-24T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "20",
+       "homeAway": "home",
+       "team": {
+        "id": "20",
+        "abbreviation": "PHI",
+        "displayName": "Philadelphia 76ers",
+        "shortDisplayName": "76ers",
+        "name": "76ers",
+        "location": "Philadelphia"
+       }
+      },
+      {
+       "id": "22",
+       "homeAway": "away",
+       "team": {
+        "id": "22",
+        "abbreviation": "POR",
+        "displayName": "Portland Trail Blazers",
+        "shortDisplayName": "Trail Blazers",
+        "name": "Trail Blazers",
+        "location": "Portland"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910038",
+   "uid": "s:40~l:46~e:401910038",
+   "date": "2026-11-24T00:30Z",
+   "name": "Oklahoma City Thunder at Indiana Pacers",
+   "shortName": "OKC @ IND",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 7:30 PM EST",
+     "shortDetail": "11/23 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910038",
+     "date": "2026-11-24T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "11",
+       "homeAway": "home",
+       "team": {
+        "id": "11",
+        "abbreviation": "IND",
+        "displayName": "Indiana Pacers",
+        "shortDisplayName": "Pacers",
+        "name": "Pacers",
+        "location": "Indiana"
+       }
+      },
+      {
+       "id": "25",
+       "homeAway": "away",
+       "team": {
+        "id": "25",
+        "abbreviation": "OKC",
+        "displayName": "Oklahoma City Thunder",
+        "shortDisplayName": "Thunder",
+        "name": "Thunder",
+        "location": "Oklahoma City"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910039",
+   "uid": "s:40~l:46~e:401910039",
+   "date": "2026-11-24T00:30Z",
+   "name": "Milwaukee Bucks at Toronto Raptors",
+   "shortName": "MIL @ TOR",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 7:30 PM EST",
+     "shortDetail": "11/23 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910039",
+     "date": "2026-11-24T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "28",
+       "homeAway": "home",
+       "team": {
+        "id": "28",
+        "abbreviation": "TOR",
+        "displayName": "Toronto Raptors",
+        "shortDisplayName": "Raptors",
+        "name": "Raptors",
+        "location": "Toronto"
+       }
+      },
+      {
+       "id": "15",
+       "homeAway": "away",
+       "team": {
+        "id": "15",
+        "abbreviation": "MIL",
+        "displayName": "Milwaukee Bucks",
+        "shortDisplayName": "Bucks",
+        "name": "Bucks",
+        "location": "Milwaukee"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910040",
+   "uid": "s:40~l:46~e:401910040",
+   "date": "2026-11-24T00:30Z",
+   "name": "Brooklyn Nets at Minnesota Timberwolves",
+   "shortName": "BKN @ MIN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 7:30 PM EST",
+     "shortDetail": "11/23 - 7:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910040",
+     "date": "2026-11-24T00:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "16",
+       "homeAway": "home",
+       "team": {
+        "id": "16",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota Timberwolves",
+        "shortDisplayName": "Timberwolves",
+        "name": "Timberwolves",
+        "location": "Minnesota"
+       }
+      },
+      {
+       "id": "17",
+       "homeAway": "away",
+       "team": {
+        "id": "17",
+        "abbreviation": "BKN",
+        "displayName": "Brooklyn Nets",
+        "shortDisplayName": "Nets",
+        "name": "Nets",
+        "location": "Brooklyn"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910041",
+   "uid": "s:40~l:46~e:401910041",
+   "date": "2026-11-24T01:00Z",
+   "name": "Cleveland Cavaliers at Chicago Bulls",
+   "shortName": "CLE @ CHI",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 8:00 PM EST",
+     "shortDetail": "11/23 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910041",
+     "date": "2026-11-24T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "4",
+       "homeAway": "home",
+       "team": {
+        "id": "4",
+        "abbreviation": "CHI",
+        "displayName": "Chicago Bulls",
+        "shortDisplayName": "Bulls",
+        "name": "Bulls",
+        "location": "Chicago"
+       }
+      },
+      {
+       "id": "5",
+       "homeAway": "away",
+       "team": {
+        "id": "5",
+        "abbreviation": "CLE",
+        "displayName": "Cleveland Cavaliers",
+        "shortDisplayName": "Cavaliers",
+        "name": "Cavaliers",
+        "location": "Cleveland"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910042",
+   "uid": "s:40~l:46~e:401910042",
+   "date": "2026-11-24T01:00Z",
+   "name": "Phoenix Suns at New Orleans Pelicans",
+   "shortName": "PHX @ NO",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 8:00 PM EST",
+     "shortDetail": "11/23 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910042",
+     "date": "2026-11-24T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "3",
+       "homeAway": "home",
+       "team": {
+        "id": "3",
+        "abbreviation": "NO",
+        "displayName": "New Orleans Pelicans",
+        "shortDisplayName": "Pelicans",
+        "name": "Pelicans",
+        "location": "New Orleans"
+       }
+      },
+      {
+       "id": "21",
+       "homeAway": "away",
+       "team": {
+        "id": "21",
+        "abbreviation": "PHX",
+        "displayName": "Phoenix Suns",
+        "shortDisplayName": "Suns",
+        "name": "Suns",
+        "location": "Phoenix"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910043",
+   "uid": "s:40~l:46~e:401910043",
+   "date": "2026-11-24T01:30Z",
+   "name": "LA Clippers at Houston Rockets",
+   "shortName": "LAC @ HOU",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 8:30 PM EST",
+     "shortDetail": "11/23 - 8:30 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910043",
+     "date": "2026-11-24T01:30Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "10",
+       "homeAway": "home",
+       "team": {
+        "id": "10",
+        "abbreviation": "HOU",
+        "displayName": "Houston Rockets",
+        "shortDisplayName": "Rockets",
+        "name": "Rockets",
+        "location": "Houston"
+       }
+      },
+      {
+       "id": "12",
+       "homeAway": "away",
+       "team": {
+        "id": "12",
+        "abbreviation": "LAC",
+        "displayName": "LA Clippers",
+        "shortDisplayName": "Clippers",
+        "name": "Clippers",
+        "location": "LA"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910044",
+   "uid": "s:40~l:46~e:401910044",
+   "date": "2026-11-24T03:00Z",
+   "name": "Utah Jazz at Los Angeles Lakers",
+   "shortName": "UTAH @ LAL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 10:00 PM EST",
+     "shortDetail": "11/23 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910044",
+     "date": "2026-11-24T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "13",
+       "homeAway": "home",
+       "team": {
+        "id": "13",
+        "abbreviation": "LAL",
+        "displayName": "Los Angeles Lakers",
+        "shortDisplayName": "Lakers",
+        "name": "Lakers",
+        "location": "Los Angeles"
+       }
+      },
+      {
+       "id": "26",
+       "homeAway": "away",
+       "team": {
+        "id": "26",
+        "abbreviation": "UTAH",
+        "displayName": "Utah Jazz",
+        "shortDisplayName": "Jazz",
+        "name": "Jazz",
+        "location": "Utah"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401910045",
+   "uid": "s:40~l:46~e:401910045",
+   "date": "2026-11-24T03:00Z",
+   "name": "San Antonio Spurs at Sacramento Kings",
+   "shortName": "SA @ SAC",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 10:00 PM EST",
+     "shortDetail": "11/23 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401910045",
+     "date": "2026-11-24T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "23",
+       "homeAway": "home",
+       "team": {
+        "id": "23",
+        "abbreviation": "SAC",
+        "displayName": "Sacramento Kings",
+        "shortDisplayName": "Kings",
+        "name": "Kings",
+        "location": "Sacramento"
+       }
+      },
+      {
+       "id": "24",
+       "homeAway": "away",
+       "team": {
+        "id": "24",
+        "abbreviation": "SA",
+        "displayName": "San Antonio Spurs",
+        "shortDisplayName": "Spurs",
+        "name": "Spurs",
+        "location": "San Antonio"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909314",
+   "uid": "s:40~l:46~e:401909314",
+   "date": "2026-11-25T00:00Z",
+   "name": "Detroit Pistons at Orlando Magic",
+   "shortName": "DET @ ORL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Tue, November 24th at 7:00 PM EST",
+     "shortDetail": "11/24 - 7:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909314",
+     "date": "2026-11-25T00:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "19",
+       "homeAway": "home",
+       "team": {
+        "id": "19",
+        "abbreviation": "ORL",
+        "displayName": "Orlando Magic",
+        "shortDisplayName": "Magic",
+        "name": "Magic",
+        "location": "Orlando"
+       }
+      },
+      {
+       "id": "8",
+       "homeAway": "away",
+       "team": {
+        "id": "8",
+        "abbreviation": "DET",
+        "displayName": "Detroit Pistons",
+        "shortDisplayName": "Pistons",
+        "name": "Pistons",
+        "location": "Detroit"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909315",
+   "uid": "s:40~l:46~e:401909315",
+   "date": "2026-11-25T01:00Z",
+   "name": "Boston Celtics at Washington Wizards",
+   "shortName": "BOS @ WSH",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Tue, November 24th at 8:00 PM EST",
+     "shortDetail": "11/24 - 8:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909315",
+     "date": "2026-11-25T01:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "27",
+       "homeAway": "home",
+       "team": {
+        "id": "27",
+        "abbreviation": "WSH",
+        "displayName": "Washington Wizards",
+        "shortDisplayName": "Wizards",
+        "name": "Wizards",
+        "location": "Washington"
+       }
+      },
+      {
+       "id": "2",
+       "homeAway": "away",
+       "team": {
+        "id": "2",
+        "abbreviation": "BOS",
+        "displayName": "Boston Celtics",
+        "shortDisplayName": "Celtics",
+        "name": "Celtics",
+        "location": "Boston"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401909316",
+   "uid": "s:40~l:46~e:401909316",
+   "date": "2026-11-25T03:00Z",
+   "name": "Dallas Mavericks at Denver Nuggets",
+   "shortName": "DAL @ DEN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0.0",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Tue, November 24th at 10:00 PM EST",
+     "shortDetail": "11/24 - 10:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401909316",
+     "date": "2026-11-25T03:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "7",
+       "homeAway": "home",
+       "team": {
+        "id": "7",
+        "abbreviation": "DEN",
+        "displayName": "Denver Nuggets",
+        "shortDisplayName": "Nuggets",
+        "name": "Nuggets",
+        "location": "Denver"
+       }
+      },
+      {
+       "id": "6",
+       "homeAway": "away",
+       "team": {
+        "id": "6",
+        "abbreviation": "DAL",
+        "displayName": "Dallas Mavericks",
+        "shortDisplayName": "Mavericks",
+        "name": "Mavericks",
+        "location": "Dallas"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
