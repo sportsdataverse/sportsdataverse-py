@@ -668,7 +668,7 @@ The possessions (one side) a player needs to be ranked: half the on-court net ga
 
 **Returns**
 
-NBA 1,600.0, WNBA 800.0.
+NBA 1,550.0, WNBA 800.0.
 
 **Raises**
 

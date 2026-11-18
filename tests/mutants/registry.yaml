@@ -9338,8 +9338,8 @@
   group: bb-preseason-prior
   finding: BB-preseason-prior
   file: sportsdataverse/nba/nba_season_sim.py
-  snippet: 'rat = possession_ridge_ratings(rows, lam=lam, prior=None if prior is None else prior.ratings)'
-  mutant: 'rat = possession_ridge_ratings(rows, lam=lam, prior=None)'
+  snippet: 'prior=None if prior is None else prior.ratings,'
+  mutant: 'prior=None,'
   test: tests/nba/test_nba_season_sim.py::test_in_season_ridge_shrinks_toward_the_prior
   expected: kill
   note: Once a game is played the ridge must shrink toward the prior, not toward average.
