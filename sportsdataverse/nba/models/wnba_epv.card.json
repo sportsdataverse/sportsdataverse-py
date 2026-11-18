@@ -1,7 +1,7 @@
 {
   "model_type": "wnba_epv",
   "objective": "reg:squarederror",
-  "label": "the offense's points from the state to the end of the possession (remaining_points)",
+  "label": "the offense's points from the state to the end of the possession (remaining_points); a start state's also holds a score the team made on defense, credited as the possessions release credits it",
   "features": [
     "start_type",
     "period",

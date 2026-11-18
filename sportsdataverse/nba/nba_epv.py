@@ -343,7 +343,7 @@ def _carried_points(possessions: pl.DataFrame, events: pl.DataFrame) -> pl.DataF
     possessions release credits it to the scoring team's next possession
     (:func:`~sportsdataverse.nba.nba_possession_rules.credit_defense_scoring`, the same rule here),
     so a game's possession points add up to its final score. ``count_as_possession`` is read when
-    the frame has it (the pro releases do), else every possession counts; in the 2025 and 2026
+    the frame has it (the pro releases do; a null is not counted), else every possession counts; in the 2025 and 2026
     NBA and WNBA releases it moves none of the 604 carries. The rule's fallback to an earlier
     possession (no later one in the period) can put a score made after a possession into its
     start's label; it is rare (6 of 272 carries in 2025).
@@ -364,7 +364,8 @@ def _carried_points(possessions: pl.DataFrame, events: pl.DataFrame) -> pl.DataF
             "period",
             "offense_team_id",
             "defense_team_id",
-            (pl.col("count_as_possession").fill_null(True) if counted else pl.lit(True)).alias("count_as_possession"),
+            # a null counts as not counted, as in the engine (it tests the value's truth)
+            (pl.col("count_as_possession").fill_null(False) if counted else pl.lit(True)).alias("count_as_possession"),
         )
         .join(scored.select("game_id").unique(), on="game_id", how="semi")
         .join(scored, on=_KEY, how="left")

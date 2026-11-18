@@ -97,8 +97,12 @@ def test_every_games_labels_hold_its_final_score() -> None:
     finals = (
         _f("pbp")
         .with_columns(pl.col("game_id").cast(pl.Utf8), pl.col("score_home", "score_away").cast(pl.Int64, strict=False))
+        .sort("game_id", "order_index")
         .group_by("game_id")
-        .agg(pl.col("score_home").max().alias("home"), pl.col("score_away").max().alias("away"))
+        .agg(
+            pl.col("score_home").drop_nulls().last().alias("home"),
+            pl.col("score_away").drop_nulls().last().alias("away"),
+        )
     )
     starts = _states().filter(pl.col("step") == 0)
     home = pl.col("offense_team_id") == pl.col("home_team_id")

@@ -721,7 +721,10 @@ def epv_card(cfg: dict[str, Any], report: dict[str, Any], booster_path: Path) ->
     return {
         "model_type": f"{cfg['lg']}_epv",
         "objective": report["params"]["objective"],
-        "label": "the offense's points from the state to the end of the possession (remaining_points)",
+        "label": (
+            "the offense's points from the state to the end of the possession (remaining_points); a start "
+            "state's also holds a score the team made on defense, credited as the possessions release credits it"
+        ),
         "features": report["features"],
         "training_seasons": cfg["train"],
         "early_stopping": {"validation_season": max(cfg["train"]), "refit_on_all_training_seasons": True},
