@@ -10,9 +10,16 @@ number per game so the site reads it instead of computing it.
 
 **The rating.** ``team_strength`` rebuilt from the regular-season possessions of games dated
 strictly before ``as_of_date``: the possession ridge's ``adj_net_rtg`` with its rank and the
-BB-D3 ``pace``. There is no preseason blend (``team_strength`` has none). This is a different
-number from :func:`~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`, the in-game booster's
-prior, which uses the season sim's game model and preseason prior.
+BB-D3 ``pace``. There is no preseason blend (``team_strength`` has none).
+
+**The in-game WP prior (BB-D25).** The ``wp_prior_*`` columns are a different number:
+:func:`~sportsdataverse.nba.nba_rated_prior.nba_rated_priors`, the pregame home win probability the
+in-game win-probability booster starts from when a game has no line. It rates the teams with the
+season sim's game model, shrunk toward last season (its preseason prior), so a team is rated from
+opening night. The margin is ``(wp_prior_home_rating - wp_prior_away_rating) * wp_prior_poss / 100
++ wp_prior_hfa`` (``wp_prior_hfa`` is the model's home term in points, 0 at a neutral site) and
+``wp_prior_home_prob = Phi(wp_prior_exp_home_margin / wp_prior_margin_sd)``, exactly the number the
+win-probability chart's first point uses.
 
 **As of.** ``as_of_date`` is the game's date, or the day after the last regular-season game with
 possessions for a game not yet reached, so an upcoming game (and every playoff game) is rated on
@@ -33,7 +40,7 @@ from sportsdataverse._common.team_season_rates import team_season_rates
 from sportsdataverse._common.team_strength import GAMES_SCHEMA, RIDGE_LAMBDA, possession_ridge_ratings, team_strength
 from sportsdataverse.nba.nba_game_predict import nba_predict_games
 from sportsdataverse.nba.nba_prediction_constants import get_constants
-from sportsdataverse.nba.nba_rated_prior import _espn_matched, _possession_rows
+from sportsdataverse.nba.nba_rated_prior import _espn_matched, _possession_rows, _season_prior, rated_home_probs
 from sportsdataverse.nba.nba_team_season_rates import _LEAGUES
 
 if TYPE_CHECKING:
@@ -62,6 +69,15 @@ PREGAME_PROJECTION_SCHEMA: dict[str, pl.DataType] = {
     "hfa": pl.Float64(),
     "exp_home_margin": pl.Float64(),
     "rated_home_prob": pl.Float64(),
+    "wp_prior_home_rating": pl.Float64(),
+    "wp_prior_away_rating": pl.Float64(),
+    "wp_prior_home_rank": pl.Float64(),
+    "wp_prior_away_rank": pl.Float64(),
+    "wp_prior_poss": pl.Float64(),
+    "wp_prior_hfa": pl.Float64(),
+    "wp_prior_margin_sd": pl.Float64(),
+    "wp_prior_exp_home_margin": pl.Float64(),
+    "wp_prior_home_prob": pl.Float64(),
 }
 
 _STRENGTH = {"team_id": pl.Int64, "adj_net_rtg": pl.Float64, "adj_net_rtg_rank": pl.Float64}
@@ -194,7 +210,12 @@ def nba_pregame_projections(
         ``neutral_site``, ``stats_game_id``, each side's ``rating`` (``adj_net_rtg``, per 100),
         ``rank`` (``adj_net_rtg_rank``), ``games`` and ``pace``, ``hfa`` (points, 0 at a
         neutral site), ``exp_home_margin`` (points) and ``rated_home_prob``. The ratings and
-        prediction are null for a game with no stats match or a side with no rating yet.
+        prediction are null for a game with no stats match or a side with no rating yet. Then
+        the in-game WP prior (BB-D25, see the module docstring): ``wp_prior_home_rating`` /
+        ``wp_prior_away_rating`` (per 100) and their ranks, ``wp_prior_poss``, ``wp_prior_hfa``
+        (points, 0 at a neutral site), ``wp_prior_margin_sd``, ``wp_prior_exp_home_margin`` and
+        ``wp_prior_home_prob``; null for a game with no stats match. The ranks are also null
+        before any team is rated (opening day of a season with no prior season released).
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
@@ -220,9 +241,23 @@ def nba_pregame_projections(
     rated = pro_pregame_projections(rows, to_rate, league_id=league_id).drop(
         "game_date", "neutral_site", "home_team_id", "away_team_id"
     )
+    prior = _season_prior(_possession_rows, league_id, season, games)
+    wp = rated_home_probs(rows, to_rate, league_id=league_id, prior=prior).select(
+        "game_id",
+        pl.col("home_adj_net_rtg").fill_null(0.0).alias("wp_prior_home_rating"),  # unrated is average, as it scores
+        pl.col("away_adj_net_rtg").fill_null(0.0).alias("wp_prior_away_rating"),
+        pl.col("home_adj_net_rtg_rank").alias("wp_prior_home_rank"),
+        pl.col("away_adj_net_rtg_rank").alias("wp_prior_away_rank"),
+        pl.col("poss").alias("wp_prior_poss"),
+        pl.col("home_term_pts").alias("wp_prior_hfa"),
+        pl.col("margin_sd").alias("wp_prior_margin_sd"),
+        pl.col("exp_home_margin").alias("wp_prior_exp_home_margin"),
+        pl.col("rated_home_prob").alias("wp_prior_home_prob"),
+    )
     last = rows.get_column("game_date").max() if rows.height else None
     out = (
         matched.join(rated, on="game_id", how="left", validate="1:1")
+        .join(wp, on="game_id", how="left", validate="1:1")
         .with_columns(
             pl.col("as_of_date").fill_null(
                 pl.min_horizontal("game_date", pl.lit(last + datetime.timedelta(days=1)))
