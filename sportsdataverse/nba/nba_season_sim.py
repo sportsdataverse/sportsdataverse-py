@@ -18,7 +18,8 @@ toward average, with the penalty as the prior's weight, so the prior fades as po
 in. Before the first game the ratings are the prior and the home term, possessions and variance
 are last season's. An expansion team starts at last season's bottom-quartile net rating. The home
 term is shrunk the same way, toward last season's with a fitted pseudo-count of possessions
-(:data:`HFA_CONSTANTS`; toward the league's value with no prior), so a few games cannot swing it.
+(:data:`HFA_PSEUDO_POSS`), so a few games cannot swing it. With no prior, or after a season with no
+home games (the 2020 bubbles), there is nothing as-of to shrink toward and the home term is free.
 
 **Rating uncertainty.** A team's rating error is shared by all its remaining games, so the sim
 draws one shift per team per simulated season from the ridge posterior,
@@ -130,24 +131,33 @@ SIM_CONSTANTS: dict[str, tuple[float, float]] = {"00": (800.0, 13.3), "10": (200
 #:   holdout case.
 PRIOR_CONSTANTS: dict[str, tuple[float, float]] = {"00": (0.8, 0.25), "10": (0.6, 0.25)}
 
-#: league_id -> (pseudo-count in non-neutral possessions, league home term in points per 100) of
-#: the as-of home term (:func:`as_of_game_model`): the ridge shrinks its home term toward last
-#: season's (``PreseasonPrior.hfa``), or toward the league value when there is no prior, with that
-#: many possessions of prior weight. Fit by ``tools/fit_pro_hfa_shrink.py`` (2026-11-17): every
-#: regular-season game of the TRAIN seasons rated as of its date (BB-D25's path), the pseudo-count
-#: minimizing pooled log loss on a doubling grid; the league value is the mean of the train seasons'
-#: final home terms. The report is ``tests/fixtures/nba_prediction/hfa_shrink_<lg>.json``; the
-#: BB-D25 holdout (``tools/models/nba_prediction/wp_model_cards.py``) scores the frozen values once.
+#: league_id -> pseudo-count, in non-neutral possessions, of the as-of home term
+#: (:func:`as_of_game_model`): the ridge shrinks its home term toward last season's
+#: (``PreseasonPrior.hfa``) with that many possessions of prior weight. No prior, or a prior season
+#: with no home games: no shrink (no as-of target). Fit by ``tools/fit_pro_hfa_shrink.py``
+#: (2026-11-17): every regular-season game of the TRAIN seasons rated as of its date (BB-D25's
+#: path), the pseudo-count minimizing pooled log loss on a doubling grid. The report is
+#: ``tests/fixtures/nba_prediction/hfa_shrink_<lg>.json``; the BB-D25 holdout
+#: (``tools/models/nba_prediction/wp_model_cards.py``) scored the frozen values once.
 #:
-#: * NBA, train 2018 2019 2022 2023 (4,920 games): 80,000 possessions (about 400 games' worth;
-#:   a season has about 245,000). Log loss 0.63307 -> 0.63147 (paired -0.00160 +- 0.00085, SE
-#:   clustered by game), the first 28 days 0.65611 -> 0.64787. The as-of term ranged -1.4 to 6.7
-#:   per 100 unshrunk, 0.5 to 1.6 shrunk. League value 1.1586.
-#: * WNBA, train 2018 2019 2021 (599 games): 20,000 possessions (about 125 games; a season has
-#:   about 35,000). Log loss 0.62583 -> 0.62156 (-0.00427 +- 0.00560, a tie on 599 games), the first
-#:   28 days 0.65610 -> 0.64600. Range -4.6 to 5.8 unshrunk, 0.6 to 2.1 shrunk. League value 1.2789.
-#:   2021's prior season is the 2020 bubble (all neutral), so its target is the league value.
-HFA_CONSTANTS: dict[str, tuple[float, float]] = {"00": (80000.0, 1.1586), "10": (20000.0, 1.2789)}
+#: * NBA, train 2018 2019 2022 2023 (4,920 games): 80,000 possessions (about 400 games; a season
+#:   has about 245,000). Train log loss 0.63307 -> 0.63147 (paired -0.00160 +- 0.00085, SE
+#:   clustered by game), the first 28 days 0.65611 -> 0.64787; the as-of term ranged -1.4 to 6.7
+#:   per 100 unshrunk, 0.5 to 1.6 shrunk. BB-D25 holdout 2024-2026, rated prior: log loss
+#:   0.61291 -> 0.60910, Brier 0.21236 -> 0.21082 (paired -0.00381 +- 0.00110, 3,960 games).
+#: * WNBA, train 2018 2019 2021 (599 games; 2021 follows the 2020 bubble, so it is unshrunk at every
+#:   pseudo-count): 10,000 possessions (about 60 games; a season has about 35,000). Train log loss
+#:   0.62538 -> 0.62209 (-0.00329 +- 0.00438, a tie on 599 games), the first 28 days 0.65442 ->
+#:   0.64509. BB-D25 holdout 2024 2025: log loss 0.62335 -> 0.61495, Brier 0.21727 -> 0.21353
+#:   (-0.00846 +- 0.00307, 572 games).
+#: * "Before" on the holdout is the unshrunk model re-run on the same rows (2026-11-18); the cards
+#:   before this change scored WNBA at 0.62348 on rows since republished.
+#: * The target (last season's term) was checked on train after the holdout was first scored:
+#:   leave-one-season-out, a league-mean target scores worse (NBA 0.63162, WNBA 0.62275 against
+#:   0.63147 / 0.62156 at that cut's picks), so the target was kept. A first cut shrank the no-prior
+#:   and post-bubble cases toward a league mean of the train seasons; review found that leaked a
+#:   season's own result (WNBA 2021) and later seasons into earlier ones, and it was dropped.
+HFA_PSEUDO_POSS: dict[str, float] = {"00": 80000.0, "10": 10000.0}
 
 _SEEDS = 15
 
@@ -226,16 +236,19 @@ class PreseasonPrior:
         ratings: One row per team: ``team_id`` (Int64), ``off_dev`` / ``def_dev`` (points per 100
             over / under the league average, already regressed) and ``new_team`` (the
             expansion default, :func:`preseason_prior`).
-        hfa: Last season's home term, per 100 (the league's, :data:`HFA_CONSTANTS`, when every game
-            last season was at a neutral site); the as-of home term shrinks toward it.
+        hfa: Last season's home term, per 100; the as-of home term shrinks toward it. 0 when
+            last season had no home games (see ``hfa_identified``).
         poss: Last season's possessions per team-game; likewise.
         s2: Last season's variance of points per 100 per possession; likewise.
+        hfa_identified: False when every game last season was at a neutral site (the 2020
+            bubbles): the ridge fit the term at an unidentified 0, so the as-of term is not shrunk.
     """
 
     ratings: pl.DataFrame
     hfa: float
     poss: float
     s2: float
+    hfa_identified: bool = True
 
 
 def _ridge_s2(rows: pl.DataFrame) -> float:
@@ -298,10 +311,9 @@ def preseason_prior(
         ~pl.col("team_id").is_in(sorted(prev_ids)).alias("new_team"),
     )
     poss = prev_rows.height / (2.0 * prev_rows.get_column("game_id").n_unique())
-    # every game neutral (the 2020 bubbles): the ridge fits the unidentified term at 0, so use the league's
-    identified = (~prev_rows.get_column("neutral_site").fill_null(False)).any()
-    hfa = float(final.get_column("hfa")[0]) if identified else HFA_CONSTANTS[league_id][1]
-    return PreseasonPrior(ratings, hfa, poss, _ridge_s2(prev_rows))
+    # every game neutral (the 2020 bubbles): the ridge fits the unidentified term at 0, no target
+    identified = bool((~prev_rows.get_column("neutral_site").fill_null(False)).any())
+    return PreseasonPrior(ratings, float(final.get_column("hfa")[0]), poss, _ridge_s2(prev_rows), identified)
 
 
 def as_of_game_model(
@@ -320,15 +332,15 @@ def as_of_game_model(
         prior: The preseason prior (:func:`preseason_prior`). The ridge then shrinks each team
             toward its prior instead of toward average, and a team with no possession yet is
             rated at its prior. None: every team starts average.
-        hfa_poss: Override the fitted home-term pseudo-count (:data:`HFA_CONSTANTS`; the fitting
+        hfa_poss: Override the fitted home-term pseudo-count (:data:`HFA_PSEUDO_POSS`; the fitting
             script scans it). 0 leaves the home term unshrunk.
 
     Returns:
-        A :class:`GameModel`. The home term is shrunk toward last season's (the prior's), or the
-        league's (:data:`HFA_CONSTANTS`) with no prior. With no rows and no prior, every team is
-        average (no ratings) and the home term is the league's; with a prior and no rows, the
-        ratings are the prior and the home term, possessions and per-possession variance are
-        last season's.
+        A :class:`GameModel`. The home term is shrunk toward last season's (the prior's); with no
+        prior, or a prior season with no home games, it is free. With no rows and no prior, every
+        team is average (no ratings) and the home term is 0; with a prior and no rows, the ratings
+        are the prior and the home term, possessions and per-possession variance are last
+        season's.
 
     Raises:
         ValueError: If ``league_id`` has no :data:`SIM_CONSTANTS` entry.
@@ -336,13 +348,13 @@ def as_of_game_model(
     if league_id not in SIM_CONSTANTS:
         raise ValueError(f"league_id must be one of {sorted(SIM_CONSTANTS)}, got {league_id!r}")
     lam, sd = SIM_CONSTANTS[league_id]
-    k, league_hfa = HFA_CONSTANTS[league_id]
-    k = k if hfa_poss is None else hfa_poss
-    hfa_target = league_hfa if prior is None else prior.hfa
+    k = HFA_PSEUDO_POSS[league_id] if hfa_poss is None else hfa_poss
+    if prior is None or not prior.hfa_identified:  # no as-of target: the home term is free
+        k = 0.0
     schema = {"team_id": pl.Int64(), "adj_net_rtg": pl.Float64(), "adj_net_rtg_sd": pl.Float64()}
     if rows.height == 0:
         if prior is None:
-            return GameModel(pl.DataFrame(schema=schema), league_hfa if k else 0.0, 100.0, sd, float("nan"))
+            return GameModel(pl.DataFrame(schema=schema), 0.0, 100.0, sd, float("nan"))
         prior_sd = float(np.sqrt(2.0 * prior.s2 / lam))
         ratings = prior.ratings.select(
             "team_id",
@@ -354,7 +366,7 @@ def as_of_game_model(
         rows,
         lam=lam,
         prior=None if prior is None else prior.ratings,
-        hfa_prior=(hfa_target, k) if k else None,
+        hfa_prior=None if prior is None or not k else (prior.hfa, k),
     )
     if prior is not None:  # a team with no possession yet is rated at its prior
         unseen = prior.ratings.join(rat.select("team_id"), on="team_id", how="anti")

@@ -280,13 +280,28 @@
     "games": 4920
   },
   "pick": 80000.0,
-  "final_hfa_by_season": {
-    "2018": 1.0901,
-    "2019": 1.381,
-    "2022": 0.8858,
-    "2023": 1.2774
+  "home_terms_by_season": {
+    "2018": {
+      "prior_hfa": 1.6229,
+      "prior_hfa_identified": true,
+      "final_hfa": 1.0901
+    },
+    "2019": {
+      "prior_hfa": 1.0901,
+      "prior_hfa_identified": true,
+      "final_hfa": 1.381
+    },
+    "2022": {
+      "prior_hfa": 0.4687,
+      "prior_hfa_identified": true,
+      "final_hfa": 0.8858
+    },
+    "2023": {
+      "prior_hfa": 0.8858,
+      "prior_hfa_identified": true,
+      "final_hfa": 1.2774
+    }
   },
-  "league_hfa": 1.1586,
   "home_term_range": {
     "0": [
       -1.381,

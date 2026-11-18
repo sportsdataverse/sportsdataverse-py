@@ -1,10 +1,11 @@
 # tools/fit_pro_hfa_shrink.py
-"""Fit the NBA / WNBA as-of home term's pseudo-count (``nba_season_sim.HFA_CONSTANTS``).
+"""Fit the NBA / WNBA as-of home term's pseudo-count (``nba_season_sim.HFA_PSEUDO_POSS``).
 
 :func:`sportsdataverse.nba.nba_season_sim.as_of_game_model` shrinks the possession ridge's home
 term toward last season's (the preseason prior's ``hfa``) with ``k`` non-neutral possessions of
-prior weight; with no prior it shrinks toward the league value. Before, the term was free: early
-in a season it swung by several points a day.
+prior weight. With no prior, or after a season with no home games (the 2020 bubbles), it stays free:
+there is no as-of target. Before, the term was always free: early in a season it swung by several
+points a day.
 
 **The fit.** Every regular-season game of the TRAIN seasons is rated as of its date, exactly as
 BB-D25 rates it (:func:`sportsdataverse.nba.nba_rated_prior.rated_home_probs`: the possessions of
@@ -12,9 +13,9 @@ games dated strictly before it, last season's prior), once per ``k`` in :data:`G
 minimizes pooled log loss. The holdout seasons are not read here: the BB-D25 gate
 (``tools/models/nba_prediction/wp_model_cards.py``) scores them once with the frozen ``k``.
 
-**The league value** (the target with no prior) is the mean over the train seasons of each
-season's final home term, the same estimate the prior carries (BB-D19's ridge at
-``RIDGE_LAMBDA``, :func:`~sportsdataverse.nba.nba_season_sim.preseason_prior`).
+A season whose prior has no identified home term (WNBA 2021, after the 2020 bubble) is scored at
+every ``k`` but is unshrunk at all of them, so it does not move the pick; the report records each
+season's prior home term and whether it was identified.
 
 Inputs are the ``{nba,wnba}_stats_possessions`` / ``_schedules`` releases (network), cached by
 ``fit_pro_season_ratings.load_season`` under ``--cache``. The report is committed at
@@ -34,7 +35,6 @@ import json
 import sys
 from pathlib import Path
 
-import numpy as np
 import polars as pl
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -44,7 +44,7 @@ from fit_pro_season_ratings import load_season  # noqa: E402
 from sportsdataverse._common.metrics import brier_score, log_loss_score  # noqa: E402
 from sportsdataverse._common.team_strength import RIDGE_LAMBDA, possession_ridge_ratings  # noqa: E402
 from sportsdataverse.nba.nba_rated_prior import rated_home_probs  # noqa: E402
-from sportsdataverse.nba.nba_season_sim import HFA_CONSTANTS, preseason_prior  # noqa: E402
+from sportsdataverse.nba.nba_season_sim import preseason_prior  # noqa: E402
 
 GRID = [0.0, 2500.0, 5000.0, 10000.0, 20000.0, 40000.0, 80000.0, 160000.0, 320000.0, 640000.0]
 EARLY_DAYS = 28
@@ -56,8 +56,8 @@ def _teams(games: pl.DataFrame) -> list[int]:
     return sorted(set(games["home_team_id"].to_list()) | set(games["away_team_id"].to_list()))
 
 
-def season_frame(lid: str, season: int, cache: Path) -> tuple[pl.DataFrame, float]:
-    """Every regular-season game of ``season`` rated at each ``k`` (``p_<k>``), its outcome, and the season's final hfa."""
+def season_frame(lid: str, season: int, cache: Path) -> tuple[pl.DataFrame, dict[str, object]]:
+    """Every regular-season game of ``season`` rated at each ``k`` (``p_<k>``) with its outcome, and the season's home terms."""
     rows, games = load_season(lid, season, cache)
     prev_rows, prev_games = load_season(lid, season - 1, cache)
     rows = rows.rename({"date": "game_date"})
@@ -80,8 +80,12 @@ def season_frame(lid: str, season: int, cache: Path) -> tuple[pl.DataFrame, floa
         r = rated_home_probs(rows, games, league_id=lid, prior=prior, hfa_poss=k)
         assert r["game_id"].to_list() == out["game_id"].to_list()
         out = out.with_columns(r["rated_home_prob"].alias(f"p_{k:g}"), r["hfa"].alias(f"hfa_{k:g}"))
-    final_hfa = float(possession_ridge_ratings(rows, lam=RIDGE_LAMBDA[lid])["hfa"][0])
-    return out.with_columns(((pl.col("game_date") - start).dt.total_days() < EARLY_DAYS).alias("early")), final_hfa
+    terms = {
+        "prior_hfa": round(prior.hfa, 4),
+        "prior_hfa_identified": prior.hfa_identified,
+        "final_hfa": round(float(possession_ridge_ratings(rows, lam=RIDGE_LAMBDA[lid])["hfa"][0]), 4),
+    }
+    return out.with_columns(((pl.col("game_date") - start).dt.total_days() < EARLY_DAYS).alias("early")), terms
 
 
 def _scores(frame: pl.DataFrame) -> dict[str, dict[str, float]]:
@@ -95,24 +99,8 @@ def _scores(frame: pl.DataFrame) -> dict[str, dict[str, float]]:
     }
 
 
-def league_hfa(lid: str, train: list[int], cache: Path) -> float:
-    """Mean over ``train`` of each season's final home term (per 100), the seasons with a home/away contrast."""
-    finals = []
-    for s in train:
-        rows = load_season(lid, s, cache)[0]
-        if (~rows["neutral_site"].fill_null(False)).any():
-            finals.append(float(possession_ridge_ratings(rows, lam=RIDGE_LAMBDA[lid])["hfa"][0]))
-    return round(float(np.mean(finals)), 4)
-
-
 def fit(lg: str, train: list[int], cache: Path) -> dict[str, object]:
     lid = _PRO[lg]
-    # the prior falls back to the league value after an all-neutral season, so it is frozen first
-    lg_hfa = league_hfa(lid, train, cache)
-    if HFA_CONSTANTS[lid][1] != lg_hfa:
-        raise SystemExit(
-            f"freeze HFA_CONSTANTS[{lid!r}] league hfa = {lg_hfa} (now {HFA_CONSTANTS[lid][1]}), then re-run"
-        )
     parts = [season_frame(lid, s, cache) for s in train]
     tr = pl.concat([f for f, _ in parts])
     pooled = _scores(tr)
@@ -128,8 +116,7 @@ def fit(lg: str, train: list[int], cache: Path) -> dict[str, object]:
         "train_scores_by_season": {str(s): _scores(tr.filter(pl.col("season") == s)) for s in train},
         "paired_best_minus_unshrunk": paired(tr, f"p_{best:g}", "p_0"),
         "pick": best,
-        "final_hfa_by_season": {str(s): round(h, 4) for s, (_, h) in zip(train, parts, strict=True)},
-        "league_hfa": lg_hfa,
+        "home_terms_by_season": {str(s): t for s, (_, t) in zip(train, parts, strict=True)},
         # the as-of home term (per 100) the games were rated with, unshrunk and at the pick
         "home_term_range": {
             f"{k:g}": [round(float(tr[f"hfa_{k:g}"].min()), 3), round(float(tr[f"hfa_{k:g}"].max()), 3)]
@@ -148,11 +135,7 @@ def main(argv: list[str] | None = None) -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     path = OUT / f"hfa_shrink_{args.league}.json"
     path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8", newline="\n")
-    print(
-        json.dumps(
-            {k: report[k] for k in ("pick", "league_hfa", "paired_best_minus_unshrunk", "train_scores")}, indent=2
-        )
-    )
+    print(json.dumps({k: report[k] for k in ("pick", "paired_best_minus_unshrunk", "train_scores")}, indent=2))
     return 0
 
 

@@ -21,86 +21,86 @@
   ],
   "train_scores": {
     "0": {
-      "log_loss": 0.62583,
-      "brier": 0.21746
+      "log_loss": 0.62538,
+      "brier": 0.21725
     },
     "2500": {
-      "log_loss": 0.6223,
-      "brier": 0.21598
+      "log_loss": 0.62257,
+      "brier": 0.21608
     },
     "5000": {
-      "log_loss": 0.62193,
-      "brier": 0.21594
+      "log_loss": 0.62225,
+      "brier": 0.21602
     },
     "10000": {
-      "log_loss": 0.62164,
-      "brier": 0.2159
+      "log_loss": 0.62209,
+      "brier": 0.21603
     },
     "20000": {
-      "log_loss": 0.62156,
-      "brier": 0.21593
+      "log_loss": 0.62221,
+      "brier": 0.21613
     },
     "40000": {
-      "log_loss": 0.62173,
-      "brier": 0.21604
+      "log_loss": 0.62255,
+      "brier": 0.2163
     },
     "80000": {
-      "log_loss": 0.62202,
-      "brier": 0.21617
+      "log_loss": 0.62296,
+      "brier": 0.21647
     },
     "160000": {
-      "log_loss": 0.62229,
-      "brier": 0.21629
+      "log_loss": 0.62329,
+      "brier": 0.21661
     },
     "320000": {
-      "log_loss": 0.62248,
-      "brier": 0.21637
+      "log_loss": 0.62351,
+      "brier": 0.2167
     },
     "640000": {
-      "log_loss": 0.62259,
-      "brier": 0.21642
+      "log_loss": 0.62364,
+      "brier": 0.21676
     }
   },
   "train_scores_early": {
     "0": {
-      "log_loss": 0.6561,
-      "brier": 0.23121
+      "log_loss": 0.65442,
+      "brier": 0.23041
     },
     "2500": {
-      "log_loss": 0.64546,
-      "brier": 0.22665
+      "log_loss": 0.64567,
+      "brier": 0.22663
     },
     "5000": {
-      "log_loss": 0.64547,
-      "brier": 0.22699
+      "log_loss": 0.64524,
+      "brier": 0.22669
     },
     "10000": {
-      "log_loss": 0.64566,
-      "brier": 0.22738
+      "log_loss": 0.64509,
+      "brier": 0.22685
     },
     "20000": {
-      "log_loss": 0.646,
-      "brier": 0.22775
+      "log_loss": 0.64522,
+      "brier": 0.22707
     },
     "40000": {
-      "log_loss": 0.64635,
-      "brier": 0.22803
+      "log_loss": 0.64547,
+      "brier": 0.22728
     },
     "80000": {
-      "log_loss": 0.64661,
-      "brier": 0.22822
+      "log_loss": 0.64567,
+      "brier": 0.22742
     },
     "160000": {
-      "log_loss": 0.64676,
-      "brier": 0.22832
+      "log_loss": 0.6458,
+      "brier": 0.22751
     },
     "320000": {
-      "log_loss": 0.64685,
-      "brier": 0.22838
+      "log_loss": 0.64587,
+      "brier": 0.22755
     },
     "640000": {
-      "log_loss": 0.6469,
-      "brier": 0.22841
+      "log_loss": 0.64591,
+      "brier": 0.22758
     }
   },
   "train_scores_by_season": {
@@ -190,67 +190,78 @@
     },
     "2021": {
       "0": {
-        "log_loss": 0.60718,
-        "brier": 0.21061
+        "log_loss": 0.60576,
+        "brier": 0.20994
       },
       "2500": {
-        "log_loss": 0.6049,
-        "brier": 0.20965
+        "log_loss": 0.60576,
+        "brier": 0.20994
       },
       "5000": {
-        "log_loss": 0.60476,
-        "brier": 0.20967
+        "log_loss": 0.60576,
+        "brier": 0.20994
       },
       "10000": {
-        "log_loss": 0.60435,
-        "brier": 0.20955
+        "log_loss": 0.60576,
+        "brier": 0.20994
       },
       "20000": {
-        "log_loss": 0.60376,
-        "brier": 0.20934
+        "log_loss": 0.60576,
+        "brier": 0.20994
       },
       "40000": {
-        "log_loss": 0.60321,
-        "brier": 0.20913
+        "log_loss": 0.60576,
+        "brier": 0.20994
       },
       "80000": {
-        "log_loss": 0.60284,
-        "brier": 0.209
+        "log_loss": 0.60576,
+        "brier": 0.20994
       },
       "160000": {
-        "log_loss": 0.60264,
-        "brier": 0.20893
+        "log_loss": 0.60576,
+        "brier": 0.20994
       },
       "320000": {
-        "log_loss": 0.60254,
-        "brier": 0.2089
+        "log_loss": 0.60576,
+        "brier": 0.20994
       },
       "640000": {
-        "log_loss": 0.6025,
-        "brier": 0.20888
+        "log_loss": 0.60576,
+        "brier": 0.20994
       }
     }
   },
   "paired_best_minus_unshrunk": {
-    "diff": -0.00427,
-    "se": 0.0056,
+    "diff": -0.00329,
+    "se": 0.00438,
     "games": 599
   },
-  "pick": 20000.0,
-  "final_hfa_by_season": {
-    "2018": 1.0187,
-    "2019": 2.5794,
-    "2021": 0.2386
+  "pick": 10000.0,
+  "home_terms_by_season": {
+    "2018": {
+      "prior_hfa": 2.0373,
+      "prior_hfa_identified": true,
+      "final_hfa": 1.0187
+    },
+    "2019": {
+      "prior_hfa": 1.0187,
+      "prior_hfa_identified": true,
+      "final_hfa": 2.5794
+    },
+    "2021": {
+      "prior_hfa": 0.0,
+      "prior_hfa_identified": false,
+      "final_hfa": 0.2386
+    }
   },
-  "league_hfa": 1.2789,
   "home_term_range": {
     "0": [
       -4.647,
       5.773
     ],
-    "20000": [
-      0.552,
-      2.073
+    "10000": [
+      -4.647,
+      2.293
     ]
   }
 }

@@ -12,9 +12,8 @@
       0.8,
       0.25
     ],
-    "hfa_constants": [
-      80000.0,
-      1.1586
+    "hfa_pseudo_poss": [
+      80000.0
     ]
   },
   "xgboost_version": "3.3.0",

@@ -502,13 +502,14 @@ def _early_log_loss(
 # Observed 2026-11-03 (weeks 0-6 log loss, with / without the prior): NBA 2025-26 0.6349 / 0.6396,
 # WNBA 2025 0.6557 / 0.6594. Gate: observed + 0.01, and the prior at least half the observed gain.
 #
-# The comparator is the UNSHRUNK no-prior model (``hfa_poss=0.0``, the BB-D18 model this gate was
-# written against), not the shipped one; thresholds unchanged. Re-baselined by Saiem's ruling of
-# 2026-11-17 (option (a)) when BB-D25's home-term shrink (``HFA_CONSTANTS``) also shrank the
-# no-prior model, toward the league's home term. Shipped vs shipped, measured 2026-11-17 and NOT
-# gated: NBA 2025-26 0.6343 with the prior / 0.6382 without; WNBA 2025 0.6543 / 0.6529, i.e. there
-# the shipped no-prior model BEATS the shipped prior by 0.0015 (its home-term target, the league's
-# 1.28 per 100, sits nearer 2025 than the prior's, 2024's 0.55). The model card carries it as a caveat.
+# The comparator is named: the UNSHRUNK no-prior model (``hfa_poss=0.0``, the BB-D18 model this gate
+# was written against); thresholds unchanged. Saiem's ruling of 2026-11-17 (option (a)) fixed it when
+# a first cut of BB-D25's home-term shrink also shrank the no-prior model, toward a league value: shipped
+# vs shipped, WNBA 2025 weeks 0-6 the no-prior model then beat the prior, 0.6529 vs 0.6543. After review
+# the no-prior model is not shrunk (no as-of target, ``HFA_PSEUDO_POSS``), so this comparator IS the
+# shipped no-prior model again and the two readings coincide. Measured 2026-11-18 (with / without):
+# NBA 2025-26 0.6343 / 0.6395, WNBA 2025 0.6542 / 0.6594, so the prior wins shipped vs shipped too, and
+# dropping the team prior (which drops the shrink with it) fails both legs.
 EARLY_GATES = {("nba", 2026): (0.6449, 0.0023), ("wnba", 2025): (0.6657, 0.0018)}
 
 
@@ -553,7 +554,7 @@ def test_in_season_ridge_shrinks_toward_the_prior() -> None:
     rows = _rows("nba", 2026).join(done, on="game_id", how="semi")
     lam = sim_mod.SIM_CONSTANTS["00"][0]
     model = sim_mod.as_of_game_model(rows, prior=pre)
-    k = sim_mod.HFA_CONSTANTS["00"][0]
+    k = sim_mod.HFA_PSEUDO_POSS["00"]
     want = possession_ridge_ratings(rows, lam=lam, prior=pre.ratings, hfa_prior=(pre.hfa, k))
     got = model.ratings.join(want.select("team_id", pl.col("adj_net_rtg").alias("w")), on="team_id", validate="1:1")
     assert got.height == 30
@@ -573,12 +574,12 @@ def test_as_of_home_term_shrinks_toward_last_season() -> None:
     """Early in WNBA 2025 the home term sits near last season's, not wherever a few games put it.
 
     Unshrunk, the as-of home term over the first four game dates ranges over several points per 100;
-    shrunk (:data:`HFA_CONSTANTS`) every date lies between it and last season's, and closer to last season's.
+    shrunk (:data:`HFA_PSEUDO_POSS`) every date lies between it and last season's, and closer to last season's.
     """
     pre = _prior("wnba", 2025)
     games = _regular("wnba", 2025)
     rows = _rows("wnba", 2025).join(games.select("game_id", "game_date"), on="game_id", how="inner", validate="m:1")
-    k = sim_mod.HFA_CONSTANTS["10"][0]
+    k = sim_mod.HFA_PSEUDO_POSS["10"]
     assert k > 0
     days = sorted(games["game_date"].unique().to_list())[1:5]
     raw, shrunk = [], []
@@ -605,22 +606,64 @@ def test_as_of_home_term_shrinks_toward_last_season() -> None:
 
 
 def test_home_term_constants_are_the_committed_fit() -> None:
-    """:data:`HFA_CONSTANTS` is ``tools/fit_pro_hfa_shrink.py``'s pick and league value (its committed report)."""
+    """:data:`HFA_PSEUDO_POSS` is ``tools/fit_pro_hfa_shrink.py``'s pick (its committed report)."""
     import json
 
     for lg, lid in (("nba", "00"), ("wnba", "10")):
         report = json.loads((ROOT / "nba_prediction" / f"hfa_shrink_{lg}.json").read_text(encoding="utf-8"))
-        assert sim_mod.HFA_CONSTANTS[lid] == (report["pick"], report["league_hfa"]), lg
+        assert sim_mod.HFA_PSEUDO_POSS[lid] == report["pick"], lg
         assert report["train_scores"][f"{report['pick']:g}"]["log_loss"] < report["train_scores"]["0"]["log_loss"]
+        terms = report["home_terms_by_season"]
+        # the real 2020 WNBA bubble release: 2021's prior has no identified home term; every other is identified
+        want = {s: (lg, s) != ("wnba", "2021") for s in terms}
+        assert {s: t["prior_hfa_identified"] for s, t in terms.items()} == want
 
 
-def test_prior_after_an_all_neutral_season_uses_the_league_home_term() -> None:
-    """The 2020 bubbles had no home games, so last season's term is not identified: the prior takes the league's."""
+def _wnba_2025_through(n_dates: int) -> tuple[pl.DataFrame, pl.DataFrame, dt.date]:
+    """WNBA 2025 possession rows (with ``game_date``), its games, and its ``n_dates``-th game date."""
+    games = _regular("wnba", 2025)
+    rows = _rows("wnba", 2025).join(games.select("game_id", "game_date"), on="game_id", how="inner", validate="m:1")
+    return rows, games, sorted(games["game_date"].unique().to_list())[n_dates]
+
+
+def test_prior_after_an_all_neutral_season_does_not_shrink_the_home_term() -> None:
+    """The 2020 bubbles had no home games, so last season's term is unidentified: nothing to shrink toward."""
     teams = sorted(set(_regular("wnba", 2025)["home_team_id"].to_list()))
-    bubble = _rows("wnba", 2024).with_columns(pl.lit(True).alias("neutral_site"))
-    pre = sim_mod.preseason_prior(bubble, teams, league_id="10")
-    assert pre is not None and pre.hfa == sim_mod.HFA_CONSTANTS["10"][1] != 0.0
-    assert _prior("wnba", 2025).hfa != pre.hfa  # an ordinary season keeps its own
+    bubble = sim_mod.preseason_prior(
+        _rows("wnba", 2024).with_columns(pl.lit(True).alias("neutral_site")), teams, league_id="10"
+    )
+    assert bubble is not None and not bubble.hfa_identified and _prior("wnba", 2025).hfa_identified
+    rows, _, day = _wnba_2025_through(3)
+    done = rows.filter(pl.col("game_date") < day).drop("game_date")
+    free = sim_mod.as_of_game_model(done, league_id="10", prior=bubble, hfa_poss=0.0).hfa
+    assert sim_mod.as_of_game_model(done, league_id="10", prior=bubble).hfa == free
+    assert sim_mod.as_of_game_model(done, league_id="10", prior=_prior("wnba", 2025)).hfa != pytest.approx(free)
+
+
+def test_no_prior_leaves_the_home_term_free() -> None:
+    """Without a prior there is no as-of target (no constant from later seasons): the home term is the free fit."""
+    rows, _, day = _wnba_2025_through(3)
+    done = rows.filter(pl.col("game_date") < day).drop("game_date")
+    free = possession_ridge_ratings(done, lam=sim_mod.SIM_CONSTANTS["10"][0])
+    assert sim_mod.as_of_game_model(done, league_id="10").hfa == pytest.approx(float(free["hfa"][0]), abs=1e-9)
+    assert sim_mod.as_of_game_model(done.head(0), league_id="10").hfa == 0.0
+
+
+def test_rated_prior_serves_the_shrunk_home_term() -> None:
+    """BB-D25's served ``hfa`` is the shrunk as-of term (``as_of_game_model``), not the free fit."""
+    from sportsdataverse.nba.nba_rated_prior import rated_home_probs
+
+    pre = _prior("wnba", 2025)
+    rows, games, day = _wnba_2025_through(3)
+    sub = games.filter(pl.col("game_date") == day).select(
+        "game_date", "home_team_id", "away_team_id", pl.lit(False).alias("neutral_site")
+    )
+    served = rated_home_probs(rows, sub, league_id="10", prior=pre)
+    before = rows.filter(pl.col("game_date") < day)
+    model = sim_mod.as_of_game_model(before, league_id="10", prior=pre)
+    free = sim_mod.as_of_game_model(before, league_id="10", prior=pre, hfa_poss=0.0)
+    assert served.height > 0 and (served["hfa"] == model.hfa).all()
+    assert abs(model.hfa - free.hfa) > 0.1, (model.hfa, free.hfa)
 
 
 def test_nba_season_sim_carries_the_prior_from_the_release_before() -> None:

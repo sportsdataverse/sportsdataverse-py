@@ -194,8 +194,8 @@ def possession_ridge_ratings(
             missing from ``prior`` shrinks toward average. One prior serves every season in
             ``rows``.
         hfa_prior: Optional ``(mean, possessions)``: shrink the home term toward ``mean`` (points
-            per 100) with that many non-neutral possessions of prior weight. None: the home term
-            is free.
+            per 100) with that many non-neutral possessions of prior weight. One target serves
+            every season in ``rows``. None: the home term is free.
 
     Returns:
         One row per (season, team) in :data:`RATINGS_SCHEMA`, plus ``hfa``: the fitted home term,

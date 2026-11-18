@@ -11,7 +11,7 @@ its home term (shrunk toward last season's) and the as-of possessions per game g
 ``Phi(margin / margin_sd)`` is the probability. Every constant is the sim's
 (:data:`~sportsdataverse.nba.nba_season_sim.SIM_CONSTANTS`,
 :data:`~sportsdataverse.nba.nba_season_sim.PRIOR_CONSTANTS`,
-:data:`~sportsdataverse.nba.nba_season_sim.HFA_CONSTANTS`); nothing is fitted here.
+:data:`~sportsdataverse.nba.nba_season_sim.HFA_PSEUDO_POSS`); nothing is fitted here.
 
 **As of the tip.** A game on date ``d`` is rated from the regular-season possessions of games
 dated strictly before ``d`` (the boundary is exclusive: a same-day game never rates another). The
@@ -83,7 +83,7 @@ def rated_home_probs(
         prior: Last season's regressed ratings (:func:`~sportsdataverse.nba.nba_season_sim.preseason_prior`);
             None rates every team average until it has possessions.
         hfa_poss: Override the home term's pseudo-count
-            (:data:`~sportsdataverse.nba.nba_season_sim.HFA_CONSTANTS`; the fitting script scans it).
+            (:data:`~sportsdataverse.nba.nba_season_sim.HFA_PSEUDO_POSS`; the fitting script scans it).
 
     Returns:
         ``games`` plus ``home_adj_net_rtg``, ``away_adj_net_rtg``, ``hfa`` (per 100),
