@@ -188,7 +188,7 @@ def main() -> None:
         "docstring": {
             "example_import": True,
             "raises": [
-                "sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id or token id).",
+                "sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id, token id or market slug).",
             ],
             "see_also": [
                 {

@@ -12,7 +12,7 @@ description: "sdv-py Soccer (all): endpoint references, dataset loaders and pars
 | [ESPN](#espn) | `site.api.espn.com`, `site.web.api.espn.com`, `sports.core.api.espn.com` | 112 | none |
 | [American Soccer Analysis](#american-soccer-analysis) | `app.americansocceranalysis.com` | 16 | none |
 | [FotMob](#fotmob) | `www.fotmob.com` | 14 | none (unofficial) |
-| [UEFA](#uefa) | `comp.uefa.com` | 7 | none |
+| [UEFA](#uefa) | `comp.uefa.com`, `match.uefa.com`, `matchstats.uefa.com` +1 more | 7 | none |
 | [FIFA](#fifa) | `api.fifa.com` | 9 | none |
 | [Football-Data.co.uk](#football-data-co-uk) | `www.football-data.co.uk` | 3 | none (CSV archive) |
 | [OpenLigaDB](#openligadb) | `api.openligadb.de` | 11 | none |

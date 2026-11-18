@@ -3842,7 +3842,7 @@ _FLAT_API_DOC = {
     "sportality": "Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality)",
     "football_data": "Football-Data.co.uk CSV archive (football-data.co.uk)",
     "openligadb": "OpenLigaDB (api.openligadb.de, community German football)",
-    "polymarket": "Polymarket read APIs (gamma-api + clob.polymarket.com)",
+    "polymarket": "Polymarket read APIs (gamma-api, clob + the US gateway)",
     "kalshi": "Kalshi Trade API v2 market data (api.elections.kalshi.com)",
 }
 
@@ -3988,6 +3988,9 @@ def _apis_for(prefix: str) -> list[dict]:
                 "slug": fa.module,
                 "label": _FLAT_API_DOC.get(fa.module, fa.module.replace("_", " ")),
                 "base": fa.host,
+                # A multi-host family (polymarket's gamma / clob / gateway) sets ``host`` per endpoint;
+                # the league index's host column lists those too, not just the family default.
+                "hosts": [fa.host] + [ep.host for ep in fa.endpoints if ep.host],
                 "count": len(fa.endpoints),
                 "kind": "flat",
             },
@@ -4108,7 +4111,7 @@ def _league_source_rows(
         buckets.setdefault(e.key, []).append(
             {"label": a["label"], "count": a["count"], "url": f"reference/{a['slug']}"},
         )
-        hosts.setdefault(e.key, []).append(a["base"])
+        hosts.setdefault(e.key, []).extend(a.get("hosts") or [a["base"]])
     loaders = _loader_doc_views(prefix)
     if loaders:
         by_base: dict[str, int] = {}

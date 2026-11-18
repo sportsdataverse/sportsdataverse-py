@@ -1,11 +1,11 @@
 ---
-title: Betting odds — Polymarket read APIs (gamma-api + clob.polymarket.com)
-sidebar_label: Polymarket read APIs (gamma-api + clob.polymarket.com)
-description: "Betting odds — Polymarket read APIs (gamma-api + clob.polymarket.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
+title: Betting odds — Polymarket read APIs (gamma-api, clob + the US gateway)
+sidebar_label: Polymarket read APIs (gamma-api, clob + the US gateway)
+description: "Betting odds — Polymarket read APIs (gamma-api, clob + the US gateway) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# Betting odds — Polymarket read APIs (gamma-api + clob.polymarket.com)
+# Betting odds — Polymarket read APIs (gamma-api, clob + the US gateway)
 
 `sportsdataverse.odds` — 10 endpoints.
 
@@ -87,7 +87,7 @@ Events -- groups of related markets -- on the Gamma metadata host.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -215,7 +215,7 @@ One market by its Gamma id.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -352,7 +352,7 @@ Markets on the Gamma metadata host, orderable by volume or liquidity.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -394,7 +394,7 @@ Tags used to categorise Gamma events and markets.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -440,7 +440,7 @@ Full order book, bids and asks, for one outcome token.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -507,7 +507,7 @@ Markets on the CLOB host, cursor-paged.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -543,7 +543,7 @@ Midpoint between the best bid and the best ask for one outcome token.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -580,7 +580,7 @@ Best price on one side of the book for one outcome token.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -642,7 +642,7 @@ Best bid and offer, last trade and volume for one Polymarket US market slug.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -673,7 +673,7 @@ Markets on the Polymarket US exchange, offset-paged and filterable by active or 
 
 | col_name | type | description |
 |---|---|---|
-| `id` | String | Polymarket US market id, a numeric string; the unfiltered first page starts at "1". |
+| `id` | String | Polymarket US market id, a numeric string (the captured unfiltered page started at "1"). |
 | `question` | String | Market title as Polymarket US displays it (e.g. "Los Angeles vs. Tennessee"). |
 | `slug` | String | Market slug, the key for `polymarket_us_market_bbo`. A game market's is "aec-" plus a Gamma event's usId (e.g. "aec-nfl-lac-ten-2025-11-02"); futures use other prefixes such as "tec-". |
 | `end_date` | String | ISO-8601 UTC time the market is scheduled to close. |
@@ -728,7 +728,7 @@ Markets on the Polymarket US exchange, offset-paged and filterable by active or 
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

@@ -9,7 +9,7 @@ description: "sdv-py Spanish FEB: endpoint references, dataset loaders and parse
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [Spanish FEB LiveStats + baloncestoenvivo](#spanish-feb-livestats-baloncestoenvivo) | `intrafeb.feb.es` | 11 | none |
+| [Spanish FEB LiveStats + baloncestoenvivo](#spanish-feb-livestats-baloncestoenvivo) | `baloncestoenvivo.feb.es`, `intrafeb.feb.es` | 11 | none |
 
 ## Spanish FEB LiveStats + baloncestoenvivo {#spanish-feb-livestats-baloncestoenvivo}
 

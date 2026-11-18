@@ -81841,7 +81841,7 @@ ncaa_box_events:
   tov: 'Turnovers (a team turnover is no player''s).'
   pf: 'Personal fouls (technicals are not counted).'
 us_markets:
-  id: Polymarket US market id, a numeric string; the unfiltered first page starts at "1".
+  id: Polymarket US market id, a numeric string (the captured unfiltered page started at "1").
   question: Market title as Polymarket US displays it (e.g. "Los Angeles vs. Tennessee").
   slug: Market slug, the key for `polymarket_us_market_bbo`. A game market's is "aec-" plus a Gamma event's usId
     (e.g. "aec-nfl-lac-ten-2025-11-02"); futures use other prefixes such as "tec-".

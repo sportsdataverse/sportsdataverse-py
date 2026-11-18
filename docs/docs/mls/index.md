@@ -10,7 +10,7 @@ description: "sdv-py MLS: endpoint references, dataset loaders and parsers for M
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 113 | none |
-| [MLS official web API](#mls-official-web-api) | `stats-api.mlssoccer.com` | 12 | none |
+| [MLS official web API](#mls-official-web-api) | `dapi.mlssoccer.com`, `sportapi.mlssoccer.com`, `stats-api.mlssoccer.com` | 12 | none |
 
 ## ESPN {#espn}
 

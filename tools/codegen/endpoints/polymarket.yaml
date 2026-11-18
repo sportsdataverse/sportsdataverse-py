@@ -2,8 +2,8 @@ api: polymarket
 docstring:
   example_import: true
   raises:
-  - 'sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id
-    or token id).'
+  - 'sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id,
+    token id or market slug).'
   see_also:
   - name: Polymarket docs
     note: gamma = market/event/tag metadata, clob = order books and prices, us = the

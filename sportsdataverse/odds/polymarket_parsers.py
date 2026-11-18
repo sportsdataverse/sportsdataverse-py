@@ -82,10 +82,13 @@ def _as_rows(raw: Any) -> List[Dict[str, Any]]:
         # A known single-key envelope wraps the payload (US ``{"markets": [...]}``, ``{"marketData": {...}}``).
         # Any other one-key body (clob ``{"mid": "0.5"}``, an ``{"error": {...}}`` object) stays one row.
         (inner,) = body.values()
+        # Same rows with or without the envelope: drop the empty ``{}`` records a bare list loses in
+        # ``_data_only``, and a non-container value (``{"marketData": null}``) is malformed: zero rows.
         if isinstance(inner, list):
-            return [r for r in inner if isinstance(r, dict)]
+            return [r for r in inner if isinstance(r, dict) and r]
         if isinstance(inner, dict):
             return [inner] if inner else []
+        return []
     return [body] if body else []
 
 
