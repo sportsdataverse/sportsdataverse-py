@@ -18,6 +18,7 @@ from polars.testing import assert_frame_equal
 
 from sportsdataverse.nba import nba_epv
 from sportsdataverse.nba.nba_epv import (
+    COLLEGE_EPV_TRANSITION_SECONDS,
     EPV_FEATURES,
     EPV_TRANSITION_SECONDS,
     START_TYPES,
@@ -647,3 +648,17 @@ def test_a_booster_on_another_window_is_refused(monkeypatch: pytest.MonkeyPatch)
     monkeypatch.setattr(nba_epv, "load_epv_model", lambda league_id: old)
     with pytest.raises(ValueError, match="10 s transition window"):
         add_epv(_states("nba"))
+
+
+def test_states_on_another_window_than_the_booster_are_refused() -> None:
+    """8 s states must not reach the college 10 s booster, nor 10 s states the pros' 8 s one."""
+    poss, pbp = _raw("nba")
+    assert (_states("nba")["transition_seconds"] == EPV_TRANSITION_SECONDS).all()
+    with pytest.raises(ValueError, match="states were built on a 8 s transition window"):
+        add_epv(_states("nba"), league_id="mbb")
+    wide = epv_states(poss, pbp, transition_seconds=COLLEGE_EPV_TRANSITION_SECONDS)
+    with pytest.raises(ValueError, match="states were built on a 10 s transition window"):
+        add_epv(wide)
+    with pytest.raises(ValueError, match="states were built on a 10 s transition window"):
+        add_epv(wide, booster=load_epv_model("00"))
+    assert "transition_seconds" not in _plays("nba").columns  # the plays keep their documented columns
