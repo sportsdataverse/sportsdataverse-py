@@ -1,0 +1,163 @@
+{
+  "market": {
+    "id": "7984",
+    "question": "Major League Soccer Champion",
+    "slug": "tec-mls-winner-2026-11-07-sea",
+    "endDate": "2027-01-01T21:20:09Z",
+    "category": "sports",
+    "startDate": "2026-03-19T21:25:04Z",
+    "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+    "description": "Will Seattle Sounders FC win the 2026 MLS Cup, scheduled to conclude December 18, 2026? If the event is postponed, delayed, or rescheduled, the expiration date will be amended to align with the new event date. If the event is not rescheduled within two weeks of the originally scheduled date, the instrument may settle at last fair market prices. If the event is canceled, the instrument may settle at last fair market prices. If the team is eliminated from contention, the instrument will settle to $0.00. If multiple teams are declared as having attained victory, holders receive $1.00 divided by the number of such teams, rounded down to the nearest tick.",
+    "active": true,
+    "marketType": "futures",
+    "closed": false,
+    "createdAt": "2026-03-19T21:31:54Z",
+    "updatedAt": "2026-11-18T11:55:13Z",
+    "archived": false,
+    "orderPriceMinTickSize": 0.001,
+    "gameStartTime": "2026-02-21T00:00:00Z",
+    "manualActivation": false,
+    "sportsMarketType": "futures",
+    "marketSides": [
+      {
+        "id": "15967",
+        "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+        "identifier": "tec-mls-winner-2026-11-07-sea",
+        "createdAt": "2026-03-19T21:31:54Z",
+        "updatedAt": "2026-03-19T21:31:54Z",
+        "description": "Yes",
+        "price": "0.0250",
+        "marketId": 7984,
+        "long": true,
+        "teamId": 2279,
+        "team": {
+          "id": 2279,
+          "name": "Seattle Sounders FC",
+          "abbreviation": "sea",
+          "league": "mls",
+          "record": "",
+          "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+          "alias": "Rave Green",
+          "safeName": "Seattle Sounders FC",
+          "colorPrimary": "#4FB84F",
+          "providerId": 710,
+          "ordering": "home",
+          "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+          "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+          "displayAbbreviation": "SEA",
+          "providerIds": [
+            {
+              "provider": "PROVIDER_SPORTRADAR",
+              "providerId": "sr:competitor:22009"
+            },
+            {
+              "provider": "PROVIDER_SPORTSDATAIO",
+              "providerId": "710"
+            }
+          ],
+          "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+          "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+          "color": {
+            "light": "#4FB84F",
+            "dark": "#4FB84F"
+          },
+          "imageDisplayType": "IMAGE_DISPLAY_TYPE_LOGO"
+        },
+        "quote": {
+          "value": "0.0250",
+          "currency": "USD"
+        },
+        "tradable": true
+      },
+      {
+        "id": "15968",
+        "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+        "identifier": "tec-mls-winner-2026-11-07-sea",
+        "createdAt": "2026-03-19T21:31:54Z",
+        "updatedAt": "2026-03-19T21:31:54Z",
+        "description": "No",
+        "price": "0.99",
+        "marketId": 7984,
+        "long": false,
+        "teamId": 2279,
+        "team": {
+          "id": 2279,
+          "name": "Seattle Sounders FC",
+          "abbreviation": "sea",
+          "league": "mls",
+          "record": "",
+          "logo": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+          "alias": "Rave Green",
+          "safeName": "Seattle Sounders FC",
+          "colorPrimary": "#4FB84F",
+          "providerId": 710,
+          "ordering": "away",
+          "longIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+          "shortIcon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+          "displayAbbreviation": "SEA",
+          "providerIds": [
+            {
+              "provider": "PROVIDER_SPORTRADAR",
+              "providerId": "sr:competitor:22009"
+            },
+            {
+              "provider": "PROVIDER_SPORTSDATAIO",
+              "providerId": "710"
+            }
+          ],
+          "longIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+          "shortIconDark": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-logos/MLS/Team%3DSeattle+Sounders+FC.png",
+          "color": {
+            "light": "#4FB84F",
+            "dark": "#4FB84F"
+          },
+          "imageDisplayType": "IMAGE_DISPLAY_TYPE_LOGO"
+        },
+        "quote": {
+          "value": "0.99",
+          "currency": "USD"
+        },
+        "tradable": true
+      }
+    ],
+    "outcomes": "[\"No\",\"Yes\"]",
+    "outcomePrices": "[\"0.0250\",\"0.99\"]",
+    "ep3Status": "OPEN",
+    "status": "MARKET_STATUS_OPEN",
+    "assetPriceTerms": null,
+    "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_FUTURE",
+    "hidden": false,
+    "tags": [],
+    "title": "Seattle Sounders FC",
+    "subtitle": "7-3-3",
+    "color": "#4FB84F",
+    "feeCoefficient": 0.095,
+    "bestBidQuote": {
+      "value": "0.0100",
+      "currency": "USD"
+    },
+    "bestAskQuote": {
+      "value": "0.0250",
+      "currency": "USD"
+    },
+    "titleShort": "Seattle Sounders FC",
+    "ep3SyncedAt": "2026-10-29T12:04:57Z",
+    "minimumTradeQty": 1,
+    "comboEnabled": false,
+    "politics": null,
+    "eventSubcategory": "SOCCER",
+    "singlesRfqConfig": {
+      "enabled": true,
+      "midpointDeviation": 0.2,
+      "minOrderValueUsd": 500,
+      "maxQuoteAgeSeconds": 30,
+      "quoteWindows": [
+        {
+          "windowMs": "400"
+        }
+      ],
+      "ruleName": "singles-rfq-half-markets",
+      "version": "singles-half-markets-v2"
+    }
+  }
+}

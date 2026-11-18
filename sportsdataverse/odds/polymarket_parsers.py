@@ -7,14 +7,19 @@ Polymarket serves three keyless read hosts and this one parser covers all of the
   "limit", "count"}``) -> rows from ``data``; the cursor is a parameter the
   caller passes on the next call, never followed here;
 * **order book** (clob ``/book`` is ``{"bids": [...], "asks": [...]}`` plus
-  scalar siblings) -> one row per price level, tagged ``side`` = ``bid`` /
-  ``ask``, with the book's scalars (``market``, ``asset_id``, ``timestamp``,
-  ``tick_size``, ...) repeated on every row so a level is self-describing;
+  scalar siblings; US ``/v1/markets/{slug}/book`` is ``{"marketData": {"bids":
+  [...], "offers": [...], ...}}``) -> one row per price level, tagged ``side`` =
+  ``bid`` / ``ask`` (US ``offers`` are asks), with the book's scalars
+  (``market``, ``asset_id``, ``timestamp``, ``tick_size``; US ``marketSlug``,
+  ``state``) repeated on every row so a level is self-describing. Nested
+  objects beside the levels (the US ``stats``) are dropped, and a book with no
+  levels is zero rows;
 * **single-key envelope** (US ``/v1/markets`` is ``{"markets": [...]}``, an
   ``{"events": [...]}`` list likewise) -> one row per element; US
   ``/v1/markets/{slug}/bbo`` is ``{"marketData": {...}}`` -> exactly one row of
   the inner object, so its ``{value, currency}`` prices flatten to
-  ``current_px_value`` / ``current_px_currency``;
+  ``current_px_value`` / ``current_px_currency``; US ``/v1/market/id/{id}`` and
+  ``/v1/market/slug/{slug}`` are ``{"market": {...}}`` -> one row;
 * **object** (gamma ``/markets/{id}``) -> exactly one row;
 * **scalar dict** (clob ``/midpoint`` is ``{"mid": "0.5"}``, ``/price`` is
   ``{"price": "0.5"}``) -> exactly one row.
@@ -51,10 +56,15 @@ _ID = re.compile(r"(^|_)(id|code|ticker)$")
 # The one list key in a cursor envelope. Checked before the generic rule so the
 # envelope's own scalars (next_cursor, limit, count) never become a row.
 _DATA_KEY = "data"
-_BOOK_SIDES = {"bids": "bid", "asks": "ask"}
+# Polymarket US names its asks ``offers``; both books tag them ``ask`` so a clob and a US book stack.
+_BOOK_SIDES = {"bids": "bid", "asks": "ask", "offers": "ask"}
 # The single keys that wrap a payload, and the container each must hold; only these are unwrapped, so a future
 # one-key body is never guessed at.
-_ENVELOPE_KEYS = {"markets": list, "events": list, "marketData": dict}
+_ENVELOPE_KEYS = {"markets": list, "events": list, "marketData": dict, "market": dict}
+# Decimal columns that arrive as a bare JSON number, pinned Float64 so the dtype never depends on the value. Polymarket
+# US's own schema types both decimal: ``/settlement`` answers ``{"settlement": 1}``, and ``minimumTradeQty`` is 1 on
+# most markets but 0.01 on the captured expired game.
+_FLOAT_COLS = {"settlement", "minimum_trade_qty"}
 
 
 def _book_rows(raw: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -90,6 +100,8 @@ def _as_rows(raw: Any) -> List[Dict[str, Any]]:
             return []
         if isinstance(inner, list):
             return [r for r in inner if isinstance(r, dict) and r]
+        if set(_BOOK_SIDES) & set(inner):  # US ``/book``: ``{"marketData": {"bids": [...], "offers": [...], ...}}``
+            return _book_rows(inner)
         return [inner] if inner else []
     return [body] if body else []
 
@@ -127,6 +139,7 @@ def _to_frame(rows: List[Dict[str, Any]]) -> pl.DataFrame:
         if dtype.is_float():
             expr = expr.cast(pl.Int64, strict=False)
         ids.append(expr.cast(pl.String).alias(name))
+    ids += [pl.col(c).cast(pl.Float64, strict=False) for c in _FLOAT_COLS & set(df.columns)]
     return df.with_columns(ids) if ids else df
 
 

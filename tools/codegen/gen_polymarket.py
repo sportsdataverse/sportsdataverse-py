@@ -8,7 +8,7 @@ Idempotent: same specs + same captures -> byte-identical output. Modeled on
 Reads the frozen specs and the committed captures from the maintainers' private
 reference checkout (``$SDV_REFS_REPO``) and emits:
 
-* ``tools/codegen/endpoints/polymarket.yaml`` -- one endpoint per GET route (10),
+* ``tools/codegen/endpoints/polymarket.yaml`` -- one endpoint per GET route (14),
   each carrying a per-endpoint ``host:`` when it differs from the document
   default (the ``uefa.yaml`` pattern).
 * ``tools/codegen/schemas/native/polymarket/<short>.yaml`` -- returns-schema per
@@ -81,6 +81,10 @@ _SURFACES = [
         {
             "/v1/markets": "us_markets",
             "/v1/markets/{slug}/bbo": "us_market_bbo",
+            "/v1/markets/{slug}/book": "us_market_book",
+            "/v1/markets/{slug}/settlement": "us_market_settlement",
+            "/v1/market/id/{id}": "us_market_by_id",
+            "/v1/market/slug/{slug}": "us_market_by_slug",
         },
     ),
 ]
@@ -100,6 +104,10 @@ _SUMMARIES = {
     "clob_price": "Best price on one side of the book for one outcome token.",
     "us_markets": "Markets on the Polymarket US exchange, offset-paged and filterable by active or closed.",
     "us_market_bbo": "Best bid and offer, last trade and volume for one Polymarket US market slug.",
+    "us_market_book": "Order book for one Polymarket US market slug, one row per bid or offer level.",
+    "us_market_settlement": "Settlement price of one Polymarket US market slug, once the market has settled.",
+    "us_market_by_id": "One Polymarket US market by its gateway id.",
+    "us_market_by_slug": "One Polymarket US market by its slug.",
 }
 
 
@@ -192,7 +200,8 @@ def main() -> None:
         "docstring": {
             "example_import": True,
             "raises": [
-                "sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id, token id or market slug).",
+                "sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id, token id or market slug, "
+                "or a Polymarket US market that has not settled yet).",
             ],
             "see_also": [
                 {

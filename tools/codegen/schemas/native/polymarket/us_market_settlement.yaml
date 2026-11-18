@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: slug
+  type: character
+- description: ''
+  name: settlement
+  type: numeric
+kind: dataframe
+schema: us_market_settlement

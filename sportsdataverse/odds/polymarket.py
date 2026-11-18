@@ -24,6 +24,10 @@ __all__ = [
     "polymarket_clob_midpoint",
     "polymarket_clob_price",
     "polymarket_us_market_bbo",
+    "polymarket_us_market_book",
+    "polymarket_us_market_by_id",
+    "polymarket_us_market_by_slug",
+    "polymarket_us_market_settlement",
     "polymarket_us_markets",
 ]
 
@@ -56,7 +60,7 @@ def polymarket_gamma_events(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -111,7 +115,7 @@ def polymarket_gamma_market(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -169,7 +173,7 @@ def polymarket_gamma_markets(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -227,7 +231,7 @@ def polymarket_gamma_tags(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -280,7 +284,7 @@ def polymarket_clob_book(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -332,7 +336,7 @@ def polymarket_clob_markets(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -384,7 +388,7 @@ def polymarket_clob_midpoint(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -438,7 +442,7 @@ def polymarket_clob_price(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -482,7 +486,7 @@ def polymarket_us_market_bbo(
     Example URL: https://gateway.polymarket.us/v1/markets/tec-mls-winner-2026-11-07-sea/bbo
 
     Args:
-        slug: Exact Polymarket US market slug: the slug field of a /v1/markets row. A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06); the game's other markets (e.g. spreads) and futures (tec-mls-winner-2026-11-07-sea) have their own slugs, so pass the listing's slug rather than building one.
+        slug: Exact Polymarket US market slug: the slug field of a /v1/markets row. A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06) and futures have their own (tec-mls-winner-2026-11-07-sea), so pass the listing's slug rather than building one.
         return_parsed: parse the payload through parse_polymarket -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -491,7 +495,7 @@ def polymarket_us_market_bbo(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -511,6 +515,206 @@ def polymarket_us_market_bbo(
     _params.update(_caller_params)
     raw = _get(
         f"https://gateway.polymarket.us/v1/markets/{slug}/bbo",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def polymarket_us_market_book(
+    slug: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Order book for one Polymarket US market slug, one row per bid or offer level.
+
+    Endpoint: ``GET https://gateway.polymarket.us/v1/markets/{slug}/book``
+    Example URL: https://gateway.polymarket.us/v1/markets/tec-mls-winner-2026-11-07-sea/book
+
+    Args:
+        slug: Exact Polymarket US market slug: the slug field of a /v1/markets row. A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06) and futures have their own (tec-mls-winner-2026-11-07-sea), so pass the listing's slug rather than building one.
+        return_parsed: parse the payload through parse_polymarket -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.odds import polymarket_us_market_book
+            polymarket_us_market_book(slug='tec-mls-winner-2026-11-07-sea')
+
+        See Also:
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
+
+        .. _Polymarket docs: https://docs.polymarket.com/
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://gateway.polymarket.us/v1/markets/{slug}/book",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def polymarket_us_market_by_id(
+    id: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """One Polymarket US market by its gateway id.
+
+    Endpoint: ``GET https://gateway.polymarket.us/v1/market/id/{id}``
+    Example URL: https://gateway.polymarket.us/v1/market/id/7984
+
+    Args:
+        id: Polymarket US market id: the id field of a /v1/markets row (its own namespace, not a Gamma id).
+        return_parsed: parse the payload through parse_polymarket -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.odds import polymarket_us_market_by_id
+            polymarket_us_market_by_id(id='7984')
+
+        See Also:
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
+
+        .. _Polymarket docs: https://docs.polymarket.com/
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://gateway.polymarket.us/v1/market/id/{id}",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def polymarket_us_market_by_slug(
+    slug: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """One Polymarket US market by its slug.
+
+    Endpoint: ``GET https://gateway.polymarket.us/v1/market/slug/{slug}``
+    Example URL: https://gateway.polymarket.us/v1/market/slug/tec-mls-winner-2026-11-07-sea
+
+    Args:
+        slug: Exact Polymarket US market slug: the slug field of a /v1/markets row. A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06) and futures have their own (tec-mls-winner-2026-11-07-sea), so pass the listing's slug rather than building one.
+        return_parsed: parse the payload through parse_polymarket -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.odds import polymarket_us_market_by_slug
+            polymarket_us_market_by_slug(slug='tec-mls-winner-2026-11-07-sea')
+
+        See Also:
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
+
+        .. _Polymarket docs: https://docs.polymarket.com/
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://gateway.polymarket.us/v1/market/slug/{slug}",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def polymarket_us_market_settlement(
+    slug: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Settlement price of one Polymarket US market slug, once the market has settled.
+
+    Endpoint: ``GET https://gateway.polymarket.us/v1/markets/{slug}/settlement``
+    Example URL: https://gateway.polymarket.us/v1/markets/aec-nba-sa-sac-2026-11-06/settlement
+
+    Args:
+        slug: Exact Polymarket US market slug: the slug field of a /v1/markets row. A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06) and futures have their own (tec-mls-winner-2026-11-07-sea), so pass the listing's slug rather than building one.
+        return_parsed: parse the payload through parse_polymarket -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.odds import polymarket_us_market_settlement
+            polymarket_us_market_settlement(slug='aec-nba-sa-sac-2026-11-06')
+
+        See Also:
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
+
+        .. _Polymarket docs: https://docs.polymarket.com/
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://gateway.polymarket.us/v1/markets/{slug}/settlement",
         params=_params,
         **kwargs,
     )
@@ -547,7 +751,7 @@ def polymarket_us_markets(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id, token id or market slug, or a Polymarket US market that has not settled yet).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

@@ -1,0 +1,110 @@
+{
+  "marketData": {
+    "marketSlug": "tec-mls-winner-2026-11-07-sea",
+    "bids": [
+      {
+        "px": {
+          "value": "0.0100",
+          "currency": "USD"
+        },
+        "qty": "3.0000"
+      },
+      {
+        "px": {
+          "value": "0.0070",
+          "currency": "USD"
+        },
+        "qty": "105.0000"
+      },
+      {
+        "px": {
+          "value": "0.0060",
+          "currency": "USD"
+        },
+        "qty": "4600.0000"
+      }
+    ],
+    "offers": [
+      {
+        "px": {
+          "value": "0.0270",
+          "currency": "USD"
+        },
+        "qty": "2.0000"
+      },
+      {
+        "px": {
+          "value": "0.0280",
+          "currency": "USD"
+        },
+        "qty": "550.0000"
+      },
+      {
+        "px": {
+          "value": "0.0320",
+          "currency": "USD"
+        },
+        "qty": "352.0000"
+      }
+    ],
+    "state": "MARKET_STATE_OPEN",
+    "stats": {
+      "openPx": {
+        "value": "0.0210",
+        "currency": "USD"
+      },
+      "closePx": {
+        "value": "0.0270",
+        "currency": "USD"
+      },
+      "lowPx": {
+        "value": "0.0010",
+        "currency": "USD"
+      },
+      "highPx": {
+        "value": "0.0890",
+        "currency": "USD"
+      },
+      "lastTradePx": {
+        "value": "0.0280",
+        "currency": "USD"
+      },
+      "settlementPx": {
+        "value": "0.0270",
+        "currency": "USD"
+      },
+      "sharesTraded": "1471165.0000",
+      "notionalTraded": {
+        "value": "29011.4100",
+        "currency": "USD"
+      },
+      "lastTradeQty": "5.0000",
+      "openInterest": "62119.0000",
+      "openSetTime": "2026-09-13T14:12:06.990267554Z",
+      "closeSetTime": "2026-09-12T21:00:40.056871352Z",
+      "highSetTime": "2026-10-18T22:13:10.746872103Z",
+      "lowSetTime": "2026-11-08T00:08:28.522571331Z",
+      "lastTradeSetTime": "2026-11-17T22:09:27.296858328Z",
+      "settlementSetTime": "2026-09-12T21:00:40.056984267Z",
+      "openInterestSetTime": "2026-11-17T11:49:52.852690605Z",
+      "notionalSetTime": "2026-11-17T22:09:27.296858328Z",
+      "settlementPriceCalculationMethod": "SETTLEMENT_PRICE_CALCULATION_METHOD_EVENT_TIER_2",
+      "currentPx": {
+        "value": "0.0185",
+        "currency": "USD"
+      },
+      "lastPriceSample": {
+        "longPx": {
+          "value": "0.0280",
+          "currency": "USD"
+        },
+        "shortPx": {
+          "value": "0.972",
+          "currency": "USD"
+        },
+        "ts": "2026-11-18T15:28:42.183491269Z"
+      }
+    },
+    "transactTime": "2026-11-18T15:28:42.183491269Z"
+  }
+}
