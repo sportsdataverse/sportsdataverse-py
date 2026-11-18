@@ -525,7 +525,7 @@ toa_usage()
 
 ### MarketLeague {#MarketLeague}
 
-`MarketLeague(espn_path: 'str', kalshi_series: 'str', gamma_series_id: 'Optional[str]', draw_possible: 'bool' = False) -> None`
+`MarketLeague(espn_path: 'str', kalshi_series: 'str', gamma_series_id: 'str | None', draw_possible: 'bool' = False) -> None`
 
 Where one league's games live on each venue.
 
@@ -535,7 +535,7 @@ Where one league's games live on each venue.
 |---|---|---|---|
 | `espn_path` | `str` |  | `{sport}/{league}` on ESPN's Site v2 API. |
 | `kalshi_series` | `str` |  | the Kalshi series of game-winner markets. |
-| `gamma_series_id` | `Optional[str]` |  | the Polymarket Gamma `series_id` of the league's game events. |
+| `gamma_series_id` | `str \| None` |  | the Polymarket Gamma `series_id` of the league's game events. |
 | `draw_possible` | `bool` | `False` | a game can end level, so a two-way price is incomplete. |
 
 ### join_espn_kalshi {#join_espn_kalshi}

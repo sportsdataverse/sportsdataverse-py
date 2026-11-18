@@ -29,7 +29,8 @@ import datetime as dt
 import json
 import re
 from dataclasses import dataclass
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+from collections.abc import Iterable, Sequence
+from typing import Any
 
 import polars as pl
 
@@ -59,12 +60,12 @@ class MarketLeague:
 
     espn_path: str
     kalshi_series: str
-    gamma_series_id: Optional[str]
+    gamma_series_id: str | None
     draw_possible: bool = False
 
 
 #: Leagues whose series were checked against recorded markets (2026-11-18).
-MARKET_LEAGUES: Dict[str, MarketLeague] = {
+MARKET_LEAGUES: dict[str, MarketLeague] = {
     "nba": MarketLeague("basketball/nba", "KXNBAGAME", "10345"),
     "nfl": MarketLeague("football/nfl", "KXNFLGAME", "12185"),
     "nhl": MarketLeague("hockey/nhl", "KXNHLGAME", "10346"),
@@ -73,7 +74,7 @@ MARKET_LEAGUES: Dict[str, MarketLeague] = {
 #: ESPN abbreviation -> the venue's code, where they differ. Identity (any case) is the default.
 #: Only pairs seen in the recorded markets are listed (tests/fixtures/market_join, 2026-11-18).
 #: A pair missing here still matches on the team name, and ``matched_by`` then says ``name``.
-MARKET_ALIASES: Dict[str, Dict[str, Dict[str, str]]] = {
+MARKET_ALIASES: dict[str, dict[str, dict[str, str]]] = {
     "nba": {
         "GS": {"kalshi": "GSW", "gamma": "GSW"},
         "NO": {"kalshi": "NOP", "gamma": "NOP"},
@@ -100,7 +101,7 @@ _TICKER = re.compile(r"^(?P<series>[A-Z0-9]+)-(?P<yy>\d{2})(?P<mon>[A-Z]{3})(?P<
 _MONTHS = {m: i for i, m in enumerate("JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC".split(), start=1)}
 
 
-def parse_kalshi_event_ticker(event_ticker: str, codes: Iterable[str]) -> Optional[Tuple[dt.date, str, str]]:
+def parse_kalshi_event_ticker(event_ticker: str, codes: Iterable[str]) -> tuple[dt.date, str, str] | None:
     """``KXNBAGAME-26NOV22BOSGSW`` and its two outcome codes -> ``(2026-11-22, "BOS", "GSW")``.
 
     The ticker joins the away and home codes with no separator, so the two outcome
@@ -140,14 +141,14 @@ def parse_kalshi_event_ticker(event_ticker: str, codes: Iterable[str]) -> Option
 @dataclass
 class _Side:
     code: str
-    labels: Tuple[str, ...]
+    labels: tuple[str, ...]
 
 
 @dataclass
 class _Game:
     game_id: Any
-    start: Optional[dt.datetime]
-    date_et: Optional[dt.date]
+    start: dt.datetime | None
+    date_et: dt.date | None
     away: _Side
     home: _Side
 
@@ -163,7 +164,7 @@ def _alias(league: str, venue: str, espn_code: str) -> str:
     return MARKET_ALIASES.get(league, {}).get(espn_code.upper(), {}).get(venue, espn_code).upper()
 
 
-def _side_match(league: str, venue: str, espn: _Side, code: str, labels: Sequence[str]) -> Optional[str]:
+def _side_match(league: str, venue: str, espn: _Side, code: str, labels: Sequence[str]) -> str | None:
     """How an ESPN team matches a venue's (code, labels): ``code``, ``alias``, ``name`` or ``None``."""
     if code and espn.code and code.upper() == espn.code.upper():
         return "code"
@@ -178,7 +179,7 @@ def _side_match(league: str, venue: str, espn: _Side, code: str, labels: Sequenc
 _RANK = {"code": 0, "alias": 1, "name": 2}
 
 
-def _pair_match(league: str, venue: str, game: _Game, away: _Side, home: _Side) -> Optional[Tuple[str, bool]]:
+def _pair_match(league: str, venue: str, game: _Game, away: _Side, home: _Side) -> tuple[str, bool] | None:
     """``(team rule, swapped)`` when the venue's pair is the game's, as listed or swapped."""
     for swapped, (a, h) in ((False, (away, home)), (True, (home, away))):
         ma = _side_match(league, venue, game.away, a.code, a.labels)
@@ -188,7 +189,7 @@ def _pair_match(league: str, venue: str, game: _Game, away: _Side, home: _Side) 
     return None
 
 
-def _utc(value: Any) -> Optional[dt.datetime]:
+def _utc(value: Any) -> dt.datetime | None:
     if isinstance(value, dt.datetime):
         return value if value.tzinfo else value.replace(tzinfo=dt.timezone.utc)
     if not value:
@@ -201,7 +202,7 @@ def _utc(value: Any) -> Optional[dt.datetime]:
     return parsed if parsed.tzinfo else parsed.replace(tzinfo=dt.timezone.utc)
 
 
-def _eastern_dates(starts: List[Optional[dt.datetime]]) -> List[Optional[dt.date]]:
+def _eastern_dates(starts: list[dt.datetime | None]) -> list[dt.date | None]:
     """US-Eastern calendar date of each UTC start, through polars' bundled tz database (no tzdata needed)."""
     s = pl.Series("s", starts, dtype=pl.Datetime("us", "UTC"))
     return s.dt.convert_time_zone("America/New_York").dt.date().to_list()
@@ -210,7 +211,7 @@ def _eastern_dates(starts: List[Optional[dt.datetime]]) -> List[Optional[dt.date
 _ESPN_COLUMNS = ("game_id", "date", "home_abbreviation", "away_abbreviation")
 
 
-def _espn_games(espn: pl.DataFrame) -> List[_Game]:
+def _espn_games(espn: pl.DataFrame) -> list[_Game]:
     """Games from an ESPN scoreboard frame (``espn_<league>_scoreboard()``, parsed)."""
     missing = [c for c in _ESPN_COLUMNS if c not in espn.columns]
     if missing:
@@ -225,10 +226,12 @@ def _espn_games(espn: pl.DataFrame) -> List[_Game]:
         )
         return _Side(str(r.get(f"{prefix}_abbreviation") or ""), labels)
 
-    return [_Game(r["game_id"], s, d, side(r, "away"), side(r, "home")) for r, s, d in zip(rows, starts, dates)]
+    return [
+        _Game(r["game_id"], s, d, side(r, "away"), side(r, "home")) for r, s, d in zip(rows, starts, dates, strict=True)
+    ]
 
 
-def _num(value: Any) -> Optional[float]:
+def _num(value: Any) -> float | None:
     try:
         out = float(value)
     except (TypeError, ValueError):
@@ -236,7 +239,7 @@ def _num(value: Any) -> Optional[float]:
     return out if out == out else None
 
 
-def _mid(bid: Optional[float], ask: Optional[float]) -> Optional[float]:
+def _mid(bid: float | None, ask: float | None) -> float | None:
     """Bid/ask midpoint; a one-sided book (no bid, or Kalshi's 1.00 empty ask) has none."""
     if bid is None or ask is None or bid <= 0 or ask >= 1 or ask < bid:
         return None
@@ -249,13 +252,13 @@ class _KalshiEvent:
     date: dt.date
     away: _Side
     home: _Side
-    markets: Dict[str, dict]
+    markets: dict[str, dict]
 
 
-def _kalshi_events(kalshi: pl.DataFrame) -> List[_KalshiEvent]:
+def _kalshi_events(kalshi: pl.DataFrame) -> list[_KalshiEvent]:
     if kalshi.is_empty() or not {"ticker", "event_ticker"} <= set(kalshi.columns):
         return []
-    grouped: Dict[str, Dict[str, dict]] = {}
+    grouped: dict[str, dict[str, dict]] = {}
     for row in kalshi.to_dicts():
         event, ticker = str(row.get("event_ticker") or ""), str(row.get("ticker") or "")
         if event and ticker.startswith(f"{event}-"):
@@ -266,16 +269,12 @@ def _kalshi_events(kalshi: pl.DataFrame) -> List[_KalshiEvent]:
         if parsed is None:
             continue
         day, away, home = parsed
-
-        def side(code: str) -> _Side:
-            row = markets[code]
-            return _Side(code, (str(row.get("yes_sub_title") or ""),))
-
-        events.append(_KalshiEvent(event, day, side(away), side(home), markets))
+        sides = [_Side(c, (str(markets[c].get("yes_sub_title") or ""),)) for c in (away, home)]
+        events.append(_KalshiEvent(event, day, sides[0], sides[1], markets))
     return events
 
 
-def _assign(games: List[_Game], candidates: Dict[int, List[Tuple[int, int, str]]]) -> Dict[int, Tuple[int, str]]:
+def _assign(games: list[_Game], candidates: dict[int, list[tuple[int, int, str]]]) -> dict[int, tuple[int, str]]:
     """One market per game and one game per market: lowest rank first, then game order.
 
     ``candidates[g]`` holds ``(rank, market_index, matched_by)``; rank 0 is an exact date.
@@ -283,7 +282,7 @@ def _assign(games: List[_Game], candidates: Dict[int, List[Tuple[int, int, str]]
     flat = sorted((rank, g, m, how) for g, opts in candidates.items() for rank, m, how in opts)
     taken_games: set = set()
     taken_markets: set = set()
-    out: Dict[int, Tuple[int, str]] = {}
+    out: dict[int, tuple[int, str]] = {}
     for _rank, g, m, how in flat:
         if g in taken_games or m in taken_markets:
             continue
@@ -357,7 +356,7 @@ def join_espn_kalshi(
     cfg = _league(league)
     games = _espn_games(espn)
     events = _kalshi_events(kalshi)
-    candidates: Dict[int, List[Tuple[int, int, str]]] = {}
+    candidates: dict[int, list[tuple[int, int, str]]] = {}
     for g, game in enumerate(games):
         for m, event in enumerate(events):
             pair = _pair_match(league, "kalshi", game, event.away, event.home)
@@ -372,7 +371,7 @@ def join_espn_kalshi(
 
     rows = []
     for g, game in enumerate(games):
-        row: Dict[str, Any] = {
+        row: dict[str, Any] = {
             "game_id": game.game_id,
             "game_date_et": game.date_et,
             "away_abbreviation": game.away.code,
@@ -385,7 +384,7 @@ def join_espn_kalshi(
     return _frame(rows, _KALSHI_SCHEMA, espn, return_as_pandas)
 
 
-def _kalshi_columns(ev: _KalshiEvent, how: str, cfg: MarketLeague, method: str) -> Dict[str, Any]:
+def _kalshi_columns(ev: _KalshiEvent, how: str, cfg: MarketLeague, method: str) -> dict[str, Any]:
     """The market columns of one matched game; prices follow the team, so a swapped pair is unswapped."""
     away_side, home_side = (ev.home, ev.away) if how.endswith("+swapped") else (ev.away, ev.home)
     away_m, home_m = ev.markets[away_side.code], ev.markets[home_side.code]
@@ -462,7 +461,7 @@ def join_espn_polymarket(
     _league(league)
     games = _espn_games(espn)
     events = _gamma_events(gamma_events)
-    candidates: Dict[int, List[Tuple[int, int, str]]] = {}
+    candidates: dict[int, list[tuple[int, int, str]]] = {}
     for g, game in enumerate(games):
         for m, ev in enumerate(events):
             pair = _pair_match(league, "gamma", game, ev["away"], ev["home"])
@@ -482,7 +481,7 @@ def join_espn_polymarket(
     matched = _assign(games, candidates)
     rows = []
     for g, game in enumerate(games):
-        row: Dict[str, Any] = {
+        row: dict[str, Any] = {
             "game_id": game.game_id,
             "game_date_et": game.date_et,
             "away_abbreviation": game.away.code,
@@ -502,7 +501,7 @@ def join_espn_polymarket(
     return _frame(rows, _GAMMA_SCHEMA, espn, return_as_pandas)
 
 
-def _gamma_events(gamma: pl.DataFrame) -> List[dict]:
+def _gamma_events(gamma: pl.DataFrame) -> list[dict]:
     if gamma.is_empty() or "teams" not in gamma.columns:
         return []
     out = []
@@ -573,7 +572,7 @@ _GAMMA_SCHEMA = {
 }
 
 
-def _frame(rows: List[dict], schema: Dict[str, Any], espn: pl.DataFrame, as_pandas: bool) -> Any:
+def _frame(rows: list[dict], schema: dict[str, Any], espn: pl.DataFrame, as_pandas: bool) -> Any:
     """Rows in the documented schema; ``game_id`` keeps the ESPN frame's dtype, so it joins back."""
     full = {"game_id": espn.schema["game_id"], **schema}
     df = pl.DataFrame([{k: r.get(k) for k in full} for r in rows], schema=full, orient="row")
