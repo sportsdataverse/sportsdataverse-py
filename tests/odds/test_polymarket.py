@@ -216,6 +216,7 @@ def test_us_book_with_a_malformed_side_is_zero_rows():
 def test_us_single_market_is_the_listing_row():
     """/v1/market/id/{id} and /v1/market/slug/{slug} answer one /v1/markets row under {"market": {...}}."""
     from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+    from tests.conftest import documented_schema
 
     by_id = parse_polymarket(load("gateway__v1__market__id__id"))
     by_slug = parse_polymarket(load("gateway__v1__market__slug__slug"))
@@ -227,6 +228,11 @@ def test_us_single_market_is_the_listing_row():
     # 1 on the open market, 0.01 on the expired one: one dtype either way
     assert by_id.schema["minimum_trade_qty"] == expired.schema["minimum_trade_qty"] == pl.Float64
     assert expired["minimum_trade_qty"].to_list() == [0.01]
+    # a whole number on the expired capture, a decimal elsewhere: documented (and pinned) Float64
+    assert expired.schema["singles_rfq_config_midpoint_deviation"] == pl.Float64
+    want = documented_schema("native/polymarket/us_market_by_slug")
+    assert dict(by_slug.schema) == want  # the expired row omits keys (quotes, title); what it has is documented
+    assert {c: want[c] for c in expired.columns} == dict(expired.schema)
     assert parse_polymarket({"market": [{"id": "1"}]}).height == 0  # an object key holding a list
 
 
@@ -237,6 +243,33 @@ def test_empty_payload_is_zero_rows():
         df = parse_polymarket(payload)
         assert isinstance(df, pl.DataFrame)
         assert df.height == 0
+
+
+def _routes():
+    return yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))["endpoints"]
+
+
+@pytest.mark.parametrize("ep", _routes(), ids=lambda e: e["short"])
+def test_every_wrapper_carries_its_documented_columns_on_an_empty_body(ep, monkeypatch):
+    """An empty answer (an expired book, an empty page) is a zero-row frame of the route's returns table."""
+    from sportsdataverse.odds import polymarket
+    from tests.conftest import documented_schema
+
+    monkeypatch.setattr(polymarket, "_get", lambda *a, **k: {})
+    wrapper = getattr(polymarket, f"polymarket_{ep['short']}")
+    want = documented_schema(ep["returns_schema"])
+    df = wrapper(**ep.get("example_args", {}))
+    assert df.height == 0 and dict(df.schema) == want
+    pdf = wrapper(**ep.get("example_args", {}), return_as_pandas=True)
+    assert isinstance(pdf, pd.DataFrame) and list(pdf.columns) == list(want)
+
+
+def test_expired_book_through_the_wrapper_has_the_book_columns(monkeypatch):
+    from sportsdataverse.odds import polymarket
+
+    monkeypatch.setattr(polymarket, "_get", lambda *a, **k: load("gateway__v1__markets__slug__book__expired"))
+    df = polymarket.polymarket_us_market_book("aec-nba-sa-sac-2026-11-06")
+    assert df.height == 0 and "px_value" in df.columns
 
 
 def test_pandas_round_trip():

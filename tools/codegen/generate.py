@@ -1980,8 +1980,33 @@ def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointVie
         )
         if api.parser_columns:
             view.parser_columns = [str(c["name"]) for c in _schema_doc(ep.returns_schema).get("columns") or []]
+        view.documented_table = _flat_documented_table(api, ep)
         views.append(view)
     return views
+
+
+def _flat_documented_table(api: spec.FlatApi, ep: spec.Endpoint) -> str:
+    """The returns table a flat wrapper passes as ``documented_table=``: its ``returns_schema`` when the parser is
+    decorated with ``_documented_empty`` and the table has columns, else ``""`` (the parser keeps its own empty)."""
+    import importlib
+
+    if api.parser_columns or not (ep.parser and api.parser_module and ep.returns_schema):
+        return ""  # a ``parser_columns`` family passes ``columns=`` instead (the template takes that branch first)
+    fn = getattr(importlib.import_module(f"sportsdataverse.{api.parser_module}"), ep.parser, None)
+    if not getattr(fn, "__documented_empty__", None) or not _schema_doc(ep.returns_schema).get("columns"):
+        return ""
+    return str(ep.returns_schema)
+
+
+def _flat_documented_tables() -> set[str]:
+    """Every ``documented_table`` a flat wrapper passes, for :func:`render_returns_schemas`."""
+    out: set[str] = set()
+    for stem, _prefix in FLAT_APIS:
+        y = ENDPOINTS / f"{stem}.yaml"
+        if y.exists():
+            api = spec.load_flat_api(y, {})
+            out.update(t for ep in api.endpoints if (t := _flat_documented_table(api, ep)))
+    return out
 
 
 def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
@@ -2383,6 +2408,7 @@ def render_returns_schemas() -> str:
         if py.name != "_returns_schemas.py" and not py.name.endswith("_espn_ext.py"):
             names.update(_EMPTY_SCHEMA_CALL.findall(py.read_text(encoding="utf-8")))
     names.update(_league_documented_tables())
+    names.update(_flat_documented_tables())
     for name in [n for n in names if ":" not in n and _schema_kind(n) == "frames"]:
         # a frames table is read one section at a time (``summary/mbb:plays``)
         names.remove(name)

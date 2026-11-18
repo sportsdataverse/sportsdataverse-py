@@ -47,6 +47,7 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _documented_empty
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import SchemaDriftWarning, _data_only
 
@@ -63,9 +64,15 @@ _BOOK_SIDES = {"bids": "bid", "asks": "ask", "offers": "ask"}
 # one-key body is never guessed at.
 _ENVELOPE_KEYS = {"markets": list, "events": list, "marketData": dict, "market": dict}
 # Decimal columns that arrive as a bare JSON number, pinned Float64 so the dtype never depends on the value. Polymarket
-# US's own schema types both decimal: ``/settlement`` answers ``{"settlement": 1}``, and ``minimumTradeQty`` is 1 on
-# most markets but 0.01 on the captured expired game.
-_FLOAT_COLS = {"settlement", "minimum_trade_qty"}
+# US's own schema types the first two decimal: ``/settlement`` answers ``{"settlement": 1}``, and ``minimumTradeQty``
+# is 1 on most markets but 0.01 on the captured expired game. ``singlesRfqConfig.midpointDeviation`` is untyped there;
+# the captures disagree (a decimal on the open market, a whole number on the expired game), so it is documented Float64.
+_FLOAT_COLS = {"settlement", "minimum_trade_qty", "singles_rfq_config_midpoint_deviation"}
+# The family's returns tables live under this prefix, one per route; each generated wrapper passes its own as
+# ``documented_table=``, so an empty result carries that route's documented columns. Called directly, without
+# one, the parser cannot know the route and keeps its zero-width frame. A constant, not a literal, because
+# codegen's schema scan would read a literal as one table.
+_TABLES = "native/polymarket"
 
 
 def _book_rows(raw: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -159,11 +166,12 @@ def _pin_floats(df: pl.DataFrame) -> pl.DataFrame:
         warnings.warn(
             f"parse_polymarket: columns {refused} hold values that are not numbers; kept as they came",
             SchemaDriftWarning,
-            stacklevel=5,  # _pin_floats < _to_frame < parse_polymarket < _data_only < caller
+            stacklevel=6,  # _pin_floats < _to_frame < parse_polymarket < _data_only < _documented_empty < caller
         )
     return df.with_columns(pinned) if pinned else df
 
 
+@_documented_empty(_TABLES)
 @_data_only
 def parse_polymarket(
     raw: Union[Dict[str, Any], List[Any], None],
@@ -182,7 +190,9 @@ def parse_polymarket(
     Returns:
         One row per market / event / tag / price level, snake_cased, with every
         id column pinned to ``Utf8`` and nested lists JSON-encoded. A zero-row
-        frame when the payload is ``None``, empty or malformed.
+        frame when the payload is ``None``, empty or malformed: with the route's
+        documented columns when the generated wrapper passes ``documented_table=``,
+        else with none.
 
     Example:
         Quick start::
