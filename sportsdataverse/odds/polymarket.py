@@ -482,7 +482,7 @@ def polymarket_us_market_bbo(
     Example URL: https://gateway.polymarket.us/v1/markets/tec-mls-winner-2026-11-07-sea/bbo
 
     Args:
-        slug: Exact market slug, the `slug` column of `polymarket_us_markets`. A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06, the `polymarket_us_slug` of `join_espn_polymarket`); its other markets (e.g. spreads) and futures (tec-mls-winner-2026-11-07-sea) have their own slugs, so pass the listing's slug rather than building one.
+        slug: Exact Polymarket US market slug: the slug field of a /v1/markets row. A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06); the game's other markets (e.g. spreads) and futures (tec-mls-winner-2026-11-07-sea) have their own slugs, so pass the listing's slug rather than building one.
         return_parsed: parse the payload through parse_polymarket -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
