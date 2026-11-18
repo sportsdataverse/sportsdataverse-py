@@ -6,11 +6,12 @@ same number for every game; the WNBA release carries no lines, so every WNBA gam
 module rates each game instead, from the season sim's game model (BB-D18,
 :func:`~sportsdataverse.nba.nba_season_sim.as_of_game_model`): BB-D19's possession ridge, shrunk
 toward last season's regressed ratings (:func:`~sportsdataverse.nba.nba_season_sim.preseason_prior`),
-its home term and the as-of possessions per game give the expected home margin
+its home term (shrunk toward last season's) and the as-of possessions per game give the expected home margin
 ``(net_home - net_away + 2 * hfa) * poss / 100`` (no home term at a neutral site), and
 ``Phi(margin / margin_sd)`` is the probability. Every constant is the sim's
 (:data:`~sportsdataverse.nba.nba_season_sim.SIM_CONSTANTS`,
-:data:`~sportsdataverse.nba.nba_season_sim.PRIOR_CONSTANTS`); nothing is fitted here.
+:data:`~sportsdataverse.nba.nba_season_sim.PRIOR_CONSTANTS`,
+:data:`~sportsdataverse.nba.nba_season_sim.HFA_PSEUDO_POSS`); nothing is fitted here.
 
 **As of the tip.** A game on date ``d`` is rated from the regular-season possessions of games
 dated strictly before ``d`` (the boundary is exclusive: a same-day game never rates another). The
@@ -77,7 +78,12 @@ _RATED_COLS = (
 
 
 def rated_home_probs(
-    rows: pl.DataFrame, games: pl.DataFrame, *, league_id: str = "00", prior: PreseasonPrior | None = None
+    rows: pl.DataFrame,
+    games: pl.DataFrame,
+    *,
+    league_id: str = "00",
+    prior: PreseasonPrior | None = None,
+    hfa_poss: float | None = None,
 ) -> pl.DataFrame:
     """Rate each game from the possessions dated strictly before it.
 
@@ -89,6 +95,8 @@ def rated_home_probs(
         league_id: ``"00"`` NBA or ``"10"`` WNBA (the sim's constants).
         prior: Last season's regressed ratings (:func:`~sportsdataverse.nba.nba_season_sim.preseason_prior`);
             None rates every team average until it has possessions.
+        hfa_poss: Override the home term's pseudo-count
+            (:data:`~sportsdataverse.nba.nba_season_sim.HFA_PSEUDO_POSS`; the fitting script scans it).
 
     Returns:
         ``games`` plus ``home_adj_net_rtg``, ``away_adj_net_rtg``, their ranks among the as-of
@@ -100,7 +108,9 @@ def rated_home_probs(
     """
     out = []
     for (day,), sub in games.group_by("game_date", maintain_order=True):
-        model = as_of_game_model(rows.filter(pl.col("game_date") < day), league_id=league_id, prior=prior)
+        model = as_of_game_model(
+            rows.filter(pl.col("game_date") < day), league_id=league_id, prior=prior, hfa_poss=hfa_poss
+        )
         assert model.ratings.schema["team_id"] == sub.schema["home_team_id"], "team_id dtype differs"
         net = model.ratings.select(
             "team_id",

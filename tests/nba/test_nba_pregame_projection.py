@@ -167,8 +167,8 @@ def test_wp_prior_columns_are_the_boosters_prior(monkeypatch: pytest.MonkeyPatch
     ) / 100 + pl.col("wp_prior_hfa")
     gap = out.select((rebuilt - pl.col("wp_prior_exp_home_margin")).abs().max()).item()
     assert gap < 1e-9
-    # no neutral game in the fixture, so every game carries the model's as-of home term (it is refit each
-    # day, and a few days in it is noisy: -6.5 points on one early date of this fixture)
+    # no neutral game in the fixture, so every game carries the model's as-of home term (refit each day,
+    # shrunk toward last season's: nba_season_sim.HFA_PSEUDO_POSS)
     assert (out["wp_prior_hfa"] != 0).all()
     # at a neutral site the home term is 0 and the margin is the rating gap alone, end to end
     monkeypatch.setattr(nba_rated_prior.nba_neutral_site, "_neutral_site", lambda *a, **k: pl.lit(True))
