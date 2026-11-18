@@ -10625,6 +10625,16 @@
   expected: kill
   note: The label must be the offense's points, read from its own side of the score.
 
+- id: bb-epv-start-label-carried-defense-score
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(after + pl.col("_carried").fill_null(0))'
+  mutant: '.then(after)'
+  test: tests/wnba/test_wnba_epv.py::test_a_technical_by_the_defense_counts_on_its_teams_next_start
+  expected: kill
+  note: A technical free throw by the defense is no event's points; the start label must take it as the release does.
+
 - id: bb-epv-ft-foul-lineup
   group: bb-epv
   finding: BB-D24
