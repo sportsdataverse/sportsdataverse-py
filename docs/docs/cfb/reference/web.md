@@ -127,32 +127,32 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `season_type_id` | Int64 |  |
-| `season_type_name` | String |  |
-| `category` | String | CFBD stats category name (e.g. passing, rushing, defensive). |
-| `event_id` | Int64 |  |
-| `event_date` | String |  |
-| `home_away` | String | `home` or `away`. |
-| `score` | String | Final score string. |
-| `opponent_id` | Int64 | ESPN team id of the opponent. |
-| `opponent_abbreviation` | String |  |
-| `opponent_display_name` | String |  |
-| `game_result` | String | Game result for the player's team (`W`/`L`). |
-| `game_processed` | String |  |
-| `minutes` | String |  |
-| `field_goals_made_field_goals_attempted` | String |  |
-| `field_goal_pct` | String |  |
-| `three_point_field_goals_made_three_point_field_goals_attempted` | String |  |
-| `three_point_pct` | String |  |
-| `free_throws_made_free_throws_attempted` | String |  |
-| `free_throw_pct` | String |  |
-| `total_rebounds` | String |  |
-| `assists` | String |  |
-| `blocks` | String |  |
-| `steals` | String |  |
-| `fouls` | String |  |
-| `turnovers` | String | Turnovers total. |
-| `points` | String | Total points accumulated by the school in the poll's weighted voting. |
+| `season_type_id` | Int64 | ESPN season type of the row (2 regular season, 3 postseason). |
+| `season_type_name` | String | Season type's name as ESPN ships it (e.g., "2019-20 Regular Season"). |
+| `category` | String | Split the row was listed under; on the Web v3 payload a month (e.g., "january"). |
+| `event_id` | Int64 | ESPN event (game) id (Int64), the key the game endpoints take. |
+| `event_date` | String | Scheduled game start, ISO 8601 UTC as ESPN ships it. |
+| `home_away` | String | The athlete's side, "home" or "away", from which side the opponent was on; null when ESPN names neither. |
+| `score` | String | Final score as ESPN prints it, winner first (e.g., "123-115"). |
+| `opponent_id` | Int64 | ESPN team id (Int64) of the opponent. |
+| `opponent_abbreviation` | String | Opponent's abbreviation (e.g., "BOS"). |
+| `opponent_display_name` | String | Opponent's full name (e.g., "Boston Celtics"). |
+| `game_result` | String | The athlete's team result, "W" or "L" (or "T"). |
+| `game_processed` | String | Whether ESPN has finished processing the game's stats. |
+| `minutes` | String | Minutes played, a whole-number string as ESPN ships it (e.g., "21"). The stat columns from here on are named from the payload's own stat `names`, so they differ by sport, and every value is a string. |
+| `field_goals_made_field_goals_attempted` | String | Field goals made-attempted, a "made-attempted" string (e.g., "1-4"). |
+| `field_goal_pct` | String | Field-goal percentage on a 0-100 scale, as a string (e.g., "25.0"). |
+| `three_point_field_goals_made_three_point_field_goals_attempted` | String | Three-pointers made-attempted, a "made-attempted" string (e.g., "0-2"). |
+| `three_point_pct` | String | Three-point percentage on a 0-100 scale, as a string. |
+| `free_throws_made_free_throws_attempted` | String | Free throws made-attempted, a "made-attempted" string. |
+| `free_throw_pct` | String | Free-throw percentage on a 0-100 scale, as a string. |
+| `total_rebounds` | String | Total rebounds in the game. |
+| `assists` | String | Assists in the game. |
+| `blocks` | String | Blocked shots in the game. |
+| `steals` | String | Steals in the game. |
+| `fouls` | String | Personal fouls in the game. |
+| `turnovers` | String | Turnovers in the game. |
+| `points` | String | Points the athlete scored in the game. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

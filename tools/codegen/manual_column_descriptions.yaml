@@ -1428,6 +1428,35 @@ as_of_split:
   pitcher: MLBAM player id of the pitcher.
   player_name: Player name carried through from the input Statcast frame, `Last, First` -- the batter for a default
     mlb_statcast_search pull, the pitcher for a `player_type="pitcher"` search.
+athlete_gamelog:
+  season_type_id: ESPN season type of the row (2 regular season, 3 postseason).
+  season_type_name: Season type's name as ESPN ships it (e.g., "2019-20 Regular Season").
+  category: Split the row was listed under; on the Web v3 payload a month (e.g., "january").
+  event_id: ESPN event (game) id (Int64), the key the game endpoints take.
+  event_date: Scheduled game start, ISO 8601 UTC as ESPN ships it.
+  home_away: The athlete's side, "home" or "away", from which side the opponent was on; null when ESPN names neither.
+  score: Final score as ESPN prints it, winner first (e.g., "123-115").
+  opponent_id: ESPN team id (Int64) of the opponent.
+  opponent_abbreviation: Opponent's abbreviation (e.g., "BOS").
+  opponent_display_name: Opponent's full name (e.g., "Boston Celtics").
+  game_result: The athlete's team result, "W" or "L" (or "T").
+  game_processed: Whether ESPN has finished processing the game's stats.
+  minutes: Minutes played, a whole-number string as ESPN ships it (e.g., "21"). The stat columns from here on are named
+    from the payload's own stat `names`, so they differ by sport, and every value is a string.
+  field_goals_made_field_goals_attempted: Field goals made-attempted, a "made-attempted" string (e.g., "1-4").
+  field_goal_pct: Field-goal percentage on a 0-100 scale, as a string (e.g., "25.0").
+  three_point_field_goals_made_three_point_field_goals_attempted: Three-pointers made-attempted, a "made-attempted"
+    string (e.g., "0-2").
+  three_point_pct: Three-point percentage on a 0-100 scale, as a string.
+  free_throws_made_free_throws_attempted: Free throws made-attempted, a "made-attempted" string.
+  free_throw_pct: Free-throw percentage on a 0-100 scale, as a string.
+  total_rebounds: Total rebounds in the game.
+  assists: Assists in the game.
+  blocks: Blocked shots in the game.
+  steals: Steals in the game.
+  fouls: Personal fouls in the game.
+  turnovers: Turnovers in the game.
+  points: Points the athlete scored in the game.
 athlete_stats:
   category: ESPN stat category the row belongs to (e.g., basketball "averages" / "totals" / "miscellaneous", NFL
     "passing", MLB "career-batting"). The stat columns after `position` are named from each category's own `names`

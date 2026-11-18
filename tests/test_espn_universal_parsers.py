@@ -2230,3 +2230,32 @@ def test_athlete_gamelog_dedupes_repeated_stat_names_and_reads_an_events_map_wit
     assert df.height == 1
     assert {"yds", "td", "yds_2", "td_2"} <= set(df.columns)
     assert df["home_away"][0] == "away" and df["event_date"][0] == "2025-09-07"
+
+
+def test_athlete_gamelog_suffixes_never_collide():
+    from sportsdataverse._common_espn_parsers import _unique_stat_columns
+
+    assert _unique_stat_columns(["YDS", "YDS", "YDS_2"]) == ["yds", "yds_2", "yds_2_2"]
+    assert _unique_stat_columns(["YDS", "TD", "YDS", "TD"]) == ["yds", "td", "yds_2", "td_2"]
+
+
+def test_athlete_gamelog_events_map_key_is_the_event_id_without_season_types():
+    from sportsdataverse._common_espn_parsers import parse_athlete_gamelog
+
+    df = parse_athlete_gamelog({"names": ["points"], "events": {"401": {"stats": ["7"]}}})
+    assert df.height == 1
+    assert str(df["event_id"][0]) == "401" and df["points"][0] == "7"
+
+
+def test_athlete_gamelog_ignores_malformed_metadata_and_event_entries():
+    from sportsdataverse._common_espn_parsers import parse_athlete_gamelog
+
+    payload = {
+        "names": ["points"],
+        "events": {"1": ["bad"]},
+        "seasonTypes": [
+            {"id": "2", "categories": [{"name": "nov", "events": [{"eventId": "1", "stats": ["9"]}, "junk"]}]}
+        ],
+    }
+    df = parse_athlete_gamelog(payload)
+    assert df.height == 1 and df["points"][0] == "9" and df["event_date"][0] is None

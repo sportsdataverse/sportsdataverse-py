@@ -833,13 +833,21 @@ def parse_athlete_stats(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
 
 
 def _unique_stat_columns(names: List[str]) -> List[str]:
-    """snake_case stat names, suffixed ``_2``, ``_3`` on a repeat (NFL labels repeat ``YDS``/``TD``)."""
+    """snake_case stat names, suffixed ``_2``, ``_3`` on a repeat (NFL labels repeat ``YDS``/``TD``).
+
+    Suffixes skip any name already emitted, so ``["YDS", "YDS", "YDS_2"]`` gives
+    ``yds, yds_2, yds_2_2`` and no stat overwrites another.
+    """
     out: List[str] = []
-    seen: Dict[str, int] = {}
+    used: set = set()
     for n in names:
-        col = underscore(n)
-        seen[col] = seen.get(col, 0) + 1
-        out.append(col if seen[col] == 1 else f"{col}_{seen[col]}")
+        base = col = underscore(n)
+        k = 1
+        while col in used:
+            k += 1
+            col = f"{base}_{k}"
+        used.add(col)
+        out.append(col)
     return out
 
 
@@ -887,8 +895,14 @@ def parse_athlete_gamelog(payload: Dict, return_as_pandas: bool = False) -> pl.D
 
     season_types = payload.get("seasonTypes") or []
     if not season_types:
-        # Fallback: top-level events (a list, or the web v3 map)
-        events = list(top_events.values()) if isinstance(top_events, dict) else top_events
+        # Fallback: top-level events (a list, or the web v3 map, whose key is the event id)
+        if isinstance(top_events, dict):
+            events = [
+                {"id": k, **v} if isinstance(v, dict) and not (v.get("id") or v.get("eventId")) else v
+                for k, v in top_events.items()
+            ]
+        else:
+            events = top_events
         if events:
             season_types = [{"id": None, "name": None, "categories": [{"name": None, "events": events}]}]
 
@@ -902,9 +916,13 @@ def parse_athlete_gamelog(payload: Dict, return_as_pandas: bool = False) -> pl.D
             names = _unique_stat_columns(cat.get("names") or cat.get("labels") or top_names)
             events = cat.get("events") or []
             for ev in events:
+                if not isinstance(ev, dict):
+                    continue
                 event_ref = ev.get("eventId") or ev.get("id") or ev.get("event", {}).get("id")
-                meta = event_meta.get(str(event_ref)) or {}
-                ev = {**meta, **ev}
+                meta = event_meta.get(str(event_ref))
+                # supplemental metadata only: a malformed entry is ignored, never raised on
+                if isinstance(meta, dict):
+                    ev = {**meta, **ev}
                 opp = ev.get("opponent") or {}
                 row = {
                     "season_type_id": st_id,
