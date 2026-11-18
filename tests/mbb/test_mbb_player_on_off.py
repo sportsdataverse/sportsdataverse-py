@@ -122,6 +122,7 @@ def test_public_builders(monkeypatch: pytest.MonkeyPatch) -> None:
 
     def spy(*args: object, **kwargs: object) -> pl.DataFrame:
         seen.append(kwargs["level"])
+        assert kwargs["tenure"] is False  # college counts the whole season off
         return real(*args, **kwargs)  # type: ignore[arg-type]
 
     monkeypatch.setattr(adapter, "player_on_off", spy)

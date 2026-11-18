@@ -646,7 +646,7 @@ players of the date who have played this season: `<m>_n` (the season-to-date `of
 `def_poss` or both) at least 1. There is no larger sample gate, unlike `player_impact`'s:
 a current rating is the box prior moved by the games, so a player with few possessions sits near
 his prior, never at a raw on-court extreme, and the date's ranks exist from the season's first
-week (the season gates of 1,600 to 3,200 possessions would leave the first seven weeks
+week (the season gates of 1,600 to 3,100 possessions would leave the first seven weeks
 unranked). 1 is best; `d_current_impact` is positive for a good defense, so it ranks
 descending too. A rank and percentile are null when the rating is null or non-finite, when
 `as_of` is null, when fewer than

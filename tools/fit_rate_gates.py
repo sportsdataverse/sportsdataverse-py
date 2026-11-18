@@ -29,8 +29,11 @@ holdout seasons the median rate is about half signal at its gate (single rates s
 * **Player on/off** (``ON_OFF_MIN_N``): the BB-D6 game impact box (``{nba,mbb}_game_player_impact``);
   the team's game totals are its on-court sums over five players. Halves are the team's odd / even
   games in ``game_id`` order (the impact box carries no date; any split that ignores the results is
-  a valid split-half); the reliability is binned on the half's ``_n`` (12 quantile bins, 10 for the WNBA's smaller
-  league) because a player's on/off sample cannot be truncated game by game without his team's.
+  a valid split-half). The team's totals are the off side's base as ``player_on_off`` counts it: for
+  the NBA and WNBA only the games inside the player's span with the team (``tenure=True``, from
+  ``_span_off``), for college the whole season. The reliability is binned on the half's ``_n`` (12
+  quantile bins, 10 for the WNBA's smaller league) because a player's on/off sample cannot be
+  truncated game by game without his team's.
 
 Each league is fitted on its TRAIN seasons; the HOLDOUT seasons (later, never seen) are fitted
 again and their ``M`` recorded, so the test suite can report the reliability the frozen gate
@@ -317,13 +320,72 @@ def _impact(league: str, season: int) -> pl.DataFrame:
         from sportsdataverse.nba.nba_game_impact import nba_game_player_impact
 
         df = nba_game_player_impact(season, league_id="00" if league == "nba" else "10")
+    return _box(df)
+
+
+def _box(df: pl.DataFrame) -> pl.DataFrame:
+    """The game impact box columns the on/off fit reads (player ids as String, one dtype for every league)."""
     return df.select(
         "season", "game_id", "team_id", pl.col("player_id").cast(pl.Utf8), "poss", "opp_poss", "pts", "opp_pts"
     )
 
 
+#: Bump when :func:`span_games` (or ``_span_off``) changes: the ``--data`` cache file names carry it.
+SPAN_VERSION = 2
+
+
+def span_games(rows: pl.DataFrame, schedule: pl.DataFrame) -> pl.DataFrame:
+    """``season, team_id, player_id, game_id``: the team games inside each player's span with it.
+
+    The window ``player_on_off(tenure=True)`` counts the NBA / WNBA off side over
+    (:func:`sportsdataverse._common.player_on_off._span_off`): from his first game for the team
+    (or the day after his last for an earlier team that season) to the day before his first for a
+    later team, else the team's last game. One span per season type, as the adapters build one
+    season type at a time (a preseason game never opens a regular-season span).
+    """
+    from sportsdataverse._common.game_impact import _sides, games_with_possessions
+    from sportsdataverse._common.player_on_off import _span_off
+    from sportsdataverse.nba.nba_player_on_off import _game_dates
+
+    keys = ["season", "team_id"]
+    out = []
+    for st in schedule["season_type"].drop_nulls().unique().sort():
+        sched = schedule.filter(pl.col("season_type") == st)
+        r = rows.join(sched.select(pl.col("game_id").cast(pl.Utf8)).unique(), on="game_id", how="semi")
+        dates = _game_dates(sched).drop_nulls().unique("game_id")
+        team_games = _sides(games_with_possessions(r)).select(*keys, pl.col("game_id").cast(pl.Utf8)).unique()
+        # player_on_off keeps the whole season for a team-season with an undated game; none in the fit seasons
+        undated = team_games.join(dates, on="game_id", how="anti")
+        assert undated.height == 0, f"{st}: {undated.height} team games without a date"
+        span = _span_off(r, dates).select(*keys, pl.col("player_id").cast(pl.Utf8), "span_first_date", "span_last_date")
+        out.append(
+            span.join(team_games.join(dates, on="game_id", validate="m:1"), on=keys)
+            .filter(pl.col("game_date").is_between("span_first_date", "span_last_date"))
+            .select(pl.col("season").cast(pl.Int64), pl.col("team_id").cast(pl.Int64), "player_id", "game_id")
+        )
+    return pl.concat(out) if out else pl.DataFrame(schema=_SPAN_SCHEMA)
+
+
+_SPAN_SCHEMA = {"season": pl.Int64, "team_id": pl.Int64, "player_id": pl.Utf8, "game_id": pl.Utf8}
+
+
+def _span(league: str, season: int) -> pl.DataFrame:
+    """:func:`span_games` of one NBA / WNBA season, from the four stats.nba.com releases."""
+    from sportsdataverse.nba.nba_game_impact import _load_releases, nba_impact_rows
+
+    lid = "00" if league == "nba" else "10"
+    pbp, lineups, possessions, schedule = _load_releases(season, lid)
+    return span_games(nba_impact_rows(pbp, lineups, possessions, schedule, league_id=lid), schedule)
+
+
 def on_off_halves(league: str, seasons: range, data: Path | None = None) -> pl.DataFrame:
-    """Per (season, team, player, half): on-court and team totals; halves are the team's odd / even games."""
+    """Per (season, team, player, half): on-court and team totals; halves are the team's odd / even games.
+
+    The team totals are the off side's base, as :func:`~sportsdataverse._common.player_on_off.player_on_off`
+    counts it: for the NBA and WNBA (``tenure=True``) only the team's games inside the player's span
+    with it (:func:`_span`), for college the team's whole season. The halves are cut over the team's
+    games first, so a player's span keeps its own odd / even split.
+    """
     g = pl.concat([_cached(data, f"{league}_impact_{s}.parquet", lambda s=s: _impact(league, s)) for s in seasons])
     g = g.with_columns(pl.col("season").cast(pl.Int64))
     tot = ("poss", "opp_poss", "pts", "opp_pts")
@@ -340,6 +402,16 @@ def on_off_halves(league: str, seasons: range, data: Path | None = None) -> pl.D
         .join(g, on=["season", "team_id", "game_id", "player_id"], how="left")
         .fill_null(0)
     )
+    if league in ("nba", "wnba"):
+        name = f"{league}_span_v{SPAN_VERSION}_{{}}.parquet"
+        span = pl.concat([_cached(data, name.format(s), lambda s=s: _span(league, s)) for s in seasons])
+        k = ["season", "team_id", "player_id", "game_id"]
+        assert all(x.schema[c] == span.schema[c] for c in k), "span key dtypes differ from the impact box's"
+        # true by construction (a span runs from at or before his first game to at or after his last):
+        # it guards the keys and a stale cache, not the span logic (tests/tools/test_fit_rate_gates.py)
+        on = x.filter(pl.col("poss") + pl.col("opp_poss") > 0).select(k)
+        assert on.join(span, on=k, how="anti").height == 0, "an on-court game outside his span"
+        x = x.join(span, on=k, how="semi")
     return x.group_by("season", "team_id", "player_id", "half").agg(pl.col(*tot, *(f"t_{c}" for c in tot)).sum())
 
 

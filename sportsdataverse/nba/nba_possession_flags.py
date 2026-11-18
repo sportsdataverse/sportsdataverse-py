@@ -14,8 +14,9 @@ transition (bigballR also counts a steal or a drawn foul as the first play; this
 field-goal attempts only); the pros' window is 8 because, of 6, 8 and 10 seconds, it lands
 closest to the level of Synergy's ``Transition`` play type and correlates with it better than 10
 (Pearson) in every season Synergy covers (see :data:`TRANSITION_SECONDS`). The WNBA, which Synergy does
-not cover here, uses the same 8 seconds. The EPV boosters' ``transition`` state keeps the
-10 seconds they were fitted on (:data:`~sportsdataverse.nba.nba_epv.EPV_TRANSITION_SECONDS`).
+not cover here, uses the same 8 seconds. The NBA / WNBA EPV boosters' ``transition`` state uses
+these 8 seconds too since their 2026-11-17 refit
+(:data:`~sportsdataverse.nba.nba_epv.EPV_TRANSITION_SECONDS`).
 
 These are deliberately not the Cleaning the Glass definitions that
 :mod:`sportsdataverse.nba.nba_play_context` reproduces as ``is_transition_ctg`` and

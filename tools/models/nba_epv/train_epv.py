@@ -10,13 +10,24 @@ Run (the ``{nba,wnba}_stats_pbp`` / ``_possessions`` and ``ncaa_{mbb,wbb}_pbp`` 
 
 The NBA, WNBA, men's and women's college boosters ship. The WNBA's gate-2 threshold is its own
 (:func:`max_large_bias`: 0.01 plus the SD of its year-over-year points per possession, 2011-2025),
-and its level reads each game's date from the ``wnba_stats_schedules`` release. It passes every gate
-on the 2025 holdout and gates 1, 2 and 4 on the 2026 confirmation; on gate 3 one 2026 state bucket
-(a shooting foul in a transition possession, which it already over-prices on the 2025 holdout) is
-over its threshold. The owner accepted that bucket on 2026-11-06 as a stated exception
-(:data:`ACCEPTED_BUCKET_EXCEPTIONS`): it is not a pass, the threshold is unchanged, and any other
-bucket over the gate, or this one moving, still fails the run. The card
-(``sportsdataverse/nba/models/wnba_epv.card.json``) says so.
+and its level reads each game's date from the ``wnba_stats_schedules`` release. The card is
+``sportsdataverse/nba/models/wnba_epv.card.json``.
+
+**The transition window.** The pros' boosters were refit on 2026-11-17 on an 8-second window
+(``nba_epv.EPV_TRANSITION_SECONDS``, BB-D7's published ``is_transition``), replacing the 10 seconds
+they were first fitted on; college keeps 10 (``nba_epv.COLLEGE_EPV_TRANSITION_SECONDS``, its own
+convention). Both pro refits pass every gate on the holdout and the confirmation with the thresholds
+unchanged. The WNBA's owner-accepted 2026 gate-3 exception (a shooting foul in a transition
+possession, +0.117 against 0.110 allowed, accepted 2026-11-06) is retired: that bucket is +0.077 on
+the refit, under its threshold, so :data:`ACCEPTED_BUCKET_EXCEPTIONS` is empty. Most of that move is
+the republished WNBA possessions, not the window: a 10-second control refit on the same data has it at
++0.098, also a pass.
+
+**The start label.** Both pro boosters were refit again the same day after the start label
+(``remaining_points`` at ``step`` 0) took in a score by the defense that the possessions release
+credits to the scoring team's next possession (``nba_epv._carried_points``; about 1 possession in
+1,050 NBA and 1 in 1,150 WNBA in 2025). Every gate still passes with the thresholds unchanged; the
+WNBA bucket above is +0.081 (allowed 0.117). The fixtures were recaptured from that day's releases.
 
 The WNBA and college boosters carry an as-of scoring level (``nba_epv.epv_level``): a season's
 points per possession move (men's college rose from 1.011 in 2022 to 1.075 in 2026), and a booster
@@ -84,7 +95,14 @@ import polars as pl
 import xgboost as xgb
 
 from sportsdataverse.mbb.mbb_epv import ncaa_epv_inputs
-from sportsdataverse.nba.nba_epv import EPV_FEATURES, add_epv, epv_level, epv_states
+from sportsdataverse.nba.nba_epv import (
+    COLLEGE_EPV_TRANSITION_SECONDS,
+    EPV_FEATURES,
+    EPV_TRANSITION_SECONDS,
+    add_epv,
+    epv_level,
+    epv_states,
+)
 
 REPO = Path(__file__).resolve().parents[3]
 FIXTURE_DIR = REPO / "tests" / "fixtures" / "bb_epv"
@@ -176,22 +194,9 @@ MIN_BUCKET = 500
 #: observed n and bias. A recorded bucket passes gate 3 only while a refit reproduces that n and
 #: that bias (within :data:`_EXCEPTION_TOL`); any other bucket over the gate, or this one moving,
 #: still fails the run. An exception is not a pass: the card and the report list it as accepted.
-ACCEPTED_BUCKET_EXCEPTIONS: dict[str, tuple[dict[str, Any], ...]] = {
-    "10": (
-        {
-            "season": 2026,
-            "last_event": 13,  # shooting_foul
-            "transition": 2,  # a transition possession after its first shot
-            "n": 1041,
-            "bias": 0.11679,
-            "allowed": 0.11022,
-            "accepted": "2026-11-06",
-            "by": "owner",
-            "note": "a shooting foul in a transition possession is over-priced by about 0.12 points on the "
-            "2026 confirmation (+0.087 of 0.120 allowed on the 2025 holdout; +0.076 without the level)",
-        },
-    ),
-}
+#: None today: the WNBA's 2026 bucket (accepted 2026-11-06 for the 10-second booster) passes on the
+#: 8-second refit (see the module docstring).
+ACCEPTED_BUCKET_EXCEPTIONS: dict[str, tuple[dict[str, Any], ...]] = {}
 _EXCEPTION_TOL = 0.0005
 #: Gate 3: the gated buckets must hold this share of a season's states (observed 0.999+).
 MIN_GATED_SHARE = 0.99
@@ -223,7 +228,8 @@ _FIXTURE_SCHEDULE = ["game_id", "season", "season_type", "game_date"]
 _FIXTURE_POSS = [
     "game_id", "period", "possession_number", "number_in_period", "start_order_index", "end_order_index",
     "start_seconds_remaining", "end_seconds_remaining", "possession_start_type", "offense_team_id",
-    "defense_team_id", "points", *[f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)],
+    "defense_team_id", "points", "count_as_possession",
+    *[f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)],
 ]  # fmt: skip
 
 
@@ -715,7 +721,10 @@ def epv_card(cfg: dict[str, Any], report: dict[str, Any], booster_path: Path) ->
     return {
         "model_type": f"{cfg['lg']}_epv",
         "objective": report["params"]["objective"],
-        "label": "the offense's points from the state to the end of the possession (remaining_points)",
+        "label": (
+            "the offense's points from the state to the end of the possession (remaining_points); a start "
+            "state's also holds a score the team made on defense, credited as the possessions release credits it"
+        ),
         "features": report["features"],
         "training_seasons": cfg["train"],
         "early_stopping": {"validation_season": max(cfg["train"]), "refit_on_all_training_seasons": True},
@@ -727,6 +736,7 @@ def epv_card(cfg: dict[str, Any], report: dict[str, Any], booster_path: Path) ->
         "start_epv_mean": report["start_epv_mean"],
         "level": report["level"],
         "fitting_script": "tools/models/nba_epv/train_epv.py",
+        "transition_seconds": report["transition_seconds"],
         "fit_report": f"tools/models/nba_epv/epv_{cfg['lg']}_holdout.json",
         "sha256": hashlib.sha256(booster_path.read_bytes()).hexdigest(),
         "gates": report["gates"],
@@ -777,13 +787,14 @@ def _identity(states: pl.DataFrame, booster: xgb.Booster, order: pl.DataFrame | 
     return float(ident["r"].max())
 
 
-def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
+def train(league_id: str, data_root: Path | None, *, fixtures: bool = True) -> dict[str, Any]:
     cfg = LEAGUES[league_id]
     split = _splits(cfg)
     if len(split) != len(cfg["train"]) + 2 + len(cfg["monitor"]):
         raise ValueError(f"train, holdout, confirmation and monitor seasons must be disjoint: {cfg}")
     raw = {s: load_inputs(league_id, s, data_root) for s in split}
-    states = {s: epv_states(poss, pbp) for s, (pbp, poss, *_) in raw.items()}
+    window = COLLEGE_EPV_TRANSITION_SECONDS if league_id in _COLLEGE else EPV_TRANSITION_SECONDS
+    states = {s: epv_states(poss, pbp, transition_seconds=window) for s, (pbp, poss, *_) in raw.items()}
     order = {s: r[3] for s, r in raw.items()}
     tr = {s: states[s] for s in cfg["train"]}
     level = level_k(cfg, league_id, data_root) if cfg["level"] else None
@@ -791,6 +802,7 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     booster = fit(tr, level)
     booster.set_attr(
         train_seasons=",".join(map(str, cfg["train"])),
+        transition_seconds=str(window),
         holdout_season=str(cfg["holdout"]),
         confirmation_season=str(cfg["confirmation"]),
         fitting_script="tools/models/nba_epv/train_epv.py",
@@ -802,6 +814,7 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     report: dict[str, Any] = {
         "league_id": league_id,
         "splits": {str(s): v for s, v in split.items()},
+        "transition_seconds": window,
         "n_train_states": every.height,
         "rounds": int(booster.attr("rounds")),
         "start_epv_mean": float(booster.attr("start_epv_mean")),
@@ -840,7 +853,9 @@ def train(league_id: str, data_root: Path | None) -> dict[str, Any]:
     write_lineage(cfg, states, booster)
     if "card" in cfg:
         write_card(cfg, report)
-    if league_id in _COLLEGE:
+    if not fixtures:
+        pass
+    elif league_id in _COLLEGE:
         write_college_fixture(league_id, cfg["holdout"], raw[cfg["holdout"]][4])  # the release the gates scored
     else:
         pbp, poss, _, hold_order, _ = raw[cfg["holdout"]]
@@ -858,5 +873,10 @@ if __name__ == "__main__":
         type=Path,
         help="a producer checkout's data dir (holding <lg>_stats/, or mbb/ / wbb/ for college)",
     )
+    ap.add_argument(
+        "--no-fixtures",
+        action="store_true",
+        help="leave tests/fixtures/bb_epv as committed (see its README)",
+    )
     args = ap.parse_args()
-    train(args.league_id, args.data_root)
+    train(args.league_id, args.data_root, fixtures=not args.no_fixtures)
