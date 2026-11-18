@@ -1,4 +1,4 @@
-"""Polymarket (gamma + clob) parser + generated-YAML contract."""
+"""Polymarket (gamma + clob + US) parser + generated-YAML contract."""
 
 import json
 import pathlib
@@ -72,6 +72,42 @@ def test_scalar_dict_bodies_are_one_row(fixture, column):
     assert column in df.columns
 
 
+def test_us_markets_envelope_is_one_row_per_market():
+    """US /v1/markets is {"markets": [...]}: the single key is unwrapped, never one envelope row."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    body = load("gateway__v1__markets")
+    assert list(body) == ["markets"]
+    df = parse_polymarket(body)
+    assert df.height == len(body["markets"])
+    assert df["slug"].to_list() == [m["slug"] for m in body["markets"]]
+    assert df.schema["id"] == pl.String and "markets" not in df.columns
+
+
+def test_us_bbo_is_one_row_with_flattened_prices():
+    """US /v1/markets/{slug}/bbo is {"marketData": {...}}; {value, currency} prices flatten."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    body = load("gateway__v1__markets__slug__bbo")
+    inner = body["marketData"]
+    df = parse_polymarket(body)
+    assert df.height == 1 and "market_data" not in df.columns
+    assert df["market_slug"][0] == inner["marketSlug"]
+    for col, key in (("best_bid_value", "bestBid"), ("best_ask_value", "bestAsk"), ("current_px_value", "currentPx")):
+        assert df[col][0] == inner[key]["value"], col  # decimal strings, kept as strings
+    assert df["best_bid_currency"][0] == "USD"
+
+
+def test_single_key_scalar_and_empty_envelopes():
+    """A one-value scalar dict is still one row; an empty single-key envelope is zero rows."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    assert parse_polymarket({"mid": "0.5"}).height == 1
+    assert parse_polymarket({"events": [{"id": "1"}, {"id": "2"}]}).height == 2
+    for payload in ({"markets": []}, {"marketData": {}}):
+        assert parse_polymarket(payload).height == 0, payload
+
+
 def test_empty_payload_is_zero_rows():
     from sportsdataverse.odds.polymarket_parsers import parse_polymarket
 
@@ -100,12 +136,16 @@ def test_each_market_wrapper_uses_its_own_host():
         assert hosts[short] == "https://gamma-api.polymarket.com", short
     for short in ("clob_book", "clob_midpoint", "clob_price"):
         assert hosts[short] == "https://clob.polymarket.com", short
+    for short in ("us_markets", "us_market_bbo"):
+        assert hosts[short] == "https://gateway.polymarket.us", short
+    assert by_short["us_market_bbo"]["path"] == "/v1/markets/{slug}/bbo"
+    assert [p["name"] for p in by_short["us_market_bbo"]["path_params"]] == ["slug"]
 
 
-def test_all_eight_routes_are_wrapped_once():
+def test_all_ten_routes_are_wrapped_once():
     doc = yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))
     shorts = [e["short"] for e in doc["endpoints"]]
-    assert len(shorts) == len(set(shorts)) == 8
+    assert len(shorts) == len(set(shorts)) == 10
 
 
 def test_paging_is_caller_supplied_not_followed():
@@ -114,3 +154,4 @@ def test_paging_is_caller_supplied_not_followed():
     by_short = {e["short"]: e for e in doc["endpoints"]}
     assert "offset" in {p["name"] for p in by_short["gamma_markets"]["extra_params"]}
     assert "next_cursor" in {p["name"] for p in by_short["clob_markets"]["extra_params"]}
+    assert {"limit", "offset", "active", "closed"} <= {p["name"] for p in by_short["us_markets"]["extra_params"]}

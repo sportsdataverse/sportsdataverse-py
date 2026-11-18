@@ -23,6 +23,8 @@ __all__ = [
     "polymarket_clob_markets",
     "polymarket_clob_midpoint",
     "polymarket_clob_price",
+    "polymarket_us_market_bbo",
+    "polymarket_us_markets",
 ]
 
 
@@ -65,7 +67,7 @@ def polymarket_gamma_events(
             polymarket_gamma_events(closed='false', limit='3', tag_slug='sports')
 
         See Also:
-            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices; reads are keyless, trading needs keys
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
 
         .. _Polymarket docs: https://docs.polymarket.com/
     """
@@ -120,7 +122,7 @@ def polymarket_gamma_market(
             polymarket_gamma_market(id='608565')
 
         See Also:
-            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices; reads are keyless, trading needs keys
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
 
         .. _Polymarket docs: https://docs.polymarket.com/
     """
@@ -178,7 +180,7 @@ def polymarket_gamma_markets(
             polymarket_gamma_markets(ascending='false', closed='false', limit='3', order='volume24hr')
 
         See Also:
-            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices; reads are keyless, trading needs keys
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
 
         .. _Polymarket docs: https://docs.polymarket.com/
     """
@@ -236,7 +238,7 @@ def polymarket_gamma_tags(
             polymarket_gamma_tags(limit='3')
 
         See Also:
-            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices; reads are keyless, trading needs keys
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
 
         .. _Polymarket docs: https://docs.polymarket.com/
     """
@@ -289,7 +291,7 @@ def polymarket_clob_book(
             polymarket_clob_book(token_id='14940935985254400645996902276818598247231942791302218826999289776538227075176')
 
         See Also:
-            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices; reads are keyless, trading needs keys
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
 
         .. _Polymarket docs: https://docs.polymarket.com/
     """
@@ -341,7 +343,7 @@ def polymarket_clob_markets(
             polymarket_clob_markets(next_cursor='MA==')
 
         See Also:
-            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices; reads are keyless, trading needs keys
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
 
         .. _Polymarket docs: https://docs.polymarket.com/
     """
@@ -393,7 +395,7 @@ def polymarket_clob_midpoint(
             polymarket_clob_midpoint(token_id='14940935985254400645996902276818598247231942791302218826999289776538227075176')
 
         See Also:
-            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices; reads are keyless, trading needs keys
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
 
         .. _Polymarket docs: https://docs.polymarket.com/
     """
@@ -447,7 +449,7 @@ def polymarket_clob_price(
             polymarket_clob_price(side='buy', token_id='14940935985254400645996902276818598247231942791302218826999289776538227075176')
 
         See Also:
-            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices; reads are keyless, trading needs keys
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
 
         .. _Polymarket docs: https://docs.polymarket.com/
     """
@@ -459,6 +461,117 @@ def polymarket_clob_price(
     _params.update(_caller_params)
     raw = _get(
         "https://clob.polymarket.com/price",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def polymarket_us_market_bbo(
+    slug: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Best bid and offer, last trade and volume for one Polymarket US market slug.
+
+    Endpoint: ``GET https://gateway.polymarket.us/v1/markets/{slug}/bbo``
+    Example URL: https://gateway.polymarket.us/v1/markets/tec-mls-winner-2026-11-07-sea/bbo
+
+    Args:
+        slug: Polymarket US market slug (from /v1/markets). A game market's is "aec-" + a Gamma event's usId (aec-nba-sa-sac-2026-11-06); futures use other prefixes (tec-mls-winner-2026-11-07-sea).
+        return_parsed: parse the payload through parse_polymarket -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.odds import polymarket_us_market_bbo
+            polymarket_us_market_bbo(slug='tec-mls-winner-2026-11-07-sea')
+
+        See Also:
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
+
+        .. _Polymarket docs: https://docs.polymarket.com/
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://gateway.polymarket.us/v1/markets/{slug}/bbo",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def polymarket_us_markets(
+    limit: Optional[str] = None,
+    offset: Optional[str] = None,
+    active: Optional[str] = None,
+    closed: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Markets on the Polymarket US exchange, offset-paged and filterable by active or closed.
+
+    Endpoint: ``GET https://gateway.polymarket.us/v1/markets``
+    Example URL: https://gateway.polymarket.us/v1/markets?limit=3
+
+    Args:
+        limit: Page size.
+        offset: Row offset; offset=1 shifts the page (verified 2026-11-18).
+        active: Filter active markets (true/false).
+        closed: Filter closed markets/events (true/false).
+        return_parsed: parse the payload through parse_polymarket -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.odds import polymarket_us_markets
+            polymarket_us_markets(limit='3')
+
+        See Also:
+            * `Polymarket docs`_ - gamma = market/event/tag metadata, clob = order books and prices, us = the Polymarket US exchange's markets and best bid/offer; reads are keyless, trading needs keys
+
+        .. _Polymarket docs: https://docs.polymarket.com/
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "limit": limit,
+        "offset": offset,
+        "active": active,
+        "closed": closed,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://gateway.polymarket.us/v1/markets",
         params=_params,
         **kwargs,
     )

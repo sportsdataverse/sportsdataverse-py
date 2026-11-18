@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # Betting odds — Polymarket read APIs (gamma-api + clob.polymarket.com)
 
-`sportsdataverse.odds` — 8 endpoints.
+`sportsdataverse.odds` — 10 endpoints.
 
 ## polymarket_gamma_events
 
@@ -588,4 +588,142 @@ Best price on one side of the book for one outcome token.
 
 ```python
 polymarket_clob_price(side='buy', token_id='14940935985254400645996902276818598247231942791302218826999289776538227075176')
+```
+
+## polymarket_us_market_bbo
+
+Best bid and offer, last trade and volume for one Polymarket US market slug.
+
+**Endpoint URL:** `GET https://gateway.polymarket.us/v1/markets/{slug}/bbo`
+
+**Valid URL:** [https://gateway.polymarket.us/v1/markets/tec-mls-winner-2026-11-07-sea/bbo](https://gateway.polymarket.us/v1/markets/tec-mls-winner-2026-11-07-sea/bbo)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `slug` | `slug` |  | `Y` |  | Polymarket US market slug (from /v1/markets). A game market's is "aec-" + a Gamma event's usId (aec-nba-sa-sac-2026-11-06); futures use other prefixes (tec-mls-winner-2026-11-07-sea). |
+
+### Returns {#polymarket_us_market_bbo-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `market_slug` | String | Market slug the quote is for (the `slug` argument). |
+| `shares_traded` | String | Contracts traded over the market's life, as a decimal string. |
+| `open_interest` | String | Contracts currently held open, as a decimal string; "0.0000" once the market has settled. |
+| `ask_depth` | Int64 | Number of price levels on the ask side of the book. |
+| `bid_depth` | Int64 | Number of price levels on the bid side of the book. |
+| `state` | String | Market state code (e.g. "MARKET_STATE_OPEN", "MARKET_STATE_EXPIRED"). |
+| `bid_shares` | String | Contracts resting on the bid side of the book, as a decimal string. |
+| `ask_shares` | String | Contracts resting on the ask side of the book, as a decimal string. |
+| `current_px_value` | String | Current price, in dollars per contract (0 to 1), as a decimal string. |
+| `current_px_currency` | String | Currency of `current_px_value` (e.g. "USD"). |
+| `last_trade_px_value` | String | Price of the last trade, in dollars per contract, as a decimal string. |
+| `last_trade_px_currency` | String | Currency of `last_trade_px_value` (e.g. "USD"). |
+| `settlement_px_value` | String | Settlement price, in dollars per contract, as a decimal string; "1.0000" or "0.0000" once the market has resolved. |
+| `settlement_px_currency` | String | Currency of `settlement_px_value` (e.g. "USD"). |
+| `best_ask_value` | String | Lowest ask, in dollars per contract, as a decimal string. Absent from an expired market, whose bestAsk is null. |
+| `best_ask_currency` | String | Currency of `best_ask_value` (e.g. "USD"). |
+| `best_bid_value` | String | Highest bid, in dollars per contract, as a decimal string. Absent from an expired market, whose bestBid is null. |
+| `best_bid_currency` | String | Currency of `best_bid_value` (e.g. "USD"). |
+| `last_price_sample_long_px_value` | String | Long-side (Yes) price in the latest price sample, as a decimal string. |
+| `last_price_sample_long_px_currency` | String | Currency of `last_price_sample_long_px_value` (e.g. "USD"). |
+| `last_price_sample_short_px_value` | String | Short-side (No) price in the latest price sample, as a decimal string. |
+| `last_price_sample_short_px_currency` | String | Currency of `last_price_sample_short_px_value` (e.g. "USD"). |
+| `last_price_sample_ts` | String | ISO-8601 UTC time of the latest price sample, to the nanosecond. |
+| `long_quote_value` | String | Price to buy the long (Yes) side now, as a decimal string; only on an open market. |
+| `long_quote_currency` | String | Currency of `long_quote_value` (e.g. "USD"). |
+| `short_quote_value` | String | Price to buy the short (No) side now, as a decimal string; only on an open market. |
+| `short_quote_currency` | String | Currency of `short_quote_value` (e.g. "USD"). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#polymarket_us_market_bbo-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#polymarket_us_market_bbo-example}
+
+```python
+polymarket_us_market_bbo(slug='tec-mls-winner-2026-11-07-sea')
+```
+
+## polymarket_us_markets
+
+Markets on the Polymarket US exchange, offset-paged and filterable by active or closed.
+
+**Endpoint URL:** `GET https://gateway.polymarket.us/v1/markets`
+
+**Valid URL:** [https://gateway.polymarket.us/v1/markets?limit=3](https://gateway.polymarket.us/v1/markets?limit=3)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Page size. |
+| `offset` | `offset` |  |  | `Y` | Row offset; offset=1 shifts the page (verified 2026-11-18). |
+| `active` | `active` |  |  | `Y` | Filter active markets (true/false). |
+| `closed` | `closed` |  |  | `Y` | Filter closed markets/events (true/false). |
+
+### Returns {#polymarket_us_markets-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | String | Polymarket US market id, a numeric string; the unfiltered first page starts at "1". |
+| `question` | String | Market title as Polymarket US displays it (e.g. "Los Angeles vs. Tennessee"). |
+| `slug` | String | Market slug, the key for `polymarket_us_market_bbo`. A game market's is "aec-" plus a Gamma event's usId (e.g. "aec-nfl-lac-ten-2025-11-02"); futures use other prefixes such as "tec-". |
+| `end_date` | String | ISO-8601 UTC time the market is scheduled to close. |
+| `category` | String | Top-level market category (e.g. "sports"). |
+| `start_date` | String | ISO-8601 UTC time the market opened for trading. |
+| `description` | String | Resolution rules in prose, including what happens if the game is postponed or canceled. |
+| `active` | Boolean | Whether the market is active; the `active` filter matches on it. |
+| `market_type` | String | Market type (e.g. "moneyline", "futures"). |
+| `closed` | Boolean | Whether the market is closed to trading; the `closed` filter matches on it. |
+| `created_at` | String | ISO-8601 UTC time the market record was created. |
+| `updated_at` | String | ISO-8601 UTC time the market record was last updated. |
+| `archived` | Boolean | Whether the market is archived. |
+| `order_price_min_tick_size` | Float64 | Smallest price increment an order may use, in dollars per contract (e.g. 0.001). |
+| `game_start_time` | String | ISO-8601 UTC scheduled start of the game the market is on; null for markets not tied to one game. |
+| `manual_activation` | Boolean | Whether the market is opened for trading by hand rather than on a schedule. |
+| `sports_market_type` | String | Sports market type (e.g. "moneyline", "futures"). |
+| `market_sides` | String | JSON-encoded list of the market's two sides, each with its id, description, price, long flag and team (name, abbreviation, league, record, logos, colors and provider ids). |
+| `outcomes` | String | JSON array serialised inside a string naming the outcomes (e.g. "[\"Chargers\",\"Titans\"]"). |
+| `outcome_prices` | String | JSON array serialised inside a string of each outcome's price, in the order of `outcomes`; a resolved market reads "1" for the winner and "0" for the loser. |
+| `ep3_status` | String | Status code from Polymarket US's EP3 system (e.g. "EXPIRED"); the API does not document EP3. |
+| `status` | String | Market status code (e.g. "MARKET_STATUS_RESOLVED"). |
+| `asset_price_terms` | String | JSON-encoded price terms for markets on an asset price; null for sports markets. |
+| `sports_market_type_v2` | String | Sports market type as an enum code (e.g. "SPORTS_MARKET_TYPE_MONEYLINE"). |
+| `hidden` | Boolean | Whether the market is hidden from the Polymarket US front end. |
+| `tags` | String | JSON-encoded list of the market's tags; empty on the captured sports markets. |
+| `fee_coefficient` | Float64 | Coefficient of the exchange's trading-fee formula for this market (e.g. 0.095). |
+| `ep3_synced_at` | String | ISO-8601 UTC time the market last synced with Polymarket US's EP3 system. |
+| `minimum_trade_qty` | Int64 | Smallest number of contracts a single trade may be for. |
+| `combo_enabled` | Boolean | Whether the market can be used as a leg of a combination (parlay) order. |
+| `politics` | String | JSON-encoded politics metadata; null for sports markets. |
+| `singles_rfq_config_enabled` | Boolean | Whether single-market request-for-quote trading is enabled. |
+| `singles_rfq_config_midpoint_deviation` | Float64 | Largest deviation from the midpoint a request-for-quote reply may have. |
+| `singles_rfq_config_min_order_value_usd` | Int64 | Smallest order value, in US dollars, accepted by request for quote. |
+| `singles_rfq_config_max_quote_age_seconds` | Int64 | Longest a request-for-quote reply stays valid, in seconds. |
+| `singles_rfq_config_quote_windows` | String | JSON-encoded list of the time windows in which request for quote is open. |
+| `singles_rfq_config_rule_name` | String | Name of the request-for-quote rule set applied (e.g. "default"). |
+| `singles_rfq_config_version` | String | Version label of the request-for-quote configuration (e.g. "singles-half-markets-v2"). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#polymarket_us_markets-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#polymarket_us_markets-example}
+
+```python
+polymarket_us_markets(limit='3')
 ```

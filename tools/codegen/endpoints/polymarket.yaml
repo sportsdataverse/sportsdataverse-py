@@ -6,8 +6,9 @@ docstring:
     or token id).'
   see_also:
   - name: Polymarket docs
-    note: gamma = market/event/tag metadata, clob = order books and prices; reads
-      are keyless, trading needs keys
+    note: gamma = market/event/tag metadata, clob = order books and prices, us = the
+      Polymarket US exchange's markets and best bid/offer; reads are keyless, trading
+      needs keys
     url: https://docs.polymarket.com/
 endpoints:
 - example_args:
@@ -172,6 +173,52 @@ endpoints:
   returns_schema: native/polymarket/clob_price
   short: clob_price
   summary: Best price on one side of the book for one outcome token.
+- example_args:
+    slug: tec-mls-winner-2026-11-07-sea
+  host: https://gateway.polymarket.us
+  parser: parse_polymarket
+  path: /v1/markets/{slug}/bbo
+  path_params:
+  - description: Polymarket US market slug (from /v1/markets). A game market's is
+      "aec-" + a Gamma event's usId (aec-nba-sa-sac-2026-11-06); futures use other
+      prefixes (tec-mls-winner-2026-11-07-sea).
+    name: slug
+    required: true
+    type: str
+  returns_schema: native/polymarket/us_market_bbo
+  short: us_market_bbo
+  summary: Best bid and offer, last trade and volume for one Polymarket US market
+    slug.
+- example_args:
+    limit: '3'
+  extra_params:
+  - description: Page size.
+    name: limit
+    query_key: limit
+    required: false
+    type: str
+  - description: Row offset; offset=1 shifts the page (verified 2026-11-18).
+    name: offset
+    query_key: offset
+    required: false
+    type: str
+  - description: Filter active markets (true/false).
+    name: active
+    query_key: active
+    required: false
+    type: str
+  - description: Filter closed markets/events (true/false).
+    name: closed
+    query_key: closed
+    required: false
+    type: str
+  host: https://gateway.polymarket.us
+  parser: parse_polymarket
+  path: /v1/markets
+  returns_schema: native/polymarket/us_markets
+  short: us_markets
+  summary: Markets on the Polymarket US exchange, offset-paged and filterable by active
+    or closed.
 host: https://gamma-api.polymarket.com
 module: polymarket
 name_pattern: polymarket_{short}
