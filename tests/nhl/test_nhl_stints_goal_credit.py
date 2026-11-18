@@ -101,7 +101,24 @@ def test_nhl_goal_on_a_change_second_credits_the_pre_change_line():
     # (off the shot): a null strength_state would drop its xG from every strength-filtered engine
     # (R960-1: 9 stints / 0.4586 xG without the fallback). The goalie-null stints left are the
     # pulled-goalie ones.
-    stints = build_stints(shifts, scored).filter((pl.col("xgf_home") + pl.col("xgf_away")) > 0)
+    all_stints = build_stints(shifts, scored)
+    stints = all_stints.filter((pl.col("xgf_home") + pl.col("xgf_away")) > 0)
     assert stints.filter(pl.col("strength_state").is_null()).is_empty()
     no_goalie = stints.filter(pl.col("home_goalie").is_null() | pl.col("away_goalie").is_null())
     assert set(no_goalie["strength_state"].to_list()) <= {"5v6", "6v5"}
+
+    # The same fallback covers every stint with no event before its end second, xG or not (a stop, a
+    # penalty at end_s): it reads strength off the end-second events. The 9 xG-bearing ones above are
+    # 5v5 either way (the carried state agrees), so only these catch the fallback going missing: without
+    # it 6 of the 51 carry a stale or null strength_state (2024020001 at 1044 and 2102 go null).
+    ev = scored.filter(pl.col("strength_state").is_not_null()).select("game_id", "game_seconds", "strength_state")
+    in_window = all_stints.join(ev, on="game_id", suffix="_event")
+    has_event = in_window.filter(pl.col("game_seconds").is_between("start_s", "end_s", closed="left"))
+    at_end = (
+        in_window.filter(pl.col("game_seconds") == pl.col("end_s"))
+        .join(has_event.select("game_id", "start_s").unique(), on=["game_id", "start_s"], how="anti")
+        .group_by("game_id", "start_s", "strength_state")
+        .agg(pl.col("strength_state_event").mode().sort().first().alias("end_event_state"))
+    )
+    assert at_end.height == 51
+    assert at_end.filter(pl.col("strength_state").ne_missing(pl.col("end_event_state"))).is_empty()

@@ -5840,7 +5840,7 @@
   mutant: 'window = window'
   test: tests/nhl/test_nhl_stints_goal_credit.py -k nhl
   expected: kill
-  note: task 2.27 -- a stint whose only event is the shot at its end second reads strength / goalies off the xG window (without it, 9 NHL xG stints carry a null strength_state).
+  note: task 2.27 -- a stint whose only event is at its end second reads strength / goalies off the xG window. Since #1213 an eventless stint carries the latest event's state, so the 9 xG-bearing stints stay 5v5 without the fallback; the test's end-second check over all 51 such stints is what goes red (6 carry a stale or null strength_state).
 
 - id: nhl-war-threads-xg-scored
   group: pwhl-impact-routing
@@ -7535,11 +7535,15 @@
   group: dtype-contract-5-2
   finding: B-M15
   file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
-  snippet: '    "espn_team_id": pl.Int64,'
-  mutant: '    "espn_team_id": pl.Utf8,'
+  snippet: |-
+    "conference_id": pl.Utf8,
+        "espn_team_id": pl.Int32,
+  mutant: |-
+    "conference_id": pl.Utf8,
+        "espn_team_id": pl.Utf8,
   test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k "id_dtypes"
   expected: kill
-  note: The NCAA -> ESPN crosswalk's espn_team_id is Utf8 again and joins no ESPN frame.
+  note: The NCAA -> ESPN team crosswalk's espn_team_id is Utf8 again and joins no ESPN frame. The id is Int32 since #1186 (the dtype of the ESPN ids in the crosswalk and NCAA releases); the old Int64 snippet had moved onto the player crosswalk's _PLAYER_SCHEMA, which this test never reads.
 
 - id: nfl-processor-ids-match-cfb
   group: dtype-contract-5-2
@@ -7575,7 +7579,7 @@
   group: dtype-contract-5-2
   finding: A-M14
   file: sportsdataverse/_codegen_runtime.py
-  snippet: '            out[col] = pd.array(df[col].to_list(), dtype="Int64")'
+  snippet: '            out[col] = pd.array(df[col].to_list(), dtype=str(dtype))'
   mutant: '            pass'
   test: tests/test_espn_universal_parsers.py -k "pandas_ids_are_nullable_int64_never_float"
   expected: kill
@@ -9093,8 +9097,8 @@
   group: bb-pro-season
   finding: BB-D18
   file: sportsdataverse/nba/nba_season_sim.py
-  snippet: 'neutral = future["neutral_site"].fill_null(False).to_numpy() if "neutral_site" in future.columns else False'
-  mutant: 'neutral = False'
+  snippet: 'neutral=future["neutral_site"].fill_null(False).to_numpy() if "neutral_site" in cols else False,'
+  mutant: 'neutral=False,'
   test: tests/nba/test_nba_neutral_site.py::test_the_sim_hands_the_flag_to_the_simulator
   expected: kill
   note: simulate_pro_season passes the schedule's 5 neutral 2025-26 games through to the simulated games.
@@ -9215,8 +9219,8 @@
   group: bb-college-season
   finding: BB-D17
   file: sportsdataverse/mbb/mbb_college_season.py
-  snippet: 'pl.when(pl.col("_w").is_in(barred)).then(pl.col("_l")).otherwise(pl.col("_w")).alias("champion_id")'
-  mutant: 'pl.col("_w").alias("champion_id")'
+  snippet: 'pl.when(~pl.col("_w").is_in(barred))'
+  mutant: 'pl.when(pl.lit(True))'
   test: tests/mbb/test_mbb_college_season.py::test_auto_bids_are_the_conference_champions
   expected: kill
   note: Southern Indiana won the 2024 women's OVC final while reclassifying; the runner-up UT Martin took the bid.
@@ -11020,8 +11024,12 @@
   group: bb-player-war
   finding: BB-D26
   file: sportsdataverse/mbb/mbb_player_war.py
-  snippet: 'team_games=team_games, player_games=player_games'
-  mutant: 'team_games=None, player_games=None'
+  snippet: |-
+    team_games=team_games,
+            player_games=player_games,
+  mutant: |-
+    team_games=None,
+            player_games=None,
   test: tests/mbb/test_mbb_player_war.py::test_the_public_college_path_ships_the_interval
   expected: kill
   note: The college public path would publish a null interval on every row.
