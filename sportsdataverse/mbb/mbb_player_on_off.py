@@ -88,6 +88,7 @@ def mbb_player_on_off(
         min_poss=min_poss,
         level=NCAA_LEVEL[league],
         game_dates=_game_dates(pbp),
+        tenure=False,  # rosters hold all season: a debut-opened span would drop an injured player's games
     )
     return out.to_pandas() if return_as_pandas else out
 

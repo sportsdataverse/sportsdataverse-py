@@ -10035,6 +10035,36 @@
   note: Ranking every team lets a team with a handful of games (a college non-D1 opponent) into the cohort.
 
 # --- BB-D5: player on/off and WOWY pairs ------------------------------------------------------------
+- id: bb-oo-off-over-tenure
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: '    if tenure:  # stats.nba.com''s window: the team''s games in his span, not its whole season'
+  mutant: '    if False:  # stats.nba.com''s window: the team''s games in his span, not its whole season'
+  test: tests/nba/test_nba_player_on_off.py::test_span_follows_traded_players_like_stats_nba
+  expected: kill
+  note: The pros' off side counts only the team's games in his span (stats.nba.com's window); the whole season would credit a traded player with the games before he joined.
+
+- id: bb-oo-pros-use-tenure
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/nba/nba_player_on_off.py
+  snippet: 'rows, player_dtype=_PLAYER, min_poss=gate, level=NBA_LEVEL[league_id], game_dates=dates, tenure=True'
+  mutant: 'rows, player_dtype=_PLAYER, min_poss=gate, level=NBA_LEVEL[league_id], game_dates=dates, tenure=False'
+  test: tests/nba/test_nba_player_on_off.py::test_public_builders_read_the_start_year
+  expected: kill
+  note: The NBA / WNBA builders must count the off side over the player's tenure, not the whole season.
+
+- id: bb-oo-college-whole-season
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/mbb/mbb_player_on_off.py
+  snippet: '        tenure=False,  # rosters hold all season: a debut-opened span would drop an injured player''s games'
+  mutant: '        tenure=True,  # rosters hold all season: a debut-opened span would drop an injured player''s games'
+  test: tests/mbb/test_mbb_player_on_off.py::test_public_builders
+  expected: kill
+  note: College rosters hold all season, so its off side is the whole season; the fixtures cannot tell the two builds apart, so the spy pins the argument.
+
 - id: bb-oo-off-is-team-minus-on
   group: bb-player-on-off
   finding: BB-D5
@@ -10242,11 +10272,11 @@
   group: bb-epv
   finding: BB-D7
   file: sportsdataverse/nba/nba_epv.py
-  snippet: 'EPV_TRANSITION_SECONDS: Final[float] = 10.0'
-  mutant: 'EPV_TRANSITION_SECONDS: Final[float] = 8.0'
+  snippet: 'EPV_TRANSITION_SECONDS: Final[float] = 8.0'
+  mutant: 'EPV_TRANSITION_SECONDS: Final[float] = 10.0'
   test: tests/nba/test_nba_epv.py::test_transition_state_is_known_as_of_each_event
   expected: kill
-  note: Following BB-D7's 8 s window without a refit would feed the boosters a transition state they were not fitted on.
+  note: The pro boosters were refit on BB-D7's 8 s window (2026-11-17); the old 10 s would feed them a transition state they were not fitted on.
 
 - id: bb-ctg-alias-never-overwrites
   group: bb-ctg-aliases
@@ -10634,6 +10664,16 @@
   test: tests/nba/test_nba_epv.py::test_labels_sum_to_the_engine_points
   expected: kill
   note: The label must be the offense's points, read from its own side of the score.
+
+- id: bb-epv-start-label-carried-defense-score
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(after + pl.col("_carried").fill_null(0))'
+  mutant: '.then(after)'
+  test: tests/wnba/test_wnba_epv.py::test_a_technical_by_the_defense_counts_on_its_teams_next_start
+  expected: kill
+  note: A technical free throw by the defense is no event's points; the start label must take it as the release does.
 
 - id: bb-epv-ft-foul-lineup
   group: bb-epv
@@ -11053,7 +11093,7 @@
   file: tools/models/nba_epv/train_epv.py
   snippet: 'e["season"] == season'
   mutant: 'True'
-  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  test: tests/wnba/test_wnba_epv.py::test_an_accepted_bucket_is_excused_and_no_other
   expected: kill
   note: The accepted WNBA bucket would be excused in any season, not only its 2026 confirmation.
 
@@ -11063,7 +11103,7 @@
   file: tools/models/nba_epv/train_epv.py
   snippet: 'and abs(e["bias"] - bucket["bias"]) <= _EXCEPTION_TOL'
   mutant: 'and True'
-  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  test: tests/wnba/test_wnba_epv.py::test_an_accepted_bucket_is_excused_and_no_other
   expected: kill
   note: The accepted bucket would stay excused however far its bias moved on a refit.
 
@@ -11083,7 +11123,7 @@
   file: tools/models/nba_epv/train_epv.py
   snippet: 'and e["n"] == bucket["n"]'
   mutant: 'and True'
-  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  test: tests/wnba/test_wnba_epv.py::test_an_accepted_bucket_is_excused_and_no_other
   expected: kill
   note: A different sample of the accepted bucket (another n) would stay excused.
 

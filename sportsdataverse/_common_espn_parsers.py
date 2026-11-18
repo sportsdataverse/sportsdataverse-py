@@ -82,7 +82,7 @@ from __future__ import annotations
 import functools
 import warnings
 from collections.abc import Callable
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import re
 
@@ -832,6 +832,37 @@ def parse_athlete_stats(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
 # ===========================================================================
 
 
+def _unique_stat_columns(names: List[str]) -> List[str]:
+    """snake_case stat names, suffixed ``_2``, ``_3`` on a repeat (NFL labels repeat ``YDS``/``TD``).
+
+    Suffixes skip any name already emitted, so ``["YDS", "YDS", "YDS_2"]`` gives
+    ``yds, yds_2, yds_2_2`` and no stat overwrites another.
+    """
+    out: List[str] = []
+    used: set = set()
+    for n in names:
+        base = col = underscore(n)
+        k = 1
+        while col in used:
+            k += 1
+            col = f"{base}_{k}"
+        used.add(col)
+        out.append(col)
+    return out
+
+
+def _gamelog_home_away(ev: dict, opp: dict) -> Optional[str]:
+    """The athlete's side, from which side the opponent was on (``atVs`` is ``vs`` at neutral sites too)."""
+    opp_id = str(opp.get("id") or "")
+    if not opp_id:
+        return None
+    if opp_id == str(ev.get("homeTeamId")):
+        return "away"
+    if opp_id == str(ev.get("awayTeamId")):
+        return "home"
+    return None
+
+
 @_documented_empty("athlete_gamelog")
 @_zero_rows_unless_dict
 def parse_athlete_gamelog(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -840,6 +871,12 @@ def parse_athlete_gamelog(payload: Dict, return_as_pandas: bool = False) -> pl.D
     Input: raw payload from ``_espn_athlete_gamelog()``.
     Output: one row per game from ``seasonTypes[].categories[].events[]``.
     Carries season_type_id, season_type_name, category + per-event game-stats.
+
+    ESPN's web v3 gamelog keeps the stat ``names``/``labels`` at the top of the
+    payload (a category is a month split and carries none) and the per-game
+    metadata in a top-level ``events`` map keyed by event id; a category's
+    ``events[]`` holds only ``{eventId, stats}``. Both are read from there when
+    a category lacks them.
 
     Args:
         payload: Raw JSON dict from the athlete gamelog endpoint.
@@ -851,10 +888,21 @@ def parse_athlete_gamelog(payload: Dict, return_as_pandas: bool = False) -> pl.D
     if not payload:
         return _empty_frame(return_as_pandas)
 
+    top_names: List[str] = payload.get("names") or payload.get("labels") or []
+    top_events = payload.get("events") or {}
+    # the web v3 shape: a map of event id -> game metadata
+    event_meta: Dict[str, dict] = top_events if isinstance(top_events, dict) else {}
+
     season_types = payload.get("seasonTypes") or []
     if not season_types:
-        # Fallback: top-level events
-        events = payload.get("events") or []
+        # Fallback: top-level events (a list, or the web v3 map, whose key is the event id)
+        if isinstance(top_events, dict):
+            events = [
+                {"id": k, **v} if isinstance(v, dict) and not (v.get("id") or v.get("eventId")) else v
+                for k, v in top_events.items()
+            ]
+        else:
+            events = top_events
         if events:
             season_types = [{"id": None, "name": None, "categories": [{"name": None, "events": events}]}]
 
@@ -865,19 +913,24 @@ def parse_athlete_gamelog(payload: Dict, return_as_pandas: bool = False) -> pl.D
         categories = st.get("categories") or []
         for cat in categories:
             cat_name = cat.get("name") or cat.get("displayName")
-            labels: List[str] = cat.get("labels") or cat.get("names") or []
-            names: List[str] = cat.get("names") or labels
+            names = _unique_stat_columns(cat.get("names") or cat.get("labels") or top_names)
             events = cat.get("events") or []
             for ev in events:
+                if not isinstance(ev, dict):
+                    continue
                 event_ref = ev.get("eventId") or ev.get("id") or ev.get("event", {}).get("id")
+                meta = event_meta.get(str(event_ref))
+                # supplemental metadata only: a malformed entry is ignored, never raised on
+                if isinstance(meta, dict):
+                    ev = {**meta, **ev}
                 opp = ev.get("opponent") or {}
                 row = {
                     "season_type_id": st_id,
                     "season_type_name": st_name,
                     "category": cat_name,
                     "event_id": event_ref,
-                    "event_date": ev.get("date"),
-                    "home_away": ev.get("homeAway"),
+                    "event_date": ev.get("date") or ev.get("gameDate"),
+                    "home_away": ev.get("homeAway") or _gamelog_home_away(ev, opp),
                     "score": ev.get("score"),
                     "opponent_id": opp.get("id"),
                     "opponent_abbreviation": opp.get("abbreviation"),
@@ -887,8 +940,7 @@ def parse_athlete_gamelog(payload: Dict, return_as_pandas: bool = False) -> pl.D
                 }
                 stats: List = ev.get("stats") or []
                 for i, val in enumerate(stats):
-                    col = underscore(names[i]) if i < len(names) else f"stat_{i}"
-                    row[col] = val
+                    row[names[i] if i < len(names) else f"stat_{i}"] = val
                 rows.append(row)
 
     if not rows:

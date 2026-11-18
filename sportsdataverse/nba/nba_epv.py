@@ -16,7 +16,8 @@ possession leaks in):
   its period's first, no shot and no dead ball yet, within :data:`EPV_TRANSITION_SECONDS` of the
   change of possession), 2 a transition possession whose first shot has been taken (BB-D7's
   ``is_transition`` rule at :data:`EPV_TRANSITION_SECONDS`, known once that shot happens). The
-  boosters were fitted at 10 s, so this is a superset of the published 8-second ``is_transition``.
+  pros' window is the published 8-second ``is_transition``; college keeps its own 10 seconds
+  (:data:`COLLEGE_EPV_TRANSITION_SECONDS`, bigballR's and the college splits').
 * ``last_event`` -- the event just processed (:data:`LAST_EVENTS`); steals, blocks,
   substitutions, replays and the dead-ball rebound between two free throws carry the previous one.
 * ``ft_pending`` -- free throws still to come after a free throw ("1 of 2" leaves 1); a technical
@@ -69,6 +70,7 @@ import polars as pl
 
 from sportsdataverse._common.game_impact import credit_free_throws_to_foul_lineup
 from sportsdataverse.nba.nba_possession_flags import TRANSITION_START_TYPES, add_possession_flags
+from sportsdataverse.nba.nba_possession_rules import credit_defense_scoring
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -135,11 +137,15 @@ _LEAGUES: Final[dict[str, tuple[str, str]]] = {
 _RIM_FEET: Final[int] = 4
 _SHORT_FEET: Final[int] = 14
 _SHOTS: Final[tuple[str, ...]] = ("made_shot", "missed_shot")
-#: The ``transition`` state's window: 10 seconds, the one the bundled boosters were fitted on. It is
-#: pinned here, not read from BB-D7's :data:`~sportsdataverse.nba.nba_possession_flags.TRANSITION_SECONDS`
-#: (8), so the published possessions' window can change without silently shifting every booster's input.
-#: Refit the boosters (``tools/models/nba_epv/train_epv.py``) before changing it.
-EPV_TRANSITION_SECONDS: Final[float] = 10.0
+#: The NBA / WNBA ``transition`` state's window: 8 seconds, the one their bundled boosters were fitted
+#: on (refit from 10 s on 2026-11-17 to match BB-D7's published
+#: :data:`~sportsdataverse.nba.nba_possession_flags.TRANSITION_SECONDS`). It is pinned here, not read
+#: from there, so the published possessions' window can change without silently shifting the boosters'
+#: input. Refit the boosters (``tools/models/nba_epv/train_epv.py``) before changing it.
+EPV_TRANSITION_SECONDS: Final[float] = 8.0
+#: The college boosters' window: 10 seconds, the college convention (hoop-math, bigballR) that the
+#: college splits use too (``nba_game_splits.TRANSITION_WINDOW_SECONDS``).
+COLLEGE_EPV_TRANSITION_SECONDS: Final[float] = 10.0
 #: Events that close a free-throw trip. Not a rebound: the dead-ball team rebound filed after a missed
 #: first free throw leaves the rest of the trip to come (nor substitutions, timeouts or replays).
 _LIVE: Final[tuple[str, ...]] = ("made_shot", "missed_shot", "turnover", "jump_ball", "violation", "foul")
@@ -194,14 +200,12 @@ def _scored_events(pbp: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def _possession_frame(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
+def _possession_frame(possessions: pl.DataFrame, pbp: pl.DataFrame, window: float) -> pl.DataFrame:
     """Possessions with the change-of-possession clock, the BB-D7 transition flag and the next one's period."""
     unknown = possessions.filter(~pl.col("possession_start_type").is_in(START_TYPES))["possession_start_type"]
     if unknown.len():
         raise ValueError(f"unknown possession_start_type {sorted(unknown.unique().to_list(), key=str)}")
-    flags = add_possession_flags(
-        possessions.select(_POSS_COLS), pbp.select(_PBP_COLS), transition_seconds=EPV_TRANSITION_SECONDS
-    )
+    flags = add_possession_flags(possessions.select(_POSS_COLS), pbp.select(_PBP_COLS), transition_seconds=window)
     return (
         flags.with_columns(pl.col("game_id").cast(pl.Utf8))
         .sort(_KEY)
@@ -267,7 +271,7 @@ def _carried(expr: pl.Expr, start: int = 0) -> pl.Expr:
     return expr.forward_fill().over(_KEY).fill_null(start)
 
 
-def _event_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
+def _event_states(ev: pl.DataFrame, poss: pl.DataFrame, window: float) -> pl.DataFrame:
     """One state row per event inside a possession: the state after the event, its points and label inputs."""
     et = pl.col("event_type")
     zone = (
@@ -318,10 +322,7 @@ def _event_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
         pl.when(seen & pl.col("is_transition"))
         .then(2)
         .when(
-            pl.col("_live_start")
-            & ~seen
-            & ~stopped
-            & (pl.col("_ball_clock") - pl.col("seconds_remaining") <= EPV_TRANSITION_SECONDS)
+            pl.col("_live_start") & ~seen & ~stopped & (pl.col("_ball_clock") - pl.col("seconds_remaining") <= window)
         )
         .then(1)
         .otherwise(0)
@@ -331,6 +332,55 @@ def _event_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
         .then(pl.col("_dh"))
         .otherwise(pl.col("_da"))
         .alias("points"),
+    )
+
+
+def _carried_points(possessions: pl.DataFrame, events: pl.DataFrame) -> pl.DataFrame:
+    """``_carried``: what each possession's team scored on defense and the release credits to it.
+
+    A score by the defense inside a possession (a technical or flagrant free throw, or a basket a
+    misplaced boundary puts there) is not the offense's, so no event's ``points`` holds it. The
+    possessions release credits it to the scoring team's next possession
+    (:func:`~sportsdataverse.nba.nba_possession_rules.credit_defense_scoring`, the same rule here),
+    so a game's possession points add up to its final score. ``count_as_possession`` is read when
+    the frame has it (the pro releases do; a null is not counted), else every possession counts; in the 2025 and 2026
+    NBA and WNBA releases it moves none of the 604 carries. The rule's fallback to an earlier
+    possession (no later one in the period) can put a score made after a possession into its
+    start's label; it is rare (6 of 272 carries in 2025).
+    """
+    home = pl.col("offense_team_id") == pl.col("home_team_id")
+    scored = (
+        events.group_by(_KEY)
+        .agg(pl.when(home).then(pl.col("_da")).otherwise(pl.col("_dh")).sum().alias("_def"))
+        .filter(pl.col("_def") != 0)
+    )
+    if scored.is_empty():
+        return pl.DataFrame(schema={"game_id": pl.Utf8, "possession_number": pl.Int64, "_carried": pl.Int64})
+    counted = "count_as_possession" in possessions.columns
+    recs = (
+        possessions.select(
+            pl.col("game_id").cast(pl.Utf8),
+            "possession_number",
+            "period",
+            "offense_team_id",
+            "defense_team_id",
+            # a null counts as not counted, as in the engine (it tests the value's truth)
+            (pl.col("count_as_possession").fill_null(False) if counted else pl.lit(True)).alias("count_as_possession"),
+        )
+        .join(scored.select("game_id").unique(), on="game_id", how="semi")
+        .join(scored, on=_KEY, how="left")
+        .sort(_KEY)
+    )
+    out: list[tuple[str, int, int]] = []
+    for (_,), g in recs.group_by("game_id"):
+        rows = [{**r, "points": 0} for r in g.sort("possession_number").to_dicts()]
+        carries: list[tuple[int, int, int, dict[str, int]]] = [
+            (i, r["defense_team_id"], r["_def"], {}) for i, r in enumerate(rows) if r["_def"]
+        ]
+        credit_defense_scoring(rows, carries)
+        out += [(r["game_id"], r["possession_number"], r["points"]) for r in rows if r["points"]]
+    return pl.DataFrame(
+        out, schema={"game_id": pl.Utf8, "possession_number": pl.Int64, "_carried": pl.Int64}, orient="row"
     )
 
 
@@ -348,7 +398,9 @@ def _start_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
+def epv_states(
+    possessions: pl.DataFrame, pbp: pl.DataFrame, *, transition_seconds: float = EPV_TRANSITION_SECONDS
+) -> pl.DataFrame:
     """Every EPV state of the possessions: each one's start, then the state after each of its events.
 
     Args:
@@ -356,20 +408,45 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
             ``wnba_stats_possessions``): ``game_id``, ``period``, ``possession_number``,
             ``number_in_period``, ``start_order_index``, ``end_order_index``,
             ``start_seconds_remaining``, ``end_seconds_remaining``, ``possession_start_type``,
-            ``offense_team_id``, ``defense_team_id`` and ``off_player_1..5`` / ``def_player_1..5``.
+            ``offense_team_id``, ``defense_team_id`` and ``off_player_1..5`` / ``def_player_1..5``;
+            ``count_as_possession`` too when it has it (without it every possession counts for
+            where a score by the defense is credited, ``remaining_points`` below).
         pbp: Their play-by-play (``nba_stats_pbp`` / ``wnba_stats_pbp``): ``season``, ``game_id``,
             ``order_index``, ``period``, ``seconds_remaining``, ``event_type``, ``sub_type``,
             ``description``, ``shot_distance``, ``shot_value``, ``team_id``, ``person_id``,
             ``location``, ``score_home``, ``score_away`` and ``action_number``. Each event carries its
             possession's starting ten (``off_player_*`` / ``def_player_*``).
+        transition_seconds: The ``transition`` state's window: :data:`EPV_TRANSITION_SECONDS` (8,
+            the pros) by default, :data:`COLLEGE_EPV_TRANSITION_SECONDS` (10) for college. It must
+            be the window the booster that scores the states was fitted on.
 
     Returns:
         One row per state, in game order: ``step`` 0 is the possession's start (no event columns),
         then one row per event. Carries :data:`EPV_FEATURES`, ``points`` (the offense's points on
         the event), ``remaining_points`` (the offense's points after the state, to the end of the
-        possession: the model's label), ``is_last`` (the possession's last event),
+        possession: the model's label). The start's label is the possessions release's ``points``:
+        it also holds a score the team made on defense (a technical free throw, say), which is no
+        event's ``points`` and which the release credits to the team's next possession in the
+        period (else an earlier one), so it is not only points scored from that state.
+        ``is_last`` (the possession's last event),
         ``next_in_period`` and the event's ``team_id`` / ``person_id`` / ``event_type`` / ``sub_type`` /
         ``description`` / player slots.
+
+    Example:
+        Pros (the 8-second window)::
+
+            from sportsdataverse.nba import nba_loaders as L
+            from sportsdataverse.nba.nba_epv import add_epv, epv_states
+            poss, pbp = L.load_nba_stats_possessions(2024), L.load_nba_stats_pbp(2024)
+            plays = add_epv(epv_states(poss, pbp))
+
+        College, on its own 10-second window::
+
+            from sportsdataverse.mbb.mbb_epv import ncaa_epv_inputs
+            from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
+            from sportsdataverse.nba.nba_epv import COLLEGE_EPV_TRANSITION_SECONDS
+            poss, pbp, _, _ = ncaa_epv_inputs(load_ncaa_mbb_pbp(2025))
+            states = epv_states(poss, pbp, transition_seconds=COLLEGE_EPV_TRANSITION_SECONDS)
 
     Raises:
         ValueError: If a needed column is missing, a ``possession_start_type`` is not one of
@@ -380,8 +457,10 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
     if missing:
         raise ValueError(f"missing columns {missing}")
     ev = _scored_events(pbp)
-    poss = _possession_frame(possessions, pbp)
-    events = _event_states(ev, poss).with_columns(pl.int_range(1, pl.len() + 1).over(_KEY).alias("step"))
+    poss = _possession_frame(possessions, pbp, transition_seconds)
+    events = _event_states(ev, poss, transition_seconds).with_columns(
+        pl.int_range(1, pl.len() + 1).over(_KEY).alias("step")
+    )
     starts = _start_states(ev, poss).with_columns(pl.lit(0, dtype=pl.Int64).alias("step"))
     if starts.height != possessions.height:
         raise ValueError(f"pbp has no first event for {possessions.height - starts.height} possessions")
@@ -394,7 +473,8 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
     out = pl.concat(
         [starts.join(start_margin, on=_KEY), events.join(start_margin, on=_KEY, how="inner")],
         how="diagonal_relaxed",
-    )
+    ).join(_carried_points(possessions, events), on=_KEY, how="left")
+    after = pl.col("points").sum().over(_KEY) - pl.col("points").cum_sum().over(_KEY)
     return (
         out.with_columns(
             pl.col("period").clip(upper_bound=5).cast(pl.Int32),
@@ -403,7 +483,10 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
         )
         .sort("game_id", "possession_number", "step")
         .with_columns(
-            (pl.col("points").sum().over(_KEY) - pl.col("points").cum_sum().over(_KEY)).alias("remaining_points"),
+            pl.when(pl.col("step") == 0)
+            .then(after + pl.col("_carried").fill_null(0))
+            .otherwise(after)
+            .alias("remaining_points"),
             ((pl.col("step") == pl.col("step").max().over(_KEY)) & (pl.col("step") > 0)).alias("is_last"),
             pl.col("_next_in_period").alias("next_in_period"),
         )
@@ -541,13 +624,22 @@ def add_epv(
         the possession-ending term is measured against) scaled by the game's ``level_scale``.
 
     Raises:
-        ValueError: If the booster has no ``start_epv_mean`` attribute.
+        ValueError: If the booster has no ``start_epv_mean`` attribute, or a bundled booster was
+            fitted on another transition window than the league's (``transition_seconds``; a
+            booster without the attribute was fitted on 10 s).
     """
     import numpy as np
 
     if booster is None:
         _check_seasons(states["season"].drop_nulls().unique().to_list(), league_id)
         booster = load_epv_model(league_id)
+        window = COLLEGE_EPV_TRANSITION_SECONDS if league_id in ("mbb", "wbb") else EPV_TRANSITION_SECONDS
+        fitted = float(booster.attr("transition_seconds") or 10.0)
+        if fitted != window:
+            raise ValueError(
+                f"the {league_id!r} EPV booster was fitted on a {fitted:g} s transition window, the states use "
+                f"{window:g} s; refit it with tools/models/nba_epv/train_epv.py"
+            )
     if booster.attr("start_epv_mean") is not None:
         _check_features(booster)
     mean = booster.attr("start_epv_mean")
