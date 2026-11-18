@@ -103,6 +103,19 @@ _SUMMARIES = {
 }
 
 
+# Param prose that supersedes the frozen spec's. The refs spec says a game market's slug is "aec-" + a Gamma usId;
+# that slug is the game-winner (moneyline) market only, and a game's other markets have their own slugs
+# (CodeRabbit on #1229). Follow-up: carry this wording into sdv-internal-refs' PARAM_DOC["slug"] and drop it here.
+_PARAM_DESC = {
+    ("us_market_bbo", "slug"): (
+        "Exact market slug, the `slug` column of `polymarket_us_markets`. A game's game-winner (moneyline) "
+        'market is "aec-" + the Gamma event\'s usId (aec-nba-sa-sac-2026-11-06, the `polymarket_us_slug` '
+        "of `join_espn_polymarket`); its other markets (e.g. spreads) and futures (tec-mls-winner-2026-11-07-sea) "
+        "have their own slugs, so pass the listing's slug rather than building one."
+    ),
+}
+
+
 def _capture_for(refs: Path, prefix: str, path: str) -> Path | None:
     """``clob`` + ``/markets`` -> ``captures/clob__markets.json``."""
     slug = path.strip("/").replace("/", "__").replace("{", "").replace("}", "")
@@ -117,6 +130,7 @@ def _endpoint_entry(path: str, op: dict, short: str, host: str) -> Dict[str, Any
     for prm in op.get("parameters", []):
         name = prm["name"]
         desc = str(prm.get("description") or "").strip()
+        desc = _PARAM_DESC.get((short, name), desc)
         if prm.get("in") == "path":
             # Every one of these specs documents its path params; dropping the text makes the
             # reference page print "<name> path parameter." filler instead.
@@ -171,6 +185,10 @@ def main() -> None:
         missing = sorted(set(p for p, _ in ops) - set(shorts))
         if missing:
             raise SystemExit(f"polymarket: {spec_file} paths without a short: {missing}")
+        # The reverse: a mapped route the spec no longer has would silently drop its wrapper.
+        absent = sorted(set(shorts) - set(p for p, _ in ops))
+        if absent:
+            raise SystemExit(f"polymarket: {spec_file} lacks mapped paths: {absent}")
         ops.sort(key=lambda pv: shorts[pv[0]])
         for path, op in ops:
             short = shorts[path]

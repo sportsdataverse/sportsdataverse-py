@@ -126,7 +126,14 @@ def test_single_key_scalar_and_empty_envelopes():
 
     assert parse_polymarket({"mid": "0.5"}).height == 1
     assert parse_polymarket({"events": [{"id": "1"}, {"id": "2"}]}).height == 2
-    for payload in ({"markets": []}, {"marketData": {}}, {"marketData": None}, {"markets": "x"}):
+    for payload in (
+        {"markets": []},
+        {"marketData": {}},
+        {"marketData": None},
+        {"markets": "x"},
+        {"markets": {"id": "1"}},  # a list key holding an object
+        {"marketData": [{"marketSlug": "s"}]},  # an object key holding a list
+    ):
         assert parse_polymarket(payload).height == 0, payload
     # an envelope keeps exactly the rows its bare list would
     rows = [{}, {"id": "1"}]

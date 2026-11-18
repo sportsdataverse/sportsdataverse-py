@@ -81843,8 +81843,8 @@ ncaa_box_events:
 us_markets:
   id: Polymarket US market id, a numeric string (the captured unfiltered page started at "1").
   question: Market title as Polymarket US displays it (e.g. "Los Angeles vs. Tennessee").
-  slug: Market slug, the key for `polymarket_us_market_bbo`. A game market's is "aec-" plus a Gamma event's usId
-    (e.g. "aec-nfl-lac-ten-2025-11-02"); futures use other prefixes such as "tec-".
+  slug: Market slug, the key for `polymarket_us_market_bbo`. A game-winner (moneyline) market's is "aec-" plus the
+    Gamma event's usId (e.g. "aec-nfl-lac-ten-2025-11-02"); a game's other markets and futures ("tec-") have their own.
   end_date: ISO-8601 UTC time the market is scheduled to close.
   category: Top-level market category (e.g. "sports").
   start_date: ISO-8601 UTC time the market opened for trading.

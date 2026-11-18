@@ -600,7 +600,7 @@ Best bid and offer, last trade and volume for one Polymarket US market slug.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `slug` | `slug` |  | `Y` |  | Polymarket US market slug (from /v1/markets). A game market's is "aec-" + a Gamma event's usId (aec-nba-sa-sac-2026-11-06); futures use other prefixes (tec-mls-winner-2026-11-07-sea). |
+| `slug` | `slug` |  | `Y` |  | Exact market slug, the `slug` column of `polymarket_us_markets`. A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06, the `polymarket_us_slug` of `join_espn_polymarket`); its other markets (e.g. spreads) and futures (tec-mls-winner-2026-11-07-sea) have their own slugs, so pass the listing's slug rather than building one. |
 
 ### Returns {#polymarket_us_market_bbo-returns}
 
@@ -675,7 +675,7 @@ Markets on the Polymarket US exchange, offset-paged and filterable by active or 
 |---|---|---|
 | `id` | String | Polymarket US market id, a numeric string (the captured unfiltered page started at "1"). |
 | `question` | String | Market title as Polymarket US displays it (e.g. "Los Angeles vs. Tennessee"). |
-| `slug` | String | Market slug, the key for `polymarket_us_market_bbo`. A game market's is "aec-" plus a Gamma event's usId (e.g. "aec-nfl-lac-ten-2025-11-02"); futures use other prefixes such as "tec-". |
+| `slug` | String | Market slug, the key for `polymarket_us_market_bbo`. A game-winner (moneyline) market's is "aec-" plus the Gamma event's usId (e.g. "aec-nfl-lac-ten-2025-11-02"); a game's other markets and futures ("tec-") have their own. |
 | `end_date` | String | ISO-8601 UTC time the market is scheduled to close. |
 | `category` | String | Top-level market category (e.g. "sports"). |
 | `start_date` | String | ISO-8601 UTC time the market opened for trading. |

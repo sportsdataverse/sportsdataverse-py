@@ -40,7 +40,7 @@ the next re-capture. Re-pin after 2027-01-01.
 The US bbo is pinned to `tec-mls-winner-2026-11-07-sea`, an MLS Cup future that
 ends 2027-01-01, so `bestBid` / `bestAsk` / `longQuote` / `shortQuote` are populated
 (an expired game market answers the bests null and drops the quotes). A game
-market's slug is `aec-` + a Gamma event's `usId`, the form `join_espn_polymarket` (#1227)
+game-winner (moneyline) market's slug is `aec-` + a Gamma event's `usId`, the form `join_espn_polymarket` (#1227)
 emits as `polymarket_us_slug`. Re-pin after 2027-01-01.
 
 List routes are the **first page only** — Gamma and US page by `limit`/`offset`, CLOB

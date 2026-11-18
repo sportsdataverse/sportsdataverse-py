@@ -179,9 +179,11 @@ endpoints:
   parser: parse_polymarket
   path: /v1/markets/{slug}/bbo
   path_params:
-  - description: Polymarket US market slug (from /v1/markets). A game market's is
-      "aec-" + a Gamma event's usId (aec-nba-sa-sac-2026-11-06); futures use other
-      prefixes (tec-mls-winner-2026-11-07-sea).
+  - description: Exact market slug, the `slug` column of `polymarket_us_markets`.
+      A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06,
+      the `polymarket_us_slug` of `join_espn_polymarket`); its other markets (e.g.
+      spreads) and futures (tec-mls-winner-2026-11-07-sea) have their own slugs, so
+      pass the listing's slug rather than building one.
     name: slug
     required: true
     type: str
