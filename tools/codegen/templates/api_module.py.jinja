@@ -141,6 +141,8 @@ def {{ ep.fn_name }}(
     if return_parsed:
 {% if parser_columns %}
         return {{ ep.parser }}(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["{{ ep.short }}"])
+{% elif ep.documented_table %}
+        return {{ ep.parser }}(raw, return_as_pandas=return_as_pandas, documented_table={{ ep.documented_table|py_repr }})
 {% else %}
         return {{ ep.parser }}(raw, return_as_pandas=return_as_pandas)
 {% endif %}

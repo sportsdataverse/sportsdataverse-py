@@ -89,7 +89,9 @@ def polymarket_gamma_events(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(
+            raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/gamma_events"
+        )
     return raw
 
 
@@ -139,7 +141,9 @@ def polymarket_gamma_market(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(
+            raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/gamma_market"
+        )
     return raw
 
 
@@ -203,7 +207,9 @@ def polymarket_gamma_markets(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(
+            raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/gamma_markets"
+        )
     return raw
 
 
@@ -258,7 +264,7 @@ def polymarket_gamma_tags(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/gamma_tags")
     return raw
 
 
@@ -310,7 +316,7 @@ def polymarket_clob_book(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/clob_book")
     return raw
 
 
@@ -362,7 +368,9 @@ def polymarket_clob_markets(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(
+            raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/clob_markets"
+        )
     return raw
 
 
@@ -414,7 +422,9 @@ def polymarket_clob_midpoint(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(
+            raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/clob_midpoint"
+        )
     return raw
 
 
@@ -469,7 +479,7 @@ def polymarket_clob_price(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/clob_price")
     return raw
 
 
@@ -519,7 +529,9 @@ def polymarket_us_market_bbo(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(
+            raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/us_market_bbo"
+        )
     return raw
 
 
@@ -569,7 +581,9 @@ def polymarket_us_market_book(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(
+            raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/us_market_book"
+        )
     return raw
 
 
@@ -619,7 +633,9 @@ def polymarket_us_market_by_id(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(
+            raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/us_market_by_id"
+        )
     return raw
 
 
@@ -669,7 +685,9 @@ def polymarket_us_market_by_slug(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(
+            raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/us_market_by_slug"
+        )
     return raw
 
 
@@ -719,7 +737,9 @@ def polymarket_us_market_settlement(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(
+            raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/us_market_settlement"
+        )
     return raw
 
 
@@ -780,5 +800,5 @@ def polymarket_us_markets(
         **kwargs,
     )
     if return_parsed:
-        return parse_polymarket(raw, return_as_pandas=return_as_pandas)
+        return parse_polymarket(raw, return_as_pandas=return_as_pandas, documented_table="native/polymarket/us_markets")
     return raw
