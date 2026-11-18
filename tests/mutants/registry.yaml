@@ -10232,11 +10232,11 @@
   group: bb-epv
   finding: BB-D7
   file: sportsdataverse/nba/nba_epv.py
-  snippet: 'EPV_TRANSITION_SECONDS: Final[float] = 10.0'
-  mutant: 'EPV_TRANSITION_SECONDS: Final[float] = 8.0'
+  snippet: 'EPV_TRANSITION_SECONDS: Final[float] = 8.0'
+  mutant: 'EPV_TRANSITION_SECONDS: Final[float] = 10.0'
   test: tests/nba/test_nba_epv.py::test_transition_state_is_known_as_of_each_event
   expected: kill
-  note: Following BB-D7's 8 s window without a refit would feed the boosters a transition state they were not fitted on.
+  note: The pro boosters were refit on BB-D7's 8 s window (2026-11-17); the old 10 s would feed them a transition state they were not fitted on.
 
 - id: bb-ctg-alias-never-overwrites
   group: bb-ctg-aliases
@@ -11043,7 +11043,7 @@
   file: tools/models/nba_epv/train_epv.py
   snippet: 'e["season"] == season'
   mutant: 'True'
-  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  test: tests/wnba/test_wnba_epv.py::test_an_accepted_bucket_is_excused_and_no_other
   expected: kill
   note: The accepted WNBA bucket would be excused in any season, not only its 2026 confirmation.
 
@@ -11053,7 +11053,7 @@
   file: tools/models/nba_epv/train_epv.py
   snippet: 'and abs(e["bias"] - bucket["bias"]) <= _EXCEPTION_TOL'
   mutant: 'and True'
-  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  test: tests/wnba/test_wnba_epv.py::test_an_accepted_bucket_is_excused_and_no_other
   expected: kill
   note: The accepted bucket would stay excused however far its bias moved on a refit.
 
@@ -11073,7 +11073,7 @@
   file: tools/models/nba_epv/train_epv.py
   snippet: 'and e["n"] == bucket["n"]'
   mutant: 'and True'
-  test: tests/wnba/test_wnba_epv.py::test_the_accepted_bucket_is_excused_and_no_other
+  test: tests/wnba/test_wnba_epv.py::test_an_accepted_bucket_is_excused_and_no_other
   expected: kill
   note: A different sample of the accepted bucket (another n) would stay excused.
 
