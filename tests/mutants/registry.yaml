@@ -9029,6 +9029,36 @@
   expected: kill
   note: Without the ridge's home term the second half of 2025-26 is predicted at 0.506 home wins against a real 0.551.
 
+- id: bb-ps-hfa-shrink-dropped
+  group: bb-pro-season
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'hfa_prior=(hfa_target, k) if k else None,'
+  mutant: 'hfa_prior=None,'
+  test: tests/nba/test_nba_season_sim.py::test_as_of_home_term_shrinks_toward_last_season
+  expected: kill
+  note: Unshrunk, the as-of home term early in WNBA 2025 swings several points per 100 off last season's.
+
+- id: bb-ps-hfa-shrink-mean-not-restored
+  group: bb-pro-season
+  finding: BB-D25
+  file: sportsdataverse/_common/team_strength.py
+  snippet: 'hfa += hfa_mean  # with no home/away contrast the term is its prior mean'
+  mutant: 'pass'
+  test: tests/nba/test_nba_season_sim.py::test_as_of_home_term_shrinks_toward_last_season
+  expected: kill
+  note: The ridge fits the home term's residual off its target; without adding the target back it shrinks toward 0.
+
+- id: bb-ps-bubble-prior-hfa
+  group: bb-pro-season
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'hfa = float(final.get_column("hfa")[0]) if identified else HFA_CONSTANTS[league_id][1]'
+  mutant: 'hfa = float(final.get_column("hfa")[0])'
+  test: tests/nba/test_nba_season_sim.py::test_prior_after_an_all_neutral_season_uses_the_league_home_term
+  expected: kill
+  note: After the 2020 bubbles last season's home term is unidentified (fit at 0); the prior takes the league's.
+
 - id: bb-ps-neutral-site-ignored-in-sim
   group: bb-pro-season
   finding: BB-D18

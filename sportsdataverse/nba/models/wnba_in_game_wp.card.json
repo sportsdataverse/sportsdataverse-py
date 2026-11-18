@@ -209,61 +209,61 @@
       "games": 312,
       "pregame": {
         "n": 312,
-        "brier": 0.22585,
-        "log_loss": 0.64125,
-        "calibration_slope": 0.7246,
-        "calibration_in_the_large": -0.0091
+        "brier": 0.22083,
+        "log_loss": 0.63048,
+        "calibration_slope": 0.7993,
+        "calibration_in_the_large": -0.0208
       },
       "live": {
         "n": 120717,
-        "brier": 0.15744,
-        "log_loss": 0.46617,
-        "calibration_slope": 0.913,
-        "calibration_in_the_large": -0.0125
+        "brier": 0.15425,
+        "log_loss": 0.45824,
+        "calibration_slope": 0.9465,
+        "calibration_in_the_large": -0.0178
       },
       "by_period": {
         "1": {
           "n": 28321,
-          "brier": 0.22187,
-          "log_loss": 0.63605,
-          "calibration_slope": 0.7316,
-          "calibration_in_the_large": -0.0242
+          "brier": 0.21732,
+          "log_loss": 0.62537,
+          "calibration_slope": 0.7989,
+          "calibration_in_the_large": -0.0316
         },
         "2": {
           "n": 30561,
-          "brier": 0.18538,
-          "log_loss": 0.54509,
-          "calibration_slope": 0.8975,
-          "calibration_in_the_large": -0.0099
+          "brier": 0.18079,
+          "log_loss": 0.53418,
+          "calibration_slope": 0.9445,
+          "calibration_in_the_large": -0.0167
         },
         "3": {
           "n": 30427,
-          "brier": 0.1465,
-          "log_loss": 0.44425,
-          "calibration_slope": 0.9167,
-          "calibration_in_the_large": -0.0123
+          "brier": 0.14412,
+          "log_loss": 0.4374,
+          "calibration_slope": 0.9391,
+          "calibration_in_the_large": -0.0172
         },
         "4": {
           "n": 30977,
-          "brier": 0.08245,
-          "log_loss": 0.25645,
-          "calibration_slope": 1.0172,
-          "calibration_in_the_large": -0.0064
+          "brier": 0.08111,
+          "log_loss": 0.25291,
+          "calibration_slope": 1.0351,
+          "calibration_in_the_large": -0.0089
         },
         "ot": {
           "n": 431,
-          "brier": 0.10518,
-          "log_loss": 0.32974,
-          "calibration_slope": 1.9294,
-          "calibration_in_the_large": 0.1232
+          "brier": 0.10063,
+          "log_loss": 0.3204,
+          "calibration_slope": 2.1329,
+          "calibration_in_the_large": 0.1186
         }
       },
       "final_minute_of_regulation": {
         "n": 4578,
-        "brier": 0.0323,
-        "log_loss": 0.11219,
-        "calibration_slope": 1.3754,
-        "calibration_in_the_large": 0.0164
+        "brier": 0.03167,
+        "log_loss": 0.11104,
+        "calibration_slope": 1.3839,
+        "calibration_in_the_large": 0.0153
       },
       "final": {
         "rows": 625,
@@ -272,69 +272,69 @@
       "reliability_deciles": [
         {
           "bin_mid": 0.05,
-          "mean_pred": 0.0372,
-          "mean_actual": 0.0198,
-          "n": 13029
+          "mean_pred": 0.0377,
+          "mean_actual": 0.0202,
+          "n": 13216
         },
         {
           "bin_mid": 0.15,
-          "mean_pred": 0.1522,
-          "mean_actual": 0.208,
-          "n": 10432
+          "mean_pred": 0.1531,
+          "mean_actual": 0.2064,
+          "n": 10958
         },
         {
           "bin_mid": 0.25,
-          "mean_pred": 0.2456,
-          "mean_actual": 0.31,
-          "n": 8736
+          "mean_pred": 0.2453,
+          "mean_actual": 0.3014,
+          "n": 9063
         },
         {
           "bin_mid": 0.35,
-          "mean_pred": 0.3524,
-          "mean_actual": 0.3765,
-          "n": 11228
+          "mean_pred": 0.3541,
+          "mean_actual": 0.4073,
+          "n": 11418
         },
         {
           "bin_mid": 0.45,
-          "mean_pred": 0.4451,
-          "mean_actual": 0.5413,
-          "n": 8988
+          "mean_pred": 0.4467,
+          "mean_actual": 0.5032,
+          "n": 8878
         },
         {
           "bin_mid": 0.55,
-          "mean_pred": 0.5498,
-          "mean_actual": 0.5882,
-          "n": 11263
+          "mean_pred": 0.5496,
+          "mean_actual": 0.5877,
+          "n": 10970
         },
         {
           "bin_mid": 0.65,
-          "mean_pred": 0.6482,
-          "mean_actual": 0.6298,
-          "n": 11580
+          "mean_pred": 0.648,
+          "mean_actual": 0.6577,
+          "n": 11665
         },
         {
           "bin_mid": 0.75,
-          "mean_pred": 0.7522,
-          "mean_actual": 0.7421,
-          "n": 11277
+          "mean_pred": 0.7534,
+          "mean_actual": 0.7477,
+          "n": 11029
         },
         {
           "bin_mid": 0.85,
-          "mean_pred": 0.854,
-          "mean_actual": 0.8076,
-          "n": 11733
+          "mean_pred": 0.8538,
+          "mean_actual": 0.8282,
+          "n": 11378
         },
         {
           "bin_mid": 0.95,
-          "mean_pred": 0.9673,
-          "mean_actual": 0.9624,
-          "n": 22451
+          "mean_pred": 0.9677,
+          "mean_actual": 0.9679,
+          "n": 22142
         }
       ],
       "late_game": {
         "games": 312,
         "horn_jump_share": 0.0,
-        "horn_step_median": 0.01266,
+        "horn_step_median": 0.01259,
         "final_minute_pairs": 869,
         "final_minute_toward_share": 0.2313,
         "final_minute_away_share": 0.0
@@ -352,6 +352,10 @@
       "prior_constants": [
         0.6,
         0.25
+      ],
+      "hfa_constants": [
+        20000.0,
+        1.2789
       ]
     },
     "holdout_seasons": [
@@ -369,42 +373,42 @@
       "scores": {
         "hfa": {
           "n": 576,
-          "brier": 0.24713,
-          "log_loss": 0.68741,
+          "brier": 0.24721,
+          "log_loss": 0.68756,
           "calibration_slope": null,
-          "calibration_in_the_large": -0.011
+          "calibration_in_the_large": -0.0109
         },
         "line_or_hfa": {
           "n": 576,
-          "brier": 0.24713,
-          "log_loss": 0.68741,
+          "brier": 0.24721,
+          "log_loss": 0.68756,
           "calibration_slope": null,
-          "calibration_in_the_large": -0.011
+          "calibration_in_the_large": -0.0109
         },
         "rated": {
           "n": 576,
-          "brier": 0.21734,
-          "log_loss": 0.62348,
-          "calibration_slope": 0.8528,
-          "calibration_in_the_large": -0.013
+          "brier": 0.21342,
+          "log_loss": 0.61474,
+          "calibration_slope": 0.9161,
+          "calibration_in_the_large": -0.0118
         },
         "line_or_rated": {
           "n": 576,
-          "brier": 0.21734,
-          "log_loss": 0.62348,
-          "calibration_slope": 0.8528,
-          "calibration_in_the_large": -0.013
+          "brier": 0.21342,
+          "log_loss": 0.61474,
+          "calibration_slope": 0.9161,
+          "calibration_in_the_large": -0.0118
         }
       },
       "paired_log_loss": {
         "rated - hfa": {
-          "diff": -0.06393,
-          "se": 0.01649,
+          "diff": -0.07282,
+          "se": 0.0162,
           "games": 576
         },
         "line_or_rated - line_or_hfa": {
-          "diff": -0.06393,
-          "se": 0.01649,
+          "diff": -0.07282,
+          "se": 0.0162,
           "games": 576
         }
       },
@@ -424,42 +428,42 @@
         "scores": {
           "hfa": {
             "n": 264,
-            "brier": 0.24793,
-            "log_loss": 0.68899,
+            "brier": 0.2481,
+            "log_loss": 0.68933,
             "calibration_slope": null,
-            "calibration_in_the_large": -0.0027
+            "calibration_in_the_large": -0.0025
           },
           "line_or_hfa": {
             "n": 264,
-            "brier": 0.24793,
-            "log_loss": 0.68899,
+            "brier": 0.2481,
+            "log_loss": 0.68933,
             "calibration_slope": null,
-            "calibration_in_the_large": -0.0027
+            "calibration_in_the_large": -0.0025
           },
           "rated": {
             "n": 264,
-            "brier": 0.20728,
-            "log_loss": 0.60248,
-            "calibration_slope": 1.0236,
-            "calibration_in_the_large": -0.0176
+            "brier": 0.20465,
+            "log_loss": 0.59613,
+            "calibration_slope": 1.0695,
+            "calibration_in_the_large": -0.0011
           },
           "line_or_rated": {
             "n": 264,
-            "brier": 0.20728,
-            "log_loss": 0.60248,
-            "calibration_slope": 1.0236,
-            "calibration_in_the_large": -0.0176
+            "brier": 0.20465,
+            "log_loss": 0.59613,
+            "calibration_slope": 1.0695,
+            "calibration_in_the_large": -0.0011
           }
         },
         "paired_log_loss": {
           "rated - hfa": {
-            "diff": -0.08651,
-            "se": 0.02377,
+            "diff": -0.0932,
+            "se": 0.02317,
             "games": 264
           },
           "line_or_rated - line_or_hfa": {
-            "diff": -0.08651,
-            "se": 0.02377,
+            "diff": -0.0932,
+            "se": 0.02317,
             "games": 264
           }
         },
@@ -492,28 +496,28 @@
           },
           "rated": {
             "n": 312,
-            "brier": 0.22585,
-            "log_loss": 0.64125,
-            "calibration_slope": 0.7246,
-            "calibration_in_the_large": -0.0091
+            "brier": 0.22083,
+            "log_loss": 0.63048,
+            "calibration_slope": 0.7993,
+            "calibration_in_the_large": -0.0208
           },
           "line_or_rated": {
             "n": 312,
-            "brier": 0.22585,
-            "log_loss": 0.64125,
-            "calibration_slope": 0.7246,
-            "calibration_in_the_large": -0.0091
+            "brier": 0.22083,
+            "log_loss": 0.63048,
+            "calibration_slope": 0.7993,
+            "calibration_in_the_large": -0.0208
           }
         },
         "paired_log_loss": {
           "rated - hfa": {
-            "diff": -0.04482,
-            "se": 0.0228,
+            "diff": -0.05558,
+            "se": 0.02254,
             "games": 312
           },
           "line_or_rated - line_or_hfa": {
-            "diff": -0.04482,
-            "se": 0.0228,
+            "diff": -0.05558,
+            "se": 0.02254,
             "games": 312
           }
         },

@@ -109,9 +109,13 @@ def _sha(path: Path) -> str:
 
 def rated_prior_constants(league_id: str) -> dict[str, list[float]]:
     """The season sim constants the rated prior is computed with (a test pins them to the scored ones)."""
-    from sportsdataverse.nba.nba_season_sim import PRIOR_CONSTANTS, SIM_CONSTANTS
+    from sportsdataverse.nba.nba_season_sim import HFA_CONSTANTS, PRIOR_CONSTANTS, SIM_CONSTANTS
 
-    return {"sim_constants": list(SIM_CONSTANTS[league_id]), "prior_constants": list(PRIOR_CONSTANTS[league_id])}
+    return {
+        "sim_constants": list(SIM_CONSTANTS[league_id]),
+        "prior_constants": list(PRIOR_CONSTANTS[league_id]),
+        "hfa_constants": list(HFA_CONSTANTS[league_id]),
+    }
 
 
 def season_pbp(lg: str, season: int) -> pl.DataFrame:
@@ -125,7 +129,7 @@ def season_games(lg: str, season: int, pbp: pl.DataFrame, cache: Path) -> pl.Dat
     rating used; clear it after any other change to :mod:`sportsdataverse.nba.nba_rated_prior`.
     """
     const = rated_prior_constants(LEAGUE_IDS[lg])
-    key = "_".join(f"{v:g}" for v in (*const["sim_constants"], *const["prior_constants"]))
+    key = "_".join(f"{v:g}" for v in (*const["sim_constants"], *const["prior_constants"], *const["hfa_constants"]))
     path = cache / f"{lg}_rated_games_{season}_{key}.parquet"
     if path.exists():
         return pl.read_parquet(path)

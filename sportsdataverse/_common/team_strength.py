@@ -174,7 +174,13 @@ def ridge_design(rows: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def possession_ridge_ratings(rows: pl.DataFrame, *, lam: float, prior: pl.DataFrame | None = None) -> pl.DataFrame:
+def possession_ridge_ratings(
+    rows: pl.DataFrame,
+    *,
+    lam: float,
+    prior: pl.DataFrame | None = None,
+    hfa_prior: tuple[float, float] | None = None,
+) -> pl.DataFrame:
     """Adjusted offensive / defensive / net ratings from possessions, one ridge fit per season.
 
     Args:
@@ -187,6 +193,9 @@ def possession_ridge_ratings(rows: pl.DataFrame, *, lam: float, prior: pl.DataFr
             instead of toward average (``lam`` possessions of the prior on each side); a team
             missing from ``prior`` shrinks toward average. One prior serves every season in
             ``rows``.
+        hfa_prior: Optional ``(mean, possessions)``: shrink the home term toward ``mean`` (points
+            per 100) with that many non-neutral possessions of prior weight. None: the home term
+            is free.
 
     Returns:
         One row per (season, team) in :data:`RATINGS_SCHEMA`, plus ``hfa``: the fitted home term,
@@ -220,6 +229,9 @@ def possession_ridge_ratings(rows: pl.DataFrame, *, lam: float, prior: pl.DataFr
             .with_columns(pl.col("off_dev", "def_dev").fill_null(0.0))
             .with_columns((pl.col("y") - pl.col("off_dev") - pl.col("def_dev")).alias("y"))
         )
+    hfa_mean, hfa_lam = (0.0, None) if hfa_prior is None else hfa_prior
+    if hfa_mean:  # ridge toward a mean home term: likewise, on the residual
+        design = design.with_columns((pl.col("y") - hfa_mean * pl.col("hfa")).alias("y"))
     # Possessions sharing (offense, defense, home term) share a design row: fit their mean,
     # weighted by their count. Same coefficients, and a college season (~360 teams, ~800k
     # possessions) stays a few thousand rows instead of a dense matrix of gigabytes.
@@ -239,7 +251,9 @@ def possession_ridge_ratings(rows: pl.DataFrame, *, lam: float, prior: pl.DataFr
             lam=lam,
             hfa_col="hfa",
             weight_col="_n",
+            home_lam=hfa_lam,
         )
+        hfa += hfa_mean  # with no home/away contrast the term is its prior mean
         if prior is not None and prior.height:
             coef = (
                 coef.join(pri.rename({"off_dev": "_po", "def_dev": "_pd"}), on="team_id", how="left", validate="1:1")
