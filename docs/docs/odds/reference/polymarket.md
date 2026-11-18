@@ -600,7 +600,7 @@ Best bid and offer, last trade and volume for one Polymarket US market slug.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `slug` | `slug` |  | `Y` |  | Exact market slug, the `slug` column of `polymarket_us_markets`. A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06, the `polymarket_us_slug` of `join_espn_polymarket`); its other markets (e.g. spreads) and futures (tec-mls-winner-2026-11-07-sea) have their own slugs, so pass the listing's slug rather than building one. |
+| `slug` | `slug` |  | `Y` |  | Exact Polymarket US market slug: the slug field of a /v1/markets row. A game's game-winner (moneyline) market is "aec-" + the Gamma event's usId (aec-nba-sa-sac-2026-11-06); the game's other markets (e.g. spreads) and futures (tec-mls-winner-2026-11-07-sea) have their own slugs, so pass the listing's slug rather than building one. |
 
 ### Returns {#polymarket_us_market_bbo-returns}
 
