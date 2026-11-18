@@ -518,9 +518,16 @@ def _gamma_events(gamma: pl.DataFrame) -> list[dict]:
     if gamma.is_empty() or "teams" not in gamma.columns:
         return []
     out = []
+    seen: set = set()
     for row in gamma.to_dicts():
-        if not _GAMMA_GAME_SLUG.match(str(row.get("slug") or "")):
+        slug = str(row.get("slug") or "")
+        if not _GAMMA_GAME_SLUG.match(slug):
             continue
+        # One event, one market: a repeated row (overlapping pages) would otherwise serve two games.
+        key = str(row["id"]) if row.get("id") is not None else slug
+        if key in seen:
+            continue
+        seen.add(key)
         teams = row.get("teams")
         if isinstance(teams, str):
             try:

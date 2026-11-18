@@ -164,3 +164,19 @@ def test_a_day_with_no_games_returns_the_documented_empty_frame():
     assert out.height == 0 and out.schema["game_id"] == pl.Int64 and "matched_by" in out.columns
     out = join_espn_polymarket(empty, parse_polymarket(_load("nba", "gamma_events")), "nba")
     assert out.height == 0 and "polymarket_us_slug" in out.columns
+
+
+def test_a_repeated_gamma_event_still_serves_one_game():
+    """The event listed twice (overlapping pages), and the pair playing again the next day (a real game
+    copied 24 h later): a start window that reaches both games must still give the event to one."""
+    espn = parse_scoreboard(_load("nhl", "espn_scoreboard")).head(1)
+    rematch = espn.with_columns(
+        pl.col("game_id") + 1,
+        (pl.col("date").str.to_datetime(time_zone="UTC") + pl.duration(days=1)).dt.strftime("%Y-%m-%dT%H:%MZ"),
+    )
+    games = pl.concat([espn, rematch])
+    gamma = parse_polymarket(_load("nhl", "gamma_events"))
+    out = join_espn_polymarket(games, pl.concat([gamma, gamma]), "nhl", max_start_gap_hours=30)
+    hit = out.filter(pl.col("matched_by").is_not_null())
+    assert hit.height >= 1 and hit["gamma_event_id"].n_unique() == hit.height
+    assert out.equals(join_espn_polymarket(games, gamma, "nhl", max_start_gap_hours=30))
