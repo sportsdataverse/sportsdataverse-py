@@ -78629,7 +78629,7 @@ nba_epv_plays:
   step: 'The event''s place in its possession, from 1.'
   sub_type: 'The release''s event sub type (the foul or free-throw kind, the shot type, ...).'
   team_id: 'Team id on the event: the team of the player who made it, or the team on a team event (a team rebound or timeout, which the feed files under person_id).'
-  transition: 'State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot.'
+  transition: 'State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 8 s), 2 a transition possession after its first shot.'
 nba_epv_player_games:
   def_epv_on: 'EPV added by the opponent with the ball while the player was on the floor.'
   epv_on: 'On-court EPV +/-: off_epv_on - def_epv_on.'
@@ -79172,7 +79172,7 @@ wnba_epv_plays:
   step: The event's place in its possession, from 1.
   sub_type: The release's event sub type (the foul or free-throw kind, the shot type, ...).
   team_id: 'Team id on the event: the team of the player who made it, or the team on a team event (a team rebound or timeout, which the feed files under person_id).'
-  transition: 'State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 10 s), 2 a transition possession after its first shot.'
+  transition: 'State: 0 half court, 1 transition window open (live start, no shot or dead ball yet, within 8 s), 2 a transition possession after its first shot.'
 wnba_epv_player_games:
   def_epv_on: EPV added by the opponent with the ball while the player was on the floor. An ordinary free throw counts for the lineup on the floor at its foul, not the one after a substitution.
   epv_on: 'On-court EPV +/-: off_epv_on - def_epv_on.'

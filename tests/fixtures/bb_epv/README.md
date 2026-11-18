@@ -18,6 +18,15 @@ Nothing is synthetic or edited: rows are only filtered and columns only dropped.
 2025 (2024-25) is the holdout season of the bundled booster (trained on 2022-2024), so every
 calibration check on these files is out of sample.
 
+**These are the 2026-11-05 / 06 captures, kept on purpose.** The 8-second refit of 2026-11-17 ran
+with `--no-fixtures`. The possessions releases were republished in between, and the new `points`
+column credits a point the EPV labels (`remaining_points`, from the pbp running score) miss on
+about 1 possession in 2,000 (4 of the 8,012 NBA and 3 of the 3,191 WNBA rows here; e.g. WNBA
+`1022500002` possession 115). The republished release sums to the final score in every game
+checked; the labels and the old release are a point short. Rewriting these files would turn
+`test_labels_sum_to_the_engine_points` red on that pre-existing label gap, which is a separate fix
+to the label (not to this corpus). Pass `--no-fixtures` until it lands.
+
 | File | Rows | Release asset | Kept |
 |---|---:|---|---|
 | `nba_pbp_2025.parquet` | 20,056 | `nba_stats_pbp/nba_play_by_play_2025` | The first 40 regular-season games of 2024-25 by `game_id` (`0022400001`-`0022400040`). Cols: what `epv_states` reads (`season, game_id, order_index, action_number, period, seconds_remaining, event_type, sub_type, description, shot_distance, shot_value, team_id, person_id, location, score_home, score_away`) plus the release's `off_player_1..5` / `def_player_1..5` (which `epv_states` ignores: each event takes its possession's starting ten). |

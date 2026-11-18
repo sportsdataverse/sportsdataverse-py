@@ -16,7 +16,8 @@ possession leaks in):
   its period's first, no shot and no dead ball yet, within :data:`EPV_TRANSITION_SECONDS` of the
   change of possession), 2 a transition possession whose first shot has been taken (BB-D7's
   ``is_transition`` rule at :data:`EPV_TRANSITION_SECONDS`, known once that shot happens). The
-  boosters were fitted at 10 s, so this is a superset of the published 8-second ``is_transition``.
+  pros' window is the published 8-second ``is_transition``; college keeps its own 10 seconds
+  (:data:`COLLEGE_EPV_TRANSITION_SECONDS`, bigballR's and the college splits').
 * ``last_event`` -- the event just processed (:data:`LAST_EVENTS`); steals, blocks,
   substitutions, replays and the dead-ball rebound between two free throws carry the previous one.
 * ``ft_pending`` -- free throws still to come after a free throw ("1 of 2" leaves 1); a technical
@@ -135,11 +136,15 @@ _LEAGUES: Final[dict[str, tuple[str, str]]] = {
 _RIM_FEET: Final[int] = 4
 _SHORT_FEET: Final[int] = 14
 _SHOTS: Final[tuple[str, ...]] = ("made_shot", "missed_shot")
-#: The ``transition`` state's window: 10 seconds, the one the bundled boosters were fitted on. It is
-#: pinned here, not read from BB-D7's :data:`~sportsdataverse.nba.nba_possession_flags.TRANSITION_SECONDS`
-#: (8), so the published possessions' window can change without silently shifting every booster's input.
-#: Refit the boosters (``tools/models/nba_epv/train_epv.py``) before changing it.
-EPV_TRANSITION_SECONDS: Final[float] = 10.0
+#: The NBA / WNBA ``transition`` state's window: 8 seconds, the one their bundled boosters were fitted
+#: on (refit from 10 s on 2026-11-17 to match BB-D7's published
+#: :data:`~sportsdataverse.nba.nba_possession_flags.TRANSITION_SECONDS`). It is pinned here, not read
+#: from there, so the published possessions' window can change without silently shifting the boosters'
+#: input. Refit the boosters (``tools/models/nba_epv/train_epv.py``) before changing it.
+EPV_TRANSITION_SECONDS: Final[float] = 8.0
+#: The college boosters' window: 10 seconds, the college convention (hoop-math, bigballR) that the
+#: college splits use too (``nba_game_splits.TRANSITION_WINDOW_SECONDS``).
+COLLEGE_EPV_TRANSITION_SECONDS: Final[float] = 10.0
 #: Events that close a free-throw trip. Not a rebound: the dead-ball team rebound filed after a missed
 #: first free throw leaves the rest of the trip to come (nor substitutions, timeouts or replays).
 _LIVE: Final[tuple[str, ...]] = ("made_shot", "missed_shot", "turnover", "jump_ball", "violation", "foul")
@@ -194,14 +199,12 @@ def _scored_events(pbp: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def _possession_frame(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
+def _possession_frame(possessions: pl.DataFrame, pbp: pl.DataFrame, window: float) -> pl.DataFrame:
     """Possessions with the change-of-possession clock, the BB-D7 transition flag and the next one's period."""
     unknown = possessions.filter(~pl.col("possession_start_type").is_in(START_TYPES))["possession_start_type"]
     if unknown.len():
         raise ValueError(f"unknown possession_start_type {sorted(unknown.unique().to_list(), key=str)}")
-    flags = add_possession_flags(
-        possessions.select(_POSS_COLS), pbp.select(_PBP_COLS), transition_seconds=EPV_TRANSITION_SECONDS
-    )
+    flags = add_possession_flags(possessions.select(_POSS_COLS), pbp.select(_PBP_COLS), transition_seconds=window)
     return (
         flags.with_columns(pl.col("game_id").cast(pl.Utf8))
         .sort(_KEY)
@@ -267,7 +270,7 @@ def _carried(expr: pl.Expr, start: int = 0) -> pl.Expr:
     return expr.forward_fill().over(_KEY).fill_null(start)
 
 
-def _event_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
+def _event_states(ev: pl.DataFrame, poss: pl.DataFrame, window: float) -> pl.DataFrame:
     """One state row per event inside a possession: the state after the event, its points and label inputs."""
     et = pl.col("event_type")
     zone = (
@@ -318,10 +321,7 @@ def _event_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
         pl.when(seen & pl.col("is_transition"))
         .then(2)
         .when(
-            pl.col("_live_start")
-            & ~seen
-            & ~stopped
-            & (pl.col("_ball_clock") - pl.col("seconds_remaining") <= EPV_TRANSITION_SECONDS)
+            pl.col("_live_start") & ~seen & ~stopped & (pl.col("_ball_clock") - pl.col("seconds_remaining") <= window)
         )
         .then(1)
         .otherwise(0)
@@ -348,7 +348,9 @@ def _start_states(ev: pl.DataFrame, poss: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
+def epv_states(
+    possessions: pl.DataFrame, pbp: pl.DataFrame, *, transition_seconds: float = EPV_TRANSITION_SECONDS
+) -> pl.DataFrame:
     """Every EPV state of the possessions: each one's start, then the state after each of its events.
 
     Args:
@@ -362,6 +364,9 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
             ``description``, ``shot_distance``, ``shot_value``, ``team_id``, ``person_id``,
             ``location``, ``score_home``, ``score_away`` and ``action_number``. Each event carries its
             possession's starting ten (``off_player_*`` / ``def_player_*``).
+        transition_seconds: The ``transition`` state's window: :data:`EPV_TRANSITION_SECONDS` (8,
+            the pros) by default, :data:`COLLEGE_EPV_TRANSITION_SECONDS` (10) for college. It must
+            be the window the booster that scores the states was fitted on.
 
     Returns:
         One row per state, in game order: ``step`` 0 is the possession's start (no event columns),
@@ -380,8 +385,10 @@ def epv_states(possessions: pl.DataFrame, pbp: pl.DataFrame) -> pl.DataFrame:
     if missing:
         raise ValueError(f"missing columns {missing}")
     ev = _scored_events(pbp)
-    poss = _possession_frame(possessions, pbp)
-    events = _event_states(ev, poss).with_columns(pl.int_range(1, pl.len() + 1).over(_KEY).alias("step"))
+    poss = _possession_frame(possessions, pbp, transition_seconds)
+    events = _event_states(ev, poss, transition_seconds).with_columns(
+        pl.int_range(1, pl.len() + 1).over(_KEY).alias("step")
+    )
     starts = _start_states(ev, poss).with_columns(pl.lit(0, dtype=pl.Int64).alias("step"))
     if starts.height != possessions.height:
         raise ValueError(f"pbp has no first event for {possessions.height - starts.height} possessions")

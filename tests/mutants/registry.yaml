@@ -10202,11 +10202,11 @@
   group: bb-epv
   finding: BB-D7
   file: sportsdataverse/nba/nba_epv.py
-  snippet: 'EPV_TRANSITION_SECONDS: Final[float] = 10.0'
-  mutant: 'EPV_TRANSITION_SECONDS: Final[float] = 8.0'
+  snippet: 'EPV_TRANSITION_SECONDS: Final[float] = 8.0'
+  mutant: 'EPV_TRANSITION_SECONDS: Final[float] = 10.0'
   test: tests/nba/test_nba_epv.py::test_transition_state_is_known_as_of_each_event
   expected: kill
-  note: Following BB-D7's 8 s window without a refit would feed the boosters a transition state they were not fitted on.
+  note: The pro boosters were refit on BB-D7's 8 s window (2026-11-17); the old 10 s would feed them a transition state they were not fitted on.
 
 - id: bb-ctg-alias-never-overwrites
   group: bb-ctg-aliases

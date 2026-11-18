@@ -158,13 +158,21 @@ def test_gate_two_is_the_wnba_drift_rule() -> None:
     assert abs(_report()["gates"]["max_large_bias"] - rule["max_large_bias"]) < 1e-12
 
 
-def test_the_accepted_bucket_is_excused_and_no_other() -> None:
-    """The one accepted gate-3 bucket passes only as recorded; any other bucket over the gate still fails."""
+def test_an_accepted_bucket_is_excused_and_no_other() -> None:
+    """An accepted gate-3 bucket passes only as recorded; any other bucket over the gate still fails.
+
+    The 8-second refit has no failing bucket and no exception (the 10-second booster's 2026 shooting
+    foul in transition, accepted 2026-11-06, passes now), so the rule is checked on that bucket as it
+    was recorded.
+    """
     T = _train_epv()
     r = _report()
+    assert T.ACCEPTED_BUCKET_EXCEPTIONS == {} and r["accepted_bucket_exceptions"] == []
+    assert r["seasons"]["2026"]["failing_buckets"] == [] and r["seasons"]["2025"]["failing_buckets"] == []
     m, thr = r["seasons"]["2026"], r["gates"]["max_large_bias"]
-    exc = T.ACCEPTED_BUCKET_EXCEPTIONS["10"]
-    assert [(b["last_event"], b["transition"], b["n"]) for b in m["failing_buckets"]] == [(13, 2, 1041)]
+    bucket = {"last_event": 13, "transition": 2, "n": 1041, "bias": 0.11679, "allowed": 0.11022}
+    exc = ({"season": 2026, **bucket, "accepted": "2026-11-06", "by": "owner", "note": "test"},)
+    m = {**m, "failing_buckets": [bucket]}
     assert T.gate("c", m, thr, 2026, exc) == []
     assert any("buckets over the bias gate" in f for f in T.gate("c", m, thr, 2026, ()))  # it is not a pass
     assert T.gate("c", m, thr, 2025, exc)  # excused in its recorded season only
@@ -175,7 +183,6 @@ def test_the_accepted_bucket_is_excused_and_no_other() -> None:
     regrown = {**m, "failing_buckets": [{**m["failing_buckets"][0], "n": 1040}]}
     assert T.gate("c", regrown, thr, 2026, exc)  # a different sample of that bucket is not the one accepted
     assert r["failed_gates"] == []
-    assert [e["observed"]["n"] for e in r["accepted_bucket_exceptions"]] == [1041]
 
 
 def test_the_card_is_built_from_the_committed_artefacts() -> None:
@@ -183,7 +190,7 @@ def test_the_card_is_built_from_the_committed_artefacts() -> None:
     cfg = T.LEAGUES["10"]
     card = json.loads(CARD.read_text(encoding="utf-8"))
     assert card == json.loads(json.dumps(T.epv_card(cfg, _report(), cfg["models"] / cfg["artifact"])))
-    assert card["accepted_bucket_exceptions"] and "not a pass" in card["caveats"][0]
+    assert card["accepted_bucket_exceptions"] == [] and not any("not a pass" in c for c in card["caveats"])
 
 
 def _same(a: pl.DataFrame, b: pl.DataFrame) -> None:

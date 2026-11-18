@@ -18,6 +18,7 @@ import pytest
 from sportsdataverse.mbb import mbb_epv
 from sportsdataverse.mbb.mbb_epv import ncaa_epv_inputs
 from sportsdataverse.nba.nba_epv import (
+    COLLEGE_EPV_TRANSITION_SECONDS,
     EPV_FEATURES,
     START_TYPES,
     add_epv,
@@ -49,7 +50,7 @@ def _inputs(name: str) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame, pl.Dat
 @lru_cache(maxsize=3)
 def _states(name: str) -> pl.DataFrame:
     poss, pbp, _, _ = _inputs(name)
-    return epv_states(poss, pbp)
+    return epv_states(poss, pbp, transition_seconds=COLLEGE_EPV_TRANSITION_SECONDS)
 
 
 @lru_cache(maxsize=3)
