@@ -376,6 +376,22 @@ def epv_states(
         ``next_in_period`` and the event's ``team_id`` / ``person_id`` / ``event_type`` / ``sub_type`` /
         ``description`` / player slots.
 
+    Example:
+        Pros (the 8-second window)::
+
+            from sportsdataverse.nba import nba_loaders as L
+            from sportsdataverse.nba.nba_epv import add_epv, epv_states
+            poss, pbp = L.load_nba_stats_possessions(2024), L.load_nba_stats_pbp(2024)
+            plays = add_epv(epv_states(poss, pbp))
+
+        College, on its own 10-second window::
+
+            from sportsdataverse.mbb.mbb_epv import ncaa_epv_inputs
+            from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
+            from sportsdataverse.nba.nba_epv import COLLEGE_EPV_TRANSITION_SECONDS
+            poss, pbp, _, _ = ncaa_epv_inputs(load_ncaa_mbb_pbp(2025))
+            states = epv_states(poss, pbp, transition_seconds=COLLEGE_EPV_TRANSITION_SECONDS)
+
     Raises:
         ValueError: If a needed column is missing, a ``possession_start_type`` is not one of
             :data:`START_TYPES`, or ``pbp`` has no event for a possession (the start of one, or
@@ -548,13 +564,22 @@ def add_epv(
         the possession-ending term is measured against) scaled by the game's ``level_scale``.
 
     Raises:
-        ValueError: If the booster has no ``start_epv_mean`` attribute.
+        ValueError: If the booster has no ``start_epv_mean`` attribute, or a bundled booster was
+            fitted on another transition window than the league's (``transition_seconds``; a
+            booster without the attribute was fitted on 10 s).
     """
     import numpy as np
 
     if booster is None:
         _check_seasons(states["season"].drop_nulls().unique().to_list(), league_id)
         booster = load_epv_model(league_id)
+        window = COLLEGE_EPV_TRANSITION_SECONDS if league_id in ("mbb", "wbb") else EPV_TRANSITION_SECONDS
+        fitted = float(booster.attr("transition_seconds") or 10.0)
+        if fitted != window:
+            raise ValueError(
+                f"the {league_id!r} EPV booster was fitted on a {fitted:g} s transition window, the states use "
+                f"{window:g} s; refit it with tools/models/nba_epv/train_epv.py"
+            )
     if booster.attr("start_epv_mean") is not None:
         _check_features(booster)
     mean = booster.attr("start_epv_mean")

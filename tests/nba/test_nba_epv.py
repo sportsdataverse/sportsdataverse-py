@@ -127,6 +127,7 @@ def test_transition_state_is_known_as_of_each_event(lg: str) -> None:
     # the bundled boosters say which window they were fitted on: the states must use it
     for league_id in ("00", "10"):
         assert float(load_epv_model(league_id).attr("transition_seconds")) == EPV_TRANSITION_SECONDS
+
     poss, pbp = _raw(lg)
     flags = (
         add_possession_flags(poss, pbp, transition_seconds=BOOSTER_WINDOW)
@@ -158,6 +159,7 @@ def test_transition_state_is_known_as_of_each_event(lg: str) -> None:
     assert (window["number_in_period"] > 1).all()
     open_for = window["_ball_clock"] - window["seconds_remaining"]
     assert (open_for <= BOOSTER_WINDOW).all()
+    assert (open_for > BOOSTER_WINDOW - 2).any()  # and open to the window's end, not a shorter cutoff
     shut = before.filter(
         pl.col("possession_start_type").is_in(["OffMadeShot", "OffMissedShot", "OffLiveBallTurnover"])
         & (pl.col("number_in_period") > 1)
@@ -603,3 +605,14 @@ def test_season_loaders_take_the_start_year(monkeypatch: pytest.MonkeyPatch) -> 
     _same(pg, epv_player_games(_plays("nba"), _tens("nba")))
     _same(nba_epv.nba_epv_lineup_games(HOLDOUT), epv_lineup_games(_plays("nba"), _tens("nba")))
     assert nba_epv.nba_epv_plays(HOLDOUT, return_as_pandas=True).shape[0] == _plays("nba").height
+
+
+def test_a_booster_on_another_window_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A bundled booster fitted on 10 s must not score the pros' 8 s states."""
+    from sportsdataverse.nba import nba_epv
+
+    old = load_epv_model("00").copy()
+    old.set_attr(transition_seconds=None)  # the pre-refit boosters carried no window: 10 s
+    monkeypatch.setattr(nba_epv, "load_epv_model", lambda league_id: old)
+    with pytest.raises(ValueError, match="10 s transition window"):
+        add_epv(_states("nba"))
