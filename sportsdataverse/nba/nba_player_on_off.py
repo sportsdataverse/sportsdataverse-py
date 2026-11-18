@@ -9,12 +9,16 @@ add up to his team's. ``league_id="10"`` reads the WNBA twins;
 Checked against stats.nba.com's ``teamplayeronoffsummary`` (2024-25 regular season, three teams'
 whole seasons): on the 41 players over 400 possessions each way whose stats.nba.com off-court spans
 the team's season, the on-court net rating is a median 0.48 from stats.nba.com's and the on-off
-difference a median 0.68 (correlation 0.96). stats.nba.com's off-court covers only the games a
-player was on the roster, so for a player traded or signed mid-season its off side is shorter than
-the team's season the ``_off`` columns use; the ``_off_span`` columns limit it to his first-to-last
-game with the team, and on those traded players track stats.nba.com's off side
-(``tests/nba/test_nba_player_on_off.py``). Its ORtg and DRtg each run about 3 below these: it credits a possession
-to every player on the floor during it, not only to those who started it.
+difference a median 0.81 (max 3.0, correlation 0.964; 0.68 / 3.96 / 0.961 with the whole season
+as the off side). stats.nba.com's off-court covers only the games a player was on the roster; the
+``_off`` side here (``tenure=True``) approximates that window from game dates: his span with the
+team, from his first game for it (or the day after his last for an earlier team that season) to the
+day before his first for a later team. On the 26 players whose stats.nba.com window is shorter than
+the season (traded, signed or waived) the span cuts the median off-court net rating miss from 2.96
+(the whole season) to 1.27; on the 44 whose window is the whole season it costs 0.26 to 0.40, since a
+span opens at a late debut (an injury) where the roster had him from opening night
+(``tests/nba/test_nba_player_on_off.py``). Its ORtg and DRtg each run about 3 below these: it credits
+a possession to every player on the floor during it, not only to those who started it.
 """
 
 from __future__ import annotations
@@ -87,13 +91,15 @@ def nba_player_on_off(
         and ``off_rtg`` / ``def_rtg`` / ``net_rtg`` (per 100 possessions); ``<rating>_diff`` (on
         minus off); ``<m>_rank`` / ``<m>_pct`` for the on and diff ratings (within the season,
         among players with at least ``min_poss`` both ways) and ``<m>_n`` for every rating.
-        ``poss_on + poss_off`` is the team's possessions. Then his span with the team:
+        The off side counts only the team's games in his span with it, as stats.nba.com does:
         ``team_games_span`` (the team's games from his first game for it, or the day after
         his last for an earlier team that season, to the day before his first for a later team,
-        else the season's end, by the schedule's ``game_date``), ``span_first_date`` / ``span_last_date``, the off side over
-        that span (``<total>_off_span`` and ``<rating>_off_span``, not ranked) and
-        ``<rating>_diff_span`` (on minus it): for a player traded or signed mid-season, the
-        on/off over his time with the team. Ids are the stats.nba.com ids (Int64).
+        else the season's end, by the schedule's ``game_date``), ``span_first_date`` /
+        ``span_last_date``. So ``poss_on + poss_off`` is the team's possessions over his span, and
+        for a player traded or signed mid-season the off side and the difference are his time with
+        the team. ``<total>_off_span`` / ``<rating>_off_span`` / ``<rating>_diff_span`` repeat the
+        ``_off`` / ``_diff`` columns (a player with no dated game keeps the whole season in ``_off``
+        and null spans). Ids are the stats.nba.com ids (Int64).
         Empty input returns that schema with zero rows.
 
     Raises:
@@ -109,7 +115,9 @@ def nba_player_on_off(
     """
     rows, dates = _rows_and_dates(seasons, league_id, season_type)
     gate = _MIN_POSS[league_id] if min_poss is None else min_poss
-    out = player_on_off(rows, player_dtype=_PLAYER, min_poss=gate, level=NBA_LEVEL[league_id], game_dates=dates)
+    out = player_on_off(
+        rows, player_dtype=_PLAYER, min_poss=gate, level=NBA_LEVEL[league_id], game_dates=dates, tenure=True
+    )
     return out.to_pandas() if return_as_pandas else out
 
 
