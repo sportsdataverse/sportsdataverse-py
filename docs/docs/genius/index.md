@@ -9,7 +9,7 @@ description: "sdv-py Genius Sports LiveStats: endpoint references, dataset loade
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [Genius Sports LiveStats](#genius-sports-livestats) | `fibalivestats.dcd.shared.geniussports.com` | 59 | none |
+| [Genius Sports LiveStats](#genius-sports-livestats) | `fibalivestats.dcd.shared.geniussports.com`, `hosted.dcd.shared.geniussports.com`, `widget.wh.geniussports.com` | 59 | none |
 | [Additional functions](reference/additional) | hand-written wrappers & helpers | 50 | — |
 
 ## Genius Sports LiveStats {#genius-sports-livestats}

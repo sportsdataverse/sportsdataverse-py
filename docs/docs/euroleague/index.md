@@ -9,7 +9,7 @@ description: "sdv-py EuroLeague: endpoint references, dataset loaders and parser
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [EuroLeague Competition Engine](#euroleague-competition-engine) | `api-live.euroleague.net` | 15 | none |
+| [EuroLeague Competition Engine](#euroleague-competition-engine) | `api-live.euroleague.net`, `live.euroleague.net` | 15 | none |
 
 ## EuroLeague Competition Engine {#euroleague-competition-engine}
 

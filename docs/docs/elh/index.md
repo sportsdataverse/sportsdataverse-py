@@ -9,7 +9,7 @@ description: "sdv-py Czech Extraliga: endpoint references, dataset loaders and p
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [hokej.cz (Czech Extraliga)](#hokej-cz-czech-extraliga) | `s3-eu-west-1.amazonaws.com` | 9 | none |
+| [hokej.cz (Czech Extraliga)](#hokej-cz-czech-extraliga) | `json.esports.cz`, `s3-eu-west-1.amazonaws.com` | 9 | none |
 | [Additional functions](reference/additional) | hand-written wrappers & helpers | 1 | — |
 
 ## hokej.cz (Czech Extraliga) {#hokej-cz-czech-extraliga}

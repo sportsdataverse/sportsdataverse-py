@@ -1,4 +1,4 @@
-"""Polymarket (gamma + clob) parser + generated-YAML contract."""
+"""Polymarket (gamma + clob + US) parser + generated-YAML contract."""
 
 import json
 import pathlib
@@ -72,6 +72,94 @@ def test_scalar_dict_bodies_are_one_row(fixture, column):
     assert column in df.columns
 
 
+def test_us_markets_envelope_is_one_row_per_market():
+    """US /v1/markets is {"markets": [...]}: the single key is unwrapped, never one envelope row."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    body = load("gateway__v1__markets")
+    assert list(body) == ["markets"]
+    df = parse_polymarket(body)
+    assert df.height == len(body["markets"])
+    assert df["slug"].to_list() == [m["slug"] for m in body["markets"]]
+    assert df.schema["id"] == pl.String and "markets" not in df.columns
+
+
+def test_us_bbo_is_one_row_with_flattened_prices():
+    """US /v1/markets/{slug}/bbo is {"marketData": {...}}; {value, currency} prices flatten."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    body = load("gateway__v1__markets__slug__bbo")
+    inner = body["marketData"]
+    df = parse_polymarket(body)
+    assert df.height == 1 and "market_data" not in df.columns
+    assert df["market_slug"][0] == inner["marketSlug"]
+    for col, key in (("best_bid_value", "bestBid"), ("best_ask_value", "bestAsk"), ("current_px_value", "currentPx")):
+        assert df[col][0] == inner[key]["value"], col  # decimal strings, kept as strings
+    assert df["best_bid_currency"][0] == "USD"
+
+
+def test_us_expired_bbo_keeps_the_null_bests_and_drops_the_quotes():
+    """An expired market answers bestBid/bestAsk null and no longQuote/shortQuote: one row, no invented columns."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    inner = load("gateway__v1__markets__slug__bbo__expired")["marketData"]
+    assert inner["bestBid"] is None and "longQuote" not in inner
+    df = parse_polymarket({"marketData": inner})
+    assert df.height == 1 and df["state"][0] == "MARKET_STATE_EXPIRED"
+    assert df["best_bid"][0] is None and "best_bid_value" not in df.columns
+    assert not any(c.startswith("long_quote") for c in df.columns)
+
+
+def test_us_closed_markets_page_parses_like_the_open_one():
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    body = load("gateway__v1__markets__closed")
+    df = parse_polymarket(body)
+    assert df.height == len(body["markets"])
+    assert df["closed"].to_list() == [True] * df.height
+    assert all(s.startswith("aec-") for s in df["slug"].to_list())  # closed game markets carry aec- slugs
+
+
+def test_single_key_scalar_and_empty_envelopes():
+    """A one-value scalar dict is still one row; an empty single-key envelope is zero rows."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    assert parse_polymarket({"mid": "0.5"}).height == 1
+    assert parse_polymarket({"events": [{"id": "1"}, {"id": "2"}]}).height == 2
+    for payload in (
+        {"markets": []},
+        {"marketData": {}},
+        {"marketData": None},
+        {"markets": "x"},
+        {"markets": {"id": "1"}},  # a list key holding an object
+        {"marketData": [{"marketSlug": "s"}]},  # an object key holding a list
+    ):
+        assert parse_polymarket(payload).height == 0, payload
+    # an envelope keeps exactly the rows its bare list would
+    rows = [{}, {"id": "1"}]
+    assert parse_polymarket({"markets": rows}).height == parse_polymarket(rows).height == 1
+
+
+def test_only_known_envelope_keys_are_unwrapped():
+    """An unknown one-key object (a nested error) is one row with its prefix, never unwrapped."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    df = parse_polymarket({"error": {"code": "not_found", "message": "no market"}})
+    assert df.height == 1 and {"error_code", "error_message"} <= set(df.columns)
+
+
+@pytest.mark.parametrize(
+    "fixture,schema", [("gateway__v1__markets", "us_markets"), ("gateway__v1__markets__slug__bbo", "us_market_bbo")]
+)
+def test_us_returns_schema_matches_the_parser_on_its_capture(fixture, schema):
+    """The committed returns table is the parser's output on the committed capture (names and order)."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    path = YAML_PATH.parents[1] / "schemas" / "native" / "polymarket" / f"{schema}.yaml"
+    columns = [c["name"] for c in yaml.safe_load(path.read_text(encoding="utf-8"))["columns"]]
+    assert columns == parse_polymarket(load(fixture)).columns
+
+
 def test_empty_payload_is_zero_rows():
     from sportsdataverse.odds.polymarket_parsers import parse_polymarket
 
@@ -100,12 +188,16 @@ def test_each_market_wrapper_uses_its_own_host():
         assert hosts[short] == "https://gamma-api.polymarket.com", short
     for short in ("clob_book", "clob_midpoint", "clob_price"):
         assert hosts[short] == "https://clob.polymarket.com", short
+    for short in ("us_markets", "us_market_bbo"):
+        assert hosts[short] == "https://gateway.polymarket.us", short
+    assert by_short["us_market_bbo"]["path"] == "/v1/markets/{slug}/bbo"
+    assert [p["name"] for p in by_short["us_market_bbo"]["path_params"]] == ["slug"]
 
 
-def test_all_eight_routes_are_wrapped_once():
+def test_all_ten_routes_are_wrapped_once():
     doc = yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))
     shorts = [e["short"] for e in doc["endpoints"]]
-    assert len(shorts) == len(set(shorts)) == 8
+    assert len(shorts) == len(set(shorts)) == 10
 
 
 def test_paging_is_caller_supplied_not_followed():
@@ -114,3 +206,4 @@ def test_paging_is_caller_supplied_not_followed():
     by_short = {e["short"]: e for e in doc["endpoints"]}
     assert "offset" in {p["name"] for p in by_short["gamma_markets"]["extra_params"]}
     assert "next_cursor" in {p["name"] for p in by_short["clob_markets"]["extra_params"]}
+    assert {"limit", "offset", "active", "closed"} <= {p["name"] for p in by_short["us_markets"]["extra_params"]}

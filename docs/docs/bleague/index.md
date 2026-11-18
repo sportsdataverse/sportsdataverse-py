@@ -9,7 +9,7 @@ description: "sdv-py B.LEAGUE: endpoint references, dataset loaders and parsers 
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [B.LEAGUE (Japan)](#b-league-japan) | `b-league.s3.amazonaws.com` | 14 | none |
+| [B.LEAGUE (Japan)](#b-league-japan) | `b-league.s3.amazonaws.com`, `www.bleague.jp` | 14 | none |
 
 ## B.LEAGUE (Japan) {#b-league-japan}
 

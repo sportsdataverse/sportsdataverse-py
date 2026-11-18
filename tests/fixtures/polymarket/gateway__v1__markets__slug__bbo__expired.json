@@ -1,0 +1,37 @@
+{
+  "marketData": {
+    "marketSlug": "aec-nba-sa-sac-2026-11-06",
+    "currentPx": {
+      "value": "0.9900",
+      "currency": "USD"
+    },
+    "lastTradePx": {
+      "value": "0.9900",
+      "currency": "USD"
+    },
+    "settlementPx": {
+      "value": "1.0000",
+      "currency": "USD"
+    },
+    "sharesTraded": "1365574.7000",
+    "openInterest": "0.0000",
+    "bestAsk": null,
+    "bestBid": null,
+    "askDepth": 0,
+    "bidDepth": 0,
+    "lastPriceSample": {
+      "longPx": {
+        "value": "0.9900",
+        "currency": "USD"
+      },
+      "shortPx": {
+        "value": "0.01",
+        "currency": "USD"
+      },
+      "ts": "2026-11-07T05:46:34.595209639Z"
+    },
+    "state": "MARKET_STATE_EXPIRED",
+    "bidShares": "0",
+    "askShares": "0"
+  }
+}

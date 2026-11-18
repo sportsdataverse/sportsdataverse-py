@@ -1,6 +1,6 @@
-"""Generate the ``polymarket`` flat-API endpoint YAML + returns-schemas from the two
-frozen Polymarket OpenAPI specs (``gamma-api.polymarket.com`` + ``clob.polymarket.com``,
-both keyless, read-only).
+"""Generate the ``polymarket`` flat-API endpoint YAML + returns-schemas from the three
+frozen Polymarket OpenAPI specs (``gamma-api.polymarket.com``, ``clob.polymarket.com`` and
+the Polymarket US exchange's ``gateway.polymarket.us``, all keyless, read-only).
 
 Idempotent: same specs + same captures -> byte-identical output. Modeled on
 ``gen_sleeper.py``, with the shared plumbing in ``gen_soccer_common.py``.
@@ -8,7 +8,7 @@ Idempotent: same specs + same captures -> byte-identical output. Modeled on
 Reads the frozen specs and the committed captures from the maintainers' private
 reference checkout (``$SDV_REFS_REPO``) and emits:
 
-* ``tools/codegen/endpoints/polymarket.yaml`` -- one endpoint per GET route (8),
+* ``tools/codegen/endpoints/polymarket.yaml`` -- one endpoint per GET route (10),
   each carrying a per-endpoint ``host:`` when it differs from the document
   default (the ``uefa.yaml`` pattern).
 * ``tools/codegen/schemas/native/polymarket/<short>.yaml`` -- returns-schema per
@@ -42,8 +42,10 @@ from sportsdataverse.odds.polymarket_parsers import parse_polymarket
 HOST = "https://gamma-api.polymarket.com"
 GAMMA_HOST = "https://gamma-api.polymarket.com"
 CLOB_HOST = "https://clob.polymarket.com"
+US_HOST = "https://gateway.polymarket.us"
 SPEC = "polymarket-gamma.openapi.yaml"
 CLOB_SPEC = "polymarket-clob.openapi.yaml"
+US_SPEC = "polymarket-us.openapi.yaml"
 STEM = "polymarket"
 
 # (spec filename, host, capture prefix, {path: short}). Both hosts serve /markets,
@@ -72,6 +74,15 @@ _SURFACES = [
             "/price": "clob_price",
         },
     ),
+    (
+        US_SPEC,
+        US_HOST,
+        "gateway",
+        {
+            "/v1/markets": "us_markets",
+            "/v1/markets/{slug}/bbo": "us_market_bbo",
+        },
+    ),
 ]
 
 
@@ -87,6 +98,21 @@ _SUMMARIES = {
     "clob_book": "Full order book, bids and asks, for one outcome token.",
     "clob_midpoint": "Midpoint between the best bid and the best ask for one outcome token.",
     "clob_price": "Best price on one side of the book for one outcome token.",
+    "us_markets": "Markets on the Polymarket US exchange, offset-paged and filterable by active or closed.",
+    "us_market_bbo": "Best bid and offer, last trade and volume for one Polymarket US market slug.",
+}
+
+
+# Param prose that supersedes the frozen spec's. The refs spec says a game market's slug is "aec-" + a Gamma usId;
+# that slug is the game-winner (moneyline) market only, and a game's other markets have their own slugs
+# (CodeRabbit on #1229). Follow-up: carry this wording into sdv-internal-refs' PARAM_DOC["slug"] and drop it here.
+_PARAM_DESC = {
+    ("us_market_bbo", "slug"): (
+        "Exact market slug, the `slug` column of `polymarket_us_markets`. A game's game-winner (moneyline) "
+        'market is "aec-" + the Gamma event\'s usId (aec-nba-sa-sac-2026-11-06, the `polymarket_us_slug` '
+        "of `join_espn_polymarket`); its other markets (e.g. spreads) and futures (tec-mls-winner-2026-11-07-sea) "
+        "have their own slugs, so pass the listing's slug rather than building one."
+    ),
 }
 
 
@@ -104,6 +130,7 @@ def _endpoint_entry(path: str, op: dict, short: str, host: str) -> Dict[str, Any
     for prm in op.get("parameters", []):
         name = prm["name"]
         desc = str(prm.get("description") or "").strip()
+        desc = _PARAM_DESC.get((short, name), desc)
         if prm.get("in") == "path":
             # Every one of these specs documents its path params; dropping the text makes the
             # reference page print "<name> path parameter." filler instead.
@@ -158,6 +185,10 @@ def main() -> None:
         missing = sorted(set(p for p, _ in ops) - set(shorts))
         if missing:
             raise SystemExit(f"polymarket: {spec_file} paths without a short: {missing}")
+        # The reverse: a mapped route the spec no longer has would silently drop its wrapper.
+        absent = sorted(set(shorts) - set(p for p, _ in ops))
+        if absent:
+            raise SystemExit(f"polymarket: {spec_file} lacks mapped paths: {absent}")
         ops.sort(key=lambda pv: shorts[pv[0]])
         for path, op in ops:
             short = shorts[path]
@@ -175,14 +206,15 @@ def main() -> None:
         "docstring": {
             "example_import": True,
             "raises": [
-                "sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id or token id).",
+                "sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id, token id or market slug).",
             ],
             "see_also": [
                 {
                     "name": "Polymarket docs",
                     "url": "https://docs.polymarket.com/",
                     "note": (
-                        "gamma = market/event/tag metadata, clob = order books and prices; "
+                        "gamma = market/event/tag metadata, clob = order books and prices, "
+                        "us = the Polymarket US exchange's markets and best bid/offer; "
                         "reads are keyless, trading needs keys"
                     ),
                 },

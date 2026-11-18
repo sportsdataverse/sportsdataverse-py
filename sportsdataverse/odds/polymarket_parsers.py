@@ -1,6 +1,6 @@
-"""Parser for the generated ``polymarket`` wrappers (gamma + clob read APIs).
+"""Parser for the generated ``polymarket`` wrappers (gamma + clob + US read APIs).
 
-Polymarket serves two keyless read hosts and this one parser covers both:
+Polymarket serves three keyless read hosts and this one parser covers all of them:
 
 * **list** (gamma ``/markets``, ``/events``, ``/tags``) -> one row per element;
 * **cursor envelope** (clob ``/markets`` is ``{"data": [...], "next_cursor",
@@ -10,6 +10,11 @@ Polymarket serves two keyless read hosts and this one parser covers both:
   scalar siblings) -> one row per price level, tagged ``side`` = ``bid`` /
   ``ask``, with the book's scalars (``market``, ``asset_id``, ``timestamp``,
   ``tick_size``, ...) repeated on every row so a level is self-describing;
+* **single-key envelope** (US ``/v1/markets`` is ``{"markets": [...]}``, an
+  ``{"events": [...]}`` list likewise) -> one row per element; US
+  ``/v1/markets/{slug}/bbo`` is ``{"marketData": {...}}`` -> exactly one row of
+  the inner object, so its ``{value, currency}`` prices flatten to
+  ``current_px_value`` / ``current_px_currency``;
 * **object** (gamma ``/markets/{id}``) -> exactly one row;
 * **scalar dict** (clob ``/midpoint`` is ``{"mid": "0.5"}``, ``/price`` is
   ``{"price": "0.5"}``) -> exactly one row.
@@ -47,6 +52,9 @@ _ID = re.compile(r"(^|_)(id|code|ticker)$")
 # envelope's own scalars (next_cursor, limit, count) never become a row.
 _DATA_KEY = "data"
 _BOOK_SIDES = {"bids": "bid", "asks": "ask"}
+# The single keys that wrap a payload, and the container each must hold; only these are unwrapped, so a future
+# one-key body is never guessed at.
+_ENVELOPE_KEYS = {"markets": list, "events": list, "marketData": dict}
 
 
 def _book_rows(raw: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -71,6 +79,18 @@ def _as_rows(raw: Any) -> List[Dict[str, Any]]:
         return _book_rows(body)
     if isinstance(body.get(_DATA_KEY), list):
         return [r for r in body[_DATA_KEY] if isinstance(r, dict)]
+    if len(body) == 1 and set(body) <= _ENVELOPE_KEYS.keys():
+        # A known single-key envelope wraps the payload (US ``{"markets": [...]}``, ``{"marketData": {...}}``).
+        # Any other one-key body (clob ``{"mid": "0.5"}``, an ``{"error": {...}}`` object) stays one row.
+        ((key, inner),) = body.items()
+        # Same rows with or without the envelope: drop the empty ``{}`` records a bare list loses in
+        # ``_data_only``. The wrong container (``{"markets": {...}}``, ``{"marketData": [...]}``, ``null``) is
+        # malformed: zero rows.
+        if not isinstance(inner, _ENVELOPE_KEYS[key]):
+            return []
+        if isinstance(inner, list):
+            return [r for r in inner if isinstance(r, dict) and r]
+        return [inner] if inner else []
     return [body] if body else []
 
 
@@ -116,10 +136,11 @@ def parse_polymarket(
     *,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
-    """Parse any Polymarket gamma or clob body into a tidy frame.
+    """Parse any Polymarket gamma, clob or US body into a tidy frame.
 
     Args:
-        raw: a decoded gamma or clob body -- a list, a ``{"data": [...]}`` cursor
+        raw: a decoded gamma, clob or US body -- a list, a ``{"data": [...]}`` cursor
+            envelope, a single-key ``{"markets": [...]}`` / ``{"marketData": {...}}``
             envelope, an order book, a single market object, or a one-value dict
             (see the module docstring for the row rule).
         return_as_pandas: return a pandas DataFrame instead of polars.
