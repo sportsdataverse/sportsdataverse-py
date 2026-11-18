@@ -9029,6 +9029,46 @@
   expected: kill
   note: Without the ridge's home term the second half of 2025-26 is predicted at 0.506 home wins against a real 0.551.
 
+- id: bb-ps-hfa-shrink-dropped
+  group: bb-pro-season
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'hfa_prior=None if prior is None or not k else (prior.hfa, k),'
+  mutant: 'hfa_prior=None,'
+  test: tests/nba/test_nba_season_sim.py::test_as_of_home_term_shrinks_toward_last_season
+  expected: kill
+  note: Unshrunk, the as-of home term early in WNBA 2025 swings several points per 100 off last season's.
+
+- id: bb-ps-hfa-shrink-mean-not-restored
+  group: bb-pro-season
+  finding: BB-D25
+  file: sportsdataverse/_common/team_strength.py
+  snippet: 'hfa += hfa_mean  # with no home/away contrast the term is its prior mean'
+  mutant: 'pass'
+  test: tests/nba/test_nba_season_sim.py::test_as_of_home_term_shrinks_toward_last_season
+  expected: kill
+  note: The ridge fits the home term's residual off its target; without adding the target back it shrinks toward 0.
+
+- id: bb-ps-bubble-prior-hfa
+  group: bb-pro-season
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_season_sim.py
+  snippet: 'if prior is None or not prior.hfa_identified:  # no as-of target: the home term is free'
+  mutant: 'if prior is None:  # no as-of target: the home term is free'
+  test: tests/nba/test_nba_season_sim.py::test_prior_after_an_all_neutral_season_does_not_shrink_the_home_term
+  expected: kill
+  note: After the 2020 bubbles last season's home term is an unidentified 0; shrinking toward it would pull 2021 to 0.
+
+- id: bb-wp-rated-prior-unshrunk-hfa
+  group: bb-wp-cards
+  finding: BB-D25
+  file: sportsdataverse/nba/nba_rated_prior.py
+  snippet: 'league_id=league_id, prior=prior, hfa_poss=hfa_poss'
+  mutant: 'league_id=league_id, prior=prior, hfa_poss=0.0'
+  test: tests/nba/test_nba_season_sim.py::test_rated_prior_serves_the_shrunk_home_term
+  expected: kill
+  note: The served BB-D25 home term is the shrunk as-of one, not the free fit.
+
 - id: bb-ps-neutral-site-ignored-in-sim
   group: bb-pro-season
   finding: BB-D18
@@ -9298,8 +9338,8 @@
   group: bb-preseason-prior
   finding: BB-preseason-prior
   file: sportsdataverse/nba/nba_season_sim.py
-  snippet: 'rat = possession_ridge_ratings(rows, lam=lam, prior=None if prior is None else prior.ratings)'
-  mutant: 'rat = possession_ridge_ratings(rows, lam=lam, prior=None)'
+  snippet: 'prior=None if prior is None else prior.ratings,'
+  mutant: 'prior=None,'
   test: tests/nba/test_nba_season_sim.py::test_in_season_ridge_shrinks_toward_the_prior
   expected: kill
   note: Once a game is played the ridge must shrink toward the prior, not toward average.
@@ -9999,8 +10039,8 @@
   group: bb-player-on-off
   finding: BB-D5
   file: sportsdataverse/_common/player_on_off.py
-  snippet: '    if tenure:  # stats.nba.com''s window: the team''s games in his span, not its whole season'
-  mutant: '    if False:  # stats.nba.com''s window: the team''s games in his span, not its whole season'
+  snippet: '    if tenure and game_dates is not None:  # stats.nba.com''s window: his span, not the team''s season'
+  mutant: '    if False:  # stats.nba.com''s window: his span, not the team''s season'
   test: tests/nba/test_nba_player_on_off.py::test_span_follows_traded_players_like_stats_nba
   expected: kill
   note: The pros' off side counts only the team's games in his span (stats.nba.com's window); the whole season would credit a traded player with the games before he joined.
@@ -10624,6 +10664,16 @@
   test: tests/nba/test_nba_epv.py::test_labels_sum_to_the_engine_points
   expected: kill
   note: The label must be the offense's points, read from its own side of the score.
+
+- id: bb-epv-start-label-carried-defense-score
+  group: bb-epv
+  finding: BB-D24
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: '.then(after + pl.col("_carried").fill_null(0))'
+  mutant: '.then(after)'
+  test: tests/wnba/test_wnba_epv.py::test_a_technical_by_the_defense_counts_on_its_teams_next_start
+  expected: kill
+  note: A technical free throw by the defense is no event's points; the start label must take it as the release does.
 
 - id: bb-epv-ft-foul-lineup
   group: bb-epv

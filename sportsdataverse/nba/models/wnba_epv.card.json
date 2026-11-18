@@ -1,7 +1,7 @@
 {
   "model_type": "wnba_epv",
   "objective": "reg:squarederror",
-  "label": "the offense's points from the state to the end of the possession (remaining_points)",
+  "label": "the offense's points from the state to the end of the possession (remaining_points); a start state's also holds a score the team made on defense, credited as the possessions release credits it",
   "features": [
     "start_type",
     "period",
@@ -35,18 +35,18 @@
     "seed": 42
   },
   "num_boost_round": 44,
-  "start_epv_mean": 1.0301742553710938,
+  "start_epv_mean": 1.0312378406524658,
   "level": {
     "tau2": 0.0004941338058071512,
     "sigma2": 1.3439346938065517,
     "level_k": 2719.778889872307,
     "n_gaps": 12,
-    "level_ppp": 1.0327929588664788
+    "level_ppp": 1.0342387768379961
   },
   "fitting_script": "tools/models/nba_epv/train_epv.py",
   "transition_seconds": 8.0,
   "fit_report": "tools/models/nba_epv/epv_wnba_holdout.json",
-  "sha256": "da8bd84bd4df2b1b299db286f224d250c7235ad0ee5b3bc3169ce3852f80ee56",
+  "sha256": "80b293875ab179269a8729c6530dd0210ccb10be97a9a2bfea50c620fdc2275e",
   "gates": {
     "max_large_bias": 0.033267675646490656,
     "max_large_bias_rule": {
@@ -90,18 +90,18 @@
       "split": "holdout",
       "games": 286,
       "states": 160259,
-      "mse": 0.7454078010462991,
-      "mse_cell_mean": 0.7513188323997365,
+      "mse": 0.7457529557236199,
+      "mse_cell_mean": 0.7515404689552917,
       "paired_vs_cell_mean": {
         "games": 286,
-        "mean": -0.005878218580265364,
-        "ci_lo": -0.006841730008929566,
-        "ci_hi": -0.004914707151601161
+        "mean": -0.005752406242332785,
+        "ci_lo": -0.006713681245129416,
+        "ci_hi": -0.004791131239536154
       },
-      "large_bias": -0.001028141582171016,
-      "large_bias_game_se": 0.003975744734568603,
-      "large_bias_without_level": -0.002815313011168219,
-      "calibration_slope": 1.0131429127287295,
+      "large_bias": -0.0011216284301994728,
+      "large_bias_game_se": 0.003982135745829912,
+      "large_bias_without_level": -0.002649739096048709,
+      "calibration_slope": 1.0134430026532595,
       "gated_buckets": 22,
       "gated_state_share": 0.9943092119631347,
       "failing_buckets": []
@@ -110,18 +110,18 @@
       "split": "confirmation",
       "games": 330,
       "states": 192646,
-      "mse": 0.7604309012464785,
-      "mse_cell_mean": 0.7663740072075844,
+      "mse": 0.7610624638550152,
+      "mse_cell_mean": 0.7668631582255078,
       "paired_vs_cell_mean": {
         "games": 330,
-        "mean": -0.0059315099096458965,
-        "ci_lo": -0.006882615200691688,
-        "ci_hi": -0.004980404618600105
+        "mean": -0.005772260389341208,
+        "ci_lo": -0.006701120951918645,
+        "ci_hi": -0.004843399826763771
       },
-      "large_bias": -0.004949232058900188,
-      "large_bias_game_se": 0.0041023929837618305,
-      "large_bias_without_level": -0.029858853181428557,
-      "calibration_slope": 1.0103642492553713,
+      "large_bias": -0.004884558180560217,
+      "large_bias_game_se": 0.004105350181994815,
+      "large_bias_without_level": -0.029943355598035293,
+      "calibration_slope": 1.010391474672228,
       "gated_buckets": 23,
       "gated_state_share": 0.9971969311587056,
       "failing_buckets": []

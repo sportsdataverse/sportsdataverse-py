@@ -126,7 +126,7 @@ def opponent_adjusted_ridge(
     home_col: str,
     resp_col: str,
     lam: float,
-    penalize_home: bool = False,
+    penalize_home: bool | float = False,
     hfa_col: str | None = None,
     weight_col: str | None = None,
 ) -> tuple[pl.DataFrame, float, float]:
@@ -148,8 +148,9 @@ def opponent_adjusted_ridge(
             ``off_col == home_col``).
         resp_col: Numeric response column (e.g. ``epa``).
         lam: Ridge penalty applied to the team coefficients.
-        penalize_home: Also penalise the home-field coefficient
-            (default False).
+        penalize_home: Also penalise the home-field coefficient (default False): True by ``lam``,
+            a number by that penalty (to shrink it toward ``h``, subtract ``h`` times the home
+            regressor from the response and add ``h`` back).
         hfa_col: Numeric column used as the home regressor as-is (e.g. CFB's
             ``+1`` home offense / ``0`` neutral site / ``-1`` away), in place
             of the ``off_col == home_col`` indicator, which then goes unused.
@@ -197,19 +198,18 @@ def opponent_adjusted_ridge(
     else:
         X[:, 2 * n_t + 1] = (off == plays[home_col].cast(pl.Utf8)).to_numpy().astype(float)  # HFA (offense is home)
     y = plays[resp_col].cast(pl.Float64).to_numpy()
-    R = np.eye(p)
-    R[2 * n_t, 2 * n_t] = 0.0  # don't penalise intercept
-    if not penalize_home:
-        R[2 * n_t + 1, 2 * n_t + 1] = 0.0  # don't penalise HFA
+    P = lam * np.eye(p)
+    P[2 * n_t, 2 * n_t] = 0.0  # don't penalise intercept
+    P[2 * n_t + 1, 2 * n_t + 1] = lam if penalize_home is True else float(penalize_home)  # False: free HFA
     if np.ptp(X[:, 2 * n_t + 1]) == 0:
         # No home/away contrast (e.g. every game at a neutral site): the term is not
         # identified and an unpenalised zero column makes X'X singular. Fit it at 0.
         X[:, 2 * n_t + 1] = 0.0
-        R[2 * n_t + 1, 2 * n_t + 1] = 1.0
+        P[2 * n_t + 1, 2 * n_t + 1] = 1.0
     w = np.ones(n) if weight_col is None else plays[weight_col].cast(pl.Float64).fill_null(-1.0).to_numpy()
     if (~np.isfinite(w) | (w <= 0)).any():
         raise ValueError(f"opponent_adjusted_ridge: {weight_col!r} has nulls, NaNs or non-positive weights")
-    beta = np.linalg.solve(X.T @ (X * w[:, None]) + lam * R, X.T @ (w * y))
+    beta = np.linalg.solve(X.T @ (X * w[:, None]) + P, X.T @ (w * y))
     frame = pl.DataFrame(
         {
             "team_id": teams,

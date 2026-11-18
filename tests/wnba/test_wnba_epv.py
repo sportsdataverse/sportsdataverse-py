@@ -72,6 +72,49 @@ def test_labels_sum_to_the_engine_points() -> None:
     assert j.height == poss.height and (j["remaining_points"] == j["points"]).all()
 
 
+def test_a_technical_by_the_defense_counts_on_its_teams_next_start() -> None:
+    """1022500002: the visitors' technical free throw (order 273) falls inside the home team's possession 114.
+
+    No event's ``points`` holds it (the visitors are the defense there). The release credits it to
+    the visitors' next possession, 115 (a layup): that start's label is 3, its events hold 2. Before
+    the fix the label was 2 and the game's labels missed its final score (183) by that point.
+    """
+    s = _states().filter(pl.col("game_id") == "1022500002")
+    ft = s.filter(pl.col("order_index") == 273)
+    assert ft.select("possession_number", "event_type", "sub_type", "points").rows() == [
+        (114, "free_throw", "Free Throw Technical", 0)
+    ]
+    p = s.filter(pl.col("possession_number") == 115)
+    assert p.filter(pl.col("step") == 0)["remaining_points"].item() == 3
+    assert p.filter(pl.col("step") > 0).select("event_type", "points", "remaining_points").rows() == [
+        ("made_shot", 2, 0)
+    ]
+    assert s.filter(pl.col("step") == 0)["remaining_points"].sum() == 183
+
+
+def test_every_games_labels_hold_its_final_score() -> None:
+    """Each team's start labels add up to its final score (the feed's last score), in every fixture game."""
+    finals = (
+        _f("pbp")
+        .with_columns(pl.col("game_id").cast(pl.Utf8), pl.col("score_home", "score_away").cast(pl.Int64, strict=False))
+        .sort("game_id", "order_index")
+        .group_by("game_id")
+        .agg(
+            pl.col("score_home").drop_nulls().last().alias("home"),
+            pl.col("score_away").drop_nulls().last().alias("away"),
+        )
+    )
+    starts = _states().filter(pl.col("step") == 0)
+    home = pl.col("offense_team_id") == pl.col("home_team_id")
+    got = starts.group_by("game_id").agg(
+        pl.col("remaining_points").filter(home).sum().alias("h"),
+        pl.col("remaining_points").filter(~home).sum().alias("a"),
+    )
+    j = got.join(finals, on="game_id")
+    assert j.height == 20
+    assert (j["h"] == j["home"]).all() and (j["a"] == j["away"]).all(), j.filter(pl.col("h") != pl.col("home"))
+
+
 def test_epv_added_telescopes_and_teams_reconcile() -> None:
     p = _plays()
     r = p.group_by(KEY).agg(

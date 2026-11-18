@@ -10,12 +10,12 @@ columns: every player who appeared is ranked, a 20-possession call-up beside a s
 * ranked within ``(season, season_type, per_mode)``, 1 is best (``def_rating`` and ``tm_tov_pct``
   rank ascending, :data:`ADVANCED_LOWER_IS_BETTER`; ``usg_pct`` ranks the heaviest usage first);
 * only players whose ``poss`` (possessions played, one side) reaches :func:`advanced_min_poss`: NBA
-  1,600, WNBA 800. That is half the on-court net-rating gate of
-  :data:`~sportsdataverse._common.rate_gates.ON_OFF_MIN_N` (NBA 3,200 / WNBA 1,600, counted on both
+  1,550, WNBA 800. That is half the on-court net-rating gate of
+  :data:`~sportsdataverse._common.rate_gates.ON_OFF_MIN_N` (NBA 3,100 / WNBA 1,600, counted on both
   sides), the possessions at which a player's on-court net rating is half signal, so a net rating
   here is ranked on the same sample as ``player_on_off``'s. The box rates (TS%, usage, PIE) settle
   sooner, so the gate is conservative for them. A full NBA regular season qualifies about 330
-  players (2025-26: 333 of 582); a playoff run rarely does;
+  players (2025-26: 337 of 582); a playoff run rarely does;
 * null under :data:`~sportsdataverse._common.league_context.MIN_COHORT_PLAYERS` qualifiers.
 
 The table's other ``_rank`` columns (``gp_rank``, ``min_rank``, the ``e_`` / ``sp_work_`` variants,
@@ -64,7 +64,7 @@ def advanced_min_poss(league_id: str = "00") -> float:
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
 
     Returns:
-        NBA 1,600.0, WNBA 800.0.
+        NBA 1,550.0, WNBA 800.0.
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.

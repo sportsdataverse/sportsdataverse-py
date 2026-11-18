@@ -13,14 +13,14 @@ follows the season-table suffix grammar of :mod:`sportsdataverse._common.league_
   :data:`~sportsdataverse._common.league_context.MIN_COHORT_PLAYERS` ranked players. A rating
   is ranked only when its ``<m>_n`` reaches the on-court gate of the same side in
   :data:`~sportsdataverse._common.rate_gates.ON_OFF_MIN_N` (the possessions at which a player's
-  on-court rating is half signal: NBA 1,700 offensive / 1,600 defensive / 3,200 total, WNBA 610 /
+  on-court rating is half signal: NBA 1,700 offensive / 1,600 defensive / 3,100 total, WNBA 610 /
   1,200 / 1,600). A regularized or box rating is less noisy than the raw on-court rating at the
   same sample, so the gate is conservative. ``war`` is a count, not a rate: it has no sample gate.
 
 Every metric is higher-is-better (a defensive rating is positive for a good defender) except
 ``boban_projected_sd``, which ranks ascending: 1 is the most certain projection. The three BOBAN
 columns are multi-season estimates with no single-side sample, so their ``<m>_n`` is the season's
-``off_poss + def_poss`` and they take the net on-court gate, the closest existing one (NBA 3,200,
+``off_poss + def_poss`` and they take the net on-court gate, the closest existing one (NBA 3,100,
 WNBA 1,600): conservative again, since the Kalman filter also carries earlier seasons.
 ``boban_projected_rating`` forecasts the next season; it is ranked within the season it was made.
 """
@@ -194,7 +194,7 @@ def nba_current_impact_context(current: pl.DataFrame, *, return_as_pandas: bool 
     ``def_poss`` or both) at least 1. There is no larger sample gate, unlike ``player_impact``'s:
     a current rating is the box prior moved by the games, so a player with few possessions sits near
     his prior, never at a raw on-court extreme, and the date's ranks exist from the season's first
-    week (the season gates of 1,600 to 3,200 possessions would leave the first seven weeks
+    week (the season gates of 1,600 to 3,100 possessions would leave the first seven weeks
     unranked). 1 is best; ``d_current_impact`` is positive for a good defense, so it ranks
     descending too. A rank and percentile are null when the rating is null or non-finite, when
     ``as_of`` is null, when fewer than

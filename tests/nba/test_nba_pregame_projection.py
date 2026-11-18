@@ -127,3 +127,56 @@ def test_wiring_keys_the_espn_game(monkeypatch: pytest.MonkeyPatch) -> None:
     assert full["home_team_id"].min() == 1  # the ESPN ids, not the stats ids the ratings are keyed on
     with pytest.raises(ValueError, match="league_id"):
         nba_pregame_projections(2025, league_id="20")
+
+
+def test_wp_prior_columns_are_the_boosters_prior(monkeypatch: pytest.MonkeyPatch) -> None:
+    """``wp_prior_*`` is BB-D25's number (``nba_rated_priors``) to the bit, home term included."""
+    from sportsdataverse.nba import nba_rated_prior
+    from sportsdataverse.wnba import wnba_loaders
+
+    espn = GAMES.select(
+        pl.lit(2025).alias("season"),
+        (pl.int_range(pl.len()) + 401_000_000).alias("game_id"),
+        "game_date",
+        (pl.int_range(pl.len()) + 1).alias("home_id"),
+        (pl.int_range(pl.len()) + 100).alias("away_id"),
+        pl.lit(False).alias("neutral_site"),
+        pl.col("_h").alias("home_display_name"),
+        pl.col("_a").alias("away_display_name"),
+    )
+    monkeypatch.setattr(wnba_loaders, "load_wnba_schedule", lambda seasons: espn)
+    calls: list[int] = []
+
+    def rows(league_id: str, season: int) -> tuple[pl.DataFrame, pl.DataFrame]:
+        calls.append(season)
+        return ROWS, GAMES  # the fixture is its own prior season
+
+    monkeypatch.setattr(nba_pregame_projection, "_possession_rows", rows)
+    monkeypatch.setattr(nba_rated_prior, "_possession_rows", rows)
+    out = nba_pregame_projections(2025, league_id="10")
+    assert calls == [2025, 2024]  # the season, then the season before for the prior
+    d25 = nba_rated_prior.nba_rated_priors(2025, league_id="10")
+    both = out.join(d25, on="game_id", validate="1:1")
+    assert both.height == GAMES.height and both["wp_prior_home_prob"].null_count() == 0  # opening night too
+    assert both["wp_prior_home_prob"].to_list() == both["rated_home_prob_right"].to_list()
+    assert both["wp_prior_exp_home_margin"].to_list() == both["exp_home_margin_right"].to_list()
+    assert both["wp_prior_home_rating"].to_list() == both["home_adj_net_rtg"].fill_null(0.0).to_list()
+    # the page's inputs rebuild the number: rating gap at the model's pace, plus the home term in points
+    rebuilt = (pl.col("wp_prior_home_rating") - pl.col("wp_prior_away_rating")) * pl.col(
+        "wp_prior_poss"
+    ) / 100 + pl.col("wp_prior_hfa")
+    gap = out.select((rebuilt - pl.col("wp_prior_exp_home_margin")).abs().max()).item()
+    assert gap < 1e-9
+    # no neutral game in the fixture, so every game carries the model's as-of home term (refit each day,
+    # shrunk toward last season's: nba_season_sim.HFA_PSEUDO_POSS)
+    assert (out["wp_prior_hfa"] != 0).all()
+    # at a neutral site the home term is 0 and the margin is the rating gap alone, end to end
+    monkeypatch.setattr(nba_rated_prior.nba_neutral_site, "_neutral_site", lambda *a, **k: pl.lit(True))
+    neutral = nba_pregame_projections(2025, league_id="10").filter(pl.col("stats_game_id").is_not_null())
+    assert neutral.height == GAMES.height and (neutral["wp_prior_hfa"] == 0.0).all()
+    gap_only = (pl.col("wp_prior_home_rating") - pl.col("wp_prior_away_rating")) * pl.col("wp_prior_poss") / 100
+    assert neutral.select((gap_only - pl.col("wp_prior_exp_home_margin")).abs().max()).item() < 1e-9
+    assert out["wp_prior_home_rank"].min() == 1.0
+    # no team_strength rating on opening night, but the booster's prior rates it from last season
+    first = out.filter(pl.col("game_date") == GAMES["game_date"].min())
+    assert first["rated_home_prob"].null_count() == first.height and first["wp_prior_home_prob"].null_count() == 0
