@@ -60,17 +60,30 @@ NCAA_LEVEL: dict[str, str] = {"mens": "mbb", "womens": "wbb"}
 # Fitted by tools/fit_rate_gates.py (train seasons of its SPANS; tests/fixtures/bb_rate_gates holds
 # the curves); refit and paste, never hand-tune. ``math.inf``: never ranked (see the module docstring).
 #
-# Owner-accepted exceptions (owner decision, 2026-11-09): three WNBA gates stay ranked although on the
+# The on/off gates were refitted on 2026-11-17 with the NBA / WNBA off side over the player's span with
+# the team, one span per season type, as player_on_off(tenure=True) counts it (sportsdataverse-py #1218):
+# NBA off_rtg_diff 2400 -> 2500, def_rtg_diff 3400 -> 3900 and net_rtg_diff 7900 -> 7100, WNBA
+# off_rtg_diff 720 -> 750. NBA net_rtg_on 3200 -> 3100 is release drift since the 2026-11-06 fit: the on
+# side does not use the span, and its curve is the same with and without it.
+#
+# Owner ruling (2026-11-17): WNBA on/off net_rtg_diff is never ranked (math.inf), NOT a fitted value.
+# Its train fit (2018-2022) gives M 2333, a gate of 2400, but on the unseen 2023-2025 seasons the span
+# curve never comes near half signal: r -0.04 to 0.37 over 10 bins, and the fitted M lands past twice
+# the largest sample, so the gate would score r = 0 there (the whole-season fit had 0.48 at 2600).
+#
+# Owner-accepted exceptions (owner decision, 2026-11-09): two WNBA gates stay ranked although on the
 # unseen 2023-2025 seasons they are under a third signal (holdout r = gate / (gate + holdout M)): team
-# ``pace`` 7 games (0.331), on/off ``off_rtg_on`` 610 (0.267) and ``off_rtg_diff`` 720 (0.314).
-# Re-measured season by season on the current releases (possessions PIPELINE_VERSION 7), no data or
+# ``pace`` 7 games (0.331) and on/off ``off_rtg_on`` 610 (0.263; 0.267 on the 2026-11-06 fixture, the
+# 0.263 #1142 re-measured on the current releases: release drift, not the span). On/off ``off_rtg_diff``
+# was a third (720, 0.314); the span refit lifts it to 0.351 at 750. For pace and off_rtg_on,
+# re-measured season by season on the current releases (possessions PIPELINE_VERSION 7), no data or
 # source defect drives them: the gates refit to the same values, on-court possessions tie out to the
 # team's, no span season predates 2015 (the two-halves era), and the team off_rtg of both sources
 # (ESPN box, stats.nba.com possessions) drops on 2023-2025 as off_rtg_on does. Pace's dip is 2025
 # alone (13 teams). The figures are the fit's inputs, not the published tables': pace is ESPN box
 # possessions per game (the table's possession-table pace per 40 minutes scores 0.44 at 7), and
-# the on/off halves include playoff games (regular season alone: off_rtg_on 0.35, off_rtg_diff
-# never half signal). tests/tools/test_fit_rate_gates.py pins exactly these (ACCEPTED_LOW_HOLDOUT);
+# the on/off halves include playoff games (regular season alone, 2026-11-09 whole-season
+# fit: off_rtg_on 0.35, off_rtg_diff never half signal). tests/tools/test_fit_rate_gates.py pins exactly these (ACCEPTED_LOW_HOLDOUT);
 # evidence in sportsdataverse-py #1142 and docs/architecture/model-lineage.md.
 #: Level -> team / lineup rate -> the smallest ``<m>_n`` it is ranked on (``net_rtg``: poss +
 #: opp_poss; ``pace``: the clock in regulation games; ``orb_pct``: rebound chances; ``efg_pct`` /
@@ -100,10 +113,10 @@ TEAM_MIN_N: dict[str, dict[str, float]] = {
 #: Level -> on/off rating -> the smallest ``<m>_n`` it is ranked on (``_on``: the on-court possessions
 #: of that side, both for net; ``_diff``: the thinner of on and off).
 ON_OFF_MIN_N: dict[str, dict[str, float]] = {
-    "nba": {"off_rtg_on": 1700, "def_rtg_on": 1600, "net_rtg_on": 3200,
-            "off_rtg_diff": 2400, "def_rtg_diff": 3400, "net_rtg_diff": 7900},
+    "nba": {"off_rtg_on": 1700, "def_rtg_on": 1600, "net_rtg_on": 3100,
+            "off_rtg_diff": 2500, "def_rtg_diff": 3900, "net_rtg_diff": 7100},
     "wnba": {"off_rtg_on": 610, "def_rtg_on": 1200, "net_rtg_on": 1600,
-             "off_rtg_diff": 720, "def_rtg_diff": math.inf, "net_rtg_diff": 2600},
+             "off_rtg_diff": 750, "def_rtg_diff": math.inf, "net_rtg_diff": math.inf},
     "mbb": {"off_rtg_on": 530, "def_rtg_on": 750, "net_rtg_on": 1100,
             "off_rtg_diff": math.inf, "def_rtg_diff": math.inf, "net_rtg_diff": math.inf},
     "wbb": {"off_rtg_on": 240, "def_rtg_on": 590, "net_rtg_on": 600,

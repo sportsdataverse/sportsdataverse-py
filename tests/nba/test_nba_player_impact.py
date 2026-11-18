@@ -50,7 +50,7 @@ def test_n_is_the_possessions_of_the_metric_side(ranked) -> None:
 
 def test_a_rating_is_ranked_exactly_when_its_n_reaches_the_side_gate(ranked) -> None:
     """Ranked <=> finite metric and <m>_n >= the same side's on-court gate; war (a count) is ungated.
-    Observed on the 2024-25 NBA regular season: 298 o_rapm / 305 d_rapm / 306 rapm of 569 ranked;
+    Observed on the 2024-25 NBA regular season: 298 o_rapm / 305 d_rapm / 314 rapm of 569 ranked;
     2025 WNBA 131 / 92 / 121 of 181. No playoff run reaches a gate."""
     lg, _, out = ranked
     rs = out.filter(pl.col("season_type") == "Regular Season")
@@ -61,7 +61,7 @@ def test_a_rating_is_ranked_exactly_when_its_n_reaches_the_side_gate(ranked) -> 
         assert rs.filter(eligible & pl.col(f"{m}_rank").is_null()).height == 0, m
         assert rs.filter(~eligible & pl.col(f"{m}_rank").is_not_null()).height == 0, m
     counts = {m: rs[f"{m}_rank"].count() for m in ("o_rapm", "d_rapm", "rapm", "war")}
-    assert counts == {"nba": {"o_rapm": 298, "d_rapm": 305, "rapm": 306, "war": 569},
+    assert counts == {"nba": {"o_rapm": 298, "d_rapm": 305, "rapm": 314, "war": 569},
                       "wnba": {"o_rapm": 131, "d_rapm": 92, "rapm": 121, "war": 181}}[lg]  # fmt: skip
     playoffs = out.filter(pl.col("season_type") == "Playoffs")
     assert playoffs["rapm_rank"].count() == 0 and playoffs["war_rank"].count() == playoffs.height
