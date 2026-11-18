@@ -1041,6 +1041,9 @@ _DESC_INHERITS: dict[str, tuple[str, frozenset[str]]] = {
         f"nfl/{s}": ("load_cfb_pbp", frozenset({"opportunity_run", "prob_2pt", "xp_wp"}))
         for s in ("build_nfl_season", "calculate_epa", "calculate_wpa")
     },
+    # A Polymarket US single-market lookup answers one /v1/markets row.
+    # Their own `id` line: the listing's mentions its unfiltered page.
+    **{f"odds/{s}": ("us_markets", frozenset({"id"})) for s in ("us_market_by_id", "us_market_by_slug")},
 }
 
 

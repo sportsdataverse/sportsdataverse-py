@@ -3,7 +3,7 @@ docstring:
   example_import: true
   raises:
   - 'sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id,
-    token id or market slug).'
+    token id or market slug, or a Polymarket US market that has not settled yet).'
   see_also:
   - name: Polymarket docs
     note: gamma = market/event/tag metadata, clob = order books and prices, us = the
@@ -181,9 +181,8 @@ endpoints:
   path_params:
   - description: 'Exact Polymarket US market slug: the slug field of a /v1/markets
       row. A game''s game-winner (moneyline) market is "aec-" + the Gamma event''s
-      usId (aec-nba-sa-sac-2026-11-06); the game''s other markets (e.g. spreads) and
-      futures (tec-mls-winner-2026-11-07-sea) have their own slugs, so pass the listing''s
-      slug rather than building one.'
+      usId (aec-nba-sa-sac-2026-11-06) and futures have their own (tec-mls-winner-2026-11-07-sea),
+      so pass the listing''s slug rather than building one.'
     name: slug
     required: true
     type: str
@@ -191,6 +190,70 @@ endpoints:
   short: us_market_bbo
   summary: Best bid and offer, last trade and volume for one Polymarket US market
     slug.
+- example_args:
+    slug: tec-mls-winner-2026-11-07-sea
+  host: https://gateway.polymarket.us
+  parser: parse_polymarket
+  path: /v1/markets/{slug}/book
+  path_params:
+  - description: 'Exact Polymarket US market slug: the slug field of a /v1/markets
+      row. A game''s game-winner (moneyline) market is "aec-" + the Gamma event''s
+      usId (aec-nba-sa-sac-2026-11-06) and futures have their own (tec-mls-winner-2026-11-07-sea),
+      so pass the listing''s slug rather than building one.'
+    name: slug
+    required: true
+    type: str
+  returns_schema: native/polymarket/us_market_book
+  short: us_market_book
+  summary: Order book for one Polymarket US market slug, one row per bid or offer
+    level.
+- example_args:
+    id: '7984'
+  host: https://gateway.polymarket.us
+  parser: parse_polymarket
+  path: /v1/market/id/{id}
+  path_params:
+  - description: 'Polymarket US market id: the id field of a /v1/markets row (its
+      own namespace, not a Gamma id).'
+    name: id
+    required: true
+    type: str
+  returns_schema: native/polymarket/us_market_by_id
+  short: us_market_by_id
+  summary: One Polymarket US market by its gateway id.
+- example_args:
+    slug: tec-mls-winner-2026-11-07-sea
+  host: https://gateway.polymarket.us
+  parser: parse_polymarket
+  path: /v1/market/slug/{slug}
+  path_params:
+  - description: 'Exact Polymarket US market slug: the slug field of a /v1/markets
+      row. A game''s game-winner (moneyline) market is "aec-" + the Gamma event''s
+      usId (aec-nba-sa-sac-2026-11-06) and futures have their own (tec-mls-winner-2026-11-07-sea),
+      so pass the listing''s slug rather than building one.'
+    name: slug
+    required: true
+    type: str
+  returns_schema: native/polymarket/us_market_by_slug
+  short: us_market_by_slug
+  summary: One Polymarket US market by its slug.
+- example_args:
+    slug: aec-nba-sa-sac-2026-11-06
+  host: https://gateway.polymarket.us
+  parser: parse_polymarket
+  path: /v1/markets/{slug}/settlement
+  path_params:
+  - description: 'Exact Polymarket US market slug: the slug field of a /v1/markets
+      row. A game''s game-winner (moneyline) market is "aec-" + the Gamma event''s
+      usId (aec-nba-sa-sac-2026-11-06) and futures have their own (tec-mls-winner-2026-11-07-sea),
+      so pass the listing''s slug rather than building one.'
+    name: slug
+    required: true
+    type: str
+  returns_schema: native/polymarket/us_market_settlement
+  short: us_market_settlement
+  summary: Settlement price of one Polymarket US market slug, once the market has
+    settled.
 - example_args:
     active: 'true'
     closed: 'false'

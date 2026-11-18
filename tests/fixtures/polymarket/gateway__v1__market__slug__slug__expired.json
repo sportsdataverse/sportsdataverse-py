@@ -1,0 +1,150 @@
+{
+  "market": {
+    "id": "1701941",
+    "question": "Who will win in the upcoming basketball event SA Spurs vs SAC Kings scheduled for November 7, 2026 at 3:00 AM UTC?",
+    "slug": "aec-nba-sa-sac-2026-11-06",
+    "endDate": "2026-11-07T05:46:33Z",
+    "category": "sports",
+    "startDate": "2026-10-23T05:00:32Z",
+    "description": "This market will settle to the winner of the SA Spurs vs SAC Kings professional basketball game scheduled for November 6, 2026 at 10:00PM ET (as of the listing of the event's first instrument). Overtime is included if played. If the game is delayed, postponed, suspended or otherwise rescheduled to a date and time not within two days of the originally scheduled date and time, the market will settle to the last fair market price. Outcome sourced from the relevant governing body.",
+    "active": false,
+    "marketType": "moneyline",
+    "closed": true,
+    "createdAt": "2026-10-23T05:00:32Z",
+    "updatedAt": "2026-11-09T11:51:37Z",
+    "archived": false,
+    "orderPriceMinTickSize": 0.01,
+    "gameStartTime": "2026-11-07T03:00:00Z",
+    "manualActivation": false,
+    "sportsMarketType": "basketball_team_full_game_winner",
+    "marketSides": [
+      {
+        "id": "3403352",
+        "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+        "identifier": "aec-nba-sa-sac-2026-11-06",
+        "createdAt": "2026-10-23T05:00:32Z",
+        "updatedAt": "2026-10-23T05:00:32Z",
+        "description": "Spurs",
+        "price": "1",
+        "marketId": 1701941,
+        "long": true,
+        "teamId": 33,
+        "team": {
+          "id": 33,
+          "name": "San Antonio Spurs",
+          "abbreviation": "sa",
+          "league": "nba",
+          "record": "12-3",
+          "logo": "https://static.polymarket.us/images/teams/nba-sa/SAS_light_inset6.png",
+          "alias": "San Antonio Spurs",
+          "safeName": "Spurs",
+          "homeIcon": "https://static.polymarket.us/images/teams/nba-sa/SAS_light_inset6.png",
+          "awayIcon": "https://static.polymarket.us/images/teams/nba-sa/SAS_light_inset6.png",
+          "colorPrimary": "#8492a4",
+          "providerId": 24,
+          "ordering": "away",
+          "longIcon": "https://static.polymarket.us/images/teams/nba-sa/SAS_light_inset6.png",
+          "shortIcon": "https://static.polymarket.us/images/teams/nba-sa/SAS_light_inset6.png",
+          "displayAbbreviation": "SA",
+          "providerIds": [
+            {
+              "provider": "PROVIDER_SPORTRADAR",
+              "providerId": "583ecd4f-fb46-11e1-82cb-f4ce4684ea4c"
+            },
+            {
+              "provider": "PROVIDER_OPTICODDS",
+              "providerId": "E89F51275352"
+            },
+            {
+              "provider": "PROVIDER_SPORTSDATAIO",
+              "providerId": "24"
+            }
+          ],
+          "longIconDark": "https://static.polymarket.us/images/teams/nba-sa/SAS_dark_inset6.png",
+          "shortIconDark": "https://static.polymarket.us/images/teams/nba-sa/SAS_dark_inset6.png",
+          "color": {
+            "light": "#8492a4",
+            "dark": "#8492a4"
+          },
+          "imageDisplayType": "IMAGE_DISPLAY_TYPE_LOGO"
+        },
+        "tradable": true
+      },
+      {
+        "id": "3403353",
+        "marketSideType": "MARKET_SIDE_TYPE_INSTRUMENT",
+        "identifier": "aec-nba-sa-sac-2026-11-06",
+        "createdAt": "2026-10-23T05:00:32Z",
+        "updatedAt": "2026-10-23T05:00:32Z",
+        "description": "Kings",
+        "price": "0",
+        "marketId": 1701941,
+        "long": false,
+        "teamId": 32,
+        "team": {
+          "id": 32,
+          "name": "Sacramento Kings",
+          "abbreviation": "sac",
+          "league": "nba",
+          "record": "1-12",
+          "logo": "https://static.polymarket.us/images/teams/nba-sac/SAC_light_inset6.png",
+          "alias": "Sacramento Kings",
+          "safeName": "Kings",
+          "homeIcon": "https://static.polymarket.us/images/teams/nba-sac/SAC_light_inset6.png",
+          "awayIcon": "https://static.polymarket.us/images/teams/nba-sac/SAC_light_inset6.png",
+          "colorPrimary": "#6c318b",
+          "providerId": 30,
+          "ordering": "home",
+          "longIcon": "https://static.polymarket.us/images/teams/nba-sac/SAC_light_inset6.png",
+          "shortIcon": "https://static.polymarket.us/images/teams/nba-sac/SAC_light_inset6.png",
+          "displayAbbreviation": "SAC",
+          "providerIds": [
+            {
+              "provider": "PROVIDER_SPORTSDATAIO",
+              "providerId": "30"
+            },
+            {
+              "provider": "PROVIDER_SPORTRADAR",
+              "providerId": "583ed0ac-fb46-11e1-82cb-f4ce4684ea4c"
+            },
+            {
+              "provider": "PROVIDER_OPTICODDS",
+              "providerId": "04E36C744934"
+            }
+          ],
+          "longIconDark": "https://static.polymarket.us/images/teams/nba-sac/SAC_dark_inset6.png",
+          "shortIconDark": "https://static.polymarket.us/images/teams/nba-sac/SAC_dark_inset6.png",
+          "color": {
+            "light": "#6c318b",
+            "dark": "#6c318b"
+          },
+          "imageDisplayType": "IMAGE_DISPLAY_TYPE_LOGO"
+        },
+        "tradable": true
+      }
+    ],
+    "outcomes": "[\"Spurs\",\"Kings\"]",
+    "outcomePrices": "[\"1\",\"0\"]",
+    "ep3Status": "EXPIRED",
+    "status": "MARKET_STATUS_RESOLVED",
+    "assetPriceTerms": null,
+    "sportsMarketTypeV2": "SPORTS_MARKET_TYPE_MONEYLINE",
+    "hidden": false,
+    "tags": [],
+    "feeCoefficient": 0.095,
+    "ep3SyncedAt": "2026-11-09T11:51:37Z",
+    "minimumTradeQty": 0.01,
+    "comboEnabled": true,
+    "politics": null,
+    "eventSubcategory": "BASKETBALL",
+    "singlesRfqConfig": {
+      "enabled": false,
+      "midpointDeviation": 0,
+      "minOrderValueUsd": 0,
+      "maxQuoteAgeSeconds": 0,
+      "quoteWindows": [],
+      "ruleName": "default",
+      "version": "singles-half-markets-v2"
+    }
+  }
+}

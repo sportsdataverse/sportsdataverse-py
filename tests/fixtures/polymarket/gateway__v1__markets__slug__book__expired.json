@@ -1,0 +1,61 @@
+{
+  "marketData": {
+    "marketSlug": "aec-nba-sa-sac-2026-11-06",
+    "bids": [],
+    "offers": [],
+    "state": "MARKET_STATE_EXPIRED",
+    "stats": {
+      "openPx": {
+        "value": "0.8000",
+        "currency": "USD"
+      },
+      "lowPx": {
+        "value": "0.5800",
+        "currency": "USD"
+      },
+      "highPx": {
+        "value": "0.9900",
+        "currency": "USD"
+      },
+      "lastTradePx": {
+        "value": "0.9900",
+        "currency": "USD"
+      },
+      "settlementPx": {
+        "value": "1.0000",
+        "currency": "USD"
+      },
+      "sharesTraded": "1365574.7000",
+      "notionalTraded": {
+        "value": "1267669.8903",
+        "currency": "USD"
+      },
+      "lastTradeQty": "1216.2800",
+      "openInterest": "0.0000",
+      "openSetTime": "2026-10-28T21:29:01.022952979Z",
+      "highSetTime": "2026-11-07T04:20:56.040532819Z",
+      "lowSetTime": "2026-11-03T16:18:54.355680537Z",
+      "lastTradeSetTime": "2026-11-07T05:46:19.514947309Z",
+      "settlementSetTime": "2026-11-07T05:46:34.595209639Z",
+      "openInterestSetTime": "2026-11-07T05:46:33.647854319Z",
+      "notionalSetTime": "2026-11-07T05:46:19.514947309Z",
+      "settlementPriceCalculationMethod": "SETTLEMENT_PRICE_CALCULATION_METHOD_EVENT_TIER_1",
+      "currentPx": {
+        "value": "0.9900",
+        "currency": "USD"
+      },
+      "lastPriceSample": {
+        "longPx": {
+          "value": "0.9900",
+          "currency": "USD"
+        },
+        "shortPx": {
+          "value": "0.01",
+          "currency": "USD"
+        },
+        "ts": "2026-11-07T05:46:34.595209639Z"
+      }
+    },
+    "transactTime": "2026-11-07T05:46:34.595209639Z"
+  }
+}

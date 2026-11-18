@@ -149,7 +149,15 @@ def test_only_known_envelope_keys_are_unwrapped():
 
 
 @pytest.mark.parametrize(
-    "fixture,schema", [("gateway__v1__markets", "us_markets"), ("gateway__v1__markets__slug__bbo", "us_market_bbo")]
+    "fixture,schema",
+    [
+        ("gateway__v1__markets", "us_markets"),
+        ("gateway__v1__markets__slug__bbo", "us_market_bbo"),
+        ("gateway__v1__markets__slug__book", "us_market_book"),
+        ("gateway__v1__markets__slug__settlement", "us_market_settlement"),
+        ("gateway__v1__market__id__id", "us_market_by_id"),
+        ("gateway__v1__market__slug__slug", "us_market_by_slug"),
+    ],
 )
 def test_us_returns_schema_matches_the_parser_on_its_capture(fixture, schema):
     """The committed returns table is the parser's output on the committed capture (names and order)."""
@@ -158,6 +166,68 @@ def test_us_returns_schema_matches_the_parser_on_its_capture(fixture, schema):
     path = YAML_PATH.parents[1] / "schemas" / "native" / "polymarket" / f"{schema}.yaml"
     columns = [c["name"] for c in yaml.safe_load(path.read_text(encoding="utf-8"))["columns"]]
     assert columns == parse_polymarket(load(fixture)).columns
+
+
+def test_us_book_is_one_row_per_level_with_offers_as_asks():
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    inner = load("gateway__v1__markets__slug__book")["marketData"]
+    df = parse_polymarket({"marketData": inner})
+    assert df.height == len(inner["bids"]) + len(inner["offers"])
+    assert df.filter(pl.col("side") == "bid")["px_value"].to_list() == [b["px"]["value"] for b in inner["bids"]]
+    assert df.filter(pl.col("side") == "ask")["px_value"].to_list() == [o["px"]["value"] for o in inner["offers"]]
+    assert set(df["market_slug"]) == {inner["marketSlug"]} and set(df["state"]) == {"MARKET_STATE_OPEN"}
+    assert not any(c.startswith("stats") for c in df.columns)  # nested stats sit beside the levels, not on them
+
+
+def test_us_expired_book_has_no_levels_so_zero_rows():
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    assert parse_polymarket(load("gateway__v1__markets__slug__book__expired")).height == 0
+
+
+def test_us_settlement_is_one_float_row():
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    df = parse_polymarket(load("gateway__v1__markets__slug__settlement"))
+    assert df.rows() == [("aec-nba-sa-sac-2026-11-06", 1.0)] and df.schema["settlement"] == pl.Float64
+    zero = parse_polymarket({"slug": "s", "settlement": 0})  # an int body still comes out Float64
+    assert zero.schema["settlement"] == pl.Float64 and zero["settlement"].to_list() == [0.0]
+
+
+@pytest.mark.parametrize("bad", ["N/A", True])
+def test_us_settlement_that_is_not_a_number_is_kept_and_warned(bad):
+    """A value the Float64 cast would null (or a boolean it would turn into a price) is refused, not forced."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    with pytest.warns(SchemaDriftWarning, match="settlement"):
+        df = parse_polymarket({"slug": "s", "settlement": bad})
+    assert df["settlement"].to_list() == [bad]
+
+
+def test_us_book_with_a_malformed_side_is_zero_rows():
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    assert parse_polymarket({"marketData": {"bids": 5, "offers": []}}).height == 0
+    assert parse_polymarket({"bids": 5, "asks": None}).height == 0
+
+
+def test_us_single_market_is_the_listing_row():
+    """/v1/market/id/{id} and /v1/market/slug/{slug} answer one /v1/markets row under {"market": {...}}."""
+    from sportsdataverse.odds.polymarket_parsers import parse_polymarket
+
+    by_id = parse_polymarket(load("gateway__v1__market__id__id"))
+    by_slug = parse_polymarket(load("gateway__v1__market__slug__slug"))
+    assert by_id.height == by_slug.height == 1 and by_id.equals(by_slug)
+    assert by_id["id"].to_list() == ["7984"] and by_id.schema["id"] == pl.String
+    assert set(by_id.columns) == set(parse_polymarket(load("gateway__v1__markets")).columns)
+    expired = parse_polymarket(load("gateway__v1__market__slug__slug__expired"))
+    assert expired.height == 1 and expired["slug"].to_list() == ["aec-nba-sa-sac-2026-11-06"]
+    # 1 on the open market, 0.01 on the expired one: one dtype either way
+    assert by_id.schema["minimum_trade_qty"] == expired.schema["minimum_trade_qty"] == pl.Float64
+    assert expired["minimum_trade_qty"].to_list() == [0.01]
+    assert parse_polymarket({"market": [{"id": "1"}]}).height == 0  # an object key holding a list
 
 
 def test_empty_payload_is_zero_rows():
@@ -188,16 +258,26 @@ def test_each_market_wrapper_uses_its_own_host():
         assert hosts[short] == "https://gamma-api.polymarket.com", short
     for short in ("clob_book", "clob_midpoint", "clob_price"):
         assert hosts[short] == "https://clob.polymarket.com", short
-    for short in ("us_markets", "us_market_bbo"):
+    us = (
+        "us_markets",
+        "us_market_bbo",
+        "us_market_book",
+        "us_market_settlement",
+        "us_market_by_id",
+        "us_market_by_slug",
+    )
+    for short in us:
         assert hosts[short] == "https://gateway.polymarket.us", short
+    assert by_short["us_market_by_id"]["path"] == "/v1/market/id/{id}"
+    assert [p["name"] for p in by_short["us_market_by_id"]["path_params"]] == ["id"]
     assert by_short["us_market_bbo"]["path"] == "/v1/markets/{slug}/bbo"
     assert [p["name"] for p in by_short["us_market_bbo"]["path_params"]] == ["slug"]
 
 
-def test_all_ten_routes_are_wrapped_once():
+def test_all_fourteen_routes_are_wrapped_once():
     doc = yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))
     shorts = [e["short"] for e in doc["endpoints"]]
-    assert len(shorts) == len(set(shorts)) == 10
+    assert len(shorts) == len(set(shorts)) == 14
 
 
 def test_paging_is_caller_supplied_not_followed():

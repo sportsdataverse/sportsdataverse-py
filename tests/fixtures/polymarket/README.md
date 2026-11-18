@@ -27,6 +27,12 @@ captured **2026-11-18**), copied byte-for-byte from the maintainers' captures.
 | `gateway__v1__markets__closed.json` | `gateway.polymarket.us` | `/v1/markets` unfiltered first page (closed 2025 game markets; no `title` / `bestBidQuote` / ...) |
 | `gateway__v1__markets__slug__bbo.json` | `gateway.polymarket.us` | `/v1/markets/{slug}/bbo` (`{"marketData": {...}}`; open market) |
 | `gateway__v1__markets__slug__bbo__expired.json` | `gateway.polymarket.us` | `/v1/markets/aec-nba-sa-sac-2026-11-06/bbo` (expired: `bestBid` / `bestAsk` null, no quotes) |
+| `gateway__v1__markets__slug__book.json` | `gateway.polymarket.us` | `/v1/markets/{slug}/book` (`{"marketData": {bids, offers, state, stats, ...}}`; open market) |
+| `gateway__v1__markets__slug__book__expired.json` | `gateway.polymarket.us` | `/v1/markets/aec-nba-sa-sac-2026-11-06/book` (expired: empty `bids` / `offers`) |
+| `gateway__v1__markets__slug__settlement.json` | `gateway.polymarket.us` | `/v1/markets/aec-nba-sa-sac-2026-11-06/settlement` (`{slug, settlement}`; an unsettled market answers 404) |
+| `gateway__v1__market__id__id.json` | `gateway.polymarket.us` | `/v1/market/id/7984` (`{"market": {...}}`; the pinned future's gateway id) |
+| `gateway__v1__market__slug__slug.json` | `gateway.polymarket.us` | `/v1/market/slug/{slug}` (`{"market": {...}}`; open market) |
+| `gateway__v1__market__slug__slug__expired.json` | `gateway.polymarket.us` | `/v1/market/slug/aec-nba-sa-sac-2026-11-06` (expired game market) |
 
 Pinned examples: Gamma market `608565` ("Will Lionel Messi win the 2026 Ballon
 d'Or?", event `ballon-dor-winner-2026`) and its first `clobTokenIds` entry, the

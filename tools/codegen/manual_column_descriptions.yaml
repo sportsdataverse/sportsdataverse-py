@@ -81841,10 +81841,12 @@ ncaa_box_events:
   tov: 'Turnovers (a team turnover is no player''s).'
   pf: 'Personal fouls (technicals are not counted).'
 us_markets:
-  id: Polymarket US market id, a numeric string (the captured unfiltered page started at "1").
+  id: Polymarket US market id, a numeric string and the key for `polymarket_us_market_by_id` (the captured
+    unfiltered page started at "1"); not a Gamma market id.
   question: Market title as Polymarket US displays it (e.g. "Los Angeles vs. Tennessee").
-  slug: Market slug, the key for `polymarket_us_market_bbo`. A game-winner (moneyline) market's is "aec-" plus the
-    Gamma event's usId (e.g. "aec-nfl-lac-ten-2025-11-02"); a game's other markets and futures ("tec-") have their own.
+  slug: Market slug, the key for `polymarket_us_market_bbo`, `_book`, `_settlement` and `_by_slug`. A game-winner
+    (moneyline) market's is "aec-" plus the Gamma event's usId (e.g. "aec-nfl-lac-ten-2025-11-02"); futures have their
+    own ("tec-"), so pass the listing's slug rather than building one.
   end_date: ISO-8601 UTC time the market is scheduled to close.
   category: Top-level market category (e.g. "sports").
   start_date: ISO-8601 UTC time the market opened for trading.
@@ -81872,7 +81874,7 @@ us_markets:
   tags: JSON-encoded list of the market's tags; empty on the captured sports markets.
   fee_coefficient: Coefficient of the exchange's trading-fee formula for this market (e.g. 0.095).
   ep3_synced_at: ISO-8601 UTC time the market last synced with Polymarket US's EP3 system.
-  minimum_trade_qty: Smallest number of contracts a single trade may be for.
+  minimum_trade_qty: Smallest number of contracts a single trade may be for, as Float64 (1 on most markets; 0.01 = 1% of a contract).
   combo_enabled: Whether the market can be used as a leg of a combination (parlay) order.
   politics: JSON-encoded politics metadata; null for sports markets.
   singles_rfq_config_enabled: Whether single-market request-for-quote trading is enabled.
@@ -81924,6 +81926,24 @@ us_market_bbo:
   long_quote_currency: Currency of `long_quote_value` (e.g. "USD").
   short_quote_value: Price to buy the short (No) side now, as a decimal string; only on an open market.
   short_quote_currency: Currency of `short_quote_value` (e.g. "USD").
+us_market_book:
+  market_slug: Market slug the book is for (the `slug` argument), repeated on every level.
+  state: Market state code (e.g. "MARKET_STATE_OPEN"), repeated on every level; an expired market's book has no
+    levels, so it is zero rows.
+  transact_time: ISO-8601 UTC time of the book snapshot, to the nanosecond.
+  side: '"bid" or "ask" (Polymarket US names its asks offers; "ask" matches `polymarket_clob_book`).'
+  qty: Contracts resting at this price level, as a decimal string.
+  px_value: Price of the level, in dollars per contract (0 to 1), as a decimal string.
+  px_currency: Currency of `px_value` (e.g. "USD").
+us_market_settlement:
+  slug: Market slug the settlement is for (the `slug` argument).
+  settlement: Price per contract the market settled at, in dollars, as Float64 (the captured expired game settled at
+    1, its book's settlementPx). Polymarket's own schema declares a 404 for this route, answered for a market that has
+    not settled (probed 2026-11-18) and raised as NoDataError.
+us_market_by_id:
+  id: Polymarket US market id, a numeric string (the `id` argument); its own namespace, not a Gamma market id.
+us_market_by_slug:
+  id: Polymarket US market id, a numeric string and the key for `polymarket_us_market_by_id`; not a Gamma market id.
 join_espn_kalshi:
   away_abbreviation: ESPN abbreviation of the away team (the scoreboard's away side, even when the venue lists it as home).
   away_prob: Away win probability, de-vigged with home_prob so the two sum to 1.

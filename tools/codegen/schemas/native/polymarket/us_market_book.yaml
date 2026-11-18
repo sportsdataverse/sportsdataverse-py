@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: market_slug
+  type: character
+- description: ''
+  name: state
+  type: character
+- description: ''
+  name: transact_time
+  type: character
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: qty
+  type: character
+- description: ''
+  name: px_value
+  type: character
+- description: ''
+  name: px_currency
+  type: character
+kind: dataframe
+schema: us_market_book
