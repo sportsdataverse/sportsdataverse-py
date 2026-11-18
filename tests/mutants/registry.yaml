@@ -10679,6 +10679,16 @@
   expected: kill
   note: A technical free throw by the defense is no event's points; the start label must take it as the release does.
 
+- id: bb-epv-states-window-matches-booster
+  group: bb-epv
+  finding: BB-D7
+  file: sportsdataverse/nba/nba_epv.py
+  snippet: 'if any(w != fitted_window for w in built):'
+  mutant: 'if False:'
+  test: tests/nba/test_nba_epv.py::test_states_on_another_window_than_the_booster_are_refused
+  expected: kill
+  note: States built on one transition window must not be scored by a booster fitted on another.
+
 - id: bb-epv-ft-foul-lineup
   group: bb-epv
   finding: BB-D24

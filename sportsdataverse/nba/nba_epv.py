@@ -419,6 +419,7 @@ _STATE_COLUMNS: Final[list[str]] = [
     "remaining_points",
     "is_last",
     "next_in_period",
+    "transition_seconds",
 ]
 
 
@@ -453,8 +454,9 @@ def epv_states(
         event's ``points`` and which the release credits to the team's next possession in the
         period (else an earlier one), so it is not only points scored from that state.
         ``is_last`` (the possession's last event),
-        ``next_in_period`` and the event's ``team_id`` / ``person_id`` / ``event_type`` / ``sub_type`` /
-        ``description`` / player slots.
+        ``next_in_period``, the event's ``team_id`` / ``person_id`` / ``event_type`` / ``sub_type`` /
+        ``description`` / player slots, and ``transition_seconds`` (the window the states were built
+        on, which :func:`add_epv` checks against the booster's).
 
     Example:
         Pros (the 8-second window)::
@@ -513,6 +515,7 @@ def epv_states(
             .alias("remaining_points"),
             ((pl.col("step") == pl.col("step").max().over(_KEY)) & (pl.col("step") > 0)).alias("is_last"),
             pl.col("_next_in_period").alias("next_in_period"),
+            pl.lit(float(transition_seconds)).alias("transition_seconds"),
         )
         .select(_STATE_COLUMNS)
     )
@@ -628,12 +631,15 @@ def add_epv(
         the possession-ending term is measured against) scaled by the game's ``level_scale``.
 
     Raises:
-        ValueError: If the booster has no ``start_epv_mean`` attribute, or a bundled booster was
+        ValueError: If the booster has no ``start_epv_mean`` attribute, a bundled booster was
             fitted on another transition window than the league's (``transition_seconds``; a
-            booster without the attribute was fitted on 10 s).
+            booster without the attribute was fitted on 10 s), or the states were built on another
+            window than the booster was fitted on (checked when the states carry
+            ``transition_seconds`` and the booster is bundled or carries the attribute).
     """
     import numpy as np
 
+    bundled = booster is None
     if booster is None:
         _check_seasons(states["season"].drop_nulls().unique().to_list(), league_id)
         booster = load_epv_model(league_id)
@@ -644,6 +650,17 @@ def add_epv(
                 f"the {league_id!r} EPV booster was fitted on a {fitted:g} s transition window, the states use "
                 f"{window:g} s; refit it with tools/models/nba_epv/train_epv.py"
             )
+    fitted_attr = booster.attr("transition_seconds")
+    if "transition_seconds" in states.columns and (bundled or fitted_attr is not None):
+        fitted_window = float(fitted_attr or 10.0)
+        built = sorted(states["transition_seconds"].drop_nulls().unique().to_list())
+        if any(w != fitted_window for w in built):
+            raise ValueError(
+                f"the states were built on a {', '.join(f'{w:g}' for w in built)} s transition window, the "
+                f"booster was fitted on {fitted_window:g} s; build them with "
+                f"epv_states(..., transition_seconds={fitted_window:g})"
+            )
+    states = states.drop("transition_seconds", strict=False)
     if booster.attr("start_epv_mean") is not None:
         _check_features(booster)
     mean = booster.attr("start_epv_mean")
