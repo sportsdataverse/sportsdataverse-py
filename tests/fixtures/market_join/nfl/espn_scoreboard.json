@@ -1,0 +1,706 @@
+{
+ "events": [
+  {
+   "id": "401873066",
+   "uid": "s:20~l:28~e:401873066",
+   "date": "2026-11-20T01:15Z",
+   "name": "Indianapolis Colts at Houston Texans",
+   "shortName": "IND @ HOU",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Thu, November 19th at 8:15 PM EST",
+     "shortDetail": "11/19 - 8:15 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873066",
+     "date": "2026-11-20T01:15Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "34",
+       "homeAway": "home",
+       "team": {
+        "id": "34",
+        "abbreviation": "HOU",
+        "displayName": "Houston Texans",
+        "shortDisplayName": "Texans",
+        "name": "Texans",
+        "location": "Houston"
+       }
+      },
+      {
+       "id": "11",
+       "homeAway": "away",
+       "team": {
+        "id": "11",
+        "abbreviation": "IND",
+        "displayName": "Indianapolis Colts",
+        "shortDisplayName": "Colts",
+        "name": "Colts",
+        "location": "Indianapolis"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873070",
+   "uid": "s:20~l:28~e:401873070",
+   "date": "2026-11-22T18:00Z",
+   "name": "Miami Dolphins at Buffalo Bills",
+   "shortName": "MIA @ BUF",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 1:00 PM EST",
+     "shortDetail": "11/22 - 1:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873070",
+     "date": "2026-11-22T18:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "2",
+       "homeAway": "home",
+       "team": {
+        "id": "2",
+        "abbreviation": "BUF",
+        "displayName": "Buffalo Bills",
+        "shortDisplayName": "Bills",
+        "name": "Bills",
+        "location": "Buffalo"
+       }
+      },
+      {
+       "id": "15",
+       "homeAway": "away",
+       "team": {
+        "id": "15",
+        "abbreviation": "MIA",
+        "displayName": "Miami Dolphins",
+        "shortDisplayName": "Dolphins",
+        "name": "Dolphins",
+        "location": "Miami"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873071",
+   "uid": "s:20~l:28~e:401873071",
+   "date": "2026-11-22T18:00Z",
+   "name": "New Orleans Saints at Chicago Bears",
+   "shortName": "NO @ CHI",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 1:00 PM EST",
+     "shortDetail": "11/22 - 1:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873071",
+     "date": "2026-11-22T18:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "3",
+       "homeAway": "home",
+       "team": {
+        "id": "3",
+        "abbreviation": "CHI",
+        "displayName": "Chicago Bears",
+        "shortDisplayName": "Bears",
+        "name": "Bears",
+        "location": "Chicago"
+       }
+      },
+      {
+       "id": "18",
+       "homeAway": "away",
+       "team": {
+        "id": "18",
+        "abbreviation": "NO",
+        "displayName": "New Orleans Saints",
+        "shortDisplayName": "Saints",
+        "name": "Saints",
+        "location": "New Orleans"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873073",
+   "uid": "s:20~l:28~e:401873073",
+   "date": "2026-11-22T18:00Z",
+   "name": "Tennessee Titans at Dallas Cowboys",
+   "shortName": "TEN @ DAL",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 1:00 PM EST",
+     "shortDetail": "11/22 - 1:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873073",
+     "date": "2026-11-22T18:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "6",
+       "homeAway": "home",
+       "team": {
+        "id": "6",
+        "abbreviation": "DAL",
+        "displayName": "Dallas Cowboys",
+        "shortDisplayName": "Cowboys",
+        "name": "Cowboys",
+        "location": "Dallas"
+       }
+      },
+      {
+       "id": "10",
+       "homeAway": "away",
+       "team": {
+        "id": "10",
+        "abbreviation": "TEN",
+        "displayName": "Tennessee Titans",
+        "shortDisplayName": "Titans",
+        "name": "Titans",
+        "location": "Tennessee"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873072",
+   "uid": "s:20~l:28~e:401873072",
+   "date": "2026-11-22T18:00Z",
+   "name": "Tampa Bay Buccaneers at Detroit Lions",
+   "shortName": "TB @ DET",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 1:00 PM EST",
+     "shortDetail": "11/22 - 1:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873072",
+     "date": "2026-11-22T18:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "8",
+       "homeAway": "home",
+       "team": {
+        "id": "8",
+        "abbreviation": "DET",
+        "displayName": "Detroit Lions",
+        "shortDisplayName": "Lions",
+        "name": "Lions",
+        "location": "Detroit"
+       }
+      },
+      {
+       "id": "27",
+       "homeAway": "away",
+       "team": {
+        "id": "27",
+        "abbreviation": "TB",
+        "displayName": "Tampa Bay Buccaneers",
+        "shortDisplayName": "Buccaneers",
+        "name": "Buccaneers",
+        "location": "Tampa Bay"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873067",
+   "uid": "s:20~l:28~e:401873067",
+   "date": "2026-11-22T18:00Z",
+   "name": "Arizona Cardinals at Kansas City Chiefs",
+   "shortName": "ARI @ KC",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 1:00 PM EST",
+     "shortDetail": "11/22 - 1:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873067",
+     "date": "2026-11-22T18:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "12",
+       "homeAway": "home",
+       "team": {
+        "id": "12",
+        "abbreviation": "KC",
+        "displayName": "Kansas City Chiefs",
+        "shortDisplayName": "Chiefs",
+        "name": "Chiefs",
+        "location": "Kansas City"
+       }
+      },
+      {
+       "id": "22",
+       "homeAway": "away",
+       "team": {
+        "id": "22",
+        "abbreviation": "ARI",
+        "displayName": "Arizona Cardinals",
+        "shortDisplayName": "Cardinals",
+        "name": "Cardinals",
+        "location": "Arizona"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873076",
+   "uid": "s:20~l:28~e:401873076",
+   "date": "2026-11-22T18:00Z",
+   "name": "Pittsburgh Steelers at Philadelphia Eagles",
+   "shortName": "PIT @ PHI",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 1:00 PM EST",
+     "shortDetail": "11/22 - 1:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873076",
+     "date": "2026-11-22T18:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "21",
+       "homeAway": "home",
+       "team": {
+        "id": "21",
+        "abbreviation": "PHI",
+        "displayName": "Philadelphia Eagles",
+        "shortDisplayName": "Eagles",
+        "name": "Eagles",
+        "location": "Philadelphia"
+       }
+      },
+      {
+       "id": "23",
+       "homeAway": "away",
+       "team": {
+        "id": "23",
+        "abbreviation": "PIT",
+        "displayName": "Pittsburgh Steelers",
+        "shortDisplayName": "Steelers",
+        "name": "Steelers",
+        "location": "Pittsburgh"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873068",
+   "uid": "s:20~l:28~e:401873068",
+   "date": "2026-11-22T18:00Z",
+   "name": "Baltimore Ravens at Carolina Panthers",
+   "shortName": "BAL @ CAR",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 1:00 PM EST",
+     "shortDetail": "11/22 - 1:00 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873068",
+     "date": "2026-11-22T18:00Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "29",
+       "homeAway": "home",
+       "team": {
+        "id": "29",
+        "abbreviation": "CAR",
+        "displayName": "Carolina Panthers",
+        "shortDisplayName": "Panthers",
+        "name": "Panthers",
+        "location": "Carolina"
+       }
+      },
+      {
+       "id": "33",
+       "homeAway": "away",
+       "team": {
+        "id": "33",
+        "abbreviation": "BAL",
+        "displayName": "Baltimore Ravens",
+        "shortDisplayName": "Ravens",
+        "name": "Ravens",
+        "location": "Baltimore"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873074",
+   "uid": "s:20~l:28~e:401873074",
+   "date": "2026-11-22T21:05Z",
+   "name": "New York Jets at Los Angeles Chargers",
+   "shortName": "NYJ @ LAC",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 4:05 PM EST",
+     "shortDetail": "11/22 - 4:05 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873074",
+     "date": "2026-11-22T21:05Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "24",
+       "homeAway": "home",
+       "team": {
+        "id": "24",
+        "abbreviation": "LAC",
+        "displayName": "Los Angeles Chargers",
+        "shortDisplayName": "Chargers",
+        "name": "Chargers",
+        "location": "Los Angeles"
+       }
+      },
+      {
+       "id": "20",
+       "homeAway": "away",
+       "team": {
+        "id": "20",
+        "abbreviation": "NYJ",
+        "displayName": "New York Jets",
+        "shortDisplayName": "Jets",
+        "name": "Jets",
+        "location": "New York"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873075",
+   "uid": "s:20~l:28~e:401873075",
+   "date": "2026-11-22T21:25Z",
+   "name": "Las Vegas Raiders at Denver Broncos",
+   "shortName": "LV @ DEN",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 4:25 PM EST",
+     "shortDetail": "11/22 - 4:25 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873075",
+     "date": "2026-11-22T21:25Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "7",
+       "homeAway": "home",
+       "team": {
+        "id": "7",
+        "abbreviation": "DEN",
+        "displayName": "Denver Broncos",
+        "shortDisplayName": "Broncos",
+        "name": "Broncos",
+        "location": "Denver"
+       }
+      },
+      {
+       "id": "13",
+       "homeAway": "away",
+       "team": {
+        "id": "13",
+        "abbreviation": "LV",
+        "displayName": "Las Vegas Raiders",
+        "shortDisplayName": "Raiders",
+        "name": "Raiders",
+        "location": "Las Vegas"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873069",
+   "uid": "s:20~l:28~e:401873069",
+   "date": "2026-11-22T21:25Z",
+   "name": "Jacksonville Jaguars at New York Giants",
+   "shortName": "JAX @ NYG",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 4:25 PM EST",
+     "shortDetail": "11/22 - 4:25 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873069",
+     "date": "2026-11-22T21:25Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "19",
+       "homeAway": "home",
+       "team": {
+        "id": "19",
+        "abbreviation": "NYG",
+        "displayName": "New York Giants",
+        "shortDisplayName": "Giants",
+        "name": "Giants",
+        "location": "New York"
+       }
+      },
+      {
+       "id": "30",
+       "homeAway": "away",
+       "team": {
+        "id": "30",
+        "abbreviation": "JAX",
+        "displayName": "Jacksonville Jaguars",
+        "shortDisplayName": "Jaguars",
+        "name": "Jaguars",
+        "location": "Jacksonville"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873077",
+   "uid": "s:20~l:28~e:401873077",
+   "date": "2026-11-23T01:20Z",
+   "name": "Minnesota Vikings at San Francisco 49ers",
+   "shortName": "MIN VS SF",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Sun, November 22nd at 8:20 PM EST",
+     "shortDetail": "11/22 - 8:20 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873077",
+     "date": "2026-11-23T01:20Z",
+     "neutralSite": true,
+     "competitors": [
+      {
+       "id": "25",
+       "homeAway": "home",
+       "team": {
+        "id": "25",
+        "abbreviation": "SF",
+        "displayName": "San Francisco 49ers",
+        "shortDisplayName": "49ers",
+        "name": "49ers",
+        "location": "San Francisco"
+       }
+      },
+      {
+       "id": "16",
+       "homeAway": "away",
+       "team": {
+        "id": "16",
+        "abbreviation": "MIN",
+        "displayName": "Minnesota Vikings",
+        "shortDisplayName": "Vikings",
+        "name": "Vikings",
+        "location": "Minnesota"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "401873078",
+   "uid": "s:20~l:28~e:401873078",
+   "date": "2026-11-24T01:15Z",
+   "name": "Cincinnati Bengals at Washington Commanders",
+   "shortName": "CIN @ WSH",
+   "status": {
+    "clock": 0.0,
+    "displayClock": "0:00",
+    "period": 0,
+    "type": {
+     "id": "1",
+     "name": "STATUS_SCHEDULED",
+     "state": "pre",
+     "completed": false,
+     "description": "Scheduled",
+     "detail": "Mon, November 23rd at 8:15 PM EST",
+     "shortDetail": "11/23 - 8:15 PM EST"
+    }
+   },
+   "competitions": [
+    {
+     "id": "401873078",
+     "date": "2026-11-24T01:15Z",
+     "neutralSite": false,
+     "competitors": [
+      {
+       "id": "28",
+       "homeAway": "home",
+       "team": {
+        "id": "28",
+        "abbreviation": "WSH",
+        "displayName": "Washington Commanders",
+        "shortDisplayName": "Commanders",
+        "name": "Commanders",
+        "location": "Washington"
+       }
+      },
+      {
+       "id": "4",
+       "homeAway": "away",
+       "team": {
+        "id": "4",
+        "abbreviation": "CIN",
+        "displayName": "Cincinnati Bengals",
+        "shortDisplayName": "Bengals",
+        "name": "Bengals",
+        "location": "Cincinnati"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,2834 @@
+[
+ {
+  "id": "1284238",
+  "slug": "nba-sas-sac-2026-11-06",
+  "title": "Spurs vs. Kings",
+  "eventDate": "2026-11-06",
+  "startTime": "2026-11-07T03:00:00Z",
+  "usId": "nba-sa-sac-2026-11-06",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sas",
+    "alias": "Spurs",
+    "name": "Spurs",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sac",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1299577",
+  "slug": "nba-orl-bos-2026-11-16",
+  "title": "Magic vs. Celtics",
+  "eventDate": "2026-11-16",
+  "startTime": "2026-11-17T00:00:00Z",
+  "usId": "nba-orl-bos-2026-11-16",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "orl",
+    "alias": "Magic",
+    "name": "Magic",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bos",
+    "alias": "Celtics",
+    "name": "Celtics",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1299578",
+  "slug": "nba-chi-cle-2026-11-16",
+  "title": "Bulls vs. Cavaliers",
+  "eventDate": "2026-11-16",
+  "startTime": "2026-11-17T00:00:00Z",
+  "usId": "nba-chi-cle-2026-11-16",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Bulls",
+    "name": "Bulls",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cle",
+    "alias": "Cavaliers",
+    "name": "Cavaliers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1299583",
+  "slug": "nba-gsw-nop-2026-11-16",
+  "title": "Warriors vs. Pelicans",
+  "eventDate": "2026-11-16",
+  "startTime": "2026-11-17T01:00:00Z",
+  "usId": "nba-gs-no-2026-11-16",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "gsw",
+    "alias": "Warriors",
+    "name": "Warriors",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nop",
+    "alias": "Pelicans",
+    "name": "Pelicans",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1306312",
+  "slug": "nba-cha-lal-2026-11-17",
+  "title": "Hornets vs. Lakers",
+  "eventDate": "2026-11-17",
+  "startTime": "2026-11-18T04:00:00Z",
+  "usId": "nba-cha-lal-2026-11-17",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cha",
+    "alias": "Hornets",
+    "name": "Hornets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lal",
+    "alias": "Lakers",
+    "name": "Lakers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1306313",
+  "slug": "nba-uta-lac-2026-11-17",
+  "title": "Jazz vs. Clippers",
+  "eventDate": "2026-11-17",
+  "startTime": "2026-11-18T03:30:00Z",
+  "usId": "nba-uta-lac-2026-11-17",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "uta",
+    "alias": "Jazz",
+    "name": "Jazz",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lac",
+    "alias": "Clippers",
+    "name": "Clippers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312318",
+  "slug": "nba-mem-cle-2026-11-18",
+  "title": "Grizzlies vs. Cavaliers",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T00:00:00Z",
+  "usId": "nba-mem-cle-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mem",
+    "alias": "Grizzlies",
+    "name": "Grizzlies",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cle",
+    "alias": "Cavaliers",
+    "name": "Cavaliers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312319",
+  "slug": "nba-hou-ind-2026-11-18",
+  "title": "Rockets vs. Pacers",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T00:00:00Z",
+  "usId": "nba-hou-ind-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "hou",
+    "alias": "Rockets",
+    "name": "Rockets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ind",
+    "alias": "Pacers",
+    "name": "Pacers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312320",
+  "slug": "nba-mil-mia-2026-11-18",
+  "title": "Bucks vs. Heat",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T00:00:00Z",
+  "usId": "nba-mil-mia-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mil",
+    "alias": "Bucks",
+    "name": "Bucks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mia",
+    "alias": "Heat",
+    "name": "Heat",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312321",
+  "slug": "nba-phi-orl-2026-11-18",
+  "title": "76ers vs. Magic",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T00:00:00Z",
+  "usId": "nba-phi-orl-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phi",
+    "alias": "76ers",
+    "name": "76ers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "orl",
+    "alias": "Magic",
+    "name": "Magic",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312322",
+  "slug": "nba-chi-bkn-2026-11-18",
+  "title": "Bulls vs. Nets",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T00:30:00Z",
+  "usId": "nba-chi-bkn-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Bulls",
+    "name": "Bulls",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bkn",
+    "alias": "Nets",
+    "name": "Nets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312323",
+  "slug": "nba-was-tor-2026-11-18",
+  "title": "Wizards vs. Raptors",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T00:30:00Z",
+  "usId": "nba-was-tor-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "was",
+    "alias": "Wizards",
+    "name": "Wizards",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tor",
+    "alias": "Raptors",
+    "name": "Raptors",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312324",
+  "slug": "nba-det-nop-2026-11-18",
+  "title": "Pistons vs. Pelicans",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T01:00:00Z",
+  "usId": "nba-det-no-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "det",
+    "alias": "Pistons",
+    "name": "Pistons",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nop",
+    "alias": "Pelicans",
+    "name": "Pelicans",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312325",
+  "slug": "nba-atl-okc-2026-11-18",
+  "title": "Hawks vs. Thunder",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T01:00:00Z",
+  "usId": "nba-atl-okc-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "atl",
+    "alias": "Hawks",
+    "name": "Hawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "okc",
+    "alias": "Thunder",
+    "name": "Thunder",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312326",
+  "slug": "nba-bos-den-2026-11-18",
+  "title": "Celtics vs. Nuggets",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T02:30:00Z",
+  "usId": "nba-bos-den-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bos",
+    "alias": "Celtics",
+    "name": "Celtics",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "den",
+    "alias": "Nuggets",
+    "name": "Nuggets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312327",
+  "slug": "nba-gsw-dal-2026-11-18",
+  "title": "Warriors vs. Mavericks",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T01:00:00Z",
+  "usId": "nba-gs-dal-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "gsw",
+    "alias": "Warriors",
+    "name": "Warriors",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "dal",
+    "alias": "Mavericks",
+    "name": "Mavericks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312328",
+  "slug": "nba-uta-lal-2026-11-18",
+  "title": "Jazz vs. Lakers",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T03:00:00Z",
+  "usId": "nba-uta-lal-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "uta",
+    "alias": "Jazz",
+    "name": "Jazz",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lal",
+    "alias": "Lakers",
+    "name": "Lakers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1312329",
+  "slug": "nba-phx-sac-2026-11-18",
+  "title": "Suns vs. Kings",
+  "eventDate": "2026-11-18",
+  "startTime": "2026-11-19T03:00:00Z",
+  "usId": "nba-pho-sac-2026-11-18",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phx",
+    "alias": "Suns",
+    "name": "Suns",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sac",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1318453",
+  "slug": "nba-gsw-mem-2026-11-19",
+  "title": "Warriors vs. Grizzlies",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T01:00:00Z",
+  "usId": "nba-gs-mem-2026-11-19",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "gsw",
+    "alias": "Warriors",
+    "name": "Warriors",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mem",
+    "alias": "Grizzlies",
+    "name": "Grizzlies",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1318454",
+  "slug": "nba-por-mil-2026-11-19",
+  "title": "Trail Blazers vs. Bucks",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T01:00:00Z",
+  "usId": "nba-por-mil-2026-11-19",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "por",
+    "alias": "Trail Blazers",
+    "name": "Trail Blazers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mil",
+    "alias": "Bucks",
+    "name": "Bucks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1318455",
+  "slug": "nba-nyk-min-2026-11-19",
+  "title": "Knicks vs. Timberwolves",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T01:00:00Z",
+  "usId": "nba-ny-min-2026-11-19",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyk",
+    "alias": "Knicks",
+    "name": "Knicks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "min",
+    "alias": "Timberwolves",
+    "name": "Timberwolves",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1318456",
+  "slug": "nba-lac-sas-2026-11-19",
+  "title": "Clippers vs. Spurs",
+  "eventDate": "2026-11-19",
+  "startTime": "2026-11-20T01:00:00Z",
+  "usId": "nba-lac-sa-2026-11-19",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lac",
+    "alias": "Clippers",
+    "name": "Clippers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sas",
+    "alias": "Spurs",
+    "name": "Spurs",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1323809",
+  "slug": "nba-cha-atl-2026-11-20",
+  "title": "Hornets vs. Hawks",
+  "eventDate": "2026-11-20",
+  "startTime": "2026-11-21T00:00:00Z",
+  "usId": "nba-cha-atl-2026-11-20",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cha",
+    "alias": "Hornets",
+    "name": "Hornets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "atl",
+    "alias": "Hawks",
+    "name": "Hawks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1323810",
+  "slug": "nba-orl-bkn-2026-11-20",
+  "title": "Magic vs. Nets",
+  "eventDate": "2026-11-20",
+  "startTime": "2026-11-21T00:30:00Z",
+  "usId": "nba-orl-bkn-2026-11-20",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "orl",
+    "alias": "Magic",
+    "name": "Magic",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bkn",
+    "alias": "Nets",
+    "name": "Nets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1323811",
+  "slug": "nba-ind-cle-2026-11-20",
+  "title": "Pacers vs. Cavaliers",
+  "eventDate": "2026-11-20",
+  "startTime": "2026-11-21T00:30:00Z",
+  "usId": "nba-ind-cle-2026-11-20",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ind",
+    "alias": "Pacers",
+    "name": "Pacers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cle",
+    "alias": "Cavaliers",
+    "name": "Cavaliers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1323812",
+  "slug": "nba-tor-det-2026-11-20",
+  "title": "Raptors vs. Pistons",
+  "eventDate": "2026-11-20",
+  "startTime": "2026-11-21T00:30:00Z",
+  "usId": "nba-tor-det-2026-11-20",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tor",
+    "alias": "Raptors",
+    "name": "Raptors",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Pistons",
+    "name": "Pistons",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1323813",
+  "slug": "nba-was-chi-2026-11-20",
+  "title": "Wizards vs. Bulls",
+  "eventDate": "2026-11-20",
+  "startTime": "2026-11-21T01:00:00Z",
+  "usId": "nba-was-chi-2026-11-20",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "was",
+    "alias": "Wizards",
+    "name": "Wizards",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Bulls",
+    "name": "Bulls",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1323814",
+  "slug": "nba-nop-okc-2026-11-20",
+  "title": "Pelicans vs. Thunder",
+  "eventDate": "2026-11-20",
+  "startTime": "2026-11-21T01:00:00Z",
+  "usId": "nba-no-okc-2026-11-20",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nop",
+    "alias": "Pelicans",
+    "name": "Pelicans",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "okc",
+    "alias": "Thunder",
+    "name": "Thunder",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1323815",
+  "slug": "nba-phx-uta-2026-11-20",
+  "title": "Suns vs. Jazz",
+  "eventDate": "2026-11-20",
+  "startTime": "2026-11-21T02:30:00Z",
+  "usId": "nba-pho-uta-2026-11-20",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phx",
+    "alias": "Suns",
+    "name": "Suns",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "uta",
+    "alias": "Jazz",
+    "name": "Jazz",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1323816",
+  "slug": "nba-hou-den-2026-11-20",
+  "title": "Rockets vs. Nuggets",
+  "eventDate": "2026-11-20",
+  "startTime": "2026-11-21T03:00:00Z",
+  "usId": "nba-hou-den-2026-11-20",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "hou",
+    "alias": "Rockets",
+    "name": "Rockets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "den",
+    "alias": "Nuggets",
+    "name": "Nuggets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1323817",
+  "slug": "nba-sac-lal-2026-11-20",
+  "title": "Kings vs. Lakers",
+  "eventDate": "2026-11-20",
+  "startTime": "2026-11-21T03:00:00Z",
+  "usId": "nba-sac-lal-2026-11-20",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sac",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lal",
+    "alias": "Lakers",
+    "name": "Lakers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1330302",
+  "slug": "nba-mil-phi-2026-11-21",
+  "title": "Bucks vs. 76ers",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-21T18:00:00Z",
+  "usId": "nba-mil-phi-2026-11-21",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mil",
+    "alias": "Bucks",
+    "name": "Bucks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phi",
+    "alias": "76ers",
+    "name": "76ers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1330303",
+  "slug": "nba-por-nyk-2026-11-21",
+  "title": "Trail Blazers vs. Knicks",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T00:30:00Z",
+  "usId": "nba-por-ny-2026-11-21",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "por",
+    "alias": "Trail Blazers",
+    "name": "Trail Blazers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyk",
+    "alias": "Knicks",
+    "name": "Knicks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1330304",
+  "slug": "nba-lac-dal-2026-11-21",
+  "title": "Clippers vs. Mavericks",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T01:00:00Z",
+  "usId": "nba-lac-dal-2026-11-21",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lac",
+    "alias": "Clippers",
+    "name": "Clippers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "dal",
+    "alias": "Mavericks",
+    "name": "Mavericks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1330305",
+  "slug": "nba-mem-min-2026-11-21",
+  "title": "Grizzlies vs. Timberwolves",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T01:00:00Z",
+  "usId": "nba-mem-min-2026-11-21",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mem",
+    "alias": "Grizzlies",
+    "name": "Grizzlies",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "min",
+    "alias": "Timberwolves",
+    "name": "Timberwolves",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1330306",
+  "slug": "nba-nop-sas-2026-11-21",
+  "title": "Pelicans vs. Spurs",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T01:00:00Z",
+  "usId": "nba-no-sa-2026-11-21",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nop",
+    "alias": "Pelicans",
+    "name": "Pelicans",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sas",
+    "alias": "Spurs",
+    "name": "Spurs",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1330307",
+  "slug": "nba-bos-sac-2026-11-21",
+  "title": "Celtics vs. Kings",
+  "eventDate": "2026-11-21",
+  "startTime": "2026-11-22T03:00:00Z",
+  "usId": "nba-bos-sac-2026-11-21",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bos",
+    "alias": "Celtics",
+    "name": "Celtics",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sac",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1338695",
+  "slug": "nba-det-atl-2026-11-22",
+  "title": "Pistons vs. Hawks",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T20:30:00Z",
+  "usId": "nba-det-atl-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "det",
+    "alias": "Pistons",
+    "name": "Pistons",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "atl",
+    "alias": "Hawks",
+    "name": "Hawks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1338696",
+  "slug": "nba-okc-mia-2026-11-22",
+  "title": "Thunder vs. Heat",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-22T23:00:00Z",
+  "usId": "nba-okc-mia-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "okc",
+    "alias": "Thunder",
+    "name": "Thunder",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mia",
+    "alias": "Heat",
+    "name": "Heat",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1338697",
+  "slug": "nba-orl-was-2026-11-22",
+  "title": "Magic vs. Wizards",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-23T00:00:00Z",
+  "usId": "nba-orl-was-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "orl",
+    "alias": "Magic",
+    "name": "Magic",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "was",
+    "alias": "Wizards",
+    "name": "Wizards",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1338698",
+  "slug": "nba-den-chi-2026-11-22",
+  "title": "Nuggets vs. Bulls",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-23T00:00:00Z",
+  "usId": "nba-den-chi-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "den",
+    "alias": "Nuggets",
+    "name": "Nuggets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Bulls",
+    "name": "Bulls",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1338699",
+  "slug": "nba-dal-uta-2026-11-22",
+  "title": "Mavericks vs. Jazz",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-23T00:00:00Z",
+  "usId": "nba-dal-uta-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "dal",
+    "alias": "Mavericks",
+    "name": "Mavericks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "uta",
+    "alias": "Jazz",
+    "name": "Jazz",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1338700",
+  "slug": "nba-ind-nyk-2026-11-22",
+  "title": "Pacers vs. Knicks",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-23T01:00:00Z",
+  "usId": "nba-ind-ny-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ind",
+    "alias": "Pacers",
+    "name": "Pacers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyk",
+    "alias": "Knicks",
+    "name": "Knicks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1338701",
+  "slug": "nba-bos-gsw-2026-11-22",
+  "title": "Celtics vs. Warriors",
+  "eventDate": "2026-11-22",
+  "startTime": "2026-11-23T01:30:00Z",
+  "usId": "nba-bos-gs-2026-11-22",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bos",
+    "alias": "Celtics",
+    "name": "Celtics",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "gsw",
+    "alias": "Warriors",
+    "name": "Warriors",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1346975",
+  "slug": "nba-mem-cha-2026-11-23",
+  "title": "Grizzlies vs. Hornets",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T00:00:00Z",
+  "usId": "nba-mem-cha-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mem",
+    "alias": "Grizzlies",
+    "name": "Grizzlies",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cha",
+    "alias": "Hornets",
+    "name": "Hornets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1346976",
+  "slug": "nba-por-phi-2026-11-23",
+  "title": "Trail Blazers vs. 76ers",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T00:00:00Z",
+  "usId": "nba-por-phi-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "por",
+    "alias": "Trail Blazers",
+    "name": "Trail Blazers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phi",
+    "alias": "76ers",
+    "name": "76ers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1346977",
+  "slug": "nba-okc-ind-2026-11-23",
+  "title": "Thunder vs. Pacers",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T00:30:00Z",
+  "usId": "nba-okc-ind-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "okc",
+    "alias": "Thunder",
+    "name": "Thunder",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ind",
+    "alias": "Pacers",
+    "name": "Pacers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1346978",
+  "slug": "nba-mil-tor-2026-11-23",
+  "title": "Bucks vs. Raptors",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T00:30:00Z",
+  "usId": "nba-mil-tor-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mil",
+    "alias": "Bucks",
+    "name": "Bucks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tor",
+    "alias": "Raptors",
+    "name": "Raptors",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1346979",
+  "slug": "nba-bkn-min-2026-11-23",
+  "title": "Nets vs. Timberwolves",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T00:30:00Z",
+  "usId": "nba-bkn-min-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bkn",
+    "alias": "Nets",
+    "name": "Nets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "min",
+    "alias": "Timberwolves",
+    "name": "Timberwolves",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1346980",
+  "slug": "nba-cle-chi-2026-11-23",
+  "title": "Cavaliers vs. Bulls",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T01:00:00Z",
+  "usId": "nba-cle-chi-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cle",
+    "alias": "Cavaliers",
+    "name": "Cavaliers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Bulls",
+    "name": "Bulls",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1346981",
+  "slug": "nba-phx-nop-2026-11-23",
+  "title": "Suns vs. Pelicans",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T01:00:00Z",
+  "usId": "nba-pho-no-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phx",
+    "alias": "Suns",
+    "name": "Suns",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nop",
+    "alias": "Pelicans",
+    "name": "Pelicans",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1346983",
+  "slug": "nba-lac-hou-2026-11-23",
+  "title": "Clippers vs. Rockets",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T01:30:00Z",
+  "usId": "nba-lac-hou-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lac",
+    "alias": "Clippers",
+    "name": "Clippers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "hou",
+    "alias": "Rockets",
+    "name": "Rockets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1346984",
+  "slug": "nba-uta-lal-2026-11-23",
+  "title": "Jazz vs. Lakers",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T03:00:00Z",
+  "usId": "nba-uta-lal-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "uta",
+    "alias": "Jazz",
+    "name": "Jazz",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lal",
+    "alias": "Lakers",
+    "name": "Lakers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1346986",
+  "slug": "nba-sas-sac-2026-11-23",
+  "title": "Spurs vs. Kings",
+  "eventDate": "2026-11-23",
+  "startTime": "2026-11-24T03:00:00Z",
+  "usId": "nba-sa-sac-2026-11-23",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sas",
+    "alias": "Spurs",
+    "name": "Spurs",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sac",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1354781",
+  "slug": "nba-det-orl-2026-11-24",
+  "title": "Pistons vs. Magic",
+  "eventDate": "2026-11-24",
+  "startTime": "2026-11-25T00:00:00Z",
+  "usId": "nba-det-orl-2026-11-24",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "det",
+    "alias": "Pistons",
+    "name": "Pistons",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "orl",
+    "alias": "Magic",
+    "name": "Magic",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1354782",
+  "slug": "nba-bos-was-2026-11-24",
+  "title": "Celtics vs. Wizards",
+  "eventDate": "2026-11-24",
+  "startTime": "2026-11-25T01:00:00Z",
+  "usId": "nba-bos-was-2026-11-24",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bos",
+    "alias": "Celtics",
+    "name": "Celtics",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "was",
+    "alias": "Wizards",
+    "name": "Wizards",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1354783",
+  "slug": "nba-dal-den-2026-11-24",
+  "title": "Mavericks vs. Nuggets",
+  "eventDate": "2026-11-24",
+  "startTime": "2026-11-25T03:00:00Z",
+  "usId": "nba-dal-den-2026-11-24",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "dal",
+    "alias": "Mavericks",
+    "name": "Mavericks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "den",
+    "alias": "Nuggets",
+    "name": "Nuggets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1362199",
+  "slug": "nba-mia-phi-2026-11-25",
+  "title": "Heat vs. 76ers",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-25T22:00:00Z",
+  "usId": "nba-mia-phi-2026-11-25",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mia",
+    "alias": "Heat",
+    "name": "Heat",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phi",
+    "alias": "76ers",
+    "name": "76ers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1362200",
+  "slug": "nba-chi-cha-2026-11-25",
+  "title": "Bulls vs. Hornets",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:00:00Z",
+  "usId": "nba-chi-cha-2026-11-25",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "chi",
+    "alias": "Bulls",
+    "name": "Bulls",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cha",
+    "alias": "Hornets",
+    "name": "Hornets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1362201",
+  "slug": "nba-cle-nyk-2026-11-25",
+  "title": "Cavaliers vs. Knicks",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:30:00Z",
+  "usId": "nba-cle-ny-2026-11-25",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cle",
+    "alias": "Cavaliers",
+    "name": "Cavaliers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyk",
+    "alias": "Knicks",
+    "name": "Knicks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1362202",
+  "slug": "nba-min-okc-2026-11-25",
+  "title": "Timberwolves vs. Thunder",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T00:30:00Z",
+  "usId": "nba-min-okc-2026-11-25",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Timberwolves",
+    "name": "Timberwolves",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "okc",
+    "alias": "Thunder",
+    "name": "Thunder",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1362203",
+  "slug": "nba-lac-mem-2026-11-25",
+  "title": "Clippers vs. Grizzlies",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T01:00:00Z",
+  "usId": "nba-lac-mem-2026-11-25",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lac",
+    "alias": "Clippers",
+    "name": "Clippers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mem",
+    "alias": "Grizzlies",
+    "name": "Grizzlies",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1362204",
+  "slug": "nba-bkn-mil-2026-11-25",
+  "title": "Nets vs. Bucks",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T01:00:00Z",
+  "usId": "nba-bkn-mil-2026-11-25",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bkn",
+    "alias": "Nets",
+    "name": "Nets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mil",
+    "alias": "Bucks",
+    "name": "Bucks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1362205",
+  "slug": "nba-phx-hou-2026-11-25",
+  "title": "Suns vs. Rockets",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T01:30:00Z",
+  "usId": "nba-pho-hou-2026-11-25",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phx",
+    "alias": "Suns",
+    "name": "Suns",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "hou",
+    "alias": "Rockets",
+    "name": "Rockets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1362206",
+  "slug": "nba-sac-gsw-2026-11-25",
+  "title": "Kings vs. Warriors",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T03:00:00Z",
+  "usId": "nba-sac-gs-2026-11-25",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sac",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "gsw",
+    "alias": "Warriors",
+    "name": "Warriors",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1362207",
+  "slug": "nba-sas-por-2026-11-25",
+  "title": "Spurs vs. Trail Blazers",
+  "eventDate": "2026-11-25",
+  "startTime": "2026-11-26T03:00:00Z",
+  "usId": "nba-sa-por-2026-11-25",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sas",
+    "alias": "Spurs",
+    "name": "Spurs",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "por",
+    "alias": "Trail Blazers",
+    "name": "Trail Blazers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377575",
+  "slug": "nba-mia-nyk-2026-11-27",
+  "title": "Heat vs. Knicks",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T00:00:00Z",
+  "usId": "nba-mia-ny-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mia",
+    "alias": "Heat",
+    "name": "Heat",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyk",
+    "alias": "Knicks",
+    "name": "Knicks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377576",
+  "slug": "nba-mil-det-2026-11-27",
+  "title": "Bucks vs. Pistons",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T00:30:00Z",
+  "usId": "nba-mil-det-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mil",
+    "alias": "Bucks",
+    "name": "Bucks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Pistons",
+    "name": "Pistons",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377577",
+  "slug": "nba-phi-ind-2026-11-27",
+  "title": "76ers vs. Pacers",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T00:30:00Z",
+  "usId": "nba-phi-ind-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phi",
+    "alias": "76ers",
+    "name": "76ers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "ind",
+    "alias": "Pacers",
+    "name": "Pacers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377578",
+  "slug": "nba-bkn-tor-2026-11-27",
+  "title": "Nets vs. Raptors",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T00:30:00Z",
+  "usId": "nba-bkn-tor-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bkn",
+    "alias": "Nets",
+    "name": "Nets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tor",
+    "alias": "Raptors",
+    "name": "Raptors",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377579",
+  "slug": "nba-atl-bos-2026-11-27",
+  "title": "Hawks vs. Celtics",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T01:00:00Z",
+  "usId": "nba-atl-bos-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "atl",
+    "alias": "Hawks",
+    "name": "Hawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bos",
+    "alias": "Celtics",
+    "name": "Celtics",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377580",
+  "slug": "nba-mem-min-2026-11-27",
+  "title": "Grizzlies vs. Timberwolves",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T01:30:00Z",
+  "usId": "nba-mem-min-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mem",
+    "alias": "Grizzlies",
+    "name": "Grizzlies",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "min",
+    "alias": "Timberwolves",
+    "name": "Timberwolves",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377581",
+  "slug": "nba-dal-phx-2026-11-27",
+  "title": "Mavericks vs. Suns",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T02:00:00Z",
+  "usId": "nba-dal-pho-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "dal",
+    "alias": "Mavericks",
+    "name": "Mavericks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phx",
+    "alias": "Suns",
+    "name": "Suns",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377582",
+  "slug": "nba-lal-sas-2026-11-27",
+  "title": "Lakers vs. Spurs",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T02:30:00Z",
+  "usId": "nba-lal-sa-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lal",
+    "alias": "Lakers",
+    "name": "Lakers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sas",
+    "alias": "Spurs",
+    "name": "Spurs",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377583",
+  "slug": "nba-den-uta-2026-11-27",
+  "title": "Nuggets vs. Jazz",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T02:30:00Z",
+  "usId": "nba-den-uta-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "den",
+    "alias": "Nuggets",
+    "name": "Nuggets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "uta",
+    "alias": "Jazz",
+    "name": "Jazz",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377584",
+  "slug": "nba-nop-lac-2026-11-27",
+  "title": "Pelicans vs. Clippers",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T02:30:00Z",
+  "usId": "nba-no-lac-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nop",
+    "alias": "Pelicans",
+    "name": "Pelicans",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lac",
+    "alias": "Clippers",
+    "name": "Clippers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1377585",
+  "slug": "nba-gsw-por-2026-11-27",
+  "title": "Warriors vs. Trail Blazers",
+  "eventDate": "2026-11-27",
+  "startTime": "2026-11-28T02:30:00Z",
+  "usId": "nba-gs-por-2026-11-27",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "gsw",
+    "alias": "Warriors",
+    "name": "Warriors",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "por",
+    "alias": "Trail Blazers",
+    "name": "Trail Blazers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1384629",
+  "slug": "nba-orl-was-2026-11-28",
+  "title": "Magic vs. Wizards",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-28T22:00:00Z",
+  "usId": "nba-orl-was-2026-11-28",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "orl",
+    "alias": "Magic",
+    "name": "Magic",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "was",
+    "alias": "Wizards",
+    "name": "Wizards",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1384630",
+  "slug": "nba-bkn-cha-2026-11-28",
+  "title": "Nets vs. Hornets",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-28T23:00:00Z",
+  "usId": "nba-bkn-cha-2026-11-28",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bkn",
+    "alias": "Nets",
+    "name": "Nets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cha",
+    "alias": "Hornets",
+    "name": "Hornets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1384631",
+  "slug": "nba-ind-chi-2026-11-28",
+  "title": "Pacers vs. Bulls",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T01:00:00Z",
+  "usId": "nba-ind-chi-2026-11-28",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ind",
+    "alias": "Pacers",
+    "name": "Pacers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Bulls",
+    "name": "Bulls",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1384632",
+  "slug": "nba-okc-mil-2026-11-28",
+  "title": "Thunder vs. Bucks",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T01:00:00Z",
+  "usId": "nba-okc-mil-2026-11-28",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "okc",
+    "alias": "Thunder",
+    "name": "Thunder",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mil",
+    "alias": "Bucks",
+    "name": "Bucks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1384634",
+  "slug": "nba-phi-hou-2026-11-28",
+  "title": "76ers vs. Rockets",
+  "eventDate": "2026-11-28",
+  "startTime": "2026-11-29T01:30:00Z",
+  "usId": "nba-phi-hou-2026-11-28",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phi",
+    "alias": "76ers",
+    "name": "76ers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "hou",
+    "alias": "Rockets",
+    "name": "Rockets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1392363",
+  "slug": "nba-lal-mem-2026-11-29",
+  "title": "Lakers vs. Grizzlies",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T21:00:00Z",
+  "usId": "nba-lal-mem-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lal",
+    "alias": "Lakers",
+    "name": "Lakers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mem",
+    "alias": "Grizzlies",
+    "name": "Grizzlies",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1392365",
+  "slug": "nba-bos-sas-2026-11-29",
+  "title": "Celtics vs. Spurs",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T21:00:00Z",
+  "usId": "nba-bos-sa-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bos",
+    "alias": "Celtics",
+    "name": "Celtics",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sas",
+    "alias": "Spurs",
+    "name": "Spurs",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1392366",
+  "slug": "nba-phx-uta-2026-11-29",
+  "title": "Suns vs. Jazz",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T22:00:00Z",
+  "usId": "nba-pho-uta-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "phx",
+    "alias": "Suns",
+    "name": "Suns",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "uta",
+    "alias": "Jazz",
+    "name": "Jazz",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1392367",
+  "slug": "nba-mia-cle-2026-11-29",
+  "title": "Heat vs. Cavaliers",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T23:00:00Z",
+  "usId": "nba-mia-cle-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mia",
+    "alias": "Heat",
+    "name": "Heat",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cle",
+    "alias": "Cavaliers",
+    "name": "Cavaliers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1392369",
+  "slug": "nba-orl-det-2026-11-29",
+  "title": "Magic vs. Pistons",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T23:00:00Z",
+  "usId": "nba-orl-det-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "orl",
+    "alias": "Magic",
+    "name": "Magic",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Pistons",
+    "name": "Pistons",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1392370",
+  "slug": "nba-atl-nyk-2026-11-29",
+  "title": "Hawks vs. Knicks",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T23:00:00Z",
+  "usId": "nba-atl-ny-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "atl",
+    "alias": "Hawks",
+    "name": "Hawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nyk",
+    "alias": "Knicks",
+    "name": "Knicks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1392371",
+  "slug": "nba-den-tor-2026-11-29",
+  "title": "Nuggets vs. Raptors",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T23:00:00Z",
+  "usId": "nba-den-tor-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "den",
+    "alias": "Nuggets",
+    "name": "Nuggets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "tor",
+    "alias": "Raptors",
+    "name": "Raptors",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1392373",
+  "slug": "nba-nop-por-2026-11-29",
+  "title": "Pelicans vs. Trail Blazers",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-29T23:00:00Z",
+  "usId": "nba-no-por-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nop",
+    "alias": "Pelicans",
+    "name": "Pelicans",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "por",
+    "alias": "Trail Blazers",
+    "name": "Trail Blazers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1392374",
+  "slug": "nba-lac-gsw-2026-11-29",
+  "title": "Clippers vs. Warriors",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-30T01:30:00Z",
+  "usId": "nba-lac-gs-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lac",
+    "alias": "Clippers",
+    "name": "Clippers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "gsw",
+    "alias": "Warriors",
+    "name": "Warriors",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1392375",
+  "slug": "nba-min-sac-2026-11-29",
+  "title": "Timberwolves vs. Kings",
+  "eventDate": "2026-11-29",
+  "startTime": "2026-11-30T02:00:00Z",
+  "usId": "nba-min-sac-2026-11-29",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Timberwolves",
+    "name": "Timberwolves",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sac",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1399820",
+  "slug": "nba-was-cha-2026-11-30",
+  "title": "Wizards vs. Hornets",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T00:00:00Z",
+  "usId": "nba-was-cha-2026-11-30",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "was",
+    "alias": "Wizards",
+    "name": "Wizards",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cha",
+    "alias": "Hornets",
+    "name": "Hornets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1399822",
+  "slug": "nba-den-det-2026-11-30",
+  "title": "Nuggets vs. Pistons",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T00:00:00Z",
+  "usId": "nba-den-det-2026-11-30",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "den",
+    "alias": "Nuggets",
+    "name": "Nuggets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Pistons",
+    "name": "Pistons",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1399823",
+  "slug": "nba-okc-bkn-2026-11-30",
+  "title": "Thunder vs. Nets",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T00:30:00Z",
+  "usId": "nba-okc-bkn-2026-11-30",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "okc",
+    "alias": "Thunder",
+    "name": "Thunder",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bkn",
+    "alias": "Nets",
+    "name": "Nets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1399825",
+  "slug": "nba-lal-hou-2026-11-30",
+  "title": "Lakers vs. Rockets",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T00:30:00Z",
+  "usId": "nba-lal-hou-2026-11-30",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lal",
+    "alias": "Lakers",
+    "name": "Lakers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "hou",
+    "alias": "Rockets",
+    "name": "Rockets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1399826",
+  "slug": "nba-bos-dal-2026-11-30",
+  "title": "Celtics vs. Mavericks",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T01:00:00Z",
+  "usId": "nba-bos-dal-2026-11-30",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bos",
+    "alias": "Celtics",
+    "name": "Celtics",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "dal",
+    "alias": "Mavericks",
+    "name": "Mavericks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1399827",
+  "slug": "nba-sas-mil-2026-11-30",
+  "title": "Spurs vs. Bucks",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T01:00:00Z",
+  "usId": "nba-sa-mil-2026-11-30",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sas",
+    "alias": "Spurs",
+    "name": "Spurs",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mil",
+    "alias": "Bucks",
+    "name": "Bucks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1399828",
+  "slug": "nba-nop-sac-2026-11-30",
+  "title": "Pelicans vs. Kings",
+  "eventDate": "2026-11-30",
+  "startTime": "2026-12-01T03:00:00Z",
+  "usId": "nba-no-sac-2026-11-30",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nop",
+    "alias": "Pelicans",
+    "name": "Pelicans",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "sac",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1407266",
+  "slug": "nba-ind-cle-2026-12-01",
+  "title": "Pacers vs. Cavaliers",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T00:00:00Z",
+  "usId": "nba-ind-cle-2026-12-01",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "ind",
+    "alias": "Pacers",
+    "name": "Pacers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "cle",
+    "alias": "Cavaliers",
+    "name": "Cavaliers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1407267",
+  "slug": "nba-mem-phi-2026-12-01",
+  "title": "Grizzlies vs. 76ers",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T00:00:00Z",
+  "usId": "nba-mem-phi-2026-12-01",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mem",
+    "alias": "Grizzlies",
+    "name": "Grizzlies",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phi",
+    "alias": "76ers",
+    "name": "76ers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1407269",
+  "slug": "nba-atl-mia-2026-12-01",
+  "title": "Hawks vs. Heat",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T00:30:00Z",
+  "usId": "nba-atl-mia-2026-12-01",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "atl",
+    "alias": "Hawks",
+    "name": "Hawks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mia",
+    "alias": "Heat",
+    "name": "Heat",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1407270",
+  "slug": "nba-nyk-chi-2026-12-01",
+  "title": "Knicks vs. Bulls",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T01:00:00Z",
+  "usId": "nba-ny-chi-2026-12-01",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyk",
+    "alias": "Knicks",
+    "name": "Knicks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "chi",
+    "alias": "Bulls",
+    "name": "Bulls",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1407271",
+  "slug": "nba-tor-hou-2026-12-01",
+  "title": "Raptors vs. Rockets",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T01:30:00Z",
+  "usId": "nba-tor-hou-2026-12-01",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "tor",
+    "alias": "Raptors",
+    "name": "Raptors",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "hou",
+    "alias": "Rockets",
+    "name": "Rockets",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1407272",
+  "slug": "nba-lac-phx-2026-12-01",
+  "title": "Clippers vs. Suns",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T02:00:00Z",
+  "usId": "nba-lac-pho-2026-12-01",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lac",
+    "alias": "Clippers",
+    "name": "Clippers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phx",
+    "alias": "Suns",
+    "name": "Suns",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1407274",
+  "slug": "nba-min-por-2026-12-01",
+  "title": "Timberwolves vs. Trail Blazers",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T03:00:00Z",
+  "usId": "nba-min-por-2026-12-01",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Timberwolves",
+    "name": "Timberwolves",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "por",
+    "alias": "Trail Blazers",
+    "name": "Trail Blazers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1407275",
+  "slug": "nba-uta-gsw-2026-12-01",
+  "title": "Jazz vs. Warriors",
+  "eventDate": "2026-12-01",
+  "startTime": "2026-12-02T04:00:00Z",
+  "usId": "nba-uta-gs-2026-12-01",
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "uta",
+    "alias": "Jazz",
+    "name": "Jazz",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "gsw",
+    "alias": "Warriors",
+    "name": "Warriors",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1409592",
+  "slug": "nba-cha-lal-2026-11-17-exact-margin",
+  "title": "Hornets vs. Lakers - Exact Margin",
+  "eventDate": "2026-11-17",
+  "startTime": "2026-11-18T04:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cha",
+    "alias": "Hornets",
+    "name": "Hornets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lal",
+    "alias": "Lakers",
+    "name": "Lakers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1409594",
+  "slug": "nba-uta-lac-2026-11-17-exact-margin",
+  "title": "Jazz vs. Clippers - Exact Margin",
+  "eventDate": "2026-11-17",
+  "startTime": "2026-11-18T03:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "uta",
+    "alias": "Jazz",
+    "name": "Jazz",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lac",
+    "alias": "Clippers",
+    "name": "Clippers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414562",
+  "slug": "nba-mem-det-2026-12-02",
+  "title": "Grizzlies vs. Pistons",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "mem",
+    "alias": "Grizzlies",
+    "name": "Grizzlies",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "det",
+    "alias": "Pistons",
+    "name": "Pistons",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414564",
+  "slug": "nba-den-phi-2026-12-02",
+  "title": "Nuggets vs. 76ers",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T00:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "den",
+    "alias": "Nuggets",
+    "name": "Nuggets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phi",
+    "alias": "76ers",
+    "name": "76ers",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414565",
+  "slug": "nba-cha-bos-2026-12-02",
+  "title": "Hornets vs. Celtics",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T00:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "cha",
+    "alias": "Hornets",
+    "name": "Hornets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "bos",
+    "alias": "Celtics",
+    "name": "Celtics",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414566",
+  "slug": "nba-orl-dal-2026-12-02",
+  "title": "Magic vs. Mavericks",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "orl",
+    "alias": "Magic",
+    "name": "Magic",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "dal",
+    "alias": "Mavericks",
+    "name": "Mavericks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414568",
+  "slug": "nba-nyk-mil-2026-12-02",
+  "title": "Knicks vs. Bucks",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "nyk",
+    "alias": "Knicks",
+    "name": "Knicks",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "mil",
+    "alias": "Bucks",
+    "name": "Bucks",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414569",
+  "slug": "nba-lal-nop-2026-12-02",
+  "title": "Lakers vs. Pelicans",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "lal",
+    "alias": "Lakers",
+    "name": "Lakers",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "nop",
+    "alias": "Pelicans",
+    "name": "Pelicans",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414570",
+  "slug": "nba-bkn-okc-2026-12-02",
+  "title": "Nets vs. Thunder",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T01:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "bkn",
+    "alias": "Nets",
+    "name": "Nets",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "okc",
+    "alias": "Thunder",
+    "name": "Thunder",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414571",
+  "slug": "nba-sac-phx-2026-12-02",
+  "title": "Kings vs. Suns",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T02:00:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "sac",
+    "alias": "Kings",
+    "name": "Kings",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "phx",
+    "alias": "Suns",
+    "name": "Suns",
+    "ordering": "home"
+   }
+  ]
+ },
+ {
+  "id": "1414573",
+  "slug": "nba-min-lac-2026-12-02",
+  "title": "Timberwolves vs. Clippers",
+  "eventDate": "2026-12-02",
+  "startTime": "2026-12-03T03:30:00Z",
+  "usId": null,
+  "active": true,
+  "closed": false,
+  "teams": [
+   {
+    "abbreviation": "min",
+    "alias": "Timberwolves",
+    "name": "Timberwolves",
+    "ordering": "away"
+   },
+   {
+    "abbreviation": "lac",
+    "alias": "Clippers",
+    "name": "Clippers",
+    "ordering": "home"
+   }
+  ]
+ }
+]
