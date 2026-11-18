@@ -470,8 +470,13 @@ def _prior(lg: str, season: int) -> sim_mod.PreseasonPrior:
     return pre
 
 
-def _early_log_loss(lg: str, season: int, prior: sim_mod.PreseasonPrior | None, first: int = 0) -> float:
-    """Weeks ``first``-6: ratings as of each weekly cutoff from the first game, every later game scored."""
+def _early_log_loss(
+    lg: str, season: int, prior: sim_mod.PreseasonPrior | None, first: int = 0, hfa_poss: float | None = None
+) -> float:
+    """Weeks ``first``-6: ratings as of each weekly cutoff from the first game, every later game scored.
+
+    ``hfa_poss`` overrides the home term's pseudo-count (``0.0``: unshrunk, the model before BB-D25's shrink).
+    """
     lid = "00" if lg == "nba" else "10"
     games = _regular(lg, season).filter(pl.col("home_pts").is_not_null())
     rows = _rows(lg, season).join(games.select("game_id", "game_date"), on="game_id", how="inner", validate="m:1")
@@ -480,7 +485,7 @@ def _early_log_loss(lg: str, season: int, prior: sim_mod.PreseasonPrior | None, 
     for week in range(first, 7):
         cut = start + dt.timedelta(days=7 * week)
         model = sim_mod.as_of_game_model(
-            rows.filter(pl.col("game_date") < cut).drop("game_date"), league_id=lid, prior=prior
+            rows.filter(pl.col("game_date") < cut).drop("game_date"), league_id=lid, prior=prior, hfa_poss=hfa_poss
         )
         net = dict(zip(model.ratings["team_id"].to_list(), model.ratings["adj_net_rtg"].to_list(), strict=True))
         fut = games.filter(pl.col("game_date") >= cut)
@@ -496,6 +501,14 @@ def _early_log_loss(lg: str, season: int, prior: sim_mod.PreseasonPrior | None, 
 
 # Observed 2026-11-03 (weeks 0-6 log loss, with / without the prior): NBA 2025-26 0.6349 / 0.6396,
 # WNBA 2025 0.6557 / 0.6594. Gate: observed + 0.01, and the prior at least half the observed gain.
+#
+# The comparator is the UNSHRUNK no-prior model (``hfa_poss=0.0``, the BB-D18 model this gate was
+# written against), not the shipped one; thresholds unchanged. Re-baselined by Saiem's ruling of
+# 2026-11-17 (option (a)) when BB-D25's home-term shrink (``HFA_CONSTANTS``) also shrank the
+# no-prior model, toward the league's home term. Shipped vs shipped, measured 2026-11-17 and NOT
+# gated: NBA 2025-26 0.6343 with the prior / 0.6382 without; WNBA 2025 0.6543 / 0.6529, i.e. there
+# the shipped no-prior model BEATS the shipped prior by 0.0015 (its home-term target, the league's
+# 1.28 per 100, sits nearer 2025 than the prior's, 2024's 0.55). The model card carries it as a caveat.
 EARLY_GATES = {("nba", 2026): (0.6449, 0.0023), ("wnba", 2025): (0.6657, 0.0018)}
 
 
@@ -503,7 +516,7 @@ EARLY_GATES = {("nba", 2026): (0.6449, 0.0023), ("wnba", 2025): (0.6657, 0.0018)
 def test_preseason_prior_improves_early_season_log_loss(key: tuple[str, int]) -> None:
     lg, season = key
     with_prior = _early_log_loss(lg, season, _prior(lg, season))
-    without = _early_log_loss(lg, season, None)
+    without = _early_log_loss(lg, season, None, hfa_poss=0.0)  # the unshrunk BB-D18 comparator (see above)
     gate, gain = EARLY_GATES[key]
     assert with_prior <= gate, (with_prior, without)
     assert without - with_prior >= gain, (with_prior, without)

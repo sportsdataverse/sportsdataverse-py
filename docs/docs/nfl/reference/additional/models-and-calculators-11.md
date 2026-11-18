@@ -172,7 +172,7 @@ usage.sort("proj_wopr", descending=True).head()
 
 ### opponent_adjusted_ridge {#opponent_adjusted_ridge}
 
-`opponent_adjusted_ridge(plays: 'pl.DataFrame', *, off_col: 'str', def_col: 'str', home_col: 'str', resp_col: 'str', lam: 'float', penalize_home: 'bool' = False, hfa_col: 'str | None' = None, weight_col: 'str | None' = None) -> 'tuple[pl.DataFrame, float, float]'`
+`opponent_adjusted_ridge(plays: 'pl.DataFrame', *, off_col: 'str', def_col: 'str', home_col: 'str', resp_col: 'str', lam: 'float', penalize_home: 'bool' = False, hfa_col: 'str | None' = None, weight_col: 'str | None' = None, home_lam: 'float | None' = None) -> 'tuple[pl.DataFrame, float, float]'`
 
 Ridge-regress `resp_col` on offense + defense team indicators + HFA.
 
@@ -196,6 +196,7 @@ ratings, CFB adjusted EPA (via `hfa_col`) and basketball team strength (via `wei
 | `penalize_home` | `bool` | `False` | Also penalise the home-field coefficient (default False). |
 | `hfa_col` | `str \| None` | `None` | Numeric column used as the home regressor as-is (e.g. CFB's `+1` home offense / `0` neutral site / `-1` away), in place of the `off_col == home_col` indicator, which then goes unused. Must not contain nulls (raises `ValueError`). |
 | `weight_col` | `str \| None` | `None` | Optional per-row weight `W` (each finite and > 0, else `ValueError`): a row standing for that many identical rows, with `resp_col` their mean, gives the uncollapsed fit's coefficients. |
+| `home_lam` | `float \| None` | `None` | Penalise the home coefficient (toward 0) by this amount instead of `lam` / nothing; overrides `penalize_home`. To shrink it toward a mean `h`, subtract `h * home regressor` from the response and add `h` back to the result. |
 
 **Returns**
 

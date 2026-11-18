@@ -86,6 +86,10 @@ CAVEATS = [
     "The home-court baseline's constants were fit on 2024, a prior-gate season, which favours the baseline.",
     "The prior gate pools seasons; a single WNBA season is too small to clear two standard errors alone "
     "(gate_by_season).",
+    "The rated prior's home term is shrunk toward last season's (nba_season_sim.HFA_CONSTANTS, train-season fit). "
+    "Weeks 0-6 of WNBA 2025 the shipped no-prior model beats the shipped prior by 0.0015 log loss (0.6529 vs "
+    "0.6543): it shrinks toward the league's home term, nearer 2025 than 2024's. The BB-D18 early gate compares "
+    "against the unshrunk no-prior model instead (owner ruling, 2026-11-17).",
     "The rated prior is opt-in: score_win_prob and game_page_tables serve it only when the caller passes "
     "rated_home_prob; without it a lineless game gets home court alone.",
 ]
