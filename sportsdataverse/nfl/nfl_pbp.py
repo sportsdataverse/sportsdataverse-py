@@ -7494,14 +7494,28 @@ class NFLPlayProcess(object):
             right_on=["athlete_name", "pos_team"],
         )
 
+        # The counting columns (Car / Yds / YPC / Rush_TD here, rushing_attempts / rushing_yards
+        # on the team row) follow nflverse and ESPN's box: a kneel-down is the kneeler's carry.
+        # The EPA / WPA / SR / Fum columns, and the team `rushes` / `rush_yards` the rush rates
+        # divide by, stay on designed rushes (`rush_box`); a sack stays a pass play.
+        rush_count_box = play_df.filter(
+            ((pl.col("rush") == True) & (pl.col("scrimmage_play") == True)) | (pl.col("kneel_down") == True)
+        ).fill_null(0.0)
+        rusher_count_box = (
+            rush_count_box.group_by(["pos_team", "rusher_player_name"])
+            .agg(
+                Car=pl.len(),
+                Yds=pl.col("yds_rushed").sum(),
+                Rush_TD=pl.col("rush_td").sum(),
+                YPC=pl.col("yds_rushed").mean(),
+            )
+            .with_columns(pl.col(pl.Float32).round(2))
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
         rusher_box = (
             rush_box.fill_null(0.0)
             .group_by(["pos_team", "rusher_player_name"])
             .agg(
-                Car=pl.col("rush").sum(),
-                Yds=pl.col("yds_rushed").sum(),
-                Rush_TD=pl.col("rush_td").sum(),
-                YPC=pl.col("yds_rushed").mean(),
                 EPA=pl.col("EPA").sum(),
                 EPA_per_Play=pl.col("EPA").mean(),
                 WPA=pl.col("wpa").sum(),
@@ -7512,6 +7526,10 @@ class NFLPlayProcess(object):
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
+        # a kneel-only line has no designed rush: its sums are 0, its rates null
+        rusher_box = rusher_count_box.join(
+            rusher_box, on=["pos_team", "rusher_player_name"], how="full", coalesce=True, nulls_equal=True
+        ).with_columns(pl.col("Car", "Yds", "Rush_TD", "EPA", "WPA", "Fum", "Fum_Lost").fill_null(0))
         # rusher_box = rusher_box.replace({np.nan: None})
 
         if "yds_lateral" in pass_box.columns:
@@ -7572,7 +7590,8 @@ class NFLPlayProcess(object):
             play_df.group_by(["pos_team"])
             .agg(
                 EPA_plays=pl.col("play").sum(),
-                total_yards=pl.col("statYardage").sum(),
+                # an interception's statYardage is the RETURN, the defense's yards: zero it, as CFB does
+                total_yards=pl.when(pl.col("int") == True).then(0).otherwise(pl.col("statYardage")).sum(),
                 EPA_overall_total=pl.col("EPA").sum(),
             )
             .with_columns(pl.col(pl.Float32).round(2))
@@ -7605,9 +7624,11 @@ class NFLPlayProcess(object):
                 EPA_explosive=pl.col("EPA_explosive").sum(),
                 EPA_explosive_rate=pl.col("EPA_explosive").mean(),
                 passes_rate=pl.col("pass").mean(),
-                off_yards=pl.col("statYardage").sum(),
-                total_off_yards=pl.col("statYardage").sum(),
-                yards_per_play=pl.col("statYardage").mean(),
+                # Exclude the interception's return yardage (its statYardage) from offense, as
+                # CFB does; the INT stays a 0-yard play in the yards_per_play denominator.
+                off_yards=pl.when(pl.col("int") == True).then(0).otherwise(pl.col("statYardage")).sum(),
+                total_off_yards=pl.when(pl.col("int") == True).then(0).otherwise(pl.col("statYardage")).sum(),
+                yards_per_play=pl.when(pl.col("int") == True).then(0).otherwise(pl.col("statYardage")).mean(),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
@@ -7638,6 +7659,8 @@ class NFLPlayProcess(object):
             .agg(
                 passes=pl.col("pass").sum(),
                 pass_yards=pl.col("yds_receiving").sum(),
+                # NFL box "net passing yards": gross passing yards less the yards lost to sacks
+                pass_yards_net=(pl.col("yds_receiving") + pl.col("yds_sacked")).sum(),
                 # passes / yards_per_pass count sacks as 0-yard dropbacks; their (negative) yards
                 # ride separately, and yards_per_dropback adds them back: (pass_yards + sack_yards)
                 # over the same dropbacks, the basis of SDV's `yardsdropback`
@@ -7674,6 +7697,18 @@ class NFLPlayProcess(object):
                 EPA_explosive_rushing_rate=pl.col("EPA_explosive").mean(),
                 EPA_non_explosive_rushing=pl.col("EPA_non_explosive").sum(),
                 EPA_non_explosive_rushing_per_play=pl.col("EPA_non_explosive").mean(),
+            )
+            .with_columns(pl.col(pl.Float32).round(2))
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+
+        # nflverse / ESPN box totals (kneel-downs included; see rush_count_box). `rushes` /
+        # `rush_yards` above stay designed rushes: the rush rates and EPA divide by them.
+        team_rush_count_box = (
+            rush_count_box.group_by(["pos_team"])
+            .agg(
+                rushing_attempts=pl.len(),
+                rushing_yards=pl.col("yds_rushed").sum(),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
@@ -7773,6 +7808,7 @@ class NFLPlayProcess(object):
             team_pen_box,
             team_sp_box,
             team_scrimmage_box_rush,
+            team_rush_count_box,
             team_scrimmage_box_pass,
             team_scrimmage_box,
             team_base_box,

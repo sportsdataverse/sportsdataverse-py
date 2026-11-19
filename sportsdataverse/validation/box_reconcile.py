@@ -22,12 +22,12 @@ restated. ``create_box_score`` builds its sections inline, so its filters are
 mirrored here in :data:`_FILTERS` and each check names the builder frame it
 mirrors; only columns whose filter and aggregation are **identical in both
 processors** are checked, which is why the league-divergent totals
-(``total_yards`` / ``off_yards``, which CFB zeroes on interception rows, and
+(``total_yards`` / ``off_yards``, which both zero on interception rows but CFB also on a null ``int``, and
 ``penalty_first_downs_created``, which CFB restricts to accepted penalties)
 are absent. The one exception is the box-score rushing count, checked per league
-(:data:`_LEAGUE_TEAM_CHECKS` / :data:`_LEAGUE_PLAYER_CHECKS`): CFB's rusher lines
-and ``rushing_attempts`` / ``rushing_yards`` follow the NCAA convention (a sack
-is the passer's rush, a kneel-down a TEAM rush).
+(:data:`_LEAGUE_TEAM_CHECKS` / :data:`_LEAGUE_PLAYER_CHECKS`): the rusher lines and
+``rushing_attempts`` / ``rushing_yards`` count kneel-downs in both, and CFB's follow
+the NCAA convention (a sack is the passer's rush, a kneel-down a TEAM rush).
 
 **Fail closed.** A team the frame has rows for but the box has no row for is a
 violation, not a skip -- the #553 review's finding 4 (a failed id join read as
@@ -109,6 +109,11 @@ _FILTERS: dict[str, tuple[Callable[[], pl.Expr] | None, tuple[str, ...]]] = {
     "standard": (lambda: _t("standard_down") & _t("scrimmage_play"), ("standard_down", "scrimmage_play")),
     "passing_down": (lambda: _t("passing_down") & _t("scrimmage_play"), ("passing_down", "scrimmage_play")),
     "middle8": (lambda: _t("middle_8") & _t("scrimmage_play"), ("middle_8", "scrimmage_play")),
+    # NFL rush_count_box: designed rushes and kneel-downs (nflverse / ESPN)
+    "rush_count_nfl": (
+        lambda: (_t("rush") & _t("scrimmage_play")) | _t("kneel_down"),
+        ("rush", "scrimmage_play", "kneel_down"),
+    ),
     # CFB rush_count_box: designed rushes, sacks and kneel-downs (the NCAA box convention)
     "rush_count_cfb": (
         lambda: (_t("rush") & _t("scrimmage_play")) | (_t("sack_vec") & _t("scrimmage_play")) | _t("kneel_down"),
@@ -253,6 +258,22 @@ _PLAYER_CHECKS: tuple[tuple[str, str, str, Callable[[], pl.Expr], tuple[str, ...
 
 #: The box-score rushing count, which differs by league.
 _LEAGUE_TEAM_CHECKS: dict[str, tuple[_Check, ...]] = {
+    "nfl": (
+        _ck("team", "pos_team", "rushing_attempts", "rush_count_nfl", _rows(), "rush"),
+        _ck("team", "pos_team", "rushing_yards", "rush_count_nfl", _sum("yds_rushed"), "yds_rushed"),
+        # team_scrimmage_box_pass: gross passing yards less the sack yards
+        _ck(
+            "team",
+            "pos_team",
+            "pass_yards_net",
+            "pass",
+            lambda: (
+                c("yds_receiving").cast(pl.Float64).fill_null(0.0) + c("yds_sacked").cast(pl.Float64).fill_null(0.0)
+            ).sum(),
+            "yds_receiving",
+            "yds_sacked",
+        ),
+    ),
     "cfb": (
         _ck("team", "pos_team", "rushing_attempts", "rush_count_cfb", _rows()),
         _ck(
@@ -270,8 +291,8 @@ _LEAGUE_TEAM_CHECKS: dict[str, tuple[_Check, ...]] = {
 }
 _LEAGUE_PLAYER_CHECKS: dict[str, tuple[tuple[str, str, str, Callable[[], pl.Expr], tuple[str, ...]], ...]] = {
     "nfl": (
-        ("rush", "Car", "rush", _sum("rush"), ("rush",)),
-        ("rush", "Yds", "rush", _sum("yds_rushed"), ("yds_rushed",)),
+        ("rush", "Car", "rush_count_nfl", _rows(), ("rush",)),
+        ("rush", "Yds", "rush_count_nfl", _sum("yds_rushed"), ("yds_rushed",)),
     ),
     "cfb": (
         ("rush", "Car", "rush_count_cfb", _rows(), ()),
@@ -850,7 +871,8 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
         box: the processor's ``advBoxScore`` dict (``None`` / ``{}`` -> no rules).
         league: ``"nfl"`` or ``"cfb"``; it picks the box-score rushing-count checks,
             the one place the two processors' conventions differ (CFB counts a
-            sack as the passer's rush and a kneel-down as a TEAM rush).
+            sack as the passer's rush and a kneel-down as a TEAM rush; NFL counts
+            the kneel as the kneeler's carry and nets sacks out of ``pass_yards_net``).
 
     Returns:
         One ``RuleResult`` per ``box.*`` reconciliation rule that could run,

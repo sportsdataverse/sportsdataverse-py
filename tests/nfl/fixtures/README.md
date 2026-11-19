@@ -14,6 +14,7 @@
   - [Touchdown-flag residuals (`td_flag_residuals/`, task 2.20)](#touchdown-flag-residuals-td_flag_residuals-task-220)
   - [Era play order (`era_play_order/`, task 2.19)](#era-play-order-era_play_order-task-219)
   - [Roof without a venue id (`roof/`)](#roof-without-a-venue-id-roof)
+  - [Box-score conventions (`box_convention/`)](#box-score-conventions-box_convention)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -332,3 +333,15 @@ sits in a subdirectory so the whole-game oracle (which globs `summary_*` at the 
 | game (nflverse) | ESPN `gameInfo.venue` | nflverse `roof` / `stadium` | pins |
 |---|---|---|---|
 | 240926011 (`2004_03_GB_IND`) | absent (no id; ESPN ships venue ids from 2006) | `dome` / RCA Dome | `_nfl_roof` falls back to `model_vars.home_team_roof("IND", 2004)` |
+
+## Box-score conventions (`box_convention/`)
+
+ESPN Site v2 summaries of three 2026 week-10 games, fetched 2026-11-19 from the URL above (one request each) and
+trimmed to the same keys as the whole-game captures. `tests/nfl/test_nfl_box_convention.py` reads them, and ESPN's
+own `boxscore` in each is the oracle. They sit in a subdirectory, so the whole-game oracle does not pick them up.
+
+| game_id | away @ home | pins |
+|---|---|---|
+| 401873053 | NE @ DET | R.McCreary's 22-yard return of a T.DeVito interception, out of NE's `off_yards`; four kneels |
+| 401873059 | MIA @ IND | Daniel Jones' two kneels on his rushing line |
+| 401873060 | MIN @ GB | GB 223 gross / 164 net passing (`pass_yards_net`) |
