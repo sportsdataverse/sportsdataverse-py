@@ -24,10 +24,11 @@ mirrors; only columns whose filter and aggregation are **identical in both
 processors** are checked, which is why the league-divergent totals
 (``total_yards`` / ``off_yards``, which both zero on interception rows but CFB also on a null ``int``, and
 ``penalty_first_downs_created``, which CFB restricts to accepted penalties)
-are absent. The one exception is the box-score rushing count, checked per league
-(:data:`_LEAGUE_TEAM_CHECKS` / :data:`_LEAGUE_PLAYER_CHECKS`): the rusher lines and
-``rushing_attempts`` / ``rushing_yards`` count kneel-downs in both, and CFB's follow
-the NCAA convention (a sack is the passer's rush, a kneel-down a TEAM rush).
+are absent from the shared checks. The league-specific ones are checked per league
+(:data:`_LEAGUE_TEAM_CHECKS` / :data:`_LEAGUE_PLAYER_CHECKS`): NFL's ``off_yards`` /
+``total_yards`` and ``pass_yards_net``, and the box-score rushing count -- the rusher
+lines and ``rushing_attempts`` / ``rushing_yards`` count kneel-downs in both, and CFB's
+follow the NCAA convention (a sack is the passer's rush, a kneel-down a TEAM rush).
 
 **Fail closed.** A team the frame has rows for but the box has no row for is a
 violation, not a skip -- the #553 review's finding 4 (a failed id join read as
@@ -159,6 +160,11 @@ def _cfb_box_rush_yds() -> pl.Expr:
     )
 
 
+def _nfl_yards_less_int_returns() -> pl.Expr:
+    """NFL ``off_yards`` / ``total_yards``: ``statYardage`` with an interception's (its return) zeroed."""
+    return pl.when(_t("int")).then(0).otherwise(c("statYardage")).cast(pl.Float64, strict=False).fill_null(0.0).sum()
+
+
 def _ck(section: str, team_key: str, column: str, flt: str, expr: Callable[[], pl.Expr], *needs: str) -> _Check:
     return _Check(section, team_key, column, flt, expr, tuple(needs))
 
@@ -268,11 +274,15 @@ _LEAGUE_TEAM_CHECKS: dict[str, tuple[_Check, ...]] = {
             "pass_yards_net",
             "pass",
             lambda: (
-                c("yds_receiving").cast(pl.Float64).fill_null(0.0) + c("yds_sacked").cast(pl.Float64).fill_null(0.0)
+                c("yds_receiving").cast(pl.Float64, strict=False).fill_null(0.0)
+                + c("yds_sacked").cast(pl.Float64, strict=False).fill_null(0.0)
             ).sum(),
             "yds_receiving",
             "yds_sacked",
         ),
+        # team_scrimmage_box / team_base_box: an interception's statYardage (the return) is zeroed
+        _ck("team", "pos_team", "off_yards", "scrimmage", _nfl_yards_less_int_returns, "int", "statYardage"),
+        _ck("team", "pos_team", "total_yards", "all", _nfl_yards_less_int_returns, "int", "statYardage"),
     ),
     "cfb": (
         _ck("team", "pos_team", "rushing_attempts", "rush_count_cfb", _rows()),
