@@ -15,6 +15,7 @@ cfb:
   espn_cfb_game_rosters: {game_id: 401636892}
   espn_cfb_play_participants: {game_id: 401636892}
   espn_cfb_player_stats: {athlete_id: 4426335, season: 2024}
+  cfb_player_havoc: {seasons: 2025}
   espn_cfb_schedule: {}
   espn_cfb_teams: {}
   get_cfb_teams: {}

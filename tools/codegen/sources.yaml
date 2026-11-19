@@ -1072,6 +1072,7 @@ categories:
       - sportsdataverse.cfb.cfb_advanced_stats
       - sportsdataverse.cfb.cfb_situational_stats
       - sportsdataverse.cfb.cfb_returning_production
+      - sportsdataverse.cfb.cfb_player_havoc
       - sportsdataverse.cfb.cfb_transfer_impact
       - sportsdataverse.mbb.mbb_shot_selection
       - sportsdataverse.nfl.nfl_playcall
