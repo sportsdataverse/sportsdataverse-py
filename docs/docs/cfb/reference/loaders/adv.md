@@ -32,7 +32,7 @@ Release: [espn_cfb_adv_team](https://github.com/sportsdataverse/sportsdataverse-
 | `EPA_punt` | Float64 | Total EPA on punt plays. |
 | `kickoff_plays` | Int64 | Number of kickoff plays. |
 | `EPA_kickoff` | Float64 | Total EPA on kickoff plays. |
-| `rushes` | Int64 | Number of designed rushing attempts (sacks and kneel-downs excluded); the rush rates divide by it. |
+| `rushes` | Int64 | Number of designed rushing attempts (sacks and kneel-downs excluded); the per-rush rates (`yards_per_rush`, `EPA_rushing_per_play`, `rushing_first_downs_created_rate`) divide by it. |
 | `rush_yards` | Float64 | Yards the team gained on designed rushes (sacks and kneel-downs excluded). |
 | `yards_per_rush` | Float64 | Yards gained per rushing attempt. |
 | `rushing_power_rate` | Float64 | Share of carries that were power rushing attempts. |
@@ -481,7 +481,7 @@ Release: [espn_cfb_adv_team_gamelog](https://github.com/sportsdataverse/sportsda
 | `EPA_punt` | Float64 | Total EPA on punt plays. |
 | `kickoff_plays` | Int64 | Number of kickoff plays. |
 | `EPA_kickoff` | Float64 | Total EPA on kickoff plays. |
-| `rushes` | Int64 | Number of designed rushing attempts (sacks and kneel-downs excluded); the rush rates divide by it. |
+| `rushes` | Int64 | Number of designed rushing attempts (sacks and kneel-downs excluded); the per-rush rates (`yards_per_rush`, `EPA_rushing_per_play`, `rushing_first_downs_created_rate`) divide by it. |
 | `rush_yards` | Float64 | Yards the team gained on designed rushes (sacks and kneel-downs excluded). |
 | `yards_per_rush` | Float64 | Yards gained per rushing attempt. |
 | `rushing_power_rate` | Float64 | Share of carries that were power rushing attempts. |

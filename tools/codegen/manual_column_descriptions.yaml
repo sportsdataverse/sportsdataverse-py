@@ -7212,7 +7212,8 @@ load_cfb_adv_team:
   pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
   punt_plays: Number of punt plays.
   rush_yards: Yards the team gained on designed rushes (sacks and kneel-downs excluded).
-  rushes: Number of designed rushing attempts (sacks and kneel-downs excluded); the rush rates divide by it.
+  rushes: Number of designed rushing attempts (sacks and kneel-downs excluded); the per-rush rates (`yards_per_rush`,
+    `EPA_rushing_per_play`, `rushing_first_downs_created_rate`) divide by it.
   rushes_rate: Share of the team's plays from scrimmage that were rush plays.
   rushing_first_downs_created: Number of first downs created on rush plays.
   rushing_first_downs_created_rate: Share of rush plays that created a first down.
@@ -7295,7 +7296,8 @@ load_cfb_adv_team_gamelog:
     balance.
   punt_plays: Number of punt plays.
   rush_yards: Yards the team gained on designed rushes (sacks and kneel-downs excluded).
-  rushes: Number of designed rushing attempts (sacks and kneel-downs excluded); the rush rates divide by it.
+  rushes: Number of designed rushing attempts (sacks and kneel-downs excluded); the per-rush rates (`yards_per_rush`,
+    `EPA_rushing_per_play`, `rushing_first_downs_created_rate`) divide by it.
   rushes_rate: Share of the team's plays from scrimmage that were rush plays.
   rushing_first_downs_created: Number of first downs created on rush plays.
   rushing_first_downs_created_rate: Share of rush plays that created a first down.
