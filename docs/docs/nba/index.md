@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 287 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 288 | — |
 
 ## ESPN {#espn}
 
@@ -146,6 +146,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_in_game_win_prob`](reference/additional/models-and-calculators-2#nba_in_game_win_prob)
 - [`nba_la_rapm`](reference/additional/models-and-calculators-2#nba_la_rapm)
 - [`nba_matchup_drapm`](reference/additional/models-and-calculators-2#nba_matchup_drapm)
+- [`nba_multiseason_rapm`](reference/additional/models-and-calculators-2#nba_multiseason_rapm)
 - [`nba_player_impact_context`](reference/additional/models-and-calculators-3#nba_player_impact_context)
 - [`nba_player_impact_league_averages`](reference/additional/models-and-calculators-3#nba_player_impact_league_averages)
 - [`nba_player_stats_advanced_context`](reference/additional/models-and-calculators-3#nba_player_stats_advanced_context)

@@ -1058,7 +1058,7 @@ res = darko_forecast_accuracy(panel, ages, aging_curve=curve, process_var=q, obs
 
 ### decay_weights {#decay_weights}
 
-`decay_weights(game_date: 'pl.Series', asof: 'Optional[datetime.date]', half_life_days: 'float') -> 'np.ndarray'`
+`decay_weights(game_date: 'pl.Series', asof: 'datetime.date | None', half_life_days: 'float') -> 'np.ndarray'`
 
 Exponential time-decay sample weights `w = 0.5 ** (days_ago / half_life)`.
 
@@ -1067,7 +1067,7 @@ Exponential time-decay sample weights `w = 0.5 ** (days_ago / half_life)`.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_date` | `Series` |  | Per-possession game dates (`pl.Date` Series), aligned row-for-row with the design the weights will be applied to. |
-| `asof` | `Optional[date]` |  | Reference "today". `None` disables decay (all weights `1.0`). Games dated after `asof` are clamped to `days_ago = 0` (weight `1.0`); callers that want a strict as-of cutoff must filter first. |
+| `asof` | `date \| None` |  | Reference "today". `None` disables decay (all weights `1.0`). Games dated after `asof` are clamped to `days_ago = 0` (weight `1.0`); callers that want a strict as-of cutoff must filter first. |
 | `half_life_days` | `float` |  | Days at which a possession's weight halves. Must be > 0. |
 
 **Returns**

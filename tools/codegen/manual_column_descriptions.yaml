@@ -81554,6 +81554,14 @@ nba_reml_rapm:
   def_poss: 'Defensive possessions in the fit.'
   lambda_o: 'Offense penalty the fit used (points-per-possession scale; ADJ_RAPM_PENALTY by default, REML with penalty="reml", or the lambdas= given; the same on every row).'
   lambda_d: 'Defense penalty the fit used (ADJ_RAPM_PENALTY by default, REML with penalty="reml", or the lambdas= given; the same on every row).'
+nba_multiseason_rapm:
+  player_id: 'NBA stats person id.'
+  o_multiseason_rapm: 'Offensive RAPM per 100 possessions from one ridge fit over every possession of the pooled seasons, all weighted equally, at the league fixed penalty (RAPM_PENALTY) unless alpha= is given.'
+  d_multiseason_rapm: 'Defensive RAPM per 100 possessions over the pooled seasons, negated from the raw points-allowed coefficient so positive = good defense.'
+  multiseason_rapm: 'o_multiseason_rapm + d_multiseason_rapm.'
+  off_poss: 'Offensive possessions in the window, summed over the pooled seasons.'
+  def_poss: 'Defensive possessions in the window, summed over the pooled seasons.'
+  n_seasons: 'Number of pooled seasons in which the player has at least one possession.'
 game_lines:
   game_id: ESPN game id, the join key to the schedule, play-by-play and box-score frames.
   season: ESPN season of the game, from the schedule.

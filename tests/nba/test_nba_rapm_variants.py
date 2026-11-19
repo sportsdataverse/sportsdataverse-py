@@ -6,6 +6,7 @@ import datetime
 
 import numpy as np
 import polars as pl
+import pytest
 
 from sportsdataverse.nba.nba_model_validation import _synthetic_possessions
 from sportsdataverse.nba.nba_rapm import nba_rapm
@@ -13,6 +14,7 @@ from sportsdataverse.nba.nba_rapm_variants import (
     DECAY_RAPM_SCHEMA,
     FOUR_FACTOR_SCHEMA,
     LA_RAPM_SCHEMA,
+    MULTISEASON_RAPM_SCHEMA,
     ORACLE_RAPM_CV,
     ORACLE_RAPM_LAMBDAS,
     _fit_weighted,
@@ -23,6 +25,7 @@ from sportsdataverse.nba.nba_rapm_variants import (
     nba_decay_rapm,
     nba_four_factor_rapm,
     nba_la_rapm,
+    nba_multiseason_rapm,
     oracle_rapm_alphas,
 )
 
@@ -588,3 +591,54 @@ def test_decay_rapm_concurrent_validity_vs_ryan_davis_multi():
     )
     # non-regression guard; tighten to a real floor once a first real run establishes one.
     assert best_corr >= plain_corr - 0.02
+
+
+_MULTISEASON_FIXTURE = (
+    pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "nba_multiseason_rapm" / "possessions_sample.parquet"
+)
+
+
+def test_multiseason_rapm_pooled_equals_plain_rapm_on_real_possessions():
+    """Two real seasons pooled: the variant is plain RAPM's fit on the concatenated frame."""
+    poss = pl.read_parquet(_MULTISEASON_FIXTURE)
+    assert sorted(poss["season"].unique().to_list()) == [2026, 2027]
+    ms = nba_multiseason_rapm(poss)
+    plain = nba_rapm(poss)
+    assert ms.schema == pl.Schema(MULTISEASON_RAPM_SCHEMA)
+    assert ms["player_id"].to_list() == plain["player_id"].to_list()
+    np.testing.assert_allclose(ms["o_multiseason_rapm"].to_numpy(), plain["o_rapm"].to_numpy(), atol=1e-9)
+    np.testing.assert_allclose(ms["d_multiseason_rapm"].to_numpy(), plain["d_rapm"].to_numpy(), atol=1e-9)
+    assert ms["off_poss"].to_list() == plain["off_poss"].to_list()
+
+
+def test_multiseason_rapm_seasons_filter_and_counts_on_real_possessions():
+    """``seasons=`` fits only those rows, pooling moves the fit, and ``n_seasons`` counts both seasons."""
+    poss = pl.read_parquet(_MULTISEASON_FIXTURE)
+    one = nba_multiseason_rapm(poss, seasons=[2027])
+    plain_one = nba_rapm(poss.filter(pl.col("season") == 2027))
+    np.testing.assert_allclose(one["multiseason_rapm"].to_numpy(), plain_one["rapm"].to_numpy(), atol=1e-9)
+    assert set(one["n_seasons"].to_list()) == {1}
+
+    both = nba_multiseason_rapm(poss)
+    j = one.join(both, on="player_id", suffix="_both")
+    assert j.height == one.height
+    assert float((j["multiseason_rapm"] - j["multiseason_rapm_both"]).abs().max()) > 0.01  # pooling changed the fit
+    lineup = [f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)]
+    per = (
+        poss.unpivot(index="season", on=lineup, value_name="player_id")
+        .group_by("player_id")
+        .agg(pl.col("season").n_unique())
+    )
+    expected = dict(zip(per["player_id"].to_list(), per["season"].to_list()))
+    assert dict(zip(both["player_id"].to_list(), both["n_seasons"].to_list())) == expected
+    assert 2 in set(expected.values())
+
+
+def test_multiseason_rapm_empty_and_missing_season():
+    poss = pl.read_parquet(_MULTISEASON_FIXTURE)
+    assert nba_multiseason_rapm(poss.head(0)).schema == pl.Schema(MULTISEASON_RAPM_SCHEMA)
+    assert nba_multiseason_rapm(poss, seasons=[1999]).height == 0
+    with pytest.raises(ValueError, match="season"):
+        nba_multiseason_rapm(poss.drop("season"))
+    with pytest.raises(ValueError, match="alpha"):
+        nba_multiseason_rapm(poss, alpha=0.0)

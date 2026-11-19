@@ -215,6 +215,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_in_game_win_prob](additional/models-and-calculators-2.md#nba_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
 | [nba_la_rapm](additional/models-and-calculators-2.md#nba_la_rapm) | Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed). |
 | [nba_matchup_drapm](additional/models-and-calculators-2.md#nba_matchup_drapm) | Matchup-based defensive RAPM (offense-quality-controlled). |
+| [nba_multiseason_rapm](additional/models-and-calculators-2.md#nba_multiseason_rapm) | Multi-season RAPM: one plain ridge fit over the possessions of several seasons pooled. |
 | [nba_player_impact_context](additional/models-and-calculators-3.md#nba_player_impact_context) | Append `<m>_n`, `<m>_rank` and `<m>_pct` to a `player_impact` table. |
 | [nba_player_impact_league_averages](additional/models-and-calculators-3.md#nba_player_impact_league_averages) | The league-average rows of a `player_impact` table, one block per season type. |
 | [nba_player_stats_advanced_context](additional/models-and-calculators-3.md#nba_player_stats_advanced_context) | Replace `player_stats_advanced`'s API ranks of the rated measures with gated producer ranks. |
