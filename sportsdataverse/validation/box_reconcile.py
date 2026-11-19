@@ -111,8 +111,8 @@ _FILTERS: dict[str, tuple[Callable[[], pl.Expr] | None, tuple[str, ...]]] = {
     "middle8": (lambda: _t("middle_8") & _t("scrimmage_play"), ("middle_8", "scrimmage_play")),
     # CFB rush_count_box: designed rushes, sacks and kneel-downs (the NCAA box convention)
     "rush_count_cfb": (
-        lambda: (_t("rush") & _t("scrimmage_play")) | (_t("sack_vec") & _t("scrimmage_play")) | _t("kneel_down"),
-        ("rush", "scrimmage_play", "sack_vec", "kneel_down"),
+        lambda: (_t("rush") & _t("scrimmage_play")) | (_cfb_box_sack() & _t("scrimmage_play")) | _t("kneel_down"),
+        ("rush", "scrimmage_play", "sack_vec", "sack", "type.text", "kneel_down"),
     ),
 }
 
@@ -142,12 +142,20 @@ def _rows() -> Callable[[], pl.Expr]:
     return lambda: pl.len()
 
 
+def _cfb_box_sack() -> pl.Expr:
+    """CFB ``box_sack``: ``sack_vec``, or a sack for a safety (``sack`` on a ``Safety`` row)."""
+    return _t("sack_vec") | (_t("sack") & (c("type.text") == "Safety").fill_null(False))
+
+
 def _cfb_box_rush_yds() -> pl.Expr:
-    """CFB ``box_rush_yds``: a sack's loss (``yds_sacked``, else an unfumbled sack's ``statYardage``), else ``yds_rushed``."""
+    """CFB ``box_rush_yds``: a sack's loss, else ``yds_rushed`` (a kneel's ``statYardage`` when it states none).
+
+    A sack's loss is ``yds_sacked``, else an unfumbled sack's ``statYardage``.
+    """
     return (
-        pl.when(_t("sack_vec"))
+        pl.when(_cfb_box_sack())
         .then(pl.coalesce(c("yds_sacked"), pl.when(~_t("fumble_vec")).then(c("statYardage"))))
-        .otherwise(c("yds_rushed"))
+        .otherwise(pl.coalesce(c("yds_rushed"), pl.when(_t("kneel_down")).then(c("statYardage"))))
         .cast(pl.Float64, strict=False)
         .fill_null(0.0)
         .sum()

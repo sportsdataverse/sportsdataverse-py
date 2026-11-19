@@ -9897,19 +9897,21 @@ class CFBPlayProcess(object):
         # by the passer for the yards lost, and a kneel-down is a TEAM rush. The EPA / WPA / SR /
         # Fum columns, and the team `rushes` / `rush_yards` the rush rates divide by, stay on
         # designed rushes (`rush_box`).
+        # a sack for a safety is `sack` but not `sack_vec`
+        box_sack = (pl.col("sack_vec") == True) | ((pl.col("sack") == True) & (pl.col("type.text") == "Safety"))
         rush_count_box = (
             play_df.filter(
                 ((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
-                | ((pl.col("sack_vec") == True) & (pl.col("scrimmage_play") == True))
+                | (box_sack & (pl.col("scrimmage_play") == True))
                 | (pl.col("kneel_down") == True)
             )
             .with_columns(
                 rusher_player_name=pl.when(pl.col("kneel_down") == True)
                 .then(pl.lit("TEAM"))
-                .when(pl.col("sack_vec") == True)
+                .when(box_sack)
                 .then(pl.col("passer_player_name"))
                 .otherwise(pl.col("rusher_player_name")),
-                box_rush_yds=pl.when(pl.col("sack_vec") == True)
+                box_rush_yds=pl.when(box_sack)
                 # yds_sacked is null where the text states no loss ("intentional grounding"
                 # filed as a Sack); the play's statYardage is then the yards it cost. Not on a
                 # fumbled sack: its statYardage can be the return.
@@ -9919,7 +9921,10 @@ class CFBPlayProcess(object):
                         pl.when(pl.col("fumble_vec") == False).then(pl.col("statYardage")),
                     )
                 )
-                .otherwise(pl.col("yds_rushed")),
+                # a kneel whose text states no yardage ("takes a knee") costs its statYardage
+                .otherwise(
+                    pl.coalesce(pl.col("yds_rushed"), pl.when(pl.col("kneel_down") == True).then(pl.col("statYardage")))
+                ),
             )
             .pipe(_fill_missing)
         )
