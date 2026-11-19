@@ -29,6 +29,7 @@ GAMES = [
     ("nba", "nba_401766458.json.gz"),
     ("nba", "nba_401704638.json.gz"),
     ("nba", "nba_400829116.json.gz"),
+    ("nba", "nba_401910002.json.gz"),  # a missed "Heave Jump Shot" the box does not count as an FGA
     ("wnba", "summary_wnba.json"),
     ("wnba", "wnba_400927398.json.gz"),
     ("mbb", "summary_mbb.json"),
