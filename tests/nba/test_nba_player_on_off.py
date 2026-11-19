@@ -330,6 +330,21 @@ def test_span_follows_traded_players_like_stats_nba() -> None:
     assert (j0["minutes_off"] - j0["min_off"]).abs().median() >= 128  # observed 128.4
 
 
+def test_inactive_lists_alone_keep_the_open_end() -> None:
+    """Every fixture game has an inactive list, but it never names a DNP-CD: no span may close on it."""
+    dates = adapter._game_dates(_read("schedule"))
+    inactive = _read("game_rosters").select("team_id", "player_id", "game_id")
+    out = player_on_off(_rows(), player_dtype=pl.Int64(), min_poss=400, game_dates=dates, tenure=True, rosters=inactive)
+    j = out.join(_on_off(), on=["team_id", "player_id"], validate="1:1", suffix="_d")
+    # a player listed for a later team closes there, rightly (28 here); the rest must keep the dates-only end
+    box = _read("player_boxscores").select(pl.col("person_id").alias("player_id"), "team_id")
+    teams = pl.concat([inactive.select("player_id", "team_id"), box]).unique().group_by("player_id").len()
+    one = j.join(teams.filter(pl.col("len") == 1), on="player_id", how="semi")
+    assert one.height == 448
+    # 80 close early when any listed row makes a game's list whole
+    assert one.filter(pl.col("span_last_date") < pl.col("span_last_date_d")).height == 0
+
+
 def test_span_columns_are_null_without_dates() -> None:
     out = player_on_off(_rows(), player_dtype=pl.Int64(), min_poss=400)
     span = [c for c in player_on_off_schema(pl.Int64()) if "span" in c]

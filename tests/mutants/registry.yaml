@@ -10089,6 +10089,16 @@
   expected: kill
   note: A fully listed team-season closes a span at the last listed game; without it a waived or traded player's span runs to the next team's first game or the season's end.
 
+- id: bb-oo-span-whole-list-names-every-player
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: '        gaps = played.join(listed, on=["team_id", "game_id", "player_id"], how="anti").select(keys).unique()'
+  mutant: '        gaps = team_games.join(listed, on=["team_id", "game_id"], how="anti").select(keys).unique()'
+  test: tests/nba/test_nba_player_on_off.py::test_inactive_lists_alone_keep_the_open_end
+  expected: kill
+  note: A game's list is whole only if it names everyone who played; an inactive list alone (no box score) would close a DNP-CD player's span early (80 fixture spans).
+
 - id: bb-oo-college-whole-season
   group: bb-player-on-off
   finding: BB-D5

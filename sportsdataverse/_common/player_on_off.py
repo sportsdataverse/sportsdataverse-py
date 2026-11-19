@@ -206,7 +206,9 @@ def _span_off(rows: pl.DataFrame, game_dates: pl.DataFrame, rosters: pl.DataFram
         listed = listed.join(team_games.select(*keys, "game_id", "game_date"), on=["team_id", "game_id"])
         assert listed.schema["season"] == seen.schema["season"], "season dtypes differ between rosters and rows"
         seen = pl.concat([seen, listed.select(seen.columns)])
-        gaps = team_games.join(listed, on=["team_id", "game_id"], how="anti").select(keys).unique()
+        # A game's list is whole only if it names everyone who played: an inactive list alone never does.
+        played = dated.explode("players").drop_nulls("players").select(*keys, "game_id", player_id="players")
+        gaps = played.join(listed, on=["team_id", "game_id", "player_id"], how="anti").select(keys).unique()
         listed_all = team_games.select(keys).unique().join(gaps, on=keys, how="anti")
     stints = (
         seen.group_by([*keys, "player_id"])
@@ -318,8 +320,9 @@ def player_on_off(
         rosters: ``team_id``, ``player_id`` and ``game_id`` of the games each player was listed
             for without taking the floor (a DNP or an inactive), for the span: a listed game counts
             as one of his games for the team, so a player injured on opening night opens his span
-            there, not at his debut; where every game of the team-season has rows (the box score
-            with its DNPs lists all of them) the span closes at his last listed game (waived, or
+            there, not at his debut; where every game of the team-season has rows naming everyone who
+            played it (the box score with its DNPs does; an inactive list alone never does) the
+            span closes at his last listed game (waived, or
             traded before he played for his next team). ``None`` opens it at his first game on the
             floor and closes it only at a later team's first game or the season's end.
 
