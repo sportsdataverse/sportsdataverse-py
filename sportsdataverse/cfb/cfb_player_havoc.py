@@ -102,6 +102,38 @@ def _forced_fumbles(defensive_players: pl.DataFrame, games: pl.DataFrame) -> pl.
     return ff.filter(pl.col("athlete_id").is_not_null()).select(*_KEYS, "athlete_name", "forced_fumbles")
 
 
+def _season_totals(player_box: pl.DataFrame, defensive_players: pl.DataFrame) -> pl.DataFrame:
+    """Season totals and per-game rates per ``(season, team_id, athlete_id)``, box lines joined to forced fumbles."""
+    player_box = player_box.with_columns(pl.col(k).cast(pl.Int64) for k in _KEYS)
+    games = _box_games(player_box)
+    if defensive_players.height and "forced_fumbles" in defensive_players.columns:
+        ff = _forced_fumbles(defensive_players, games)
+        for k in _KEYS:
+            assert games.schema[k] == ff.schema[k], k
+        games = games.join(ff, on=_KEYS, how="full", coalesce=True).with_columns(
+            pl.coalesce("athlete_name", "athlete_name_right").alias("athlete_name")
+        )
+    else:
+        games = games.with_columns(pl.lit(0.0).alias("forced_fumbles"))
+    counts = [c for c in _RATES if c != "havoc"]
+    games = games.with_columns(pl.col(c).fill_null(0.0) for c in counts)
+    return (
+        games.sort("game_id")
+        .group_by("season", "team_id", "athlete_id")
+        .agg(
+            pl.col("athlete_name").drop_nulls().last(),
+            pl.len().cast(pl.Int64).alias("games"),
+            *[pl.col(c).sum() for c in counts],
+        )
+        .with_columns(
+            (pl.col("tfl") + pl.col("pass_breakups") + pl.col("interceptions") + pl.col("forced_fumbles")).alias(
+                "havoc"
+            )
+        )
+        .with_columns((pl.col(c) / pl.col("games")).alias(r) for c, r in _RATES.items())
+    )
+
+
 def cfb_player_havoc(
     seasons: int | list[int],
     *,
@@ -175,35 +207,7 @@ def cfb_player_havoc(
         out = pl.DataFrame(schema=_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
 
-    player_box = player_box.with_columns(pl.col(k).cast(pl.Int64) for k in _KEYS)
-    games = _box_games(player_box)
-    if defensive_players.height and "forced_fumbles" in defensive_players.columns:
-        ff = _forced_fumbles(defensive_players, games)
-        for k in _KEYS:
-            assert games.schema[k] == ff.schema[k], k
-        games = games.join(ff, on=_KEYS, how="full", coalesce=True).with_columns(
-            pl.coalesce("athlete_name", "athlete_name_right").alias("athlete_name")
-        )
-    else:
-        games = games.with_columns(pl.lit(0.0).alias("forced_fumbles"))
-    counts = [c for c in _RATES if c != "havoc"]
-    games = games.with_columns(pl.col(c).fill_null(0.0) for c in counts)
-
-    season = (
-        games.sort("game_id")
-        .group_by("season", "team_id", "athlete_id")
-        .agg(
-            pl.col("athlete_name").drop_nulls().last(),
-            pl.len().cast(pl.Int64).alias("games"),
-            *[pl.col(c).sum() for c in counts],
-        )
-        .with_columns(
-            (pl.col("tfl") + pl.col("pass_breakups") + pl.col("interceptions") + pl.col("forced_fumbles")).alias(
-                "havoc"
-            )
-        )
-        .with_columns((pl.col(c) / pl.col("games")).alias(r) for c, r in _RATES.items())
-    )
+    season = _season_totals(player_box, defensive_players)
     rates = list(_RATES.values())
     season = attach_sample_sizes(season, {r: pl.col("games") for r in rates})
     season = attach_ranks(
