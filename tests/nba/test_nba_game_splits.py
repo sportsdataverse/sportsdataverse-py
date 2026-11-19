@@ -199,3 +199,18 @@ def test_transition_needs_a_live_start_and_a_quick_first_shot(monkeypatch: pytes
     assert poss.filter(pl.col("start_type") == "period_start")["transition"].not_().all()
     # 4 periods, so 4 period starts; the counted possessions partition every team row
     assert poss.filter(pl.col("start_type") == "period_start").height == 4
+
+
+def test_only_a_heave_leaves_the_shot_counts(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The heave match is a whole word: a missed shot by a shooter named "Heaven" stays an FGA."""
+    raw = _raw("nba_401910002.json.gz")
+    heave = next(p for p in raw["plays"] if p["type"]["text"] == "Heave Jump Shot")
+    assert heave["text"] == "Mikal Bridges misses heave jump shot" and not heave["scoringPlay"]
+    miss = next(p for p in raw["plays"] if p.get("shootingPlay") and not p["scoringPlay"] and "heave" not in p["text"])
+    miss["text"] = "Heaven Smith " + miss["text"].split(" misses ", 1)[1].join(["misses ", ""])
+    mod = importlib.import_module("sportsdataverse.nba.nba_pbp")
+    monkeypatch.setattr(mod, "download", lambda url, **kwargs: _Resp(copy.deepcopy(raw)))
+    f = gp.game_page_frames(mod.espn_nba_pbp(game_id=401910002, return_parsed=False), league="nba")
+    box = dict(f["team_box"].select(pl.col("team_id").cast(pl.Int32), "field_goals_attempted").iter_rows())
+    for team, fga in f["team_game_splits"].select("team_id", "fga").iter_rows():
+        assert fga == box[team]

@@ -185,6 +185,10 @@ def _three(pbp: pl.DataFrame) -> pl.Expr:
     )
 
 
+#: A heave, as a whole word: a shooter named "Heaven" takes real attempts.
+_HEAVE = r"(?i)\bheave\b"
+
+
 def _flags(pbp: pl.DataFrame) -> pl.DataFrame:
     """Every play with its event flags (``_fga``, ``_ft``, ``_tov``, ...) and its score change per side."""
     tt, txt = pl.col("type_text").fill_null(""), pl.col("text").fill_null("")
@@ -211,8 +215,8 @@ def _flags(pbp: pl.DataFrame) -> pl.DataFrame:
         (
             shoot
             & ~is_ft
-            & (tt.str.contains("(?i)heave") | txt.str.contains("(?i)heave"))
-            & ~pl.col("scoring_play").fill_null(False)
+            & (tt.str.contains(_HEAVE) | txt.str.contains(_HEAVE))
+            & (pl.col("scoring_play").fill_null(False) == False)
         ).alias("_heave_miss"),
         (shoot & ~is_ft & _three(pbp)).alias("_three"),
         is_ft.alias("_ft"),
@@ -418,7 +422,7 @@ def _team_rows(rows: pl.DataFrame, poss: pl.DataFrame, player_box: pl.DataFrame 
         ev.filter(pl.col("_ft"))
         .group_by("team_id")
         .agg(pl.len().cast(pl.Int64).alias("fta"), pl.col("_made").sum().cast(pl.Int64).alias("ftm")),
-        _zone_counts(ev.filter(pl.col("_fga") & ~pl.col("_heave_miss")), ["team_id"]),
+        _zone_counts(ev.filter((pl.col("_fga") == True) & (pl.col("_heave_miss") == False)), ["team_id"]),
     ]
     has_bench = (
         player_box is not None and player_box.height and {"starter", "points", "team_id"} <= set(player_box.columns)
@@ -546,7 +550,7 @@ def _player_counts(rows: pl.DataFrame, box: pl.DataFrame | None) -> pl.DataFrame
     mine = rows.filter(pl.col("athlete_id_1").is_not_null() & (pl.col("_off") | pl.col("_ft"))).with_columns(
         actor.alias("athlete_id"), pl.col("_team").alias("team_id")
     )
-    shots = _zone_counts(mine.filter(pl.col("_fga") & ~pl.col("_heave_miss")), key).rename(
+    shots = _zone_counts(mine.filter((pl.col("_fga") == True) & (pl.col("_heave_miss") == False)), key).rename(
         {"fg3_fga": "fg3a", "fg3_fgm": "fg3m"}
     )
     # points from the plays, not score_value: 2015-16 NBA free throws all ship scoreValue 0
