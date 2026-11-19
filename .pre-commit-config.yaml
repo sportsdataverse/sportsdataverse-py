@@ -116,6 +116,14 @@ repos:
         language: system
         files: ^(CHANGELOG\.md|changelog\.d/.*)$
         pass_filenames: false
+      # The changelog.d/ house style (`- **Area:**` lead, <= 3 lines of <= 120 chars, trailing `(#PR)`), so a
+      # fragment off the style fails at commit time instead of in review or on main. Same gate as the CI lint job.
+      - id: changelog-fragment-style
+        name: changelog.d fragment house style
+        entry: uv run --frozen python tools/hooks/sync_docs_changelog.py --check
+        language: system
+        files: ^changelog\.d/
+        pass_filenames: false
       # Gate: the committed generated wrappers must stay in sync with the codegen
       # metadata (endpoint YAML / schema / template). Runs `--check` (re-render to a
       # temp dir + byte-diff) rather than write-mode, so it fails clearly on drift
