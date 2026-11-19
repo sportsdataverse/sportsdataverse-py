@@ -255,6 +255,13 @@ _DEFAULT_OVERRIDES = {
     # League off week, so it takes the sweep capture's date (2025-01-15, 2 games, nbagl_stats/scoreboardv3.json).
     ("nbagl_stats", "cumestatsteam", "TeamID"): "1612709925",
     ("nbagl_stats", "scoreboardv3", "GameDate"): "2025-01-15",
+    # leagueseasonmatchups does NOT read TeamID "0" as all teams (matchupsrollup does): measured
+    # 2026-11-19, NBA 2026-27 answered 0 rows with "0" on both and 38,644 rows with "" on both.
+    **{
+        (stem, "leagueseasonmatchups", key): ""
+        for stem in ("nba_stats", "wnba_stats")
+        for key in ("DefTeamID", "OffTeamID")
+    },
 }
 _SEASON_DOC = {
     # Never name the date helpers here: generate.py treats a whole-word mention on a reference

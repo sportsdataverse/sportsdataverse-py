@@ -247,6 +247,15 @@ def test_entity_defaults_belong_to_the_wrappers_league():
     assert _sent(wnba_stats.wnba_stats_playbyplayv2)["StartPeriod"] == "0"  # wehoop's constant
 
 
+@pytest.mark.parametrize("fn", [nba_stats.nba_stats_leagueseasonmatchups, wnba_stats.wnba_stats_leagueseasonmatchups])
+def test_leagueseasonmatchups_sends_blank_team_filters(fn):
+    # Measured 2026-11-19: leagueseasonmatchups reads TeamID "0" as a team, not "all teams" (NBA 2026-27
+    # 0 rows vs 38,644 blank; WNBA 2026 0 vs 23,330). matchupsrollup does read "0" as all teams.
+    sent = _sent(fn)
+    assert sent["DefTeamID"] == "" and sent["OffTeamID"] == ""
+    assert _sent(nba_stats.nba_stats_matchupsrollup)["DefTeamID"] == "0"
+
+
 # One wrapper per family the 2026-10-05 sweeps found broken (no season: an HTTP 500, or every season
 # summed), each league.
 _LIVE = [
