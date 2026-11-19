@@ -28,7 +28,7 @@ payload bodies, gzipped verbatim (no trimming).
 | `2002_16_STL_SEA_nflverse.parquet` | the same game's nflverse rows | — | nflverse-data `pbp_2002.parquet` (downloaded 2026-10-26), 28 columns (© nflverse contributors, CC BY 4.0); an oracle for `test_matches_nflverse` |
 | `2025_03_LA_PHI.json.gz` | 2025 wk3 LA @ PHI (final) | `FINAL` | `nfl-raw` committed library `nfl/raw/2025/2025_03_LA_PHI.json` (blob `fcdf1738`); play 3600, a blocked field goal the kicker recovers and throws, must stay `field_goal` (`test_play_type.py`) |
 | `2025_02_SEA_PIT.json.gz` | 2025 wk2 SEA @ PIT (final) | `FINAL` | `nfl-raw` committed library `nfl/raw/2025/2025_02_SEA_PIT.json` (blob `dd7d51d5`); play 3686, a sack-fumble reversed to an incomplete pass with intentional grounding: Shield `PASS`, pinned as `pass` although nflverse's stale feed type makes it `no_play` |
-| `2025_11_HOU_TEN.json.gz` | 2025 wk11 HOU @ TEN (final) | `FINAL` | `nfl-raw` committed library `nfl/raw/2025/2025_11_HOU_TEN.json` (blob `1b56b2ec`); three Shield `UNSPECIFIED` plays (312 an enforced no-play penalty, 1675 / 1699 penalties declined in punt formation), all `no_play` as in nflverse (`test_play_type.py`) |
+| `2025_11_HOU_TEN.json.gz` | 2025 wk11 HOU @ TEN (final) | `FINAL` | `nfl-raw` committed library `nfl/raw/2025/2025_11_HOU_TEN.json` (blob `1b56b2ec`); three Shield `UNSPECIFIED` plays (312 an enforced no-play penalty, 1675 / 1699 penalties declined in punt formation with no stats): 312 `no_play`, the other two null, as in nflverse `pbp_2025` (`test_play_type.py`) |
 
 The four `2026_02_DET_BUF` files are the live-path fixtures: the Q2 in-progress one exercises
 open-drive possession, the held-back game-outcome columns, the current-situation row
