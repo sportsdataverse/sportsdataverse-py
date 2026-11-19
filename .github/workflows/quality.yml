@@ -51,6 +51,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: changelog.d fragment house style (3 lines, `- **Area:**` lead, trailing `(#PR)`)
+        # Stdlib only and first, so a fragment off the style fails in seconds.
+        run: python3 tools/hooks/sync_docs_changelog.py --check
       - name: Install uv
         uses: astral-sh/setup-uv@v8.1.0
         with:
