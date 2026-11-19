@@ -24,7 +24,10 @@ mirrors; only columns whose filter and aggregation are **identical in both
 processors** are checked, which is why the league-divergent totals
 (``total_yards`` / ``off_yards``, which CFB zeroes on interception rows, and
 ``penalty_first_downs_created``, which CFB restricts to accepted penalties)
-are absent.
+are absent. The one exception is the box-score rushing count, checked per league
+(:data:`_LEAGUE_TEAM_CHECKS` / :data:`_LEAGUE_PLAYER_CHECKS`): CFB's rusher lines
+and ``rushing_attempts`` / ``rushing_yards`` follow the NCAA convention (a sack
+is the passer's rush, a kneel-down a TEAM rush).
 
 **Fail closed.** A team the frame has rows for but the box has no row for is a
 violation, not a skip -- the #553 review's finding 4 (a failed id join read as
@@ -106,6 +109,11 @@ _FILTERS: dict[str, tuple[Callable[[], pl.Expr] | None, tuple[str, ...]]] = {
     "standard": (lambda: _t("standard_down") & _t("scrimmage_play"), ("standard_down", "scrimmage_play")),
     "passing_down": (lambda: _t("passing_down") & _t("scrimmage_play"), ("passing_down", "scrimmage_play")),
     "middle8": (lambda: _t("middle_8") & _t("scrimmage_play"), ("middle_8", "scrimmage_play")),
+    # CFB rush_count_box: designed rushes, sacks and kneel-downs (the NCAA box convention)
+    "rush_count_cfb": (
+        lambda: (_t("rush") & _t("scrimmage_play")) | (_t("sack_vec") & _t("scrimmage_play")) | _t("kneel_down"),
+        ("rush", "scrimmage_play", "sack_vec", "kneel_down"),
+    ),
 }
 
 
@@ -132,6 +140,18 @@ def _count_true(col: str) -> Callable[[], pl.Expr]:
 
 def _rows() -> Callable[[], pl.Expr]:
     return lambda: pl.len()
+
+
+def _cfb_box_rush_yds() -> pl.Expr:
+    """CFB ``box_rush_yds``: a sack's loss (``yds_sacked``, else its ``statYardage``), else ``yds_rushed``."""
+    return (
+        pl.when(_t("sack_vec"))
+        .then(pl.coalesce(c("yds_sacked"), c("statYardage")))
+        .otherwise(c("yds_rushed"))
+        .cast(pl.Float64, strict=False)
+        .fill_null(0.0)
+        .sum()
+    )
 
 
 def _ck(section: str, team_key: str, column: str, flt: str, expr: Callable[[], pl.Expr], *needs: str) -> _Check:
@@ -225,13 +245,29 @@ _USAGE_TEAM_CHECKS: tuple[tuple[str, Callable[[], pl.Expr], tuple[str, ...]], ..
 #: Per-player sections against the same rows their builder aggregates.
 _PLAYER_CHECKS: tuple[tuple[str, str, str, Callable[[], pl.Expr], tuple[str, ...]], ...] = (
     # (section, box column summed over the section's players, filter, frame expr, needs)
-    ("rush", "Car", "rush", _sum("rush"), ("rush",)),
-    ("rush", "Yds", "rush", _sum("yds_rushed"), ("yds_rushed",)),
     ("pass", "Att", "pass", _sum("pass_attempt"), ("pass_attempt",)),
     ("pass", "Comp", "pass", _sum("completion"), ("completion",)),
     ("receiver", "Tar", "pass", _sum("target"), ("target",)),
     ("receiver", "Rec", "pass", _sum("completion"), ("completion",)),
 )
+
+#: The box-score rushing count, which differs by league.
+_LEAGUE_TEAM_CHECKS: dict[str, tuple[_Check, ...]] = {
+    "cfb": (
+        _ck("team", "pos_team", "rushing_attempts", "rush_count_cfb", _rows(), "rush"),
+        _ck("team", "pos_team", "rushing_yards", "rush_count_cfb", _cfb_box_rush_yds, "yds_sacked", "yds_rushed"),
+    ),
+}
+_LEAGUE_PLAYER_CHECKS: dict[str, tuple[tuple[str, str, str, Callable[[], pl.Expr], tuple[str, ...]], ...]] = {
+    "nfl": (
+        ("rush", "Car", "rush", _sum("rush"), ("rush",)),
+        ("rush", "Yds", "rush", _sum("yds_rushed"), ("yds_rushed",)),
+    ),
+    "cfb": (
+        ("rush", "Car", "rush_count_cfb", _rows(), ("rush",)),
+        ("rush", "Yds", "rush_count_cfb", _cfb_box_rush_yds, ("yds_sacked", "yds_rushed", "statYardage")),
+    ),
+}
 
 #: ``rate == numerator / denominator`` inside one row of one section.
 #: Only ratios whose denominator is the count the builder actually divided by: a ``.mean()``
@@ -392,12 +428,14 @@ def _filtered(plays: pl.DataFrame, name: str) -> pl.DataFrame | None:
 # ---------------------------------------------------------------------------
 
 
-def _team_totals(plays: pl.DataFrame, box: dict[str, Any] | None, standing: pl.DataFrame | None) -> Any:
+def _team_totals(
+    plays: pl.DataFrame, box: dict[str, Any] | None, standing: pl.DataFrame | None, league: str = "nfl"
+) -> Any:
     """``box.team_totals_match_plays`` -- team / situational / defensive / team_usage totals."""
     full = _is_full_box(box)
     tally = _Tally()
     cache: dict[str, pl.DataFrame | None] = {}
-    for check in _TEAM_CHECKS:
+    for check in _TEAM_CHECKS + _LEAGUE_TEAM_CHECKS.get(league, ()):
         if any(col not in plays.columns for col in check.needs):
             continue
         if check.filter not in cache:
@@ -450,12 +488,12 @@ def _team_totals(plays: pl.DataFrame, box: dict[str, Any] | None, standing: pl.D
     )
 
 
-def _player_sums(plays: pl.DataFrame, box: dict[str, Any] | None) -> Any:
+def _player_sums(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = "nfl") -> Any:
     """``box.player_sums_match_team`` -- a per-player section sums to the same rows."""
     full = _is_full_box(box)
     tally = _Tally()
     cache: dict[str, pl.DataFrame | None] = {}
-    for section, column, flt, expr, needs in _PLAYER_CHECKS:
+    for section, column, flt, expr, needs in _PLAYER_CHECKS + _LEAGUE_PLAYER_CHECKS.get(league, ()):
         if any(col not in plays.columns for col in needs):
             continue
         if flt not in cache:
@@ -800,9 +838,9 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
     Args:
         plays: one game's processed plays frame.
         box: the processor's ``advBoxScore`` dict (``None`` / ``{}`` -> no rules).
-        league: ``"nfl"`` or ``"cfb"``; the checked columns are the ones both
-            processors build identically, so the league is currently carried for
-            symmetry with :func:`~sportsdataverse.validation.pbp_invariants.evaluate`.
+        league: ``"nfl"`` or ``"cfb"``; it picks the box-score rushing-count checks,
+            the one place the two processors' conventions differ (CFB counts a
+            sack as the passer's rush and a kneel-down as a TEAM rush).
 
     Returns:
         One ``RuleResult`` per ``box.*`` reconciliation rule that could run,
@@ -823,7 +861,6 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
         * :func:`~sportsdataverse.validation.pbp_invariants.evaluate` -- runs these rules with the rest
         * :func:`~sportsdataverse.validation.validate_game` -- the per-game gate built on both
     """
-    del league  # every checked column is league-identical; see the module docstring
     if not isinstance(plays, pl.DataFrame) or plays.height == 0 or not box:
         return []
     from sportsdataverse.validation.findings import Severity
@@ -852,8 +889,8 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
     teams = game_teams(plays)
     return [
         *marker,
-        _team_totals(plays, box, standing),
-        _player_sums(plays, box),
+        _team_totals(plays, box, standing, league),
+        _player_sums(plays, box, league),
         _rates(box),
         _mirror(box, teams),
         _turnovers(plays, box),
