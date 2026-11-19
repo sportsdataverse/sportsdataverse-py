@@ -58,20 +58,48 @@ def _rows(lg: str = "nba", season: int = 2025) -> pl.DataFrame:
 
 
 @cache
-def _on_off(level: str | None = None, *, tenure: bool = True) -> pl.DataFrame:
-    """The adapter's build (``tenure=True``, the off side over his span) or the whole-season one."""
-    dates = adapter._game_dates(_read("schedule"))
-    return player_on_off(_rows(), player_dtype=pl.Int64(), min_poss=400, level=level, game_dates=dates, tenure=tenure)
+def _rosters() -> pl.DataFrame:
+    """The fixture games' box-score rows (DNPs included) and inactive lists, as the adapter reads them."""
+    box = _read("player_boxscores").select("team_id", pl.col("person_id").alias("player_id"), "game_id")
+    return pl.concat([box, _read("game_rosters").select("team_id", "player_id", "game_id")])
 
 
 @cache
-def _traded(*, tenure: bool = True) -> pl.DataFrame:
-    """The fixture plus ``nba_*_2025_trades``: the three other-team games that bound three traded players' spans."""
+def _on_off(level: str | None = None, *, tenure: bool = True, rosters: bool = False) -> pl.DataFrame:
+    """The span build (``tenure=True``, the off side over his span) or the whole-season one.
+
+    ``rosters=True`` adds the listed games the adapter reads (its build); without them the span
+    runs from his first game on the floor.
+    """
+    dates = adapter._game_dates(_read("schedule"))
+    return player_on_off(
+        _rows(),
+        player_dtype=pl.Int64(),
+        min_poss=400,
+        level=level,
+        game_dates=dates,
+        tenure=tenure,
+        rosters=_rosters() if rosters else None,
+    )
+
+
+@cache
+def _traded(*, tenure: bool = True, rosters: bool = True) -> pl.DataFrame:
+    """The fixture plus ``nba_*_2025_trades``: the three other-team games that bound three traded players' spans.
+
+    ``rosters=True`` (the default) is the adapter's build; ``False`` opens each span at his first game on the floor.
+    """
     names = ("pbp", "game_lineups", "possessions", "schedule")
     frames = [pl.concat([_read(n), pl.read_parquet(FIX / f"nba_{n}_2025_trades.parquet")]) for n in names]
     dates = adapter._game_dates(frames[3])
     return player_on_off(
-        nba_impact_rows(*frames), player_dtype=pl.Int64(), min_poss=400, level="nba", game_dates=dates, tenure=tenure
+        nba_impact_rows(*frames),
+        player_dtype=pl.Int64(),
+        min_poss=400,
+        level="nba",
+        game_dates=dates,
+        tenure=tenure,
+        rosters=_rosters() if rosters else None,
     )
 
 
@@ -183,14 +211,19 @@ def test_matches_stats_nba_on_off_summary() -> None:
     served = o.join(_traded(), on=["team_id", "player_id"], how="left", validate="1:1")
     same = served.join(full.select("team_id", "player_id"), on=["team_id", "player_id"], how="semi")
     assert same.height == 41
+    # Here stats.nba.com's window is the season and the listed games make the span the season too, so
+    # these are the whole-season numbers (0.813 / 2.998 / 0.9642 when a late debut opened the span).
     t_diff = (same["net_rtg_diff"] - (same["net_rating"] - same["net_rating_off"])).abs()
-    assert t_diff.median() <= 0.82 and t_diff.max() <= 3.0  # observed 0.813 / 2.998
-    assert same.select(pl.corr(pl.col("net_rtg_diff"), on_off_gap)).item() >= 0.964  # observed 0.9642
+    assert t_diff.median() <= 0.69 and t_diff.max() <= 3.96  # observed 0.684 / 3.958
+    assert same.select(pl.corr(pl.col("net_rtg_diff"), on_off_gap)).item() >= 0.961  # observed 0.9611
     both = served.filter(
         pl.col("poss_on") + pl.col("opp_poss_on") >= gate, pl.col("poss_off") + pl.col("opp_poss_off") >= gate
     )
     assert both.height == 56
-    assert both.select(pl.corr(pl.col("net_rtg_diff"), on_off_gap)).item() >= 0.962  # observed 0.9626
+    # 0.9626 and 1.051 / 4.528 from game dates alone
+    assert both.select(pl.corr(pl.col("net_rtg_diff"), on_off_gap)).item() >= 0.968  # observed 0.9681
+    b_diff = (both["net_rtg_diff"] - (both["net_rating"] - both["net_rating_off"])).abs()
+    assert b_diff.median() <= 0.81 and b_diff.max() <= 3.96  # observed 0.801 / 3.958
 
 
 def test_span_off_is_the_team_over_his_span() -> None:
@@ -250,27 +283,66 @@ def test_span_follows_traded_players_like_stats_nba() -> None:
     assert g["span_first_date"] == dt.date(2025, 2, 4) and g["team_games_span"] == 34 and g["games"] == 28
     assert abs(g["minutes_off"] - g["min_off"]) <= 1  # observed 693.75 v 694
     assert abs(g["net_rtg_off"] - g["net_rating_off"]) <= 0.13  # observed 0.123; the season's is 1.00
-    # Jusuf Nurkic and Josh Okogie, Phoenix to Charlotte: it closes the day before their first
-    # Charlotte game (2025-02-12, 2025-01-20).
+    # Jusuf Nurkic and Josh Okogie, Phoenix to Charlotte: it closes at their last game listed for
+    # Phoenix (2025-02-05, 2025-01-14), days before their first Charlotte game (2025-02-12,
+    # 2025-01-20); Okogie's opens on opening night, where he was listed, not at his 2024-11-08 debut.
     n, o = row[203994], row[1629006]
-    assert n["span_last_date"] == dt.date(2025, 2, 11) and o["span_last_date"] == dt.date(2025, 1, 18)
+    assert n["span_last_date"] == dt.date(2025, 2, 5) and o["span_last_date"] == dt.date(2025, 1, 14)
+    assert o["span_first_date"] == dt.date(2024, 10, 23)
     for r in (g, n, o):
+        assert abs(r["minutes_off"] - r["min_off"]) <= 16.1  # observed 0.25 / 6.84 / 16.09
         assert abs(r["net_rtg_off"] - r["net_rating_off"]) < abs(r["net_rtg_off_season"] - r["net_rating_off"])
+    # From game dates alone the two spans run to the day before the Charlotte debut, and Okogie's
+    # opens at his debut: 156 and 277 off-court minutes from stats.nba.com's.
+    dated = {r["player_id"]: r for r in _traded(rosters=False).to_dicts() if r["team_id"] == 1610612756}
+    assert dated[203994]["span_last_date"] == dt.date(2025, 2, 11) and dated[1629006]["span_last_date"] == dt.date(
+        2025, 1, 18
+    )
+    assert abs(dated[1629006]["minutes_off"] - o["min_off"]) > 270  # observed 276.9
     # The bound reads every game of the season: without his last Dallas game the fixture's latest
     # Dallas game of his is 2024-10-25 (against Minnesota), and the span opens the next day.
     alone = _on_off().filter(player_id=1629656).row(0, named=True)
     assert alone["span_first_date"] == dt.date(2024, 10, 26)
     # Across the 70: on the 26 whose stats.nba.com off side is short of the team's season (traded,
-    # signed or waived), the span cuts the median off-court net rating miss from 2.96 to 1.27; on
-    # the 44 whose is the whole season it costs 0.26 to 0.40 (a late debut starts the span late).
+    # signed or waived), the span cuts the median off-court net rating miss from 2.96 (the whole
+    # season) to 0.59; on the 44 whose is the whole season it is the whole season's 0.261, since the
+    # listed games (DNPs, inactives) open a late debut's span on opening night. From game dates alone
+    # (``rosters=False``) the span opens at the debut and closes only at a later team's first game:
+    # 1.27 on the 26 and 0.40 on the 44 (BB-D5's late-debut gap, sportsdataverse-py #1218).
     gap = (pl.col("min") + pl.col("min_off") - pl.col("minutes_on") - pl.col("minutes_off_season")).abs() > 3
     miss = {
         s or "tenure": (pl.col(f"net_rtg_off{s}") - pl.col("net_rating_off")).abs().median() for s in ("", "_season")
     }
     short = j.filter(gap).select(**miss).row(0, named=True)
     full = j.filter(~gap).select(**miss).row(0, named=True)
-    assert j.filter(gap).height == 26 and short["tenure"] <= 1.27 and short["_season"] >= 2.95  # observed 1.265 / 2.960
-    assert full["_season"] <= 0.27 and full["tenure"] <= 0.40  # observed 0.261 / 0.399
+    assert j.filter(gap).height == 26 and short["tenure"] <= 0.59 and short["_season"] >= 2.95  # observed 0.587 / 2.960
+    assert full["_season"] <= 0.27 and full["tenure"] <= 0.27  # observed 0.261 / 0.261
+    # off-court minutes: a median 2.9 from stats.nba.com's over the 70 (128.4 from game dates alone)
+    assert (j["minutes_off"] - j["min_off"]).abs().median() <= 3.0  # observed 2.90
+    j0 = (
+        _oracle()
+        .join(_traded(rosters=False), on=["team_id", "player_id"], validate="1:1")
+        .join(season, on=["team_id", "player_id"], validate="1:1")
+    )
+    short0 = j0.filter(gap).select(**miss).row(0, named=True)
+    full0 = j0.filter(~gap).select(**miss).row(0, named=True)
+    assert short0["tenure"] >= 1.26 and full0["tenure"] >= 0.39  # observed 1.265 / 0.399
+    assert (j0["minutes_off"] - j0["min_off"]).abs().median() >= 128  # observed 128.4
+
+
+def test_inactive_lists_alone_keep_the_open_end() -> None:
+    """Every fixture game has an inactive list, but it never names a DNP-CD: no span may close on it."""
+    dates = adapter._game_dates(_read("schedule"))
+    inactive = _read("game_rosters").select("team_id", "player_id", "game_id")
+    out = player_on_off(_rows(), player_dtype=pl.Int64(), min_poss=400, game_dates=dates, tenure=True, rosters=inactive)
+    j = out.join(_on_off(), on=["team_id", "player_id"], validate="1:1", suffix="_d")
+    # a player listed for a later team closes there, rightly (28 here); the rest must keep the dates-only end
+    box = _read("player_boxscores").select(pl.col("person_id").alias("player_id"), "team_id")
+    teams = pl.concat([inactive.select("player_id", "team_id"), box]).unique().group_by("player_id").len()
+    one = j.join(teams.filter(pl.col("len") == 1), on="player_id", how="semi")
+    assert one.height == 448
+    # 80 close early when any listed row makes a game's list whole
+    assert one.filter(pl.col("span_last_date") < pl.col("span_last_date_d")).height == 0
 
 
 def test_span_columns_are_null_without_dates() -> None:
@@ -402,6 +474,10 @@ def test_public_builders_read_the_start_year(monkeypatch: pytest.MonkeyPatch) ->
     for loader, name in names.items():
         monkeypatch.setattr(nba_loaders, f"load_nba_stats_{loader}", fixture("nba", name, 2024))
         monkeypatch.setattr(wnba_loaders, f"load_wnba_stats_{loader}", fixture("wnba", name, 2025))
+    for loader in ("player_boxscores", "game_rosters"):  # the listed games the span opens on
+        monkeypatch.setattr(nba_loaders, f"load_nba_stats_{loader}", fixture("nba", loader, 2024))
+    # the WNBA box release starts at 2026, so 2025 reads only the inactive lists (none here)
+    monkeypatch.setattr(wnba_loaders, "load_wnba_stats_game_rosters", lambda seasons: pl.DataFrame())
     seen: list[object] = []
     real = adapter.player_on_off
 
@@ -410,7 +486,8 @@ def test_public_builders_read_the_start_year(monkeypatch: pytest.MonkeyPatch) ->
         return real(*args, **kwargs)  # type: ignore[arg-type]
 
     monkeypatch.setattr(adapter, "player_on_off", spy)
-    assert nba_player_on_off(2025).equals(_on_off(level="nba"))
+    assert nba_player_on_off(2025).equals(_on_off(level="nba", rosters=True))
+    assert not _on_off(level="nba", rosters=True).equals(_on_off(level="nba"))  # the listed games move spans
     assert not _on_off(level="nba").equals(_on_off())  # the adapter's level gate changes ranks
     assert nba_player_wowy(2025).equals(_wowy())
     assert nba_player_on_off(2025, season_type="preseason").height == 0  # the fixture has no preseason game
