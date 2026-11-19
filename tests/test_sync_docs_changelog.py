@@ -160,28 +160,6 @@ def test_the_unreleased_page_says_when_nothing_is_merged():
     assert "Nothing has been merged since the last release." in page
 
 
-_TRAILING_PR = re.compile(r"\(#\d+(?:, #\d+)*\)$")
-
-
-def _style_errors(directory: Path) -> list[str]:
-    """changelog.d/README.md's bullet contract: `- **Area:**` lead, <= 3 lines of <= 120 chars, ends with `(#PR)`."""
-    errors = []
-    for path in sorted(directory.glob("*.md")):
-        if path.name == "README.md":
-            continue
-        for bullet in sync._bullets(path.name, path.read_text(encoding="utf-8-sig")):
-            lines = bullet.splitlines()
-            head = f"changelog.d/{path.name}: {lines[0][:60]!r}"
-            if not bullet.startswith("- **"):
-                errors.append(f"{head} does not start with a `- **Area:**` lead")
-            if len(lines) > 3:
-                errors.append(f"{head} runs {len(lines)} lines (at most 3; split it)")
-            errors.extend(f"{head} has a {len(x)}-char line (at most 120)" for x in lines if len(x) > 120)
-            if not _TRAILING_PR.search(bullet):
-                errors.append(f"{head} does not end with its PR number, `(#123)`")
-    return errors
-
-
 @pytest.mark.parametrize(
     ("body", "why"),
     [
@@ -194,18 +172,35 @@ def _style_errors(directory: Path) -> list[str]:
 )
 def test_a_bullet_off_the_house_style_is_reported(tmp_path, body, why):
     d = _fragments(tmp_path, {"x.fixed.md": body})
-    errors = _style_errors(d)
+    errors = sync.style_errors(d)
     assert len(errors) == 1 and why in errors[0]
 
 
 def test_a_house_style_bullet_passes(tmp_path):
     d = _fragments(tmp_path, {"x.fixed.md": "- **NFL:** a\n  b\n  c. (#2, #3)\n- **CFB:** d. (#4)\n"})
-    assert _style_errors(d) == []
+    assert sync.style_errors(d) == []
+
+
+@pytest.mark.parametrize(
+    ("files", "code", "why"),
+    [
+        ({"x.fixed.md": "- **NFL:** b. (#2)\n"}, 0, ""),
+        ({"x.fixed.md": "- **NFL:** b.\n"}, 1, "PR number"),
+        ({"x.fixed.md": "not a bullet\n"}, 1, "bullets"),
+        ({"X.fixed.md": "- **NFL:** b. (#2)\n"}, 1, "name a fragment"),
+    ],
+)
+def test_check_mode_gates_the_fragments_and_writes_nothing(tmp_path, monkeypatch, capsys, files, code, why):
+    """`--check` is the pre-commit / CI lint gate: a bad fragment fails before review, and no page is written."""
+    monkeypatch.setattr(sync, "FRAGMENTS", _fragments(tmp_path, files))
+    monkeypatch.setattr(sync, "PAGES", tmp_path / "pages")  # absent: a write would raise
+    assert sync.main(["--check"]) == code
+    assert why in capsys.readouterr().err
 
 
 def test_the_real_fragments_follow_the_house_style():
     """Fragments land verbatim in the release notes, so every bullet carries its area, its PR and fits in 3 lines."""
-    errors = _style_errors(sync.FRAGMENTS)
+    errors = sync.style_errors(sync.FRAGMENTS)
     assert not errors, "\n".join(errors)
 
 
