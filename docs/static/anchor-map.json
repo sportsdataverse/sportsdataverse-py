@@ -5253,6 +5253,7 @@
   "nba_live_boxscore": "nba-stats-api",
   "nba_live_pbp": "nba-stats-api",
   "nba_matchup_drapm": "models-and-calculators-2",
+  "nba_multiseason_rapm": "models-and-calculators-2",
   "nba_neutral_site_games": "analytics-3",
   "nba_official_seasons": "analytics-3",
   "nba_pbp_disk": "play-by-play-processing",

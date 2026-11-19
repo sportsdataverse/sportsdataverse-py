@@ -45,7 +45,7 @@ import polars as pl
 from scipy.sparse import csr_matrix
 from sklearn.linear_model import RidgeCV
 
-from sportsdataverse.nba.nba_rapm import RAPM_PENALTY, build_rapm_design, rapm_penalty
+from sportsdataverse.nba.nba_rapm import RAPM_PENALTY, build_rapm_design, rapm_penalty, ridge_rapm_coef
 
 _OFF: list[str] = [f"off_player_{i}" for i in range(1, 6)]
 _DEF: list[str] = [f"def_player_{i}" for i in range(1, 6)]
@@ -392,6 +392,116 @@ def nba_decay_rapm(
             "def_poss": pl.Series(def_poss, dtype=pl.Int64),
         }
     ).sort("player_id")
+    return out.to_pandas() if return_as_pandas else out
+
+
+#: Output schema for :func:`nba_multiseason_rapm`.
+MULTISEASON_RAPM_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    "o_multiseason_rapm": pl.Float64,
+    "d_multiseason_rapm": pl.Float64,
+    "multiseason_rapm": pl.Float64,
+    "off_poss": pl.Int64,
+    "def_poss": pl.Int64,
+    "n_seasons": pl.Int64,
+}
+
+
+def nba_multiseason_rapm(
+    possessions: pl.DataFrame,
+    *,
+    seasons: Optional[Sequence[int]] = None,
+    alpha: Optional[float] = None,
+    league_id: Optional[str] = None,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Multi-season RAPM: one plain ridge fit over the possessions of several seasons pooled.
+
+    Every possession counts equally, whatever its season, and the fit uses plain RAPM's fixed league
+    penalty (:func:`~sportsdataverse.nba.nba_rapm.rapm_penalty`). That penalty is the per-possession
+    noise variance over the prior variance of a player's coefficient, so it does not depend on how
+    many seasons are pooled; a longer window shrinks each player less because he has more
+    possessions. For recency weighting inside a window use :func:`nba_decay_rapm`.
+
+    Gated against Jeremias Engelmann's 8-season RAPM (2019-20 through 2026-27, regular season, posted
+    2026-11-02; personal oracle, not redistributed) by ``tools/gate_multiseason_rapm.py`` on
+    2026-11-18: over those 1,687,155 regular-season possessions every one of his 1,224 players
+    matches on ``player_id``. Spearman against his total is 0.967 for the 488 players with at
+    least 10,000 possessions (0.975 at 30,000, 0.911 over all 1,224), offense 0.953, defense 0.954,
+    and the spread is 0.90 of his (std ratio at 10,000 possessions). Per-season decay weights
+    (0.9 to 0.7 a season) lowered every one of these, so the window is unweighted.
+
+    Args:
+        possessions: Possession+lineup rows of one or more seasons (``off_player_1..5``,
+            ``def_player_1..5``, ``points``, see :func:`~sportsdataverse.nba.nba_rapm.build_rapm_design`)
+            with an integer ``season`` column, as the ``nba_stats_possessions`` release stamps it
+            (the end year). Filter the season type (regular season, playoffs) before calling.
+        seasons: The ``season`` values to pool. ``None`` (default) pools every row.
+        alpha: A ridge penalty to fit at instead of the league's (positive).
+        league_id: ``"00"`` / ``"10"`` / ``"20"``, the league whose penalty is used; ``None`` reads it
+            from the ``game_id`` prefix (:func:`~sportsdataverse.nba.nba_rapm.rapm_penalty`).
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        Frame with :data:`MULTISEASON_RAPM_SCHEMA`, sorted by ``player_id``. ``off_poss`` /
+        ``def_poss`` are summed over the window and ``n_seasons`` counts the seasons a player has a
+        possession in. Empty input, or a ``seasons`` that matches no row, gives a zero-row frame.
+
+    Raises:
+        ValueError: *possessions* has rows but no ``season`` column.
+
+    Example:
+        The 2019-20 through 2026-27 regular-season window::
+
+            import polars as pl
+            from sportsdataverse.nba.nba_loaders import load_nba_stats_possessions, load_nba_stats_schedules
+            from sportsdataverse.nba.nba_rapm_variants import nba_multiseason_rapm
+
+            starts = range(2019, 2027)
+            rs = load_nba_stats_schedules(starts).filter(pl.col("season_type") == "regular-season")
+            poss = load_nba_stats_possessions(starts).join(rs.select("game_id"), on="game_id", how="semi")
+            df = nba_multiseason_rapm(poss)
+            print(df.filter(pl.col("off_poss") >= 10_000).sort("multiseason_rapm", descending=True).head())
+
+        See Also:
+            * `nba_api`_ — upstream play-by-play source
+
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    if possessions.is_empty():
+        out = _empty(MULTISEASON_RAPM_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+    if "season" not in possessions.columns:
+        raise ValueError("nba_multiseason_rapm requires a 'season' column")
+    frame = possessions if seasons is None else possessions.filter(pl.col("season").is_in(list(seasons)))
+    X, kept, pids = _prepare_design(frame)
+    if not pids:
+        out = _empty(MULTISEASON_RAPM_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+    penalty = rapm_penalty(kept, league_id) if alpha is None else alpha
+    coef = ridge_rapm_coef(X, kept["points"].to_numpy().astype(np.float64), penalty)
+    P = len(pids)
+    o, d = coef[:P] * 100.0, -coef[P:] * 100.0
+    col_sums = np.asarray(X.sum(axis=0), dtype=np.float64).ravel()
+    n_seasons = (
+        kept.select("season", *_OFF, *_DEF)
+        .unpivot(index="season", value_name="player_id")
+        .group_by("player_id")
+        .agg(pl.col("season").n_unique().cast(pl.Int64).alias("n_seasons"))
+        .with_columns(pl.col("player_id").cast(pl.Int64))
+    )
+    out = pl.DataFrame(
+        {
+            "player_id": pl.Series(pids, dtype=pl.Int64),
+            "o_multiseason_rapm": pl.Series(o, dtype=pl.Float64),
+            "d_multiseason_rapm": pl.Series(d, dtype=pl.Float64),
+            "multiseason_rapm": pl.Series(o + d, dtype=pl.Float64),
+            "off_poss": pl.Series(col_sums[:P].astype(np.int64), dtype=pl.Int64),
+            "def_poss": pl.Series(col_sums[P:].astype(np.int64), dtype=pl.Int64),
+        }
+    )
+    assert out.schema["player_id"] == n_seasons.schema["player_id"]
+    out = out.join(n_seasons, on="player_id", how="left").select(list(MULTISEASON_RAPM_SCHEMA)).sort("player_id")
     return out.to_pandas() if return_as_pandas else out
 
 

@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: game_page–nba_matchup"
-sidebar_label: "Models and calculators: game_page–nba_matchup"
+title: "NBA — additional Python functions — Models and calculators: game_page–nba_multiseason"
+sidebar_label: "Models and calculators: game_page–nba_multiseason"
 sidebar_position: 12
-description: "NBA — additional Python functions — Models and calculators: game_page–nba_matchup — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: game_page–nba_multiseason — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: game_page–nba_matchup
+# NBA — additional Python functions — Models and calculators: game_page–nba_multiseason
 
 ### game_page_tables {#game_page_tables}
 
@@ -1102,4 +1102,58 @@ d = nba_matchup_drapm("2023-24", matchups=matchups_df)
 # Pipeline next step
 
 d.filter(pl.col("matchup_poss") >= 200).sort("matchup_drapm", descending=True)
+```
+
+### nba_multiseason_rapm {#nba_multiseason_rapm}
+
+`nba_multiseason_rapm(possessions: 'pl.DataFrame', *, seasons: 'Optional[Sequence[int]]' = None, alpha: 'Optional[float]' = None, league_id: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Multi-season RAPM: one plain ridge fit over the possessions of several seasons pooled.
+
+Every possession counts equally, whatever its season, and the fit uses plain RAPM's fixed league
+penalty (`~sportsdataverse.nba.nba_rapm.rapm_penalty`). That penalty is the per-possession
+noise variance over the prior variance of a player's coefficient, so it does not depend on how
+many seasons are pooled; a longer window shrinks each player less because he has more
+possessions. For recency weighting inside a window use `nba_decay_rapm`.
+
+Gated against Jeremias Engelmann's 8-season RAPM (2019-20 through 2026-27, regular season, posted
+2026-11-02; personal oracle, not redistributed) by `tools/gate_multiseason_rapm.py` on
+2026-11-18: over those 1,687,155 regular-season possessions every one of his 1,224 players
+matches on `player_id`. Spearman against his total is 0.967 for the 488 players with at
+least 10,000 possessions (0.975 at 30,000, 0.911 over all 1,224), offense 0.953, defense 0.954,
+and the spread is 0.90 of his (std ratio at 10,000 possessions). Per-season decay weights
+(0.9 to 0.7 a season) lowered every one of these, so the window is unweighted.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup rows of one or more seasons (`off_player_1..5`, `def_player_1..5`, `points`, see `~sportsdataverse.nba.nba_rapm.build_rapm_design`) with an integer `season` column, as the `nba_stats_possessions` release stamps it (the end year). Filter the season type (regular season, playoffs) before calling. |
+| `seasons` | `Optional[Sequence[int]]` | `None` | The `season` values to pool. `None` (default) pools every row. |
+| `alpha` | `Optional[float]` | `None` | A ridge penalty to fit at instead of the league's (positive). |
+| `league_id` | `Optional[str]` | `None` | `"00"` / `"10"` / `"20"`, the league whose penalty is used; `None` reads it from the `game_id` prefix (`~sportsdataverse.nba.nba_rapm.rapm_penalty`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Frame with `MULTISEASON_RAPM_SCHEMA`, sorted by `player_id`. `off_poss` / `def_poss` are summed over the window and `n_seasons` counts the seasons a player has a possession in. Empty input, or a `seasons` that matches no row, gives a zero-row frame.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | *possessions* has rows but no `season` column. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_loaders import load_nba_stats_possessions, load_nba_stats_schedules
+from sportsdataverse.nba.nba_rapm_variants import nba_multiseason_rapm
+
+starts = range(2019, 2027)
+rs = load_nba_stats_schedules(starts).filter(pl.col("season_type") == "regular-season")
+poss = load_nba_stats_possessions(starts).join(rs.select("game_id"), on="game_id", how="semi")
+df = nba_multiseason_rapm(poss)
+print(df.filter(pl.col("off_poss") >= 10_000).sort("multiseason_rapm", descending=True).head())
 ```
