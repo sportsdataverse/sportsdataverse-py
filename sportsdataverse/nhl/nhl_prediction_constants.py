@@ -142,8 +142,9 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     #     (actual 0.541 / 0.569 / 0.521);
     #   total bias -0.25 / -0.07 / -0.31 and MAE 1.87 / 1.89 / 1.87 unchanged (avg_xgf is both the
     #     rating shrinkage target and the total's centre, so its level cancels).
-    # Re-run 2026-11-18 on the nhl_pbp_full republished 2026-11-14: every value above reproduces to
-    #   4 dp, and the 2025-26 slice after Jan 15 that flagged 0.571 vs 0.519 now reads 0.522 vs 0.519
+    # Re-run 2026-11-18 on the nhl_pbp_full republished 2026-11-14: hfa / margin_sd / total_scale
+    #   reproduce to 4 dp and avg_xgf to the shipped 2 dp (its seasons above average 1.999); the
+    #   2025-26 slice after Jan 15 that flagged 0.571 vs 0.519 now reads 0.522 vs 0.519
     #   (Brier 0.2437 -> 0.2383, 574 games). hfa is one league constant, not an as-of estimate, so
     #   it has no early-season swing to shrink (unlike BB-D25's ridge home term, #1223). Per-season
     #   joint fits read 0.030 / 0.053 / 0.109 / 0.032 (2022-23 .. 2025-26); an expanding-window

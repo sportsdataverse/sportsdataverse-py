@@ -1,7 +1,8 @@
-"""Fit HFA / margin_sd / total_scale / avg_xgf / avg_total_goals for LEAGUE_CONSTANTS["nhl"] by walking the
-2023 backtest with strict as-of-date ratings (Task 2.3).
+"""Fit HFA / margin_sd / total_scale / avg_xgf for LEAGUE_CONSTANTS["nhl"] by walking the 2023 backtest
+with strict as-of-date ratings (Task 2.3). It also prints the realized mean total; avg_total_goals
+stays a seeded published reference.
 
-Run once (downloads the full-season pbp + schedule; no live-API gate needed):
+Run once (downloads the 2022-23 .. 2025-26 pbp + schedules; no live-API gate needed):
 
     uv run python tools/models/nhl_prediction/fit_pregame.py
 
@@ -139,7 +140,7 @@ def main() -> None:
     # predict_total stretches the raw total around 2 * avg_xgf (its own mean) and adds back
     # avg_total_goals, so that pair is the OLS intercept: the mean realized total belongs in
     # avg_total_goals, and the mean raw total should sit on 2 * avg_xgf.
-    print(f"avg_total_goals (mean realized) = {float(y.mean()):.4f}  <- write this into LEAGUE_CONSTANTS")
+    print(f"avg_total_goals (mean realized) = {float(y.mean()):.4f}  (reference; the constant stays seeded)")
     print(
         f"mean raw total                  = {float(x.mean()):.4f}  (should be ~2 * avg_xgf = {2 * const.avg_xgf:.2f})"
     )
