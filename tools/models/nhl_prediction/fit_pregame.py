@@ -134,12 +134,14 @@ def main() -> None:
     )
     print(f"diagnostic: real-goal home margin residual = {hfa_residual:.4f}, residual std = {resid_sd:.4f}")
     xgf = [float((rates if s == SEASON else build_game_rates(s)[0])["xgf"].mean()) for s in AVG_XGF_SEASONS]
-    print(f"avg_xgf (mean EV xG-for per team-game) = {np.mean(xgf):.4f}  <- write this into LEAGUE_CONSTANTS")
-    print(f"  per season {AVG_XGF_SEASONS}: " + " / ".join(f"{v:.3f}" for v in xgf))
+    # avg_xgf ships at 2 dp, so that is the value to copy; the 4 dp mean is a diagnostic.
+    print(f"avg_xgf (mean EV xG-for per team-game) = {np.mean(xgf):.2f}  <- write this into LEAGUE_CONSTANTS")
+    print(f"  mean {np.mean(xgf):.4f}; per season {AVG_XGF_SEASONS}: " + " / ".join(f"{v:.3f}" for v in xgf))
     print(f"total_scale (OLS slope)         = {slope:.4f}  <- write this into LEAGUE_CONSTANTS")
     # predict_total stretches the raw total around 2 * avg_xgf (its own mean) and adds back
-    # avg_total_goals, so that pair is the OLS intercept: the mean realized total belongs in
-    # avg_total_goals, and the mean raw total should sit on 2 * avg_xgf.
+    # avg_total_goals, so that pair is the OLS intercept. The mean realized total below is that
+    # intercept's fitted value, printed for comparison only: avg_total_goals stays the seeded
+    # published reference. The mean raw total should sit on 2 * avg_xgf.
     print(f"avg_total_goals (mean realized) = {float(y.mean()):.4f}  (reference; the constant stays seeded)")
     print(
         f"mean raw total                  = {float(x.mean()):.4f}  (should be ~2 * avg_xgf = {2 * const.avg_xgf:.2f})"
