@@ -7032,15 +7032,16 @@ load_cfb_adv_receiving:
   pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
   receiver_player_name: Display name of the targeted receiver -- the FIRST participant in that role on the play.
 load_cfb_adv_rushing:
-  Car: Rushing attempts credited to this ball carrier in the game.
-  EPA_per_Play: EPA per play on the passer's plays.
+  Car: Rushing attempts credited to this ball carrier in the game, by the NCAA box convention ESPN's box uses -- a passer's
+    sacks are his rushes and kneel-downs are rushes by `TEAM` (builds before 2026-11 count designed rushes only).
+  EPA_per_Play: EPA per play on the carrier's designed rushes (sacks and kneel-downs excluded).
   Fum: Count of the carrier's rush attempts whose play text mentions a fumble; it is a play-level flag, not a fumble charged
     to this player.
   Fum_Lost: Count of the carrier's rush attempts on which a fumble was lost to the opponent.
   Rush_TD: Rushing touchdowns scored by this ball carrier in the game.
-  SR: Success rate on the passer's plays.
-  YPC: Yards per carry, the mean rushing yardage across the player's attempts in the game.
-  Yds: Passing yards from the advanced box score.
+  SR: Success rate on the carrier's designed rushes (sacks and kneel-downs excluded).
+  YPC: Yards per carry, `Yds` over `Car`.
+  Yds: Rushing yards on the carrier's `Car` attempts, sack yardage included.
   pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
   rusher_player_name: Display name of the ball carrier on a rush -- the FIRST participant in that role on the play.
 load_cfb_adv_situational:
@@ -7210,8 +7211,9 @@ load_cfb_adv_team:
     balance.
   pos_team_id: ESPN team id of the team on offense. Present for every season 2004+.
   punt_plays: Number of punt plays.
-  rush_yards: Total yards the team gained on rush plays.
-  rushes: Number of rushing attempts.
+  rush_yards: Yards the team gained on designed rushes (sacks and kneel-downs excluded).
+  rushes: Number of designed rushing attempts (sacks and kneel-downs excluded); the per-rush rates (`yards_per_rush`,
+    `EPA_rushing_per_play`, `rushing_first_downs_created_rate`) divide by it.
   rushes_rate: Share of the team's plays from scrimmage that were rush plays.
   rushing_first_downs_created: Number of first downs created on rush plays.
   rushing_first_downs_created_rate: Share of rush plays that created a first down.
@@ -7293,8 +7295,9 @@ load_cfb_adv_team_gamelog:
   penalty_yards: Net penalty yardage assessed against the team; can be negative when enforcement moved the team forward on
     balance.
   punt_plays: Number of punt plays.
-  rush_yards: Total yards the team gained on rush plays.
-  rushes: Number of rushing attempts.
+  rush_yards: Yards the team gained on designed rushes (sacks and kneel-downs excluded).
+  rushes: Number of designed rushing attempts (sacks and kneel-downs excluded); the per-rush rates (`yards_per_rush`,
+    `EPA_rushing_per_play`, `rushing_first_downs_created_rate`) divide by it.
   rushes_rate: Share of the team's plays from scrimmage that were rush plays.
   rushing_first_downs_created: Number of first downs created on rush plays.
   rushing_first_downs_created_rate: Share of rush plays that created a first down.

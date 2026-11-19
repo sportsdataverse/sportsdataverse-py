@@ -252,3 +252,9 @@ def test_emptied_usage_box_fires_although_the_sections_are_present(nfl_game):
     emptied = _mutate(box, lambda b: b.update(team_usage=[], player_usage=[], drive_scripting=[]))
     assert _fires(plays, emptied, "box.team_totals_match_plays") > 0
     assert _fires(plays, emptied, "box.drives_match_drive_rows") > 0
+
+
+def test_an_unknown_league_raises_rather_than_skipping_the_rushing_checks(cfb_game):
+    plays, _summary, box = cfb_game
+    with pytest.raises(ValueError, match="league"):
+        evaluate_box(plays, box, "ncaaf")

@@ -32,8 +32,8 @@ Release: [espn_cfb_adv_team](https://github.com/sportsdataverse/sportsdataverse-
 | `EPA_punt` | Float64 | Total EPA on punt plays. |
 | `kickoff_plays` | Int64 | Number of kickoff plays. |
 | `EPA_kickoff` | Float64 | Total EPA on kickoff plays. |
-| `rushes` | Int64 | Number of rushing attempts. |
-| `rush_yards` | Float64 | Total yards the team gained on rush plays. |
+| `rushes` | Int64 | Number of designed rushing attempts (sacks and kneel-downs excluded); the per-rush rates (`yards_per_rush`, `EPA_rushing_per_play`, `rushing_first_downs_created_rate`) divide by it. |
+| `rush_yards` | Float64 | Yards the team gained on designed rushes (sacks and kneel-downs excluded). |
 | `yards_per_rush` | Float64 | Yards gained per rushing attempt. |
 | `rushing_power_rate` | Float64 | Share of carries that were power rushing attempts. |
 | `rushing_first_downs_created` | Int64 | Number of first downs created on rush plays. |
@@ -158,14 +158,14 @@ Release: [espn_cfb_adv_rushing](https://github.com/sportsdataverse/sportsdataver
 | `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
 | `rusher_player_name` | String | Display name of the ball carrier on a rush -- the FIRST participant in that role on the play. |
-| `Car` | Int64 | Rushing attempts credited to this ball carrier in the game. |
-| `Yds` | Float64 | Passing yards from the advanced box score. |
+| `Car` | Int64 | Rushing attempts credited to this ball carrier in the game, by the NCAA box convention ESPN's box uses -- a passer's sacks are his rushes and kneel-downs are rushes by `TEAM` (builds before 2026-11 count designed rushes only). |
+| `Yds` | Float64 | Rushing yards on the carrier's `Car` attempts, sack yardage included. |
 | `Rush_TD` | Int64 | Rushing touchdowns scored by this ball carrier in the game. |
-| `YPC` | Float64 | Yards per carry, the mean rushing yardage across the player's attempts in the game. |
+| `YPC` | Float64 | Yards per carry, `Yds` over `Car`. |
 | `EPA` | Float64 | Expected Points Added on the play (cfbfastR EPA model output). |
-| `EPA_per_Play` | Float64 | EPA per play on the passer's plays. |
+| `EPA_per_Play` | Float64 | EPA per play on the carrier's designed rushes (sacks and kneel-downs excluded). |
 | `WPA` | Float64 |  |
-| `SR` | Float64 | Success rate on the passer's plays. |
+| `SR` | Float64 | Success rate on the carrier's designed rushes (sacks and kneel-downs excluded). |
 | `Fum` | Int64 | Count of the carrier's rush attempts whose play text mentions a fumble; it is a play-level flag, not a fumble charged to this player. |
 | `Fum_Lost` | Int64 | Count of the carrier's rush attempts on which a fumble was lost to the opponent. |
 | `game_id` | Int64 | ESPN game identifier. |
@@ -481,8 +481,8 @@ Release: [espn_cfb_adv_team_gamelog](https://github.com/sportsdataverse/sportsda
 | `EPA_punt` | Float64 | Total EPA on punt plays. |
 | `kickoff_plays` | Int64 | Number of kickoff plays. |
 | `EPA_kickoff` | Float64 | Total EPA on kickoff plays. |
-| `rushes` | Int64 | Number of rushing attempts. |
-| `rush_yards` | Float64 | Total yards the team gained on rush plays. |
+| `rushes` | Int64 | Number of designed rushing attempts (sacks and kneel-downs excluded); the per-rush rates (`yards_per_rush`, `EPA_rushing_per_play`, `rushing_first_downs_created_rate`) divide by it. |
+| `rush_yards` | Float64 | Yards the team gained on designed rushes (sacks and kneel-downs excluded). |
 | `yards_per_rush` | Float64 | Yards gained per rushing attempt. |
 | `rushing_power_rate` | Float64 | Share of carries that were power rushing attempts. |
 | `rushing_first_downs_created` | Int64 | Number of first downs created on rush plays. |
