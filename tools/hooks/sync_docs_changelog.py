@@ -9,6 +9,7 @@ drift-gated. The unreleased page comes from the changelog.d/ fragments, one file
 never edit the same lines. That page is gitignored: docs-deploy.yml writes it just before the site build. This
 script changes neither source, and leaves out CHANGELOG.md's doctoc table of contents (each page gets
 Docusaurus's own). Run with --no-git-add to write the pages without staging the committed two.
+Run with --check to only validate the fragments (names, bullets, the house style) and write nothing.
 
 Stdlib only, so docs-deploy runs it with the runner's own python3 and no uv sync.
 """
@@ -125,6 +126,28 @@ def read_fragments(directory: Path = FRAGMENTS) -> dict[str, list[str]]:
     return out
 
 
+_TRAILING_PR = re.compile(r"\(#\d+(?:, #\d+)*\)$")
+
+
+def style_errors(directory: Path = FRAGMENTS) -> list[str]:
+    """changelog.d/README.md's bullet contract: `- **Area:**` lead, <= 3 lines of <= 120 chars, ends with `(#PR)`."""
+    errors = []
+    for path in sorted(directory.glob("*.md")):
+        if path.name == "README.md":
+            continue
+        for bullet in _bullets(path.name, path.read_text(encoding="utf-8-sig")):
+            lines = bullet.splitlines()
+            head = f"changelog.d/{path.name}: {lines[0][:60]!r}"
+            if not bullet.startswith("- **"):
+                errors.append(f"{head} does not start with a `- **Area:**` lead")
+            if len(lines) > 3:
+                errors.append(f"{head} runs {len(lines)} lines (at most 3; split it)")
+            errors.extend(f"{head} has a {len(x)}-char line (at most 120)" for x in lines if len(x) > 120)
+            if not _TRAILING_PR.search(bullet):
+                errors.append(f"{head} does not end with its PR number, `(#123)`")
+    return errors
+
+
 def assemble(fragments: dict[str, list[str]], heading: str) -> str:
     """A ``## <heading>`` section: each group under its ``###`` heading in GROUPS order, its bullets sorted."""
     parts = [f"## {heading}\n"]
@@ -175,6 +198,15 @@ def render_unreleased(text: str, fragments: dict[str, list[str]]) -> str:
 
 
 def main(argv: list[str]) -> int:
+    if "--check" in argv:  # the fragment gate only (pre-commit, CI lint): parse + house style, write nothing
+        try:
+            read_fragments(FRAGMENTS)
+            errors = style_errors(FRAGMENTS)
+        except ValueError as e:
+            errors = [str(e)]
+        for e in errors:
+            print(f"sync_docs_changelog: {e}", file=sys.stderr)
+        return 1 if errors else 0
     try:
         text = SOURCE.read_text(encoding="utf-8")
         pages = render(text)
