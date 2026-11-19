@@ -22,9 +22,13 @@ restated. ``create_box_score`` builds its sections inline, so its filters are
 mirrored here in :data:`_FILTERS` and each check names the builder frame it
 mirrors; only columns whose filter and aggregation are **identical in both
 processors** are checked, which is why the league-divergent totals
-(``total_yards`` / ``off_yards``, which CFB zeroes on interception rows, and
+(``total_yards`` / ``off_yards``, which both zero on interception rows but CFB also on a null ``int``, and
 ``penalty_first_downs_created``, which CFB restricts to accepted penalties)
-are absent.
+are absent from the shared checks. The league-specific ones are checked per league
+(:data:`_LEAGUE_TEAM_CHECKS` / :data:`_LEAGUE_PLAYER_CHECKS`): NFL's ``off_yards`` /
+``total_yards`` and ``pass_yards_net``, and the box-score rushing count -- the rusher
+lines and ``rushing_attempts`` / ``rushing_yards`` count kneel-downs in both, and CFB's
+follow the NCAA convention (a sack is the passer's rush, a kneel-down a TEAM rush).
 
 **Fail closed.** A team the frame has rows for but the box has no row for is a
 violation, not a skip -- the #553 review's finding 4 (a failed id join read as
@@ -106,6 +110,16 @@ _FILTERS: dict[str, tuple[Callable[[], pl.Expr] | None, tuple[str, ...]]] = {
     "standard": (lambda: _t("standard_down") & _t("scrimmage_play"), ("standard_down", "scrimmage_play")),
     "passing_down": (lambda: _t("passing_down") & _t("scrimmage_play"), ("passing_down", "scrimmage_play")),
     "middle8": (lambda: _t("middle_8") & _t("scrimmage_play"), ("middle_8", "scrimmage_play")),
+    # NFL rush_count_box: designed rushes and kneel-downs (nflverse / ESPN)
+    "rush_count_nfl": (
+        lambda: (_t("rush") & _t("scrimmage_play")) | _t("kneel_down"),
+        ("rush", "scrimmage_play", "kneel_down"),
+    ),
+    # CFB rush_count_box: designed rushes, sacks and kneel-downs (the NCAA box convention)
+    "rush_count_cfb": (
+        lambda: (_t("rush") & _t("scrimmage_play")) | (_cfb_box_sack() & _t("scrimmage_play")) | _t("kneel_down"),
+        ("rush", "scrimmage_play", "sack_vec", "sack", "type.text", "kneel_down"),
+    ),
 }
 
 
@@ -132,6 +146,31 @@ def _count_true(col: str) -> Callable[[], pl.Expr]:
 
 def _rows() -> Callable[[], pl.Expr]:
     return lambda: pl.len()
+
+
+def _cfb_box_sack() -> pl.Expr:
+    """CFB ``box_sack``: ``sack_vec``, or a sack for a safety (``sack`` on a ``Safety`` row)."""
+    return _t("sack_vec") | (_t("sack") & (c("type.text") == "Safety").fill_null(False))
+
+
+def _cfb_box_rush_yds() -> pl.Expr:
+    """CFB ``box_rush_yds``: a sack's loss, else ``yds_rushed`` (a kneel's ``statYardage`` when it states none).
+
+    A sack's loss is ``yds_sacked``, else an unfumbled sack's ``statYardage``.
+    """
+    return (
+        pl.when(_cfb_box_sack())
+        .then(pl.coalesce(c("yds_sacked"), pl.when(~_t("fumble_vec")).then(c("statYardage"))))
+        .otherwise(pl.coalesce(c("yds_rushed"), pl.when(_t("kneel_down")).then(c("statYardage"))))
+        .cast(pl.Float64, strict=False)
+        .fill_null(0.0)
+        .sum()
+    )
+
+
+def _nfl_yards_less_int_returns() -> pl.Expr:
+    """NFL ``off_yards`` / ``total_yards``: ``statYardage`` with an interception's (its return) zeroed."""
+    return pl.when(_t("int")).then(0).otherwise(c("statYardage")).cast(pl.Float64, strict=False).fill_null(0.0).sum()
 
 
 def _ck(section: str, team_key: str, column: str, flt: str, expr: Callable[[], pl.Expr], *needs: str) -> _Check:
@@ -225,13 +264,59 @@ _USAGE_TEAM_CHECKS: tuple[tuple[str, Callable[[], pl.Expr], tuple[str, ...]], ..
 #: Per-player sections against the same rows their builder aggregates.
 _PLAYER_CHECKS: tuple[tuple[str, str, str, Callable[[], pl.Expr], tuple[str, ...]], ...] = (
     # (section, box column summed over the section's players, filter, frame expr, needs)
-    ("rush", "Car", "rush", _sum("rush"), ("rush",)),
-    ("rush", "Yds", "rush", _sum("yds_rushed"), ("yds_rushed",)),
     ("pass", "Att", "pass", _sum("pass_attempt"), ("pass_attempt",)),
     ("pass", "Comp", "pass", _sum("completion"), ("completion",)),
     ("receiver", "Tar", "pass", _sum("target"), ("target",)),
     ("receiver", "Rec", "pass", _sum("completion"), ("completion",)),
 )
+
+#: The box-score rushing count, which differs by league.
+_LEAGUE_TEAM_CHECKS: dict[str, tuple[_Check, ...]] = {
+    "nfl": (
+        _ck("team", "pos_team", "rushing_attempts", "rush_count_nfl", _rows(), "rush"),
+        _ck("team", "pos_team", "rushing_yards", "rush_count_nfl", _sum("yds_rushed"), "yds_rushed"),
+        # team_scrimmage_box_pass: gross passing yards less the sack yards
+        _ck(
+            "team",
+            "pos_team",
+            "pass_yards_net",
+            "pass",
+            lambda: (
+                c("yds_receiving").cast(pl.Float64, strict=False).fill_null(0.0)
+                + c("yds_sacked").cast(pl.Float64, strict=False).fill_null(0.0)
+            ).sum(),
+            "yds_receiving",
+            "yds_sacked",
+        ),
+        # team_scrimmage_box / team_base_box: an interception's statYardage (the return) is zeroed
+        _ck("team", "pos_team", "off_yards", "scrimmage", _nfl_yards_less_int_returns, "int", "statYardage"),
+        _ck("team", "pos_team", "total_yards", "all", _nfl_yards_less_int_returns, "int", "statYardage"),
+    ),
+    "cfb": (
+        _ck("team", "pos_team", "rushing_attempts", "rush_count_cfb", _rows()),
+        _ck(
+            "team",
+            "pos_team",
+            "rushing_yards",
+            "rush_count_cfb",
+            _cfb_box_rush_yds,
+            "yds_sacked",
+            "yds_rushed",
+            "statYardage",
+            "fumble_vec",
+        ),
+    ),
+}
+_LEAGUE_PLAYER_CHECKS: dict[str, tuple[tuple[str, str, str, Callable[[], pl.Expr], tuple[str, ...]], ...]] = {
+    "nfl": (
+        ("rush", "Car", "rush_count_nfl", _rows(), ("rush",)),
+        ("rush", "Yds", "rush_count_nfl", _sum("yds_rushed"), ("yds_rushed",)),
+    ),
+    "cfb": (
+        ("rush", "Car", "rush_count_cfb", _rows(), ()),
+        ("rush", "Yds", "rush_count_cfb", _cfb_box_rush_yds, ("yds_sacked", "yds_rushed", "statYardage", "fumble_vec")),
+    ),
+}
 
 #: ``rate == numerator / denominator`` inside one row of one section.
 #: Only ratios whose denominator is the count the builder actually divided by: a ``.mean()``
@@ -392,12 +477,14 @@ def _filtered(plays: pl.DataFrame, name: str) -> pl.DataFrame | None:
 # ---------------------------------------------------------------------------
 
 
-def _team_totals(plays: pl.DataFrame, box: dict[str, Any] | None, standing: pl.DataFrame | None) -> Any:
+def _team_totals(
+    plays: pl.DataFrame, box: dict[str, Any] | None, standing: pl.DataFrame | None, league: str = "nfl"
+) -> Any:
     """``box.team_totals_match_plays`` -- team / situational / defensive / team_usage totals."""
     full = _is_full_box(box)
     tally = _Tally()
     cache: dict[str, pl.DataFrame | None] = {}
-    for check in _TEAM_CHECKS:
+    for check in _TEAM_CHECKS + _LEAGUE_TEAM_CHECKS.get(league, ()):
         if any(col not in plays.columns for col in check.needs):
             continue
         if check.filter not in cache:
@@ -450,12 +537,12 @@ def _team_totals(plays: pl.DataFrame, box: dict[str, Any] | None, standing: pl.D
     )
 
 
-def _player_sums(plays: pl.DataFrame, box: dict[str, Any] | None) -> Any:
+def _player_sums(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = "nfl") -> Any:
     """``box.player_sums_match_team`` -- a per-player section sums to the same rows."""
     full = _is_full_box(box)
     tally = _Tally()
     cache: dict[str, pl.DataFrame | None] = {}
-    for section, column, flt, expr, needs in _PLAYER_CHECKS:
+    for section, column, flt, expr, needs in _PLAYER_CHECKS + _LEAGUE_PLAYER_CHECKS.get(league, ()):
         if any(col not in plays.columns for col in needs):
             continue
         if flt not in cache:
@@ -800,13 +887,17 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
     Args:
         plays: one game's processed plays frame.
         box: the processor's ``advBoxScore`` dict (``None`` / ``{}`` -> no rules).
-        league: ``"nfl"`` or ``"cfb"``; the checked columns are the ones both
-            processors build identically, so the league is currently carried for
-            symmetry with :func:`~sportsdataverse.validation.pbp_invariants.evaluate`.
+        league: ``"nfl"`` or ``"cfb"``; it picks the box-score rushing-count checks,
+            the one place the two processors' conventions differ (CFB counts a
+            sack as the passer's rush and a kneel-down as a TEAM rush; NFL counts
+            the kneel as the kneeler's carry and nets sacks out of ``pass_yards_net``).
 
     Returns:
         One ``RuleResult`` per ``box.*`` reconciliation rule that could run,
         including rules that did not fire.
+
+    Raises:
+        ValueError: If a box is given and ``league`` is not ``"nfl"`` or ``"cfb"``.
 
     Example:
         Reconcile a processed game's box score::
@@ -823,9 +914,10 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
         * :func:`~sportsdataverse.validation.pbp_invariants.evaluate` -- runs these rules with the rest
         * :func:`~sportsdataverse.validation.validate_game` -- the per-game gate built on both
     """
-    del league  # every checked column is league-identical; see the module docstring
     if not isinstance(plays, pl.DataFrame) or plays.height == 0 or not box:
         return []
+    if league not in _LEAGUE_PLAYER_CHECKS:
+        raise ValueError(f"league must be 'nfl' or 'cfb', got {league!r}")
     from sportsdataverse.validation.findings import Severity
     from sportsdataverse.validation.pbp_invariants import RuleResult
 
@@ -852,8 +944,8 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
     teams = game_teams(plays)
     return [
         *marker,
-        _team_totals(plays, box, standing),
-        _player_sums(plays, box),
+        _team_totals(plays, box, standing, league),
+        _player_sums(plays, box, league),
         _rates(box),
         _mirror(box, teams),
         _turnovers(plays, box),

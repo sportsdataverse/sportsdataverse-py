@@ -9892,14 +9892,57 @@ class CFBPlayProcess(object):
             how="left",
         ).sort("Att", descending=True)  # 0.36-live: box tables sorted by volume
 
+        # The counting columns (Car / Yds / YPC / Rush_TD here, rushing_attempts / rushing_yards
+        # on the team row) follow the NCAA box convention ESPN's CFB box uses: a sack is a rush
+        # by the passer for the yards lost, and a kneel-down is a TEAM rush. The EPA / WPA / SR /
+        # Fum columns, and the team `rushes` / `rush_yards` the rush rates divide by, stay on
+        # designed rushes (`rush_box`).
+        # a sack for a safety is `sack` but not `sack_vec`
+        box_sack = (pl.col("sack_vec") == True) | ((pl.col("sack") == True) & (pl.col("type.text") == "Safety"))
+        rush_count_box = (
+            play_df.filter(
+                ((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
+                | (box_sack & (pl.col("scrimmage_play") == True))
+                | (pl.col("kneel_down") == True)
+            )
+            .with_columns(
+                rusher_player_name=pl.when(pl.col("kneel_down") == True)
+                .then(pl.lit("TEAM"))
+                .when(box_sack)
+                .then(pl.col("passer_player_name"))
+                .otherwise(pl.col("rusher_player_name")),
+                box_rush_yds=pl.when(box_sack)
+                # yds_sacked is null where the text states no loss ("intentional grounding"
+                # filed as a Sack); the play's statYardage is then the yards it cost. Not on a
+                # fumbled sack: its statYardage can be the return.
+                .then(
+                    pl.coalesce(
+                        pl.col("yds_sacked"),
+                        pl.when(pl.col("fumble_vec") == False).then(pl.col("statYardage")),
+                    )
+                )
+                # a kneel whose text states no yardage ("takes a knee") costs its statYardage
+                .otherwise(
+                    pl.coalesce(pl.col("yds_rushed"), pl.when(pl.col("kneel_down") == True).then(pl.col("statYardage")))
+                ),
+            )
+            .pipe(_fill_missing)
+        )
+        rusher_count_box = (
+            rush_count_box.group_by(["pos_team", "rusher_player_name"])
+            .agg(
+                Car=pl.len(),
+                Yds=pl.col("box_rush_yds").sum(),
+                Rush_TD=pl.col("rush_td").sum(),
+                YPC=pl.col("box_rush_yds").mean(),
+            )
+            .with_columns(pl.col(pl.Float32).round(2))
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
         rusher_box = (
             _fill_missing(rush_box)
             .group_by(["pos_team", "rusher_player_name"])
             .agg(
-                Car=pl.col("rush").sum(),
-                Yds=pl.col("yds_rushed").sum(),
-                Rush_TD=pl.col("rush_td").sum(),
-                YPC=pl.col("yds_rushed").mean(),
                 EPA=pl.col("EPA").sum(),
                 EPA_per_Play=pl.col("EPA").mean(),
                 WPA=pl.col("wpa").sum(),
@@ -9909,6 +9952,13 @@ class CFBPlayProcess(object):
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+        rusher_box = (
+            rusher_count_box.join(
+                rusher_box, on=["pos_team", "rusher_player_name"], how="full", coalesce=True, nulls_equal=True
+            )
+            # a sack- or kneel-only line has no designed rush: its sums are 0, its rates null
+            .with_columns(pl.col("Car", "Yds", "Rush_TD", "EPA", "WPA", "Fum", "Fum_Lost").fill_null(0))
             .sort("Car", descending=True)  # 0.36-live: box tables sorted by volume
         )
         # rusher_box = rusher_box.replace({np.nan: None})
@@ -10081,6 +10131,18 @@ class CFBPlayProcess(object):
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
 
+        # NCAA box totals (sacks and kneels included; see rush_count_box). `rushes` / `rush_yards`
+        # above stay designed rushes: the rush rates and EPA divide by them.
+        team_rush_count_box = (
+            rush_count_box.group_by(["pos_team"])
+            .agg(
+                rushing_attempts=pl.len(),
+                rushing_yards=pl.col("box_rush_yds").sum(),
+            )
+            .with_columns(pl.col(pl.Float32).round(2))
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+        )
+
         team_rush_base_box = (
             play_df.filter((pl.col("scrimmage_play") == True))
             .pipe(_fill_missing)
@@ -10159,6 +10221,7 @@ class CFBPlayProcess(object):
             team_penalized_box,
             team_sp_box,
             team_scrimmage_box_rush,
+            team_rush_count_box,
             team_scrimmage_box_pass,
             team_scrimmage_box,
             team_base_box,

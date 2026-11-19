@@ -33,6 +33,7 @@ ESPN_TOLERANCE = 0.025
 GAMES = [
     ("nba", BB / "nba_401766458.json.gz"),
     ("nba", BB / "nba_401704638.json.gz"),
+    ("nba", BB / "nba_401910002.json.gz"),  # a missed "Heave Jump Shot": no FGA in either
     ("wnba", BB / "wnba_400927398.json.gz"),
     ("mbb", BB / "mbb_401812161.json.gz"),
     ("mbb", BB / "mbb_401856600.json.gz"),

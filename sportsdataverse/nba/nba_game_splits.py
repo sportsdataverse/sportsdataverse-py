@@ -34,7 +34,9 @@ Definitions:
   ``fg3_unlocated``. A three is ``points_attempted`` 3; a frame without that column (older
   captures) reads the text ("three point", or 24 feet or more) and the location (22 feet or more to
   the side, or 23.75 out). ``layup_dunk`` is any shot whose play type names a layup or a dunk, and
-  an assisted make is one whose text credits an assist.
+  an assisted make is one whose text credits an assist. A missed heave (ESPN's "Heave Jump Shot")
+  is left out of every shot count, as the official box leaves it out of FGA and 3PA; it still names
+  the offense of its possession.
 
 Each split pair partitions the team's possessions and their points: ``transition`` + ``half_court``
 and ``second_chance`` + ``first_chance`` add up to ``possessions`` and to ``points -
@@ -183,6 +185,10 @@ def _three(pbp: pl.DataFrame) -> pl.Expr:
     )
 
 
+#: A heave, as a whole word: a shooter named "Heaven" takes real attempts.
+_HEAVE = r"(?i)\bheave\b"
+
+
 def _flags(pbp: pl.DataFrame) -> pl.DataFrame:
     """Every play with its event flags (``_fga``, ``_ft``, ``_tov``, ...) and its score change per side."""
     tt, txt = pl.col("type_text").fill_null(""), pl.col("text").fill_null("")
@@ -205,6 +211,13 @@ def _flags(pbp: pl.DataFrame) -> pl.DataFrame:
     )
     return rows.with_columns(
         (shoot & ~is_ft).alias("_fga"),
+        # the official box (NBA's heave rule) charges no attempt for a missed end-of-period heave
+        (
+            shoot
+            & ~is_ft
+            & (tt.str.contains(_HEAVE) | txt.str.contains(_HEAVE))
+            & (pl.col("scoring_play").fill_null(False) == False)
+        ).alias("_heave_miss"),
         (shoot & ~is_ft & _three(pbp)).alias("_three"),
         is_ft.alias("_ft"),
         (is_ft & (tt.str.contains("(?i)technical") | txt.str.contains("(?i)technical"))).alias("_tech"),
@@ -409,7 +422,7 @@ def _team_rows(rows: pl.DataFrame, poss: pl.DataFrame, player_box: pl.DataFrame 
         ev.filter(pl.col("_ft"))
         .group_by("team_id")
         .agg(pl.len().cast(pl.Int64).alias("fta"), pl.col("_made").sum().cast(pl.Int64).alias("ftm")),
-        _zone_counts(ev.filter(pl.col("_fga")), ["team_id"]),
+        _zone_counts(ev.filter((pl.col("_fga") == True) & (pl.col("_heave_miss") == False)), ["team_id"]),
     ]
     has_bench = (
         player_box is not None and player_box.height and {"starter", "points", "team_id"} <= set(player_box.columns)
@@ -537,7 +550,9 @@ def _player_counts(rows: pl.DataFrame, box: pl.DataFrame | None) -> pl.DataFrame
     mine = rows.filter(pl.col("athlete_id_1").is_not_null() & (pl.col("_off") | pl.col("_ft"))).with_columns(
         actor.alias("athlete_id"), pl.col("_team").alias("team_id")
     )
-    shots = _zone_counts(mine.filter(pl.col("_fga")), key).rename({"fg3_fga": "fg3a", "fg3_fgm": "fg3m"})
+    shots = _zone_counts(mine.filter((pl.col("_fga") == True) & (pl.col("_heave_miss") == False)), key).rename(
+        {"fg3_fga": "fg3a", "fg3_fgm": "fg3m"}
+    )
     # points from the plays, not score_value: 2015-16 NBA free throws all ship scoreValue 0
     points = (
         pl.when(pl.col("_made") & pl.col("_ft"))

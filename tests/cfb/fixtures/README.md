@@ -178,6 +178,9 @@ read their snapshot noise as the game.
 Virginia Tech OT1 rows) and 401760426 (San Diego State @ New Mexico, 2025, two overtimes; New Mexico's OT2 timeout is
 filed under a second-quarter drive). They are not `summary_*` files at the top level, so the whole-game oracle does not
 pick them up.
+`box_convention/` holds 3 trimmed captures (the `trimmed` form above, fetched from the summary endpoint 2026-11-19,
+one request each) for the NCAA box-score rushing convention (`tests/cfb/test_cfb_box_rushing_convention.py`):
+401856864 (Utah @ Arizona), 401856884 (Florida @ Kentucky) and 401856889 (Alabama @ Vanderbilt), all 2026 week 12.
 
 ## Captures
 
