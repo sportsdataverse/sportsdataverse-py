@@ -384,6 +384,7 @@ from sportsdataverse.nba import nba_lineup_seasons as nba_lineup_seasons  # noqa
 from sportsdataverse.nba import nba_live_boxscore as nba_live_boxscore  # noqa: F401
 from sportsdataverse.nba import nba_live_pbp as nba_live_pbp  # noqa: F401
 from sportsdataverse.nba import nba_matchup_drapm as nba_matchup_drapm  # noqa: F401
+from sportsdataverse.nba import nba_multiseason_rapm as nba_multiseason_rapm  # noqa: F401
 from sportsdataverse.nba import nba_neutral_site_games as nba_neutral_site_games  # noqa: F401
 from sportsdataverse.nba import nba_official_seasons as nba_official_seasons  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
@@ -877,6 +878,7 @@ __all__ = [
     "nba_live_boxscore",
     "nba_live_pbp",
     "nba_matchup_drapm",
+    "nba_multiseason_rapm",
     "nba_neutral_site_games",
     "nba_official_seasons",
     "nba_pbp_disk",

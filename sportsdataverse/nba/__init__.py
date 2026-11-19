@@ -124,11 +124,13 @@ from sportsdataverse.nba.nba_rapm_variants import (  # noqa: F401
     DECAY_RAPM_SCHEMA,
     FOUR_FACTOR_SCHEMA,
     LA_RAPM_SCHEMA,
+    MULTISEASON_RAPM_SCHEMA,
     decay_weights,
     luck_adjusted_response,
     nba_decay_rapm,
     nba_four_factor_rapm,
     nba_la_rapm,
+    nba_multiseason_rapm,
 )
 from sportsdataverse.nba.nba_ratings_panel import (  # noqa: F401
     RATINGS_PANEL_SCHEMA,
