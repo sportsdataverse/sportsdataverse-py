@@ -294,8 +294,10 @@ _NFL_RECOVERY_SPOT_RE = r"(?:RECOVERED|recovered) by [A-Z]{2,3}-[^,]*? at ([A-Z]
 _NFL_PASSER_RE = r"(" + _NFL_NAME + r") (?:pass|sacked|spiked)"
 _NFL_RECEIVER_RE = r"(?:^|\s)(?:to|for) (" + _NFL_NAME + r")"
 # "J.Goff pass deep left intended for A.St. Brown INTERCEPTED by C.Gonzalez": the intended
-# receiver of an interception, who is targeted on it (nflverse's receiver on the play).
-_NFL_INTENDED_RE = r"intended for (" + _NFL_NAME + r")"
+# receiver of an interception, who is targeted on it (nflverse's receiver on the play). Only
+# before "INTERCEPTED": "Pass intended for A.Roberts, ball deflected & caught by S.Kelemete" is a
+# completion to S.Kelemete.
+_NFL_INTENDED_RE = r"intended for (" + _NFL_NAME + r") (?:INTERCEPTED|intercepted)"
 # The CFB-era receiver chain reads "to (.+)" anywhere, so with no NFL receiver form on the play
 # it returns a fragment ("short left." from "T.DeVito pass incomplete short left.", "stop" from
 # "spiked the ball to stop the clock"). Its result is kept only when it reads as a name: every
@@ -4626,7 +4628,8 @@ class NFLPlayProcess(object):
                         pl.col("text").str.replace(_NFL_DIRECT_SNAP_RE, "").str.extract(_NFL_RECEIVER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_RECEIVER_RE2),
                         _abbreviated_name(_NFL_TAGGED_RECEIVER_RE),
-                        pl.when(pl.col("receiver_player").str.contains(_NFL_NAME_SHAPED)).then(
+                        # the chain's value still carries its trailing space here
+                        pl.when(pl.col("receiver_player").str.strip_chars().str.contains(_NFL_NAME_SHAPED)).then(
                             pl.col("receiver_player")
                         ),
                     ),
@@ -4684,7 +4687,13 @@ class NFLPlayProcess(object):
                         pl.col("text").str.extract(_NFL_FUMBLER_RE, 1),
                         _abbreviated_name(_NFL_TAGGED_FUMBLER_RE),
                         pl.when(pl.col("sack") == True).then(pl.col("pass_player")).otherwise(None),
-                        pl.when(pl.col("pass") == True).then(pl.col("receiver_player")).otherwise(None),
+                        # an interception's "T.Lewis to TEN 44 for 8 yards. FUMBLES" is the
+                        # returner's fumble, not the intended receiver's
+                        pl.when(pl.col("int").fill_null(False) == True)
+                        .then(pl.col("text").str.extract(_NFL_INTERCEPTOR_RE, 1))
+                        .when(pl.col("pass") == True)
+                        .then(pl.col("receiver_player"))
+                        .otherwise(None),
                         pl.when(pl.col("rush") == True).then(pl.col("rush_player")).otherwise(None),
                         pl.col("fumble_player"),
                     ),
@@ -5246,9 +5255,14 @@ class NFLPlayProcess(object):
             .otherwise(pl.col("yds_receiving")),
             # lateral after a catch: the row's yds_receiving stays the passer's
             # credit (statYardage); the receiver box moves the lateral yards to
-            # the lateral recipient
-            lateral_player_name=pl.col("text").str.extract(_NFL_LATERAL_NAME_RE, 1),
-            yds_lateral=pl.col("text").str.extract(_NFL_LATERAL_YDS_RE, 1).cast(pl.Int32, strict=False),
+            # the lateral recipient. Only after a catch: a lateral on an interception
+            # return is the defense's and moves none of the intended receiver's yards.
+            lateral_player_name=pl.when(pl.col("completion").fill_null(False) == True).then(
+                pl.col("text").str.extract(_NFL_LATERAL_NAME_RE, 1)
+            ),
+            yds_lateral=pl.when(pl.col("completion").fill_null(False) == True).then(
+                pl.col("text").str.extract(_NFL_LATERAL_YDS_RE, 1).cast(pl.Int32, strict=False)
+            ),
         )
 
     def __after_cols(self, play_df):
@@ -7547,8 +7561,9 @@ class NFLPlayProcess(object):
                 EPA_per_Play=pl.col("EPA").mean(),
                 WPA=pl.col("wpa").sum(),
                 SR=pl.col("EPA_success").mean(),
-                Fum=pl.col("fumble_vec").sum(),
-                Fum_Lost=pl.col("fumble_lost").sum(),
+                # an interception's intended receiver is not charged the returner's fumble
+                Fum=pl.col("fumble_vec").filter(pl.col("int").fill_null(False) == False).sum(),
+                Fum_Lost=pl.col("fumble_lost").filter(pl.col("int").fill_null(False) == False).sum(),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))

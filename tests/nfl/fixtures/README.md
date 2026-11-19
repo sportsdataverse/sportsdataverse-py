@@ -331,6 +331,10 @@ to the same keys as the whole-game captures: 401873053 (NE @ DET, three intercep
 game."). `nflverse_targets_2026_w10.csv` is nflverse's `load_player_stats(2026, "week")` for week 10 (read 2026-11-19),
 every player with a target on the four teams: `player_id`, `player_display_name` and `targets`, plus the `game_id`,
 the ESPN `team_id` and the box's spelling of the name (`receiver_player_name`), joined by first initial and surname.
+Four more are trimmed the same way from `nflverse-dev/nfl-raw` (`nfl/espn/raw/<season>/<game_id>.json.gz` at
+`1782be66`): 320909007 (2012 PIT @ DEN, receivers spelled out), 401326443 (2021 TEN @ IND, a fumble on an
+interception return), 401326410 (2021 TB @ PHI, a lateral on an interception return) and 321230025 (2012 ARI @ SF,
+"Pass intended for A.Roberts" on a completion to S.Kelemete).
 `tests/nfl/test_nfl_receiver_targets.py` reads them. They sit in a subdirectory, so the whole-game oracle does not pick
 them up.
 
