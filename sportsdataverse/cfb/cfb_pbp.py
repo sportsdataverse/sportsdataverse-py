@@ -9911,8 +9911,14 @@ class CFBPlayProcess(object):
                 .otherwise(pl.col("rusher_player_name")),
                 box_rush_yds=pl.when(pl.col("sack_vec") == True)
                 # yds_sacked is null where the text states no loss ("intentional grounding"
-                # filed as a Sack); the play's statYardage is then the yards it cost
-                .then(pl.coalesce(pl.col("yds_sacked"), pl.col("statYardage")))
+                # filed as a Sack); the play's statYardage is then the yards it cost. Not on a
+                # fumbled sack: its statYardage can be the return.
+                .then(
+                    pl.coalesce(
+                        pl.col("yds_sacked"),
+                        pl.when(pl.col("fumble_vec") == False).then(pl.col("statYardage")),
+                    )
+                )
                 .otherwise(pl.col("yds_rushed")),
             )
             .pipe(_fill_missing)
@@ -9943,9 +9949,11 @@ class CFBPlayProcess(object):
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
         rusher_box = (
-            rusher_count_box.join(rusher_box, on=["pos_team", "rusher_player_name"], how="left", nulls_equal=True)
+            rusher_count_box.join(
+                rusher_box, on=["pos_team", "rusher_player_name"], how="full", coalesce=True, nulls_equal=True
+            )
             # a sack- or kneel-only line has no designed rush: its sums are 0, its rates null
-            .with_columns(pl.col("EPA", "WPA", "Fum", "Fum_Lost").fill_null(0))
+            .with_columns(pl.col("Car", "Yds", "Rush_TD", "EPA", "WPA", "Fum", "Fum_Lost").fill_null(0))
             .sort("Car", descending=True)  # 0.36-live: box tables sorted by volume
         )
         # rusher_box = rusher_box.replace({np.nan: None})

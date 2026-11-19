@@ -143,10 +143,10 @@ def _rows() -> Callable[[], pl.Expr]:
 
 
 def _cfb_box_rush_yds() -> pl.Expr:
-    """CFB ``box_rush_yds``: a sack's loss (``yds_sacked``, else its ``statYardage``), else ``yds_rushed``."""
+    """CFB ``box_rush_yds``: a sack's loss (``yds_sacked``, else an unfumbled sack's ``statYardage``), else ``yds_rushed``."""
     return (
         pl.when(_t("sack_vec"))
-        .then(pl.coalesce(c("yds_sacked"), c("statYardage")))
+        .then(pl.coalesce(c("yds_sacked"), pl.when(~_t("fumble_vec")).then(c("statYardage"))))
         .otherwise(c("yds_rushed"))
         .cast(pl.Float64, strict=False)
         .fill_null(0.0)
@@ -254,8 +254,18 @@ _PLAYER_CHECKS: tuple[tuple[str, str, str, Callable[[], pl.Expr], tuple[str, ...
 #: The box-score rushing count, which differs by league.
 _LEAGUE_TEAM_CHECKS: dict[str, tuple[_Check, ...]] = {
     "cfb": (
-        _ck("team", "pos_team", "rushing_attempts", "rush_count_cfb", _rows(), "rush"),
-        _ck("team", "pos_team", "rushing_yards", "rush_count_cfb", _cfb_box_rush_yds, "yds_sacked", "yds_rushed"),
+        _ck("team", "pos_team", "rushing_attempts", "rush_count_cfb", _rows()),
+        _ck(
+            "team",
+            "pos_team",
+            "rushing_yards",
+            "rush_count_cfb",
+            _cfb_box_rush_yds,
+            "yds_sacked",
+            "yds_rushed",
+            "statYardage",
+            "fumble_vec",
+        ),
     ),
 }
 _LEAGUE_PLAYER_CHECKS: dict[str, tuple[tuple[str, str, str, Callable[[], pl.Expr], tuple[str, ...]], ...]] = {
@@ -264,8 +274,8 @@ _LEAGUE_PLAYER_CHECKS: dict[str, tuple[tuple[str, str, str, Callable[[], pl.Expr
         ("rush", "Yds", "rush", _sum("yds_rushed"), ("yds_rushed",)),
     ),
     "cfb": (
-        ("rush", "Car", "rush_count_cfb", _rows(), ("rush",)),
-        ("rush", "Yds", "rush_count_cfb", _cfb_box_rush_yds, ("yds_sacked", "yds_rushed", "statYardage")),
+        ("rush", "Car", "rush_count_cfb", _rows(), ()),
+        ("rush", "Yds", "rush_count_cfb", _cfb_box_rush_yds, ("yds_sacked", "yds_rushed", "statYardage", "fumble_vec")),
     ),
 }
 
@@ -846,6 +856,9 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
         One ``RuleResult`` per ``box.*`` reconciliation rule that could run,
         including rules that did not fire.
 
+    Raises:
+        ValueError: If a box is given and ``league`` is not ``"nfl"`` or ``"cfb"``.
+
     Example:
         Reconcile a processed game's box score::
 
@@ -863,6 +876,8 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
     """
     if not isinstance(plays, pl.DataFrame) or plays.height == 0 or not box:
         return []
+    if league not in _LEAGUE_PLAYER_CHECKS:
+        raise ValueError(f"league must be 'nfl' or 'cfb', got {league!r}")
     from sportsdataverse.validation.findings import Severity
     from sportsdataverse.validation.pbp_invariants import RuleResult
 
