@@ -125,7 +125,8 @@ def cfb_player_havoc(
     play-by-play (:func:`load_cfb_adv_defensive_players`), which only credits a forced fumble when
     ESPN's play text names the player. Measured on 2025, that is about 0.5 a game, so this column
     undercounts. College football has no public snap counts, so every rate is per game, and a game
-    counts only when the player has a defensive or interception box line in it. ESPN's defensive
+    counts only when the player has a defensive or interception box line in it or the play text
+    credits him with a forced fumble in it. ESPN's defensive
     box covers 935 of 958 games in 2025 but 473 in 2023 and 154 in 2021, so earlier seasons are
     partial. No PFF data is used.
 
@@ -206,7 +207,7 @@ def cfb_player_havoc(
     rates = list(_RATES.values())
     season = attach_sample_sizes(season, {r: pl.col("games") for r in rates})
     season = attach_ranks(
-        season, rates, min_cohort=MIN_COHORT_PLAYERS, by=("season",), min_n={r: min_games for r in rates}
+        season, rates, min_cohort=MIN_COHORT_PLAYERS, by=("season",), min_n=dict.fromkeys(rates, min_games)
     )
     out = season.select([pl.col(c).cast(t) for c, t in _SCHEMA.items()]).sort(
         "season", "havoc_per_game_rank", "athlete_id", nulls_last=True
