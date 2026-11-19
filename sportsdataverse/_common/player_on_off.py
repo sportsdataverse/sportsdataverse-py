@@ -19,7 +19,9 @@ team is on the floor for exactly one set of its players, and
   earlier that season (traded in), and closes the day before his first game for a later team
   (traded out), else at the season's end. The games he missed inside it count, so a player
   injured for the rest of the season keeps the whole season after his debut; a player signed
-  mid-season starts at his debut. ``<rating>_diff_span`` is on minus that off side,
+  mid-season starts at his debut. With ``rosters`` (the games he was listed for without playing:
+  a DNP, an inactive) those games are his too, so a player injured from opening night starts
+  there, and a fully listed team-season closes the span at his last listed game. ``<rating>_diff_span`` is on minus that off side,
   ``team_games_span`` counts the span's team games and ``span_first_date`` /
   ``span_last_date`` are its first and last. A game with no date is left out of the span (the
   ``*_on`` totals keep it). A player with one team and a debut in its first game has a span of
@@ -168,12 +170,15 @@ def _season_totals(rows: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame, pl.D
     return team, on, sets
 
 
-def _span_off(rows: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame:
+def _span_off(rows: pl.DataFrame, game_dates: pl.DataFrame, rosters: pl.DataFrame | None = None) -> pl.DataFrame:
     """Per player and team-season: the team's games in his span with it, minus his own stints.
 
     The span opens at his first game for the team, or, when he played for another team earlier
     that season, the day after his last game there (he was traded in); it closes the day before
-    his first game for a later team (traded out), else at the team's last game. Returns
+    his first game for a later team (traded out), else at the team's last game. With ``rosters``
+    a game he was listed for (a DNP or an inactive) counts as one of his games for the team, so a
+    late debut no longer opens the span late, and where every team game of the team-season has a
+    list the span closes at his last listed game (a waived player's ends there). Returns
     ``season, team_id, player_id``, ``team_games_span``, ``span_first_date`` /
     ``span_last_date`` (the span's first and last team game) and ``<total>_off_span``.
     """
@@ -190,15 +195,33 @@ def _span_off(rows: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame:
         .agg(sums)
         .rename({"players": "player_id"})
     )
-    stints = player_games.group_by([*keys, "player_id"]).agg(
-        pl.col("game_date").min().alias("_first"),
-        pl.col("game_date").max().alias("_last"),
-        *[pl.col(c).sum().alias(f"{c}_in") for c in _TOTALS],
+    seen = player_games.select(*keys, "player_id", "game_date")
+    listed_all = pl.DataFrame(schema={k: team_games.schema[k] for k in keys})  # team-seasons listed every game
+    if rosters is not None:  # listed but not on the floor: a DNP or an inactive is still on the roster
+        listed = rosters.select(
+            pl.col("team_id").cast(pl.Int64),
+            pl.col("player_id").cast(seen.schema["player_id"]),
+            pl.col("game_id").cast(pl.Utf8),
+        )
+        listed = listed.join(team_games.select(*keys, "game_id", "game_date"), on=["team_id", "game_id"])
+        assert listed.schema["season"] == seen.schema["season"], "season dtypes differ between rosters and rows"
+        seen = pl.concat([seen, listed.select(seen.columns)])
+        gaps = team_games.join(listed, on=["team_id", "game_id"], how="anti").select(keys).unique()
+        listed_all = team_games.select(keys).unique().join(gaps, on=keys, how="anti")
+    stints = (
+        seen.group_by([*keys, "player_id"])
+        .agg(pl.col("game_date").min().alias("_first"), pl.col("game_date").max().alias("_last"))
+        .join(
+            player_games.group_by([*keys, "player_id"]).agg(*[pl.col(c).sum().alias(f"{c}_in") for c in _TOTALS]),
+            on=[*keys, "player_id"],
+            how="inner",  # a player who was only ever listed has no row to fill
+            validate="1:1",
+        )
     )
     # His games for other teams that season bound the span: the last one before his first game here,
     # the first one after his last. Game by game, so a return to an earlier team still bounds both
     # (A, then B, then A again: B's span closes before the return; A's keeps the B weeks inside it).
-    other = player_games.select("season", "player_id", pl.col("team_id").alias("_t"), pl.col("game_date").alias("_d"))
+    other = seen.select("season", "player_id", pl.col("team_id").alias("_t"), pl.col("game_date").alias("_d"))
     pairs = (
         stints.select(*keys, "player_id", "_first", "_last")
         .join(other, on=["season", "player_id"])
@@ -208,11 +231,22 @@ def _span_off(rows: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame:
         pl.col("_d").filter(pl.col("_d") < pl.col("_first")).max().alias("_prev"),
         pl.col("_d").filter(pl.col("_d") > pl.col("_last")).min().alias("_next"),
     )
-    window = stints.join(bounds, on=[*keys, "player_id"], how="left", validate="1:1").select(
-        *keys,
-        "player_id",
-        pl.coalesce(pl.col("_prev") + pl.duration(days=1), pl.col("_first")).alias("_start"),
-        (pl.col("_next") - pl.duration(days=1)).alias("_end"),
+    # Where every team game has its list, his last listed game closes the span (waived, or traded
+    # before he played for his next team); a team-season with a game unlisted keeps the open end,
+    # since the gap could hold his last games (the inactive lists alone cover few games before 2025).
+    full = listed_all.with_columns(pl.lit(True).alias("_full"))
+    window = (
+        stints.join(bounds, on=[*keys, "player_id"], how="left", validate="1:1")
+        .join(full, on=keys, how="left", validate="m:1")
+        .select(
+            *keys,
+            "player_id",
+            pl.coalesce(pl.col("_prev") + pl.duration(days=1), pl.col("_first")).alias("_start"),
+            pl.when(pl.col("_full"))
+            .then(pl.min_horizontal(pl.col("_next") - pl.duration(days=1), pl.col("_last")))
+            .otherwise(pl.col("_next") - pl.duration(days=1))
+            .alias("_end"),
+        )
     )
     # ponytail: every player x every team game, then the window filter: ~20 x 82 rows a team-season.
     in_span = (
@@ -263,6 +297,7 @@ def player_on_off(
     level: str | None = None,
     game_dates: pl.DataFrame | None = None,
     tenure: bool = False,
+    rosters: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
     """Per player and team-season: the team with him on the floor and without him.
 
@@ -280,6 +315,13 @@ def player_on_off(
             NBA / WNBA adapters) instead of the team's whole season (college). It needs
             ``game_dates``; a player with no span, and every player of a team-season with an
             undated game, keeps the whole season.
+        rosters: ``team_id``, ``player_id`` and ``game_id`` of the games each player was listed
+            for without taking the floor (a DNP or an inactive), for the span: a listed game counts
+            as one of his games for the team, so a player injured on opening night opens his span
+            there, not at his debut; where every game of the team-season has rows (the box score
+            with its DNPs lists all of them) the span closes at his last listed game (waived, or
+            traded before he played for his next team). ``None`` opens it at his first game on the
+            floor and closes it only at a later team's first game or the season's end.
 
     Returns:
         One row per ``(season, team_id, player_id)`` in :func:`player_on_off_schema`: ``games`` he
@@ -317,7 +359,7 @@ def player_on_off(
     if game_dates is None:
         span = pl.DataFrame(schema={**{k: out.schema[k] for k in [*keys, "player_id"]}, **_SPAN_RAW})
     else:
-        span = _span_off(rows, game_dates)
+        span = _span_off(rows, game_dates, rosters)
     out = out.join(span, on=[*keys, "player_id"], how="left", validate="1:1")
     if tenure and game_dates is not None:  # stats.nba.com's window: his span, not the team's season
         out = _tenure_off(out, rows, game_dates, keys)

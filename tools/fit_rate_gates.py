@@ -331,17 +331,19 @@ def _box(df: pl.DataFrame) -> pl.DataFrame:
 
 
 #: Bump when :func:`span_games` (or ``_span_off``) changes: the ``--data`` cache file names carry it.
-SPAN_VERSION = 2
+SPAN_VERSION = 3
 
 
-def span_games(rows: pl.DataFrame, schedule: pl.DataFrame) -> pl.DataFrame:
+def span_games(rows: pl.DataFrame, schedule: pl.DataFrame, rosters: pl.DataFrame | None = None) -> pl.DataFrame:
     """``season, team_id, player_id, game_id``: the team games inside each player's span with it.
 
     The window ``player_on_off(tenure=True)`` counts the NBA / WNBA off side over
     (:func:`sportsdataverse._common.player_on_off._span_off`): from his first game for the team
     (or the day after his last for an earlier team that season) to the day before his first for a
-    later team, else the team's last game. One span per season type, as the adapters build one
-    season type at a time (a preseason game never opens a regular-season span).
+    later team, else the team's last game. With ``rosters`` (the adapter's listed games: box-score
+    DNPs and inactives) a listed game counts as one of his, as in ``player_on_off``. One span per
+    season type, as the adapters build one season type at a time (a preseason game never opens a
+    regular-season span).
     """
     from sportsdataverse._common.game_impact import _sides, games_with_possessions
     from sportsdataverse._common.player_on_off import _span_off
@@ -357,7 +359,9 @@ def span_games(rows: pl.DataFrame, schedule: pl.DataFrame) -> pl.DataFrame:
         # player_on_off keeps the whole season for a team-season with an undated game; none in the fit seasons
         undated = team_games.join(dates, on="game_id", how="anti")
         assert undated.height == 0, f"{st}: {undated.height} team games without a date"
-        span = _span_off(r, dates).select(*keys, pl.col("player_id").cast(pl.Utf8), "span_first_date", "span_last_date")
+        span = _span_off(r, dates, rosters).select(
+            *keys, pl.col("player_id").cast(pl.Utf8), "span_first_date", "span_last_date"
+        )
         out.append(
             span.join(team_games.join(dates, on="game_id", validate="m:1"), on=keys)
             .filter(pl.col("game_date").is_between("span_first_date", "span_last_date"))
@@ -372,10 +376,12 @@ _SPAN_SCHEMA = {"season": pl.Int64, "team_id": pl.Int64, "player_id": pl.Utf8, "
 def _span(league: str, season: int) -> pl.DataFrame:
     """:func:`span_games` of one NBA / WNBA season, from the four stats.nba.com releases."""
     from sportsdataverse.nba.nba_game_impact import _load_releases, nba_impact_rows
+    from sportsdataverse.nba.nba_player_on_off import _rosters
 
     lid = "00" if league == "nba" else "10"
     pbp, lineups, possessions, schedule = _load_releases(season, lid)
-    return span_games(nba_impact_rows(pbp, lineups, possessions, schedule, league_id=lid), schedule)
+    rows = nba_impact_rows(pbp, lineups, possessions, schedule, league_id=lid)
+    return span_games(rows, schedule, _rosters(season, lid))
 
 
 def on_off_halves(league: str, seasons: range, data: Path | None = None) -> pl.DataFrame:
