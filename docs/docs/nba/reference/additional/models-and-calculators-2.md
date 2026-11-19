@@ -289,7 +289,7 @@ frames = game_page_frames(parse(401726992, summary), league="wnba")
 
 ### luck_adjusted_response {#luck_adjusted_response}
 
-`luck_adjusted_response(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0) -> 'pl.DataFrame'`
+`luck_adjusted_response(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'dict[int, tuple[float, float]] | None' = None, *, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0) -> 'pl.DataFrame'`
 
 Attach a per-possession `la_points` expected-points response.
 
@@ -318,7 +318,7 @@ tech FT).
 |---|---|---|---|
 | `possessions` | `DataFrame` |  | Possession+lineup frame carrying team-level `fg2m` and the join keys `game_id` + `possession_number` + `offense_team_id`. |
 | `shooting` | `DataFrame` |  | Per-(possession, shooter) frame (`build_possession_shooting`), which may include defense-team shooter rows (e.g. technical FTs) — filtered out here before aggregation. |
-| `player_rates` | `Optional[dict[int, tuple[float, float]]]` | `None` | Optional `{player_id: (p3, pft)}` override (e.g. planted truth in tests); `None` → shrink from `shooting`. |
+| `player_rates` | `dict[int, tuple[float, float]] \| None` | `None` | Optional `{player_id: (p3, pft)}` override (e.g. planted truth in tests); `None` → shrink from `shooting`. |
 | `fg3_k` | `float` | `100.0` | 3-point shrinkage pseudo-count, forwarded to `_shrunk_shooter_rates` when `player_rates` is `None`. |
 | `ft_k` | `float` | `50.0` | Free-throw shrinkage pseudo-count, forwarded to `_shrunk_shooter_rates` when `player_rates` is `None`. |
 
@@ -738,7 +738,7 @@ print(proj.sort("projected_rating", descending=True).head())
 
 ### nba_decay_rapm {#nba_decay_rapm}
 
-`nba_decay_rapm(possessions: 'pl.DataFrame', *, asof: 'Optional[datetime.date]' = None, half_life_days: 'float' = 180.0, alphas: 'Optional[np.ndarray]' = None, league_id: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_decay_rapm(possessions: 'pl.DataFrame', *, asof: 'datetime.date | None' = None, half_life_days: 'float' = 180.0, alphas: 'np.ndarray | None' = None, league_id: 'str | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`.
 
@@ -758,10 +758,10 @@ the binding WP2 ridge-schedule ruling documented in the module docstring.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `possessions` | `DataFrame` |  | Multi-season possession+lineup frame. Must carry a `game_date` (`pl.Date`) column when `asof` is not `None`. |
-| `asof` | `Optional[date]` | `None` | Reference date; `None` -> unweighted, plain-RAPM-equivalent fit. |
+| `asof` | `date \| None` | `None` | Reference date; `None` -> unweighted, plain-RAPM-equivalent fit. |
 | `half_life_days` | `float` | `180.0` | Weight half-life in days (default 180). |
-| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects plain RAPM's league penalty (`~sportsdataverse.nba.nba_rapm.rapm_penalty`) when `asof is None` or `oracle_rapm_alphas` (evaluated at the possession count) when `asof` is set. |
-| `league_id` | `Optional[str]` | `None` | `"00"` / `"10"` / `"20"`, the league whose plain-RAPM penalty the `asof=None` branch fits at; `None` reads it from the `game_id` prefix (`~sportsdataverse.nba.nba_rapm.rapm_penalty`). |
+| `alphas` | `ndarray \| None` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects plain RAPM's league penalty (`~sportsdataverse.nba.nba_rapm.rapm_penalty`) when `asof is None` or `oracle_rapm_alphas` (evaluated at the possession count) when `asof` is set. |
+| `league_id` | `str \| None` | `None` | `"00"` / `"10"` / `"20"`, the league whose plain-RAPM penalty the `asof=None` branch fits at; `None` reads it from the `game_id` prefix (`~sportsdataverse.nba.nba_rapm.rapm_penalty`). |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 
 **Returns**
@@ -897,7 +897,7 @@ t.filter(pl.col("poss") >= 200).sort("ball_security_skill", descending=True)
 
 ### nba_four_factor_rapm {#nba_four_factor_rapm}
 
-`nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'np.ndarray | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design.
 
@@ -911,7 +911,7 @@ govern the response definitions.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `possessions` | `DataFrame` |  | Possession+lineup frame carrying team-level `fg2m, fg3m, ftm, oreb, tov` and the ten lineup columns. Must also carry a `points` column -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally) requires it unconditionally even though none of the four factor responses use it. `offense_team_id` is NOT required here (unlike `nba_la_rapm`): none of the four factor responses need the offense-only shooter join. |
-| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override, shared by all four factor fits. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule. |
+| `alphas` | `ndarray \| None` | `None` | Optional RidgeCV alpha grid override, shared by all four factor fits. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule. |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 
 **Returns**
@@ -1003,7 +1003,7 @@ wp = nba_in_game_win_prob(pbp, 0.62)
 
 ### nba_la_rapm {#nba_la_rapm}
 
-`nba_la_rapm(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, alphas: 'Optional[np.ndarray]' = None, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_la_rapm(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'dict[int, tuple[float, float]] | None' = None, *, alphas: 'np.ndarray | None' = None, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed).
 
@@ -1017,8 +1017,8 @@ expected value (`luck_adjusted_response`); 2-pt makes stay realized.
 |---|---|---|---|
 | `possessions` | `DataFrame` |  | Possession+lineup frame with team-level `fg2m` and the ten lineup columns; join keys `game_id` + `possession_number` + `offense_team_id` (the last is required by `luck_adjusted_response`'s defense-shooter leak filter). Must also carry a `points` column even though the LA response (`la_points`) supersedes it for fitting -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally via `_prepare`) requires it unconditionally. |
 | `shooting` | `DataFrame` |  | Per-(possession, shooter) frame from `build_possession_shooting`. |
-| `player_rates` | `Optional[dict[int, tuple[float, float]]]` | `None` | Optional `{player_id: (p3, pft)}` override; `None` → shrink from `shooting`. |
-| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule (`cv=` `ORACLE_RAPM_CV` always; there is no plain-schedule mode). |
+| `player_rates` | `dict[int, tuple[float, float]] \| None` | `None` | Optional `{player_id: (p3, pft)}` override; `None` → shrink from `shooting`. |
+| `alphas` | `ndarray \| None` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule (`cv=` `ORACLE_RAPM_CV` always; there is no plain-schedule mode). |
 | `fg3_k` | `float` | `100.0` | 3-point shrinkage pseudo-count, forwarded to `luck_adjusted_response` when `player_rates` is `None`. |
 | `ft_k` | `float` | `50.0` | Free-throw shrinkage pseudo-count, forwarded to `luck_adjusted_response` when `player_rates` is `None`. |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
@@ -1106,7 +1106,7 @@ d.filter(pl.col("matchup_poss") >= 200).sort("matchup_drapm", descending=True)
 
 ### nba_multiseason_rapm {#nba_multiseason_rapm}
 
-`nba_multiseason_rapm(possessions: 'pl.DataFrame', *, seasons: 'Optional[Sequence[int]]' = None, alpha: 'Optional[float]' = None, league_id: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nba_multiseason_rapm(possessions: 'pl.DataFrame', *, seasons: 'Sequence[int] | None' = None, alpha: 'float | None' = None, league_id: 'str | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Multi-season RAPM: one plain ridge fit over the possessions of several seasons pooled.
 
@@ -1129,9 +1129,9 @@ and the spread is 0.90 of his (std ratio at 10,000 possessions). Per-season deca
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `possessions` | `DataFrame` |  | Possession+lineup rows of one or more seasons (`off_player_1..5`, `def_player_1..5`, `points`, see `~sportsdataverse.nba.nba_rapm.build_rapm_design`) with an integer `season` column, as the `nba_stats_possessions` release stamps it (the end year). Filter the season type (regular season, playoffs) before calling. |
-| `seasons` | `Optional[Sequence[int]]` | `None` | The `season` values to pool. `None` (default) pools every row. |
-| `alpha` | `Optional[float]` | `None` | A ridge penalty to fit at instead of the league's (positive). |
-| `league_id` | `Optional[str]` | `None` | `"00"` / `"10"` / `"20"`, the league whose penalty is used; `None` reads it from the `game_id` prefix (`~sportsdataverse.nba.nba_rapm.rapm_penalty`). |
+| `seasons` | `Sequence[int] \| None` | `None` | The `season` values to pool. `None` (default) pools every row. |
+| `alpha` | `float \| None` | `None` | A ridge penalty to fit at instead of the league's (positive). |
+| `league_id` | `str \| None` | `None` | `"00"` / `"10"` / `"20"`, the league whose penalty is used; `None` reads it from the `game_id` prefix (`~sportsdataverse.nba.nba_rapm.rapm_penalty`). |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 
 **Returns**
@@ -1142,7 +1142,7 @@ Frame with `MULTISEASON_RAPM_SCHEMA`, sorted by `player_id`. `off_poss` / `def_p
 
 | Exception | Description |
 |---|---|
-| `ValueError` | *possessions* has rows but no `season` column. |
+| `ValueError` | *possessions* has rows but no `season` column, or *alpha* is not positive. |
 
 **Example**
 

@@ -9,7 +9,8 @@ The script fits our multi-season RAPM over the same window (``nba_stats_possessi
 regular-season games only, via the ``nba_stats_schedules`` release), joins on ``player_id`` (dtype
 asserted equal first) and prints the match rate, the Spearman rho of our total / offense / defense
 against his at three possession floors, and the ratio of our spread to his. It exits 1 when Spearman
-on the total at ``Poss >= 10,000`` is below :data:`RHO_FLOOR`, the register's bar.
+on the total at ``Poss >= 10,000`` is below :data:`RHO_FLOOR`, the register's bar, or when fewer than
+:data:`MATCH_RATE_FLOOR` of his players match.
 
 Usage::
 
@@ -32,6 +33,8 @@ from sportsdataverse.nba.nba_rapm_variants import nba_multiseason_rapm
 STARTS = range(2019, 2027)
 #: Spearman floor on the total at ``Poss >= 10,000`` (Intake Register ACC-2026-0001). Never lowered.
 RHO_FLOOR = 0.95
+#: Share of the oracle's players that must match on ``player_id`` (observed 1,224 / 1,224 on 2026-11-18).
+MATCH_RATE_FLOOR = 0.99
 FLOORS = (0, 10_000, 30_000)
 _LINEUP = [f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)]
 
@@ -79,7 +82,8 @@ def gate(ours: pl.DataFrame, oracle: pl.DataFrame) -> dict:
             "std_ratio": round(k["multiseason_rapm"].std() / k["Tot"].std(), 4),
         }
     report["rho_floor"] = RHO_FLOOR
-    report["pass"] = report["poss_ge_10000"]["rho_total"] >= RHO_FLOOR
+    report["match_rate_floor"] = MATCH_RATE_FLOOR
+    report["pass"] = report["poss_ge_10000"]["rho_total"] >= RHO_FLOOR and report["match_rate"] >= MATCH_RATE_FLOOR
     return report
 
 

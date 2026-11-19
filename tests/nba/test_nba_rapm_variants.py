@@ -640,3 +640,5 @@ def test_multiseason_rapm_empty_and_missing_season():
     assert nba_multiseason_rapm(poss, seasons=[1999]).height == 0
     with pytest.raises(ValueError, match="season"):
         nba_multiseason_rapm(poss.drop("season"))
+    with pytest.raises(ValueError, match="alpha"):
+        nba_multiseason_rapm(poss, alpha=0.0)

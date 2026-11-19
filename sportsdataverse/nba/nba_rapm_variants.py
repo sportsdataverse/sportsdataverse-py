@@ -37,7 +37,7 @@ ruling above.
 from __future__ import annotations
 
 import datetime
-from typing import Optional, Sequence, Union
+from collections.abc import Sequence
 
 import numpy as np
 import pandas as pd
@@ -104,7 +104,7 @@ def oracle_rapm_alphas(
 
 def decay_weights(
     game_date: pl.Series,
-    asof: Optional[datetime.date],
+    asof: datetime.date | None,
     half_life_days: float,
 ) -> np.ndarray:
     """Exponential time-decay sample weights ``w = 0.5 ** (days_ago / half_life)``.
@@ -180,8 +180,8 @@ def _prepare(
     possessions: pl.DataFrame,
     response_col: str,
     *,
-    weight_col: Optional[str] = None,
-) -> tuple[csr_matrix, np.ndarray, Optional[np.ndarray], list[int]]:
+    weight_col: str | None = None,
+) -> tuple[csr_matrix, np.ndarray, np.ndarray | None, list[int]]:
     """Build the shared design ``X`` with an externally-supplied, row-aligned response.
 
     Drops null-lineup rows ONCE (identical subset to ``build_rapm_design``) so the
@@ -213,9 +213,9 @@ def _fit_weighted(
     X: csr_matrix,
     y: np.ndarray,
     *,
-    weights: Optional[np.ndarray] = None,
-    alphas: Optional[np.ndarray] = None,
-    cv: Optional[int] = None,
+    weights: np.ndarray | None = None,
+    alphas: np.ndarray | None = None,
+    cv: int | None = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Fit a (optionally weighted) RidgeCV and return per-100 offense/defense + poss counts.
 
@@ -277,12 +277,12 @@ def _empty(schema: dict[str, pl.DataType]) -> pl.DataFrame:
 def nba_decay_rapm(
     possessions: pl.DataFrame,
     *,
-    asof: Optional[datetime.date] = None,
+    asof: datetime.date | None = None,
     half_life_days: float = 180.0,
-    alphas: Optional[np.ndarray] = None,
-    league_id: Optional[str] = None,
+    alphas: np.ndarray | None = None,
+    league_id: str | None = None,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Time-decay RAPM: ridge weighted by ``0.5 ** (days_ago / half_life_days)``.
 
     ``asof=None`` disables decay: every possession is weighted ``1.0`` and the
@@ -354,7 +354,7 @@ def nba_decay_rapm(
         return out.to_pandas() if return_as_pandas else out
 
     frame = possessions
-    weight_col: Optional[str] = None
+    weight_col: str | None = None
     if asof is not None:
         if "game_date" not in frame.columns:
             raise ValueError("nba_decay_rapm(asof=...) requires a 'game_date' column")
@@ -374,7 +374,7 @@ def nba_decay_rapm(
     if asof is None:
         # Plain-RAPM-equivalent branch: reproduce nba_rapm's own schedule exactly.
         fit_alphas = alphas if alphas is not None else np.asarray([rapm_penalty(frame, league_id)])
-        fit_cv: Optional[int] = None
+        fit_cv: int | None = None
     else:
         # Decay-weighted branch: oracle regularization schedule (binding WP2 ruling),
         # evaluated at the post-filter possession count (X.shape[0]), NOT player count.
@@ -410,11 +410,11 @@ MULTISEASON_RAPM_SCHEMA: dict[str, pl.DataType] = {
 def nba_multiseason_rapm(
     possessions: pl.DataFrame,
     *,
-    seasons: Optional[Sequence[int]] = None,
-    alpha: Optional[float] = None,
-    league_id: Optional[str] = None,
+    seasons: Sequence[int] | None = None,
+    alpha: float | None = None,
+    league_id: str | None = None,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Multi-season RAPM: one plain ridge fit over the possessions of several seasons pooled.
 
     Every possession counts equally, whatever its season, and the fit uses plain RAPM's fixed league
@@ -448,7 +448,7 @@ def nba_multiseason_rapm(
         possession in. Empty input, or a ``seasons`` that matches no row, gives a zero-row frame.
 
     Raises:
-        ValueError: *possessions* has rows but no ``season`` column.
+        ValueError: *possessions* has rows but no ``season`` column, or *alpha* is not positive.
 
     Example:
         The 2019-20 through 2026-27 regular-season window::
@@ -473,6 +473,8 @@ def nba_multiseason_rapm(
         return out.to_pandas() if return_as_pandas else out
     if "season" not in possessions.columns:
         raise ValueError("nba_multiseason_rapm requires a 'season' column")
+    if alpha is not None and not alpha > 0:
+        raise ValueError(f"nba_multiseason_rapm alpha must be positive, got {alpha!r}")
     frame = possessions if seasons is None else possessions.filter(pl.col("season").is_in(list(seasons)))
     X, kept, pids = _prepare_design(frame)
     if not pids:
@@ -553,7 +555,7 @@ def _shrunk_shooter_rates(
 def luck_adjusted_response(
     possessions: pl.DataFrame,
     shooting: pl.DataFrame,
-    player_rates: Optional[dict[int, tuple[float, float]]] = None,
+    player_rates: dict[int, tuple[float, float]] | None = None,
     *,
     fg3_k: float = 100.0,
     ft_k: float = 50.0,
@@ -674,13 +676,13 @@ LA_RAPM_SCHEMA: dict[str, pl.DataType] = {
 def nba_la_rapm(
     possessions: pl.DataFrame,
     shooting: pl.DataFrame,
-    player_rates: Optional[dict[int, tuple[float, float]]] = None,
+    player_rates: dict[int, tuple[float, float]] | None = None,
     *,
-    alphas: Optional[np.ndarray] = None,
+    alphas: np.ndarray | None = None,
     fg3_k: float = 100.0,
     ft_k: float = 50.0,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed).
 
     Replaces realized 3-point and free-throw outcomes with the shooter's shrunk
@@ -820,9 +822,9 @@ FOUR_FACTOR_SCHEMA: dict[str, pl.DataType] = {
 def nba_four_factor_rapm(
     possessions: pl.DataFrame,
     *,
-    alphas: Optional[np.ndarray] = None,
+    alphas: np.ndarray | None = None,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design.
 
     Each factor is regressed on the identical offense/defense design matrix,
