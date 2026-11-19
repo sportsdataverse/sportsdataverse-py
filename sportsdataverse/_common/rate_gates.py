@@ -66,6 +66,14 @@ NCAA_LEVEL: dict[str, str] = {"mens": "mbb", "womens": "wbb"}
 # off_rtg_diff 720 -> 750. NBA net_rtg_on 3200 -> 3100 is release drift since the 2026-11-06 fit: the on
 # side does not use the span, and its curve is the same with and without it.
 #
+# Refitted again on 2026-11-18 (tools/fit_rate_gates.py --kind on_off, SPAN_VERSION 3) on the listed-games
+# span of sportsdataverse-py #1240: it opens at the player's first listed game (a box-score DNP or the
+# inactive list) and, where every game names everyone who played, closes at his last. Only the _diff
+# curves move (the on side does not use the span; its curves are unchanged): NBA def_rtg_diff
+# 3900 -> 4000 (train M 3813 -> 3914) and net_rtg_diff 7100 -> 7300 (M 7029 -> 7252), WNBA off_rtg_diff
+# 750 -> 780 (M 749 -> 776). NBA off_rtg_diff stays 2500 (M 2425 -> 2420); WNBA net_rtg_diff stays never
+# ranked (train M 2333 -> 2437, holdout curve still never near half signal).
+#
 # Owner ruling (2026-11-17): WNBA on/off net_rtg_diff is never ranked (math.inf), NOT a fitted value.
 # Its train fit (2018-2022) gives M 2333, a gate of 2400, but on the unseen 2023-2025 seasons the span
 # curve never comes near half signal: r -0.04 to 0.37 over 10 bins, and the fitted M lands past twice
@@ -75,7 +83,8 @@ NCAA_LEVEL: dict[str, str] = {"mens": "mbb", "womens": "wbb"}
 # unseen 2023-2025 seasons they are under a third signal (holdout r = gate / (gate + holdout M)): team
 # ``pace`` 7 games (0.331) and on/off ``off_rtg_on`` 610 (0.263; 0.267 on the 2026-11-06 fixture, the
 # 0.263 #1142 re-measured on the current releases: release drift, not the span). On/off ``off_rtg_diff``
-# was a third (720, 0.314); the span refit lifts it to 0.351 at 750. For pace and off_rtg_on,
+# was a third (720, 0.314); the span refit lifts it to 0.351 at 750, the listed-games refit to 0.370
+# at 780. For pace and off_rtg_on,
 # re-measured season by season on the current releases (possessions PIPELINE_VERSION 7), no data or
 # source defect drives them: the gates refit to the same values, on-court possessions tie out to the
 # team's, no span season predates 2015 (the two-halves era), and the team off_rtg of both sources
@@ -114,9 +123,9 @@ TEAM_MIN_N: dict[str, dict[str, float]] = {
 #: of that side, both for net; ``_diff``: the thinner of on and off).
 ON_OFF_MIN_N: dict[str, dict[str, float]] = {
     "nba": {"off_rtg_on": 1700, "def_rtg_on": 1600, "net_rtg_on": 3100,
-            "off_rtg_diff": 2500, "def_rtg_diff": 3900, "net_rtg_diff": 7100},
+            "off_rtg_diff": 2500, "def_rtg_diff": 4000, "net_rtg_diff": 7300},
     "wnba": {"off_rtg_on": 610, "def_rtg_on": 1200, "net_rtg_on": 1600,
-             "off_rtg_diff": 750, "def_rtg_diff": math.inf, "net_rtg_diff": math.inf},
+             "off_rtg_diff": 780, "def_rtg_diff": math.inf, "net_rtg_diff": math.inf},
     "mbb": {"off_rtg_on": 530, "def_rtg_on": 750, "net_rtg_on": 1100,
             "off_rtg_diff": math.inf, "def_rtg_diff": math.inf, "net_rtg_diff": math.inf},
     "wbb": {"off_rtg_on": 240, "def_rtg_on": 590, "net_rtg_on": 600,

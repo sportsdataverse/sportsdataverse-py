@@ -9,8 +9,8 @@ up to two significant figures); the HOLDOUT seasons' own ``M`` then scores the f
 Holdout reliability at the frozen gate (``g / (g + M_holdout)``), the median and the worst rate of
 each league (gates = observed, rounded down at the second decimal; never loosen a gate to pass --
 refit and re-derive it): team rates NBA 0.479 / 0.39 (opp_orb_pct), WNBA 0.489 / 0.33 (pace), MBB
-0.492 / 0.43 (opp_ft_rate), WBB 0.503 / 0.41 (opp_efg_pct); on/off NBA 0.540 / 0.50 (def_rtg_diff), WNBA
-0.426 / 0.26 (off_rtg_on), MBB 0.513 / 0.50, WBB 0.542 / 0.53. Per-game player box NBA 0.603 / 0.58
+0.492 / 0.43 (opp_ft_rate), WBB 0.503 / 0.41 (opp_efg_pct); on/off NBA 0.544 / 0.50 (def_rtg_diff), WNBA
+0.436 / 0.26 (off_rtg_on), MBB 0.513 / 0.50, WBB 0.542 / 0.53. Per-game player box NBA 0.603 / 0.58
 (reb_pg), WNBA 0.588 / 0.55 (ast_pg), MBB 0.623 / 0.50 (pts_pg), WBB 0.607 / 0.49 (pts_pg). A gate fitted
 on the train seasons is about half signal on seasons it never saw, the WNBA on/off gates less so; single rates
 scatter (the WNBA has 36 holdout teams).
@@ -18,7 +18,8 @@ scatter (the WNBA has 36 holdout teams).
 Two WNBA rates sit under a third signal on the holdout and stay ranked as owner-accepted exceptions
 (2026-11-09): team ``pace`` 0.331 and on/off ``off_rtg_on`` 0.263 (0.267 before release drift). Re-measured season by
 season on the current releases, no data or source defect drives them (``rate_gates``, model-lineage). On/off
-``off_rtg_diff`` (0.314) left the list when the 2026-11-17 refit counted the off side over the player's span (0.351).
+``off_rtg_diff`` (0.314) left the list when the 2026-11-17 refit counted the off side over the player's span (0.351;
+0.370 at the 2026-11-18 listed-games refit, #1240).
 That refit's WNBA ``net_rtg_diff`` never reaches half signal on the holdout, so the owner ruled it never ranked
 (``OWNER_NEVER_RANKED``).
 These figures use the fitter's inputs: box possessions per game for pace, and on/off halves that include
@@ -56,7 +57,7 @@ FROZEN = {"team": TEAM_MIN_N, "on_off": ON_OFF_MIN_N, "player_box": PLAYER_BOX_M
 #: (league, kind) -> (median, worst) holdout reliability at the frozen gate, observed, rounded down.
 HOLDOUT = {
     ("nba", "team"): (0.47, 0.39), ("wnba", "team"): (0.48, 0.33), ("mbb", "team"): (0.49, 0.43),
-    ("wbb", "team"): (0.50, 0.41), ("nba", "on_off"): (0.54, 0.50), ("wnba", "on_off"): (0.42, 0.26),
+    ("wbb", "team"): (0.50, 0.41), ("nba", "on_off"): (0.54, 0.50), ("wnba", "on_off"): (0.43, 0.26),
     ("mbb", "on_off"): (0.51, 0.50), ("wbb", "on_off"): (0.54, 0.53),
     ("nba", "player_box"): (0.60, 0.58), ("wnba", "player_box"): (0.58, 0.55), ("mbb", "player_box"): (0.62, 0.50),
     ("wbb", "player_box"): (0.60, 0.49),

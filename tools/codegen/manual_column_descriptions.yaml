@@ -77359,7 +77359,7 @@ nba_player_on_off:
     ranked; null where the rank is.'
   def_rtg_diff_rank: Rank of def_rtg_diff within the season, league-wide (1 = best, lowest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 400 (NBA) or 200 (WNBA)),
-    whose def_rtg_diff_n is at least 3,900 defensive possessions on the thinner side (on or off the floor) (the sample at
+    whose def_rtg_diff_n is at least 4,000 defensive possessions on the thinner side (on or off the floor) (the sample at
     which the rate is half signal, rate_gates); null under that gate or below 10 qualifiers.
   def_rtg_off: 'Defensive rating with the player off the floor: the rest of the team''s games in his span with it, a game-date approximation of stats.nba.com''s roster window (from his first game for the team, or the day after his last for an earlier team that season, to the day before his first for a later team, else the season''s end), the games he missed inside it included: opp_pts_off per 100 opp_poss_off;
     null with no possessions.'
@@ -77381,7 +77381,7 @@ nba_player_on_off:
     ranked; null where the rank is.'
   net_rtg_diff_rank: Rank of net_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 400 (NBA) or 200 (WNBA)),
-    whose net_rtg_diff_n is at least 7,100 possessions on the thinner side (offense plus defense, on or off the floor) (the
+    whose net_rtg_diff_n is at least 7,300 possessions on the thinner side (offense plus defense, on or off the floor) (the
     sample at which the rate is half signal, rate_gates); null under that gate or below 10 qualifiers.
   net_rtg_off: 'Net rating with the player off the floor: the rest of the team''s games in his span with it, a game-date approximation of stats.nba.com''s roster window (from his first game for the team, or the day after his last for an earlier team that season, to the day before his first for a later team, else the season''s end), the games he missed inside it included: off_rtg_off - def_rtg_off; null
     when either is null.'
@@ -77529,11 +77529,8 @@ wnba_player_on_off:
     ranked; null where the rank is.'
   off_rtg_diff_rank: Rank of off_rtg_diff within the season, league-wide (1 = best, highest first, ties averaged), among players
     with at least min_poss possessions (offense plus defense) both on and off the floor (default 200), whose off_rtg_diff_n
-    is at least 750 offensive possessions on the thinner side (on or off the floor) (the sample at which the rate was, on the fit seasons, half
-    signal, rate_gates); null under that gate or below 10 qualifiers. An owner-accepted exception (2026-11-09), as on the unseen
-    2023-2025 seasons the 720-possession gate is 0.31 signal, under a third, measured on halves that include playoff games (on
-    regular-season games alone its curve never reaches half signal); the rank stays published, as no data or source defect
-    was found (rate_gates).
+    is at least 780 offensive possessions on the thinner side (on or off the floor) (the sample at which the rate was, on the fit seasons, half
+    signal, rate_gates); null under that gate or below 10 qualifiers.
   off_rtg_off: 'Offensive rating with the player off the floor: the rest of the team''s games in his span with it, a game-date approximation of stats.nba.com''s roster window (from his first game for the team, or the day after his last for an earlier team that season, to the day before his first for a later team, else the season''s end), the games he missed inside it included: pts_off per 100 poss_off;
     null with no possessions.'
   off_rtg_off_n: 'Sample size of off_rtg_off: poss_off.'
