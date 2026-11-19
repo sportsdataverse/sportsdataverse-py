@@ -11,7 +11,7 @@ number is ever hard-coded inside an algorithm function.
 Seeded constants (``margin_sd``, ``hfa``, ``shrink_k``, ``total_scale``,
 ``avg_*``) start from published references so the engine runs before
 fitting, and are overwritten in-code by the committed fitting scripts in
-``dev/nhl_prediction/`` (``fit_pregame.py`` for Task 2.3, ``fit_props.py``
+``tools/models/nhl_prediction/`` (``fit_pregame.py`` for Task 2.3, ``fit_props.py``
 for Task 4.2) once the 2023 backtest corpus is captured. Hockey is a
 low-event-count, high-variance sport: ``margin_sd`` is deliberately wide and
 ``shrink_k`` (a games-played prior) is a first-class part of every rating,
@@ -119,7 +119,8 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     # Refitted 2026-11-13 on the retrained xG (nhl_xg_models 2026-11-13: 5v5 model fitted on 5v5
     # shots, rink coordinates fixed; published goals/sum-xG per season now 0.98-1.03, was ~0.77).
     # avg_xgf = 2.00: mean even-strength xG-for per team-game over 2022-23 .. 2025-26
-    #   (2.099 / 1.962 / 1.923 / 2.012; `team_game_xg_rates`, even_strength_only=True). It was
+    #   (2.099 / 1.962 / 1.923 / 2.012; `team_game_xg_rates`, even_strength_only=True; printed by
+    #   fit_pregame.py over its AVG_XGF_SEASONS). It was
     #   2.55, from the old xG, which ran ~2.84 on 2022-23.
     # hfa/margin_sd/total_scale fitted by tools/models/nhl_prediction/fit_pregame.py against the
     # 2023 as-of-date backtest (1174 games, dates[20:] onward), converged on a second pass:
@@ -141,6 +142,13 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     #     (actual 0.541 / 0.569 / 0.521);
     #   total bias -0.25 / -0.07 / -0.31 and MAE 1.87 / 1.89 / 1.87 unchanged (avg_xgf is both the
     #     rating shrinkage target and the total's centre, so its level cancels).
+    # Re-run 2026-11-18 on the nhl_pbp_full republished 2026-11-14: every value above reproduces to
+    #   4 dp, and the 2025-26 slice after Jan 15 that flagged 0.571 vs 0.519 now reads 0.522 vs 0.519
+    #   (Brier 0.2437 -> 0.2383, 574 games). hfa is one league constant, not an as-of estimate, so
+    #   it has no early-season swing to shrink (unlike BB-D25's ridge home term, #1223). Per-season
+    #   joint fits read 0.030 / 0.053 / 0.109 / 0.032 (2022-23 .. 2025-26); an expanding-window
+    #   refit (0.030 / 0.042 / 0.062) scores Brier 0.2362 / 0.2392 / 0.2421 against the fixed
+    #   value's 0.2362 / 0.2399 / 0.2417, a wash, so hfa stays fitted on 2022-23 alone.
     # avg_total_goals remains a published-reference seed (not walked/fit).
     #
     # prop_kappa/pos_priors fitted 2026-07-08 by tools/models/nhl_prediction/fit_props.py

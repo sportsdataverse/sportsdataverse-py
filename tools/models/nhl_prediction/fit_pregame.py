@@ -1,4 +1,4 @@
-"""Fit HFA / margin_sd / total_scale / avg_total_goals for LEAGUE_CONSTANTS["nhl"] by walking the
+"""Fit HFA / margin_sd / total_scale / avg_xgf / avg_total_goals for LEAGUE_CONSTANTS["nhl"] by walking the
 2023 backtest with strict as-of-date ratings (Task 2.3).
 
 Run once (downloads the full-season pbp + schedule; no live-API gate needed):
@@ -22,6 +22,8 @@ from sportsdataverse.nhl.nhl_prediction_constants import as_of_ratings_split, br
 from sportsdataverse.nhl.nhl_team_ratings import adjust_rate_opponent, team_game_xg_rates
 
 SEASON = 2023
+# avg_xgf is the mean of each season's EV xG-for per team-game, 2022-23 .. 2025-26.
+AVG_XGF_SEASONS = (2023, 2024, 2025, 2026)
 
 
 def build_game_rates(season: int = SEASON) -> tuple[pl.DataFrame, pl.DataFrame]:
@@ -130,7 +132,9 @@ def main() -> None:
         f" / {float(y_win.mean()):.4f}"
     )
     print(f"diagnostic: real-goal home margin residual = {hfa_residual:.4f}, residual std = {resid_sd:.4f}")
-    print(f"avg_xgf (mean EV xG-for per team-game) = {float(rates['xgf'].mean()):.4f}")
+    xgf = [float((rates if s == SEASON else build_game_rates(s)[0])["xgf"].mean()) for s in AVG_XGF_SEASONS]
+    print(f"avg_xgf (mean EV xG-for per team-game) = {np.mean(xgf):.4f}  <- write this into LEAGUE_CONSTANTS")
+    print(f"  per season {AVG_XGF_SEASONS}: " + " / ".join(f"{v:.3f}" for v in xgf))
     print(f"total_scale (OLS slope)         = {slope:.4f}  <- write this into LEAGUE_CONSTANTS")
     # predict_total stretches the raw total around 2 * avg_xgf (its own mean) and adds back
     # avg_total_goals, so that pair is the OLS intercept: the mean realized total belongs in
