@@ -293,6 +293,14 @@ _NFL_LATERAL_YDS_RE = r"Lateral to " + _NFL_NAME + r"[^.]*? for (-?\d+) yards?"
 _NFL_RECOVERY_SPOT_RE = r"(?:RECOVERED|recovered) by [A-Z]{2,3}-[^,]*? at ([A-Z]{2,3}) (\d{1,2})"
 _NFL_PASSER_RE = r"(" + _NFL_NAME + r") (?:pass|sacked|spiked)"
 _NFL_RECEIVER_RE = r"(?:^|\s)(?:to|for) (" + _NFL_NAME + r")"
+# "J.Goff pass deep left intended for A.St. Brown INTERCEPTED by C.Gonzalez": the intended
+# receiver of an interception, who is targeted on it (nflverse's receiver on the play).
+_NFL_INTENDED_RE = r"intended for (" + _NFL_NAME + r")"
+# The CFB-era receiver chain reads "to (.+)" anywhere, so with no NFL receiver form on the play
+# it returns a fragment ("short left." from "T.DeVito pass incomplete short left.", "stop" from
+# "spiked the ball to stop the clock"). Its result is kept only when it reads as a name: every
+# word capitalized.
+_NFL_NAME_SHAPED = r"^[A-Z][A-Za-z'\-]*\.?(?: ?[A-Z][A-Za-z'\-]*\.?)*$"
 # "Direct snap to J.Cribbs.  J.Cribbs pass deep right to Z.Sudfeld": the snap
 # clause carries the first "to NAME" and is dropped before the receiver is read.
 _NFL_DIRECT_SNAP_RE = r"Direct snap to " + _NFL_NAME + r"\.?\s*"
@@ -4602,8 +4610,14 @@ class NFLPlayProcess(object):
                 # The legacy receiver chain leaves the "X Yd pass from Y" touchdown
                 # form null (its first branch matches and extracts nothing), so a
                 # null receiver on a non-sack, non-interception pass is retried;
-                # the deliberate nulls on sacks / interceptions stay null.
+                # the deliberate nulls on sacks stay null. An interception's intended
+                # receiver ("intended for X INTERCEPTED") is the play's receiver, as in
+                # nflverse: he is charged the target.
                 receiver_player=pl.when(
+                    (pl.col("pass") == True).and_(pl.col("text").str.contains(_NFL_INTENDED_RE)),
+                )
+                .then(pl.col("text").str.extract(_NFL_INTENDED_RE, 1))
+                .when(
                     (pl.col("pass") == True).and_(pl.col("receiver_player").is_not_null()),
                 )
                 .then(
@@ -4612,7 +4626,9 @@ class NFLPlayProcess(object):
                         pl.col("text").str.replace(_NFL_DIRECT_SNAP_RE, "").str.extract(_NFL_RECEIVER_RE, 1),
                         _abbreviated_name(_NFL_LEGACY_RECEIVER_RE2),
                         _abbreviated_name(_NFL_TAGGED_RECEIVER_RE),
-                        pl.col("receiver_player"),
+                        pl.when(pl.col("receiver_player").str.contains(_NFL_NAME_SHAPED)).then(
+                            pl.col("receiver_player")
+                        ),
                     ),
                 )
                 .when(

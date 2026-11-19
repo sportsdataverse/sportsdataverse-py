@@ -13,6 +13,7 @@
   - [Games that end on a try (`try_endings/`, task 2.2)](#games-that-end-on-a-try-try_endings-task-22)
   - [Touchdown-flag residuals (`td_flag_residuals/`, task 2.20)](#touchdown-flag-residuals-td_flag_residuals-task-220)
   - [Era play order (`era_play_order/`, task 2.19)](#era-play-order-era_play_order-task-219)
+  - [Receiver targets (`box_convention/`)](#receiver-targets-box_convention)
   - [Roof without a venue id (`roof/`)](#roof-without-a-venue-id-roof)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -321,6 +322,17 @@ the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The ora
 | 281012016 (`2008_06_DET_MIN`) | 4b1d90b6 | 923, "Dan Orlovsky tackled in end zone by Jared Allen." at 0:21 of Q1 | `Safety`, `scoringPlay` true, text without the word "safety" | `safety` 1, `epa` 0.230 | task 2.28 (a scored "Safety" row takes the -2 overlay whatever its text) |
 | 400874522 (`2016_01_TB_ATL`) | eb7830dc | 79, D.Freeman's run to the ATL 20 at 14:20 of Q1 | `Rush`, TB's score 0 -> 2 -> 0 over 58 / 79 / 100; ATL snaps next from its own 20 | `safety` 0, `epa` -0.770 | task 2.28 (an untyped safety needs a free kick next) |
 | 271216005 (`2007_15_BUF_CLE`) | 4f540c18 | 961, T.Edwards' pass at 14:15 of Q2; the next row is 996, B.Moorman's intentional safety (ESPN `Safety`, scored) | `Pass`, CLE's score 3 -> 5 on it (a row early); 996 starts at the BUF 24 (`yardsToEndzone` 76) | `safety` 0 (996: 1), `epa` -0.474 | task 2.28 (an untyped safety's free kick is from the kicker's 20) |
+
+## Receiver targets (`box_convention/`)
+
+ESPN Site v2 summaries of two 2026 week-10 games, fetched 2026-11-19 from the URL above (one request each) and trimmed
+to the same keys as the whole-game captures: 401873053 (NE @ DET, three interceptions "intended for" a receiver;
+"T.DeVito pass incomplete short left.") and 401873055 (CAR @ NO, an incompletion whose text ends "has returned to the
+game."). `nflverse_targets_2026_w10.csv` is nflverse's `load_player_stats(2026, "week")` for week 10 (read 2026-11-19),
+every player with a target on the four teams: `player_id`, `player_display_name` and `targets`, plus the `game_id`,
+the ESPN `team_id` and the box's spelling of the name (`receiver_player_name`), joined by first initial and surname.
+`tests/nfl/test_nfl_receiver_targets.py` reads them. They sit in a subdirectory, so the whole-game oracle does not pick
+them up.
 
 ## Roof without a venue id (`roof/`)
 
