@@ -303,7 +303,10 @@ def _scored_shots(rows: pl.DataFrame, lg: str, cells: pl.DataFrame | None) -> pl
     """The game's field-goal attempts with ``shot_value``, ``zone``, ``pts`` and ``xpts``."""
     x, y = pl.col("x_legacy").cast(pl.Float64), pl.col("y_legacy").cast(pl.Float64)
     located = x.is_not_null() & y.is_not_null()
-    shots = rows.filter(pl.col("_fga") & pl.col("_poss").is_not_null()).with_columns(
+    # a missed heave is no attempt in the official box, so it is none here either (as in the splits)
+    shots = rows.filter(
+        (pl.col("_fga") == True) & (pl.col("_heave_miss") == False) & pl.col("_poss").is_not_null()
+    ).with_columns(
         pl.when(pl.col("_three")).then(3).otherwise(2).cast(pl.Int64).alias("shot_value"),
         ((x**2 + y**2).sqrt() / 10.0).alias("_dist_ft"),
         pl.lit(1).alias("is_field_goal"),

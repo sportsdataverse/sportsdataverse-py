@@ -5379,10 +5379,10 @@ def nba_stats_leagueplayerondetails(
 
 def nba_stats_leagueseasonmatchups(
     def_player_id_nullable: Optional[str] = "",
-    def_team_id_nullable: Optional[str] = "0",
+    def_team_id_nullable: Optional[str] = "",
     league_id: Optional[str] = "00",
     off_player_id_nullable: Optional[str] = "",
-    off_team_id_nullable: Optional[str] = "0",
+    off_team_id_nullable: Optional[str] = "",
     per_mode_simple: Optional[str] = "Totals",
     season: Optional[str] = None,
     season_type_playoffs: Optional[str] = "Regular Season",
@@ -5394,7 +5394,7 @@ def nba_stats_leagueseasonmatchups(
     """League season matchups.
 
     Endpoint: ``GET https://stats.nba.com/stats/leagueseasonmatchups``
-    Example URL: https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&Season=2024-25&SeasonType=Regular+Season
+    Example URL: https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=&LeagueID=00&OffPlayerID=&OffTeamID=&PerMode=Totals&Season=2024-25&SeasonType=Regular+Season
 
     Args:
         def_player_id_nullable: DefPlayerID query parameter.
