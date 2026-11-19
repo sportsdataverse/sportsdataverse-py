@@ -173,6 +173,15 @@ _STAT_PLAY_TYPES = (
     ("punt_attempt", "punt"),
     ("kickoff_attempt", "kickoff"),
 )
+# nflfastR's UNSPECIFIED branch: a penalty first, then these, else no_play (mostly declined penalties in punt / FG
+# formation, which don't count as a play).
+_UNSPECIFIED_PLAY_TYPES = (
+    ("penalty", "no_play"),
+    ("pass_attempt", "pass"),
+    ("rush_attempt", "run"),
+    ("punt_attempt", "punt"),
+    ("field_goal_attempt", "field_goal"),
+)
 
 
 def _play_type(row: Dict[str, Any], shield_play_type: Optional[str], desc: Optional[str] = None) -> Optional[str]:
@@ -180,8 +189,9 @@ def _play_type(row: Dict[str, Any], shield_play_type: Optional[str], desc: Optio
 
     Follows nflfastR's ``translate_play_type_nfl``: the feed's kick types win outright (a blocked-kick
     recovery pass or a nullified kickoff keeps its kick class), and a ``PENALTY`` play is ``no_play``
-    unless the penalty was enforced between downs on a pass or run. Other feed types fall back to the
-    stat outcomes. qb_kneel / qb_spike are refined later from the description; this assigns the
+    unless the penalty was enforced between downs on a pass or run. An ``UNSPECIFIED`` play is ``no_play``
+    when it carries a penalty or no pass / rush / punt / field-goal attempt (a declined penalty in punt or
+    FG formation). Other feed types fall back to the stat outcomes. qb_kneel / qb_spike are refined later from the description; this assigns the
     base class (pass/run/punt/field_goal/kickoff/extra_point/no_play).
     """
     kick = _KICK_PLAY_TYPES.get(shield_play_type or "")
@@ -196,6 +206,8 @@ def _play_type(row: Dict[str, Any], shield_play_type: Optional[str], desc: Optio
         if has_rush and between_downs:
             return "run"
         return "no_play"
+    if shield_play_type == "UNSPECIFIED":
+        return next((label for col, label in _UNSPECIFIED_PLAY_TYPES if row.get(col) == 1), "no_play")
     return next((label for col, label in _STAT_PLAY_TYPES if row.get(col) == 1), None)
 
 

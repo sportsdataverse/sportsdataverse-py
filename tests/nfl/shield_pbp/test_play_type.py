@@ -100,3 +100,35 @@ def test_spike_and_kneel_only_relabel_passes_and_runs():
         }
     )
     assert add_description_features(df)["play_type"].to_list() == ["no_play", "qb_spike", "no_play", "qb_kneel"]
+
+
+def test_unspecified_plays_are_no_play():
+    # 2025_11_HOU_TEN: three Shield UNSPECIFIED plays with no attempt stat. 312 carries an enforced no-play penalty;
+    # 1675 and 1699 are penalties declined in punt formation (penalty 0). nflfastR and nflverse label all three
+    # no_play; before this they were a null play_type (121 such rows in the 2025 rebuild).
+    path = FIXTURES / "2025_11_HOU_TEN.json.gz"
+    if not path.exists():
+        pytest.skip("2025_11_HOU_TEN fixture not present")
+    df = build_pbp(json.load(gzip.open(path, "rt", encoding="utf-8")), game_id="2025_11_HOU_TEN")
+    rows = df.filter(pl.col("shield_play_type") == "UNSPECIFIED").sort("play_id")
+    assert rows.select("play_id", "penalty", "play_type").rows() == [
+        (312, 1, "no_play"),
+        (1675, 0, "no_play"),
+        (1699, 0, "no_play"),
+    ]
+
+
+@pytest.mark.parametrize(
+    ("row", "expected"),
+    [
+        ({"penalty": 1, "pass_attempt": 1}, "no_play"),  # the penalty wins, as in nflfastR
+        ({"pass_attempt": 1}, "pass"),
+        ({"rush_attempt": 1}, "run"),
+        ({"punt_attempt": 1}, "punt"),
+        ({"field_goal_attempt": 1}, "field_goal"),
+        ({"kickoff_attempt": 1}, "no_play"),  # nflfastR's UNSPECIFIED branch has no kickoff / PAT case
+        ({}, "no_play"),
+    ],
+)
+def test_unspecified_follows_nflfastr(row, expected):
+    assert _play_type(row, "UNSPECIFIED") == expected
