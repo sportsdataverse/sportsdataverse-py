@@ -7,16 +7,16 @@ add up to his team's. ``league_id="10"`` reads the WNBA twins;
 :mod:`sportsdataverse.wnba.wnba_player_on_off` binds it.
 
 Checked against stats.nba.com's ``teamplayeronoffsummary`` (2024-25 regular season, three teams'
-whole seasons): on the 41 players over 400 possessions each way whose stats.nba.com off-court spans
-the team's season, the on-court net rating is a median 0.48 from stats.nba.com's and the on-off
-difference a median 0.81 (max 3.0, correlation 0.964; 0.68 / 3.96 / 0.961 with the whole season
-as the off side). stats.nba.com's off-court covers only the games a player was on the roster; the
-``_off`` side here (``tenure=True``) approximates that window from game dates: his span with the
-team, from his first game for it (or the day after his last for an earlier team that season) to the
-day before his first for a later team. On the 26 players whose stats.nba.com window is shorter than
-the season (traded, signed or waived) the span cuts the median off-court net rating miss from 2.96
-(the whole season) to 1.27; on the 44 whose window is the whole season it costs 0.26 to 0.40, since a
-span opens at a late debut (an injury) where the roster had him from opening night
+whole seasons): on the 56 players over 400 possessions each way the on-off difference is a median
+0.80 from stats.nba.com's (max 3.96, correlation 0.968). stats.nba.com's off-court covers only the
+games a player was on the roster; the ``_off`` side here (``tenure=True``) approximates that window:
+his span with the team, from his first game listed for it (on the floor, or in its box score as a
+DNP, or on its inactive list; or the day after his last for an earlier team that season) to his last
+listed game, or the day before his first for a later team. On the 26 players whose stats.nba.com
+window is shorter than the season (traded, signed or waived) the span cuts the median off-court net
+rating miss from 2.96 (the whole season) to 0.59; on the 44 whose window is the whole season it is
+the whole season's 0.26, and the off-court minutes are a median 2.9 from stats.nba.com's over all 70.
+From game dates alone (a span opening at a late debut) those were 1.27, 0.40 and 128 minutes
 (``tests/nba/test_nba_player_on_off.py``). Its ORtg and DRtg each run about 3 below these: it credits
 a possession to every player on the floor during it, not only to those who started it.
 """
@@ -34,6 +34,7 @@ from sportsdataverse.nba.nba_lineup_seasons import _MIN_POSS, _SEASON_TYPES
 __all__ = ["nba_player_on_off", "nba_player_wowy"]
 
 _PLAYER = pl.Int64()
+_ROSTER = {"team_id": pl.Int64(), "player_id": _PLAYER, "game_id": pl.Utf8()}
 
 
 def _rows_and_dates(seasons: int | list[int], league_id: str, season_type: str) -> tuple[pl.DataFrame, pl.DataFrame]:
@@ -56,6 +57,27 @@ def _game_dates(schedule: pl.DataFrame) -> pl.DataFrame:
         pl.col("game_id").cast(pl.Utf8),
         pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date("%Y-%m-%d", strict=False),
     )
+
+
+def _rosters(seasons: int | list[int], league_id: str) -> pl.DataFrame:
+    """``team_id``, ``player_id``, ``game_id`` of every player listed for a game: its box score (DNPs
+    included) and its inactive list, the roster the span reads (:func:`player_on_off`'s ``rosters``)."""
+    seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
+    if league_id == "10":
+        from sportsdataverse.wnba import wnba_loaders as W
+
+        # ponytail: the WNBA box release starts at 2026; before it only the (sparse) inactive lists
+        box_seasons = [s for s in seasons_list if s >= 2026]
+        box = W.load_wnba_stats_player_boxscores(box_seasons) if box_seasons else pl.DataFrame()
+        inactive = W.load_wnba_stats_game_rosters(seasons_list)
+    else:
+        from sportsdataverse.nba import nba_loaders as N
+
+        args = [s - 1 for s in seasons_list]  # the NBA loaders take the start year
+        box, inactive = N.load_nba_stats_player_boxscores(args), N.load_nba_stats_game_rosters(args)
+    cols = [pl.col("team_id").cast(pl.Int64), pl.col("player_id").cast(_PLAYER), pl.col("game_id").cast(pl.Utf8)]
+    parts = [f.rename({"person_id": "player_id"}, strict=False) for f in (box, inactive) if f.height]
+    return pl.concat([f.select(cols) for f in parts]) if parts else pl.DataFrame(schema=_ROSTER)
 
 
 def _rows(seasons: int | list[int], league_id: str, season_type: str) -> pl.DataFrame:
@@ -92,9 +114,10 @@ def nba_player_on_off(
         minus off); ``<m>_rank`` / ``<m>_pct`` for the on and diff ratings (within the season,
         among players with at least ``min_poss`` both ways) and ``<m>_n`` for every rating.
         The off side counts only the team's games in his span with it, as stats.nba.com does:
-        ``team_games_span`` (the team's games from his first game for it, or the day after
-        his last for an earlier team that season, to the day before his first for a later team,
-        else the season's end, by the schedule's ``game_date``), ``span_first_date`` /
+        ``team_games_span`` (the team's games from his first game listed for it, on the floor,
+        as a box-score DNP or on its inactive list, or the day after his last for an earlier
+        team that season, to his last listed game or the day before his first for a later team,
+        by the schedule's ``game_date``), ``span_first_date`` /
         ``span_last_date``. So ``poss_on + poss_off`` is the team's possessions over his span, and
         for a player traded or signed mid-season the off side and the difference are his time with
         the team. ``<total>_off_span`` / ``<rating>_off_span`` / ``<rating>_diff_span`` repeat the
@@ -116,7 +139,13 @@ def nba_player_on_off(
     rows, dates = _rows_and_dates(seasons, league_id, season_type)
     gate = _MIN_POSS[league_id] if min_poss is None else min_poss
     out = player_on_off(
-        rows, player_dtype=_PLAYER, min_poss=gate, level=NBA_LEVEL[league_id], game_dates=dates, tenure=True
+        rows,
+        player_dtype=_PLAYER,
+        min_poss=gate,
+        level=NBA_LEVEL[league_id],
+        game_dates=dates,
+        tenure=True,
+        rosters=_rosters(seasons, league_id),
     )
     return out.to_pandas() if return_as_pandas else out
 

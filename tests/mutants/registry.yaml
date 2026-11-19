@@ -10053,11 +10053,51 @@
   group: bb-player-on-off
   finding: BB-D5
   file: sportsdataverse/nba/nba_player_on_off.py
-  snippet: 'rows, player_dtype=_PLAYER, min_poss=gate, level=NBA_LEVEL[league_id], game_dates=dates, tenure=True'
-  mutant: 'rows, player_dtype=_PLAYER, min_poss=gate, level=NBA_LEVEL[league_id], game_dates=dates, tenure=False'
+  snippet: '        tenure=True,'
+  mutant: '        tenure=False,'
   test: tests/nba/test_nba_player_on_off.py::test_public_builders_read_the_start_year
   expected: kill
   note: The NBA / WNBA builders must count the off side over the player's tenure, not the whole season.
+
+- id: bb-oo-pros-read-rosters
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/nba/nba_player_on_off.py
+  snippet: '        rosters=_rosters(seasons, league_id),'
+  mutant: '        rosters=None,'
+  test: tests/nba/test_nba_player_on_off.py::test_public_builders_read_the_start_year
+  expected: kill
+  note: The NBA / WNBA builders must pass the listed games (box-score DNPs, inactives), or a late debut opens the span late.
+
+- id: bb-oo-span-opens-on-listed-games
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: '    if rosters is not None:  # listed but not on the floor: a DNP or an inactive is still on the roster'
+  mutant: '    if False:  # listed but not on the floor: a DNP or an inactive is still on the roster'
+  test: tests/nba/test_nba_player_on_off.py::test_span_follows_traded_players_like_stats_nba
+  expected: kill
+  note: Without the listed games a player on the roster from opening night but debuting late opens his span at the debut (0.40 against 0.26 off-court miss on the 44 whole-season players).
+
+- id: bb-oo-span-closes-on-last-listed
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: '            .then(pl.min_horizontal(pl.col("_next") - pl.duration(days=1), pl.col("_last")))'
+  mutant: '            .then(pl.col("_next") - pl.duration(days=1))'
+  test: tests/nba/test_nba_player_on_off.py::test_span_follows_traded_players_like_stats_nba
+  expected: kill
+  note: A fully listed team-season closes a span at the last listed game; without it a waived or traded player's span runs to the next team's first game or the season's end.
+
+- id: bb-oo-span-whole-list-names-every-player
+  group: bb-player-on-off
+  finding: BB-D5
+  file: sportsdataverse/_common/player_on_off.py
+  snippet: '        gaps = played.join(listed, on=["team_id", "game_id", "player_id"], how="anti").select(keys).unique()'
+  mutant: '        gaps = team_games.join(listed, on=["team_id", "game_id"], how="anti").select(keys).unique()'
+  test: tests/nba/test_nba_player_on_off.py::test_inactive_lists_alone_keep_the_open_end
+  expected: kill
+  note: A game's list is whole only if it names everyone who played; an inactive list alone (no box score) would close a DNP-CD player's span early (80 fixture spans).
 
 - id: bb-oo-college-whole-season
   group: bb-player-on-off
@@ -10153,8 +10193,8 @@
   group: bb-player-on-off
   finding: BB-D5
   file: sportsdataverse/_common/player_on_off.py
-  snippet: '(pl.col("_next") - pl.duration(days=1)).alias("_end"),'
-  mutant: 'pl.lit(None, dtype=pl.Date).alias("_end"),'
+  snippet: '            .otherwise(pl.col("_next") - pl.duration(days=1))'
+  mutant: '            .otherwise(pl.lit(None, dtype=pl.Date))'
   test: tests/nba/test_nba_player_on_off.py::test_span_follows_traded_players_like_stats_nba
   expected: kill
   note: A traded-out player's span would run to the season's end, through his games for the later team.
