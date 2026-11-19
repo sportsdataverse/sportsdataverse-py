@@ -4622,7 +4622,7 @@ endpoints:
     name: def_player_id_nullable
     query_key: DefPlayerID
     type: str
-  - default: '0'
+  - default: ''
     name: def_team_id_nullable
     query_key: DefTeamID
     type: str
@@ -4634,7 +4634,7 @@ endpoints:
     name: off_player_id_nullable
     query_key: OffPlayerID
     type: str
-  - default: '0'
+  - default: ''
     name: off_team_id_nullable
     query_key: OffTeamID
     type: str
