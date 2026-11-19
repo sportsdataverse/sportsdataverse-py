@@ -1,10 +1,10 @@
 ---
-title: "College football — additional Python functions — Analytics: add_play–cfb_resume"
-sidebar_label: "Analytics: add_play–cfb_resume"
+title: "College football — additional Python functions — Analytics: add_play–cfb_player"
+sidebar_label: "Analytics: add_play–cfb_player"
 sidebar_position: 12
-description: "College football — additional Python functions — Analytics: add_play–cfb_resume — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Analytics: add_play–cfb_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# College football — additional Python functions — Analytics: add_play–cfb_resume
+# College football — additional Python functions — Analytics: add_play–cfb_player
 
 ### add_play_type_canonical {#add_play_type_canonical}
 
@@ -679,151 +679,94 @@ st = cfb_standings(games, teams)
 print(st.head())
 ```
 
-### cfb_playoff_seeds {#cfb_playoff_seeds}
+### cfb_player_havoc {#cfb_player_havoc}
 
-`cfb_playoff_seeds(standings: 'FrameLike', rankings: 'FrameLike | None' = None, playoff_seeds: 'int' = 12, *, season: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | Any'`
+`cfb_player_havoc(seasons: 'int | list[int]', *, min_games: 'int' = 6, player_box: 'pl.DataFrame | None' = None, defensive_players: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Assign College Football Playoff seeds (12-team straight seeding, by season).
+CFB player havoc per season: tackles for loss, sacks, pass breakups, interceptions and forced fumbles, per game.
 
-Two selection rules, picked by `season`; both seed the field straight by
-ranking order (no champion bump to the top four):
+These are counting stats, not a grade. A defender's havoc is his tackles for loss, pass
+breakups, interceptions and forced fumbles, the player version of the team havoc rate. Sacks
+are listed and ranked on their own but not added again, because a sack is already a tackle for
+loss. Events are counted, not plays: a strip-sack is two events for the same player, where team
+havoc counts that play once. Nothing is adjusted for opponent, scheme or position, so an edge
+rusher and a corner are ranked on the same scale.
 
-* **2026+** (`season=None` or `>= 2026`, the current rule): the ACC,
-  Big Ten, Big 12 and SEC champions are in regardless of ranking; so is
-  the highest-ranked champion of the American, Conference USA, MAC,
-  Mountain West, Pac-12 and Sun Belt; and Notre Dame (`"Notre Dame"` or
-  ESPN id `"87"`) when it ranks inside the top `playoff_seeds`; the
-  rest of the field is at-large.
-* **2024-2025** (`season < 2026`): the 5 highest-ranked conference
-  champions are guaranteed inclusion, the rest is at-large.
-
-An automatic qualifier ranked outside the top `playoff_seeds` displaces
-the lowest-ranked at-large team and takes the lowest seed. Conference
-names match both cfbd and short spellings (e.g. `"American Athletic"` /
-`"American"`).
-
-When `rankings` is None the ordering falls back to the standings
-tiebreaker metrics — `win_pct` desc, then `sov`, `sos`, `pd`
-desc, then team name (documented deterministic fallback; a committee
-ranking is the intended input). Notre Dame's "ranked inside the field"
-test reads its position in that same ordering.
-
-Differs from cfbseedR 0.2.0 (`autobid`) in three places: cfbseedR gives
-the Group-of-6 bid to the best-ranked G6 team whether or not it won its
-conference; it tests Notre Dame's committee `rank` only (no bid without
-`rankings`); and it matches `"Notre Dame"` but not `"87"`. Its
-`cfb_standings()` / `cfb_simulations()` also always apply the current
-rules, where `cfb_standings` and
-`sportsdataverse.cfb.cfb_simulations` here follow a
-`season`-keyed input.
-
-Called on its own, this function cannot see a season: pass `season=`
-for standings of a pre-2026 season (`cfb_standings(...,
-playoff_seeds=...)` reads it from `season`-keyed games instead).
+Tackles for loss (half credit on a shared one), sacks, pass breakups and interceptions come
+from ESPN's player box score. In the college box, `passesDefended` excludes the defender's
+interceptions, so the two are added without double counting. Forced fumbles come from the
+play-by-play (`load_cfb_adv_defensive_players`), which only credits a forced fumble when
+ESPN's play text names the player. Measured on 2025, that is about 0.5 a game, so this column
+undercounts. College football has no public snap counts, so every rate is per game, and a game
+counts only when the player has a defensive or interception box line in it or the play text
+credits him with a forced fumble in it. ESPN's defensive
+box covers 935 of 958 games in 2025 but 473 in 2023 and 154 in 2021, so earlier seasons are
+partial. No PFF data is used.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `standings` | `FrameLike` |  | Output of `cfb_standings` (needs `sim`, `team`, `conference`, `conf_champ`, `win_pct`, `sov`, `sos`, `pd`). |
-| `rankings` | `FrameLike \| None` | `None` | Optional frame with columns `team` and `rank` (1 = best). Unranked teams order after ranked ones by the fallback. |
-| `playoff_seeds` | `int` | `12` | Field size (default 12). Automatic qualifiers are capped at this size. |
-| `season` | `int \| None` | `None` | Season whose selection rule applies (default `None` = the current, 2026 rule). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `seasons` | `int \| list[int]` |  | A season or list of seasons (2004 or later for the box release; the defensive box lines are near-complete from 2025). |
+| `min_games` | `int` | `6` | A rate is ranked only for a player with at least this many games (its `_n`). Defaults to 6, half a regular season. |
+| `player_box` | `DataFrame \| None` | `None` | An ESPN player box frame shaped like `load_cfb_player_box` (no download). |
+| `defensive_players` | `DataFrame \| None` | `None` | A frame shaped like `load_cfb_adv_defensive_players` (no download). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-The standings frame with a `seed` column (Int64; null for teams outside the field), sorted by sim and seed.
+One row per `(season, team_id, athlete_id)` (ESPN ids, Int64): `athlete_name`, `games`, the season totals `havoc` / `tfl` / `sacks` / `pass_breakups` / `interceptions` / `forced_fumbles` (Float64, since a shared tackle for loss is a half), and for each total its `<stat>_per_game` with `_n` (games), `_rank` (1 is the most) and the Weibull `_pct`. These are ranked within the season among players with at least `min_games` games, and are null below that, or when fewer than 10 players qualify. A season with no box lines gives that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
-| `sim` | Int64 | Season or simulation identifier the standings row belongs to. |
-| `team` | String | Team name (join key across the seedr engine frames). |
-| `conference` | String | Conference the team belongs to; null or "FBS Independents" marks an independent. |
-| `games` | Int64 | Total games played across all game types (regular season, conference championship and postseason). |
-| `wins` | Int64 | Wins across all played games (conference championship and postseason included). |
-| `losses` | Int64 | Losses across all played games. |
-| `ties` | Int64 | Ties across all played games. |
-| `win_pct` | Float64 | Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played. |
-| `pd` | Float64 | Point differential (points for minus points against, via game margins) summed over all played games. |
-| `conf_games` | Int64 | Number of conference regular-season games played (both teams in the same conference; CONF_CHAMP games excluded). |
-| `conf_wins` | Int64 | Wins in conference regular-season games. |
-| `conf_losses` | Int64 | Losses in conference regular-season games. |
-| `conf_ties` | Int64 | Ties in conference regular-season games. |
-| `conf_pct` | Float64 | Conference win percentage - (conf_wins + 0.5 * conf_ties) / conf_games, 0.0 with no conference games; the primary sort key for conference ranks. |
-| `conf_pd` | Float64 | Point differential summed over conference regular-season games only; the POINTS-depth tiebreaker rung. |
-| `sov` | Float64 | Strength of victory, conference-REG-scoped (unlike nflseedR's overall version) - the pooled sos formula over conference victories only; 0.0 for independents or teams without conference wins. |
-| `sos` | Float64 | Strength of schedule, conference-REG-scoped (unlike nflseedR's overall version) - conference opponents' summed conference wins (ties half) over their summed conference games, one term per conference game played (pooled, as cfbseedR); 0.0 for independents. |
-| `conf_rank` | Int64 | Rank within the conference from the tiebreaker cascade (1 = best); null for independents. |
-| `conf_champ` | Boolean | Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the conference's rank-1 team; always false for independents. |
-| `seed` | Int64 | College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From 2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 champion and a Notre Dame ranked within the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions. Automatic qualifiers are capped at the field size. |
+| `season` | Int64 | Season of the player's games (every game in the box release, bowls included). |
+| `team_id` | Int64 | ESPN team id of the defender's team (Int64). |
+| `athlete_id` | Int64 | ESPN athlete id (Int64). |
+| `athlete_name` | String | ESPN display name, from his last box line of the season. |
+| `games` | Int64 | Games with a defensive or interception box line for the player (college football has no public snap counts); the denominator of every per-game rate. |
+| `havoc` | Float64 | Havoc events: tfl + pass_breakups + interceptions + forced_fumbles. Sacks are not added again, as a sack is already a tackle for loss, and a strip-sack counts twice. A counting stat, not a grade. |
+| `tfl` | Float64 | Tackles for loss from ESPN's player box, sacks included; a shared tackle for loss is a half. |
+| `sacks` | Float64 | Sacks from ESPN's player box; a shared sack is a half. Already inside tfl. |
+| `pass_breakups` | Float64 | Passes defended from ESPN's college player box, which excludes the defender's interceptions. |
+| `interceptions` | Float64 | Interceptions made, from the box's interceptions category (never the passing category's thrown interceptions). |
+| `forced_fumbles` | Float64 | Forced fumbles credited in ESPN's play text (load_cfb_adv_defensive_players), keyed to the box by team and name. Undercounts: about 0.5 a game in 2025. |
+| `havoc_per_game` | Float64 | Per-game havoc events (tackles for loss + pass breakups + interceptions + forced fumbles): the season total over games. |
+| `havoc_per_game_n` | Int64 | Sample size of havoc_per_game: the player's games. |
+| `havoc_per_game_rank` | Float64 | Rank of havoc_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
+| `havoc_per_game_pct` | Float64 | Weibull percentile of havoc_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
+| `tfl_per_game` | Float64 | Per-game tackles for loss (sacks included; a shared one is a half): the season total over games. |
+| `tfl_per_game_n` | Int64 | Sample size of tfl_per_game: the player's games. |
+| `tfl_per_game_rank` | Float64 | Rank of tfl_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
+| `tfl_per_game_pct` | Float64 | Weibull percentile of tfl_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
+| `sacks_per_game` | Float64 | Per-game sacks (a shared one is a half): the season total over games. |
+| `sacks_per_game_n` | Int64 | Sample size of sacks_per_game: the player's games. |
+| `sacks_per_game_rank` | Float64 | Rank of sacks_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
+| `sacks_per_game_pct` | Float64 | Weibull percentile of sacks_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
+| `pass_breakups_per_game` | Float64 | Per-game pass breakups (ESPN's college passesDefended, which excludes interceptions): the season total over games. |
+| `pass_breakups_per_game_n` | Int64 | Sample size of pass_breakups_per_game: the player's games. |
+| `pass_breakups_per_game_rank` | Float64 | Rank of pass_breakups_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
+| `pass_breakups_per_game_pct` | Float64 | Weibull percentile of pass_breakups_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
+| `interceptions_per_game` | Float64 | Per-game interceptions made: the season total over games. |
+| `interceptions_per_game_n` | Int64 | Sample size of interceptions_per_game: the player's games. |
+| `interceptions_per_game_rank` | Float64 | Rank of interceptions_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
+| `interceptions_per_game_pct` | Float64 | Weibull percentile of interceptions_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
+| `forced_fumbles_per_game` | Float64 | Per-game forced fumbles named in ESPN's play text: the season total over games. |
+| `forced_fumbles_per_game_n` | Int64 | Sample size of forced_fumbles_per_game: the player's games. |
+| `forced_fumbles_per_game_rank` | Float64 | Rank of forced_fumbles_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
+| `forced_fumbles_per_game_pct` | Float64 | Weibull percentile of forced_fumbles_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `rankings` has duplicate team rows. |
+| `SeasonNotFoundError` | If a season is before 2004 (raised by the loaders). |
 
 **Example**
 
 ```python
-import polars as pl
-from sportsdataverse.cfb import cfb_standings, cfb_playoff_seeds
-st = cfb_standings(games, teams)
-seeded = cfb_playoff_seeds(st, rankings=ranks_df, playoff_seeds=12)
-print(seeded.filter(pl.col("seed").is_not_null()))
-
-# The 2024-2025 rule (5 highest-ranked champions)
-
-seeded = cfb_playoff_seeds(st, rankings=ranks_df, season=2025)
-```
-
-### cfb_resume {#cfb_resume}
-
-`cfb_resume(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Rating-based résumé metrics: SoS, quality wins, game control, wins-above-bubble.
-
-For each team, joins every played opponent to its `cfb_ratings.cfb_ratings`
-strength and rolls the games up into:
-
-- `sos` -- mean opponent `adj_net` over played games (rating-based strength
-  of schedule; complements the record-based SOV/SOS in `cfb_standings`).
-- `quality_wins` -- count of wins over opponents with `adj_net` at or above
-  the era `quality_win_threshold`.
-- `game_control` -- mean postgame win expectancy `Phi(actual_margin /
-  margin_sd)`, i.e. how *dominant* the results were, not just win/loss.
-- `wab` -- wins above bubble: actual wins minus the expected wins of a
-  bubble-quality team (`bubble_adj_net`) playing the same schedule, using the
-  Phase-2 predictors with the HFA applied on the team's actual home/away side.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A single season or list of seasons. |
-| `as_of_date` | `date \| None` | `None` | Leakage boundary forwarded to `cfb_ratings.cfb_ratings` (ratings use only games before this date). `None` uses the full season. |
-| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
-| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
-
-**Returns**
-
-One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense rank, best = 1), `quality_wins` (Int64), `game_control` (Float64), `wab` (Float64). Zero-row (typed) when no games are available.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season the résumé covers (null for a pooled multi-season fit). |
-| `team_id` | String | Team ESPN id (character join key). |
-| `sos` | Float64 | Rating-based strength of schedule - mean opponent adj_net over played games. |
-| `sos_rank` | Int64 | Dense rank on sos descending (toughest schedule = 1). |
-| `quality_wins` | Int64 | Count of wins over opponents with adj_net at or above the era quality-win threshold. |
-| `game_control` | Float64 | Mean postgame win expectancy Phi(actual_margin / margin_sd) across played games - how dominant the results were, not just win/loss. |
-| `wab` | Float64 | Wins above bubble - actual wins minus a bubble-quality team's expected wins over the same schedule. |
-
-**Example**
-
-```python
-from sportsdataverse.cfb.cfb_resume import cfb_resume
-resume = cfb_resume(2023)
-resume.sort("sos_rank").head()
+from sportsdataverse.cfb import cfb_player_havoc
+havoc = cfb_player_havoc(2025)
+havoc.sort("havoc_per_game_rank").select(
+    "athlete_name", "games", "havoc", "havoc_per_game", "havoc_per_game_pct"
+).head()
 ```

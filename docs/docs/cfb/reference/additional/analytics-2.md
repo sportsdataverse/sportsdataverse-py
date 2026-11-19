@@ -1,10 +1,159 @@
 ---
-title: "College football — additional Python functions — Analytics: cfb_returning–play_type"
-sidebar_label: "Analytics: cfb_returning–play_type"
+title: "College football — additional Python functions — Analytics: cfb_playoff–play_type"
+sidebar_label: "Analytics: cfb_playoff–play_type"
 sidebar_position: 13
-description: "College football — additional Python functions — Analytics: cfb_returning–play_type — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Analytics: cfb_playoff–play_type — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# College football — additional Python functions — Analytics: cfb_returning–play_type
+# College football — additional Python functions — Analytics: cfb_playoff–play_type
+
+### cfb_playoff_seeds {#cfb_playoff_seeds}
+
+`cfb_playoff_seeds(standings: 'FrameLike', rankings: 'FrameLike | None' = None, playoff_seeds: 'int' = 12, *, season: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | Any'`
+
+Assign College Football Playoff seeds (12-team straight seeding, by season).
+
+Two selection rules, picked by `season`; both seed the field straight by
+ranking order (no champion bump to the top four):
+
+* **2026+** (`season=None` or `>= 2026`, the current rule): the ACC,
+  Big Ten, Big 12 and SEC champions are in regardless of ranking; so is
+  the highest-ranked champion of the American, Conference USA, MAC,
+  Mountain West, Pac-12 and Sun Belt; and Notre Dame (`"Notre Dame"` or
+  ESPN id `"87"`) when it ranks inside the top `playoff_seeds`; the
+  rest of the field is at-large.
+* **2024-2025** (`season < 2026`): the 5 highest-ranked conference
+  champions are guaranteed inclusion, the rest is at-large.
+
+An automatic qualifier ranked outside the top `playoff_seeds` displaces
+the lowest-ranked at-large team and takes the lowest seed. Conference
+names match both cfbd and short spellings (e.g. `"American Athletic"` /
+`"American"`).
+
+When `rankings` is None the ordering falls back to the standings
+tiebreaker metrics — `win_pct` desc, then `sov`, `sos`, `pd`
+desc, then team name (documented deterministic fallback; a committee
+ranking is the intended input). Notre Dame's "ranked inside the field"
+test reads its position in that same ordering.
+
+Differs from cfbseedR 0.2.0 (`autobid`) in three places: cfbseedR gives
+the Group-of-6 bid to the best-ranked G6 team whether or not it won its
+conference; it tests Notre Dame's committee `rank` only (no bid without
+`rankings`); and it matches `"Notre Dame"` but not `"87"`. Its
+`cfb_standings()` / `cfb_simulations()` also always apply the current
+rules, where `cfb_standings` and
+`sportsdataverse.cfb.cfb_simulations` here follow a
+`season`-keyed input.
+
+Called on its own, this function cannot see a season: pass `season=`
+for standings of a pre-2026 season (`cfb_standings(...,
+playoff_seeds=...)` reads it from `season`-keyed games instead).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `standings` | `FrameLike` |  | Output of `cfb_standings` (needs `sim`, `team`, `conference`, `conf_champ`, `win_pct`, `sov`, `sos`, `pd`). |
+| `rankings` | `FrameLike \| None` | `None` | Optional frame with columns `team` and `rank` (1 = best). Unranked teams order after ranked ones by the fallback. |
+| `playoff_seeds` | `int` | `12` | Field size (default 12). Automatic qualifiers are capped at this size. |
+| `season` | `int \| None` | `None` | Season whose selection rule applies (default `None` = the current, 2026 rule). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The standings frame with a `seed` column (Int64; null for teams outside the field), sorted by sim and seed.
+
+| col_name | type | description |
+|---|---|---|
+| `sim` | Int64 | Season or simulation identifier the standings row belongs to. |
+| `team` | String | Team name (join key across the seedr engine frames). |
+| `conference` | String | Conference the team belongs to; null or "FBS Independents" marks an independent. |
+| `games` | Int64 | Total games played across all game types (regular season, conference championship and postseason). |
+| `wins` | Int64 | Wins across all played games (conference championship and postseason included). |
+| `losses` | Int64 | Losses across all played games. |
+| `ties` | Int64 | Ties across all played games. |
+| `win_pct` | Float64 | Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played. |
+| `pd` | Float64 | Point differential (points for minus points against, via game margins) summed over all played games. |
+| `conf_games` | Int64 | Number of conference regular-season games played (both teams in the same conference; CONF_CHAMP games excluded). |
+| `conf_wins` | Int64 | Wins in conference regular-season games. |
+| `conf_losses` | Int64 | Losses in conference regular-season games. |
+| `conf_ties` | Int64 | Ties in conference regular-season games. |
+| `conf_pct` | Float64 | Conference win percentage - (conf_wins + 0.5 * conf_ties) / conf_games, 0.0 with no conference games; the primary sort key for conference ranks. |
+| `conf_pd` | Float64 | Point differential summed over conference regular-season games only; the POINTS-depth tiebreaker rung. |
+| `sov` | Float64 | Strength of victory, conference-REG-scoped (unlike nflseedR's overall version) - the pooled sos formula over conference victories only; 0.0 for independents or teams without conference wins. |
+| `sos` | Float64 | Strength of schedule, conference-REG-scoped (unlike nflseedR's overall version) - conference opponents' summed conference wins (ties half) over their summed conference games, one term per conference game played (pooled, as cfbseedR); 0.0 for independents. |
+| `conf_rank` | Int64 | Rank within the conference from the tiebreaker cascade (1 = best); null for independents. |
+| `conf_champ` | Boolean | Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the conference's rank-1 team; always false for independents. |
+| `seed` | Int64 | College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From 2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 champion and a Notre Dame ranked within the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions. Automatic qualifiers are capped at the field size. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `rankings` has duplicate team rows. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import cfb_standings, cfb_playoff_seeds
+st = cfb_standings(games, teams)
+seeded = cfb_playoff_seeds(st, rankings=ranks_df, playoff_seeds=12)
+print(seeded.filter(pl.col("seed").is_not_null()))
+
+# The 2024-2025 rule (5 highest-ranked champions)
+
+seeded = cfb_playoff_seeds(st, rankings=ranks_df, season=2025)
+```
+
+### cfb_resume {#cfb_resume}
+
+`cfb_resume(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Rating-based résumé metrics: SoS, quality wins, game control, wins-above-bubble.
+
+For each team, joins every played opponent to its `cfb_ratings.cfb_ratings`
+strength and rolls the games up into:
+
+- `sos` -- mean opponent `adj_net` over played games (rating-based strength
+  of schedule; complements the record-based SOV/SOS in `cfb_standings`).
+- `quality_wins` -- count of wins over opponents with `adj_net` at or above
+  the era `quality_win_threshold`.
+- `game_control` -- mean postgame win expectancy `Phi(actual_margin /
+  margin_sd)`, i.e. how *dominant* the results were, not just win/loss.
+- `wab` -- wins above bubble: actual wins minus the expected wins of a
+  bubble-quality team (`bubble_adj_net`) playing the same schedule, using the
+  Phase-2 predictors with the HFA applied on the team's actual home/away side.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single season or list of seasons. |
+| `as_of_date` | `date \| None` | `None` | Leakage boundary forwarded to `cfb_ratings.cfb_ratings` (ratings use only games before this date). `None` uses the full season. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense rank, best = 1), `quality_wins` (Int64), `game_control` (Float64), `wab` (Float64). Zero-row (typed) when no games are available.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season the résumé covers (null for a pooled multi-season fit). |
+| `team_id` | String | Team ESPN id (character join key). |
+| `sos` | Float64 | Rating-based strength of schedule - mean opponent adj_net over played games. |
+| `sos_rank` | Int64 | Dense rank on sos descending (toughest schedule = 1). |
+| `quality_wins` | Int64 | Count of wins over opponents with adj_net at or above the era quality-win threshold. |
+| `game_control` | Float64 | Mean postgame win expectancy Phi(actual_margin / margin_sd) across played games - how dominant the results were, not just win/loss. |
+| `wab` | Float64 | Wins above bubble - actual wins minus a bubble-quality team's expected wins over the same schedule. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_resume import cfb_resume
+resume = cfb_resume(2023)
+resume.sort("sos_rank").head()
+```
 
 ### cfb_returning_production {#cfb_returning_production}
 

@@ -569,6 +569,7 @@ files = [
     "sportsdataverse/cfb/cfb_ratings.py",
     "sportsdataverse/cfb/cfb_recruiting_projection.py",
     "sportsdataverse/cfb/cfb_returning_production.py",
+    "sportsdataverse/cfb/cfb_player_havoc.py",
     "sportsdataverse/cfb/cfb_roster_talent.py",
     "sportsdataverse/cfb/cfb_resume.py",
     "sportsdataverse/cfb/cfb_season_odds.py",
