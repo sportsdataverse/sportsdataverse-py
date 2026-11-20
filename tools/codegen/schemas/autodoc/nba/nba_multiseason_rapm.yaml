@@ -1,0 +1,25 @@
+schema: nba_multiseason_rapm
+kind: dataframe
+hand_authored: true
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: o_multiseason_rapm
+  type: double
+  description: ''
+- name: d_multiseason_rapm
+  type: double
+  description: ''
+- name: multiseason_rapm
+  type: double
+  description: ''
+- name: off_poss
+  type: integer
+  description: ''
+- name: def_poss
+  type: integer
+  description: ''
+- name: n_seasons
+  type: integer
+  description: ''

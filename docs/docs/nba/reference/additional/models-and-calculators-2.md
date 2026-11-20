@@ -1138,6 +1138,16 @@ and the spread is 0.90 of his (std ratio at 10,000 possessions). Per-season deca
 
 Frame with `MULTISEASON_RAPM_SCHEMA`, sorted by `player_id`. `off_poss` / `def_poss` are summed over the window and `n_seasons` counts the seasons a player has a possession in. Empty input, or a `seasons` that matches no row, gives a zero-row frame.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | NBA stats person id. |
+| `o_multiseason_rapm` | Float64 | Offensive RAPM per 100 possessions from one ridge fit over every possession of the pooled seasons, all weighted equally, at the league fixed penalty (RAPM_PENALTY) unless alpha= is given. |
+| `d_multiseason_rapm` | Float64 | Defensive RAPM per 100 possessions over the pooled seasons, negated from the raw points-allowed coefficient so positive = good defense. |
+| `multiseason_rapm` | Float64 | o_multiseason_rapm + d_multiseason_rapm. |
+| `off_poss` | Int64 | Offensive possessions in the window, summed over the pooled seasons. |
+| `def_poss` | Int64 | Defensive possessions in the window, summed over the pooled seasons. |
+| `n_seasons` | Int64 | Number of pooled seasons in which the player has at least one possession. |
+
 **Raises**
 
 | Exception | Description |

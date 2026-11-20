@@ -1575,7 +1575,7 @@ def test_hostile_body_is_zero_rows_or_a_vocabulary_raise(qual, shape):
 # ``documented_table=``; called without one, a parser whose table has per-league variants keeps its zero-width
 # result. The generic flatteners (parse_items, parse_single_entity), the ESPN cdn rankings and HockeyTech
 # leaders / standings / roster / player stats (columns follow the payload or the league) are not documented.
-_DOCUMENTED_EMPTY_FLOOR = 50
+_DOCUMENTED_EMPTY_FLOOR = 51
 
 
 def _documented_parsers() -> Dict[str, Any]:

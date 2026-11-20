@@ -7212,7 +7212,7 @@
   mutant: '# @_documented_empty("autodoc/pwhl/pwhl_teams")'
   test: tests/test_espn_universal_parsers.py -k "empty_schema_sweep_covers"
   expected: kill
-  note: parse_teams drops out of the empty-result sweep (41 documented parsers < the floor of 42).
+  note: parse_teams drops out of the empty-result sweep (50 documented parsers < the floor of 51).
 
 - id: enrich-pbp-no-plays-is-the-documented-table
   group: dtype-contract-5-1
