@@ -177,7 +177,7 @@ Do not "fix" this to route the bytes through the gateway — a test guards it.
 
 **Source families** (orthogonal to the sport prefix above): `espn_<sport>_*` is
 the default; `fox_<sport>_*` wraps Fox Sports Bifrost (8 leagues) alongside the
-generated `fox_api` family (33 endpoints); 107 multi-sport `yahoo_*` functions come
+generated `fox_api` family (33 endpoints); 105 multi-sport `yahoo_*` functions come
 from the generated `yahoo_shangrila` family; `cbs_napi_*` wraps CBS Sports NAPI;
 and native-site APIs use their own prefixes
 (`nfl_*` → `api.nfl.com`, `nhl_*` / `mlb_api_*` → the league sites,

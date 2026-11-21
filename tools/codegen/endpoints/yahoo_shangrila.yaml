@@ -2444,54 +2444,6 @@ endpoints:
   short: trending_game_ids
   summary: Yahoo shangrila persisted query `trendingGameIds` -> one row per `trendingGames`
     entry
-- docstring:
-    parsed_doc: A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections
-  example_args:
-    game_id: ncaaf.g.202509200023
-  extra_params:
-  - name: v
-    query_key: v
-    type: int
-  - name: polling
-    query_key: polling
-    type: int
-  host: https://api-secure.sports.yahoo.com/v1/editorial/s
-  parser: parse_yahoo_editorial
-  path: /boxscore/{game_id}
-  path_params:
-  - name: game_id
-    required: true
-    type: str
-  returns_schema: native/yahoo_shangrila/editorial_boxscore
-  short: editorial_boxscore
-  summary: Full game box score + play-by-play (normalized stat dictionaries)
-- docstring:
-    parsed_doc: A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections
-  extra_params:
-  - name: leagues
-    query_key: leagues
-    type: str
-  - name: week
-    query_key: week
-    type: int
-  - name: season
-    query_key: season
-    type: int
-  - name: conferences
-    query_key: conferences
-    type: str
-  - name: count
-    query_key: count
-    type: int
-  - name: v
-    query_key: v
-    type: int
-  host: https://api-secure.sports.yahoo.com/v1/editorial/s
-  parser: parse_yahoo_editorial
-  path: /scoreboard
-  returns_schema: native/yahoo_shangrila/editorial_scoreboard
-  short: editorial_scoreboard
-  summary: 'Scoreboard: games + teams + leagues + odds (fat payload)'
 getter_module: sportsdataverse.providers.yahoo.yahoo_shangrila_runtime
 host: https://graphite-secure.sports.yahoo.com/v1/query/shangrila
 module: yahoo_shangrila

@@ -94,7 +94,7 @@ The big league modules export roughly 270–740 public names each (ESPN wrappers
 native-API wrappers, dataset loaders and parsers), and the flat `sportsdataverse` namespace holds
 about 9,300 public functions. **Fox Sports** adds `fox_<league>_*` Bifrost wrappers (pbp /
 boxscore / odds / roster / stats / standings / leaders) for 8 leagues plus the generated `fox_api`
-family (33 endpoints). **Yahoo Sports** adds 107 multi-sport `yahoo_*` functions from the generated
+family (33 endpoints). **Yahoo Sports** adds 105 multi-sport `yahoo_*` functions from the generated
 `yahoo_shangrila` family and keeps the legacy `yahoo_cfb_*` season-stats and scoreboard wrappers
 for college football. **CBS Sports** adds 82 `cbs_napi_*` wrappers. `sportsdataverse.release` ports
 the `sportsdataversedata` R release utilities (GitHub-release asset publish / download helpers,

@@ -9,13 +9,13 @@ description: "sdv-py Yahoo Sports: endpoint references, dataset loaders and pars
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [Yahoo Sports Shangrila](#yahoo-sports-shangrila) | `api-secure.sports.yahoo.com`, `graphite-secure.sports.yahoo.com` | 107 | none |
+| [Yahoo Sports Shangrila](#yahoo-sports-shangrila) | `graphite-secure.sports.yahoo.com` | 105 | none |
 
 ## Yahoo Sports Shangrila {#yahoo-sports-shangrila}
 
 | Reference | Functions |
 |---|---:|
-| [Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)](reference/yahoo_shangrila) | 107 |
+| [Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)](reference/yahoo_shangrila) | 105 |
 
 ## Examples
 

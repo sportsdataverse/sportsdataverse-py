@@ -1,10 +1,7 @@
 """Parsers for the generated Yahoo Sports wrappers (:mod:`sportsdataverse.providers.yahoo.yahoo_shangrila`).
 
-The 107 wrapped Yahoo routes serve only **two** envelope shapes, so three
-parsers cover the family:
-
-**1. shangrila (GraphQL persisted queries, 105 routes).** Every body is
-``{"data": {...}, "extensions": {...}}``. The rows of interest sit under one or
+The 105 wrapped Yahoo routes are shangrila GraphQL persisted queries. Every body
+is ``{"data": {...}, "extensions": {...}}``. The rows of interest sit under one or
 more collections in ``data``, sometimes behind single-key wrapper levels::
 
     {"data": {"leagues": [{"leaders": [ <row>, <row>, ... ]}]}}
@@ -18,11 +15,8 @@ collection as a frame; :func:`parse_yahoo_shangrila_tables` returns one frame pe
 ``data`` collection for the genuinely multi-table queries. The endpoint YAML picks
 between them from the spec, so a caller never has to.
 
-**2. editorial (scoreboard / boxscore, 2 routes).** Every body is
-``{"service": {"xml:lang": ..., "<root>": {"<collection>": {"<id>": <entry>}}}}``
-where each collection is a map keyed by a dotted Yahoo id
-(``ncaaf.g.202509200023``). :func:`parse_yahoo_editorial` emits one frame per
-collection with the map key surfaced as ``entity_id``.
+The editorial scoreboard / boxscore feed and its ``parse_yahoo_editorial`` parser
+were removed after Yahoo retired the feed on 2026-11-20.
 
 Follows the package-wide parser contract: polars by default, pandas via
 ``return_as_pandas=True``, zero-row frame (or an empty dict, for the dict-valued
@@ -47,7 +41,6 @@ import polars as pl
 from sportsdataverse.dl_utils import underscore
 
 __all__ = [
-    "parse_yahoo_editorial",
     "parse_yahoo_shangrila",
     "parse_yahoo_shangrila_tables",
 ]
@@ -173,16 +166,6 @@ def _descend(node: Any) -> List[Any]:
         return []
 
 
-def _is_id_map(entry: Any) -> bool:
-    """True when ``entry`` is itself an id-keyed map (every value is a dict).
-
-    Distinguishes ``player_stats[pid] = {variation: {...}}`` (a second id level,
-    which becomes one row per sub-entry) from ``games[gid] = {"gameid": ..., ...}``
-    (a plain record, which becomes one row).
-    """
-    return isinstance(entry, dict) and bool(entry) and all(isinstance(v, dict) for v in entry.values())
-
-
 def _tables(raw: Any) -> Dict[str, pl.DataFrame]:
     """``{snake_cased data key: frame}`` for a shangrila envelope (``{}`` when malformed).
 
@@ -275,80 +258,3 @@ def parse_yahoo_shangrila_tables(
     """
     tables = _tables(raw)
     return {k: v.to_pandas() for k, v in tables.items()} if return_as_pandas else dict(tables)
-
-
-def parse_yahoo_editorial(
-    raw: Any,
-    *,
-    return_as_pandas: bool = False,
-) -> Dict[str, Frame]:
-    """Parse a Yahoo editorial scoreboard / boxscore feed into one frame per collection.
-
-    The feed is ``{"service": {"<root>": {"<collection>": {"<id>": <entry>}}}}``.
-    Each collection becomes a frame; the map key is surfaced as ``entity_id`` (a
-    distinct name so it never collides with an ``id`` field inside the entry). An
-    entry that is a dict becomes one row, a list of dicts becomes one row per
-    element (``gamedrives``), and a scalar/``None`` becomes a ``value`` column
-    (``teamrecord``, ``gamescore``). An entry that is ITSELF an id-keyed map
-    (``player_stats`` -> stat variation, ``gameplay_by_play`` -> play) becomes one
-    row per sub-entry with the sub-key in ``sub_id``.
-
-    Args:
-        raw: an editorial feed body as returned by
-            :func:`sportsdataverse.providers.yahoo.yahoo_shangrila_runtime._get`.
-        return_as_pandas: return a dict of pandas DataFrames instead of polars.
-
-    Returns:
-        ``{snake_cased collection name: DataFrame}`` -- e.g. ``games``, ``teams``,
-        ``teamrankings`` for a scoreboard; ``player_stats``, ``team_stats``,
-        ``gamedrives`` for a boxscore. ``entity_id`` holds the dotted Yahoo id and
-        stays ``Utf8``. An empty dict when the payload is ``None`` / empty /
-        malformed.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.providers.yahoo.yahoo_shangrila import yahoo_editorial_scoreboard
-            tables = yahoo_editorial_scoreboard(leagues="ncaaf")
-            print(sorted(tables))
-
-        Pipeline next step (one line)::
-
-            tables["games"].select("entity_id", "start_time", "winning_team_id").head()
-
-    See Also:
-        * `cfbfastR`_ -- R sister package for college football.
-
-    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
-    """
-    service = (raw or {}).get("service") if isinstance(raw, dict) else None
-    if not isinstance(service, dict):
-        return {}
-    root = next((v for k, v in service.items() if k != "xml:lang" and isinstance(v, dict)), None)
-    if not isinstance(root, dict):
-        return {}
-    out: Dict[str, Frame] = {}
-    for name, collection in root.items():
-        if not isinstance(collection, dict):
-            continue
-        rows: List[Dict[str, Any]] = []
-        for entity_id, entry in collection.items():
-            if _is_id_map(entry):
-                # a SECOND id-keyed level (player_stats -> stat variation,
-                # gameplay_by_play -> play): one row per sub-entry, not one
-                # thousand-column row per game.
-                rows.extend({"entity_id": entity_id, "sub_id": sub, **rec} for sub, rec in entry.items())
-            elif isinstance(entry, dict):
-                rows.append({"entity_id": entity_id, **entry})
-            elif isinstance(entry, list):
-                rows.extend(
-                    {"entity_id": entity_id, **item}
-                    if isinstance(item, dict)
-                    else {"entity_id": entity_id, "value": item}
-                    for item in entry
-                )
-            else:
-                rows.append({"entity_id": entity_id, "value": entry})
-        df = _rows_to_frame(rows)
-        out[underscore(name)] = df.to_pandas() if return_as_pandas else df
-    return out

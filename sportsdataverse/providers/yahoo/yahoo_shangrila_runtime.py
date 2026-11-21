@@ -2,17 +2,16 @@
 
 The generated flat-API module imports ``_get`` from here (via the
 ``getter_module`` field of ``tools/codegen/endpoints/yahoo_shangrila.yaml``)
-instead of the shared :mod:`sportsdataverse._codegen_runtime`, because the two
-Yahoo hosts need two things the shared getter does not send:
+instead of the shared :mod:`sportsdataverse._codegen_runtime`, because the
+Yahoo host needs two things the shared getter does not send:
 
-* **Origin / Referer headers.** ``graphite-secure.sports.yahoo.com`` and
-  ``api-secure.sports.yahoo.com`` are NOT authenticated -- there is no token,
-  cookie or crumb -- but they reject a request that does not look like it came
-  from ``sports.yahoo.com``. That is the whole "auth" story, which is why the
+* **Origin / Referer headers.** ``graphite-secure.sports.yahoo.com`` is NOT
+  authenticated -- there is no token, cookie or crumb -- but it rejects a request
+  that does not look like it came from ``sports.yahoo.com``. That is the whole "auth" story, which is why the
   YAML sets ``getter_module`` but NOT ``auth: true``.
-* **Locale defaults.** Every path in both specs declares optional
+* **Locale defaults.** Every path in the spec declares optional
   ``lang``/``region``/``tz`` parameters with defaults. Sending them here keeps
-  three no-op arguments off all 107 generated signatures; a caller who needs a
+  three no-op arguments off all 105 generated signatures; a caller who needs a
   different locale passes ``params={"lang": "fr-FR"}``, which the generated
   wrapper merges over these defaults.
 

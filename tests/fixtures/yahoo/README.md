@@ -17,7 +17,7 @@
 | `shangrila_playbook_boxscore_ncaaf.json` | `GET .../shangrila/playbookBoxscore?...&gameId=ncaaf.g.202509270116&isFootball=true`, captured 2026-11-20 | HTTP 200, 90 KB; each lineup trimmed to 2 players with stats + 1 without, `footballStatTypes` to the stats used, `footballPositions` to 3; drives, play-by-play, win probability, odds, recap videos, series history and the teams' `lastGames` / `injuredPlayers` / `rankPolls` / `teamStandings` / `playoffSeeds` dropped. Used by `test_cfb_yahoo_ext.py`. |
 
 `...` is `https://graphite-secure.sports.yahoo.com/v1/query/shangrila` plus `lang=en-US&region=US&tz=America%2FChicago`.
-The `editorial_*` files predate Yahoo's retirement of the editorial feed (2026-11-20, HTTP 404 for every league); they now
-back only the generated editorial wrappers' tests.
+Yahoo retired its editorial feed on 2026-11-20 (HTTP 404 for every league). The `editorial_*` captures went with the
+`yahoo_editorial_*` wrappers and `parse_yahoo_editorial`.
 
 The other files in this directory came with #452 (`407db46cd8`, 2026-09-03) and predate this README.

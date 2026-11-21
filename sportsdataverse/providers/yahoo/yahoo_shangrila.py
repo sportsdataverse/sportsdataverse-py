@@ -12,11 +12,7 @@ import pandas as pd  # noqa: F401
 import polars as pl  # noqa: F401
 
 from sportsdataverse.providers.yahoo.yahoo_shangrila_runtime import _get
-from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import (
-    parse_yahoo_editorial,
-    parse_yahoo_shangrila,
-    parse_yahoo_shangrila_tables,
-)
+from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila, parse_yahoo_shangrila_tables
 
 __all__ = [
     "yahoo_oly_medal_count",
@@ -124,8 +120,6 @@ __all__ = [
     "yahoo_tennis_tournaments_by_date",
     "yahoo_trending_event_ids",
     "yahoo_trending_game_ids",
-    "yahoo_editorial_boxscore",
-    "yahoo_editorial_scoreboard",
 ]
 
 
@@ -6939,116 +6933,4 @@ def yahoo_trending_game_ids(
     )
     if return_parsed:
         return parse_yahoo_shangrila(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def yahoo_editorial_boxscore(
-    game_id: str,
-    v: Optional[int] = None,
-    polling: Optional[int] = None,
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """Full game box score + play-by-play (normalized stat dictionaries)
-
-    Endpoint: ``GET https://api-secure.sports.yahoo.com/v1/editorial/s/boxscore/{game_id}``
-    Example URL: https://api-secure.sports.yahoo.com/v1/editorial/s/boxscore/ncaaf.g.202509200023
-
-    Args:
-        game_id: game_id path parameter.
-        v: v query parameter.
-        polling: polling query parameter.
-        return_parsed: parse the payload through parse_yahoo_editorial -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
-        **kwargs: Forwarded to the underlying HTTP getter.
-
-    Returns:
-        A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
-        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
-
-    Example:
-        Quick start::
-
-            yahoo_editorial_boxscore(game_id='ncaaf.g.202509200023')
-    """
-    _caller_params = kwargs.pop("params", None) or {}
-    _params = {
-        "v": v,
-        "polling": polling,
-    }
-    _params.update(_caller_params)
-    raw = _get(
-        f"https://api-secure.sports.yahoo.com/v1/editorial/s/boxscore/{game_id}",
-        params=_params,
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_yahoo_editorial(raw, return_as_pandas=return_as_pandas)
-    return raw
-
-
-def yahoo_editorial_scoreboard(
-    leagues: Optional[str] = None,
-    week: Optional[int] = None,
-    season: Optional[int] = None,
-    conferences: Optional[str] = None,
-    count: Optional[int] = None,
-    v: Optional[int] = None,
-    *,
-    return_parsed: bool = True,
-    return_as_pandas: bool = False,
-    **kwargs,
-) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
-    """Scoreboard: games + teams + leagues + odds (fat payload)
-
-    Endpoint: ``GET https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard``
-    Example URL: https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard
-
-    Args:
-        leagues: leagues query parameter.
-        week: week query parameter.
-        season: season query parameter.
-        conferences: conferences query parameter.
-        count: count query parameter.
-        v: v query parameter.
-        return_parsed: parse the payload through parse_yahoo_editorial -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
-        **kwargs: Forwarded to the underlying HTTP getter.
-
-    Returns:
-        A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections by default; the raw JSON ``Dict`` when ``return_parsed=False``.
-
-    Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
-        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
-
-    Example:
-        Quick start::
-
-            yahoo_editorial_scoreboard()
-    """
-    _caller_params = kwargs.pop("params", None) or {}
-    _params = {
-        "leagues": leagues,
-        "week": week,
-        "season": season,
-        "conferences": conferences,
-        "count": count,
-        "v": v,
-    }
-    _params.update(_caller_params)
-    raw = _get(
-        "https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard",
-        params=_params,
-        **kwargs,
-    )
-    if return_parsed:
-        return parse_yahoo_editorial(raw, return_as_pandas=return_as_pandas)
     return raw

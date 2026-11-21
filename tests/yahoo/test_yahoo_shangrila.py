@@ -1,5 +1,5 @@
 """Offline tests for the Yahoo Sports stem: the ``yahoo_shangrila_runtime._get``
-getter, the three envelope parsers, and the generated wrapper wiring. No network.
+getter, the two shangrila parsers, and the generated wrapper wiring. No network.
 
 Fixture provenance:
 
@@ -194,60 +194,16 @@ def test_shangrila_empty_collection_is_zero_rows():
 
 
 # ===========================================================================
-# editorial envelope: {"service": {"<root>": {"<collection>": {"<id>": ...}}}}
-# ===========================================================================
-
-
-def test_editorial_scoreboard_real_capture():
-    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
-
-    tables = parse_yahoo_editorial(_load("editorial_scoreboard_ncaaf"))
-    assert {"games", "teams", "teamrecord", "leagues"} <= set(tables)
-    games = tables["games"]
-    assert games.height == 2
-    assert games.schema["entity_id"] == pl.Utf8
-    assert games["entity_id"][0].startswith("ncaaf.g.")
-    assert games.schema["gameid"] == pl.Utf8  # numeric-looking Yahoo ids never become floats
-    # a scalar-valued collection surfaces as entity_id + value
-    assert tables["teamrecord"].columns == ["entity_id", "value"]
-
-
-def test_editorial_boxscore_nested_id_maps_become_rows():
-    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
-
-    tables = parse_yahoo_editorial(_load("editorial_boxscore_ncaaf"))
-    # player_stats[playerId][statVariation] -> one row per (player, variation)
-    ps = tables["player_stats"]
-    assert {"entity_id", "sub_id"} <= set(ps.columns)
-    assert ps.height == 2
-    assert ps["entity_id"][0].startswith("ncaaf.p.")
-    assert ps["sub_id"][0].startswith("ncaaf.stat_variation.")
-    # dotted stat-type keys are sanitized into column names
-    assert any(c.startswith("ncaaf_stat_type_") for c in ps.columns)
-    # a list-valued collection explodes to one row per element
-    assert tables["gamedrives"].height == 3
-    # play-by-play is a second id level, not a thousand-column single row
-    assert tables["gameplay_by_play"].height == 3
-    assert tables["gameplay_by_play"].width < 40
-
-
-@pytest.mark.parametrize("payload", [None, {}, {"service": {}}, {"service": None}, "nope", []])
-def test_editorial_empty_and_malformed(payload):
-    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
-
-    assert parse_yahoo_editorial(payload) == {}
-
-
-# ===========================================================================
 # generated wrappers
 # ===========================================================================
 
 
 def test_generated_module_wraps_every_spec_path(mod):
-    assert len(mod.__all__) == 107
+    assert len(mod.__all__) == 105
     assert "yahoo_league_standings" in mod.__all__
     assert "yahoo_season_stats_football_passing_ncaaf" in mod.__all__
-    assert "yahoo_editorial_scoreboard" in mod.__all__
+    # the editorial feed 404s since 2026-11-20; its two wrappers were retired
+    assert not [n for n in mod.__all__ if n.startswith("yahoo_editorial_")]
 
 
 def test_wrapper_builds_shangrila_url_and_maps_query_keys(mod, monkeypatch):
@@ -264,13 +220,6 @@ def test_wrapper_builds_shangrila_url_and_maps_query_keys(mod, monkeypatch):
     assert isinstance(df, pl.DataFrame)
 
 
-def test_wrapper_builds_editorial_url_with_path_param(mod, monkeypatch):
-    seen = {}
-    monkeypatch.setattr(mod, "_get", lambda url, params=None, **kw: (seen.update(url=url), {})[1])
-    mod.yahoo_editorial_boxscore(game_id="ncaaf.g.202509200023")
-    assert seen["url"] == "https://api-secure.sports.yahoo.com/v1/editorial/s/boxscore/ncaaf.g.202509200023"
-
-
 def test_wrapper_return_parsed_false_passes_raw_through(mod, monkeypatch):
     monkeypatch.setattr(mod, "_get", lambda url, params=None, **kw: SINGLE_COLLECTION)
     assert mod.yahoo_league_standings(return_parsed=False) is SINGLE_COLLECTION
@@ -285,39 +234,30 @@ def test_multi_table_wrapper_returns_dict_of_frames(mod, monkeypatch):
 
 
 def test_numeric_ids_are_pinned_to_utf8_without_a_float_detour():
-    """Yahoo ships conference ids as bare JSON numbers in one collection and dotted
-    strings in another. Before the id pin they landed Float64 in ``divisions`` and
-    Utf8 in ``teams`` -- the same id, from one payload, in two dtypes that cannot
-    join -- and a naive cast to text would have produced "1.0"."""
-    import json
-    import pathlib as _p
+    """Yahoo ships some ids (conference, subdivision) as bare JSON numbers next to
+    dotted-string ids. With a null in the column pandas types them Float64, and a
+    naive cast to text would give "1.0": the id pin routes them through Int64."""
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila
 
-    import polars as pl
-
-    from sportsdataverse.providers.yahoo import parse_yahoo_editorial
-
-    fixture = _p.Path(__file__).parent.parent / "fixtures" / "yahoo" / "editorial_scoreboard_ncaaf.json"
-    frames = parse_yahoo_editorial(json.loads(fixture.read_text(encoding="utf-8")))
-    divisions, teams = frames["divisions"], frames["teams"]
-
-    conf_cols = [c for c in divisions.columns if c.startswith("conferences_") and c.endswith("_id")]
-    assert conf_cols, "fixture should carry numeric conference ids"
-    for col in conf_cols:
-        assert divisions.schema[col] == pl.Utf8, f"{col} is {divisions.schema[col]}, not Utf8"
-        assert not any((v or "").endswith(".0") for v in divisions[col].drop_nulls().to_list())
-
-    assert teams.schema["conference_id"] == pl.Utf8
-    # the same id space, so the two frames must actually be joinable
-    assert set(divisions[conf_cols[0]].drop_nulls().to_list()) & set(teams["conference_id"].drop_nulls().to_list())
+    raw = {
+        "data": {
+            "teams": [
+                {"teamId": "ncaaf.t.1", "conferenceId": 1, "rating": 1.5},
+                {"teamId": "ncaaf.t.2", "conferenceId": None, "rating": 2.0},
+            ]
+        }
+    }
+    df = parse_yahoo_shangrila(raw)
+    assert df.schema["conference_id"] == pl.Utf8
+    assert df["conference_id"].to_list() == ["1", None]
+    assert df.schema["rating"] == pl.Float64  # not id-shaped, left alone
 
 
 def test_boolean_flags_stay_boolean_when_a_row_lacks_the_key():
-    """B-M17: the real stream with ``official`` dropped from one play: null there, Boolean, never "nan"."""
-    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
+    """B-M17: a flag missing from one row is null there, Boolean, never "nan"."""
+    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_shangrila
 
-    raw = _load("editorial_boxscore_ncaaf")
-    plays = next(iter(raw["service"]["boxscore"]["gamemedia_stream"].values()))
-    del plays[0]["official"]
-    df = parse_yahoo_editorial(raw)["gamemedia_stream"]
+    raw = {"data": {"plays": [{"playId": "p1", "official": True}, {"playId": "p2"}]}}
+    df = parse_yahoo_shangrila(raw)
     assert df.schema["official"] == pl.Boolean
     assert df["official"].null_count() == 1 and df["official"].drop_nulls().all()
