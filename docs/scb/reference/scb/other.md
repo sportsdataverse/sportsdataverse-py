@@ -1,0 +1,882 @@
+# BBL / DBBL (SCB) — SCB basketball API (BBL and DBBL, Germany) — Other: seasons–transfers_teams
+
+> BBL / DBBL (SCB) — SCB basketball API (BBL and DBBL, Germany) — Other: seasons–transfers_teams — function reference in sdv-py, the SportsDataverse Python package.
+
+## scb_seasons
+
+Seasons, newest first, with the active flag (BBL back to 1966, DBBL 2024 on).
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/seasons`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/seasons](https://api.basketball-bundesliga.de/seasons)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+
+### Returns {#scb_seasons-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `season_id` | Int64 | The API's own season key, the START year (2025 = 2025-26); `season` minus one. |
+| `is_active` | Boolean | True for the season in progress. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_seasons-example}
+
+```python
+scb_seasons()
+```
+
+## scb_season_players
+
+Every player registered in a season: the id crosswalk (season_player_id, real_player_id, season_team_id).
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/seasons/{season}`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/seasons/2026](https://api.basketball-bundesliga.de/seasons/2026)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | Season END year (2026 = 2025-26, the sdv key). Sent to the API as its START-year seasonId (season - 1). |
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+
+### Returns {#scb_season_players-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `season_id` | Int64 | The API's own season key, the START year (2025 = 2025-26); `season` minus one. |
+| `season_player_id` | String | Season-player id: one player's engagement with one club (kept across seasons while he stays, new after a move; see README). Joins to box-score `seasonPlayer.id`, action `seasonPlayerId` and /season-players/{seasonPlayerId}. |
+| `real_player_id` | Int64 | Global person id: the same across clubs and seasons. Joins to `realPlayerId` everywhere. |
+| `season_team_id` | String | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). |
+| `first_name` | String | Player's given name. |
+| `last_name` | String | Player's family name. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_season_players-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_season_players-example}
+
+```python
+scb_season_players(season=2027)
+```
+
+## scb_season_teams
+
+Every team of a season: club id, season-team id, name and three-letter code.
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/seasons/{season}`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/seasons/2026](https://api.basketball-bundesliga.de/seasons/2026)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | Season END year (2026 = 2025-26, the sdv key). Sent to the API as its START-year seasonId (season - 1). |
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+
+### Returns {#scb_season_teams-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `season_id` | Int64 | The API's own season key, the START year (2025 = 2025-26); `season` minus one. |
+| `team_id` | String | Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}. |
+| `season_team_id` | String | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). |
+| `team_name` | String | Team name as listed that season (sponsor names included). |
+| `tlc` | String | Three-letter club code. |
+| `logo_url` | String | Logo image URL (per season). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_season_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_season_teams-example}
+
+```python
+scb_season_teams(season=2027)
+```
+
+## scb_playoff_series
+
+Playoff bracket of a season: one row per series (quarter-finals, semi-finals, finals).
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/seasons/{season}/playoff-tree`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/seasons/2025/playoff-tree](https://api.basketball-bundesliga.de/seasons/2025/playoff-tree)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | Season END year (2026 = 2025-26, the sdv key). Sent to the API as its START-year seasonId (season - 1). |
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+
+### Returns {#scb_playoff_series-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `season_id` | Int64 | Season, START year (2026 = 2026-27). |
+| `round` | String | Round of the bracket: `quarter_finals`, `semi_finals` or `finals`. |
+| `series` | Int64 | 1-based position of the series within its round, in the order the API lists them. |
+| `match_winner_id` | String | Season-team id of the series winner, a string (the playoff tree sends an integer). |
+| `is_match_finished` | Boolean | The series is decided. |
+| `team_a_id` | String | Season-team id of series team A (the higher seed is A), a string (the playoff tree sends it as an integer); equals the club team id. |
+| `team_a_name` | String | Name of series team A (the higher seed is A) as listed that season. |
+| `team_a_tlc` | String | Three-letter club code of series team A (the higher seed is A). |
+| `team_a_rank` | Int64 | Regular-season table position (the seed) of series team A (the higher seed is A). |
+| `team_a_victories` | Int64 | Series wins of team A. |
+| `team_b_id` | String | Season-team id of series team B (the higher seed is A), a string (the playoff tree sends it as an integer); equals the club team id. |
+| `team_b_name` | String | Name of series team B (the higher seed is A) as listed that season. |
+| `team_b_tlc` | String | Three-letter club code of series team B (the higher seed is A). |
+| `team_b_rank` | Int64 | Regular-season table position (the seed) of series team B (the higher seed is A). |
+| `team_b_victories` | Int64 | Series wins of team B. |
+| `games` | Int64 | Games of the series. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_playoff_series-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_playoff_series-example}
+
+```python
+scb_playoff_series(season=2026)
+```
+
+## scb_playoff_games
+
+Every playoff game of a season with its series and the points of each series team.
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/seasons/{season}/playoff-tree`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/seasons/2025/playoff-tree](https://api.basketball-bundesliga.de/seasons/2025/playoff-tree)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | Season END year (2026 = 2025-26, the sdv key). Sent to the API as its START-year seasonId (season - 1). |
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+
+### Returns {#scb_playoff_games-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `season_id` | Int64 | The API's own season key, the START year (2025 = 2025-26); `season` minus one. |
+| `round` | String | Round of the bracket: `quarter_finals`, `semi_finals` or `finals`. |
+| `series` | Int64 | 1-based position of the game's series within its round, in the order the API lists them. |
+| `game_id` | String | Game id, a string (the playoff tree sends an integer); joins `scb_games.game_id`. |
+| `scheduled_time` | String | Scheduled tip-off, ISO 8601 UTC. |
+| `timestamp` | Int64 | Tip-off, Unix seconds. |
+| `game_winner_id` | String | Season-team id of the game winner, a string (the playoff tree sends an integer). |
+| `home_team_id` | String | Season-team id of the home team, a string (the playoff tree sends an integer). |
+| `guest_team_id` | String | Season-team id of the guest (away) team, a string (the playoff tree sends an integer). |
+| `team_a_id` | String | Season-team id of the series' team A (the higher seed); `points_team_a` is its score, whichever side hosted. |
+| `team_b_id` | String | Season-team id of the series' team B; `points_team_b` is its score, whichever side hosted. |
+| `points_team_a` | Int64 | Team A's points in the game. |
+| `points_team_b` | Int64 | Team B's points in the game. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_playoff_games-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_playoff_games-example}
+
+```python
+scb_playoff_games(season=2026)
+```
+
+## scb_player_statistics
+
+Season player stat table: totals and per-game values, one row per player and stat block.
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/seasons/{season}/player-statistics`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/seasons/2025/player-statistics?displayType=MAIN_ROUND](https://api.basketball-bundesliga.de/seasons/2025/player-statistics?displayType=MAIN_ROUND)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | Season END year (2026 = 2025-26, the sdv key). Sent to the API as its START-year seasonId (season - 1). |
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+| `displayType` | `display_type` |  |  | `Y` | Which games the table covers: MAIN_ROUND (regular season), PLAYOFFS, PLAYOFFS_TOTAL, MAIN_ROUND_AND_PLAY_OFFS or CUP. |
+
+### Returns {#scb_player_statistics-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `display_type` | String | Which games the table covers, echoed from the request (MAIN_ROUND, PLAYOFFS, PLAYOFFS_TOTAL, MAIN_ROUND_AND_PLAY_OFFS or CUP). |
+| `season_player_id` | String | Season-player id: one player's engagement with one club (kept across seasons while he stays, new after a move; see README). Joins to box-score `seasonPlayer.id`, action `seasonPlayerId` and /season-players/{seasonPlayerId}. |
+| `real_player_id` | Int64 | Global person id: the same across clubs and seasons. Joins to `realPlayerId` everywhere. |
+| `first_name` | String | Player's given name. |
+| `last_name` | String | Player's family name. |
+| `shirt_number` | String | Jersey number of the player, kept as text so a `00` jersey survives. |
+| `position` | String | Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD, CENTER. |
+| `team_id` | String | Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}. |
+| `season_team_id` | String | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). |
+| `team_name` | String | Team name as listed that season (sponsor names included, e.g. 'EWE Baskets Oldenburg'). |
+| `team_tlc` | String | Three-letter club code. |
+| `season_id` | Int64 | The API's own season key, the START year (2025 = 2025-26); `season` minus one. |
+| `round_code` | Int64 | Provider round code; 1 for MAIN_ROUND in every sample (mapping unverified). |
+| `competition` | String | Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL host; DBBL, DBBL_CUP on the DBBL host. |
+| `seconds_played` | Int64 | The player's season total playing time in SECONDS over displayType. |
+| `points` | Int64 | The player's season total points over displayType. |
+| `two_point_shots_made` | Int64 | The player's season total 2-point field goals made over displayType. |
+| `two_point_shots_attempted` | Int64 | The player's season total 2-point field goals attempted over displayType. |
+| `two_point_shot_success_percent` | Float64 | The player's season total 2-point field-goal percentage over displaytype, 0-100 (one decimal); 0 when no attempts. |
+| `three_point_shots_made` | Int64 | The player's season total 3-point field goals made over displayType. |
+| `three_point_shots_attempted` | Int64 | The player's season total 3-point field goals attempted over displayType. |
+| `three_point_shot_success_percent` | Float64 | The player's season total 3-point field-goal percentage over displaytype, 0-100 (one decimal); 0 when no attempts. |
+| `field_goals_made` | Int64 | The player's season total field goals made over displayType. |
+| `field_goals_attempted` | Int64 | The player's season total field goals attempted over displayType. |
+| `field_goals_success_percent` | Float64 | The player's season total field-goal percentage over displaytype, 0-100 (one decimal); 0 when no attempts. |
+| `free_throws_made` | Int64 | The player's season total free throws made over displayType. |
+| `free_throws_attempted` | Int64 | The player's season total free throws attempted over displayType. |
+| `free_throws_success_percent` | Float64 | The player's season total free-throw percentage over displaytype, 0-100 (one decimal); 0 when no attempts. |
+| `offensive_rebounds` | Int64 | The player's season total offensive rebounds over displayType. |
+| `defensive_rebounds` | Int64 | The player's season total defensive rebounds over displayType. |
+| `total_rebounds` | Int64 | The player's season total rebounds (offensive + defensive) over displayType. |
+| `assists` | Int64 | The player's season total assists over displayType. |
+| `steals` | Int64 | The player's season total steals over displayType. |
+| `turnovers` | Int64 | The player's season total turnovers over displayType. |
+| `blocks` | Int64 | The player's season total blocked shots over displayType. |
+| `fouls_committed` | Int64 | The player's season total fouls committed over displayType. |
+| `efficiency` | Int64 | The player's season total efficiency (EFF = PTS + REB + AST + STL + BLK - missed FG - missed FT - TO; checked on a 2026 box score) over displayType. |
+| `plus_minus` | Int64 | The player's season total plus-minus over displaytype. |
+| `games_played` | Int64 | The player's season total games played over displayType. |
+| `seconds_per_game` | Float64 | Per-game average of seconds, seconds. |
+| `points_per_game` | Float64 | Per-game average of points. |
+| `two_point_shots_made_per_game` | Float64 | Per-game average of 2-point field goals made. |
+| `two_point_shots_attempted_per_game` | Float64 | Per-game average of 2-point field goals attempted. |
+| `three_point_shots_made_per_game` | Float64 | Per-game average of 3-point field goals made. |
+| `three_point_shots_attempted_per_game` | Float64 | Per-game average of 3-point field goals attempted. |
+| `field_goals_made_per_game` | Float64 | Per-game average of field goals made. |
+| `field_goals_attempted_per_game` | Float64 | Per-game average of field goals attempted. |
+| `field_goals_success_percent_per_game` | Float64 | Per-game average of field-goal percentage (0 in every sample: unusable). |
+| `free_throws_made_per_game` | Float64 | Per-game average of free throws made. |
+| `free_throws_attempted_per_game` | Float64 | Per-game average of free throws attempted. |
+| `defensive_rebounds_per_game` | Float64 | Per-game average of defensive rebounds. |
+| `offensive_rebounds_per_game` | Float64 | Per-game average of offensive rebounds. |
+| `total_rebounds_per_game` | Float64 | Per-game average of rebounds (offensive + defensive). |
+| `assists_per_game` | Float64 | Per-game average of assists. |
+| `steals_per_game` | Float64 | Per-game average of steals. |
+| `turnovers_per_game` | Float64 | Per-game average of turnovers. |
+| `blocks_per_game` | Float64 | Per-game average of blocked shots. |
+| `fouls_committed_per_game` | Float64 | Per-game average of fouls committed. |
+| `efficiency_per_game` | Float64 | Per-game average of efficiency (EFF = PTS + REB + AST + STL + BLK - missed FG - missed FT - TO; checked on a 2026 box score). |
+| `plus_minus_per_game` | Float64 | Per-game average of plus-minus (point margin while on court). |
+| `double_double` | Int64 | The player's season total double-doubles over displayType. |
+| `double_double_per_game` | Float64 | Per-game average of double-doubles. |
+| `games_started` | Int64 | The player's season total games started over displayType. |
+| `triple_double` | Int64 | The player's season total triple-doubles over displayType. |
+| `triple_double_per_game` | Float64 | Per-game average of triple-doubles. |
+| `fouls_received` | Int64 | The player's season total fouls drawn over displayType. |
+| `fouls_received_per_game` | Float64 | Per-game average of fouls drawn. |
+| `overall` | Boolean | False in every sample (meaning unverified). |
+| `stage` | String | Stage: MAIN_ROUND (Hauptrunde, regular season), PLAYINS, FIRST_ROUND, SECOND_ROUND, ROUND_OF_16 (Achtelfinale), ROUND_OF_8 (Viertelfinale), SEMI_FINALS, FINALS, THIRD_PLACE_GAME, QUALIFICATION, GROUP_STAGE. |
+| `aggregation` | String | Aggregation label as sent: STAGE in player tables, MAIN_ROUND in team tables. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_player_statistics-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_player_statistics-example}
+
+```python
+scb_player_statistics(display_type='MAIN_ROUND', season=2026)
+```
+
+## scb_games
+
+Games of a season (the whole season in one page): teams, score by period, officials, venue and top scorer.
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/games`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/games?currentPage=1&seasonId=2025&pageSize=500](https://api.basketball-bundesliga.de/games?currentPage=1&seasonId=2025&pageSize=500)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+| `seasonId` | `season` |  |  | `Y` | Season END year (2026 = 2025-26, the sdv key). Sent to the API as its START-year seasonId (season - 1). Omitted = the season in progress. |
+| `competition` | `competition` |  |  | `Y` | Competition filter: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL host; DBBL, DBBL_CUP on the DBBL host. Omitted = all. The other host's competition answers an empty page. |
+| `gameType` | `game_type` |  |  | `Y` | Finished, scheduled or all games. Omitted = all. |
+| `seasonTeamId` | `team_id` |  |  | `Y` | Only the games of this team, home or guest (the club id equals the season-team id). |
+| `pageSize` | `page_size` |  |  | `Y` | Rows per page. The wrapper reads page 1 and refuses a result that needs more pages, so keep it large enough for the whole result (500 covers a season). |
+
+### Returns {#scb_games-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `season_id` | Int64 | Season, START year (2026 = 2026-27). |
+| `game_id` | String | Game id, a string; unique within a league only (BBL and DBBL overlap), and not chronological. |
+| `competition` | String | Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL host; DBBL, DBBL_CUP on the DBBL host. |
+| `stage` | String | Stage: MAIN_ROUND (Hauptrunde, regular season), PLAYINS, FIRST_ROUND, SECOND_ROUND, ROUND_OF_16 (Achtelfinale), ROUND_OF_8 (Viertelfinale), SEMI_FINALS, FINALS, THIRD_PLACE_GAME, QUALIFICATION, GROUP_STAGE. |
+| `status` | String | Game status: PRE (scheduled), LIVE, POST (ended, not yet official), OFFICIAL (final). |
+| `scheduled_time` | String | Scheduled tip-off, ISO 8601 UTC. |
+| `match_day` | Int64 | Round number within the stage (Spieltag). |
+| `is_tbd` | Boolean | Date or time not yet fixed. |
+| `is_hidden` | Boolean | True when the API hides the game (0/1 on /games, a boolean on the header). |
+| `home_team_id` | String | Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}. |
+| `home_season_team_id` | String | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). |
+| `home_team_name` | String | Team name as listed that season (sponsor names included, e.g. 'EWE Baskets Oldenburg'). |
+| `home_tlc` | String | Three-letter club code. |
+| `home_is_foreign` | Boolean | The team is not in this league (cup opponents from the ProA / ProB). |
+| `home_rank` | Int64 | The team's current table position. |
+| `home_streak` | String | Current streak: W or L; empty when none. |
+| `home_streak_count` | Int64 | Length of the current streak. |
+| `home_last10_victories` | Int64 | Wins in the last 10 games. |
+| `home_last10_losses` | Int64 | Losses in the last 10 games. |
+| `home_total_games` | Int64 | Games the home team has played so far (the API sends it as a string). |
+| `guest_team_id` | String | Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}. |
+| `guest_season_team_id` | String | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). |
+| `guest_team_name` | String | Team name as listed that season (sponsor names included, e.g. 'EWE Baskets Oldenburg'). |
+| `guest_tlc` | String | Three-letter club code. |
+| `guest_is_foreign` | Boolean | The team is not in this league (cup opponents from the ProA / ProB). |
+| `guest_rank` | Int64 | The team's current table position. |
+| `guest_streak` | String | Current streak: W or L; empty when none. |
+| `guest_streak_count` | Int64 | Length of the current streak. |
+| `guest_last10_victories` | Int64 | Wins in the last 10 games. |
+| `guest_last10_losses` | Int64 | Losses in the last 10 games. |
+| `guest_total_games` | Int64 | Games the guest team has played so far (the API sends it as a string). |
+| `home_score` | Int64 | Home team final score. |
+| `guest_score` | Int64 | Guest team final score. |
+| `latest_period` | Int64 | Number of the last period played (4 = Q4, 5 = OT1, ...); the API sends `Q4` on /games and 4 on /games/recent. Null before the game. |
+| `spectators` | Int64 | Attendance; 0 when not recorded. |
+| `home_q1_score` | Int64 | Home team points in quarter 1; 0 when quarter scores were not recorded. |
+| `home_q2_score` | Int64 | Home team points in quarter 2; 0 when quarter scores were not recorded. |
+| `home_q3_score` | Int64 | Home team points in quarter 3; 0 when quarter scores were not recorded. |
+| `home_q4_score` | Int64 | Home team points in quarter 4; 0 when quarter scores were not recorded. |
+| `home_ot1_score` | Int64 | Home team points in overtime 1; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot2_score` | Int64 | Home team points in overtime 2; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot3_score` | Int64 | Home team points in overtime 3; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot4_score` | Int64 | Home team points in overtime 4; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot5_score` | Int64 | Home team points in overtime 5; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot6_score` | Int64 | Home team points in overtime 6; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot7_score` | Int64 | Home team points in overtime 7; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot8_score` | Int64 | Home team points in overtime 8; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot9_score` | Int64 | Home team points in overtime 9; 0 when not played (null from OT5 on in old seasons). |
+| `guest_q1_score` | Int64 | Guest team points in quarter 1; 0 when quarter scores were not recorded. |
+| `guest_q2_score` | Int64 | Guest team points in quarter 2; 0 when quarter scores were not recorded. |
+| `guest_q3_score` | Int64 | Guest team points in quarter 3; 0 when quarter scores were not recorded. |
+| `guest_q4_score` | Int64 | Guest team points in quarter 4; 0 when quarter scores were not recorded. |
+| `guest_ot1_score` | Int64 | Guest team points in overtime 1; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot2_score` | Int64 | Guest team points in overtime 2; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot3_score` | Int64 | Guest team points in overtime 3; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot4_score` | Int64 | Guest team points in overtime 4; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot5_score` | Int64 | Guest team points in overtime 5; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot6_score` | Int64 | Guest team points in overtime 6; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot7_score` | Int64 | Guest team points in overtime 7; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot8_score` | Int64 | Guest team points in overtime 8; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot9_score` | Int64 | Guest team points in overtime 9; 0 when not played (null from OT5 on in old seasons). |
+| `referee1_id` | String | Official id; joins to /referees `refId` (= its `id`). /referees lists only the current officials (44), so older games' officials can be missing there: all 40 of 2026-27's matched, 6 of 10 of 2008-09's. |
+| `referee1_first_name` | String | Official's given name. |
+| `referee1_last_name` | String | Official's family name. |
+| `referee2_id` | String | Official id; joins to /referees `refId` (= its `id`). /referees lists only the current officials (44), so older games' officials can be missing there: all 40 of 2026-27's matched, 6 of 10 of 2008-09's. |
+| `referee2_first_name` | String | Official's given name. |
+| `referee2_last_name` | String | Official's family name. |
+| `referee3_id` | String | Official id; joins to /referees `refId` (= its `id`). /referees lists only the current officials (44), so older games' officials can be missing there: all 40 of 2026-27's matched, 6 of 10 of 2008-09's. |
+| `referee3_first_name` | String | Official's given name. |
+| `referee3_last_name` | String | Official's family name. |
+| `commissioner_id` | String | Official id; joins to /referees `refId` (= its `id`). /referees lists only the current officials (44), so older games' officials can be missing there: all 40 of 2026-27's matched, 6 of 10 of 2008-09's. |
+| `commissioner_first_name` | String | Official's given name. |
+| `commissioner_last_name` | String | Official's family name. |
+| `venue_id` | String | Arena id, stable across seasons (Uber Arena = 2 in both 2025-26 and 2026-27); a different key space from /teams `seasonVenues.id`, and no captured route is keyed by it. A string in /games and /games/{gameId}, an integer in /games/recent. |
+| `venue_name` | String | Name of the arena the game is played in; `venue_id` is its stable arena id. |
+| `venue_address` | String | Postal address, German. |
+| `venue_capacity` | Int64 | Arena capacity, spectators. |
+| `venue_is_main` | Boolean | The club's main arena. |
+| `tv_channel` | String | TV channel(s) showing the game, comma-joined (a list on some routes, an empty string when none). |
+| `tv_type` | String | TV coverage type; empty or null in every sample. |
+| `is_free_tv` | Boolean | Shown on free-to-air TV. |
+| `live_stream_url` | String | Live-stream link (DBBL games link YouTube); empty when none. |
+| `top_score` | Int64 | Points of the game's top scorer; null before the game. |
+| `top_scorer_season_player_id` | String | Season-player id. BBL: a string equal to `id`. DBBL: an INTEGER that matches /seasons/{seasonId} `seasonPlayerId` (5 of 5 rows checked, 2026-27). Joins to /season-players/{seasonPlayerId}. |
+| `top_scorer_real_player_id` | String | Global person id: the same across clubs and seasons. Joins to `realPlayerId` everywhere. |
+| `top_scorer_first_name` | String | Player's given name. |
+| `top_scorer_last_name` | String | Player's family name. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_games-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_games-example}
+
+```python
+scb_games(season=2026)
+```
+
+## scb_game
+
+One game header: teams, score by period, officials, venue and top scorer.
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/games/{game_id}`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/games/2006920](https://api.basketball-bundesliga.de/games/2006920)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `game_id` | `game_id` |  | `Y` |  | Game id (`game_id` in `scb_games`), e.g. 2006920 (BBL) or 10130 (DBBL). One sequence per league. |
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+
+### Returns {#scb_game-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `season_id` | Int64 | Season, START year (2026 = 2026-27). |
+| `game_id` | String | Game id, a string; unique within a league only (BBL and DBBL overlap), and not chronological. |
+| `competition` | String | Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL host; DBBL, DBBL_CUP on the DBBL host. |
+| `stage` | String | Stage: MAIN_ROUND (Hauptrunde, regular season), PLAYINS, FIRST_ROUND, SECOND_ROUND, ROUND_OF_16 (Achtelfinale), ROUND_OF_8 (Viertelfinale), SEMI_FINALS, FINALS, THIRD_PLACE_GAME, QUALIFICATION, GROUP_STAGE. |
+| `status` | String | Game status: PRE (scheduled), LIVE, POST (ended, not yet official), OFFICIAL (final). |
+| `stat_status` | String | Live-stats feed status code. Observed: E (ended; German Ende), N (not started), 1 (old games), empty string. Meaning inferred. |
+| `game_progress` | String | Live progress code: E (ended), empty or null before the game. Meaning inferred. |
+| `scheduled_time` | String | Scheduled tip-off, ISO 8601 UTC. |
+| `match_day` | Int64 | Round number within the stage (Spieltag). |
+| `is_tbd` | Boolean | Date or time not yet fixed. |
+| `is_hidden` | Boolean | True when the API hides the game (0/1 on /games, a boolean on the header). |
+| `home_team_id` | String | Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}. |
+| `home_season_team_id` | String | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). |
+| `home_team_name` | String | Team name as listed that season (sponsor names included, e.g. 'EWE Baskets Oldenburg'). |
+| `home_tlc` | String | Three-letter club code. |
+| `home_is_foreign` | Boolean | The team is not in this league (cup opponents from the ProA / ProB). |
+| `home_rank` | Int64 | The team's current table position. |
+| `home_streak` | String | Current streak: W or L; empty when none. |
+| `home_streak_count` | Int64 | Length of the current streak. |
+| `home_last10_victories` | Int64 | Wins in the last 10 games. |
+| `home_last10_losses` | Int64 | Losses in the last 10 games. |
+| `home_total_games` | Int64 | Games the home team has played so far (the API sends it as a string). |
+| `guest_team_id` | String | Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}. |
+| `guest_season_team_id` | String | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). |
+| `guest_team_name` | String | Team name as listed that season (sponsor names included, e.g. 'EWE Baskets Oldenburg'). |
+| `guest_tlc` | String | Three-letter club code. |
+| `guest_is_foreign` | Boolean | The team is not in this league (cup opponents from the ProA / ProB). |
+| `guest_rank` | Int64 | The team's current table position. |
+| `guest_streak` | String | Current streak: W or L; empty when none. |
+| `guest_streak_count` | Int64 | Length of the current streak. |
+| `guest_last10_victories` | Int64 | Wins in the last 10 games. |
+| `guest_last10_losses` | Int64 | Losses in the last 10 games. |
+| `guest_total_games` | Int64 | Games the guest team has played so far (the API sends it as a string). |
+| `home_score` | Int64 | Home team final score. |
+| `guest_score` | Int64 | Guest team final score. |
+| `latest_period` | Int64 | Number of the last period played (4 = Q4, 5 = OT1, ...); the API sends `Q4` on /games and 4 on /games/recent. Null before the game. |
+| `spectators` | Int64 | Attendance; 0 when not recorded. |
+| `home_q1_score` | Int64 | Home team points in quarter 1; 0 when quarter scores were not recorded. |
+| `home_q2_score` | Int64 | Home team points in quarter 2; 0 when quarter scores were not recorded. |
+| `home_q3_score` | Int64 | Home team points in quarter 3; 0 when quarter scores were not recorded. |
+| `home_q4_score` | Int64 | Home team points in quarter 4; 0 when quarter scores were not recorded. |
+| `home_ot1_score` | Int64 | Home team points in overtime 1; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot2_score` | Int64 | Home team points in overtime 2; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot3_score` | Int64 | Home team points in overtime 3; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot4_score` | Int64 | Home team points in overtime 4; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot5_score` | Int64 | Home team points in overtime 5; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot6_score` | Int64 | Home team points in overtime 6; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot7_score` | Int64 | Home team points in overtime 7; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot8_score` | Int64 | Home team points in overtime 8; 0 when not played (null from OT5 on in old seasons). |
+| `home_ot9_score` | Int64 | Home team points in overtime 9; 0 when not played (null from OT5 on in old seasons). |
+| `guest_q1_score` | Int64 | Guest team points in quarter 1; 0 when quarter scores were not recorded. |
+| `guest_q2_score` | Int64 | Guest team points in quarter 2; 0 when quarter scores were not recorded. |
+| `guest_q3_score` | Int64 | Guest team points in quarter 3; 0 when quarter scores were not recorded. |
+| `guest_q4_score` | Int64 | Guest team points in quarter 4; 0 when quarter scores were not recorded. |
+| `guest_ot1_score` | Int64 | Guest team points in overtime 1; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot2_score` | Int64 | Guest team points in overtime 2; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot3_score` | Int64 | Guest team points in overtime 3; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot4_score` | Int64 | Guest team points in overtime 4; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot5_score` | Int64 | Guest team points in overtime 5; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot6_score` | Int64 | Guest team points in overtime 6; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot7_score` | Int64 | Guest team points in overtime 7; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot8_score` | Int64 | Guest team points in overtime 8; 0 when not played (null from OT5 on in old seasons). |
+| `guest_ot9_score` | Int64 | Guest team points in overtime 9; 0 when not played (null from OT5 on in old seasons). |
+| `referee1_id` | String | Official id; joins to /referees `refId` (= its `id`). /referees lists only the current officials (44), so older games' officials can be missing there: all 40 of 2026-27's matched, 6 of 10 of 2008-09's. |
+| `referee1_first_name` | String | Official's given name. |
+| `referee1_last_name` | String | Official's family name. |
+| `referee2_id` | String | Official id; joins to /referees `refId` (= its `id`). /referees lists only the current officials (44), so older games' officials can be missing there: all 40 of 2026-27's matched, 6 of 10 of 2008-09's. |
+| `referee2_first_name` | String | Official's given name. |
+| `referee2_last_name` | String | Official's family name. |
+| `referee3_id` | String | Official id; joins to /referees `refId` (= its `id`). /referees lists only the current officials (44), so older games' officials can be missing there: all 40 of 2026-27's matched, 6 of 10 of 2008-09's. |
+| `referee3_first_name` | String | Official's given name. |
+| `referee3_last_name` | String | Official's family name. |
+| `commissioner_id` | String | Official id; joins to /referees `refId` (= its `id`). /referees lists only the current officials (44), so older games' officials can be missing there: all 40 of 2026-27's matched, 6 of 10 of 2008-09's. |
+| `commissioner_first_name` | String | Official's given name. |
+| `commissioner_last_name` | String | Official's family name. |
+| `venue_id` | String | Arena id, stable across seasons (Uber Arena = 2 in both 2025-26 and 2026-27); a different key space from /teams `seasonVenues.id`, and no captured route is keyed by it. A string in /games and /games/{gameId}, an integer in /games/recent. |
+| `venue_name` | String | Name of the arena the game is played in; `venue_id` is its stable arena id. |
+| `venue_address` | String | Postal address, German. |
+| `venue_capacity` | Int64 | Arena capacity, spectators. |
+| `venue_is_main` | Boolean | The club's main arena. |
+| `tv_channel` | String | TV channel(s) showing the game, comma-joined (a list on some routes, an empty string when none). |
+| `tv_type` | String | TV coverage type; empty or null in every sample. |
+| `is_free_tv` | Boolean | Shown on free-to-air TV. |
+| `live_stream_url` | String | Live-stream link (DBBL games link YouTube); empty when none. |
+| `top_score` | Int64 | Points of the game's top scorer; null before the game. |
+| `top_scorer_season_player_id` | String | Season-player id. BBL: a string equal to `id`. DBBL: an INTEGER that matches /seasons/{seasonId} `seasonPlayerId` (5 of 5 rows checked, 2026-27). Joins to /season-players/{seasonPlayerId}. |
+| `top_scorer_real_player_id` | String | Global person id: the same across clubs and seasons. Joins to `realPlayerId` everywhere. |
+| `top_scorer_first_name` | String | Player's given name. |
+| `top_scorer_last_name` | String | Player's family name. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_game-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_game-example}
+
+```python
+scb_game(game_id='2006920')
+```
+
+## scb_standings
+
+League table of a season: record, home / away split, streaks and tie-break detail (2005-06 on).
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/standings`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/standings?seasonId=2025](https://api.basketball-bundesliga.de/standings?seasonId=2025)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+| `seasonId` | `season` |  |  | `Y` | Season END year (2026 = 2025-26, the sdv key). Sent to the API as its START-year seasonId (season - 1). Omitted = the season in progress. Seasons before about 2000 answer an empty table. |
+| `competition` | `competition` |  |  | `Y` | Competition: BBL, BBL_CUP, ALLSTAR, CHAMPIONS_CUP (BBL host) or DBBL, DBBL_CUP (DBBL host). BBL_CUP answers an empty table. |
+
+### Returns {#scb_standings-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season` | Int64 | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
+| `standing_id` | String | Opaque id of the standings row, a string. |
+| `season_team_id` | String | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). An integer here. |
+| `team_id` | String | Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}. |
+| `team_name` | String | Team name; null on some rows. |
+| `team_tlc` | String | Three-letter club code. |
+| `team_name_short` | String | Short team name (null on DBBL). |
+| `has_reached_playoffs` | Boolean | Clinched a playoff place. |
+| `has_reached_playins` | Boolean | Clinched at least the play-ins. |
+| `is_relegation_certain` | Boolean | Relegated for certain. |
+| `season_id` | Int64 | Season, START year (2026 = 2026-27). |
+| `competition` | String | Competition: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP on the BBL host; DBBL, DBBL_CUP on the DBBL host. |
+| `stage` | String | Stage: MAIN_ROUND (Hauptrunde, regular season), PLAYINS, FIRST_ROUND, SECOND_ROUND, ROUND_OF_16 (Achtelfinale), ROUND_OF_8 (Viertelfinale), SEMI_FINALS, FINALS, THIRD_PLACE_GAME, QUALIFICATION, GROUP_STAGE. |
+| `rank` | Int64 | Table position. |
+| `streak` | String | Current streak: W or L; empty when none. |
+| `streak_count` | Int64 | Length of the current streak. |
+| `point_corrections` | String | Table-point deductions; [] in every sample. |
+| `home_victories` | Int64 | Home games: wins. |
+| `home_losses` | Int64 | Home games: number of losses in the table. |
+| `home_victory_percentage` | Float64 | Home games: win percentage, 0-100. |
+| `away_victories` | Int64 | Away games: wins. |
+| `away_losses` | Int64 | Away games: number of losses in the table. |
+| `away_victory_percentage` | Float64 | Away games: win percentage, 0-100. |
+| `table_points` | Int64 | Table points scored (2 per win), from the API's `totalPointsMade`; the provider's notes call its 'Points' fields table points. |
+| `table_points_against` | Int64 | Table points conceded (2 per loss), from the API's `totalPointsAgainst`; per the provider's notes, table points. |
+| `total_victory_percentage` | Float64 | All games: win percentage, 0-100. |
+| `total_games` | Int64 | Games played in the table (home and away together). |
+| `total_victories` | Int64 | All games: wins. |
+| `total_losses` | Int64 | Losses in the table over all games. |
+| `last10_victories` | Int64 | Wins in the last 10 games. |
+| `last10_losses` | Int64 | Losses in the last 10 games. |
+| `last10_percentage` | Float64 | Win percentage over the last 10 games, 0-100. |
+| `last10_outcomes` | String | Results of the last games, newest first: W or L. |
+| `home_last10_victories` | Int64 | Home games: last 10 games, wins. |
+| `home_last10_losses` | Int64 | Home games: last 10 games, losses. |
+| `home_last10_victory_percentage` | Float64 | Home games: last 10 games, win percentage, 0-100. |
+| `home_streak` | String | Home games: current streak, W or L. |
+| `home_streak_count` | Int64 | Home games: length of the current streak. |
+| `away_last10_victories` | Int64 | Away games: last 10 games, wins. |
+| `away_last10_losses` | Int64 | Away games: last 10 games, losses. |
+| `away_last10_victory_percentage` | Float64 | Away games: last 10 games, win percentage, 0-100. |
+| `away_streak` | String | Away games: current streak, W or L. |
+| `away_streak_count` | Int64 | Away games: length of the current streak. |
+| `updated_date` | String | Last update of the row, ISO 8601 UTC. |
+| `ranking_comparison_info` | String | Tie-break detail among teams level on record. |
+| `home_points_for` | Int64 | Home games: basketball points scored (the API's football-style `GoalsMade`). |
+| `away_points_for` | Int64 | Away games: basketball points scored (the API's football-style `GoalsMade`). |
+| `total_points_for` | Int64 | All games: basketball points scored (the API's football-style `GoalsMade`). |
+| `home_points_against` | Int64 | Home games: basketball points allowed (the API's football-style `GoalsAgainst`). |
+| `away_points_against` | Int64 | Away games: basketball points allowed (the API's football-style `GoalsAgainst`). |
+| `total_points_against` | Int64 | All games: basketball points allowed (the API's football-style `GoalsAgainst`). |
+| `home_point_difference` | Int64 | Home games: point differential, scored minus allowed (the API's `GoalDifference`). |
+| `away_point_difference` | Int64 | Away games: point differential, scored minus allowed (the API's `GoalDifference`). |
+| `total_point_difference` | Int64 | All games: point differential, scored minus allowed (the API's `GoalDifference`). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_standings-example}
+
+```python
+scb_standings(season=2026)
+```
+
+## scb_season_player
+
+Player profile by season-player id: bio, position, club and previous clubs.
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/season-players/{season_player_id}`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/season-players/56414](https://api.basketball-bundesliga.de/season-players/56414)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season_player_id` | `season_player_id` |  | `Y` |  | Season-player id (`season_player_id` in a box score, an action or `scb_season_players`): one player's engagement with one club. |
+| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
+
+### Returns {#scb_season_player-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `season_player_id` | String | Season-player id: one player's engagement with one club (kept across seasons while he stays, new after a move). Joins box-score lines, actions, records and `scb_season_player`. |
+| `real_player_id` | Int64 | Global person id: the same across clubs and seasons. Joins to `realPlayerId` everywhere. |
+| `active_season_player_id` | String | The player's current season-player id (his latest club engagement). Joins to /season-players/{seasonPlayerId}. |
+| `first_name` | String | Player's given name. |
+| `last_name` | String | Player's family name. |
+| `birth_date` | String | Date of birth, YYYY-MM-DD. |
+| `position` | String | Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD, CENTER. |
+| `shirt_number` | String | Jersey number. A number or a numeric string across rows. |
+| `height` | Float64 | Height in metres (float32 noise: 1.77 arrives as 1.7699999809265137). |
+| `weight` | Int64 | Weight in kg; 0 when unknown. |
+| `nationalities` | String | Nationalities, ISO 3166-1 alpha-2 codes. |
+| `is_all_star` | Boolean | All-Star selection flag. |
+| `is_young` | Boolean | Young-player flag (German-trained youth rule; inferred). |
+| `has_changed_teams` | Boolean | Moved clubs during the season. |
+| `bbl_games_played` | Int64 | Career league games played (BBL host; 0 on DBBL). |
+| `team_id` | String | Club id, a string; equal to `season_team_id` in every sample. Joins to `scb_team` and `scb_season_teams`. |
+| `team_name` | String | Team name as listed that season (sponsor names included). |
+| `previous_teams` | String | Former clubs, free text (German names). |
+| `season_ids` | String | Seasons (start years) with this player or club. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_season_player-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_season_player-example}
+
+```python
+scb_season_player(season_player_id='56414')
+```
+
+## scb_referees
+
+Current referees and commissioners (BBL only).
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/referees`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/referees?currentPage=1&pageSize=100](https://api.basketball-bundesliga.de/referees?currentPage=1&pageSize=100)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `pageSize` | `page_size` |  |  | `Y` | Rows per page. 100 returns all current officials in one page; a result that needs more pages is refused. |
+
+### Returns {#scb_referees-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `referee_id` | String | Official id (`refId`, equal to the API's `id`); joins `referee1_id` .. `commissioner_id` of `scb_games`. |
+| `first_name` | String | Official's given name. |
+| `last_name` | String | Official's family name. |
+| `official_function` | String | REFEREE or COMMISSIONER. |
+| `participations` | Int64 | League games officiated. |
+| `year_joined_bbl` | Int64 | Year the official joined the league. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_referees-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_referees-example}
+
+```python
+scb_referees()
+```
+
+## scb_transfers
+
+Latest transfers, one row per move (BBL only).
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/transfers`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/transfers](https://api.basketball-bundesliga.de/transfers)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#scb_transfers-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `transfer_date` | String | Date of the transfer, YYYY-MM-DD (the API's `sortingDate`). |
+| `season_player_id` | String | Season-player id: one player's engagement with one club (kept across seasons while he stays, new after a move). Joins box-score lines, actions, records and `scb_season_player`. |
+| `real_player_id` | Int64 | Global person id (integer): the same player across clubs and seasons. Join players across seasons on this. |
+| `first_name` | String | Player's given name. |
+| `last_name` | String | Player's family name. |
+| `position` | String | Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD, CENTER. |
+| `source_team_id` | String | Club id the player left; null when the source is not a league club. |
+| `source_team_name` | String | Name of the club the player left (the free-text field, else the short club name). |
+| `destination_team_id` | String | Club id the player joined; null when the destination is not a league club. |
+| `destination_team_name` | String | Name of the club the player joined (the free-text field, else the short club name). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_transfers-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_transfers-example}
+
+```python
+scb_transfers()
+```
+
+## scb_transfers_teams
+
+Per club, the players joining and leaving, one row per move with its direction (BBL only).
+
+**Endpoint URL:** `GET https://api.basketball-bundesliga.de/transfers/teams`
+
+**Valid URL:** [https://api.basketball-bundesliga.de/transfers/teams](https://api.basketball-bundesliga.de/transfers/teams)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#scb_transfers_teams-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | String | Club id, a string; equal to `season_team_id` in every sample. Joins to `scb_team` and `scb_season_teams`. |
+| `direction` | String | `joining` or `leaving`: whether `team_id` is the destination or the source of the move. |
+| `league` | String | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
+| `transfer_date` | String | Date of the transfer, YYYY-MM-DD (the API's `sortingDate`). |
+| `season_player_id` | String | Season-player id: one player's engagement with one club (kept across seasons while he stays, new after a move). Joins box-score lines, actions, records and `scb_season_player`. |
+| `real_player_id` | Int64 | Global person id (integer): the same player across clubs and seasons. Join players across seasons on this. |
+| `first_name` | String | Player's given name. |
+| `last_name` | String | Player's family name. |
+| `position` | String | Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD, CENTER. |
+| `source_team_id` | String | Club id the player left; null when the source is not a league club. |
+| `source_team_name` | String | Name of the club the player left (the free-text field, else the short club name). |
+| `destination_team_id` | String | Club id the player joined; null when the destination is not a league club. |
+| `destination_team_name` | String | Name of the club the player joined (the free-text field, else the short club name). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_transfers_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game not yet started, an empty table, a playoff bracket not yet drawn); a game before 2002-03 is zero rows. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#scb_transfers_teams-example}
+
+```python
+scb_transfers_teams()
+```
