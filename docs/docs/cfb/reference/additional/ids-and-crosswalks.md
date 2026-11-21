@@ -160,7 +160,7 @@ the same upstream data always builds the same rows.
 
 **Returns**
 
-A polars DataFrame (pandas when `return_as_pandas=True`) with columns `matchup_key`, `espn_game_id`, `fox_game_id`, `yahoo_game_id`, `yahoo_global_game_id`, `home_team`, `away_team`, `espn_date`, `fox_date`, `yahoo_date`, `matched_sources`.
+A polars DataFrame (pandas when `return_as_pandas=True`) with columns `matchup_key`, `espn_game_id`, `fox_game_id`, `yahoo_game_id`, `yahoo_global_game_id`, `home_team`, `away_team`, `espn_date`, `fox_date`, `yahoo_date`, `matched_sources`. `yahoo_global_game_id` is always null: it came from Yahoo's editorial scoreboard, retired 2026-11-20, and shangrila has no counterpart.
 
 | col_name | type | description |
 |---|---|---|
@@ -180,7 +180,7 @@ A polars DataFrame (pandas when `return_as_pandas=True`) with columns `matchup_k
 
 | Exception | Description |
 |---|---|
-| `CrosswalkSourceError` | Full-season mode, a provider fetch failed after its retries (a 404 is "no games", never a failure). |
+| `CrosswalkSourceError` | Full-season mode, a provider fetch failed after its retries (a 404 is "no games", never a failure), or every Yahoo week came back empty or 404. |
 
 **Example**
 
@@ -209,8 +209,8 @@ id, name, and abbreviation (`None` where a provider has no match). The
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` | Season year used only to fetch Yahoo's embedded team directory (Yahoo has no standalone teams endpoint). Defaults to the most recent CFB season. |
-| `week` | `int` | `1` | Schedule week used for the Yahoo scoreboard fetch. Defaults to `1`. The embedded directory is the full league list regardless. |
+| `season` | `Optional[int]` | `None` | Season year sent to Yahoo's `leagueTeams` directory, which answers with the current directory for any season. Defaults to the most recent CFB season. |
+| `week` | `int` | `1` | Ignored; kept so existing calls still work. Defaults to `1`. |
 | `providers` | `Optional[Sequence[str]]` | `None` | Which sources to include — any of `"espn"`, `"fox"`, `"yahoo"`. `None` (default) uses all three; pass a subset for a pairwise crosswalk (e.g. `("espn", "fox")`) or a single source. Unselected providers are not fetched and surface as null columns. |
 | `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
 

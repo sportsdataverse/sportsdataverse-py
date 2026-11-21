@@ -1,7 +1,7 @@
 ---
 title: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook"
 sidebar_label: "Playbook"
-sidebar_position: 5
+sidebar_position: 3
 description: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---

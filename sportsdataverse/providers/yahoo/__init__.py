@@ -1,4 +1,4 @@
-"""Yahoo Sports wrappers (``graphite-secure.sports.yahoo.com`` + editorial).
+"""Yahoo Sports wrappers (``graphite-secure.sports.yahoo.com``).
 
 A cross-sport package rather than a league one: the Shangrila query graph spans
 NFL, NBA, MLB, NHL, WNBA, college, soccer, golf, tennis, MMA, motorsport and the
@@ -11,7 +11,6 @@ from __future__ import annotations
 
 from sportsdataverse.providers.yahoo.yahoo_shangrila import *  # noqa: F401,F403
 from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import (  # noqa: F401
-    parse_yahoo_editorial,
     parse_yahoo_shangrila,
     parse_yahoo_shangrila_tables,
 )

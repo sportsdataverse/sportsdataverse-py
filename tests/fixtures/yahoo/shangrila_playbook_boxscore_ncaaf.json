@@ -1,0 +1,770 @@
+{
+ "data": {
+  "footballPositions": [
+   {
+    "positionId": "WIDE_RECEIVER",
+    "name": "Wide Receiver",
+    "abbreviation": "WR"
+   },
+   {
+    "positionId": "LEFT_OFFENSIVE_TACKLE",
+    "name": "Left Offensive Tackle",
+    "abbreviation": "LO"
+   },
+   {
+    "positionId": "LEFT_OFFENSIVE_GUARD",
+    "name": "Left Offensive Guard",
+    "abbreviation": "LO"
+   }
+  ],
+  "footballStatTypes": [
+   {
+    "statId": "PASSING_YARDS",
+    "abbreviation": "Yds",
+    "displayName": "Passing Yards",
+    "shortName": "Yards",
+    "contextAgnosticAbbreviation": "Pass Yds",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "PASSING_TOUCHDOWNS",
+    "abbreviation": "TD",
+    "displayName": "Passing Touchdowns",
+    "shortName": "Touchdowns",
+    "contextAgnosticAbbreviation": "Pass TD",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "RUSHING_YARDS",
+    "abbreviation": "Yds",
+    "displayName": "Rushing Yards",
+    "shortName": "Yards",
+    "contextAgnosticAbbreviation": "Rush Yds",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "RUSHING_TOUCHDOWNS",
+    "abbreviation": "TD",
+    "displayName": "Rushing Touchdowns",
+    "shortName": "Touchdowns",
+    "contextAgnosticAbbreviation": "Rush TD",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "RECEPTIONS",
+    "abbreviation": "Rec",
+    "displayName": "Receptions",
+    "shortName": "Receptions",
+    "contextAgnosticAbbreviation": "Rec",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "RECEIVING_YARDS",
+    "abbreviation": "Yds",
+    "displayName": "Receiving Yards",
+    "shortName": "Yards",
+    "contextAgnosticAbbreviation": "Rec Yds",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "RECEIVING_TOUCHDOWNS",
+    "abbreviation": "TD",
+    "displayName": "Receiving Touchdowns",
+    "shortName": "Touchdowns",
+    "contextAgnosticAbbreviation": "Rec TD",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "SOLO_TACKLES",
+    "abbreviation": "Solo",
+    "displayName": "Solo Tackles",
+    "shortName": "Solo Tackles",
+    "contextAgnosticAbbreviation": "Solo",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "TACKLE_ASSISTS",
+    "abbreviation": "Ast",
+    "displayName": "Tackle Assists",
+    "shortName": "Tackle Assists",
+    "contextAgnosticAbbreviation": "Ast",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "SACKS",
+    "abbreviation": "Sack",
+    "displayName": "Sacks",
+    "shortName": "Sacks",
+    "contextAgnosticAbbreviation": "Sacks",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "FIELD_GOALS_MADE",
+    "abbreviation": "FGM",
+    "displayName": "Field Goals Made",
+    "shortName": "Field Goals Made",
+    "contextAgnosticAbbreviation": "FGM",
+    "sortOrder": "DESCENDING"
+   },
+   {
+    "statId": "EXTRA_POINTS_MADE",
+    "abbreviation": "XPM",
+    "displayName": "Extra Points Made",
+    "shortName": "Extra Points Made",
+    "contextAgnosticAbbreviation": "XPM",
+    "sortOrder": "DESCENDING"
+   }
+  ],
+  "games": [
+   {
+    "gameId": "ncaaf.g.202509270116",
+    "displayName": "Idaho @ Montana",
+    "displayResult": "30-41",
+    "sport": {
+     "name": "Football"
+    },
+    "league": {
+     "name": "College Football",
+     "fullName": "ncaaf",
+     "displayShort": "NCAAF",
+     "shortName": "NCAAF",
+     "sport": {
+      "name": "Football"
+     },
+     "alias": {
+      "url": "https://sports.yahoo.com/college-football/",
+      "subpages": [
+       {
+        "type": "schedule",
+        "url": "https://sports.yahoo.com/college-football/schedule/"
+       },
+       {
+        "type": "scoreboard",
+        "url": "https://sports.yahoo.com/college-football/scoreboard/"
+       }
+      ]
+     }
+    },
+    "alias": {
+     "url": "https://sports.yahoo.com/ncaaf/idaho-vandals-montana-grizzlies-202509270116/"
+    },
+    "specialEventType": null,
+    "awayTeamId": "ncaaf.t.114",
+    "basicAwayTeam": {
+     "abbreviation": "IDHO",
+     "displayName": "Idaho",
+     "teamId": "ncaaf.t.114",
+     "teamLogoWhite": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/tNQqlVXi9Rwqo2erheSCKg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTkwO3c9OTA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181217/500x500/idaho_wbg.png"
+     },
+     "teamLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/jhjVEzZtu1E..BisIufnZA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTkwO3c9OTA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181217/500x500/idaho.png"
+     },
+     "nickname": "Vandals",
+     "primaryColor": "b3a369",
+     "secondaryColor": "eaab00"
+    },
+    "awayTeam": {
+     "fullName": "Idaho Vandals",
+     "teamId": "ncaaf.t.114",
+     "primaryColor": "b3a369",
+     "secondaryColor": "eaab00",
+     "displayName": "Idaho",
+     "abbreviation": "IDHO",
+     "location": "Idaho",
+     "alias": {
+      "url": "https://sports.yahoo.com/ncaaf/teams/idaho/",
+      "subpages": [
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/idaho/injuries/",
+        "type": "injuries"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/idaho/schedule/",
+        "type": "schedule"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/idaho/stats/",
+        "type": "statsLeaders"
+       }
+      ]
+     },
+     "nickname": "Vandals",
+     "teamLogoWhite": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/RGgnhOZZkP1NQxeQYVcXMw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTE4MDt3PTE4MA--/https://s.yimg.com/cv/apiv2/default/ncaaf/20181217/500x500/idaho_wbg.png.cf.webp"
+     },
+     "teamLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/B551j0Nvt9vdVDX2_0.W6g--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTE4MDt3PTE4MA--/https://s.yimg.com/cv/apiv2/default/ncaaf/20181217/500x500/idaho.png.cf.webp"
+     },
+     "teamLogoWhiteLarge": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/RGgnhOZZkP1NQxeQYVcXMw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTE4MDt3PTE4MA--/https://s.yimg.com/cv/apiv2/default/ncaaf/20181217/500x500/idaho_wbg.png.cf.webp"
+     },
+     "teamLogoLarge": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/B551j0Nvt9vdVDX2_0.W6g--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTE4MDt3PTE4MA--/https://s.yimg.com/cv/apiv2/default/ncaaf/20181217/500x500/idaho.png.cf.webp"
+     },
+     "gametimeTicketUrl": "https://gametime.co/college-football/vandals-at-bengals-tickets/11-21-2026-pocatello-id-holt-arena/events/6908f1dc30d5cd4f627214fd?utm_campaign=yahoo_integration&utm_source=yahoo"
+    },
+    "awayTeamRecord": {
+     "displayName": "2-3",
+     "wins": 2,
+     "losses": 3
+    },
+    "homeTeamId": "ncaaf.t.116",
+    "basicHomeTeam": {
+     "abbreviation": "MONT",
+     "displayName": "Montana",
+     "teamId": "ncaaf.t.116",
+     "teamLogoWhite": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/oI7qg3tOxMRodJsY7VaCHQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTkwO3c9OTA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181218/500x500/montana_wbgs.png"
+     },
+     "teamLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/GP3G_WzVNflu85RMzxV8TA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTkwO3c9OTA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181218/500x500/montana_s.png"
+     },
+     "nickname": "Grizzlies",
+     "primaryColor": "660033",
+     "secondaryColor": "999999"
+    },
+    "homeTeam": {
+     "fullName": "Montana Grizzlies",
+     "teamId": "ncaaf.t.116",
+     "primaryColor": "660033",
+     "secondaryColor": "999999",
+     "displayName": "Montana",
+     "abbreviation": "MONT",
+     "location": "Montana",
+     "alias": {
+      "url": "https://sports.yahoo.com/ncaaf/teams/montana/",
+      "subpages": [
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/montana/injuries/",
+        "type": "injuries"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/montana/schedule/",
+        "type": "schedule"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/montana/stats/",
+        "type": "statsLeaders"
+       }
+      ]
+     },
+     "nickname": "Grizzlies",
+     "teamLogoWhite": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/CFLK4AHhihibfcEVTfz1NA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTE4MDt3PTE4MA--/https://s.yimg.com/cv/apiv2/default/ncaaf/20181218/500x500/montana_wbgs.png.cf.webp"
+     },
+     "teamLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/u1Ml2eEpHSrOTApuJ0mrNg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTE4MDt3PTE4MA--/https://s.yimg.com/cv/apiv2/default/ncaaf/20181218/500x500/montana_s.png.cf.webp"
+     },
+     "teamLogoWhiteLarge": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/CFLK4AHhihibfcEVTfz1NA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTE4MDt3PTE4MA--/https://s.yimg.com/cv/apiv2/default/ncaaf/20181218/500x500/montana_wbgs.png.cf.webp"
+     },
+     "teamLogoLarge": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/u1Ml2eEpHSrOTApuJ0mrNg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTE4MDt3PTE4MA--/https://s.yimg.com/cv/apiv2/default/ncaaf/20181218/500x500/montana_s.png.cf.webp"
+     },
+     "gametimeTicketUrl": "https://gametime.co/college-football/grizzlies-at-bobcats-tickets/11-21-2026-bozeman-mt-bobcat-stadium-msu/events/69025cb377a9cb0dbb13373d?utm_campaign=yahoo_integration&utm_source=yahoo"
+    },
+    "homeTeamRecord": {
+     "displayName": "4-0",
+     "wins": 4,
+     "losses": 0
+    },
+    "awayScore": 30,
+    "homeScore": 41,
+    "startTime": "2025-09-27T21:15:00-05:00",
+    "startDate": "2025-09-27-05:00",
+    "ifNecessary": null,
+    "status": "FINAL",
+    "statusDisplayName": "Final",
+    "fullStatusDisplayName": "Final",
+    "season": 2025,
+    "seasonPhase": "REGULAR_SEASON",
+    "timeLeft": ":00.0",
+    "isHalftime": false,
+    "tournamentId": null,
+    "week": 5,
+    "playoffSeries": null,
+    "playoffGameOrder": null,
+    "winningTeamId": "ncaaf.t.116",
+    "broadcastChannels": [
+     {
+      "name": "ESPN2",
+      "abbr": "ESPN2",
+      "displayName": "ESPN2"
+     }
+    ],
+    "newsBreak": null,
+    "eventExtendedDisplayName": null,
+    "venue": {
+     "displayName": "Washington-Grizzly Stadium",
+     "city": "Missoula",
+     "coverType": null,
+     "state": "MT",
+     "venueId": "ncaaf.v.116",
+     "country": "USA"
+    },
+    "tvCoverage": "ESPN2",
+    "weather": null,
+    "xmStation": null,
+    "currentPeriod": {
+     "shortDisplayName": "4th",
+     "period": 4,
+     "displayName": "4th Quarter",
+     "overtime": false
+    },
+    "regulationPeriods": [
+     {
+      "shortDisplayName": "1st",
+      "period": 1,
+      "displayName": "1st Quarter",
+      "overtime": false
+     },
+     {
+      "shortDisplayName": "2nd",
+      "period": 2,
+      "displayName": "2nd Quarter",
+      "overtime": false
+     },
+     {
+      "shortDisplayName": "3rd",
+      "period": 3,
+      "displayName": "3rd Quarter",
+      "overtime": false
+     },
+     {
+      "shortDisplayName": "4th",
+      "period": 4,
+      "displayName": "4th Quarter",
+      "overtime": false
+     }
+    ],
+    "awayTeamLineup": [
+     {
+      "player": {
+       "displayName": "Nate Thomas",
+       "shortDisplayName": "N. Thomas",
+       "playerId": "ncaaf.p.326682",
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/players/326682/"
+       },
+       "teamId": "ncaaf.t.114",
+       "uniformNumber": null,
+       "positionIds": [
+        "RUNNING_BACK"
+       ],
+       "firstName": "Nate",
+       "lastName": "Thomas",
+       "suggestedHeadshot": null,
+       "playerGameStats": [
+        {
+         "stats": [
+          {
+           "statId": "PASSING_YARDS",
+           "value": null
+          },
+          {
+           "statId": "PASSING_TOUCHDOWNS",
+           "value": null
+          },
+          {
+           "statId": "RUSHING_YARDS",
+           "value": "70"
+          },
+          {
+           "statId": "RUSHING_TOUCHDOWNS",
+           "value": "0"
+          },
+          {
+           "statId": "RECEIVING_YARDS",
+           "value": "11"
+          },
+          {
+           "statId": "RECEPTIONS",
+           "value": "3"
+          },
+          {
+           "statId": "RECEIVING_TOUCHDOWNS",
+           "value": "0"
+          },
+          {
+           "statId": "SOLO_TACKLES",
+           "value": null
+          },
+          {
+           "statId": "TACKLE_ASSISTS",
+           "value": null
+          },
+          {
+           "statId": "SACKS",
+           "value": null
+          },
+          {
+           "statId": "FIELD_GOALS_MADE",
+           "value": null
+          },
+          {
+           "statId": "EXTRA_POINTS_MADE",
+           "value": null
+          }
+         ]
+        }
+       ]
+      }
+     },
+     {
+      "player": {
+       "displayName": "Joshua Wood",
+       "shortDisplayName": "J. Wood",
+       "playerId": "ncaaf.p.336870",
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/players/336870/"
+       },
+       "teamId": "ncaaf.t.114",
+       "uniformNumber": "3",
+       "positionIds": [
+        "QUARTERBACK"
+       ],
+       "firstName": "Joshua",
+       "lastName": "Wood",
+       "suggestedHeadshot": null,
+       "playerGameStats": [
+        {
+         "stats": [
+          {
+           "statId": "PASSING_YARDS",
+           "value": "262"
+          },
+          {
+           "statId": "PASSING_TOUCHDOWNS",
+           "value": "0"
+          },
+          {
+           "statId": "RUSHING_YARDS",
+           "value": "32"
+          },
+          {
+           "statId": "RUSHING_TOUCHDOWNS",
+           "value": "3"
+          },
+          {
+           "statId": "RECEIVING_YARDS",
+           "value": null
+          },
+          {
+           "statId": "RECEPTIONS",
+           "value": null
+          },
+          {
+           "statId": "RECEIVING_TOUCHDOWNS",
+           "value": null
+          },
+          {
+           "statId": "SOLO_TACKLES",
+           "value": null
+          },
+          {
+           "statId": "TACKLE_ASSISTS",
+           "value": null
+          },
+          {
+           "statId": "SACKS",
+           "value": null
+          },
+          {
+           "statId": "FIELD_GOALS_MADE",
+           "value": null
+          },
+          {
+           "statId": "EXTRA_POINTS_MADE",
+           "value": null
+          }
+         ]
+        }
+       ]
+      }
+     },
+     {
+      "player": {
+       "displayName": "Trais Higgins",
+       "shortDisplayName": "T. Higgins",
+       "playerId": "ncaaf.p.335187",
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/players/335187/"
+       },
+       "teamId": "ncaaf.t.114",
+       "uniformNumber": "6",
+       "positionIds": [
+        "WIDE_RECEIVER"
+       ],
+       "firstName": "Trais",
+       "lastName": "Higgins",
+       "suggestedHeadshot": null,
+       "playerGameStats": []
+      }
+     }
+    ],
+    "homeTeamLineup": [
+     {
+      "player": {
+       "displayName": "Drew Deck",
+       "shortDisplayName": "D. Deck",
+       "playerId": "ncaaf.p.312809",
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/players/312809/"
+       },
+       "teamId": "ncaaf.t.116",
+       "uniformNumber": null,
+       "positionIds": [
+        "WIDE_RECEIVER"
+       ],
+       "firstName": "Drew",
+       "lastName": "Deck",
+       "suggestedHeadshot": null,
+       "playerGameStats": [
+        {
+         "stats": [
+          {
+           "statId": "PASSING_YARDS",
+           "value": null
+          },
+          {
+           "statId": "PASSING_TOUCHDOWNS",
+           "value": null
+          },
+          {
+           "statId": "RUSHING_YARDS",
+           "value": null
+          },
+          {
+           "statId": "RUSHING_TOUCHDOWNS",
+           "value": null
+          },
+          {
+           "statId": "RECEIVING_YARDS",
+           "value": "67"
+          },
+          {
+           "statId": "RECEPTIONS",
+           "value": "5"
+          },
+          {
+           "statId": "RECEIVING_TOUCHDOWNS",
+           "value": "0"
+          },
+          {
+           "statId": "SOLO_TACKLES",
+           "value": null
+          },
+          {
+           "statId": "TACKLE_ASSISTS",
+           "value": null
+          },
+          {
+           "statId": "SACKS",
+           "value": null
+          },
+          {
+           "statId": "FIELD_GOALS_MADE",
+           "value": null
+          },
+          {
+           "statId": "EXTRA_POINTS_MADE",
+           "value": null
+          }
+         ]
+        }
+       ]
+      }
+     },
+     {
+      "player": {
+       "displayName": "Stevie Rocker Jr.",
+       "shortDisplayName": "S. Rocker Jr.",
+       "playerId": "ncaaf.p.322313",
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/players/322313/"
+       },
+       "teamId": "ncaaf.t.116",
+       "uniformNumber": null,
+       "positionIds": [
+        "RUNNING_BACK"
+       ],
+       "firstName": "Stevie",
+       "lastName": "Rocker Jr.",
+       "suggestedHeadshot": null,
+       "playerGameStats": [
+        {
+         "stats": [
+          {
+           "statId": "PASSING_YARDS",
+           "value": null
+          },
+          {
+           "statId": "PASSING_TOUCHDOWNS",
+           "value": null
+          },
+          {
+           "statId": "RUSHING_YARDS",
+           "value": "8"
+          },
+          {
+           "statId": "RUSHING_TOUCHDOWNS",
+           "value": "0"
+          },
+          {
+           "statId": "RECEIVING_YARDS",
+           "value": null
+          },
+          {
+           "statId": "RECEPTIONS",
+           "value": null
+          },
+          {
+           "statId": "RECEIVING_TOUCHDOWNS",
+           "value": null
+          },
+          {
+           "statId": "SOLO_TACKLES",
+           "value": null
+          },
+          {
+           "statId": "TACKLE_ASSISTS",
+           "value": null
+          },
+          {
+           "statId": "SACKS",
+           "value": null
+          },
+          {
+           "statId": "FIELD_GOALS_MADE",
+           "value": null
+          },
+          {
+           "statId": "EXTRA_POINTS_MADE",
+           "value": null
+          }
+         ]
+        }
+       ]
+      }
+     },
+     {
+      "player": {
+       "displayName": "Solomon Tuliaupupu",
+       "shortDisplayName": "S. Tuliaupupu",
+       "playerId": "ncaaf.p.292987",
+       "alias": {
+        "url": "https://sports.yahoo.com/ncaaf/players/292987/"
+       },
+       "teamId": "ncaaf.t.116",
+       "uniformNumber": "58",
+       "positionIds": [
+        "LINEBACKER"
+       ],
+       "firstName": "Solomon",
+       "lastName": "Tuliaupupu",
+       "suggestedHeadshot": null,
+       "playerGameStats": []
+      }
+     }
+    ],
+    "gameTicketPrice": null,
+    "gametimeTicketUrl": null,
+    "gameCoverage": [
+     {
+      "hasStats": false,
+      "hasPlays": false,
+      "statsDelayMinutes": 720
+     }
+    ],
+    "down": null,
+    "distance": null,
+    "fieldPosition": null,
+    "fieldPositionDisplayName": null,
+    "homeTimeoutsRemaining": 0,
+    "awayTimeoutsRemaining": 0,
+    "timeoutsGranted": 3,
+    "teamPossessingBall": null,
+    "awayLineScore": [
+     {
+      "score": 0,
+      "period": {
+       "shortDisplayName": "1st",
+       "isOvertime": false,
+       "period": 1,
+       "displayName": "1st Quarter"
+      }
+     },
+     {
+      "score": 6,
+      "period": {
+       "shortDisplayName": "2nd",
+       "isOvertime": false,
+       "period": 2,
+       "displayName": "2nd Quarter"
+      }
+     },
+     {
+      "score": 8,
+      "period": {
+       "shortDisplayName": "3rd",
+       "isOvertime": false,
+       "period": 3,
+       "displayName": "3rd Quarter"
+      }
+     },
+     {
+      "score": 16,
+      "period": {
+       "shortDisplayName": "4th",
+       "isOvertime": false,
+       "period": 4,
+       "displayName": "4th Quarter"
+      }
+     }
+    ],
+    "homeLineScore": [
+     {
+      "score": 10,
+      "period": {
+       "shortDisplayName": "1st",
+       "isOvertime": false,
+       "period": 1,
+       "displayName": "1st Quarter"
+      }
+     },
+     {
+      "score": 7,
+      "period": {
+       "shortDisplayName": "2nd",
+       "isOvertime": false,
+       "period": 2,
+       "displayName": "2nd Quarter"
+      }
+     },
+     {
+      "score": 14,
+      "period": {
+       "shortDisplayName": "3rd",
+       "isOvertime": false,
+       "period": 3,
+       "displayName": "3rd Quarter"
+      }
+     },
+     {
+      "score": 10,
+      "period": {
+       "shortDisplayName": "4th",
+       "isOvertime": false,
+       "period": 4,
+       "displayName": "4th Quarter"
+      }
+     }
+    ],
+    "firstPlay": [],
+    "lastPlay": []
+   }
+  ]
+ },
+ "extensions": {}
+}

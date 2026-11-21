@@ -52,7 +52,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 
 | Function | Summary |
 |---|---|
-| [yahoo_cfb_boxscore](additional/yahoo-sports-shangrila.md#yahoo_cfb_boxscore) | Yahoo CFB box score: team and player stats, one row per entity stat. |
+| [yahoo_cfb_boxscore](additional/yahoo-sports-shangrila.md#yahoo_cfb_boxscore) | Yahoo CFB box score: player stats from the game lineups, one row per player stat. |
 | [yahoo_cfb_player_season_stats](additional/yahoo-sports-shangrila.md#yahoo_cfb_player_season_stats) | Yahoo CFB player season stats (modern; one wide row per player). |
 | [yahoo_cfb_player_season_stats_legacy](additional/yahoo-sports-shangrila.md#yahoo_cfb_player_season_stats_legacy) | Yahoo CFB legacy per-category player leaders (one wide row per player). |
 | [yahoo_cfb_scoreboard](additional/yahoo-sports-shangrila.md#yahoo_cfb_scoreboard) | Yahoo CFB scoreboard (one row per game). |

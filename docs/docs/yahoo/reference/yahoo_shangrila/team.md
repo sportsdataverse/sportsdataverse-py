@@ -1,7 +1,7 @@
 ---
 title: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Team"
 sidebar_label: "Team"
-sidebar_position: 8
+sidebar_position: 6
 description: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---

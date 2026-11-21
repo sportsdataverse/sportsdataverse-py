@@ -7,14 +7,7 @@ toc_max_heading_level: 2
 ---
 # Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)
 
-`sportsdataverse.providers.yahoo` — 107 endpoints.
-
-## Editorial
-
-| Function | Summary |
-|---|---|
-| [yahoo_editorial_boxscore](yahoo_shangrila/editorial.md#yahoo_editorial_boxscore) | Full game box score + play-by-play (normalized stat dictionaries) |
-| [yahoo_editorial_scoreboard](yahoo_shangrila/editorial-2.md#yahoo_editorial_scoreboard) | Scoreboard: games + teams + leagues + odds (fat payload) |
+`sportsdataverse.providers.yahoo` — 105 endpoints.
 
 ## Game
 

@@ -15,7 +15,7 @@ Provider      Full-name field                  Example
 ============  ===============================  ==================================
 ESPN          ``team_display_name``            ``"Ohio State Buckeyes"``
 Fox           teamnav ``entityLink.title``     ``"OHIO STATE BUCKEYES"``
-Yahoo         scoreboard ``full_name``         ``"Ohio State Buckeyes"``
+Yahoo         shangrila ``fullName``          ``"Ohio State Buckeyes"``
 The Odds API  ``home_team`` / ``away_team``    ``"Ohio State Buckeyes"``
 ============  ===============================  ==================================
 
@@ -46,8 +46,7 @@ import re
 import unicodedata
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
-from datetime import date
-from email.utils import parsedate_to_datetime
+from datetime import date, datetime, timezone
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Mapping, Optional, Sequence, TypeVar, Union
 
 import polars as pl
@@ -58,7 +57,7 @@ if TYPE_CHECKING:
 
 from sportsdataverse._codegen_runtime import _get
 from sportsdataverse._common_crosswalk_basketball import normalize_name
-from sportsdataverse._crosswalk_basketball_sources import FetchTally
+from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError, FetchTally
 from sportsdataverse._common_espn_parsers import parse_team_roster
 from sportsdataverse.cfb.cfb_fox_ext import fox_cfb_schedule, fox_cfb_team_roster, fox_cfb_teams
 from sportsdataverse.cfb.cfb_schedule import espn_cfb_calendar, espn_cfb_schedule, most_recent_cfb_season
@@ -218,18 +217,21 @@ def _matchup_key(home_norm: str, away_norm: str) -> str:
 
 
 def _yahoo_date(start_time: Optional[str]) -> Optional[str]:
-    """Parse a Yahoo ``start_time`` (RFC-2822) into an ISO ``YYYY-MM-DD``.
+    """A Yahoo kickoff (ISO-8601 with offset) as its UTC ``YYYY-MM-DD``.
 
-    Uses :func:`email.utils.parsedate_to_datetime` rather than ``strptime`` with
-    ``%a``/``%b`` directives, which are locale-dependent and would silently fail
-    on a non-English system.
+    Shangrila sends US Central time (``2025-08-30T19:00:00-05:00``). The date is
+    taken in UTC, as the editorial feed's ``+0000`` times and ESPN's dates are,
+    so an evening kickoff lands on the same date in all three.
     """
     if not start_time:
         return None
     try:
-        return parsedate_to_datetime(str(start_time)).date().isoformat()
+        when = datetime.fromisoformat(str(start_time))
     except (ValueError, TypeError):
         return None
+    if when.tzinfo is not None:
+        when = when.astimezone(timezone.utc)
+    return when.date().isoformat()
 
 
 def _iso_date(value: Optional[str]) -> Optional[str]:
@@ -399,22 +401,31 @@ def _espn_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     return out
 
 
+_YAHOO_TBD_TEAM = "ncaaf.t.0"
+
+
 def _yahoo_games(season: int, week: int, **kwargs: Any) -> List[Dict[str, Any]]:
-    raw = yahoo_cfb_scoreboard(season, week, return_parsed=False, **kwargs)
-    scoreboard = (raw.get("service") or {}).get("scoreboard") or {}
-    teams_map = scoreboard.get("teams") or {}
-    id_to_name = {tid: (team.get("full_name") or team.get("display_name")) for tid, team in teams_map.items()}
+    # global_game_id was the editorial scoreboard's ``global_gameid``; shangrila
+    # (the only Yahoo feed since 2026-11-20) has no counterpart, so it is null.
+    # An undecided side carries team id ncaaf.t.0 ("TBD TBD"). A game with both
+    # sides undecided is an unscheduled slot the editorial feed never listed, so
+    # it is skipped; one undecided side is nulled, as the editorial feed had it
+    # (e.g. "TBD @ Boise State", keyed on Boise State alone). A TBA kickoff has
+    # no start_time, so its date is start_date's local day.
     out: List[Dict[str, Any]] = []
-    for gid, game in (scoreboard.get("games") or {}).items():
-        home = id_to_name.get(game.get("home_team_id"))
-        away = id_to_name.get(game.get("away_team_id"))
-        home_norm, away_norm = _norm_team(home), _norm_team(away)
+    for r in _rows(yahoo_cfb_scoreboard(season, week, **kwargs)):
+        home_tbd = r.get("home_team_id") == _YAHOO_TBD_TEAM
+        away_tbd = r.get("away_team_id") == _YAHOO_TBD_TEAM
+        if home_tbd and away_tbd:
+            continue
+        home = None if home_tbd else r.get("home_team")
+        away = None if away_tbd else r.get("away_team")
         out.append(
             {
-                "matchup_key": _matchup_key(home_norm, away_norm),
-                "game_id": gid,
-                "global_game_id": game.get("global_gameid"),
-                "date": _yahoo_date(game.get("start_time")),
+                "matchup_key": _matchup_key(_norm_team(home), _norm_team(away)),
+                "game_id": r.get("game_id"),
+                "global_game_id": None,
+                "date": _yahoo_date(r.get("start_time")) or _iso_date(r.get("start_date")),
                 "home_team": home,
                 "away_team": away,
             }
@@ -471,6 +482,9 @@ def _yahoo_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
     # A 404 week is empty; any failed week raises CrosswalkSourceError. Skipping it
     # dropped that week's Yahoo ids and Yahoo-only rows, so two builds of the same
     # season differed (1,565 vs 1,608 rows on 2026-10-12). Dedup by game id.
+    # A season where EVERY week is empty or 404 raises too: that is an outage,
+    # not a schedule (the editorial retirement on 2026-11-20 answered 404 for
+    # every week and published crosswalks with zero Yahoo ids).
     out: List[Dict[str, Any]] = []
     seen: set[Any] = set()
     tally = FetchTally("yahoo_cfb_scoreboard", strict=True)
@@ -488,6 +502,8 @@ def _yahoo_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
                 seen.add(gid)
             out.append(row)
     tally.finish()
+    if not out:
+        raise CrosswalkSourceError(f"yahoo_cfb_scoreboard(season={season}): every week 1-23 was empty or 404")
     return out
 
 
@@ -1056,11 +1072,10 @@ def cfb_teams_crosswalk(
     ``matched_sources`` column records which providers contributed.
 
     Args:
-        season: Season year used only to fetch Yahoo's embedded team directory
-            (Yahoo has no standalone teams endpoint). Defaults to the most
-            recent CFB season.
-        week: Schedule week used for the Yahoo scoreboard fetch. Defaults to
-            ``1``. The embedded directory is the full league list regardless.
+        season: Season year sent to Yahoo's ``leagueTeams`` directory, which
+            answers with the current directory for any season. Defaults to the
+            most recent CFB season.
+        week: Ignored; kept so existing calls still work. Defaults to ``1``.
         providers: Which sources to include — any of ``"espn"``, ``"fox"``,
             ``"yahoo"``. ``None`` (default) uses all three; pass a subset for a
             pairwise crosswalk (e.g. ``("espn", "fox")``) or a single source.
@@ -1151,10 +1166,13 @@ def cfb_schedule_crosswalk(
         ``matchup_key``, ``espn_game_id``, ``fox_game_id``, ``yahoo_game_id``,
         ``yahoo_global_game_id``, ``home_team``, ``away_team``, ``espn_date``,
         ``fox_date``, ``yahoo_date``, ``matched_sources``.
+        ``yahoo_global_game_id`` is always null: it came from Yahoo's editorial
+        scoreboard, retired 2026-11-20, and shangrila has no counterpart.
 
     Raises:
         CrosswalkSourceError: Full-season mode, a provider fetch failed after its
-            retries (a 404 is "no games", never a failure).
+            retries (a 404 is "no games", never a failure), or every Yahoo week
+            came back empty or 404.
 
     Example:
         Crosswalk the whole season (regular + bowls + CFP)::
@@ -1181,7 +1199,15 @@ def cfb_schedule_crosswalk(
         rows = _merge_schedule(
             _espn_games(season, week, season_type, **kwargs) if "espn" in sel else [],
             _fox_games(season, week, **kwargs) if "fox" in sel else [],
-            _yahoo_games(season, week, **kwargs) if "yahoo" in sel else [],
+            # a 404 week is "no Yahoo games" (columns null); a failed fetch raises
+            (
+                FetchTally("yahoo_cfb_scoreboard", strict=True).fetch(
+                    f"season={season} week={week}", lambda: _yahoo_games(season, week, **kwargs)
+                )
+                or []
+            )
+            if "yahoo" in sel
+            else [],
         )
     return _materialize(rows, _SCHEDULE_SCHEMA, return_as_pandas)
 

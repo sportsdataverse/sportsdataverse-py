@@ -1,7 +1,7 @@
 ---
 title: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: oly_medal–racing_schedule"
 sidebar_label: "Other: oly_medal–racing_schedule"
-sidebar_position: 9
+sidebar_position: 7
 description: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: oly_medal–racing_schedule — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---

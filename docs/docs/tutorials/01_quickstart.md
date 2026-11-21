@@ -361,7 +361,7 @@ for lg, fns in hits.items():
       wc: espn_wc_scoreboard
     cricket: espn_cricket_scoreboard
      cbs: cbs_game_scoring_scoreboard
-    yahoo: yahoo_editorial_scoreboard, yahoo_scoreboard_game
+    yahoo: yahoo_scoreboard_game
      fox: fox_api_scoreboard, fox_api_topevents_scoreboard_segment
 
 

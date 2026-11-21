@@ -10,17 +10,20 @@ description: "College football — additional Python functions — Yahoo Sports 
 
 `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
-Yahoo CFB box score: team and player stats, one row per entity stat.
+Yahoo CFB box score: player stats from the game lineups, one row per player stat.
 
-Wraps the editorial `boxscore/{game_id}` resource. Its box score is a
-decoder-dictionary schema
-(`player_stats[playerId][variation][stat_type] = value`, same for
-`team_stats`) that this decodes against the payload's `stat_types` /
-`stat_categories` dictionaries into a long frame: one row per team stat
-and per player stat. Pivot on `stat_type_id` for a wide box. The editorial
-payload carries no player names; a player's team comes from the game's
-home/away lineups. Pass `return_parsed=False` for the raw payload, which
-also carries play-by-play and drives.
+Wraps the shangrila `playbookBoxscore` query. Each side's lineup lists
+the players Yahoo features, each with up to 12 headline stats (passing,
+rushing and receiving yards and touchdowns, receptions, tackles, sacks,
+field goals and extra points made); names come from the payload's
+`footballStatTypes`. Pivot on `stat_type_id` for a wide box.
+
+Yahoo retired the editorial `boxscore` this used to wrap on 2026-11-20.
+Shangrila has no full box score: there are no team-stat rows, a lineup
+covers about a dozen players per side, and stat ids are shangrila names
+(`PASSING_YARDS`) rather than `ncaaf.stat_type.<n>`. Pass
+`return_parsed=False` for the raw payload, which also carries drives,
+play-by-play and the win-probability timeline.
 
 **Parameters**
 
@@ -32,25 +35,26 @@ also carries play-by-play and drives.
 
 **Returns**
 
-A polars DataFrame by default (pandas when `return_as_pandas=True`) with one row per team or player stat, every column `Utf8`, and zero rows (same columns) for an empty payload; the raw editorial boxscore JSON `dict` when `return_parsed=False`: | Column | Type | Description | |---|---|---| | `game_id` | Utf8 | Dotted Yahoo game id (`ncaaf.g.<date><n>`). | | `team_id` | Utf8 | Dotted Yahoo team id (`ncaaf.t.<n>`); null for a player missing from the lineups. | | `home_away` | Utf8 | `"home"` or `"away"`. | | `player_id` | Utf8 | Dotted Yahoo player id (`ncaaf.p.<n>`); null on team-stat rows. | | `stat_category` | Utf8 | `Passing`, `Rushing`, `Receiving`, `Kicking`, `Returns`, `Punting`, `Defense` or `Team`. | | `stat_type_id` | Utf8 | Yahoo stat type id (`ncaaf.stat_type.105`). | | `stat_name` | Utf8 | Stat name (`Yards`, `Third Down Efficiency`). | | `stat_abbreviation` | Utf8 | Short stat label (`Yds`, `3DE`). | | `stat_variation` | Utf8 | Stat variation name (`Game`). | | `value` | Utf8 | Stat value as Yahoo sends it (`"188"`, `"73.2"`, `"1-14"`). |
+A polars DataFrame by default (pandas when `return_as_pandas=True`) with one row per player stat, every column `Utf8`, and zero rows (same columns) for an empty payload; the raw `playbookBoxscore` JSON `dict` when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | String | ESPN game identifier. |
-| `team_id` | String | ESPN team id. |
-| `home_away` | String | `home` or `away`. |
-| `player_id` | String | ESPN player id from the roster entry. |
-| `stat_category` | String |  |
-| `stat_type_id` | String |  |
-| `stat_name` | String | Internal stat key (e.g. `passingYards`). |
-| `stat_abbreviation` | String |  |
-| `stat_variation` | String |  |
-| `value` | String | Metric value. |
+| `game_id` | String | Dotted Yahoo game id ("ncaaf.g.<date><n>"). |
+| `team_id` | String | Dotted Yahoo team id ("ncaaf.t.<n>"). |
+| `home_away` | String | "home" or "away". |
+| `player_id` | String | Dotted Yahoo player id ("ncaaf.p.<n>"). |
+| `stat_category` | String | "Passing", "Rushing", "Receiving", "Defense" or "Kicking". |
+| `stat_type_id` | String | Shangrila stat id ("PASSING_YARDS"). |
+| `stat_name` | String | Stat name ("Passing Yards"). |
+| `stat_abbreviation` | String | Short stat label. |
+| `stat_variation` | String | Stat scope of the row; always "Game" because the shangrila lineup carries single-game stats only. |
+| `value` | String | Stat value as Yahoo sends it ("188"). |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
+| `NoDataError` | Yahoo answered 404. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**
@@ -59,13 +63,13 @@ A polars DataFrame by default (pandas when `return_as_pandas=True`) with one row
 from sportsdataverse.cfb import yahoo_cfb_boxscore
 box = yahoo_cfb_boxscore("ncaaf.g.202509200023")
 
-# Raw JSON (includes play-by-play and drives)
+# Raw JSON (includes drives and play-by-play)
 
 raw = yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=False)
 
-# Wide team box (one line)
+# Wide player box (one line)
 
-box.filter(pl.col("player_id").is_null()).pivot("stat_name", index="team_id", values="value")
+box.pivot("stat_type_id", index="player_id", values="value")
 ```
 
 ### yahoo_cfb_player_season_stats {#yahoo_cfb_player_season_stats}
@@ -260,10 +264,17 @@ df = yahoo_cfb_player_season_stats_legacy(
 
 Yahoo CFB scoreboard (one row per game).
 
-Wraps the editorial `scoreboard` resource and flattens the `games` map.
-`season` is required — there is no meaningful default for a weekly
-scoreboard and the API has no concept of "current season". The full raw
-payload also carries teams/leagues/odds maps (use `return_parsed=False`).
+Two shangrila calls: `leagueGameIdsByDate` lists the week's game ids
+(every division Yahoo carries, FBS through NAIA), then `scoreboardGame`
+fetches those games in one comma-joined batch. `season` is required --
+there is no meaningful default for a weekly scoreboard. Postseason games
+carry on the week count (bowls and the CFP run to about week 21); a week
+with no games returns zero rows. Unscheduled postseason slots are listed
+too, as `TBD @ TBD` games whose team ids are both `ncaaf.t.0`.
+
+Yahoo retired the editorial `scoreboard` this used to wrap on
+2026-11-20. Shangrila has no counterpart for its `global_gameid`, and
+the columns are new: they are listed below.
 
 **Parameters**
 
@@ -271,117 +282,42 @@ payload also carries teams/leagues/odds maps (use `return_parsed=False`).
 |---|---|---|---|
 | `season` | `int` |  | Season year (required). |
 | `week` | `int` | `1` | Schedule week number. Defaults to `1`. |
-| `count` | `int` | `500` | Maximum number of games to request. Defaults to `500`. |
-| `return_parsed` | `bool` | `True` | If `True` (default) flatten the games map to a DataFrame; if `False` return the raw JSON `dict`. |
+| `count` | `int` | `500` | Ignored. Kept so existing calls still work; `leagueGameIdsByDate` returns the whole week. |
+| `return_parsed` | `bool` | `True` | If `True` (default) flatten the games to a DataFrame; if `False` return `{"data": {"games": [...]}}`, the merged raw `scoreboardGame` entries (odds, records and venue included). |
 | `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
 **Returns**
 
-A polars DataFrame (default) with one row per game, a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`. Includes self-describing `season` and `week` columns.
+A polars DataFrame (default; pandas when `return_as_pandas=True`) with one row per game, and zero rows with the same columns for an empty week.
 
 | col_name | type | description |
 |---|---|---|
-| `gameid` | String | Date-encoded Yahoo composite game id for this row (e.g., "ncaaf.g.202509200023"). |
-| `global_gameid` | String | Yahoo cross-provider game id, distinct from the date-encoded gameid (e.g., "ncaaf.g.13556882"). |
-| `start_time` | String | Game start time. |
-| `is_time_tba` | Boolean | Flag indicating that the scheduled start time has not yet been announced. |
-| `season_phase_id` | String | Identifier of the season phase the game falls in (e.g., "season.phase.season"). |
-| `game_type` | String |  |
-| `winning_team_id` | String | Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29"). |
-| `is_rank_upset` | Boolean | Flag indicating that the lower-ranked side won, judged against the teams' poll rankings. |
-| `is_spread_upset` | Boolean | Flag indicating that the winning side was the betting underdog against the closing spread. |
-| `outcome_type` | String | Outcome classification for a completed game (e.g., "outcome.type.won", "outcome.type.tied"). |
-| `home_team_id` | String | ESPN home team id (parsed from `home_team_ref`). |
-| `away_team_id` | String | ESPN away team id (parsed from `away_team_ref`). |
-| `week_number` | String |  |
-| `navigation_links` | String |  |
-| `sportacular_url` | String | Deep link into the Yahoo Sportacular mobile app for this game (a "ysportacular://" URL). |
-| `status_display_name` | String | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
-| `status_description` | String |  |
-| `status_type` | String | Status type. |
-| `total_away_points` | String | Points scored by the away team in the game. |
-| `current_period_id` | String | Ordinal number of the period currently in progress, counting from 1. |
-| `total_home_points` | String | Points scored by the home team in the game. |
-| `total_away_shootout_points` | String | Shootout goals converted by the away team, populated only for sports that break ties by shootout. |
-| `total_home_shootout_points` | String | Shootout goals converted by the home team, populated only for sports that break ties by shootout. |
-| `home_team_stats` | String | JSON-encoded team-stat block for the home team, populated once the game is under way. |
-| `away_team_stats` | String | JSON-encoded team-stat block for the away team, populated once the game is under way. |
-| `game_period_balls` | String | Balls in the count for the at-bat in progress; baseball only. |
-| `game_period_strikes` | String | Strikes in the count for the at-bat in progress; baseball only. |
-| `game_period_outs` | String | Outs recorded so far in the current half-inning; baseball only. |
-| `yards_to_endzone` | String | Distance from the current ball spot to the opponent's goal line, in yards. |
-| `start_yardline` | String | Yard line at the drive start. |
-| `distance` | String | Yards to gain for a first down (or to the goal line in goal-to-go situations). |
-| `down` | String | Down of the play (1-4). |
-| `team_in_possession` | String | Yahoo team id of the side currently in possession of the ball. |
-| `power_play_strength_home` | String | Number of skaters the home team has on the ice during special-teams play; hockey only. |
-| `power_play_strength_away` | String | Number of skaters the away team has on the ice during special-teams play; hockey only. |
-| `game_time_elapsed` | String | Playing time elapsed in the game, in seconds. |
-| `game_time_elapsed_display` | String | Playing time elapsed formatted for display (e.g., "67:12"), used by sports whose clock counts up. |
-| `inning_status` | String | Half-inning indicator for a game in progress (e.g., "Top", "Bottom"); baseball only. |
-| `away_timeouts` | String | Away-team timeouts remaining. |
-| `home_timeouts` | String | Home-team timeouts remaining. |
-| `is_halftime` | String | Flag indicating that the game is currently stopped at halftime. |
-| `minimum_periods` | Int64 | Number of periods a game of this sport runs before overtime is required (4 for football, 9 for baseball). |
-| `game_periods` | Int64 | JSON-encoded list of the game's period nodes, each carrying a period number and its display names. |
-| `baserunners` | String | JSON-encoded baserunner occupancy for the game in progress; baseball only. |
-| `season` | Int64 | Season (4-digit year). |
-| `subleague` | String | Sub-league the game belongs to, for leagues split into constituent circuits. |
-| `subleague_display_name` | String | Display name of the sub-league the game belongs to. |
-| `agg_score` | String | Aggregate score across the legs of a two-leg tie, populated only for competitions decided on aggregate. |
-| `leg_number` | String | Ordinal of this leg within a multi-leg tie, counting from 1. |
-| `tv_coverage` | String | Network carrying the game, as a short broadcast abbreviation (e.g., "CBS", "ESPN"). |
-| `provider_coverage` | String |  |
-| `seatgeek_id` | String | SeatGeek performer or event identifier used to build the ticket-purchase link. |
-| `last_updated` | String | Timestamp ESPN last refreshed the power index. |
-| `teams` | String |  |
-| `play_by_play` | String | JSON-encoded data-island pointer to the game's play-by-play collection in the same editorial payload. |
-| `pitches` | String | JSON-encoded data-island pointer to the game's pitch-level feed; baseball only. |
-| `at_bat` | String | JSON-encoded data-island pointer to the game's current at-bat feed; baseball only. |
-| `penalty_summary` | String |  |
-| `scoring_summary` | String |  |
-| `stat_categories` | String | JSON-encoded pointer to the stat-category dictionary that groups this feed's statistics. |
-| `stadium` | String |  |
-| `stadium_id` | String |  |
-| `stadium_image` | String | JSON-encoded data-island pointer to the venue photograph used on the game page. |
-| `attendance` | String | Reported attendance at the game. |
-| `lineups` | String | JSON-encoded data-island pointer to the game's lineup collection. |
-| `top_performer` | String | JSON-encoded data-island pointer to the game's top-performing players. |
-| `players` | String |  |
-| `byline` | String |  |
-| `highlight` | String | JSON-encoded data-island pointer to the game's highlight video. |
-| `highlights` | String | Game highlight urls. |
-| `live_video` | String | JSON-encoded data-island pointer to the live video stream for the game. |
-| `odds` | String | JSON-encoded data-island pointer to the game's odds collection. |
-| `current_players` | String | JSON-encoded data-island pointer to the players currently on the field, ice or court. |
-| `last_play` | String | Free-text description of the most recent play. |
-| `series_type` | String | JSON-encoded data-island pointer to the kind of series the game belongs to. |
-| `series_status` | String | JSON-encoded data-island pointer to the current state of the series the game belongs to. |
-| `games` | String | Number of games included in the ATS summary. |
-| `series_games` | String | JSON-encoded data-island pointer to the games making up the series. |
-| `game_details` | String | JSON-encoded data-island pointer to supplementary detail notes for the game. |
-| `section_notes` | String | JSON-encoded data-island pointer to editorial section notes attached to the game page. |
-| `articles` | String | JSON-encoded data-island pointer to the editorial articles attached to the game. |
-| `tweets` | String | JSON-encoded data-island pointer to the social posts attached to the game page. |
-| `playoff_round` | String |  |
-| `media_stream` | String | JSON-encoded data-island pointer to the game's media-stream collection. |
-| `playoff_series_status` | String | JSON-encoded data-island pointer to the current state of the playoff series the game belongs to. |
-| `playoff_series_details` | String | JSON-encoded data-island pointer to detail about the playoff series the game belongs to. |
-| `drives` | String | JSON-encoded data-island pointer to the game's drive collection; football only. |
-| `user_teams_game` | String | JSON-encoded data-island pointer to the viewer's followed-team context for the game. |
-| `page_metadata` | String | JSON-encoded data-island pointer to the SEO and page metadata for the entity. |
-| `penalty_box` | String | JSON-encoded data-island pointer to the game's penalty-box feed; hockey only. |
-| `starting_pitchers` | String | JSON-encoded data-island pointer to the game's announced starting pitchers; baseball only. |
-| `unrestricted_streams` | String | JSON-encoded data-island pointer to the streams viewable without a subscription. |
-| `tv_details` | String | JSON-encoded list of broadcast entries for the game, each carrying a network abbreviation and full channel name (e.g., [{"abbr": "NBC", "name": "NBC/Peacock"}]). |
-| `away_seed` | String |  |
-| `home_seed` | String |  |
-| `week` | Int64 | Game week of the season. |
+| `game_id` | String | Dotted Yahoo game id ("ncaaf.g.202508230021"). |
+| `display_name` | String | "Away @ Home" label. |
+| `start_time` | String | Kickoff, ISO-8601 with the US Central offset; null while the time is TBA. |
+| `start_date` | String | Kickoff date with offset ("2025-08-23-05:00"). |
+| `status` | String | "PREGAME", "FINAL", or an in-game status while live. |
+| `status_display_name` | String | Display status ("Final"). |
+| `season` | Int64 | Season year the game belongs to (the fall year, so a January bowl is the prior season). |
+| `season_phase` | String | "REGULAR_SEASON" or "POSTSEASON". |
+| `week` | Int64 | Yahoo week number. |
+| `home_team_id` | String | Dotted home team id ("ncaaf.t.<n>"). |
+| `home_team` | String | Home team full name ("Kansas State Wildcats"). |
+| `home_abbreviation` | String | Home team abbreviation. |
+| `home_score` | Int64 | Home points; null before kickoff. |
+| `away_team_id` | String | Dotted away team id. |
+| `away_team` | String | Away team full name. |
+| `away_abbreviation` | String | Away team abbreviation. |
+| `away_score` | Int64 | Away points; null before kickoff. |
+| `winning_team_id` | String | Dotted id of the winner; null until final. |
+| `display_result` | String | Score line ("24-21"). |
+| `venue` | String | Name of the stadium the game is played in, as Yahoo lists it. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
+| `NoDataError` | Yahoo answered 404. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**
@@ -595,46 +531,51 @@ df = yahoo_cfb_team_season_stats_legacy(
 
 Yahoo CFB team directory (one row per team).
 
-Yahoo has no standalone teams resource (the documented
-`sports.league.teams` resource 404s without auth). Instead the editorial
-`scoreboard` payload is "fat": one call embeds the full ~186-team
-directory under `service.scoreboard.teams` keyed by the dotted
-`ncaaf.t.<id>` team id. This wrapper pulls that map for the requested
-`(season, week)` and projects it to the directory columns -- it is the
-Yahoo side of `sportsdataverse.cfb.cfb_teams_crosswalk`.
+Wraps the shangrila `leagueTeams` query (`league=ncaaf`): every team
+Yahoo carries, about 540 across FBS, FCS, D2, D3, NAIA and USCAA, keyed by
+the dotted `ncaaf.t.<n>` id. It is the Yahoo side of
+`sportsdataverse.cfb.cfb_teams_crosswalk`.
+
+Until 2026-11-20 this read the team map embedded in the editorial
+scoreboard (about 265 FBS + FCS teams). Yahoo retired that feed. Shangrila
+has no conference abbreviation and no SeatGeek id, so
+`conference_abbreviation` and `seatgeek_id` stay as all-null columns,
+and `conference_id` / `division_id` are shangrila's own ids (ACC is
+`"1"`), not the editorial ones.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int` |  | Season year (required; the scoreboard is fetched to obtain the embedded teams map). |
-| `week` | `int` | `1` | Schedule week used to fetch the scoreboard. Defaults to `1`. The embedded directory is the full league list regardless of week. |
-| `return_parsed` | `bool` | `True` | If `True` (default) flatten the teams map to a DataFrame; if `False` return the raw scoreboard JSON `dict`. |
+| `season` | `int` |  | Season year. Sent to Yahoo, but `leagueTeams` answers with the current directory for any season (2004 and 2025 return the same ids). |
+| `week` | `int` | `1` | Ignored. Kept so existing calls still work. |
+| `return_parsed` | `bool` | `True` | If `True` (default) project the teams to a DataFrame; if `False` return the raw `leagueTeams` JSON `dict`. |
 | `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. Ignored when `return_parsed=False`. |
 
 **Returns**
 
-A polars DataFrame (default) with one row per team -- columns `team_id`, `abbreviation`, `display_name`, `full_name`, `location`, `nickname`, `conference`, `conference_abbreviation`, `conference_id`, `division`, `division_id`, `seatgeek_id` -- a pandas DataFrame when `return_as_pandas=True`, or the raw scoreboard JSON `dict` when `return_parsed=False`.
+A polars DataFrame (default; pandas when `return_as_pandas=True`) with one row per team, every column `Utf8`.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | String | ESPN team id. |
-| `abbreviation` | String | Metric abbreviation. |
-| `display_name` | String | Human-readable metric name. |
-| `full_name` | String | Venue full name (e.g. `Tenney Stadium`). |
-| `location` | String | Team location / school name. |
-| `nickname` | String | Team nickname / location label. |
-| `conference` | String | Conference of the team. |
-| `conference_abbreviation` | String |  |
-| `conference_id` | String | Referencing conference id. |
-| `division` | String | Division in the conference for the team. |
-| `division_id` | String |  |
-| `seatgeek_id` | String | SeatGeek performer or event identifier used to build the ticket-purchase link. |
+| `team_id` | String | Dotted Yahoo team id ("ncaaf.t.1"). |
+| `abbreviation` | String | Team abbreviation ("CLEM"). |
+| `display_name` | String | Short name ("Clemson"). |
+| `full_name` | String | School and nickname ("Clemson Tigers"). |
+| `location` | String | School / place name. |
+| `nickname` | String | Team nickname ("Tigers"). |
+| `conference` | String | Conference name ("Atlantic Coast"). |
+| `conference_abbreviation` | String | Always null: shangrila carries none. |
+| `conference_id` | String | Yahoo shangrila conference id as a string ("1" is the ACC); not the old editorial numbering. |
+| `division` | String | "FBS", "FCS", "D2", "D3", "NAIA" or "USCAA". |
+| `division_id` | String | Shangrila division id ("1" is FBS). |
+| `seatgeek_id` | String | Always null: shangrila carries none. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
+| `NoDataError` | Yahoo answered 404. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**

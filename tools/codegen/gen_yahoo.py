@@ -5,57 +5,47 @@ Spec-driven, NOT reverse engineering: every wrapper, parameter and returns-colum
 below is read out of a committed spec. Idempotent -- the same specs yield
 byte-identical output. Modeled on :mod:`gen_on3`.
 
-Two of the three specs are folded into ONE stem (``yahoo_shangrila``), the way
-``on3.yaml`` folds its single ``/rdb/v2`` route in, via an endpoint-level
-``host:`` override:
+Only ``yahoo-sports-shangrila.openapi.yaml`` is wrapped: 105 persisted GraphQL
+queries on ``graphite-secure.sports.yahoo.com/v1/query/shangrila``.
 
-* ``yahoo-sports-shangrila.openapi.yaml`` -- 105 persisted GraphQL queries on
-  ``graphite-secure.sports.yahoo.com/v1/query/shangrila``. Family host.
-* ``yahoo-sports-editorial.openapi.yaml`` -- 2 routes on
-  ``api-secure.sports.yahoo.com/v1/editorial/s`` (scoreboard + boxscore), carried
-  as ``editorial_*`` endpoints with a ``host:`` override.
+The two other specs are deliberately NOT wrapped:
 
-The third spec (``yahoo-sports-ncp.openapi.yaml``, 1 path) is deliberately NOT
-wrapped: it is marked ``deprecated: true`` in its own spec and resolves only
-inside an authenticated page context (needs consent cookies + a crumb), returning
-401/404 to any programmatic request. Its one payload -- the league team list -- is
-already reachable unauthenticated through ``editorial_scoreboard``.
+* ``yahoo-sports-editorial.openapi.yaml`` (scoreboard + boxscore on
+  ``api-secure.sports.yahoo.com/v1/editorial/s``). Yahoo retired that feed on
+  2026-11-20 (HTTP 404 for every league), so its two ``editorial_*`` wrappers were
+  removed. ``scoreboardGame`` and ``playbookBoxscore`` replace them.
+* ``yahoo-sports-ncp.openapi.yaml`` (1 path). It is marked ``deprecated: true`` in
+  its own spec and resolves only inside an authenticated page context (needs
+  consent cookies + a crumb), returning 401/404 to any programmatic request. Its
+  one payload -- the league team list -- is reachable through ``leagueTeams``.
 
-Auth: none. ``graphite-secure`` and ``api-secure`` only require
-``Origin``/``Referer`` headers, which
+Auth: none. ``graphite-secure`` only requires ``Origin``/``Referer`` headers, which
 :mod:`sportsdataverse.providers.yahoo.yahoo_shangrila_runtime` supplies -- so the YAML sets
 ``getter_module`` but NOT ``auth: true``.
 
 The three locale parameters every path declares (``lang``/``region``/``tz``, all
 optional with spec defaults) are NOT emitted as wrapper arguments: the runtime
 sends the spec defaults and a caller overrides them with ``params={"lang": ...}``.
-Emitting them would add three no-op arguments to all 107 wrappers.
+Emitting them would add three no-op arguments to all 105 wrappers.
 
-Returns-schemas:
-
-* shangrila -- resolved from the spec's 200-response component by descending
-  through single-key wrapper levels (``data.leagues[].leaders[]`` -> the
-  ``leaders`` item), then flattening nested objects the way
-  :func:`pandas.json_normalize` does, so the ``@return`` table matches the
-  columns the parser actually emits. Endpoints whose ``data`` object carries more
-  than one collection get ``kind: frames`` (one section per collection).
-* editorial -- the spec's two response components enumerate concrete captured
-  game ids as property names, so they carry no reusable column list. Those two
-  schemas are instead derived by running the real parser over the committed
-  captures in ``yahoo/discovery/responses/``.
+Returns-schemas are resolved from the spec's 200-response component by descending
+through single-key wrapper levels (``data.leagues[].leaders[]`` -> the ``leaders``
+item), then flattening nested objects the way :func:`pandas.json_normalize` does,
+so the ``@return`` table matches the columns the parser actually emits. Endpoints
+whose ``data`` object carries more than one collection get ``kind: frames`` (one
+section per collection).
 
 Run: ``python tools/codegen/gen_yahoo.py``
 """
 
 from __future__ import annotations
 
-import json
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
-from gen_soccer_common import refs_root, snake_path, write_yaml
+from gen_soccer_common import refs_root, write_yaml
 from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
@@ -63,10 +53,8 @@ from sportsdataverse.dl_utils import underscore
 ROOT = Path(__file__).resolve().parents[2]
 
 HOST = "https://graphite-secure.sports.yahoo.com/v1/query/shangrila"
-EDITORIAL_HOST = "https://api-secure.sports.yahoo.com/v1/editorial/s"
 
 _SHANGRILA_PREFIX = "/v1/query/shangrila/"
-_EDITORIAL_PREFIX = "/v1/editorial/s/"
 
 # Locale params carried by every path; handled by the runtime, not the signature.
 _LOCALE_PARAMS = {"lang", "region", "tz"}
@@ -83,8 +71,6 @@ _DTYPE = {
 }
 # JSON-schema type -> python arg annotation for query/path params.
 _PYTYPE = {"integer": "int", "string": "str", "boolean": "bool", "number": "float"}
-
-_TOKEN = re.compile(r"\{([^}]+)\}")
 
 
 def _load(name: str) -> dict:
@@ -248,94 +234,13 @@ def _shangrila_entries(spec: dict) -> List[Dict[str, Any]]:
     return entries
 
 
-def _editorial_entries(spec: dict) -> List[Dict[str, Any]]:
-    entries: List[Dict[str, Any]] = []
-    for path in sorted(spec["paths"]):
-        op = spec["paths"][path]["get"]
-        tail = path[len(_EDITORIAL_PREFIX) :]
-        short = f"editorial_{_short(_TOKEN.sub('', tail))}"
-        pps = [{"name": underscore(tok), "type": "str", "required": True} for tok in _TOKEN.findall(tail)]
-        entry: Dict[str, Any] = {
-            "short": short,
-            "summary": op.get("summary") or f"GET {path}",
-            "host": EDITORIAL_HOST,
-            "path": "/" + snake_path(tail),
-            "parser": "parse_yahoo_editorial",
-            "returns_schema": f"native/yahoo_shangrila/{short}",
-            "docstring": {
-                "parsed_doc": "A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections",
-            },
-        }
-        if pps:
-            entry["path_params"] = pps
-            entry["example_args"] = {"game_id": "ncaaf.g.202509200023"}
-        qps = _query_params(op, pytypes=_PYTYPE, skip=_LOCALE_PARAMS | {p["name"] for p in pps}, description=None)
-        if qps:
-            entry["extra_params"] = qps
-        entries.append(entry)
-    return entries
-
-
-# ---------------------------------------------------------------------------
-# editorial returns-schemas (derived from the committed captures)
-# ---------------------------------------------------------------------------
-
-_CAPTURES = {
-    "editorial_scoreboard": "editorial_scoreboard_ncaaf.json",
-    "editorial_boxscore": "editorial_boxscore_ncaaf.json",
-}
-
-
-def _pl_doc_type(dtype: Any) -> str:
-    s = str(dtype).lower()
-    if "int" in s:
-        return "integer"
-    if "float" in s or "decimal" in s:
-        return "numeric"
-    if "bool" in s:
-        return "logical"
-    return "character"
-
-
-def _editorial_schema_docs() -> Dict[str, Dict[str, Any]]:
-    """``kind: frames`` schemas for the two editorial endpoints.
-
-    Built by running the real parser over the committed NCAAF captures, so the
-    documented columns are exactly the ones a caller gets back. Returns an empty
-    mapping when the captures are unavailable (the endpoints then keep an empty
-    returns-schema rather than a fabricated one).
-    """
-    from sportsdataverse.providers.yahoo.yahoo_shangrila_parsers import parse_yahoo_editorial
-
-    resp_dir = refs_root() / "yahoo" / "discovery" / "responses"
-    docs: Dict[str, Dict[str, Any]] = {}
-    for short, fname in _CAPTURES.items():
-        src = resp_dir / fname
-        if not src.exists():
-            continue
-        tables = parse_yahoo_editorial(json.loads(src.read_text(encoding="utf-8")))
-        docs[short] = {
-            "schema": short,
-            "kind": "frames",
-            "frames": [
-                {
-                    "section": name,
-                    "columns": [{"name": c, "type": _pl_doc_type(df.schema[c]), "description": ""} for c in df.columns],
-                }
-                for name, df in tables.items()
-            ],
-        }
-    return docs
-
-
 # ---------------------------------------------------------------------------
 
 
 def main() -> None:
     shangrila = _load("yahoo-sports-shangrila.openapi.yaml")
-    editorial = _load("yahoo-sports-editorial.openapi.yaml")
 
-    entries = [*_shangrila_entries(shangrila), *_editorial_entries(editorial)]
+    entries = _shangrila_entries(shangrila)
     shorts = [e["short"] for e in entries]
     dupes = sorted({s for s in shorts if shorts.count(s) > 1})
     if dupes:
@@ -379,16 +284,8 @@ def main() -> None:
         short = _short(path[len(_SHANGRILA_PREFIX) :])
         props = _data_props(shangrila["paths"][path]["get"], shangrila)
         write_yaml(schema_dir / f"{short}.yaml", _schema_doc(short, props))
-    editorial_docs = _editorial_schema_docs()
-    for short in _CAPTURES:
-        write_yaml(
-            schema_dir / f"{short}.yaml",
-            editorial_docs.get(short) or {"schema": short, "kind": "dataframe", "columns": []},
-        )
 
-    print(
-        f"yahoo_shangrila: {len(entries)} endpoints ({len(shangrila['paths'])} shangrila + {len(_CAPTURES)} editorial)"
-    )
+    print(f"yahoo_shangrila: {len(entries)} endpoints")
 
 
 if __name__ == "__main__":

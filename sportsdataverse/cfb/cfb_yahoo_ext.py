@@ -1,11 +1,14 @@
 """Yahoo Sports college-football wrappers (hand-written ext).
 
 Read-only wrappers over Yahoo's shangrila stats graph
-(``graphite-secure.sports.yahoo.com/v1/query/shangrila``) and editorial feed
-(``api-secure.sports.yahoo.com/v1/editorial/s``). Reverse-engineering notes +
-per-host OpenAPI specs are kept in the maintainers' private reference
-notes. NCAAF vertical slice. No auth: the
-hosts only require Origin/Referer headers.
+(``graphite-secure.sports.yahoo.com/v1/query/shangrila``). Reverse-engineering
+notes + per-host OpenAPI specs are kept in the maintainers' private reference
+notes. NCAAF vertical slice. No auth: the host only requires Origin/Referer
+headers.
+
+Yahoo retired its editorial feed (``api-secure.sports.yahoo.com/v1/editorial/s``)
+on 2026-11-20 -- every league answers 404 -- so the scoreboard, team directory
+and box score that used it now read shangrila queries instead.
 
 Mirrors the sibling ``cfb_fox_ext.py`` contract (``return_parsed`` /
 ``return_as_pandas``; polars by default, raw ``Dict`` when ``return_parsed=False``).
@@ -22,6 +25,7 @@ if TYPE_CHECKING:
     import pandas as pd
 
 from sportsdataverse._codegen_runtime import _get
+from sportsdataverse.errors import AssetFetchError, NoDataError
 
 __all__ = [
     "yahoo_cfb_boxscore",
@@ -33,7 +37,6 @@ __all__ = [
     "yahoo_cfb_team_season_stats_legacy",
 ]
 
-EDITORIAL_BASE = "https://api-secure.sports.yahoo.com/v1/editorial/s"
 SHANGRILA_BASE = "https://graphite-secure.sports.yahoo.com/v1/query/shangrila"
 _HEADERS = {"Origin": "https://sports.yahoo.com", "Referer": "https://sports.yahoo.com/"}
 
@@ -51,12 +54,6 @@ def _shangrila_get(query_name: str, params: Dict[str, Any], **kwargs: Any) -> Di
     """GET a shangrila persisted query, merging the common locale params."""
     merged = {"lang": "en-US", "region": "US", "tz": "America/Chicago", **params}
     return _get(f"{SHANGRILA_BASE}/{query_name}", params=merged, headers=_HEADERS, **kwargs)
-
-
-def _editorial_get(path: str, params: Dict[str, Any], **kwargs: Any) -> Dict[str, Any]:
-    """GET an editorial resource, merging the common locale params."""
-    merged = {"lang": "en-US", "region": "US", "tz": "America/Chicago", **params}
-    return _get(f"{EDITORIAL_BASE}/{path}", params=merged, headers=_HEADERS, **kwargs)
 
 
 def _entity_cols(row: Dict[str, Any]) -> Dict[str, Any]:
@@ -108,10 +105,10 @@ def _flatten_legacy(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
 def _frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Materialize flattened rows as a polars (default) or pandas DataFrame.
 
-    ``strict=False`` is required because Yahoo's scoreboard mixes value types
-    within a field across games (e.g. ``last_updated`` is a timestamp string for
-    played games but ``False`` for unplayed ones); strict construction raises
-    ``unexpected value while building Series`` on that bool/str mix.
+    ``strict=False`` is required because Yahoo payloads can mix value types
+    within a field across rows (the retired editorial scoreboard sent
+    ``last_updated`` as a timestamp string or ``False``); strict construction
+    raises ``unexpected value while building Series`` on such a mix.
     """
     if return_as_pandas:
         import pandas as pd
@@ -518,12 +515,67 @@ def yahoo_cfb_team_season_stats_legacy(
     return _frame(rows, return_as_pandas)
 
 
-def _flatten_editorial_map(payload: Dict[str, Any], *keys: str) -> List[Dict[str, Any]]:
-    """service.<keys...> dynamic-id map -> list of its values (rows)."""
-    node: Any = payload.get("service", {})
-    for k in keys:
-        node = node.get(k, {})
-    return list((node or {}).values())
+#: scoreboardGame takes a comma-joined ``gameId`` list; a full week (~140 games,
+#: ~3 KB of URL) answers in one call, so chunk only well past that.
+_SCOREBOARD_CHUNK = 150
+
+_SCOREBOARD_SCHEMA: Dict[str, Any] = {
+    "game_id": pl.Utf8,
+    "display_name": pl.Utf8,
+    "start_time": pl.Utf8,
+    "start_date": pl.Utf8,
+    "status": pl.Utf8,
+    "status_display_name": pl.Utf8,
+    "season": pl.Int64,
+    "season_phase": pl.Utf8,
+    "week": pl.Int64,
+    "home_team_id": pl.Utf8,
+    "home_team": pl.Utf8,
+    "home_abbreviation": pl.Utf8,
+    "home_score": pl.Int64,
+    "away_team_id": pl.Utf8,
+    "away_team": pl.Utf8,
+    "away_abbreviation": pl.Utf8,
+    "away_score": pl.Int64,
+    "winning_team_id": pl.Utf8,
+    "display_result": pl.Utf8,
+    "venue": pl.Utf8,
+}
+
+
+def _games(payload: Any) -> List[Dict[str, Any]]:
+    """``data.games`` of a shangrila game query, or ``[]``."""
+    data = payload.get("data") if isinstance(payload, dict) else None
+    games = data.get("games") if isinstance(data, dict) else None
+    return [g for g in games or [] if isinstance(g, dict)]
+
+
+def _scoreboard_row(game: Dict[str, Any]) -> Dict[str, Any]:
+    """One scoreboardGame entry -> one flat scoreboard row."""
+    home = game.get("homeTeam") or {}
+    away = game.get("awayTeam") or {}
+    return {
+        "game_id": game.get("gameId"),
+        "display_name": game.get("displayName"),
+        "start_time": game.get("startTime"),
+        "start_date": game.get("startDate"),
+        "status": game.get("status"),
+        "status_display_name": game.get("statusDisplayName"),
+        "season": game.get("season"),
+        "season_phase": game.get("seasonPhase"),
+        "week": game.get("week"),
+        "home_team_id": game.get("homeTeamId"),
+        "home_team": home.get("fullName") or home.get("displayName"),
+        "home_abbreviation": home.get("abbreviation"),
+        "home_score": game.get("homeScore"),
+        "away_team_id": game.get("awayTeamId"),
+        "away_team": away.get("fullName") or away.get("displayName"),
+        "away_abbreviation": away.get("abbreviation"),
+        "away_score": game.get("awayScore"),
+        "winning_team_id": game.get("winningTeamId"),
+        "display_result": game.get("displayResult"),
+        "venue": (game.get("venue") or {}).get("displayName"),
+    }
 
 
 @overload
@@ -567,28 +619,38 @@ def yahoo_cfb_scoreboard(
 ) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Yahoo CFB scoreboard (one row per game).
 
-    Wraps the editorial ``scoreboard`` resource and flattens the ``games`` map.
-    ``season`` is required — there is no meaningful default for a weekly
-    scoreboard and the API has no concept of "current season". The full raw
-    payload also carries teams/leagues/odds maps (use ``return_parsed=False``).
+    Two shangrila calls: ``leagueGameIdsByDate`` lists the week's game ids
+    (every division Yahoo carries, FBS through NAIA), then ``scoreboardGame``
+    fetches those games in one comma-joined batch. ``season`` is required --
+    there is no meaningful default for a weekly scoreboard. Postseason games
+    carry on the week count (bowls and the CFP run to about week 21); a week
+    with no games returns zero rows. Unscheduled postseason slots are listed
+    too, as ``TBD @ TBD`` games whose team ids are both ``ncaaf.t.0``.
+
+    Yahoo retired the editorial ``scoreboard`` this used to wrap on
+    2026-11-20. Shangrila has no counterpart for its ``global_gameid``, and
+    the columns are new: they are listed below.
 
     Args:
         season: Season year (required).
         week: Schedule week number. Defaults to ``1``.
-        count: Maximum number of games to request. Defaults to ``500``.
-        return_parsed: If ``True`` (default) flatten the games map to a
-            DataFrame; if ``False`` return the raw JSON ``dict``.
+        count: Ignored. Kept so existing calls still work; ``leagueGameIdsByDate``
+            returns the whole week.
+        return_parsed: If ``True`` (default) flatten the games to a
+            DataFrame; if ``False`` return ``{"data": {"games": [...]}}``, the
+            merged raw ``scoreboardGame`` entries (odds, records and venue
+            included).
         return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
             polars. Ignored when ``return_parsed=False``.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars DataFrame (default) with one row per game, a pandas DataFrame
-        when ``return_as_pandas=True``, or the raw JSON ``dict`` when
-        ``return_parsed=False``. Includes self-describing ``season`` and
-        ``week`` columns.
+        A polars DataFrame (default; pandas when ``return_as_pandas=True``)
+        with one row per game, and zero rows with the same columns for an
+        empty week.
 
     Raises:
+        NoDataError: Yahoo answered 404.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
             after retries, or an empty or unreadable 200 body).
 
@@ -598,34 +660,63 @@ def yahoo_cfb_scoreboard(
             from sportsdataverse.cfb import yahoo_cfb_scoreboard
             df = yahoo_cfb_scoreboard(season=2024, week=1)
     """
-    raw = _editorial_get(
-        "scoreboard",
-        {"leagues": "ncaaf", "week": week, "season": season, "count": count, "v": 2},
-        **kwargs,
-    )
+    ids_raw = _shangrila_get("leagueGameIdsByDate", {"leagues": "ncaaf", "season": season, "week": week}, **kwargs)
+    leagues = ((ids_raw or {}).get("data") or {}).get("leagues") or [{}]
+    ids = [g.get("gameId") for g in (leagues[0] or {}).get("games") or [] if g.get("gameId")]
+    games: List[Dict[str, Any]] = []
+    for i in range(0, len(ids), _SCOREBOARD_CHUNK):
+        chunk = ",".join(ids[i : i + _SCOREBOARD_CHUNK])
+        try:
+            games += _games(_shangrila_get("scoreboardGame", {"gameId": chunk}, **kwargs))
+        except NoDataError as exc:
+            # leagueGameIdsByDate listed these games, so a 404 here is a failed fetch,
+            # not an empty week: NoDataError would make callers drop the whole week
+            raise AssetFetchError(f"yahoo scoreboardGame 404 for listed ids ({chunk}): {exc}") from exc
     if not return_parsed:
-        return raw
-    rows = _flatten_editorial_map(raw, "scoreboard", "games")
-    for r in rows:
-        r["season"] = season
-        r["week"] = week
-    return _frame(rows, return_as_pandas)
+        return {"data": {"games": games}}
+    frame = pl.DataFrame([_scoreboard_row(g) for g in games], schema=_SCOREBOARD_SCHEMA, strict=False)
+    return frame.to_pandas() if return_as_pandas else frame
 
 
-_YAHOO_TEAM_FIELDS = (
-    ("team_id", "team_id"),
-    ("abbreviation", "abbr"),
-    ("display_name", "display_name"),
-    ("full_name", "full_name"),
-    ("location", "first_name"),
-    ("nickname", "last_name"),
-    ("conference", "conference"),
-    ("conference_abbreviation", "conference_abbr"),
-    ("conference_id", "conference_id"),
-    ("division", "division"),
-    ("division_id", "division_id"),
-    ("seatgeek_id", "seatgeek_id"),
-)
+_TEAMS_SCHEMA: Dict[str, Any] = {
+    "team_id": pl.Utf8,
+    "abbreviation": pl.Utf8,
+    "display_name": pl.Utf8,
+    "full_name": pl.Utf8,
+    "location": pl.Utf8,
+    "nickname": pl.Utf8,
+    "conference": pl.Utf8,
+    "conference_abbreviation": pl.Utf8,
+    "conference_id": pl.Utf8,
+    "division": pl.Utf8,
+    "division_id": pl.Utf8,
+    "seatgeek_id": pl.Utf8,
+}
+
+
+def _str_or_none(value: Any) -> Any:
+    """Shangrila sends conference/division ids as ints; the columns stay Utf8."""
+    return None if value is None else str(value)
+
+
+def _team_row(team: Dict[str, Any]) -> Dict[str, Any]:
+    """One leagueTeams entry -> one team-directory row."""
+    conference = team.get("conference") or {}
+    division = team.get("division") or {}
+    return {
+        "team_id": team.get("teamId"),
+        "abbreviation": team.get("abbreviation"),
+        "display_name": team.get("displayName"),
+        "full_name": team.get("fullName"),
+        "location": team.get("location"),
+        "nickname": team.get("nickname"),
+        "conference": conference.get("name"),
+        "conference_abbreviation": None,  # shangrila carries no conference abbreviation
+        "conference_id": _str_or_none(conference.get("conferenceId")),
+        "division": division.get("name"),
+        "division_id": _str_or_none(division.get("divisionId")),
+        "seatgeek_id": None,  # shangrila carries no SeatGeek id
+    }
 
 
 @overload
@@ -665,35 +756,35 @@ def yahoo_cfb_teams(
 ) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
     """Yahoo CFB team directory (one row per team).
 
-    Yahoo has no standalone teams resource (the documented
-    ``sports.league.teams`` resource 404s without auth). Instead the editorial
-    ``scoreboard`` payload is "fat": one call embeds the full ~186-team
-    directory under ``service.scoreboard.teams`` keyed by the dotted
-    ``ncaaf.t.<id>`` team id. This wrapper pulls that map for the requested
-    ``(season, week)`` and projects it to the directory columns -- it is the
-    Yahoo side of :func:`sportsdataverse.cfb.cfb_teams_crosswalk`.
+    Wraps the shangrila ``leagueTeams`` query (``league=ncaaf``): every team
+    Yahoo carries, about 540 across FBS, FCS, D2, D3, NAIA and USCAA, keyed by
+    the dotted ``ncaaf.t.<n>`` id. It is the Yahoo side of
+    :func:`sportsdataverse.cfb.cfb_teams_crosswalk`.
+
+    Until 2026-11-20 this read the team map embedded in the editorial
+    scoreboard (about 265 FBS + FCS teams). Yahoo retired that feed. Shangrila
+    has no conference abbreviation and no SeatGeek id, so
+    ``conference_abbreviation`` and ``seatgeek_id`` stay as all-null columns,
+    and ``conference_id`` / ``division_id`` are shangrila's own ids (ACC is
+    ``"1"``), not the editorial ones.
 
     Args:
-        season: Season year (required; the scoreboard is fetched to obtain the
-            embedded teams map).
-        week: Schedule week used to fetch the scoreboard. Defaults to ``1``.
-            The embedded directory is the full league list regardless of week.
-        return_parsed: If ``True`` (default) flatten the teams map to a
-            DataFrame; if ``False`` return the raw scoreboard JSON ``dict``.
+        season: Season year. Sent to Yahoo, but ``leagueTeams`` answers with
+            the current directory for any season (2004 and 2025 return the same
+            ids).
+        week: Ignored. Kept so existing calls still work.
+        return_parsed: If ``True`` (default) project the teams to a
+            DataFrame; if ``False`` return the raw ``leagueTeams`` JSON ``dict``.
         return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
             polars. Ignored when ``return_parsed=False``.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars DataFrame (default) with one row per team -- columns
-        ``team_id``, ``abbreviation``, ``display_name``, ``full_name``,
-        ``location``, ``nickname``, ``conference``,
-        ``conference_abbreviation``, ``conference_id``, ``division``,
-        ``division_id``, ``seatgeek_id`` -- a pandas DataFrame when
-        ``return_as_pandas=True``, or the raw scoreboard JSON ``dict`` when
-        ``return_parsed=False``.
+        A polars DataFrame (default; pandas when ``return_as_pandas=True``)
+        with one row per team, every column ``Utf8``.
 
     Raises:
+        NoDataError: Yahoo answered 404.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
             after retries, or an empty or unreadable 200 body).
 
@@ -704,20 +795,13 @@ def yahoo_cfb_teams(
             teams = yahoo_cfb_teams(season=2024)
             abbr = dict(zip(teams["team_id"], teams["abbreviation"]))
     """
-    raw = _editorial_get(
-        "scoreboard",
-        {"leagues": "ncaaf", "week": week, "season": season, "count": 500, "v": 2},
-        **kwargs,
-    )
+    raw = _shangrila_get("leagueTeams", {"league": "ncaaf", "season": season}, **kwargs)
     if not return_parsed:
         return raw
-    teams_map = ((raw.get("service") or {}).get("scoreboard") or {}).get("teams") or {}
-    rows: List[Dict[str, Any]] = []
-    for tid, team in teams_map.items():
-        row = {out: team.get(src) for out, src in _YAHOO_TEAM_FIELDS}
-        row["team_id"] = team.get("team_id") or tid  # fall back to the map key
-        rows.append(row)
-    return _frame(rows, return_as_pandas)
+    leagues = ((raw or {}).get("data") or {}).get("leagues") or [{}]
+    teams = [t for t in (leagues[0] or {}).get("teams") or [] if isinstance(t, dict)]
+    frame = pl.DataFrame([_team_row(t) for t in teams], schema=_TEAMS_SCHEMA)
+    return frame.to_pandas() if return_as_pandas else frame
 
 
 _BOXSCORE_SCHEMA: Dict[str, Any] = {
@@ -734,56 +818,55 @@ _BOXSCORE_SCHEMA: Dict[str, Any] = {
 }
 
 
-def _boxscore_rows(raw: Any) -> List[Dict[str, Any]]:
-    """Decode ``service.boxscore`` team/player stat maps into one row per entity stat.
+#: playbookBoxscore statId prefix -> the editorial box score's category name.
+_STAT_CATEGORY = {
+    "PASSING": "Passing",
+    "RUSHING": "Rushing",
+    "RECEIVING": "Receiving",
+    "RECEPTIONS": "Receiving",
+    "SOLO": "Defense",
+    "TACKLE": "Defense",
+    "SACKS": "Defense",
+    "FIELD": "Kicking",
+    "EXTRA": "Kicking",
+}
 
-    ``{team_stats|player_stats}[entity][variation][stat_type] = value`` is joined
-    against the ``stat_types`` / ``stat_categories`` / ``stat_variations``
-    dictionaries; a player's team comes from the game's home/away lineups.
+
+def _boxscore_rows(raw: Any) -> List[Dict[str, Any]]:
+    """Decode playbookBoxscore lineups into one row per player stat.
+
+    ``games[0].{home,away}TeamLineup[].player.playerGameStats[].stats[]`` holds
+    ``{statId, value}`` pairs; names come from ``data.footballStatTypes``. Null
+    values (a stat that does not apply to the player) are dropped.
     """
-    service = raw.get("service") if isinstance(raw, dict) else None
-    box = service.get("boxscore") if isinstance(service, dict) else None
-    if not isinstance(box, dict):
+    data = raw.get("data") if isinstance(raw, dict) else None
+    if not isinstance(data, dict):
         return []
-    games = box.get("games") or {}
-    game_id = next(iter(games), None)
-    game = games.get(game_id) or {}
-    lineups = (box.get("gamelineups") or {}).get(game_id) or {}
-    side_of: Dict[str, str] = {}
-    team_of: Dict[str, Any] = {}
-    for side in ("home", "away"):
-        team_id = game.get(f"{side}_team_id")
-        if team_id:
-            side_of[team_id] = side
-            team_of[team_id] = team_id
-        for player_id in (lineups.get(f"{side}_lineup") or {}).get("all") or {}:
-            side_of[player_id] = side
-            team_of[player_id] = team_id
-    types = box.get("stat_types") or {}
-    variations = box.get("stat_variations") or {}
-    category_of = {
-        stat: category.get("name")
-        for category in (box.get("stat_categories") or {}).values()
-        for stat in (category.get("stats") or [])
-    }
+    game = (_games(raw) or [{}])[0]
+    types = {t.get("statId"): t for t in data.get("footballStatTypes") or [] if isinstance(t, dict)}
     rows: List[Dict[str, Any]] = []
-    for kind in ("team_stats", "player_stats"):
-        for entity_id, by_variation in (box.get(kind) or {}).items():
-            for variation, stats in (by_variation or {}).items():
-                for stat_id, value in (stats or {}).items():
-                    stat = types.get(stat_id) or {}
+    for side in ("home", "away"):
+        side_team = game.get(f"{side}TeamId")
+        for entry in game.get(f"{side}TeamLineup") or []:
+            player = (entry or {}).get("player") or {}
+            for block in player.get("playerGameStats") or []:
+                for stat in (block or {}).get("stats") or []:
+                    stat_id, value = stat.get("statId"), stat.get("value")
+                    if not stat_id or value is None:
+                        continue
+                    meta = types.get(stat_id) or {}
                     rows.append(
                         {
-                            "game_id": game_id,
-                            "team_id": team_of.get(entity_id),
-                            "home_away": side_of.get(entity_id),
-                            "player_id": entity_id if kind == "player_stats" else None,
-                            "stat_category": category_of.get(stat_id),
+                            "game_id": game.get("gameId"),
+                            "team_id": player.get("teamId") or side_team,
+                            "home_away": side,
+                            "player_id": player.get("playerId"),
+                            "stat_category": _STAT_CATEGORY.get(stat_id.split("_")[0]),
                             "stat_type_id": stat_id,
-                            "stat_name": stat.get("name"),
-                            "stat_abbreviation": stat.get("short_name"),
-                            "stat_variation": (variations.get(variation) or {}).get("name"),
-                            "value": None if value is None else str(value),
+                            "stat_name": meta.get("displayName"),
+                            "stat_abbreviation": meta.get("abbreviation"),
+                            "stat_variation": "Game",
+                            "value": str(value),
                         }
                     )
     return rows
@@ -820,17 +903,20 @@ def yahoo_cfb_boxscore(
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
-    """Yahoo CFB box score: team and player stats, one row per entity stat.
+    """Yahoo CFB box score: player stats from the game lineups, one row per player stat.
 
-    Wraps the editorial ``boxscore/{game_id}`` resource. Its box score is a
-    decoder-dictionary schema
-    (``player_stats[playerId][variation][stat_type] = value``, same for
-    ``team_stats``) that this decodes against the payload's ``stat_types`` /
-    ``stat_categories`` dictionaries into a long frame: one row per team stat
-    and per player stat. Pivot on ``stat_type_id`` for a wide box. The editorial
-    payload carries no player names; a player's team comes from the game's
-    home/away lineups. Pass ``return_parsed=False`` for the raw payload, which
-    also carries play-by-play and drives.
+    Wraps the shangrila ``playbookBoxscore`` query. Each side's lineup lists
+    the players Yahoo features, each with up to 12 headline stats (passing,
+    rushing and receiving yards and touchdowns, receptions, tackles, sacks,
+    field goals and extra points made); names come from the payload's
+    ``footballStatTypes``. Pivot on ``stat_type_id`` for a wide box.
+
+    Yahoo retired the editorial ``boxscore`` this used to wrap on 2026-11-20.
+    Shangrila has no full box score: there are no team-stat rows, a lineup
+    covers about a dozen players per side, and stat ids are shangrila names
+    (``PASSING_YARDS``) rather than ``ncaaf.stat_type.<n>``. Pass
+    ``return_parsed=False`` for the raw payload, which also carries drives,
+    play-by-play and the win-probability timeline.
 
     Args:
         game_id: Dotted Yahoo game id (e.g. ``"ncaaf.g.202509200023"``).
@@ -842,24 +928,12 @@ def yahoo_cfb_boxscore(
 
     Returns:
         A polars DataFrame by default (pandas when ``return_as_pandas=True``)
-        with one row per team or player stat, every column ``Utf8``, and zero
-        rows (same columns) for an empty payload; the raw editorial boxscore
-        JSON ``dict`` when ``return_parsed=False``:
-
-        | Column | Type | Description |
-        |---|---|---|
-        | ``game_id`` | Utf8 | Dotted Yahoo game id (``ncaaf.g.<date><n>``). |
-        | ``team_id`` | Utf8 | Dotted Yahoo team id (``ncaaf.t.<n>``); null for a player missing from the lineups. |
-        | ``home_away`` | Utf8 | ``"home"`` or ``"away"``. |
-        | ``player_id`` | Utf8 | Dotted Yahoo player id (``ncaaf.p.<n>``); null on team-stat rows. |
-        | ``stat_category`` | Utf8 | ``Passing``, ``Rushing``, ``Receiving``, ``Kicking``, ``Returns``, ``Punting``, ``Defense`` or ``Team``. |
-        | ``stat_type_id`` | Utf8 | Yahoo stat type id (``ncaaf.stat_type.105``). |
-        | ``stat_name`` | Utf8 | Stat name (``Yards``, ``Third Down Efficiency``). |
-        | ``stat_abbreviation`` | Utf8 | Short stat label (``Yds``, ``3DE``). |
-        | ``stat_variation`` | Utf8 | Stat variation name (``Game``). |
-        | ``value`` | Utf8 | Stat value as Yahoo sends it (``"188"``, ``"73.2"``, ``"1-14"``). |
+        with one row per player stat, every column ``Utf8``, and zero rows
+        (same columns) for an empty payload; the raw ``playbookBoxscore`` JSON
+        ``dict`` when ``return_parsed=False``.
 
     Raises:
+        NoDataError: Yahoo answered 404.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure
             after retries, or an empty or unreadable 200 body).
 
@@ -869,15 +943,15 @@ def yahoo_cfb_boxscore(
             from sportsdataverse.cfb import yahoo_cfb_boxscore
             box = yahoo_cfb_boxscore("ncaaf.g.202509200023")
 
-        Raw JSON (includes play-by-play and drives)::
+        Raw JSON (includes drives and play-by-play)::
 
             raw = yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=False)
 
-        Wide team box (one line)::
+        Wide player box (one line)::
 
-            box.filter(pl.col("player_id").is_null()).pivot("stat_name", index="team_id", values="value")
+            box.pivot("stat_type_id", index="player_id", values="value")
     """
-    raw = _editorial_get(f"boxscore/{game_id}", {"v": 4}, **kwargs)
+    raw = _shangrila_get("playbookBoxscore", {"gameId": game_id, "isFootball": "true"}, **kwargs)
     if not return_parsed:
         return raw
     frame = pl.DataFrame(_boxscore_rows(raw), schema=_BOXSCORE_SCHEMA)

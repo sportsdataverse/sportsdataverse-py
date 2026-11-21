@@ -128,96 +128,170 @@ def test_team_legacy_and_extended_category(monkeypatch):
         y.yahoo_cfb_team_season_stats_legacy(season=2024, category="Bogus", sort_stat="X")
 
 
-SCOREBOARD = {
-    "service": {
-        "scoreboard": {
-            "games": {
-                "ncaaf.g.1": {
-                    "gameid": "ncaaf.g.1",
-                    "home_team_id": "ncaaf.t.1",
-                    "away_team_id": "ncaaf.t.2",
-                    "total_home_points": "21",
-                    "total_away_points": "17",
-                    "week_number": "1",
-                }
-            }
-        }
+# Yahoo retired the editorial feed on 2026-11-20 (every league answers 404); the
+# scoreboard, team directory and box score read shangrila. The fixtures are real
+# captures from 2026-11-20 (tests/fixtures/yahoo/README.md).
+_FIX = Path(__file__).resolve().parents[1] / "fixtures" / "yahoo"
+
+
+def _fixture(name):
+    return json.loads((_FIX / name).read_text(encoding="utf-8"))
+
+
+def _route(monkeypatch, **by_query):
+    """Answer each shangrila query name from its recorded payload; log every call."""
+    calls = []
+
+    def fake_get(url, params=None, headers=None, **k):
+        query = url.rsplit("/", 1)[-1]
+        calls.append((query, dict(params or {})))
+        assert url == f"{y.SHANGRILA_BASE}/{query}" and headers == y._HEADERS
+        return by_query[query]
+
+    monkeypatch.setattr(y, "_get", fake_get)
+    return calls
+
+
+def test_scoreboard_on_a_real_capture(monkeypatch):
+    """2025 week 5: leagueGameIdsByDate lists the ids, ONE scoreboardGame call fetches them."""
+    calls = _route(
+        monkeypatch,
+        leagueGameIdsByDate=_fixture("shangrila_league_game_ids_by_date_ncaaf_2025_w5.json"),
+        scoreboardGame=_fixture("shangrila_scoreboard_game_ncaaf_2025_w5.json"),
+    )
+    df = y.yahoo_cfb_scoreboard(season=2025, week=5)
+    assert [q for q, _ in calls] == ["leagueGameIdsByDate", "scoreboardGame"]
+    assert calls[0][1]["leagues"] == "ncaaf" and calls[0][1]["season"] == 2025 and calls[0][1]["week"] == 5
+    assert calls[1][1]["gameId"] == "ncaaf.g.202509250099,ncaaf.g.202509260008,ncaaf.g.202509260058"
+    assert df.schema == pl.Schema(y._SCOREBOARD_SCHEMA)
+    row = df.filter(pl.col("game_id") == "ncaaf.g.202509260058").row(0, named=True)
+    assert (
+        row["home_team_id"],
+        row["home_team"],
+        row["away_team_id"],
+        row["away_team"],
+    ) == (
+        "ncaaf.t.58",
+        "Arizona State Sun Devils",
+        "ncaaf.t.85",
+        "TCU Horned Frogs",
+    )
+    assert (row["start_time"], row["season"], row["week"], row["season_phase"]) == (
+        "2025-09-26T20:00:00-05:00",
+        2025,
+        5,
+        "REGULAR_SEASON",
+    )
+    raw = y.yahoo_cfb_scoreboard(season=2025, week=5, return_parsed=False)
+    assert [g["gameId"] for g in raw["data"]["games"]] == df["game_id"].to_list()
+
+
+def test_scoreboard_chunks_a_big_week_and_keeps_schema_on_an_empty_one(monkeypatch):
+    ids = {"data": {"leagues": [{"games": [{"gameId": f"ncaaf.g.{i}"} for i in range(y._SCOREBOARD_CHUNK + 2)]}]}}
+    calls = _route(monkeypatch, leagueGameIdsByDate=ids, scoreboardGame={"data": {"games": []}})
+    y.yahoo_cfb_scoreboard(season=2025, week=1)
+    assert [len(p["gameId"].split(",")) for q, p in calls if q == "scoreboardGame"] == [
+        y._SCOREBOARD_CHUNK,
+        2,
+    ]
+
+    calls = _route(monkeypatch, leagueGameIdsByDate={"data": {"leagues": [{"games": []}]}})
+    df = y.yahoo_cfb_scoreboard(season=2025, week=22, return_as_pandas=True)
+    assert len(df) == 0 and list(df.columns) == list(y._SCOREBOARD_SCHEMA)
+    assert [q for q, _ in calls] == ["leagueGameIdsByDate"]  # no empty scoreboardGame call
+
+
+def test_scoreboard_404_on_listed_ids_is_a_failed_fetch(monkeypatch):
+    # NoDataError here would let the crosswalk count the week as empty and drop its ids
+    from sportsdataverse.errors import AssetFetchError, NoDataError
+
+    ids = {"data": {"leagues": [{"games": [{"gameId": "ncaaf.g.1"}]}]}}
+
+    def fake_get(url, params=None, headers=None, **k):
+        if url.endswith("/scoreboardGame"):
+            raise NoDataError("404")
+        return ids
+
+    monkeypatch.setattr(y, "_get", fake_get)
+    with pytest.raises(AssetFetchError, match="listed ids"):
+        y.yahoo_cfb_scoreboard(season=2025, week=1)
+
+
+def test_teams_on_a_real_capture(monkeypatch):
+    calls = _route(monkeypatch, leagueTeams=_fixture("shangrila_league_teams_ncaaf.json"))
+    df = y.yahoo_cfb_teams(season=2025)
+    assert calls == [("leagueTeams", {**calls[0][1], "league": "ncaaf", "season": 2025})]
+    assert df.schema == pl.Schema(y._TEAMS_SCHEMA)  # every column Utf8, editorial column set kept
+    assert df["team_id"].to_list() == ["ncaaf.t.1", "ncaaf.t.116", "ncaaf.t.226"]
+    clemson = df.row(0, named=True)
+    assert clemson == {
+        "team_id": "ncaaf.t.1",
+        "abbreviation": "CLEM",
+        "display_name": "Clemson",
+        "full_name": "Clemson Tigers",
+        "location": "Clemson",
+        "nickname": "Tigers",
+        "conference": "Atlantic Coast",
+        "conference_abbreviation": None,
+        "conference_id": "1",
+        "division": "FBS",
+        "division_id": "1",
+        "seatgeek_id": None,
     }
-}
+    assert df["division"].to_list() == ["FBS", "FCS", "D2"]
+    assert df["seatgeek_id"].null_count() == df.height == df["conference_abbreviation"].null_count()
 
 
-def test_scoreboard_flattens_games_map(monkeypatch):
-    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: SCOREBOARD)
-    df = y.yahoo_cfb_scoreboard(season=2024, week=1, return_as_pandas=True)
-    assert len(df) == 1
-    assert df.iloc[0]["gameid"] == "ncaaf.g.1"
-    assert df.iloc[0]["week"] == 1  # self-describing
-
-
-BOX_FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "yahoo" / "editorial_boxscore_ncaaf_ala_at_uk.json"
+def test_teams_empty_payload_keeps_schema(monkeypatch):
+    _route(monkeypatch, leagueTeams={"data": {"leagues": []}})
+    df = y.yahoo_cfb_teams(season=2025)
+    assert df.height == 0 and df.columns == list(y._TEAMS_SCHEMA)
 
 
 def test_boxscore_default_is_parsed_like_its_siblings(monkeypatch):
-    """The module contract is polars-by-default; the box score used to be the lone
-    ``return_parsed=False`` outlier. Pin both directions so it cannot drift back."""
-    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: {"service": {"boxscore": {}}})
-    df = y.yahoo_cfb_boxscore("ncaaf.g.202509200023")
+    """The module contract is polars-by-default; pin both directions so it cannot drift back."""
+    _route(monkeypatch, playbookBoxscore={"data": {"games": []}})
+    df = y.yahoo_cfb_boxscore("ncaaf.g.202509270116")
     assert isinstance(df, pl.DataFrame) and df.columns == list(y._BOXSCORE_SCHEMA)
-    out = y.yahoo_cfb_boxscore("ncaaf.g.202509200023", return_parsed=False)
-    assert "service" in out  # return_parsed=False -> raw passthrough
+    out = y.yahoo_cfb_boxscore("ncaaf.g.202509270116", return_parsed=False)
+    assert "data" in out  # return_parsed=False -> raw passthrough
 
 
-def test_boxscore_parsed_is_one_row_per_entity_stat(monkeypatch):
-    """Real editorial boxscore, Alabama (ncaaf.t.73) at Kentucky (ncaaf.t.69), 2026-09-12:
-    both team_stats blocks plus four players (two per side), dictionaries untrimmed."""
-    raw = json.loads(BOX_FIXTURE.read_text(encoding="utf-8"))
-    seen = []
-
-    def fake_get(url, params=None, headers=None, **k):
-        seen.append(url)
-        return raw
-
-    monkeypatch.setattr(y, "_get", fake_get)
-    df = y.yahoo_cfb_boxscore("ncaaf.g.202609120069", return_parsed=True)
-    assert seen == [f"{y.EDITORIAL_BASE}/boxscore/ncaaf.g.202609120069"]
+def test_boxscore_on_a_real_capture(monkeypatch):
+    """playbookBoxscore, ncaaf.t.114 at Montana (ncaaf.t.116), 2025-09-27: two players
+    with stats and one without per side; null stats are dropped."""
+    calls = _route(monkeypatch, playbookBoxscore=_fixture("shangrila_playbook_boxscore_ncaaf.json"))
+    df = y.yahoo_cfb_boxscore("ncaaf.g.202509270116")
+    assert calls[0][1]["gameId"] == "ncaaf.g.202509270116" and calls[0][1]["isFootball"] == "true"
     assert df.columns == list(y._BOXSCORE_SCHEMA)
     assert all(dtype == pl.Utf8 for dtype in df.schema.values())
-    assert df.height == 96  # 25 team stats x 2 teams + 15 + 15 + 6 + 10 player stats
-    assert df["game_id"].unique().to_list() == ["ncaaf.g.202609120069"]
-
-    teams = df.filter(pl.col("player_id").is_null())
-    assert teams.height == 50 and set(teams["stat_category"]) == {"Team"}
-    total = teams.filter(pl.col("stat_type_id") == "ncaaf.stat_type.945")
-    assert dict(zip(total["team_id"], total["value"])) == {"ncaaf.t.69": "209", "ncaaf.t.73": "343"}
-    third = teams.filter((pl.col("team_id") == "ncaaf.t.69") & (pl.col("stat_name") == "Third Down Efficiency"))
-    assert third.select("home_away", "stat_abbreviation", "value").row(0) == ("home", "3DE", "1-14")
-
-    qb = df.filter((pl.col("player_id") == "ncaaf.p.470424") & (pl.col("stat_type_id") == "ncaaf.stat_type.105"))
-    assert qb.select("team_id", "home_away", "stat_category", "stat_name", "stat_variation", "value").row(0) == (
-        "ncaaf.t.73",
+    assert df.height == 14  # home 3 + 2 stats, away 5 + 4; stat-less players add no rows
+    assert df["game_id"].unique().to_list() == ["ncaaf.g.202509270116"]
+    assert df["player_id"].null_count() == 0 and set(df["stat_variation"]) == {"Game"}
+    qb = df.filter((pl.col("player_id") == "ncaaf.p.336870") & (pl.col("stat_type_id") == "PASSING_YARDS"))
+    assert qb.select("team_id", "home_away", "stat_category", "stat_name", "value").row(0) == (
+        "ncaaf.t.114",
         "away",
         "Passing",
-        "Yards",
-        "Game",
-        "188",
+        "Passing Yards",
+        "262",
     )
-    kicker = df.filter(pl.col("player_id") == "ncaaf.p.404415")
-    assert kicker.height == 6 and set(kicker["stat_category"]) == {"Kicking"}
-    assert set(kicker["team_id"]) == {"ncaaf.t.73"}
+    receiver = df.filter(pl.col("player_id") == "ncaaf.p.312809")
+    assert set(receiver["stat_category"]) == {"Receiving"} and set(receiver["home_away"]) == {"home"}
+    assert df["stat_category"].null_count() == 0
 
 
-@pytest.mark.parametrize("payload", [None, {}, {"service": {}}, {"service": {"boxscore": {}}}, "junk"])
+@pytest.mark.parametrize("payload", [None, {}, {"data": {}}, {"data": {"games": []}}, "junk"])
 def test_boxscore_parsed_empty_payload_keeps_schema(monkeypatch, payload):
-    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: payload)
+    _route(monkeypatch, playbookBoxscore=payload)
     df = y.yahoo_cfb_boxscore("ncaaf.g.1", return_parsed=True)
     assert df.height == 0 and df.columns == list(y._BOXSCORE_SCHEMA)
 
 
 def test_boxscore_parsed_pandas(monkeypatch):
-    raw = json.loads(BOX_FIXTURE.read_text(encoding="utf-8"))
-    monkeypatch.setattr(y, "_get", lambda url, params=None, headers=None, **k: raw)
-    df = y.yahoo_cfb_boxscore("ncaaf.g.202609120069", return_parsed=True, return_as_pandas=True)
-    assert len(df) == 96 and "stat_name" in df.columns
+    _route(monkeypatch, playbookBoxscore=_fixture("shangrila_playbook_boxscore_ncaaf.json"))
+    df = y.yahoo_cfb_boxscore("ncaaf.g.202509270116", return_as_pandas=True)
+    assert len(df) == 14 and "stat_name" in df.columns
 
 
 @skip_if_no_live

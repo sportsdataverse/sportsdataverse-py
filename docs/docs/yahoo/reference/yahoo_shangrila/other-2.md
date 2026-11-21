@@ -1,7 +1,7 @@
 ---
 title: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: scoreboard_game–trending_game"
 sidebar_label: "Other: scoreboard_game–trending_game"
-sidebar_position: 10
+sidebar_position: 8
 description: "Yahoo Sports — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Other: scoreboard_game–trending_game — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
