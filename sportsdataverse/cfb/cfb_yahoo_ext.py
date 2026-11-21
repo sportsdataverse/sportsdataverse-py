@@ -25,6 +25,7 @@ if TYPE_CHECKING:
     import pandas as pd
 
 from sportsdataverse._codegen_runtime import _get
+from sportsdataverse.errors import AssetFetchError, NoDataError
 
 __all__ = [
     "yahoo_cfb_boxscore",
@@ -688,7 +689,12 @@ def yahoo_cfb_scoreboard(
     games: List[Dict[str, Any]] = []
     for i in range(0, len(ids), _SCOREBOARD_CHUNK):
         chunk = ",".join(ids[i : i + _SCOREBOARD_CHUNK])
-        games += _games(_shangrila_get("scoreboardGame", {"gameId": chunk}, **kwargs))
+        try:
+            games += _games(_shangrila_get("scoreboardGame", {"gameId": chunk}, **kwargs))
+        except NoDataError as exc:
+            # leagueGameIdsByDate listed these games, so a 404 here is a failed fetch,
+            # not an empty week: NoDataError would make callers drop the whole week
+            raise AssetFetchError(f"yahoo scoreboardGame 404 for listed ids ({chunk}): {exc}") from exc
     if not return_parsed:
         return {"data": {"games": games}}
     frame = pl.DataFrame([_scoreboard_row(g) for g in games], schema=_SCOREBOARD_SCHEMA, strict=False)

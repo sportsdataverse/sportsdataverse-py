@@ -201,6 +201,22 @@ def test_scoreboard_chunks_a_big_week_and_keeps_schema_on_an_empty_one(monkeypat
     assert [q for q, _ in calls] == ["leagueGameIdsByDate"]  # no empty scoreboardGame call
 
 
+def test_scoreboard_404_on_listed_ids_is_a_failed_fetch(monkeypatch):
+    # NoDataError here would let the crosswalk count the week as empty and drop its ids
+    from sportsdataverse.errors import AssetFetchError, NoDataError
+
+    ids = {"data": {"leagues": [{"games": [{"gameId": "ncaaf.g.1"}]}]}}
+
+    def fake_get(url, params=None, headers=None, **k):
+        if url.endswith("/scoreboardGame"):
+            raise NoDataError("404")
+        return ids
+
+    monkeypatch.setattr(y, "_get", fake_get)
+    with pytest.raises(AssetFetchError, match="listed ids"):
+        y.yahoo_cfb_scoreboard(season=2025, week=1)
+
+
 def test_teams_on_a_real_capture(monkeypatch):
     calls = _route(monkeypatch, leagueTeams=_fixture("shangrila_league_teams_ncaaf.json"))
     df = y.yahoo_cfb_teams(season=2025)

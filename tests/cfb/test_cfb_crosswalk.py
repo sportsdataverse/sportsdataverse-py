@@ -1095,6 +1095,39 @@ def test_cfb_schedule_crosswalk_providers_fox_only(monkeypatch: pytest.MonkeyPat
     assert row["espn_game_id"] is None and row["yahoo_game_id"] is None
 
 
+def test_cfb_schedule_crosswalk_week_survives_a_yahoo_404(monkeypatch: pytest.MonkeyPatch) -> None:
+    # a 404 week leaves Yahoo's columns null instead of failing the whole call
+    from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError
+    from sportsdataverse.errors import AssetFetchError, NoDataError
+
+    monkeypatch.setattr(
+        cw,
+        "fox_cfb_schedule",
+        lambda **k: pl.DataFrame(
+            {
+                "game_id": ["41999"],
+                "date": ["2024-08-31T20:00Z"],
+                "home_team": ["Ohio State Buckeyes"],
+                "away_team": ["Akron Zips"],
+            }
+        ),
+    )
+
+    def gone(season: int, week: int, **k: Any) -> list:
+        raise NoDataError("404")
+
+    monkeypatch.setattr(cw, "yahoo_cfb_scoreboard", gone)
+    df = cfb_schedule_crosswalk(2024, 5, providers=("fox", "yahoo"))
+    assert df.height == 1 and df.row(0, named=True)["yahoo_game_id"] is None
+
+    def failed(season: int, week: int, **k: Any) -> list:
+        raise AssetFetchError("500")
+
+    monkeypatch.setattr(cw, "yahoo_cfb_scoreboard", failed)
+    with pytest.raises(CrosswalkSourceError):
+        cfb_schedule_crosswalk(2024, 5, providers=("fox", "yahoo"))
+
+
 def test_cfb_teams_crosswalk_default_season(monkeypatch: pytest.MonkeyPatch) -> None:
     seen: Dict[str, Any] = {}
 

@@ -1199,7 +1199,15 @@ def cfb_schedule_crosswalk(
         rows = _merge_schedule(
             _espn_games(season, week, season_type, **kwargs) if "espn" in sel else [],
             _fox_games(season, week, **kwargs) if "fox" in sel else [],
-            _yahoo_games(season, week, **kwargs) if "yahoo" in sel else [],
+            # a 404 week is "no Yahoo games" (columns null); a failed fetch raises
+            (
+                FetchTally("yahoo_cfb_scoreboard", strict=True).fetch(
+                    f"season={season} week={week}", lambda: _yahoo_games(season, week, **kwargs)
+                )
+                or []
+            )
+            if "yahoo" in sel
+            else [],
         )
     return _materialize(rows, _SCHEDULE_SCHEMA, return_as_pandas)
 
