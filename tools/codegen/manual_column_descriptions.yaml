@@ -81173,3 +81173,48 @@ join_espn_polymarket:
     matched.'
   polymarket_us_slug: Polymarket US gateway market slug built from the Gamma usId, e.g. aec-nba-sa-sac-2026-11-06; null when
     Gamma carries no usId.
+yahoo_cfb_scoreboard:
+  game_id: Dotted Yahoo game id ("ncaaf.g.202508230021").
+  display_name: '"Away @ Home" label.'
+  start_time: Kickoff, ISO-8601 with the US Central offset; null while the time is TBA.
+  start_date: Kickoff date with offset ("2025-08-23-05:00").
+  status: '"PREGAME", "FINAL", or an in-game status while live.'
+  status_display_name: Display status ("Final").
+  season: Season year the game belongs to (the fall year, so a January bowl is the prior season).
+  season_phase: '"REGULAR_SEASON" or "POSTSEASON".'
+  week: Yahoo week number.
+  home_team_id: Dotted home team id ("ncaaf.t.<n>").
+  home_team: Home team full name ("Kansas State Wildcats").
+  home_abbreviation: Home team abbreviation.
+  home_score: Home points; null before kickoff.
+  away_team_id: Dotted away team id.
+  away_team: Away team full name.
+  away_abbreviation: Away team abbreviation.
+  away_score: Away points; null before kickoff.
+  winning_team_id: Dotted id of the winner; null until final.
+  display_result: Score line ("24-21").
+  venue: Name of the stadium the game is played in, as Yahoo lists it.
+yahoo_cfb_teams:
+  team_id: Dotted Yahoo team id ("ncaaf.t.1").
+  abbreviation: Team abbreviation ("CLEM").
+  display_name: Short name ("Clemson").
+  full_name: School and nickname ("Clemson Tigers").
+  location: School / place name.
+  nickname: Team nickname ("Tigers").
+  conference: Conference name ("Atlantic Coast").
+  conference_abbreviation: 'Always null: shangrila carries none.'
+  conference_id: Yahoo shangrila conference id as a string ("1" is the ACC); not the old editorial numbering.
+  division: '"FBS", "FCS", "D2", "D3", "NAIA" or "USCAA".'
+  division_id: Shangrila division id ("1" is FBS).
+  seatgeek_id: 'Always null: shangrila carries none.'
+yahoo_cfb_boxscore:
+  game_id: Dotted Yahoo game id ("ncaaf.g.<date><n>").
+  team_id: Dotted Yahoo team id ("ncaaf.t.<n>").
+  home_away: '"home" or "away".'
+  player_id: Dotted Yahoo player id ("ncaaf.p.<n>").
+  stat_category: '"Passing", "Rushing", "Receiving", "Defense" or "Kicking".'
+  stat_type_id: Shangrila stat id ("PASSING_YARDS").
+  stat_name: Stat name ("Passing Yards").
+  stat_abbreviation: Short stat label.
+  stat_variation: 'Stat scope of the row; always "Game" because the shangrila lineup carries single-game stats only.'
+  value: Stat value as Yahoo sends it ("188").

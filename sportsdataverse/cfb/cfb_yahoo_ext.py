@@ -647,30 +647,7 @@ def yahoo_cfb_scoreboard(
     Returns:
         A polars DataFrame (default; pandas when ``return_as_pandas=True``)
         with one row per game, and zero rows with the same columns for an
-        empty week:
-
-        | Column | Type | Description |
-        |---|---|---|
-        | ``game_id`` | Utf8 | Dotted Yahoo game id (``ncaaf.g.202508230021``). |
-        | ``display_name`` | Utf8 | ``"Away @ Home"`` label. |
-        | ``start_time`` | Utf8 | Kickoff, ISO-8601 with the US Central offset; null while the time is TBA. |
-        | ``start_date`` | Utf8 | Kickoff date with offset (``2025-08-23-05:00``). |
-        | ``status`` | Utf8 | ``PREGAME``, ``FINAL``, or an in-game status while live. |
-        | ``status_display_name`` | Utf8 | Display status (``Final``). |
-        | ``season`` | Int64 | Season year. |
-        | ``season_phase`` | Utf8 | ``REGULAR_SEASON`` or ``POSTSEASON``. |
-        | ``week`` | Int64 | Yahoo week number. |
-        | ``home_team_id`` | Utf8 | Dotted home team id (``ncaaf.t.<n>``). |
-        | ``home_team`` | Utf8 | Home team full name (``Kansas State Wildcats``). |
-        | ``home_abbreviation`` | Utf8 | Home team abbreviation. |
-        | ``home_score`` | Int64 | Home points; null before kickoff. |
-        | ``away_team_id`` | Utf8 | Dotted away team id. |
-        | ``away_team`` | Utf8 | Away team full name. |
-        | ``away_abbreviation`` | Utf8 | Away team abbreviation. |
-        | ``away_score`` | Int64 | Away points; null before kickoff. |
-        | ``winning_team_id`` | Utf8 | Dotted id of the winner; null until final. |
-        | ``display_result`` | Utf8 | Score line (``24-21``). |
-        | ``venue`` | Utf8 | Stadium name. |
+        empty week.
 
     Raises:
         NoDataError: Yahoo answered 404.
@@ -804,22 +781,7 @@ def yahoo_cfb_teams(
 
     Returns:
         A polars DataFrame (default; pandas when ``return_as_pandas=True``)
-        with one row per team, every column ``Utf8``:
-
-        | Column | Type | Description |
-        |---|---|---|
-        | ``team_id`` | Utf8 | Dotted Yahoo team id (``ncaaf.t.1``). |
-        | ``abbreviation`` | Utf8 | Team abbreviation (``CLEM``). |
-        | ``display_name`` | Utf8 | Short name (``Clemson``). |
-        | ``full_name`` | Utf8 | School and nickname (``Clemson Tigers``). |
-        | ``location`` | Utf8 | School / place name. |
-        | ``nickname`` | Utf8 | Team nickname (``Tigers``). |
-        | ``conference`` | Utf8 | Conference name (``Atlantic Coast``). |
-        | ``conference_abbreviation`` | Utf8 | Always null: shangrila carries none. |
-        | ``conference_id`` | Utf8 | Shangrila conference id. |
-        | ``division`` | Utf8 | ``FBS``, ``FCS``, ``D2``, ``D3``, ``NAIA`` or ``USCAA``. |
-        | ``division_id`` | Utf8 | Shangrila division id (``"1"`` is FBS). |
-        | ``seatgeek_id`` | Utf8 | Always null: shangrila carries none. |
+        with one row per team, every column ``Utf8``.
 
     Raises:
         NoDataError: Yahoo answered 404.
@@ -968,20 +930,7 @@ def yahoo_cfb_boxscore(
         A polars DataFrame by default (pandas when ``return_as_pandas=True``)
         with one row per player stat, every column ``Utf8``, and zero rows
         (same columns) for an empty payload; the raw ``playbookBoxscore`` JSON
-        ``dict`` when ``return_parsed=False``:
-
-        | Column | Type | Description |
-        |---|---|---|
-        | ``game_id`` | Utf8 | Dotted Yahoo game id (``ncaaf.g.<date><n>``). |
-        | ``team_id`` | Utf8 | Dotted Yahoo team id (``ncaaf.t.<n>``). |
-        | ``home_away`` | Utf8 | ``"home"`` or ``"away"``. |
-        | ``player_id`` | Utf8 | Dotted Yahoo player id (``ncaaf.p.<n>``). |
-        | ``stat_category`` | Utf8 | ``Passing``, ``Rushing``, ``Receiving``, ``Defense`` or ``Kicking``. |
-        | ``stat_type_id`` | Utf8 | Shangrila stat id (``PASSING_YARDS``). |
-        | ``stat_name`` | Utf8 | Stat name (``Passing Yards``). |
-        | ``stat_abbreviation`` | Utf8 | Short stat label. |
-        | ``stat_variation`` | Utf8 | Always ``Game``. |
-        | ``value`` | Utf8 | Stat value as Yahoo sends it (``"188"``). |
+        ``dict`` when ``return_parsed=False``.
 
     Raises:
         NoDataError: Yahoo answered 404.

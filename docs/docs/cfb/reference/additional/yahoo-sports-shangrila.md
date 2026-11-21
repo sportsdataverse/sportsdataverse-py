@@ -35,20 +35,20 @@ play-by-play and the win-probability timeline.
 
 **Returns**
 
-A polars DataFrame by default (pandas when `return_as_pandas=True`) with one row per player stat, every column `Utf8`, and zero rows (same columns) for an empty payload; the raw `playbookBoxscore` JSON `dict` when `return_parsed=False`: | Column | Type | Description | |---|---|---| | `game_id` | Utf8 | Dotted Yahoo game id (`ncaaf.g.<date><n>`). | | `team_id` | Utf8 | Dotted Yahoo team id (`ncaaf.t.<n>`). | | `home_away` | Utf8 | `"home"` or `"away"`. | | `player_id` | Utf8 | Dotted Yahoo player id (`ncaaf.p.<n>`). | | `stat_category` | Utf8 | `Passing`, `Rushing`, `Receiving`, `Defense` or `Kicking`. | | `stat_type_id` | Utf8 | Shangrila stat id (`PASSING_YARDS`). | | `stat_name` | Utf8 | Stat name (`Passing Yards`). | | `stat_abbreviation` | Utf8 | Short stat label. | | `stat_variation` | Utf8 | Always `Game`. | | `value` | Utf8 | Stat value as Yahoo sends it (`"188"`). |
+A polars DataFrame by default (pandas when `return_as_pandas=True`) with one row per player stat, every column `Utf8`, and zero rows (same columns) for an empty payload; the raw `playbookBoxscore` JSON `dict` when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | String | ESPN game identifier. |
-| `team_id` | String | ESPN team id. |
-| `home_away` | String | `home` or `away`. |
-| `player_id` | String | ESPN player id from the roster entry. |
-| `stat_category` | String |  |
-| `stat_type_id` | String |  |
-| `stat_name` | String | Internal stat key (e.g. `passingYards`). |
-| `stat_abbreviation` | String |  |
-| `stat_variation` | String |  |
-| `value` | String | Metric value. |
+| `game_id` | String | Dotted Yahoo game id ("ncaaf.g.<date><n>"). |
+| `team_id` | String | Dotted Yahoo team id ("ncaaf.t.<n>"). |
+| `home_away` | String | "home" or "away". |
+| `player_id` | String | Dotted Yahoo player id ("ncaaf.p.<n>"). |
+| `stat_category` | String | "Passing", "Rushing", "Receiving", "Defense" or "Kicking". |
+| `stat_type_id` | String | Shangrila stat id ("PASSING_YARDS"). |
+| `stat_name` | String | Stat name ("Passing Yards"). |
+| `stat_abbreviation` | String | Short stat label. |
+| `stat_variation` | String | Stat scope of the row; always "Game" because the shangrila lineup carries single-game stats only. |
+| `value` | String | Stat value as Yahoo sends it ("188"). |
 
 **Raises**
 
@@ -288,30 +288,30 @@ the columns are new: they are listed below.
 
 **Returns**
 
-A polars DataFrame (default; pandas when `return_as_pandas=True`) with one row per game, and zero rows with the same columns for an empty week: | Column | Type | Description | |---|---|---| | `game_id` | Utf8 | Dotted Yahoo game id (`ncaaf.g.202508230021`). | | `display_name` | Utf8 | `"Away @ Home"` label. | | `start_time` | Utf8 | Kickoff, ISO-8601 with the US Central offset; null while the time is TBA. | | `start_date` | Utf8 | Kickoff date with offset (`2025-08-23-05:00`). | | `status` | Utf8 | `PREGAME`, `FINAL`, or an in-game status while live. | | `status_display_name` | Utf8 | Display status (`Final`). | | `season` | Int64 | Season year. | | `season_phase` | Utf8 | `REGULAR_SEASON` or `POSTSEASON`. | | `week` | Int64 | Yahoo week number. | | `home_team_id` | Utf8 | Dotted home team id (`ncaaf.t.<n>`). | | `home_team` | Utf8 | Home team full name (`Kansas State Wildcats`). | | `home_abbreviation` | Utf8 | Home team abbreviation. | | `home_score` | Int64 | Home points; null before kickoff. | | `away_team_id` | Utf8 | Dotted away team id. | | `away_team` | Utf8 | Away team full name. | | `away_abbreviation` | Utf8 | Away team abbreviation. | | `away_score` | Int64 | Away points; null before kickoff. | | `winning_team_id` | Utf8 | Dotted id of the winner; null until final. | | `display_result` | Utf8 | Score line (`24-21`). | | `venue` | Utf8 | Stadium name. |
+A polars DataFrame (default; pandas when `return_as_pandas=True`) with one row per game, and zero rows with the same columns for an empty week.
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | String | ESPN game identifier. |
-| `display_name` | String | Human-readable metric name. |
-| `start_time` | String | Game start time. |
-| `start_date` | String | Season start timestamp (ISO 8601, UTC). |
-| `status` | String | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `status_display_name` | String | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
-| `season` | Int64 | Season (4-digit year). |
-| `season_phase` | String | Phase of the season the game falls in (e.g., "season.phase.season"). |
-| `week` | Int64 | Game week of the season. |
-| `home_team_id` | String | ESPN home team id (parsed from `home_team_ref`). |
-| `home_team` | String | Home team name. |
-| `home_abbreviation` | String |  |
-| `home_score` | Int64 | Home-team score after the play. |
-| `away_team_id` | String | ESPN away team id (parsed from `away_team_ref`). |
-| `away_team` | String | Away team name. |
-| `away_abbreviation` | String |  |
-| `away_score` | Int64 | Away-team score after the play. |
-| `winning_team_id` | String | Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29"). |
-| `display_result` | String | Drive-result label (e.g. `Punt`, `Touchdown`). |
-| `venue` | String | Venue name. |
+| `game_id` | String | Dotted Yahoo game id ("ncaaf.g.202508230021"). |
+| `display_name` | String | "Away @ Home" label. |
+| `start_time` | String | Kickoff, ISO-8601 with the US Central offset; null while the time is TBA. |
+| `start_date` | String | Kickoff date with offset ("2025-08-23-05:00"). |
+| `status` | String | "PREGAME", "FINAL", or an in-game status while live. |
+| `status_display_name` | String | Display status ("Final"). |
+| `season` | Int64 | Season year the game belongs to (the fall year, so a January bowl is the prior season). |
+| `season_phase` | String | "REGULAR_SEASON" or "POSTSEASON". |
+| `week` | Int64 | Yahoo week number. |
+| `home_team_id` | String | Dotted home team id ("ncaaf.t.<n>"). |
+| `home_team` | String | Home team full name ("Kansas State Wildcats"). |
+| `home_abbreviation` | String | Home team abbreviation. |
+| `home_score` | Int64 | Home points; null before kickoff. |
+| `away_team_id` | String | Dotted away team id. |
+| `away_team` | String | Away team full name. |
+| `away_abbreviation` | String | Away team abbreviation. |
+| `away_score` | Int64 | Away points; null before kickoff. |
+| `winning_team_id` | String | Dotted id of the winner; null until final. |
+| `display_result` | String | Score line ("24-21"). |
+| `venue` | String | Name of the stadium the game is played in, as Yahoo lists it. |
 
 **Raises**
 
@@ -554,22 +554,22 @@ and `conference_id` / `division_id` are shangrila's own ids (ACC is
 
 **Returns**
 
-A polars DataFrame (default; pandas when `return_as_pandas=True`) with one row per team, every column `Utf8`: | Column | Type | Description | |---|---|---| | `team_id` | Utf8 | Dotted Yahoo team id (`ncaaf.t.1`). | | `abbreviation` | Utf8 | Team abbreviation (`CLEM`). | | `display_name` | Utf8 | Short name (`Clemson`). | | `full_name` | Utf8 | School and nickname (`Clemson Tigers`). | | `location` | Utf8 | School / place name. | | `nickname` | Utf8 | Team nickname (`Tigers`). | | `conference` | Utf8 | Conference name (`Atlantic Coast`). | | `conference_abbreviation` | Utf8 | Always null: shangrila carries none. | | `conference_id` | Utf8 | Shangrila conference id. | | `division` | Utf8 | `FBS`, `FCS`, `D2`, `D3`, `NAIA` or `USCAA`. | | `division_id` | Utf8 | Shangrila division id (`"1"` is FBS). | | `seatgeek_id` | Utf8 | Always null: shangrila carries none. |
+A polars DataFrame (default; pandas when `return_as_pandas=True`) with one row per team, every column `Utf8`.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | String | ESPN team id. |
-| `abbreviation` | String | Metric abbreviation. |
-| `display_name` | String | Human-readable metric name. |
-| `full_name` | String | Venue full name (e.g. `Tenney Stadium`). |
-| `location` | String | Team location / school name. |
-| `nickname` | String | Team nickname / location label. |
-| `conference` | String | Conference of the team. |
-| `conference_abbreviation` | String |  |
-| `conference_id` | String | Referencing conference id. |
-| `division` | String | Division in the conference for the team. |
-| `division_id` | String |  |
-| `seatgeek_id` | String | SeatGeek performer or event identifier used to build the ticket-purchase link. |
+| `team_id` | String | Dotted Yahoo team id ("ncaaf.t.1"). |
+| `abbreviation` | String | Team abbreviation ("CLEM"). |
+| `display_name` | String | Short name ("Clemson"). |
+| `full_name` | String | School and nickname ("Clemson Tigers"). |
+| `location` | String | School / place name. |
+| `nickname` | String | Team nickname ("Tigers"). |
+| `conference` | String | Conference name ("Atlantic Coast"). |
+| `conference_abbreviation` | String | Always null: shangrila carries none. |
+| `conference_id` | String | Yahoo shangrila conference id as a string ("1" is the ACC); not the old editorial numbering. |
+| `division` | String | "FBS", "FCS", "D2", "D3", "NAIA" or "USCAA". |
+| `division_id` | String | Shangrila division id ("1" is FBS). |
+| `seatgeek_id` | String | Always null: shangrila carries none. |
 
 **Raises**
 
