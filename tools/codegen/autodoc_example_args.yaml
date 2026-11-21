@@ -27,13 +27,13 @@ cfb:
   fox_cfb_team_gamelog: {team_id: "11"}  # 340 rows x 8 cols
   fox_cfb_team_roster: {team_id: "11"}  # 115 rows x 8 cols
   fox_cfb_team_stats: {team_id: "11"}  # 23 rows x 6 cols
-  yahoo_cfb_boxscore: {game_id: "ncaaf.g.202509200023"}  # 482 rows x 10 cols
+  yahoo_cfb_boxscore: {game_id: "ncaaf.g.202509200023"}  # 152 rows x 10 cols
   yahoo_cfb_player_season_stats: {season: 2024}  # 200 rows x 89 cols
   yahoo_cfb_player_season_stats_legacy: {season: 2024, category: "Rushing", sort_stat: "RUSHING_YARDS"}  # 200 rows x 13 cols
-  yahoo_cfb_scoreboard: {season: 2024, week: 1}  # 138 rows x 96 cols
+  yahoo_cfb_scoreboard: {season: 2024, week: 1}  # 138 rows x 20 cols
   yahoo_cfb_team_season_stats: {season: 2024}  # 134 rows x 101 cols
   yahoo_cfb_team_season_stats_legacy: {season: 2024, category: "Rushing", sort_stat: "RUSHING_YARDS"}  # 134 rows x 15 cols
-  yahoo_cfb_teams: {season: 2024}  # 262 rows x 12 cols
+  yahoo_cfb_teams: {season: 2024}  # 539 rows x 12 cols
   on3_industry_player_rankings: {year: 2025}  # 50 rows x 190 cols
   on3_industry_team_rankings: {year: 2025}  # 200 rows x 54 cols
   on3_player_rankings: {year: 2025}  # 300 rows x 191 cols

@@ -73,12 +73,12 @@ Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `espn_game_id` | Int64 | ESPN game id for the crosswalk row. |
 | `fox_game_id` | String | Fox Sports game id for the same game. |
 | `yahoo_game_id` | String | Yahoo Sports game id for the same game. |
-| `yahoo_global_game_id` | String | Yahoo's cross-season global game key in ncaaf.g.<number> form, distinct from the date-encoded yahoo_game_id. |
+| `yahoo_global_game_id` | String | Yahoo's cross-season global game key in ncaaf.g.<number> form, distinct from the date-encoded yahoo_game_id. It came from Yahoo's editorial feed, retired 2026-11-20, so builds after that date leave it null. |
 | `home_team` | String | Home team name. |
 | `away_team` | String | Away team name. |
 | `espn_date` | String | Kickoff date as YYYY-MM-DD taken from ESPN's schedule, null on games that matched no ESPN row. |
 | `fox_date` | String | Kickoff date as YYYY-MM-DD taken from the Fox Sports schedule, null on games that matched no Fox row. |
-| `yahoo_date` | String | Kickoff date as YYYY-MM-DD, parsed from Yahoo's RFC-2822 start_time string. |
+| `yahoo_date` | String | Kickoff date as YYYY-MM-DD in UTC, taken from Yahoo's kickoff time. |
 | `matched_sources` | String | Plus-joined provenance tag naming which of espn, fox, and yahoo actually supplied a row for this game. |
 
 ```python

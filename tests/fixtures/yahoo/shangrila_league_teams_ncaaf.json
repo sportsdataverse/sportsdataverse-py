@@ -1,0 +1,131 @@
+{
+ "data": {
+  "leagues": [
+   {
+    "shortName": "NCAAF",
+    "teams": [
+     {
+      "teamId": "ncaaf.t.1",
+      "displayName": "Clemson",
+      "fullName": "Clemson Tigers",
+      "location": "Clemson",
+      "nickname": "Tigers",
+      "abbreviation": "CLEM",
+      "primaryColor": "f56600",
+      "secondaryColor": "522d80",
+      "alias": {
+       "url": "https://sports.yahoo.com/ncaaf/teams/clemson/",
+       "subpages": [
+        {
+         "url": "https://sports.yahoo.com/ncaaf/teams/clemson/schedule/",
+         "type": "schedule"
+        },
+        {
+         "url": "https://sports.yahoo.com/ncaaf/teams/clemson/roster/",
+         "type": "roster"
+        }
+       ]
+      },
+      "division": {
+       "divisionId": 1,
+       "name": "FBS"
+      },
+      "conference": {
+       "conferenceId": 1,
+       "conferenceLogo": null,
+       "name": "Atlantic Coast"
+      },
+      "teamStandings": {
+       "teamRecord": {
+        "wins": 7,
+        "losses": 6
+       }
+      },
+      "subdivision": null
+     },
+     {
+      "teamId": "ncaaf.t.116",
+      "displayName": "Montana",
+      "fullName": "Montana Grizzlies",
+      "location": "Montana",
+      "nickname": "Grizzlies",
+      "abbreviation": "MONT",
+      "primaryColor": "660033",
+      "secondaryColor": "999999",
+      "alias": {
+       "url": "https://sports.yahoo.com/ncaaf/teams/montana/",
+       "subpages": [
+        {
+         "url": "https://sports.yahoo.com/ncaaf/teams/montana/schedule/",
+         "type": "schedule"
+        },
+        {
+         "url": "https://sports.yahoo.com/ncaaf/teams/montana/roster/",
+         "type": "roster"
+        }
+       ]
+      },
+      "division": {
+       "divisionId": 2,
+       "name": "FCS"
+      },
+      "conference": {
+       "conferenceId": 13,
+       "conferenceLogo": {
+        "url": "https://s.yimg.com/iu/api/res/1.2/kdM5ebkycAD4AFgbE16YeA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTEyMDt3PTEyMA--/https://s.yimg.com/cv/apiv2/ncaa_conf_logos/PNGs_160x80/Big-Sky.png"
+       },
+       "name": "Big Sky"
+      },
+      "teamStandings": {
+       "teamRecord": {
+        "wins": 13,
+        "losses": 2
+       }
+      },
+      "subdivision": null
+     },
+     {
+      "teamId": "ncaaf.t.226",
+      "displayName": "Bowie St.",
+      "fullName": "Bowie State Bulldogs",
+      "location": "Bowie State",
+      "nickname": "Bulldogs",
+      "abbreviation": "BOW",
+      "primaryColor": "fed426",
+      "secondaryColor": "000000",
+      "alias": {
+       "url": "https://sports.yahoo.com/ncaaf/teams/bowie-state/",
+       "subpages": [
+        {
+         "url": "https://sports.yahoo.com/ncaaf/teams/bowie-state/schedule/",
+         "type": "schedule"
+        },
+        {
+         "url": "https://sports.yahoo.com/ncaaf/teams/bowie-state/roster/",
+         "type": "roster"
+        }
+       ]
+      },
+      "division": {
+       "divisionId": 3,
+       "name": "D2"
+      },
+      "conference": {
+       "conferenceId": 25,
+       "conferenceLogo": null,
+       "name": "CIAA"
+      },
+      "teamStandings": {
+       "teamRecord": {
+        "wins": 0,
+        "losses": 1
+       }
+      },
+      "subdivision": null
+     }
+    ]
+   }
+  ]
+ },
+ "extensions": {}
+}

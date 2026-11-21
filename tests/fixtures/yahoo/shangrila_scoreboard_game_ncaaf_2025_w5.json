@@ -1,0 +1,481 @@
+{
+ "data": {
+  "games": [
+   {
+    "gameId": "ncaaf.g.202509250099",
+    "displayName": "Army @ East Carolina",
+    "league": {
+     "name": "College Football",
+     "fullName": "ncaaf",
+     "displayShort": "NCAAF",
+     "shortName": "NCAAF",
+     "sport": {
+      "name": "Football"
+     },
+     "alias": {
+      "url": "https://sports.yahoo.com/college-football/",
+      "subpages": [
+       {
+        "url": "https://sports.yahoo.com/college-football/scoreboard/",
+        "type": "scoreboard"
+       }
+      ]
+     },
+     "leagueLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/LZ5maTKnH4pzpoOvI1Pnsg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTcyO3c9NzI-/https://s.yimg.com/xe/ncaaf/league_logo_official.png.cf.webp"
+     }
+    },
+    "partnerUrl": [],
+    "alias": {
+     "url": "https://sports.yahoo.com/ncaaf/army-black-knights-east-carolina-pirates-202509250099/"
+    },
+    "awayTeamId": "ncaaf.t.97",
+    "awayTeam": {
+     "fullName": "Army Black Knights",
+     "teamId": "ncaaf.t.97",
+     "displayName": "Army",
+     "abbreviation": "ARMY",
+     "alias": {
+      "url": "https://sports.yahoo.com/ncaaf/teams/army/",
+      "scoreboardLinks": [
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/army/stats/",
+        "type": "statsLeaders"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/army/roster/",
+        "type": "roster"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/army/schedule/",
+        "type": "schedule"
+       }
+      ]
+     },
+     "nickname": "Black Knights",
+     "teamLogoWhite": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/.siidICEMVmRViwdwuXckw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181126/500x500/army_wbg.png.cf.webp"
+     },
+     "teamLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/eIn98_fgD2b5f0ZrL89o1g--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181126/500x500/army.png.cf.webp"
+     },
+     "teamStandings": {
+      "teamRecord": {
+       "displayName": "5-4"
+      }
+     },
+     "rankPolls": [],
+     "playoffSeeds": []
+    },
+    "awayTeamRecord": {
+     "displayName": "1-3",
+     "wins": 1,
+     "losses": 3
+    },
+    "homeTeamId": "ncaaf.t.99",
+    "homeTeam": {
+     "fullName": "East Carolina Pirates",
+     "teamId": "ncaaf.t.99",
+     "displayName": "East Carolina",
+     "abbreviation": "ECU",
+     "alias": {
+      "url": "https://sports.yahoo.com/ncaaf/teams/east-carolina/",
+      "scoreboardLinks": [
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/east-carolina/stats/",
+        "type": "statsLeaders"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/east-carolina/roster/",
+        "type": "roster"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/east-carolina/schedule/",
+        "type": "schedule"
+       }
+      ]
+     },
+     "nickname": "Pirates",
+     "teamLogoWhite": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/Cn4zK3BsUo2ucJ7lax2PwQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181207/500x500/east_carolina_wbg.png.cf.webp"
+     },
+     "teamLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/zM8ONXAvcPaHps4gwdk6iA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181207/500x500/east_carolina.png.cf.webp"
+     },
+     "teamStandings": {
+      "teamRecord": {
+       "displayName": "6-4"
+      }
+     },
+     "rankPolls": [],
+     "playoffSeeds": []
+    },
+    "homeTeamRecord": {
+     "displayName": "3-2",
+     "wins": 3,
+     "losses": 2
+    },
+    "currentPeriod": {
+     "overtime": false,
+     "shortDisplayName": "4th"
+    },
+    "awayScore": 6,
+    "homeScore": 28,
+    "startTime": "2025-09-25T18:30:00-05:00",
+    "startDate": "2025-09-25-05:00",
+    "ifNecessary": null,
+    "status": "FINAL",
+    "statusDisplayName": "Final",
+    "fullStatusDisplayName": "Final",
+    "season": 2025,
+    "seasonPhase": "REGULAR_SEASON",
+    "timeLeft": ":00.0",
+    "tournamentId": null,
+    "displayResult": "6-28",
+    "playoffSeries": null,
+    "playoffGameOrder": null,
+    "winningTeamId": "ncaaf.t.99",
+    "broadcastChannels": [
+     {
+      "name": "ESPN",
+      "abbr": "ESPN",
+      "displayName": "ESPN"
+     }
+    ],
+    "newsBreak": {
+     "subtext": "",
+     "title": "",
+     "url": "",
+     "uuid": null,
+     "type": null
+    },
+    "eventExtendedDisplayName": null,
+    "specialEventType": null,
+    "venue": {
+     "displayName": "Bagwell Field at Dowdy-Ficklen Stadium"
+    },
+    "weather": null,
+    "gametimeTicketUrl": null,
+    "gameTicketPrice": null,
+    "week": 5
+   },
+   {
+    "gameId": "ncaaf.g.202509260008",
+    "displayName": "Florida State @ Virginia",
+    "league": {
+     "name": "College Football",
+     "fullName": "ncaaf",
+     "displayShort": "NCAAF",
+     "shortName": "NCAAF",
+     "sport": {
+      "name": "Football"
+     },
+     "alias": {
+      "url": "https://sports.yahoo.com/college-football/",
+      "subpages": [
+       {
+        "url": "https://sports.yahoo.com/college-football/scoreboard/",
+        "type": "scoreboard"
+       }
+      ]
+     },
+     "leagueLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/LZ5maTKnH4pzpoOvI1Pnsg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTcyO3c9NzI-/https://s.yimg.com/xe/ncaaf/league_logo_official.png.cf.webp"
+     }
+    },
+    "partnerUrl": [],
+    "alias": {
+     "url": "https://sports.yahoo.com/ncaaf/florida-state-seminoles-virginia-cavaliers-202509260008/"
+    },
+    "awayTeamId": "ncaaf.t.3",
+    "awayTeam": {
+     "fullName": "Florida State Seminoles",
+     "teamId": "ncaaf.t.3",
+     "displayName": "Florida St.",
+     "abbreviation": "FSU",
+     "alias": {
+      "url": "https://sports.yahoo.com/ncaaf/teams/florida-state/",
+      "scoreboardLinks": [
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/florida-state/stats/",
+        "type": "statsLeaders"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/florida-state/roster/",
+        "type": "roster"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/florida-state/schedule/",
+        "type": "schedule"
+       }
+      ]
+     },
+     "nickname": "Seminoles",
+     "teamLogoWhite": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/CTaEqiQiKCWV1cKRGJJOTQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181205/500x500/florida_state_wbg.png.cf.webp"
+     },
+     "teamLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/U12nbmgOvm1bj39n.Sc.zA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181205/500x500/florida_state.png.cf.webp"
+     },
+     "teamStandings": {
+      "teamRecord": {
+       "displayName": "5-5"
+      }
+     },
+     "rankPolls": [],
+     "playoffSeeds": []
+    },
+    "awayTeamRecord": {
+     "displayName": "3-1",
+     "wins": 3,
+     "losses": 1
+    },
+    "homeTeamId": "ncaaf.t.8",
+    "homeTeam": {
+     "fullName": "Virginia Cavaliers",
+     "teamId": "ncaaf.t.8",
+     "displayName": "Virginia",
+     "abbreviation": "UVA",
+     "alias": {
+      "url": "https://sports.yahoo.com/ncaaf/teams/virginia/",
+      "scoreboardLinks": [
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/virginia/stats/",
+        "type": "statsLeaders"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/virginia/roster/",
+        "type": "roster"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/virginia/schedule/",
+        "type": "schedule"
+       }
+      ]
+     },
+     "nickname": "Cavaliers",
+     "teamLogoWhite": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/M5ho8Pf0oberkcLIHprhsQ--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/20260702/Virginia_Cavaliers_500_wbg.png.cf.webp"
+     },
+     "teamLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/2JHcCbus6uxH87RSwBcQzg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/20260702/virginia_500.png.cf.webp"
+     },
+     "teamStandings": {
+      "teamRecord": {
+       "displayName": "5-5"
+      }
+     },
+     "rankPolls": [],
+     "playoffSeeds": []
+    },
+    "homeTeamRecord": {
+     "displayName": "4-1",
+     "wins": 4,
+     "losses": 1
+    },
+    "currentPeriod": {
+     "overtime": true,
+     "shortDisplayName": "2OT"
+    },
+    "awayScore": 38,
+    "homeScore": 46,
+    "startTime": "2025-09-26T18:00:00-05:00",
+    "startDate": "2025-09-26-05:00",
+    "ifNecessary": null,
+    "status": "FINAL",
+    "statusDisplayName": "Final / 2OT",
+    "fullStatusDisplayName": "Final / 2OT",
+    "season": 2025,
+    "seasonPhase": "REGULAR_SEASON",
+    "timeLeft": ":00.0",
+    "tournamentId": null,
+    "displayResult": "38-46",
+    "playoffSeries": null,
+    "playoffGameOrder": null,
+    "winningTeamId": "ncaaf.t.8",
+    "broadcastChannels": [
+     {
+      "name": "ESPN",
+      "abbr": "ESPN",
+      "displayName": "ESPN"
+     }
+    ],
+    "newsBreak": {
+     "subtext": "Virginia upsets No. 8 Florida State in double overtime",
+     "title": "RECAP",
+     "url": "https://sports.yahoo.com/college-football/breaking-news/article/virginia-upsets-no-8-florida-state-46-38-in-double-overtime-025235332.html",
+     "uuid": null,
+     "type": null
+    },
+    "eventExtendedDisplayName": null,
+    "specialEventType": null,
+    "venue": {
+     "displayName": "Scott Stadium"
+    },
+    "weather": null,
+    "gametimeTicketUrl": null,
+    "gameTicketPrice": null,
+    "week": 5
+   },
+   {
+    "gameId": "ncaaf.g.202509260058",
+    "displayName": "TCU @ Arizona State",
+    "league": {
+     "name": "College Football",
+     "fullName": "ncaaf",
+     "displayShort": "NCAAF",
+     "shortName": "NCAAF",
+     "sport": {
+      "name": "Football"
+     },
+     "alias": {
+      "url": "https://sports.yahoo.com/college-football/",
+      "subpages": [
+       {
+        "url": "https://sports.yahoo.com/college-football/scoreboard/",
+        "type": "scoreboard"
+       }
+      ]
+     },
+     "leagueLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/LZ5maTKnH4pzpoOvI1Pnsg--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTcyO3c9NzI-/https://s.yimg.com/xe/ncaaf/league_logo_official.png.cf.webp"
+     }
+    },
+    "partnerUrl": [],
+    "alias": {
+     "url": "https://sports.yahoo.com/ncaaf/tcu-horned-frogs-arizona-state-sun-devils-202509260058/"
+    },
+    "awayTeamId": "ncaaf.t.85",
+    "awayTeam": {
+     "fullName": "TCU Horned Frogs",
+     "teamId": "ncaaf.t.85",
+     "displayName": "TCU",
+     "abbreviation": "TCU",
+     "alias": {
+      "url": "https://sports.yahoo.com/ncaaf/teams/tcu/",
+      "scoreboardLinks": [
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/tcu/stats/",
+        "type": "statsLeaders"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/tcu/roster/",
+        "type": "roster"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/tcu/schedule/",
+        "type": "schedule"
+       }
+      ]
+     },
+     "nickname": "Horned Frogs",
+     "teamLogoWhite": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/Sj..MSQRFqtA9ic64JFcgA--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181214/500x500/tcu2_wbgs.png.cf.webp"
+     },
+     "teamLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/OAQjGicPJrkbEYG17dczzw--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181214/500x500/tcu2_s.png.cf.webp"
+     },
+     "teamStandings": {
+      "teamRecord": {
+       "displayName": "5-5"
+      }
+     },
+     "rankPolls": [],
+     "playoffSeeds": []
+    },
+    "awayTeamRecord": {
+     "displayName": "3-1",
+     "wins": 3,
+     "losses": 1
+    },
+    "homeTeamId": "ncaaf.t.58",
+    "homeTeam": {
+     "fullName": "Arizona State Sun Devils",
+     "teamId": "ncaaf.t.58",
+     "displayName": "Arizona St.",
+     "abbreviation": "ASU",
+     "alias": {
+      "url": "https://sports.yahoo.com/ncaaf/teams/arizona-state/",
+      "scoreboardLinks": [
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/arizona-state/stats/",
+        "type": "statsLeaders"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/arizona-state/roster/",
+        "type": "roster"
+       },
+       {
+        "url": "https://sports.yahoo.com/ncaaf/teams/arizona-state/schedule/",
+        "type": "schedule"
+       }
+      ]
+     },
+     "nickname": "Sun Devils",
+     "teamLogoWhite": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/CV373rdNEPNJlHVGM9uX7g--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181127/500X500/arizona_state_wbg.png.cf.webp"
+     },
+     "teamLogo": {
+      "url": "https://s.yimg.com/iu/api/res/1.2/WcEqI60biLkMbOheHAHG8Q--~B/YXBwaWQ9c2hhcmVkO2ZpPWZpbGw7cT03NTtoPTgwO3c9ODA-/https://s.yimg.com/cv/apiv2/default/ncaaf/20181127/500X500/arizona_state.png.cf.webp"
+     },
+     "teamStandings": {
+      "teamRecord": {
+       "displayName": "6-4"
+      }
+     },
+     "rankPolls": [],
+     "playoffSeeds": []
+    },
+    "homeTeamRecord": {
+     "displayName": "4-1",
+     "wins": 4,
+     "losses": 1
+    },
+    "currentPeriod": {
+     "overtime": false,
+     "shortDisplayName": "4th"
+    },
+    "awayScore": 24,
+    "homeScore": 27,
+    "startTime": "2025-09-26T20:00:00-05:00",
+    "startDate": "2025-09-26-05:00",
+    "ifNecessary": null,
+    "status": "FINAL",
+    "statusDisplayName": "Final",
+    "fullStatusDisplayName": "Final",
+    "season": 2025,
+    "seasonPhase": "REGULAR_SEASON",
+    "timeLeft": ":00.0",
+    "tournamentId": null,
+    "displayResult": "24-27",
+    "playoffSeries": null,
+    "playoffGameOrder": null,
+    "winningTeamId": "ncaaf.t.58",
+    "broadcastChannels": [
+     {
+      "name": "FOX",
+      "abbr": "FOX",
+      "displayName": "FOX"
+     }
+    ],
+    "newsBreak": {
+     "subtext": "",
+     "title": "",
+     "url": "",
+     "uuid": null,
+     "type": null
+    },
+    "eventExtendedDisplayName": null,
+    "specialEventType": null,
+    "venue": {
+     "displayName": "Mountain America Stadium"
+    },
+    "weather": null,
+    "gametimeTicketUrl": null,
+    "gameTicketPrice": null,
+    "week": 5
+   }
+  ]
+ },
+ "extensions": {}
+}

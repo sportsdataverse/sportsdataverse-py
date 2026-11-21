@@ -11361,9 +11361,10 @@ load_cfb_schedule_crosswalk:
   matched_sources: Plus-joined provenance tag naming which of espn, fox, and yahoo actually supplied a row for this game.
   matchup_key: 'Order-independent key for the game: the two normalized team names sorted alphabetically and joined with a
     pipe.'
-  yahoo_date: Kickoff date as YYYY-MM-DD, parsed from Yahoo's RFC-2822 start_time string.
+  yahoo_date: Kickoff date as YYYY-MM-DD in UTC, taken from Yahoo's kickoff time.
   yahoo_game_id: Yahoo Sports game id for the same game.
   yahoo_global_game_id: Yahoo's cross-season global game key in ncaaf.g.<number> form, distinct from the date-encoded yahoo_game_id.
+    It came from Yahoo's editorial feed, retired 2026-11-20, so builds after that date leave it null.
 load_cfb_team_box:
   completionAttempts: Completions and pass attempts as a slash-separated string, for example 23/41.
   firstDowns: Total first downs ESPN credits the team, carried verbatim from the box score as a string.

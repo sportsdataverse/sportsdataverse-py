@@ -114,7 +114,9 @@ def test_matchup_key_is_order_independent() -> None:
 
 
 def test_yahoo_date_parses_and_tolerates_garbage() -> None:
-    assert _yahoo_date("Sat, 29 Aug 2026 16:00:00 +0000") == "2026-08-29"
+    assert _yahoo_date("2026-08-29T11:00:00-05:00") == "2026-08-29"
+    # an evening Central kickoff is the next UTC day, as ESPN dates it
+    assert _yahoo_date("2025-09-26T20:00:00-05:00") == "2025-09-27"
     assert _yahoo_date("not a date") is None
     assert _yahoo_date(None) is None
 
@@ -598,50 +600,56 @@ def test_espn_games_projection(monkeypatch: pytest.MonkeyPatch) -> None:
     assert out[0]["matchup_key"] == _matchup_key("ohio state buckeyes", "akron zips")
 
 
-def test_yahoo_games_projection(monkeypatch: pytest.MonkeyPatch) -> None:
-    raw = {
-        "service": {
-            "scoreboard": {
-                "teams": {
-                    "ncaaf.t.194": {"full_name": "Ohio State Buckeyes"},
-                    "ncaaf.t.1": {"full_name": "Akron Zips"},
-                },
-                "games": {
-                    "ncaaf.g.202408310194": {
-                        "home_team_id": "ncaaf.t.194",
-                        "away_team_id": "ncaaf.t.1",
-                        "global_gameid": "ncaaf.g.123",
-                        "start_time": "Sat, 31 Aug 2024 23:30:00 +0000",
-                    }
-                },
-            }
-        }
+def test_yahoo_games_projection_on_a_real_capture(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # Recorded shangrila responses for 2025 week 5 (tests/fixtures/yahoo/README.md),
+    # through the real yahoo_cfb_scoreboard: ids from leagueGameIdsByDate, teams from
+    # scoreboardGame. Dates are UTC, so the 20:00 Central kickoff is 2025-09-27.
+    import json
+    from pathlib import Path
+
+    import sportsdataverse.cfb.cfb_yahoo_ext as yahoo
+
+    fix = Path(__file__).resolve().parents[1] / "fixtures" / "yahoo"
+    by_query = {
+        "leagueGameIdsByDate": "shangrila_league_game_ids_by_date_ncaaf_2025_w5.json",
+        "scoreboardGame": "shangrila_scoreboard_game_ncaaf_2025_w5.json",
     }
-    monkeypatch.setattr(cw, "yahoo_cfb_scoreboard", lambda season, week, **k: raw)
-    out = cw._yahoo_games(2024, 1)
-    assert out[0]["game_id"] == "ncaaf.g.202408310194"
-    assert out[0]["matchup_key"] == _matchup_key("ohio state buckeyes", "akron zips")
-    assert out[0]["date"] == "2024-08-31"
+    monkeypatch.setattr(
+        yahoo,
+        "_get",
+        lambda url, **k: json.loads((fix / by_query[url.rsplit("/", 1)[-1]]).read_text(encoding="utf-8")),
+    )
+    out = {r["game_id"]: r for r in cw._yahoo_games(2025, 5)}
+    assert sorted(out) == [
+        "ncaaf.g.202509250099",
+        "ncaaf.g.202509260008",
+        "ncaaf.g.202509260058",
+    ]
+    asu = out["ncaaf.g.202509260058"]
+    assert asu["matchup_key"] == _matchup_key("arizona state sun devils", "tcu horned frogs")
+    assert (asu["home_team"], asu["away_team"], asu["date"]) == (
+        "Arizona State Sun Devils",
+        "TCU Horned Frogs",
+        "2025-09-27",
+    )
+    assert out["ncaaf.g.202509250099"]["date"] == "2025-09-25"  # 18:30 Central stays on the day
+    assert all(r["global_game_id"] is None for r in out.values())  # editorial-only id, no shangrila counterpart
 
 
-def test_yahoo_games_team_id_missing_from_map(monkeypatch: pytest.MonkeyPatch) -> None:
-    # A game can reference a team id absent from the embedded teams map
-    # (id_to_name.get -> None). The adapter must degrade gracefully, not crash.
-    raw = {
-        "service": {
-            "scoreboard": {
-                "teams": {"ncaaf.t.194": {"full_name": "Ohio State Buckeyes"}},
-                "games": {
-                    "ncaaf.g.1": {
-                        "home_team_id": "ncaaf.t.194",
-                        "away_team_id": "ncaaf.t.999",  # not in teams map
-                        "start_time": "Sat, 31 Aug 2024 23:30:00 +0000",
-                    }
-                },
-            }
-        }
-    }
-    monkeypatch.setattr(cw, "yahoo_cfb_scoreboard", lambda season, week, **k: raw)
+def test_yahoo_games_team_name_missing(monkeypatch: pytest.MonkeyPatch) -> None:
+    # A game can carry a team with no name. The adapter must degrade gracefully, not crash.
+    board = pl.DataFrame(
+        {
+            "game_id": ["ncaaf.g.1"],
+            "start_time": ["2024-08-31T18:30:00-05:00"],
+            "home_team": ["Ohio State Buckeyes"],
+            "away_team": [None],
+        },
+        schema_overrides={"away_team": pl.Utf8},
+    )
+    monkeypatch.setattr(cw, "yahoo_cfb_scoreboard", lambda season, week, **k: board)
     out = cw._yahoo_games(2024, 1)
     assert out[0]["away_team"] is None
     assert out[0]["home_team"] == "Ohio State Buckeyes"
@@ -649,26 +657,59 @@ def test_yahoo_games_team_id_missing_from_map(monkeypatch: pytest.MonkeyPatch) -
     assert out[0]["matchup_key"] == "ohio state buckeyes"
 
 
-def test_yahoo_scoreboard_parses_mixed_type_fields(monkeypatch: pytest.MonkeyPatch) -> None:
-    # Regression: Yahoo's scoreboard mixes value types within a field across
-    # games (last_updated is a timestamp str for played games, False for unplayed
-    # ones). Strict polars construction raised "unexpected value while building
-    # Series"; _frame must build it (strict=False) instead of erroring out.
-    import sportsdataverse.cfb.cfb_yahoo_ext as yahoo
+def test_yahoo_games_drops_tbd_slots_and_dates_a_tba_kickoff(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Live 2026 week 13: shangrila lists unscheduled postseason slots as "TBD @ TBD"
+    # (team id ncaaf.t.0 both sides) and a TBA kickoff with start_time null. The
+    # editorial feed listed neither slot; the TBA game keeps its date from start_date.
+    board = pl.DataFrame(
+        {
+            "game_id": ["ncaaf.g.202611289905", "ncaaf.g.202611280073", "ncaaf.g.202612040112"],
+            "start_time": [None, None, "2026-12-04T19:00:00-06:00"],
+            "start_date": ["2026-11-28-06:00", "2026-11-28-06:00", "2026-12-04-06:00"],
+            "home_team_id": ["ncaaf.t.0", "ncaaf.t.73", "ncaaf.t.112"],
+            "away_team_id": ["ncaaf.t.0", "ncaaf.t.70", "ncaaf.t.0"],
+            "home_team": ["TBD TBD", "Alabama Crimson Tide", "Boise State Broncos"],
+            "away_team": ["TBD TBD", "Auburn Tigers", "TBD TBD"],
+        },
+        schema_overrides={"start_time": pl.Utf8},
+    )
+    monkeypatch.setattr(cw, "yahoo_cfb_scoreboard", lambda season, week, **k: board)
+    out = cw._yahoo_games(2026, 13)
+    assert [(r["game_id"], r["date"]) for r in out] == [
+        ("ncaaf.g.202611280073", "2026-11-28"),
+        ("ncaaf.g.202612040112", "2026-12-05"),  # 19:00 Central is the next UTC day
+    ]
+    # one undecided side is nulled, as the editorial feed had it: keyed on Boise State alone
+    assert (out[1]["matchup_key"], out[1]["away_team"]) == ("boise state broncos", None)
 
-    payload = {
-        "service": {
-            "scoreboard": {
-                "games": {
-                    "ncaaf.g.1": {"gameid": "ncaaf.g.1", "last_updated": "2025-12-26 22:02:34", "is_rank_upset": False},
-                    "ncaaf.g.2": {"gameid": "ncaaf.g.2", "last_updated": False, "is_rank_upset": None},
-                }
-            }
-        }
-    }
-    monkeypatch.setattr(yahoo, "_editorial_get", lambda path, params, **k: payload)
-    df = yahoo.yahoo_cfb_scoreboard(2025, 18)  # must not raise on the bool/str mix
-    assert isinstance(df, pl.DataFrame) and df.height == 2
+
+def test_yahoo_season_games_raises_when_every_week_is_empty_or_404(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # 2026-11-20: the editorial feed answered 404 for every week, each 404 counted as
+    # "no games", and the crosswalk published with zero Yahoo ids. Never again.
+    from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError
+    from sportsdataverse.errors import NoDataError
+
+    def gone(season: int, week: int, **k: Any) -> list:
+        raise NoDataError("graphite-secure.sports.yahoo.com/... answered HTTP 404")
+
+    monkeypatch.setattr(cw, "_yahoo_games", gone)
+    with pytest.raises(
+        CrosswalkSourceError,
+        match=r"yahoo_cfb_scoreboard\(season=2024\): every week 1-23",
+    ):
+        cw._yahoo_season_games(2024)
+    monkeypatch.setattr(cw, "_yahoo_games", lambda season, week, **k: [])
+    with pytest.raises(CrosswalkSourceError, match="empty or 404"):
+        cw._yahoo_season_games(2024)
+    # one week with games is a season, the rest empty or 404
+    monkeypatch.setattr(
+        cw,
+        "_yahoo_games",
+        lambda season, week, **k: [{"game_id": "g", "matchup_key": "a|b"}] if week == 2 else gone(season, week),
+    )
+    assert [r["game_id"] for r in cw._yahoo_season_games(2024)] == ["g"]
 
 
 def test_fox_games_projection(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -1087,25 +1128,15 @@ def test_cfb_schedule_crosswalk_end_to_end(monkeypatch: pytest.MonkeyPatch) -> N
             }
         ),
     )
-    raw = {
-        "service": {
-            "scoreboard": {
-                "teams": {
-                    "ncaaf.t.194": {"full_name": "Ohio State Buckeyes"},
-                    "ncaaf.t.1": {"full_name": "Akron Zips"},
-                },
-                "games": {
-                    "ncaaf.g.1": {
-                        "home_team_id": "ncaaf.t.1",
-                        "away_team_id": "ncaaf.t.194",
-                        "global_gameid": "g",
-                        "start_time": "Sat, 31 Aug 2024 23:30:00 +0000",
-                    }
-                },
-            }
+    board = pl.DataFrame(
+        {
+            "game_id": ["ncaaf.g.1"],
+            "start_time": ["2024-08-31T18:30:00-05:00"],
+            "home_team": ["Akron Zips"],
+            "away_team": ["Ohio State Buckeyes"],
         }
-    }
-    monkeypatch.setattr(cw, "yahoo_cfb_scoreboard", lambda season, week, **k: raw)
+    )
+    monkeypatch.setattr(cw, "yahoo_cfb_scoreboard", lambda season, week, **k: board)
     monkeypatch.setattr(
         cw,
         "fox_cfb_schedule",
@@ -1452,20 +1483,34 @@ class _Resp:
 
 
 def _yahoo_week_body(week: int) -> str:
-    """The committed real Yahoo scoreboard, its game ids made unique per week."""
-    raw = load_fixture("yahoo", "editorial_scoreboard_ncaaf")
-    sb = raw["service"]["scoreboard"]
-    sb["games"] = {f"{gid}.w{week}": g for gid, g in sb["games"].items()}
+    """The committed real leagueGameIdsByDate capture, its game ids made unique per week."""
+    raw = load_fixture("yahoo", "shangrila_league_game_ids_by_date_ncaaf_2025_w5")
+    for g in raw["data"]["leagues"][0]["games"]:
+        g["gameId"] = f"{g['gameId']}.w{week}"
     return json.dumps(raw)
 
 
+def _yahoo_games_body(game_ids: str) -> str:
+    """The committed real scoreboardGame capture, answering the requested (suffixed) ids."""
+    raw = load_fixture("yahoo", "shangrila_scoreboard_game_ncaaf_2025_w5")
+    by_id = {g["gameId"]: g for g in raw["data"]["games"]}
+    games = []
+    for gid in game_ids.split(","):
+        game = dict(by_id[gid.rsplit(".w", 1)[0]])
+        game["gameId"] = gid
+        games.append(game)
+    return json.dumps({"data": {"games": games}})
+
+
 def _yahoo_transport(monkeypatch: pytest.MonkeyPatch, cut: Any) -> Counter:
-    """Serve every Yahoo week; ``cut(week, n)`` truncates the n-th fetch of a week mid-body."""
+    """Serve every Yahoo week; ``cut(week, n)`` truncates the n-th id-list fetch of a week mid-body."""
     import sportsdataverse._codegen_runtime as rt
 
     calls: Counter = Counter()
 
     def download(url: str, params: Dict[str, Any], **k: Any) -> _Resp:
+        if url.endswith("/scoreboardGame"):
+            return _Resp(_yahoo_games_body(params["gameId"]))
         week = params["week"]
         calls[week] += 1
         body = _yahoo_week_body(week)

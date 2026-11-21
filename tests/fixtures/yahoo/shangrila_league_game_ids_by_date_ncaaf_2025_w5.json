@@ -1,0 +1,29 @@
+{
+ "data": {
+  "leagues": [
+   {
+    "games": [
+     {
+      "gameId": "ncaaf.g.202509250099",
+      "startDate": "2025-09-25-05:00",
+      "startTime": "2025-09-25T18:30:00-05:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaaf.g.202509260008",
+      "startDate": "2025-09-26-05:00",
+      "startTime": "2025-09-26T18:00:00-05:00",
+      "status": "FINAL"
+     },
+     {
+      "gameId": "ncaaf.g.202509260058",
+      "startDate": "2025-09-26-05:00",
+      "startTime": "2025-09-26T20:00:00-05:00",
+      "status": "FINAL"
+     }
+    ]
+   }
+  ]
+ },
+ "extensions": {}
+}
