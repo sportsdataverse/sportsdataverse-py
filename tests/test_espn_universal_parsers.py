@@ -1704,8 +1704,9 @@ def test_hostile_closed_modules_stay_closed():
 
 def test_hostile_sweep_covers_every_public_parser():
     parsers = _public_parsers()
-    # 831 on 2026-10-20: a decorator that dropped ``functools.wraps`` would lose its parsers from this sweep (R4.1b-2)
-    assert len(parsers) >= 831 and {f"_common_espn_parsers.{n}" for n in _parsers()} <= set(parsers)
+    # 830 on 2026-11-21 after the Yahoo editorial parser retired (#1250); a decorator that dropped
+    # ``functools.wraps`` would lose its parsers from this sweep (R4.1b-2)
+    assert len(parsers) >= 830 and {f"_common_espn_parsers.{n}" for n in _parsers()} <= set(parsers)
     needs_more = [
         q
         for q, fn in parsers.items()
