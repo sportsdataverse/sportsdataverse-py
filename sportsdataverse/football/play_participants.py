@@ -338,20 +338,21 @@ def _build_long_frame(
                 },
             )
 
-    if not rows:
-        return pl.DataFrame(
-            schema={
-                "game_id": pl.Int64,
-                "play_id": pl.Utf8,
-                "athlete_id": pl.Utf8,
-                "athlete_ref": pl.Utf8,
-                "position_id": pl.Utf8,
-                "participant_type": pl.Utf8,
-                "player_name": pl.Utf8,
-            },
-        )
-
-    return pl.DataFrame(rows)
+    # Fixed schema on both paths: inferred from rows, an all-None column (no athlete lookup ->
+    # every player_name None) comes out ``Null``, and ``_pivot_wide``'s empty-list fill_null on
+    # the resulting ``List(Null)`` panics inside polars 2.0.
+    return pl.DataFrame(
+        rows,
+        schema={
+            "game_id": pl.Int64,
+            "play_id": pl.Utf8,
+            "athlete_id": pl.Utf8,
+            "athlete_ref": pl.Utf8,
+            "position_id": pl.Utf8,
+            "participant_type": pl.Utf8,
+            "player_name": pl.Utf8,
+        },
+    )
 
 
 def _resolve_missing_athletes(
