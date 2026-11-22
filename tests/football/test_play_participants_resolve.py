@@ -92,3 +92,17 @@ def test_a_failed_ref_is_logged_and_only_that_athlete_stays_unnamed(monkeypatch,
     assert len(fetched) == 7 and unnamed == [bad_id]
     assert f"failed to resolve athlete {bad_id}" in caplog.text
     assert wide.height > 0
+
+
+def test_empty_athlete_lookup_keeps_string_dtypes(captures):
+    """A game whose roster lookup comes back empty (the summary missed its budget) left every
+    ``player_name`` None; ``pl.DataFrame(rows)`` then inferred ``Null`` and ``_pivot_wide``'s
+    empty-list ``fill_null`` on the ``List(Null)`` column panicked inside polars 2.0 (a
+    ``PanicException`` is a BaseException, so it killed the GOP API worker).
+    """
+    plays, _lookup, _refs = captures
+    long = mod._build_long_frame(plays, {}, GAME)
+    assert long.schema["player_name"] == pl.Utf8
+    wide = mod._pivot_wide(long)
+    assert wide.height > 0
+    assert wide.schema["passer_player_names"] == pl.List(pl.Utf8)
