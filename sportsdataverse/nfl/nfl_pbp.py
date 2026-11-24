@@ -1206,6 +1206,59 @@ _PAT_CONTEXT_COLUMNS = (
 )
 
 
+def _espn_pat_try_columns(pat_text: pl.Expr, paa: pl.Expr, schema: pl.Schema) -> list[pl.Expr]:
+    """A split PAT row's derived columns: ``type.text``, the two results, ``play_type_nfl``, ``aborted_play``.
+
+    Results come from ESPN's own columns where the feed has them, else from the try's text; a blocked PAT
+    is ``blocked`` (ESPN leaves it null). Used by :func:`split_pat_rows` on its touchdown rows.
+    """
+    xp = pl.col("xp_attempt") == True  # noqa: E712
+    blocked = (paa == "Blocked PAT").fill_null(False) | pat_text.str.contains(r"(?i)\bblocked\b").fill_null(False)
+    xp_from_text = (
+        pl.when(pat_text.str.contains(r"(?i)\bno good\b|\bfailed\b|\bmissed\b"))
+        .then(pl.lit("failed"))
+        # "is GOOD", or the summary form naming the kicker alone ("(Joey Slye Kick)"): a made kick
+        .when(pat_text.is_not_null())
+        .then(pl.lit("good"))
+    )
+    xp_col = pl.col("extra_point_result") if "extra_point_result" in schema else pl.lit(None, dtype=pl.Utf8)
+    xp_result = pl.when(xp).then(pl.when(blocked).then(pl.lit("blocked")).otherwise(pl.coalesce(xp_col, xp_from_text)))
+    tp_from_text = (
+        pl.when(pat_text.str.contains(r"(?i)attempt succeeds|\bsucceed"))
+        .then(pl.lit("success"))
+        .when(pat_text.str.contains(r"(?i)attempt fails|\bfail"))
+        .then(pl.lit("failure"))
+    )
+    tp_col = pl.col("two_point_conv_result") if "two_point_conv_result" in schema else pl.lit(None, dtype=pl.Utf8)
+    two_pass = pl.coalesce(
+        pl.when(paa.is_in(["Two Point Pass", "Two Point Rush"])).then(paa == "Two Point Pass"),
+        pat_text.str.contains(r"(?i)\bpass").fill_null(False),
+    )
+    type_text = (
+        pl.when(xp & (xp_result == "blocked"))
+        .then(pl.lit("Blocked PAT"))
+        .when(xp & (xp_result == "failed"))
+        .then(pl.lit("Extra Point Missed"))
+        .when(xp & (xp_result == "good"))
+        .then(pl.lit("Extra Point Good"))
+        .when(xp)
+        .then(pl.lit("Extra Point"))
+        .when(two_pass)
+        .then(pl.lit("Two Point Pass"))
+        .otherwise(pl.lit("Two Point Rush"))
+    )
+    cols = [
+        type_text.cast(schema["type.text"]).alias("type.text"),
+        xp_result.cast(pl.Utf8).alias("extra_point_result"),
+        pl.when(~xp).then(pl.coalesce(tp_col, tp_from_text)).cast(pl.Utf8).alias("two_point_conv_result"),
+        pl.when(xp).then(pl.lit("XP_KICK")).otherwise(pl.lit("PAT2")).alias("play_type_nfl"),
+    ]
+    if "aborted_play" in schema:
+        aborted = pat_text.str.contains("Aborted", literal=True).fill_null(False)
+        cols.append(aborted.cast(schema["aborted_play"]).alias("aborted_play"))
+    return cols
+
+
 def split_pat_rows(plays: pl.DataFrame) -> pl.DataFrame:
     """Give every PAT that ESPN folded into its touchdown row a row of its own, as nflverse does.
 
@@ -1278,63 +1331,15 @@ def split_pat_rows(plays: pl.DataFrame) -> pl.DataFrame:
     if clash:
         raise ValueError(f"split_pat_rows: synthetic PAT id(s) {sorted(clash)[:5]} already belong to a play")
 
-    xp = pl.col("xp_attempt") == True  # noqa: E712
-    blocked = (paa == "Blocked PAT").fill_null(False) | pat_text.str.contains(r"(?i)\bblocked\b").fill_null(False)
-    xp_from_text = (
-        pl.when(pat_text.str.contains(r"(?i)\bno good\b|\bfailed\b|\bmissed\b"))
-        .then(pl.lit("failed"))
-        # "is GOOD", or the summary form naming the kicker alone ("(Joey Slye Kick)"): a made kick
-        .when(pat_text.is_not_null())
-        .then(pl.lit("good"))
-    )
-    xp_col = pl.col("extra_point_result") if "extra_point_result" in has else pl.lit(None, dtype=pl.Utf8)
-    xp_result = pl.when(xp).then(pl.when(blocked).then(pl.lit("blocked")).otherwise(pl.coalesce(xp_col, xp_from_text)))
-    tp_from_text = (
-        pl.when(pat_text.str.contains(r"(?i)attempt succeeds|\bsucceed"))
-        .then(pl.lit("success"))
-        .when(pat_text.str.contains(r"(?i)attempt fails|\bfail"))
-        .then(pl.lit("failure"))
-    )
-    tp_col = pl.col("two_point_conv_result") if "two_point_conv_result" in has else pl.lit(None, dtype=pl.Utf8)
-    tp_result = pl.when(~xp).then(pl.coalesce(tp_col, tp_from_text))
-    two_pass = pl.coalesce(
-        pl.when(paa.is_in(["Two Point Pass", "Two Point Rush"])).then(paa == "Two Point Pass"),
-        pat_text.str.contains(r"(?i)\bpass").fill_null(False),
-    )
-    type_text = (
-        pl.when(xp & (xp_result == "blocked"))
-        .then(pl.lit("Blocked PAT"))
-        .when(xp & (xp_result == "failed"))
-        .then(pl.lit("Extra Point Missed"))
-        .when(xp & (xp_result == "good"))
-        .then(pl.lit("Extra Point Good"))
-        .when(xp)
-        .then(pl.lit("Extra Point"))
-        .when(two_pass)
-        .then(pl.lit("Two Point Pass"))
-        .otherwise(pl.lit("Two Point Rush"))
-    )
-    extra = []
-    if "aborted_play" in has:
-        extra.append(
-            pat_text.str.contains("Aborted", literal=True)
-            .fill_null(False)
-            .cast(plays.schema["aborted_play"])
-            .alias("aborted_play")
-        )
     pat = td.select(
         "_pat_row",
         *[c for c in _PAT_CONTEXT_COLUMNS if c in has],
         (pl.col("id").cast(pl.Int64) + 1).alias("id"),
         pl.col("id").cast(pl.Int64).alias("pat_of_id"),
-        type_text.cast(plays.schema["type.text"]).alias("type.text"),
         pat_text.cast(plays.schema["text"]).alias("text"),
         "xp_attempt",
         "two_point_attempt",
-        xp_result.cast(pl.Utf8).alias("extra_point_result"),
-        tp_result.cast(pl.Utf8).alias("two_point_conv_result"),
-        pl.when(xp).then(pl.lit("XP_KICK")).otherwise(pl.lit("PAT2")).alias("play_type_nfl"),
-        *extra,
+        *_espn_pat_try_columns(pat_text, paa, plays.schema),
     )
     cleared = marked.with_columns(
         pl.when(pl.col("_pat_folded")).then(False).otherwise(pl.col("xp_attempt")).alias("xp_attempt"),
