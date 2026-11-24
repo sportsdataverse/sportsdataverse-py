@@ -1024,14 +1024,8 @@ Within each `(game_id, inning, half)` half-inning, ordered by the
 game-global `at_bat_index`: `base_state`/`outs_start` before PA
 *i* are the post-occupancy / out-count of PA *i-1* (empty/0 at the
 half's first PA -- occupancy and outs both reset at every half-inning
-boundary). The one exception is the extra-inning automatic runner
-(MLB, 2020+), who starts the half on 2nd (`"_2_"`) without any PA
-putting him there. It is detected from the half's first PA itself, not
-from a rule-era/inning table: after that PA a base is held by someone
-other than the batter, or `runners` shows a movement from
-`originBase` 2B (the placed runner scored or was put out on the play).
-Frames without `matchup_batter_id`/`runners` keep the empty start.
-`runs_on_play` is the score delta since the
+boundary), except that an extra half-inning's automatic runner starts on
+2nd (`"_2_"`; see `_pre_on_second`). `runs_on_play` is the score delta since the
 *previous PA in the game* (`over("game_id")`, **not** reset per
 half-inning -- the score itself carries across the half-inning
 boundary even though outs/bases do not).  `runs_rest_of_inning` is
@@ -1041,7 +1035,7 @@ the suffix-sum of `runs_on_play` within the half.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | Parsed `mlb_play_by_play` frame (optionally concatenated across games), carrying `game_id`, `about_inning`, `about_half_inning`, `about_at_bat_index`, `count_outs`, `result_home_score`, `result_away_score`, `matchup_post_on_{first,second,third}_id`, and optionally `matchup_batter_id` and `runners` (used to seed the extra-inning runner on 2nd). |
+| `pbp` | `DataFrame` |  | Parsed `mlb_play_by_play` frame (optionally concatenated across games), carrying `game_id`, `about_inning`, `about_half_inning`, `about_at_bat_index`, `count_outs`, `result_home_score`, `result_away_score`, `matchup_post_on_{first,second,third}_id`; optionally `matchup_batter_id` and `runners` (extra-inning runner). |
 
 **Returns**
 
