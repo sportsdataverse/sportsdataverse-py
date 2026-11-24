@@ -420,6 +420,12 @@ def test_kenpom_teams_has_no_rows_for_an_unbundled_season() -> None:
     ``mbb_crosswalk.R:349-354`` substitutes ``max(kp_yrs)``, which stamped the
     newest season's conferences on any season the bundle lacks.
     """
+    kp27 = mbb_crosswalk._kenpom_teams(2027)
+    assert kp27.height == 365
+    # A season-specific value, so a 2027 lookup that returned 2026's rows (also 365) fails:
+    # Abilene Christian moved from the WAC (2026) to the UAC (2027).
+    assert kp27.filter(pl.col("Team") == "Abilene Christian")["Conf"].to_list() == ["UAC"]
+    assert mbb_crosswalk._kenpom_teams(2026).filter(pl.col("Team") == "Abilene Christian")["Conf"].to_list() == ["WAC"]
     assert mbb_crosswalk._kenpom_teams(2026).height == 365
     assert mbb_crosswalk._kenpom_teams(2002).height == 327
     assert mbb_crosswalk._kenpom_teams(1999).height == 0
