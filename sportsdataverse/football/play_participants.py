@@ -569,6 +569,28 @@ _PARTICIPANT_NAME_COLS = [
     "forced_by_player_name",
     "recoverer_player_name",
 ]
+#: The roles ESPN hands a lateral's recipient (``coalesce_participants``).
+_LATERAL_ROLES = frozenset(
+    {"receiver_player_name", "rusher_player_name", "kickoff_return_player_name", "punt_return_player_name"}
+)
+#: A lateral row: "... lateral to #6 C.Nettles", "Lateral back to", 2004's "X took lateral".
+_LATERAL_RE = r"(?i)\blaterals?(?: back)? to\b|\btook lateral\b"
+
+
+def _skip_on_lateral(play_df: pl.DataFrame, name_col: str, src: pl.Expr) -> pl.Expr:
+    """``src`` nulled where ESPN's participant for ``name_col`` is a lateral's recipient.
+
+    ESPN names a lateral's recipient as the play's receiver, rusher or returner and leaves out the
+    player who caught, carried or returned it ("pass complete to #12 D.Haughton ... lateral to #6
+    C.Nettles" lists Nettles as the receiver: 26 of 26 lateral receptions in the 2026 CFB release,
+    and the NFL feed does the same). There the text's name stands, and so does its id.
+    """
+    if name_col not in _LATERAL_ROLES or name_col not in play_df.columns or "text" not in play_df.columns:
+        return src
+    lateral = pl.col("text").fill_null("").str.contains(_LATERAL_RE)
+    return pl.when(lateral & pl.col(name_col).is_not_null()).then(None).otherwise(src)
+
+
 _ID_PAIRS = [
     ("passer_player_id", "passer_player_id_part"),
     ("rusher_player_id", "rusher_player_id_part"),
@@ -616,12 +638,13 @@ def coalesce_participants(play_df: pl.DataFrame, parts: pl.DataFrame, *, prefer_
     coalesce_exprs = []
     for pbp_col, part_col, populate_if_null in _COALESCE_PAIRS:
         if pbp_col in play_df.columns and part_col in play_df.columns:
+            part = _skip_on_lateral(play_df, pbp_col, pl.col(part_col))
             if populate_if_null:
-                expr = pl.coalesce(pl.col(part_col).str.strip_chars(), pl.col(pbp_col)).alias(pbp_col)
+                expr = pl.coalesce(part.str.strip_chars(), pl.col(pbp_col)).alias(pbp_col)
             else:
                 expr = (
-                    pl.when(pl.col(pbp_col).is_not_null() & pl.col(part_col).is_not_null())
-                    .then(pl.col(part_col).str.strip_chars())
+                    pl.when(pl.col(pbp_col).is_not_null() & part.is_not_null())
+                    .then(part.str.strip_chars())
                     .otherwise(pl.col(pbp_col))
                     .alias(pbp_col)
                 )
@@ -672,7 +695,7 @@ def coalesce_participants(play_df: pl.DataFrame, parts: pl.DataFrame, *, prefer_
         for id_col, part_col in _ID_PAIRS:
             if part_col not in play_df.columns:
                 continue
-            src = pl.col(part_col).cast(pl.Utf8)
+            src = _skip_on_lateral(play_df, id_col.replace("_id", "_name"), pl.col(part_col).cast(pl.Utf8))
             if id_col == "interception_player_id":
                 src = pl.when(is_int).then(src).otherwise(None)
             elif id_col == "pass_breakup_player_id":
