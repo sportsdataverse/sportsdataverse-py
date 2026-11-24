@@ -3032,17 +3032,8 @@ def _apply_feature_substitution(
     EP model never sees a NA ``down``.  That is deliberately NOT the
     extra-point snap spot (``model_vars.PAT_YARDLINE_PRE_2015`` /
     ``PAT_YARDLINE_POST_2015``, ``nfl-2015-pat-snap-from-15``): nflfastR does
-    not run the EP model on a try at all — ``add_ep_variables`` L411-500
-    zeroes its classes and sets ``ep`` to the PAT make probability (FG model
-    at the snap spot) or ``2 * 0.4735`` for a two-point try, about 0.95 either
-    way.  Measured on the 18 try rows of ``tests/fixtures/nfl_ep_wp/
-    overtime_games.parquet``: the touchback 1st-and-10 proxy sits 0.31 from
-    nflverse's ``ep``, a 1st-and-10 at the snap spot 4.07 (a 1st-and-goal
-    from the 15 is worth ~4.5 points; a try is worth ~1).  The proxy stays;
-    the PAT make model belongs to ``nfl_fourth_down`` (which shares the two
-    snap-spot constants).
-    ponytail: ``ep`` on a try only feeds that row's ``1 - ep`` / ``2 - ep``
-    EPA overlay; a try-specific ``ep`` is the upgrade if it ever matters.
+    not run the EP model on a try at all, and :func:`_apply_try_values`
+    replaces the proxy's ``ep`` on every try with nflfastR's try value.
 
     Normal, downed plays are left untouched.  The substitution is written to
     *copies* of the feature columns so the returned frame still carries the
@@ -3554,7 +3545,7 @@ def _derive_wpa(df: pl.DataFrame) -> pl.DataFrame:
             pl.when(kneel_or_end).then(None).otherwise(pl.col("wpa")).alias("wpa"),
         )
 
-    df = df.drop([c for c in ("_tmp_posteam", "_end_game", "_home_wpa", "vegas_home_wp") if c in df.columns])
+    df = df.drop([c for c in ("_tmp_posteam", "_end_game", "_home_wpa") if c in df.columns])
 
     # Per-game cumulative rush/pass WPA totals (add_wp_variables L1252-1324) —
     # computed on the FINAL ``wpa`` (post kneel / end-of-game NA overrides),
@@ -4180,6 +4171,128 @@ def _add_success_first_down(df: pl.DataFrame) -> pl.DataFrame:
     return df.with_columns(exprs) if exprs else df
 
 
+#: The two-point make probability nflverse's pbp gives every try (nflfastR's ``two_point_prob_from_2``; measured
+#: constant on 2007, 2014 and 2024 -- nflfastR's development version varies it by the snap spot).
+_TWO_POINT_CONVERSION_PROB = 0.49
+
+
+def _apply_try_values(df: pl.DataFrame) -> pl.DataFrame:
+    """nflfastR's try value: ``extra_point_prob`` / ``two_point_conversion_prob`` and the ``ep`` they set.
+
+    ``add_ep_variables`` (``helper_add_ep_wp.R``) never scores a try with the EP model: it zeroes the seven
+    score classes and sets ``ep`` to ``extra_point_prob + 2 * two_point_conversion_prob``. A kick try (an
+    ``extra_point_attempt`` or an ``extra_point`` play type, two-point tries aside) gets the field-goal make
+    probability at its snap spot (the bundled ``fg_model``, roof outdoors when unknown); a two-point try gets
+    0.49 (:data:`_TWO_POINT_CONVERSION_PROB`). Both probabilities are 0 on every other play, as in nflverse.
+    """
+    from sportsdataverse.nfl.nfl_fourth_down import fg_make_probability
+
+    def flag(col: str) -> pl.Expr:
+        return (pl.col(col) == 1) if col in df.columns else pl.lit(False)
+
+    two = flag("two_point_attempt").fill_null(False)
+    kick = flag("extra_point_attempt").fill_null(False)
+    if "play_type" in df.columns:
+        kick = kick | (pl.col("play_type") == "extra_point").fill_null(False)
+    kick = kick & (two == False)  # noqa: E712
+    season = df["season"].cast(pl.Float64).to_numpy()
+    era = np.eye(5)[np.searchsorted(np.asarray(ERA_SEASON_CUTS), season, side="left").clip(0, 4)]
+    roof = df["roof"] if "roof" in df.columns else pl.Series([None] * df.height, dtype=pl.Utf8)
+    outdoors = (roof.is_null() | (roof == "outdoors")).cast(pl.Float64).to_numpy()
+    make = fg_make_probability(df["yardline_100"].cast(pl.Float64).to_numpy(), outdoors, era)
+    if make is None:  # pragma: no cover - the fg model ships with the package
+        make = np.full(df.height, np.nan)
+    df = df.with_columns(
+        extra_point_prob=pl.when(kick).then(pl.Series(make).fill_nan(None)).otherwise(0.0),
+        two_point_conversion_prob=pl.when(two).then(pl.lit(_TWO_POINT_CONVERSION_PROB)).otherwise(0.0),
+    )
+    is_try = kick | two
+    return df.with_columns(
+        *[pl.when(is_try).then(0.0).otherwise(pl.col(c)).alias(c) for c in _EP_CLASS_NAMES if c in df.columns],
+        ep=pl.when(is_try)
+        .then(pl.col("extra_point_prob") + 2 * pl.col("two_point_conversion_prob"))
+        .otherwise(pl.col("ep")),
+    )
+
+
+def _add_wp_post(df: pl.DataFrame) -> pl.DataFrame:
+    """nflfastR's ``home_wp_post`` / ``away_wp_post`` (``add_wp_variables``, ``helper_add_ep_wp.R``).
+
+    Each side's WP after the play: its ``home_wp`` / ``away_wp`` plus ``wpa`` when it had the ball, minus it
+    otherwise (null without a possession team). A tied overtime play followed by the game's end is 0.5 for both;
+    the end-of-game row, and a ``no_play`` after a ``no_play``, repeat the previous row's values.
+    """
+    if not {"game_id", "posteam", "home_team", "away_team", "home_wp", "away_wp", "wpa"} <= set(df.columns):
+        return df
+    grp = "game_id"
+    # no desc: no end-of-game row to spot (a null text would null every row through _r_ifelse)
+    lower = pl.col("desc").str.to_lowercase() if "desc" in df.columns else pl.lit("", pl.Utf8)
+    end_game = r"(?:end of game)|(?:end game)"
+    posts = {}
+    for side in ("home", "away"):
+        wp, team = pl.col(f"{side}_wp"), pl.col(f"{side}_team")
+        post = _r_ifelse(pl.col("posteam") == team, wp + pl.col("wpa"), wp - pl.col("wpa"))
+        if {"qtr", "score_differential_post"} <= set(df.columns):
+            ot_tie = (
+                (pl.col("qtr") >= 5)
+                & lower.shift(-1).over(grp).str.contains(end_game)
+                & (pl.col("score_differential_post") == 0)
+            )
+            post = _r_ifelse(ot_tie, 0.5, post)
+        posts[f"{side}_wp_post"] = post
+    df = df.with_columns(**posts)
+    use_prior = lower.str.contains(end_game)
+    if "play_type" in df.columns:
+        no_play = pl.col("play_type") == "no_play"
+        use_prior = use_prior | (no_play.shift(1).over(grp) & no_play)
+    return df.with_columns(
+        _r_ifelse(use_prior, pl.col(c).shift(1).over(grp), pl.col(c)).alias(c) for c in ("home_wp_post", "away_wp_post")
+    )
+
+
+#: What nflfastR ``clean_pbp``'s player aliases read: its cleaned names and ids, the raw stat players and
+#: ``qb_scramble``.
+_ALIAS_INPUTS = (
+    "passer",
+    "passer_id",
+    "rusher",
+    "rusher_id",
+    "receiver",
+    "receiver_id",
+    "rusher_player_name",
+    "rusher_player_id",
+    "receiver_player_name",
+    "receiver_player_id",
+    "qb_scramble",
+)
+
+
+def _add_clean_pbp_columns(df: pl.DataFrame) -> pl.DataFrame:
+    """nflfastR ``clean_pbp``'s ``play`` flag, and its ``name`` / ``id`` / ``fantasy*`` aliases.
+
+    ``play`` (Float64, as nflverse) is 1 for a scored play with a possession team whose ``play_type`` is
+    ``pass`` / ``run`` / ``no_play``, other than a ``Timeout`` or an under-review row. The aliases are added
+    only when the frame carries ``clean_pbp``'s ``passer`` / ``rusher`` / ``receiver`` (and ids): the native
+    build gets those season-wide, before enrichment.
+    """
+    if {"epa", "posteam", "desc", "play_type"} <= set(df.columns):
+        desc = pl.col("desc")
+        df = df.with_columns(
+            play=(
+                pl.col("epa").is_not_null()
+                & pl.col("posteam").is_not_null()
+                & (desc != "*** play under review ***")
+                & (desc.str.starts_with("Timeout ") == False)  # noqa: E712
+                & pl.col("play_type").is_in(["no_play", "pass", "run"]).fill_null(False)
+            ).cast(pl.Float64)
+        )
+    if set(_ALIAS_INPUTS) <= set(df.columns):
+        from sportsdataverse.nfl.nfl_clean import _player_alias_exprs
+
+        df = df.with_columns(**_player_alias_exprs())
+    return df
+
+
 def _derive_qbr_epa(df: pl.DataFrame) -> pl.DataFrame:
     """Add the per-play Total-QBR EPA components (nflverse port of ``__process_qbr``).
 
@@ -4526,6 +4639,18 @@ def enrich_nfl_pbp(
         * ``vegas_wpa`` — spread-adjusted WPA.
         * ``vegas_home_wpa`` — home-frame spread-adjusted WPA lead difference
           (kept as a real column per nflfastR; NOT null'd on kneel rows).
+        * ``vegas_home_wp`` — home-team spread-adjusted win probability.
+        * ``home_wp_post`` / ``away_wp_post`` — each team's win probability after
+          the play (``home_wp`` / ``away_wp`` plus or minus ``wpa``; null without a
+          possession team, 0.5 after a tied overtime ends the game).
+        * ``extra_point_prob`` / ``two_point_conversion_prob`` — the try's make
+          probability (field-goal model at the snap spot / 0.49), 0 on other plays;
+          a try's ``ep`` is ``extra_point_prob + 2 * two_point_conversion_prob``
+          and its seven score classes are 0, as in nflfastR.
+        * ``play`` — nflfastR ``clean_pbp``'s 1/0 "normal play" filter (Float64).
+        * ``name``, ``id``, ``fantasy``, ``fantasy_id``, ``fantasy_player_name``,
+          ``fantasy_player_id`` — ``clean_pbp``'s player aliases, only when the
+          frame carries its ``passer`` / ``rusher`` / ``receiver`` and their ids.
         * ``total_home_epa``, ``total_away_epa``, ``total_home_rush_epa``,
           ``total_away_rush_epa``, ``total_home_pass_epa``,
           ``total_away_pass_epa``, ``total_home_rush_wpa``,
@@ -4649,6 +4774,8 @@ def enrich_nfl_pbp(
     ep_cols = ["ep", *_EP_CLASS_NAMES]
     raw = df.drop([c for c in ep_cols if c in df.columns])
     raw = pl.concat([raw, scored.select([c for c in ep_cols if c in scored.columns])], how="horizontal")
+    # 1b. Tries: nflfastR's make probabilities replace the model's 1st-and-10 proxy.
+    raw = _apply_try_values(raw)
 
     # 2. EPA — native lead-difference + scoring/end-of-half/OT overlays.
     raw = _derive_epa(raw)
@@ -4679,6 +4806,7 @@ def enrich_nfl_pbp(
     # 4. WPA + home/away/def WP — native lead-of-home-WP + posteam perspective.
     raw = raw.drop([c for c in ("home_wp", "away_wp", "def_wp", "wpa", "vegas_wpa") if c in raw.columns])
     raw = _derive_wpa(raw)
+    raw = _add_wp_post(raw)
 
     # 4b. Air/YAC WPA family — nflfastR add_air_yac_wp_variables (a naive-WP
     #     re-score on the air-yards state; the R OT branch is dead code
@@ -4744,6 +4872,7 @@ def enrich_nfl_pbp(
 
     # 7b. nflfastR's success and first_down, which the Shield-built frame did not carry.
     raw = _add_success_first_down(raw)
+    raw = _add_clean_pbp_columns(raw)
 
     # 8. 4th-down decision surface — default-on, scored only on the qualifying
     #    4th-down rows and null elsewhere (nfl4th add_4th_probs + recommendation).

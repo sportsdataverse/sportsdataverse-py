@@ -447,6 +447,24 @@ def _resolve_name_id(
     return df
 
 
+def _player_alias_exprs() -> dict[str, pl.Expr]:
+    """nflfastR ``clean_pbp``'s player aliases over the passer / rusher / receiver columns.
+
+    ``name`` / ``id`` are the cleaned passer, else rusher. ``fantasy`` / ``fantasy_id`` are the cleaned rusher,
+    else receiver, else the passer on a scramble; ``fantasy_player_name`` / ``fantasy_player_id`` the RAW
+    ``rusher_player_*``, else ``receiver_player_*`` (matches R exactly).
+    """
+    scramble = pl.col("qb_scramble") == 1
+    return {
+        "name": pl.coalesce("passer", "rusher"),
+        "id": pl.coalesce("passer_id", "rusher_id"),
+        "fantasy_player_name": pl.coalesce("rusher_player_name", "receiver_player_name"),
+        "fantasy_player_id": pl.coalesce("rusher_player_id", "receiver_player_id"),
+        "fantasy": pl.coalesce("rusher", "receiver", pl.when(scramble).then(pl.col("passer"))),
+        "fantasy_id": pl.coalesce("rusher_id", "receiver_id", pl.when(scramble).then(pl.col("passer_id"))),
+    }
+
+
 def _with_default(df: pl.DataFrame, name: str, dtype: "pl.DataType", default: object) -> pl.DataFrame:
     """Add ``name`` with a constant default when absent; no-op otherwise."""
     if name in df.columns:
@@ -773,41 +791,10 @@ def clean_nfl_pbp(
     )
 
     df = df.with_columns(
-        name=pl.when(pl.col("passer").is_not_null()).then(pl.col("passer")).otherwise(pl.col("rusher")),
         jersey_number=pl.when(pl.col("passer_jersey_number").is_not_null())
         .then(pl.col("passer_jersey_number"))
         .otherwise(pl.col("rusher_jersey_number")),
-        id=pl.when(pl.col("passer_id").is_not_null()).then(pl.col("passer_id")).otherwise(pl.col("rusher_id")),
-    )
-
-    # Fantasy fallback -- `fantasy_player_name`/`_id` use the RAW (uncleaned)
-    # rusher_player_name/receiver_player_name/*_id columns; `fantasy`/`_id`
-    # use the CLEANED rusher/receiver/passer + id (matches R exactly).
-    df = df.with_columns(
-        fantasy_player_name=pl.when(pl.col("rusher_player_name").is_not_null())
-        .then(pl.col("rusher_player_name"))
-        .when(pl.col("receiver_player_name").is_not_null())
-        .then(pl.col("receiver_player_name"))
-        .otherwise(None),
-        fantasy_player_id=pl.when(pl.col("rusher_player_id").is_not_null())
-        .then(pl.col("rusher_player_id"))
-        .when(pl.col("receiver_player_id").is_not_null())
-        .then(pl.col("receiver_player_id"))
-        .otherwise(None),
-        fantasy=pl.when(pl.col("rusher").is_not_null())
-        .then(pl.col("rusher"))
-        .when(pl.col("receiver").is_not_null())
-        .then(pl.col("receiver"))
-        .when(pl.col("qb_scramble") == 1)
-        .then(pl.col("passer"))
-        .otherwise(None),
-        fantasy_id=pl.when(pl.col("rusher_id").is_not_null())
-        .then(pl.col("rusher_id"))
-        .when(pl.col("receiver_id").is_not_null())
-        .then(pl.col("receiver_id"))
-        .when(pl.col("qb_scramble") == 1)
-        .then(pl.col("passer_id"))
-        .otherwise(None),
+        **_player_alias_exprs(),
         out_of_bounds=pl.col("desc").str.contains(r"(?:ran ob)|(?:pushed ob)|(?:sacked ob)").cast(pl.Int64),
     )
 
