@@ -158,6 +158,48 @@ class TestComputeResults:
         i1 = t.filter(pl.col("team") == "I1")["elo"][0]
         assert i1 == 1500.0  # I1 idle in week 1 -> untouched default
 
+    def test_cfb_fitted_home_field_and_margin_sd(self) -> None:
+        # Defaults fitted by cfbseedR's data-raw/cfb_elo_constants.R on 8,551
+        # FBS-vs-FBS games 2014-2025 (2020 left out), shared with cfbseedR:
+        # not nflseedR's NFL 20 ELO / sd 13.
+        import inspect
+
+        import numpy as np
+
+        params = inspect.signature(cfb_compute_results).parameters
+        assert params["home_field"].default == 59.4
+        assert params["margin_sd"].default == 16.7
+
+        games, teams = _toy_unplayed()
+        games = games.with_columns(pl.lit(1, dtype=pl.Int64).alias("sim"))
+        teams = teams.with_columns(pl.lit(1, dtype=pl.Int64).alias("sim"))
+        even = {t: 1500.0 for t in teams["team"].to_list()}
+        week1 = (pl.col("week") == 1) & (pl.col("game_type") == "REG") & (pl.col("neutral") == 0)
+
+        # Equal ratings and (almost) no noise: every home margin is the home edge,
+        # 59.4 / 25 = 2.376 points, rounded away from zero.
+        out = cfb_compute_results(teams, games, 1, rng=np.random.default_rng(0), elo=even, margin_sd=1e-9)
+        assert out["games"].filter(week1)["result"].to_list() == [3.0] * games.filter(week1).height
+        # Both stay overridable; the NFL value 20 is a 0.8-point edge.
+        nfl = cfb_compute_results(
+            teams, games, 1, rng=np.random.default_rng(0), elo=even, home_field=20.0, margin_sd=1e-9
+        )
+        assert nfl["games"].filter(week1)["result"].to_list() == [1.0] * games.filter(week1).height
+
+    def test_null_neutral_flag_gets_the_home_edge(self) -> None:
+        # cfbseedR coalesces a missing `neutral` to 0 (a true home game); match it.
+        import numpy as np
+
+        games, teams = _toy_unplayed()
+        games = games.with_columns(
+            pl.lit(1, dtype=pl.Int64).alias("sim"), pl.lit(None, dtype=pl.Int64).alias("neutral")
+        )
+        teams = teams.with_columns(pl.lit(1, dtype=pl.Int64).alias("sim"))
+        even = {t: 1500.0 for t in teams["team"].to_list()}
+        out = cfb_compute_results(teams, games, 1, rng=np.random.default_rng(0), elo=even, margin_sd=1e-9)
+        week1 = out["games"].filter(pl.col("week") == 1)["result"].to_list()
+        assert week1 == [3.0] * len(week1)
+
 
 def _away_always_wins(
     teams_df: pl.DataFrame, games_df: pl.DataFrame, week_num: int, **kwargs: Any
