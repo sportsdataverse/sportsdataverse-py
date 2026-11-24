@@ -11599,3 +11599,24 @@
   test: tests/nfl/test_nfl_espn_parity_fixes.py::test_espn_cpoe_is_percentage_points
   expected: kill
   note: ESPN cpoe back on the 0-1 scale would read 100x smaller than nflfastR's and the Shield pbp's.
+
+# --- gh-1262: extra-inning automatic runner in pbp_base_out_states ------------------------------
+- id: mlb-re24-automatic-runner-not-seeded
+  group: mlb-extra-innings-runner
+  finding: gh-1262
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: 'return pl.when(first_pa & placed).then(pl.lit(1, dtype=pl.Int8)).otherwise(shifted)'
+  mutant: 'return shifted'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_extra_innings_automatic_runner_on_second
+  expected: kill
+  note: Every 2020+ extra half-inning would open bases empty instead of with the runner on 2nd.
+
+- id: mlb-re24-automatic-runner-runners-signal
+  group: mlb-extra-innings-runner
+  finding: gh-1262
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '        signals.append(pl.col("runners").cast(pl.Utf8).str.contains(_FROM_2B).fill_null(False))'
+  mutant: '        pass'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_extra_innings_automatic_runner_on_second
+  expected: kill
+  note: An automatic runner who scores on the half's first PA (718511 bottom 11) would be missed.
