@@ -3,7 +3,7 @@
 A review appends the call it reversed to the ruling that stood ("... CALL OVERTURNED. (Original
 Play: ... TOUCHDOWN)", 2009-16 "(Originally ruled a touchdown, overturned after replay review.)"),
 and ESPN keeps the reversed call's type. A lateral is one row whose participants name the
-recipient as the receiver, rusher or returner. Captures: ``fixtures/README.md``.
+recipient as the receiver, rusher or returner. Captures: ``fixtures/README.md`` (``review_laterals/``).
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ import pytest
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 
-FIX = Path(__file__).parent / "fixtures"
+FIX = Path(__file__).parent / "fixtures" / "review_laterals"  # outside the whole-game oracle's glob
 # Processing a default-odds capture warns DefaultOddsWarning incidentally; the market plays no part
 # in what these tests read. tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
 pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
