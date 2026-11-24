@@ -96,8 +96,8 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 - [`clean_nfl_pbp`](reference/additional/play-by-play-processing-3#clean_nfl_pbp)
 - [`shield_nfl_pbp`](reference/additional/play-by-play-processing-4#shield_nfl_pbp)
 - [`shield_to_espn_summary`](reference/additional/play-by-play-processing-4#shield_to_espn_summary)
-- [`split_pat_rows`](reference/additional/play-by-play-processing-4#split_pat_rows)
-- [`team_name_fn`](reference/additional/play-by-play-processing-4#team_name_fn)
+- [`split_pat_rows`](reference/additional/play-by-play-processing-5#split_pat_rows)
+- [`team_name_fn`](reference/additional/play-by-play-processing-5#team_name_fn)
 
 ### Models and calculators {#models-and-calculators}
 

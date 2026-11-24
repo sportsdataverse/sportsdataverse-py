@@ -144,8 +144,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [clean_nfl_pbp](additional/play-by-play-processing-3.md#clean_nfl_pbp) | Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port). |
 | [shield_nfl_pbp](additional/play-by-play-processing-4.md#shield_nfl_pbp) | Build one NFL game's nflverse-shape play-by-play from Shield, at ANY game phase. |
 | [shield_to_espn_summary](additional/play-by-play-processing-4.md#shield_to_espn_summary) | Project one Shield game (any phase) onto an ESPN-summary-shaped dict. |
-| [split_pat_rows](additional/play-by-play-processing-4.md#split_pat_rows) | Give every PAT that ESPN folded into its touchdown row a row of its own, as nflverse does. |
-| [team_name_fn](additional/play-by-play-processing-4.md#team_name_fn) | Fold historical/relocated team codes onto their current abbreviation. |
+| [split_pat_rows](additional/play-by-play-processing-5.md#split_pat_rows) | Give every PAT that ESPN folded into its touchdown row a row of its own, as nflverse does. |
+| [team_name_fn](additional/play-by-play-processing-5.md#team_name_fn) | Fold historical/relocated team codes onto their current abbreviation. |
 
 ## Models and calculators
 

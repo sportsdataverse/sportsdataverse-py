@@ -46400,10 +46400,6 @@ load_nfl_model_pbp:
     passer.
   rusher_id: GSIS id of the rusher as nflfastR clean_pbp derives it -- the most frequent rusher_player_id of that name within
     the possession team and season; on an aborted snap, the player charged with the fumble.
-  aborted_play: Binary indicator (1/0) that the play description contains "Aborted" (a botched snap or exchange),
-    nflfastR's clean_pbp rule.
-  play_type_nfl: nflverse NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PENALTY, TIMEOUT, ...) -- the Shield
-    feed's playType with an intercepted pass labelled INTERCEPTION, as nflverse labels it.
   sack_epa: EPA credited to the play's sack component (clipped at -5).
   sack_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
   shield_play_type: Raw NFL.com Shield play-type enum for the play (e.g. RUSH, PASS, FIELD_GOAL, KICK_OFF, PENALTY, END_QUARTER,
@@ -81246,3 +81242,19 @@ yahoo_cfb_boxscore:
   stat_abbreviation: Short stat label.
   stat_variation: 'Stat scope of the row; always "Game" because the shangrila lineup carries single-game stats only.'
   value: Stat value as Yahoo sends it ("188").
+# play_type_nfl / aborted_play (#1255). nfl_model_pbp passes the Shield build's columns through, so these
+# two belong under load_nfl_model_pbp too once nfl-data bumps SCHEMA_REV and rebuilds the release (its
+# 2026-11-24 assets were built at sdv-py 2974302a, before #1255, and lack them).
+shield_nfl_pbp:
+  aborted_play: Binary indicator (1/0) that the play description contains "Aborted" (a botched snap or exchange),
+    nflfastR's clean_pbp rule.
+  play_type_nfl: nflverse NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PENALTY, TIMEOUT, ...) -- the Shield
+    feed's playType with an intercepted pass labelled INTERCEPTION, as nflverse labels it.
+split_pat_rows:
+  aborted_play: Binary indicator (1/0) that the play text contains "Aborted" (a botched snap or exchange), nflfastR's
+    clean_pbp rule.
+  id: ESPN play id; on a split try row, the touchdown's id + 1 (ESPN gives the try no id of its own).
+  play_type_nfl: nflverse NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PENALTY, ...) mapped from ESPN's
+    type.text and the play flags; XP_KICK / PAT2 on a split try row, UNSPECIFIED for an ESPN type with no mapping.
+  pat_of_id: On a split PAT / two-point try row, the id of the touchdown it was folded into (the row's own id is that
+    id + 1); null on every other row.
