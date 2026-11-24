@@ -186,6 +186,20 @@ class TestComputeResults:
         )
         assert nfl["games"].filter(week1)["result"].to_list() == [1.0] * games.filter(week1).height
 
+    def test_null_neutral_flag_gets_the_home_edge(self) -> None:
+        # cfbseedR coalesces a missing `neutral` to 0 (a true home game); match it.
+        import numpy as np
+
+        games, teams = _toy_unplayed()
+        games = games.with_columns(
+            pl.lit(1, dtype=pl.Int64).alias("sim"), pl.lit(None, dtype=pl.Int64).alias("neutral")
+        )
+        teams = teams.with_columns(pl.lit(1, dtype=pl.Int64).alias("sim"))
+        even = {t: 1500.0 for t in teams["team"].to_list()}
+        out = cfb_compute_results(teams, games, 1, rng=np.random.default_rng(0), elo=even, margin_sd=1e-9)
+        week1 = out["games"].filter(pl.col("week") == 1)["result"].to_list()
+        assert week1 == [3.0] * len(week1)
+
 
 def _away_always_wins(
     teams_df: pl.DataFrame, games_df: pl.DataFrame, week_num: int, **kwargs: Any

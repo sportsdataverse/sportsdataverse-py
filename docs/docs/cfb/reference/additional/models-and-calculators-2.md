@@ -66,7 +66,7 @@ FBS results (`home_field`, `margin_sd`).
 The defaults come from cfbseedR's `data-raw/cfb_elo_constants.R`, fitted
 on 8,551 completed FBS-vs-FBS games from 2014-2025 (2020 left out):
 `home_field = 25 * 2.376` points of within-season home edge (SE 0.168),
-and `margin_sd` = 16.724 points, the spread of real margins around the
+and `margin_sd` = 16.734 points, the spread of real margins around the
 pregame-ELO estimate this function computes (SE 0.128). They replace
 nflseedR's NFL values (20 ELO = 0.8 points, sd 13). cfbseedR uses the
 same numbers; refit both together.
@@ -107,6 +107,7 @@ teams, games = out["teams"], out["games"]
 # Simulate with the NFL constants instead (``cfb_simulations`` passes only ``rng``, so bind overrides with ``functools.partial``)
 
 import functools
+from sportsdataverse.cfb.cfb_simulations import cfb_compute_results, cfb_simulations
 nfl_elo = functools.partial(cfb_compute_results, home_field=20.0, margin_sd=13.0)
 sims = cfb_simulations(games, teams, compute_results=nfl_elo, seed=1)
 ```
