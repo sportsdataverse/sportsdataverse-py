@@ -156,6 +156,30 @@ frames:
   - description: ''
     name: grade_pass_block_percentile
     type: integer
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: war_percentile
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
+  - description: ''
+    name: waa_percentile
+    type: integer
   section: receiving
 - columns:
   - description: ''
@@ -313,6 +337,30 @@ frames:
     type: integer
   - description: ''
     name: grade_fumble_percentile
+    type: integer
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: war_percentile
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
+  - description: ''
+    name: waa_percentile
     type: integer
   section: passing
 - columns:
@@ -472,6 +520,30 @@ frames:
   - description: ''
     name: grade_pass_block_percentile
     type: integer
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: war_percentile
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
+  - description: ''
+    name: waa_percentile
+    type: integer
   section: rushing
 - columns:
   - description: ''
@@ -629,6 +701,30 @@ frames:
     type: integer
   - description: ''
     name: grade_coverage_percentile
+    type: integer
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: war_percentile
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
+  - description: ''
+    name: waa_percentile
     type: integer
   section: defense
 frames_by: group

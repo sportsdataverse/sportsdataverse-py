@@ -257,6 +257,24 @@ frames:
   - description: ''
     name: offense_neg_graded_rate
     type: numeric
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
   section: passing
 - columns:
   - description: ''
@@ -2738,6 +2756,24 @@ frames:
   - description: ''
     name: offense_neg_graded_rate
     type: numeric
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
   section: receiving
 - columns:
   - description: ''
@@ -3210,6 +3246,24 @@ frames:
   - description: ''
     name: offense_neg_graded_rate
     type: numeric
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
   section: rushing
 - columns:
   - description: ''
@@ -3310,6 +3364,24 @@ frames:
     type: integer
   - description: ''
     name: snap_counts_te
+    type: integer
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
     type: integer
   section: blocking
 - columns:
@@ -3463,6 +3535,24 @@ frames:
   - description: ''
     name: offense_neg_graded_rate
     type: numeric
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
   section: pass-blocking
 - columns:
   - description: ''
@@ -3582,6 +3672,24 @@ frames:
   - description: ''
     name: offense_neg_graded_rate
     type: numeric
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
   section: run-blocking
 - columns:
   - description: ''
@@ -3761,6 +3869,24 @@ frames:
   - description: ''
     name: snap_counts_dl_outside_t
     type: integer
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
   section: defense
 - columns:
   - description: ''
@@ -3853,6 +3979,24 @@ frames:
   - description: ''
     name: neg_graded_rate
     type: numeric
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
   section: run-defense
 - columns:
   - description: ''
@@ -4065,6 +4209,24 @@ frames:
   - description: ''
     name: double_team_rate
     type: numeric
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
   section: pass-rush
 - columns:
   - description: ''
@@ -4198,6 +4360,24 @@ frames:
     type: numeric
   - description: ''
     name: touchdowns
+    type: integer
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
     type: integer
   section: coverage
 - columns:
@@ -4499,6 +4679,24 @@ frames:
   - description: ''
     name: field_goal_oe_total
     type: numeric
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
+    type: integer
   section: field-goals
 - columns:
   - description: ''
@@ -4599,6 +4797,24 @@ frames:
     type: integer
   - description: ''
     name: snaps
+    type: integer
+  - description: ''
+    name: war
+    type: numeric
+  - description: ''
+    name: war_rank
+    type: integer
+  - description: ''
+    name: war_rank_of
+    type: integer
+  - description: ''
+    name: waa
+    type: numeric
+  - description: ''
+    name: waa_rank
+    type: integer
+  - description: ''
+    name: waa_rank_of
     type: integer
   section: punting
 - columns:

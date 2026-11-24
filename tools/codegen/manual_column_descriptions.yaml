@@ -57518,6 +57518,14 @@ pff_api_position_report:
   twenty_made: Field goals made from 20-29 yards.
   twenty_percent: Field-goal percentage from 20-29 yards.
   twp_rate: Turnover-worthy-play rate.
+  waa: Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college
+    measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only.
+  waa_rank: PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null.
+  waa_rank_of: Number of players in the pool waa_rank is out of; null when waa is null.
+  war: Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure).
+    NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college.
+  war_rank: PFF's rank of the player on war within the report's player pool (1 = best); null when war is null.
+  war_rank_of: Number of players in the pool war_rank is out of; null when war is null.
   wide_rate: Share of receiving snaps aligned out wide.
   wide_snaps: Receiving snaps aligned out wide.
   yards: 'Yards in the report''s play family: passing yards (passing), receiving yards (receiving), rushing yards (rushing),
@@ -57824,6 +57832,22 @@ pff_api_team_leaders:
     a rank); null when the player is below his position's qualifying volume.
   targets_rank_of: Number of qualified players at his position league-wide ranked on targets, the pool targets_rank is out
     of; null when the player is below his position's qualifying volume.
+  waa: Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college
+    measure; whole-season windows only). SDV's /v2 captures cover 2026 only.
+  waa_percentile: Player's percentile (0-100, higher = better) on waa among qualified players at his position league-wide,
+    as published by PFF; null when the player is below his position's qualifying volume.
+  waa_rank: Player's rank on waa among qualified players at his position league-wide, as published by PFF (1 = best); null
+    when the player is below his position's qualifying volume.
+  waa_rank_of: Number of qualified players at his position league-wide ranked on waa, the pool waa_rank is out of; null when
+    the player is below his position's qualifying volume.
+  war: Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure;
+    whole-season windows only). PFF documents war for the NFL and waa for college; on NCAA rows use waa.
+  war_percentile: Player's percentile (0-100, higher = better) on war among qualified players at his position league-wide,
+    as published by PFF; null when the player is below his position's qualifying volume.
+  war_rank: Player's rank on war among qualified players at his position league-wide, as published by PFF (1 = best); null
+    when the player is below his position's qualifying volume.
+  war_rank_of: Number of qualified players at his position league-wide ranked on war, the pool war_rank is out of; null when
+    the player is below his position's qualifying volume.
   yards_after_contact_per_attempt: Rushing yards after contact per attempt (PFF column 'YAC/ATT').
   yards_after_contact_per_attempt_percentile: Player's percentile (0-100, higher = better) on yards after contact per attempt
     among qualified players at his position league-wide; null when the player is below his position's qualifying volume.

@@ -122,6 +122,12 @@ One of nineteen player reports for the whole league, one row per player
 | `accuracy_oe` | Float64 | Accuracy percentage over expectation, in percentage points (PFF-charted accuracy minus its expected value). |
 | `offense_pos_graded_rate` | Float64 | Percentage of the player's offensive plays that PFF graded positively. |
 | `offense_neg_graded_rate` | Float64 | Percentage of the player's offensive plays that PFF graded negatively. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **passing-depth**
 
@@ -962,6 +968,12 @@ One of nineteen player reports for the whole league, one row per player
 | `lined_up_vs_lb` | Float64 | Percentage of the player's charted matchups in which he lined up across from a linebacker; with lined_up_vs_cb and lined_up_vs_s it sums to 100 where populated (null for many players). |
 | `offense_pos_graded_rate` | Float64 | Percentage of the player's offensive plays that PFF graded positively. |
 | `offense_neg_graded_rate` | Float64 | Percentage of the player's offensive plays that PFF graded negatively. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **receiving-depth**
 
@@ -1128,6 +1140,12 @@ One of nineteen player reports for the whole league, one row per player
 | `carry_share` | Float64 | Percentage of the team's carries taken by the player. |
 | `offense_pos_graded_rate` | Float64 | Percentage of the player's offensive plays that PFF graded positively. |
 | `offense_neg_graded_rate` | Float64 | Percentage of the player's offensive plays that PFF graded negatively. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **blocking**
 
@@ -1166,6 +1184,12 @@ One of nineteen player reports for the whole league, one row per player
 | `snap_counts_rg` | Int64 | Snaps aligned at right guard. |
 | `snap_counts_rt` | Int64 | Snaps aligned at right tackle. |
 | `snap_counts_te` | Int64 | Snaps aligned at tight end. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **pass-blocking**
 
@@ -1221,6 +1245,12 @@ One of nineteen player reports for the whole league, one row per player
 | `island_pass_block_win_rate` | Float64 | Pass-block win rate, in percent, on the player's island (isolated, one-on-one) pass-blocking snaps. |
 | `offense_pos_graded_rate` | Float64 | Percentage of the player's offensive plays that PFF graded positively. |
 | `offense_neg_graded_rate` | Float64 | Percentage of the player's offensive plays that PFF graded negatively. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **run-blocking**
 
@@ -1265,6 +1295,12 @@ One of nineteen player reports for the whole league, one row per player
 | `gap_neg_graded_rate` | Float64 | Percentage of the player's gap-scheme run-blocking plays that PFF graded negatively. |
 | `offense_pos_graded_rate` | Float64 | Percentage of the player's offensive plays that PFF graded positively. |
 | `offense_neg_graded_rate` | Float64 | Percentage of the player's offensive plays that PFF graded negatively. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **defense**
 
@@ -1329,6 +1365,12 @@ One of nineteen player reports for the whole league, one row per player
 | `snap_counts_fs` | Int64 | Snaps aligned at free safety. |
 | `touchdowns` | Int64 | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
 | `snap_counts_dl_outside_t` | Int64 | Defensive-line snaps aligned outside the offensive tackle. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **run-defense**
 
@@ -1364,6 +1406,12 @@ One of nineteen player reports for the whole league, one row per player
 | `team_name` | String | Team name/abbreviation the player is credited to for the range. |
 | `pos_graded_rate` | Float64 | Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded positively. |
 | `neg_graded_rate` | Float64 | Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded negatively. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **pass-rush**
 
@@ -1439,6 +1487,12 @@ One of nineteen player reports for the whole league, one row per player
 | `rhs_misses` | Int64 | Missed tackles on snaps rushing from the right-hand side (RHS). |
 | `pass_rush_grade_oe_percentile` | Float64 | Percentile (0-100) of the player's pass-rush grade over expectation, as reported by PFF. |
 | `double_team_rate` | Float64 | Percentage of the player's pass-rush snaps on which he was double-teamed. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **coverage**
 
@@ -1488,6 +1542,12 @@ One of nineteen player reports for the whole league, one row per player
 | `assists` | Int64 | Assisted tackles credited to the player. |
 | `grades_pass_rush_defense` | Float64 | PFF pass-rush grade, 0-100. |
 | `touchdowns` | Int64 | Touchdowns: passing touchdowns thrown (passing), receiving and rushing touchdowns scored (receiving, rushing), or touchdowns allowed into the player's coverage (coverage, defense). |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **special-teams**
 
@@ -1601,6 +1661,12 @@ One of nineteen player reports for the whole league, one row per player
 | `thirty_made` | Int64 | Field goals made from 30-39 yards. |
 | `field_goal_oe` | Float64 | Field-goal percentage over expectation, in percentage points (made rate minus PFF's expected make rate). |
 | `field_goal_oe_total` | Float64 | Field goals made over expectation in total (makes minus PFF-expected makes). |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **punting**
 
@@ -1639,6 +1705,12 @@ One of nineteen player reports for the whole league, one row per player
 | `return_yards` | Int64 | Return yards gained by the return team on the player's kicks: kickoffs on the kickoffs report, punts on the punting report. |
 | `downeds` | Int64 | Punts downed by the coverage unit. |
 | `snaps` | Int64 | Punting snaps played. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure). NCAA /v2 rows also carry war, which PFF does not document there and whose values differ from waa; use waa for college. |
+| `war_rank` | Int64 | PFF's rank of the player on war within the report's player pool (1 = best); null when war is null. |
+| `war_rank_of` | Int64 | Number of players in the pool war_rank is out of; null when war is null. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure). Null on rows PFF leaves unvalued; SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | PFF's rank of the player on waa within the report's player pool (1 = best); null when waa is null. |
+| `waa_rank_of` | Int64 | Number of players in the pool waa_rank is out of; null when waa is null. |
 
 **kickoffs**
 

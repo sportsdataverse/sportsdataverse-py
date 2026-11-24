@@ -113,6 +113,37 @@ _WHOAMI_UNVERIFIED = (
     "no parser either -- the wrapper returns that raw dict"
 )
 
+# /v2 win-value columns PFF added after the committed ``schemas_v2.json`` capture (2026-09-26).
+# The /v2 parser emits every self-described column, so the wrappers already return these; listing
+# them by name keeps the returns tables current without a live re-capture. Names and sections come
+# from PFF's spec (leaders: ``war``/``waa`` + Rank/RankOf/Percentile) and the 2026 NCAA compiled
+# tables (position reports: rank trio, no percentile). Remove once a re-capture lists them.
+_WAR_TRIO = [("war", "numeric"), ("war_rank", "integer"), ("war_rank_of", "integer")]
+_WAA_TRIO = [("waa", "numeric"), ("waa_rank", "integer"), ("waa_rank_of", "integer")]
+_V2_LATE_COLUMNS: Dict[str, Dict[str, List[tuple]]] = {
+    "position_report": {
+        s: _WAR_TRIO + _WAA_TRIO
+        for s in (
+            "passing",
+            "receiving",
+            "rushing",
+            "blocking",
+            "pass-blocking",
+            "run-blocking",
+            "defense",
+            "run-defense",
+            "pass-rush",
+            "coverage",
+            "field-goals",
+            "punting",
+        )
+    },
+    "team_leaders": {
+        g: _WAR_TRIO + [("war_percentile", "integer")] + _WAA_TRIO + [("waa_percentile", "integer")]
+        for g in ("receiving", "passing", "rushing", "defense")
+    },
+}
+
 
 def _parser(path: str, op: dict, shape: Dict[str, str]) -> str | None:
     if path.startswith("/v2"):
@@ -153,7 +184,14 @@ def _schema_name(short: str) -> str:
 def _v2_schema(s2: dict, short: str, variants: List[str] | None, prefix: str, by: str = "") -> Dict[str, Any]:
     if variants is None:
         return {"schema": _schema_name(short), "kind": "dataframe", "columns": _v2_union(s2, prefix)}
-    frames = [{"section": v, "columns": _v2_union(s2, f"{prefix}__{v}")} for v in variants]
+    late = _V2_LATE_COLUMNS.get(short, {})
+    frames = []
+    for v in variants:
+        cols = _v2_union(s2, f"{prefix}__{v}")
+        have = {c["name"] for c in cols}
+        if cols:  # never mint a table the capture lacks
+            cols += [{"name": n, "type": t, "description": ""} for n, t in late.get(v, []) if n not in have]
+        frames.append({"section": v, "columns": cols})
     # ``frames_by`` = the request parameter whose value picks the table: the function returns
     # ONE DataFrame, not a dict of them (generate.py reads the marker).
     return {
