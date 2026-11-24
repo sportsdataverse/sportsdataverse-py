@@ -53,9 +53,8 @@ same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
   2025 order (SportSource right after common opponents, then order of finish,
   then opponents' win pct) and Conference USA's 2025 policy (common opponents,
   their top-down descent, average computer ranking, opponents' win pct) apply
-  from 2025, with their 2024 procedures before that. The Pac-12's 2026
-  procedure (2026-09-03) has separate two-team and multiple-team lists; an
-  epoch's ``two_team`` list replaces ``rungs`` once two teams remain tied. Optional ``teams``
+  from 2025, with their 2024 procedures before that; the Pac-12's 2026 procedure adds a ``two_team`` rung
+  list that replaces ``rungs`` once two teams remain tied. Optional ``teams``
   columns ``conf_division`` (division format: each division's best eligible
   team takes a top rank, as in the 2026 Sun Belt) and ``postseason_eligible`` (an
   explicit ``False`` team cannot hold a championship-game berth; its games
@@ -242,11 +241,10 @@ _SUNBELT_OFFICIAL: list[_Rung] = [
 ]
 
 
-# Pac-12 2026 (Pac-12 release of 2026-09-03 on pac-12.com, repeated 2026-11-15). 3+ teams: head-to-head only "if
-# every tied team has played one another" (else it moves on: no defeated-all elimination), all common opponents, the
-# next-highest common opponent descent, opponents' win pct, SportSource, coin toss. 2 teams: head-to-head, the descent,
-# all common opponents, the CFP ranking of the Tuesday before week 13, SportSource, coin toss. ``ponytail:`` a "common
-# opponent" is one every tied team played (``common_only``, the pre-2024 wording); the 2026 text leaves it undefined.
+# Pac-12 2026 (pac-12.com release 2026-09-03). 3+ teams: head-to-head only "if every tied team has played one another"
+# (no defeated-all), all common opponents, next-highest common opponent descent, opponents' win pct, SportSource, toss.
+# 2 teams: head-to-head, descent, all common opponents, CFP ranking of the Tuesday before week 13, SportSource, toss.
+# ``ponytail:`` "common opponent" = played by every tied team (``common_only``; pre-2024 wording; 2026 leaves it open).
 _PAC12_DESC: _Rung = {
     "kind": "record_vs_common_desc",
     "mode": "next_highest",
@@ -820,7 +818,9 @@ def _apply_rung(
     if kind == "cfp_ranking":  # Pac-12 2026 two-team: best committee rank; unranked behind every ranked team
         cfp = {c: metrics[c]["cfp_rank"] for c in cands}
         if all(v is None for v in cfp.values()):
-            ctx.note(f"{ctx.conf_name}: cfp_ranking skipped (no tiebreaker_data.cfp_rankings, or no tied team ranked)")
+            ctx.note(
+                f"{ctx.conf_name}: cfp_ranking skipped (no tiebreaker_data.cfp_rankings supplied, or no tied team ranked)"
+            )
             return cands
         return _keep_max(cands, {c: -float("inf") if r is None else -float(r) for c, r in cfp.items()})
     if kind in ("apr", "div_pct"):
@@ -1110,9 +1110,9 @@ def cfb_standings(
         tiebreaker_data: Optional external inputs for the registry rungs, as
             a dict of frames: ``"analytics_ratings"`` (``team``, ``rating`` —
             the ``analytics_rating`` rung: Big Ten/Big 12/ACC/MAC, and the
-            American/CUSA/Mountain West/Sun Belt metric composites),
-            ``"cfp_rankings"`` (``team``, ``rank`` — the
-            ``cfp_ranked_final_week`` clause: American/CUSA/Sun Belt) and
+            American/CUSA/Mountain West/Sun Belt/Pac-12 metric composites),
+            ``"cfp_rankings"`` (``team``, ``rank`` — the ``cfp_ranked_final_week`` clause of the
+            American/CUSA/Sun Belt and the Pac-12 two-team ``cfp_ranking`` rung) and
             ``"apr"`` (``team``, ``apr`` — the CUSA ``apr`` rung). Missing ->
             the rung is skipped, noted.
         season: Season whose rules apply (registry epochs and the CFP
