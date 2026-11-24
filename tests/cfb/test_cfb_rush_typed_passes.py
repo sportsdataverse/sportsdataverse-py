@@ -18,7 +18,9 @@ from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 FIX = Path(__file__).parent / "fixtures"
 # Processing a default-odds capture warns DefaultOddsWarning incidentally; the market plays no part
 # in what these tests read. tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
-pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+pytestmark = pytest.mark.filterwarnings(
+    r"ignore:CFB game \d+. no pregame spread is available:sportsdataverse.errors.DefaultOddsWarning"
+)
 
 
 @functools.cache
