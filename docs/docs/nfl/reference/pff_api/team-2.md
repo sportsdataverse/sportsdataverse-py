@@ -83,6 +83,14 @@ A team's leaders for one position group, with rank and percentile
 | `grade_pass_block_rank` | Int64 | Player's rank on PFF pass-blocking grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
 | `grade_pass_block_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on PFF pass-blocking grade, the pool grade_pass_block_rank is out of; null when the player is below his position's qualifying volume. |
 | `grade_pass_block_percentile` | Int64 | Player's percentile (0-100, higher = better) on PFF pass-blocking grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure; whole-season windows only). PFF documents war for the NFL and waa for college; on NCAA rows use waa. |
+| `war_rank` | Int64 | Player's rank on war among qualified players at his position league-wide, as published by PFF (1 = best); null when the player is below his position's qualifying volume. |
+| `war_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on war, the pool war_rank is out of; null when the player is below his position's qualifying volume. |
+| `war_percentile` | Int64 | Player's percentile (0-100, higher = better) on war among qualified players at his position league-wide, as published by PFF; null when the player is below his position's qualifying volume. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure; whole-season windows only). SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | Player's rank on waa among qualified players at his position league-wide, as published by PFF (1 = best); null when the player is below his position's qualifying volume. |
+| `waa_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on waa, the pool waa_rank is out of; null when the player is below his position's qualifying volume. |
+| `waa_percentile` | Int64 | Player's percentile (0-100, higher = better) on waa among qualified players at his position league-wide, as published by PFF; null when the player is below his position's qualifying volume. |
 
 **passing**
 
@@ -140,6 +148,14 @@ A team's leaders for one position group, with rank and percentile
 | `grade_fumble_rank` | Int64 | Player's rank on PFF ball-security grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
 | `grade_fumble_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on PFF ball-security grade, the pool grade_fumble_rank is out of; null when the player is below his position's qualifying volume. |
 | `grade_fumble_percentile` | Int64 | Player's percentile (0-100, higher = better) on PFF ball-security grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure; whole-season windows only). PFF documents war for the NFL and waa for college; on NCAA rows use waa. |
+| `war_rank` | Int64 | Player's rank on war among qualified players at his position league-wide, as published by PFF (1 = best); null when the player is below his position's qualifying volume. |
+| `war_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on war, the pool war_rank is out of; null when the player is below his position's qualifying volume. |
+| `war_percentile` | Int64 | Player's percentile (0-100, higher = better) on war among qualified players at his position league-wide, as published by PFF; null when the player is below his position's qualifying volume. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure; whole-season windows only). SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | Player's rank on waa among qualified players at his position league-wide, as published by PFF (1 = best); null when the player is below his position's qualifying volume. |
+| `waa_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on waa, the pool waa_rank is out of; null when the player is below his position's qualifying volume. |
+| `waa_percentile` | Int64 | Player's percentile (0-100, higher = better) on waa among qualified players at his position league-wide, as published by PFF; null when the player is below his position's qualifying volume. |
 
 **rushing**
 
@@ -197,6 +213,14 @@ A team's leaders for one position group, with rank and percentile
 | `grade_pass_block_rank` | Int64 | Player's rank on PFF pass-blocking grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
 | `grade_pass_block_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on PFF pass-blocking grade, the pool grade_pass_block_rank is out of; null when the player is below his position's qualifying volume. |
 | `grade_pass_block_percentile` | Int64 | Player's percentile (0-100, higher = better) on PFF pass-blocking grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure; whole-season windows only). PFF documents war for the NFL and waa for college; on NCAA rows use waa. |
+| `war_rank` | Int64 | Player's rank on war among qualified players at his position league-wide, as published by PFF (1 = best); null when the player is below his position's qualifying volume. |
+| `war_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on war, the pool war_rank is out of; null when the player is below his position's qualifying volume. |
+| `war_percentile` | Int64 | Player's percentile (0-100, higher = better) on war among qualified players at his position league-wide, as published by PFF; null when the player is below his position's qualifying volume. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure; whole-season windows only). SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | Player's rank on waa among qualified players at his position league-wide, as published by PFF (1 = best); null when the player is below his position's qualifying volume. |
+| `waa_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on waa, the pool waa_rank is out of; null when the player is below his position's qualifying volume. |
+| `waa_percentile` | Int64 | Player's percentile (0-100, higher = better) on waa among qualified players at his position league-wide, as published by PFF; null when the player is below his position's qualifying volume. |
 
 **defense**
 
@@ -254,6 +278,14 @@ A team's leaders for one position group, with rank and percentile
 | `grade_coverage_rank` | Int64 | Player's rank on PFF coverage grade among qualified players at his position league-wide (1 = best; tied players share a rank); null when the player is below his position's qualifying volume. |
 | `grade_coverage_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on PFF coverage grade, the pool grade_coverage_rank is out of; null when the player is below his position's qualifying volume. |
 | `grade_coverage_percentile` | Int64 | Player's percentile (0-100, higher = better) on PFF coverage grade among qualified players at his position league-wide; null when the player is below his position's qualifying volume. |
+| `war` | Float64 | Wins above replacement, PFF's estimate of the wins the player added over a replacement-level player (PFF's NFL measure; whole-season windows only). PFF documents war for the NFL and waa for college; on NCAA rows use waa. |
+| `war_rank` | Int64 | Player's rank on war among qualified players at his position league-wide, as published by PFF (1 = best); null when the player is below his position's qualifying volume. |
+| `war_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on war, the pool war_rank is out of; null when the player is below his position's qualifying volume. |
+| `war_percentile` | Int64 | Player's percentile (0-100, higher = better) on war among qualified players at his position league-wide, as published by PFF; null when the player is below his position's qualifying volume. |
+| `waa` | Float64 | Wins above average, PFF's estimate of the wins the player added over an average FBS player at his position (PFF's college measure; whole-season windows only). SDV's /v2 captures cover 2026 only. |
+| `waa_rank` | Int64 | Player's rank on waa among qualified players at his position league-wide, as published by PFF (1 = best); null when the player is below his position's qualifying volume. |
+| `waa_rank_of` | Int64 | Number of qualified players at his position league-wide ranked on waa, the pool waa_rank is out of; null when the player is below his position's qualifying volume. |
+| `waa_percentile` | Int64 | Player's percentile (0-100, higher = better) on waa among qualified players at his position league-wide, as published by PFF; null when the player is below his position's qualifying volume. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 

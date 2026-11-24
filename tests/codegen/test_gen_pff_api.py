@@ -169,6 +169,23 @@ def test_league_dtypes_widen_instead_of_first_league_winning():
     assert cols == {"player_id": "integer", "ypa": "numeric", "one_percent": "numeric"}
 
 
+def test_v2_win_value_columns_are_appended_once_and_never_mint_a_table():
+    mod = _gen()
+    s2 = {  # receiving already lists war (a later re-capture); passing lists neither; rushing is uncaptured
+        "v2/ncaa/position_report__receiving": {"columns": [{"key": "playerId", "type": "integer"}, {"key": "war"}]},
+        "v2/ncaa/position_report__passing": {"columns": [{"key": "playerId", "type": "integer"}]},
+    }
+    doc = mod._v2_schema(s2, "position_report", ["receiving", "passing", "rushing"], "position_report", "report")
+    frames = {f["section"]: [c["name"] for c in f["columns"]] for f in doc["frames"]}
+    trio = ["war", "war_rank", "war_rank_of", "waa", "waa_rank", "waa_rank_of"]
+    assert frames == {"receiving": ["player_id", *trio], "passing": ["player_id", *trio]}
+    # every late column the committed schemas carry has a hand description
+    descs = yaml.safe_load((ROOT / "tools/codegen/manual_column_descriptions.yaml").read_text(encoding="utf-8"))
+    for short, by_section in mod._V2_LATE_COLUMNS.items():
+        names = {n for cols in by_section.values() for n, _ in cols}
+        assert names <= set(descs[f"pff_api_{short}"]), short
+
+
 @pytest.mark.skipif(
     not _SPEC.exists(), reason="pff/developer spec not present ($SDV_REFS_REPO unset; local-only source)"
 )
