@@ -1415,10 +1415,16 @@ def test_live_cfb_teams_crosswalk_matches_majority() -> None:
     # the big-brand teams should hit all three providers
     full = df.filter(pl.col("matched_sources") == "espn+fox+yahoo")
     assert full.height > 80, f"only {full.height} fully-matched teams"
-    # ESPN's directory is near-exhaustive, so (with the alias table) essentially
-    # every Yahoo team should resolve to an ESPN id. Allow a tiny margin for
-    # future Yahoo additions that predate an alias entry.
-    yahoo = df.filter(pl.col("yahoo_team_id").is_not_null())
+    # Since sdv-py #1250 (Yahoo's shangrila API) Yahoo carries every division, and the crosswalk
+    # keeps them all: most D2/D3/NAIA/USCAA teams have no ESPN entry, so the rate is scoped to
+    # FBS + FCS. There ESPN's directory is near-exhaustive, so (with the alias table) essentially
+    # every Yahoo team resolves to an ESPN id. Observed 2026-11-24: 265/266 (only UT Rio Grande
+    # Valley, absent from ESPN's directory); all divisions 478/540. The margin allows future Yahoo
+    # additions that predate an alias entry.
+    division = yahoo.select(pl.col("team_id").alias("yahoo_team_id"), "division")
+    assert df.schema["yahoo_team_id"] == division.schema["yahoo_team_id"]
+    yahoo = df.join(division, on="yahoo_team_id", how="inner").filter(pl.col("division").is_in(["FBS", "FCS"]))
+    assert yahoo.height > 250, yahoo.height
     matched = yahoo.filter(pl.col("espn_team_id").is_not_null())
     rate = matched.height / yahoo.height
     assert rate >= 0.97, f"Yahoo->ESPN match rate {rate:.3f} ({matched.height}/{yahoo.height})"

@@ -67,12 +67,14 @@ def test_exported_from_the_nfl_package():
 @skip_if_no_live
 def test_live_model_pbp_reads_the_release():
     df = nfl_loaders.load_nfl_model_pbp([2024])
-    # 327 columns in every season 1999-2026 (identical names and order), checked
-    # via a parquet-footer scan on 2026-10-31. The 2026-10-29 rebuild (nfl-data
-    # SCHEMA_REV 10, sdv-py #1028) added the provider's `drive` number and made
-    # drive_start/end_yard_line nflverse's "ARI 10" text; the 2026-09-10 rebuild
-    # had added the drive_*/series_* and EPA-WPA split columns (326).
-    assert df.width == 327, df.width
+    # 335 columns as of 2026-11-24. The SCHEMA_REV 11 rebuild (nfl-data #95, 2026-11-13) added
+    # nflfastR clean_pbp's passer/rusher/receiver names and ids after series_success, plus nflfastR's
+    # success and first_down (enrich_nfl_pbp, sdv-py #1037). Before it: 327 (SCHEMA_REV 10, sdv-py
+    # #1028: the provider `drive` number, nflverse "ARI 10" drive_start/end_yard_line text). Assert
+    # the floor and the named columns, not an exact width, so an appended column is not a failure.
+    assert df.width >= 327, df.width
+    assert {"passer", "passer_id", "rusher", "rusher_id", "receiver", "receiver_id"} <= set(df.columns)
+    assert {"success", "first_down"} <= set(df.columns)
     assert df.height > 40_000, df.height
     assert df.schema["game_id"] == pl.String
     assert df.schema["drive"] == pl.Int64
