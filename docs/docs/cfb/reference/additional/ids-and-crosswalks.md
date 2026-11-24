@@ -205,6 +205,11 @@ a shared key, and full-outer-joins them so every row carries each provider's
 id, name, and abbreviation (`None` where a provider has no match). The
 `matched_sources` column records which providers contributed.
 
+Yahoo's directory covers every division it carries (FBS, FCS, D2, D3, NAIA,
+USCAA), and all of them are kept. Most lower-division teams have no ESPN
+match, so their `espn_*` columns are null; filter on `espn_team_id` (or
+join `yahoo_cfb_teams()["division"]`) for FBS/FCS work.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
