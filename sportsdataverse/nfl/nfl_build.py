@@ -43,7 +43,9 @@ if TYPE_CHECKING:
 #      (`diagonal_relaxed`) would turn those columns back into String for every game.
 # 3 -> an ESPN game with no (or an unknown) venue id takes its home team's roof, not outdoors:
 #      a v2 frame would keep every 2002-2005 dome game's outdoors EP / CP.
-PIPELINE_VERSION: int = 3
+# 4 -> play-level cpoe is in percentage points, 100 * (completion - cp): a v3 frame would keep the
+#      0-1 difference and mix scales in a season frame.
+PIPELINE_VERSION: int = 4
 
 logger = logging.getLogger("sdv.nfl_build")
 logger.addHandler(logging.NullHandler())

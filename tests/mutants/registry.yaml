@@ -11590,6 +11590,16 @@
   expected: kill
   note: An expired penalty with no event after it would carry 4v5 onto five skaters a side.
 
+- id: nfl-espn-cpoe-percentage-points
+  group: nfl-espn-cpoe
+  finding: gh-1261
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '(100.0 * (pl.col("completion").cast(pl.Float64) - pl.col("cp"))).alias("cpoe")'
+  mutant: '(pl.col("completion").cast(pl.Float64) - pl.col("cp")).alias("cpoe")'
+  test: tests/nfl/test_nfl_espn_parity_fixes.py::test_espn_cpoe_is_percentage_points
+  expected: kill
+  note: ESPN cpoe back on the 0-1 scale would read 100x smaller than nflfastR's and the Shield pbp's.
+
 # --- gh-1262: extra-inning automatic runner in pbp_base_out_states ------------------------------
 - id: mlb-re24-automatic-runner-not-seeded
   group: mlb-extra-innings-runner
