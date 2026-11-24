@@ -191,3 +191,33 @@ def test_a_flag_without_any_trace_of_the_try_is_not_split():
         }
     )
     assert split_pat_rows(plays)["pat_of_id"].null_count() == 1
+
+
+def test_a_defensive_touchdowns_try_belongs_to_the_scoring_team():
+    """Review #1255: on a pick-six the try is the defense's; ESPN's end-of-play possession says so."""
+    plays = pl.DataFrame(
+        {
+            "game_id": [405] * 2,
+            "id": [405100, 405200],
+            "game_play_number": [1, 2],
+            "type.text": ["Interception Return Touchdown", "Passing Touchdown"],
+            "text": [
+                "J.Goff pass intended for A.St. Brown INTERCEPTED by D.Bush, TOUCHDOWN. W.Lutz extra point is GOOD.",
+                "J.Goff pass to S.LaPorta for 9 yards, TOUCHDOWN. J.Bates extra point is GOOD.",
+            ],
+            "pos_team": ["Detroit Lions", "Detroit Lions"],
+            "def_pos_team": ["Denver Broncos", "Denver Broncos"],
+            "pos_team_id": [8, 8],
+            "def_pos_team_id": [7, 7],
+            "end.pos_team.id": [7, 8],
+            "defense_score_play": [True, False],
+            "xp_attempt": [True, True],
+            "two_point_attempt": [False, False],
+        }
+    )
+    pats = split_pat_rows(plays).filter(pl.col("pat_of_id").is_not_null())
+    assert pats["pos_team"].to_list() == ["Denver Broncos", "Detroit Lions"]
+    assert pats["pos_team_id"].to_list() == [7, 8] and pats["def_pos_team_id"].to_list() == [8, 7]
+    # without end-of-play possession, defense_score_play decides
+    no_end = split_pat_rows(plays.drop("end.pos_team.id")).filter(pl.col("pat_of_id").is_not_null())
+    assert no_end["pos_team_id"].to_list() == [7, 8]
