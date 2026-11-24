@@ -173,18 +173,18 @@ def test_totals_are_the_published_plain_rapm() -> None:
 
 
 @skip_if_no_live
-@pytest.mark.parametrize(("season", "old_penalty"), [(2025, DEFAULT_RAPM_ALPHAS[4]), (2026, DEFAULT_RAPM_ALPHAS[3])])
-def test_nba_totals_track_the_published_release(season: int, old_penalty: float) -> None:
+@pytest.mark.parametrize("season", [2025, 2026])
+def test_nba_totals_track_the_published_release(season: int) -> None:
     # Live: the NBA possessions and player_impact release assets (network, about 4 GB peak). The
-    # release was fit before the penalty was frozen, at RidgeCV's pick (5,179 for 2024-25, 1,931 for
-    # 2025-26), so plain RAPM at that pick is compared. Observed 2024-25: r 0.9978 / 0.9973, max |diff|
-    # 0.43 / 0.37; 2025-26: r 0.9966 / 0.9969, max 1.31 / 1.00 (o_rapm / d_rapm). The gap is lineups,
-    # not possessions: the possessions release (2026-08-13) predates the player_impact fit (2026-10-12),
-    # whose re-compile has the same possessions but some different on-floor lineups.
+    # producer (hoopR-nba-stats-data) fits plain RAPM at the frozen league penalty, RAPM_PENALTY["00"]
+    # (2,683); both seasons were re-uploaded 2026-11-15 at it, so plain RAPM at that penalty is
+    # compared. Observed 2026-11-24: 2024-25 r 0.999999 / 0.999998, max |diff| 0.032 / 0.043;
+    # 2025-26 r 0.999999 / 1.000000, max 0.036 / 0.017 (o_rapm / d_rapm). The residual gap is the
+    # on-floor lineups of the possessions release, not the possessions or the penalty.
     split = nba_player_factor_rapm(season)
     assert split["ridge_alpha"].unique().to_list() == [RAPM_PENALTY["00"]]
     rows = nba_factor_rapm_rows(*_load(season, "00"), "regular-season")
-    out = nba_rapm(rows, alpha=float(old_penalty))
+    out = nba_rapm(rows)
     pub = nba_loaders.load_nba_player_impact(season).filter(pl.col("season_type") == "Regular Season")
     assert out.schema["player_id"] == pub.schema["player_id"]
     both = out.join(pub, on="player_id", how="full", suffix="_pub", validate="1:1")
@@ -193,7 +193,7 @@ def test_nba_totals_track_the_published_release(season: int, old_penalty: float)
     for c in ("o_rapm", "d_rapm"):
         r = both.select(pl.corr(c, f"{c}_pub")).item()
         gap = both.select((pl.col(c) - pl.col(f"{c}_pub")).abs().max()).item()
-        assert r >= 0.995 and gap <= 1.31, (season, c, r, gap)
+        assert r >= 0.9999 and gap <= 0.1, (season, c, r, gap)
     worst = split.select((pl.sum_horizontal(_OFF) - pl.col("o_rapm")).abs().max()).item()
     assert worst < 1e-9  # observed 1.0e-11
 

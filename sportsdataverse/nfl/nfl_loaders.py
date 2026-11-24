@@ -195,9 +195,10 @@ def load_nfl_model_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFra
 
     A named alias for ``load_nfl_pbp(seasons, source="sportsdataverse")`` -- the
     Python-built, nflfastR-faithful enriched frame published as
-    ``nfl_model_pbp/model_pbp_{season}.parquet`` (28 assets, 1999-2026 as of
-    2026-09-17; 326 columns in every season from 2002, while the 1999-2001
-    assets predate the 2026-09-10 rebuild and carry 257/256/256). It carries ep/epa, wp/wpa/vegas_wp,
+    ``nfl_model_pbp/model_pbp_{season}.parquet`` (28 assets, 1999-2026; every
+    season carries the same columns, 335 as of the 2026-11-13 SCHEMA_REV 11
+    rebuild, which added nflfastR's passer/rusher/receiver names and ids and
+    success/first_down). It carries ep/epa, wp/wpa/vegas_wp,
     cp/cpoe and xyac_*/air_epa, and drops administrative / timeout rows for a
     clean modeling subset -- unlike the nflverse ``load_nfl_pbp`` default, which
     keeps them.

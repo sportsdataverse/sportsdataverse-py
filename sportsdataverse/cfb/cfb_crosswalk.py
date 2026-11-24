@@ -135,6 +135,7 @@ _TEAM_ALIASES: Dict[str, str] = {
     "st francis pa red flash": "saint francis red flash",
     "ave maria gyrenes": "ave maria university gyrenes",
     "central state oh marauders": "central state marauders",
+    "penn quakers": "pennsylvania quakers",
 }
 
 
@@ -1070,6 +1071,13 @@ def cfb_teams_crosswalk(
     a shared key, and full-outer-joins them so every row carries each provider's
     id, name, and abbreviation (``None`` where a provider has no match). The
     ``matched_sources`` column records which providers contributed.
+
+    Yahoo's directory covers every division it carries (FBS, FCS, D2, D3, NAIA,
+    USCAA), and all of them are kept. Most lower-division teams have no ESPN
+    match, so their ``espn_*`` columns are null. To keep FBS/FCS teams, join
+    ``yahoo_cfb_teams()`` (``team_id`` to ``yahoo_team_id``) and filter
+    ``division`` to ``"FBS"``/``"FCS"``; filter on ``espn_team_id`` only to keep
+    ESPN-matched teams.
 
     Args:
         season: Season year sent to Yahoo's ``leagueTeams`` directory, which
