@@ -4490,6 +4490,36 @@ class CFBPlayProcess(object):
                 .alias("type.text"),
             )
             .with_columns(
+                # ESPN types some passes and sacks "Rush": "Andrew Luck pass complete to Drew Terrell
+                # for 29 yards, fumbled, ..." (313160024), "Tobias Oliver sacked by Xavier Thomas ...",
+                # 36 rows in 2004-26. Typed a rush, the play counted as a carry with no completion, no
+                # receiving yards and no sack. A text that names a pass or a sack and no run takes the
+                # pass type; a touchdown only when it was a completion ("Rushing Touchdown" on an
+                # interception or a sack would also move who scored, so it stays).
+                pl.when(
+                    pl.col("type.text").is_in(["Rush", "Rushing Touchdown"])
+                    & _ruling_text().str.contains(r"(?i)\bpass (?:complete|incomplete|intercepted)|\bsacked\b")
+                    & ~_ruling_text().str.contains(r"(?i)\b(?:runs?|rush(?:es|ed)?|scrambles?|kneels?|sneak)\b")
+                )
+                .then(
+                    pl.when(pl.col("type.text") == "Rushing Touchdown")
+                    .then(
+                        pl.when(_ruling_text().str.contains(r"(?i)\bpass complete"))
+                        .then(pl.lit("Passing Touchdown"))
+                        .otherwise(pl.col("type.text"))
+                    )
+                    .when(_ruling_text().str.contains(r"(?i)\bsacked\b"))
+                    .then(pl.lit("Sack"))
+                    .when(_ruling_text().str.contains(r"(?i)\bpass intercepted"))
+                    .then(pl.lit("Interception Return"))
+                    .when(_ruling_text().str.contains(r"(?i)\bpass incomplete"))
+                    .then(pl.lit("Pass Incompletion"))
+                    .otherwise(pl.lit("Pass Reception"))
+                )
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
                 # A touchdown replay took away keeps ESPN's touchdown type (95 rows in 2004-26: 55
                 # Passing / 34 Rushing Touchdown, six return or fumble ones), and the type alone
                 # books the score. It takes the type of the play that stood.
