@@ -54,10 +54,8 @@ same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
   then opponents' win pct) and Conference USA's 2025 policy (common opponents,
   their top-down descent, average computer ranking, opponents' win pct) apply
   from 2025, with their 2024 procedures before that. The Pac-12's 2026
-  procedure (Pac-12 release, 2026-09-03) has separate two-team and
-  multiple-team lists: an epoch's ``two_team`` list replaces ``rungs``
-  whenever two teams remain tied ("if the process reduces the tie to two
-  teams, the two-team procedure will then be applied"). Optional ``teams``
+  procedure (2026-09-03) has separate two-team and multiple-team lists; an
+  epoch's ``two_team`` list replaces ``rungs`` once two teams remain tied. Optional ``teams``
   columns ``conf_division`` (division format: each division's best eligible
   team takes a top rank, as in the 2026 Sun Belt) and ``postseason_eligible`` (an
   explicit ``False`` team cannot hold a championship-game berth; its games
@@ -244,38 +242,21 @@ _SUNBELT_OFFICIAL: list[_Rung] = [
 ]
 
 
-# Pac-12 2026 (the re-formed conference's first football season; published in
-# the Pac-12 release of 2026-09-03,
-# pac-12.com/news/2026/9/3/pac-12-announces-commercial-and-operational-updates-ahead-of-its-2026-football-season-kickoff.aspx,
-# repeated in its 2026-11-15 championship scenarios release). Multiple teams:
-# combined head-to-head only "if every tied team has played one another"
-# (otherwise "the process moves to the next criterion", so no defeated-all
-# elimination); win pct vs all common conference opponents; record vs the
-# next-highest-placed common opponent down the standings (a tied group taken
-# collectively); opponents' combined conference win pct; SportSource Team Rating
-# Score; coin toss.
-_PAC12_2026: list[_Rung] = [
-    {"kind": "h2h", "round_robin_only": True},
-    {"kind": "record_vs_common"},
-    {"kind": "record_vs_common_desc", "mode": "next_highest", "grouped_ties": True, "common_only": True},
-    {"kind": "opp_conf_win_pct"},
-    {"kind": "analytics_rating"},
-    {"kind": "coin_toss"},
-]
-# Two teams: head-to-head; the next-highest-placed common opponent descent; win
-# pct vs all common conference opponents; the highest CFP ranking on the Tuesday
-# before week 13 (``tiebreaker_data["cfp_rankings"]``); SportSource Team Rating
-# Score; coin toss. ``ponytail:`` "common opponent" is read as an opponent both
-# teams played (``common_only``), as the Pac-12's pre-2024 procedure spelled
-# out; the 2026 text does not define it.
-_PAC12_2026_TWO_TEAM: list[_Rung] = [
-    {"kind": "h2h"},
-    {"kind": "record_vs_common_desc", "mode": "next_highest", "grouped_ties": True, "common_only": True},
-    {"kind": "record_vs_common"},
-    {"kind": "cfp_ranking"},
-    {"kind": "analytics_rating"},
-    {"kind": "coin_toss"},
-]
+# Pac-12 2026 (Pac-12 release of 2026-09-03 on pac-12.com, repeated 2026-11-15). 3+ teams: head-to-head only "if
+# every tied team has played one another" (else it moves on: no defeated-all elimination), all common opponents, the
+# next-highest common opponent descent, opponents' win pct, SportSource, coin toss. 2 teams: head-to-head, the descent,
+# all common opponents, the CFP ranking of the Tuesday before week 13, SportSource, coin toss. ``ponytail:`` a "common
+# opponent" is one every tied team played (``common_only``, the pre-2024 wording); the 2026 text leaves it undefined.
+_PAC12_DESC: _Rung = {
+    "kind": "record_vs_common_desc",
+    "mode": "next_highest",
+    "grouped_ties": True,
+    "common_only": True,
+}
+_PAC12_2026: list[_Rung] = [{"kind": "h2h", "round_robin_only": True}, {"kind": "record_vs_common"}, _PAC12_DESC]
+_PAC12_2026 += [{"kind": "opp_conf_win_pct"}, {"kind": "analytics_rating"}, {"kind": "coin_toss"}]
+_PAC12_2026_TWO_TEAM: list[_Rung] = [{"kind": "h2h"}, _PAC12_DESC, {"kind": "record_vs_common"}]
+_PAC12_2026_TWO_TEAM += [{"kind": "cfp_ranking"}, {"kind": "analytics_rating"}, {"kind": "coin_toss"}]
 
 
 def _epoch(
@@ -286,9 +267,8 @@ def _epoch(
 
 #: Official conference tiebreaker procedures, mirroring cfbseedR 0.2.0's
 #: ``CONFERENCE_TIEBREAKERS``: conference -> list of season-scoped epochs
-#: ``{"from": <first season>, "rungs": [<rung dict>, ...], "pool": <str|None>,
-#: "two_team": [<rung dict>, ...] | None}`` (``two_team`` replaces ``rungs``
-#: whenever two teams remain tied; only the Pac-12 2026 epoch sets it).
+#: ``{"from": <first season>, "rungs": [<rung dict>, ...], "pool": <str|None>, "two_team": [...] | None}``
+#: (``two_team``, set only by the Pac-12 2026 epoch, replaces ``rungs`` once two teams remain tied).
 #: :func:`cfb_standings` applies the epoch with the largest ``from`` not
 #: exceeding the season being ranked (unknown season = current rules). The
 #: cross-language parity fixtures under ``tests/fixtures/seedr/`` pin the
@@ -690,11 +670,7 @@ class _TieCtx:
 def _apply_h2h(
     cands: list[str], rec_sim: dict[str, dict[str, list[float]]], generic: bool, round_robin_only: bool = False
 ) -> list[str]:
-    """Head-to-head rung: generic (existing, unchanged) vs registry multi-team semantics.
-
-    ``round_robin_only`` (Pac-12 2026) skips the defeated-all elimination: when
-    not every tied pair played, the rung keeps every candidate.
-    """
+    """Head-to-head rung: generic vs registry multi-team semantics (``round_robin_only``: no defeated-all)."""
     if generic or len(cands) == 2:
         # generic cascade (byte-identical to the pre-registry implementation) and the
         # registry's 2-team walk (same aggregate-vs-the-rest computation for n=2).
@@ -841,14 +817,10 @@ def _apply_rung(
             "(best-ranked tied team lost its final conference game)"
         )
         return cands
-    if kind == "cfp_ranking":
-        # Pac-12 2026 two-team step: the best (lowest) committee rank advances;
-        # an unranked team ranks behind every ranked one.
+    if kind == "cfp_ranking":  # Pac-12 2026 two-team: best committee rank; unranked behind every ranked team
         cfp = {c: metrics[c]["cfp_rank"] for c in cands}
         if all(v is None for v in cfp.values()):
-            ctx.note(
-                f"{ctx.conf_name}: cfp_ranking skipped (no tiebreaker_data.cfp_rankings supplied, or no tied team ranked)"
-            )
+            ctx.note(f"{ctx.conf_name}: cfp_ranking skipped (no tiebreaker_data.cfp_rankings, or no tied team ranked)")
             return cands
         return _keep_max(cands, {c: -float("inf") if r is None else -float(r) for c, r in cfp.items()})
     if kind in ("apr", "div_pct"):
@@ -892,16 +864,9 @@ def _pick_winner(
     """
     cands = sorted(tied)
     i = 0
-    # A conference with a separate two-team procedure (``ctx.two_team_rungs``)
-    # switches to it whenever two teams remain; that only happens after an
-    # elimination, which restarts at rung 1 anyway.
-    two_team = ctx.two_team_rungs
-
-    def active() -> list[_Rung]:
-        return two_team if two_team is not None and len(cands) == 2 else rungs
-
-    while i < len(active()) and len(cands) > 1:
-        rung = active()[i]
+    two = ctx.two_team_rungs  # a separate two-team list (Pac-12 2026) takes over once two remain (after a restart)
+    while i < len(walk := two if two is not None and len(cands) == 2 else rungs) and len(cands) > 1:
+        rung = walk[i]
         min_depth = rung.get("min_depth")
         if isinstance(min_depth, int) and depth < min_depth:
             i += 1
