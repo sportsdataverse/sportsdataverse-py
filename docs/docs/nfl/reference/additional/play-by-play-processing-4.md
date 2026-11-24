@@ -427,6 +427,55 @@ proc.espn_nfl_pbp(summary=summary)
 result = proc.run_processing_pipeline()
 ```
 
+### split_pat_rows {#split_pat_rows}
+
+`split_pat_rows(plays: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Give every PAT that ESPN folded into its touchdown row a row of its own, as nflverse does.
+
+From about 2014 ESPN reports the extra point or two-point try inside the touchdown play
+(`xp_attempt` / `two_point_attempt` on the touchdown row); nflverse keeps it as its own
+`XP_KICK` / `PAT2` row. This is opt-in: `NFLPlayProcess` output keeps ESPN's rows, and this
+function returns a new frame with one extra row after each such touchdown. Older seasons, where ESPN
+already emits the try as its own row, are returned as they are, and so is a try a penalty wiped out
+(a `Penalty` / no-play row that carries the PAT flags; ESPN lists the re-try as its own row).
+
+The split row copies the touchdown row's game / clock / possession context, takes the try's part of
+the play text, and carries the try: `xp_attempt` / `two_point_attempt`, `extra_point_result`
+(`good` / `failed` / `blocked`; ESPN leaves a blocked PAT null), `two_point_conv_result`
+(`success` / `failure`), `play_type_nfl` (`XP_KICK` / `PAT2`) and `type.text`. The results come
+from ESPN's columns where the feed has them, else from the text. The touchdown row hands the try over
+(its PAT flags become `False` and its PAT results null). Every other column of a split row is null.
+
+ESPN gives the try no id, so the split row's `id` is the touchdown's `id + 1` and `pat_of_id` names
+the touchdown (null on every other row). Its `game_play_number` is the touchdown's.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | `NFLPlayProcess(...).plays_frame` (one game or many). |
+
+**Returns**
+
+The rows of `plays` in their original order, each folded try right after its touchdown, plus `pat_of_id` (Int64).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a synthetic id (touchdown `id + 1`) is already a play's id. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import NFLPlayProcess, split_pat_rows
+proc = NFLPlayProcess(gameId=401671740)
+proc.espn_nfl_pbp()
+proc.run_processing_pipeline()
+plays = split_pat_rows(proc.plays_frame)
+```
+
 ### team_name_fn {#team_name_fn}
 
 `team_name_fn(expr: 'pl.Expr') -> 'pl.Expr'`

@@ -1166,6 +1166,188 @@ def _espn_play_type_nfl() -> pl.Expr:
     )
 
 
+#: ESPN types that already ARE the try's own row (the pre-2014 feed, and its rare later strays): never split
+#: again. Taken from :data:`ESPN_PLAY_TYPE_NFL`, so a new PAT type learned there is covered here too.
+_ESPN_SEPARATE_PAT_TYPES = tuple(t for t, v in ESPN_PLAY_TYPE_NFL.items() if v in ("XP_KICK", "PAT2"))
+#: Touchdown-row columns a split PAT row copies (game, clock, possession and drive context).
+_PAT_CONTEXT_COLUMNS = (
+    "game_id",
+    "nflverse_game_id",
+    "season",
+    "seasonType",
+    "season_type",
+    "week",
+    "homeTeamId",
+    "awayTeamId",
+    "homeTeamAbbrev",
+    "awayTeamAbbrev",
+    "homeTeamName",
+    "awayTeamName",
+    "period.number",
+    "period",
+    "clock.displayValue",
+    "clock.minutes",
+    "clock.seconds",
+    "half",
+    "pos_team",
+    "pos_team_id",
+    "def_pos_team",
+    "def_pos_team_id",
+    "drive.id",
+    "homeScore",
+    "awayScore",
+    "game_play_number",
+    "sequenceNumber",
+)
+
+
+def split_pat_rows(plays: pl.DataFrame) -> pl.DataFrame:
+    """Give every PAT that ESPN folded into its touchdown row a row of its own, as nflverse does.
+
+    From about 2014 ESPN reports the extra point or two-point try inside the touchdown play
+    (``xp_attempt`` / ``two_point_attempt`` on the touchdown row); nflverse keeps it as its own
+    ``XP_KICK`` / ``PAT2`` row. This is opt-in: :class:`NFLPlayProcess` output keeps ESPN's rows, and this
+    function returns a new frame with one extra row after each such touchdown. Older seasons, where ESPN
+    already emits the try as its own row, are returned as they are, and so is a try a penalty wiped out
+    (a ``Penalty`` / no-play row that carries the PAT flags; ESPN lists the re-try as its own row).
+
+    The split row copies the touchdown row's game / clock / possession context, takes the try's part of
+    the play text, and carries the try: ``xp_attempt`` / ``two_point_attempt``, ``extra_point_result``
+    (``good`` / ``failed`` / ``blocked``; ESPN leaves a blocked PAT null), ``two_point_conv_result``
+    (``success`` / ``failure``), ``play_type_nfl`` (``XP_KICK`` / ``PAT2``) and ``type.text``. The results come
+    from ESPN's columns where the feed has them, else from the text. The touchdown row hands the try over
+    (its PAT flags become ``False`` and its PAT results null). Every other column of a split row is null.
+
+    ESPN gives the try no id, so the split row's ``id`` is the touchdown's ``id + 1`` and ``pat_of_id`` names
+    the touchdown (null on every other row). Its ``game_play_number`` is the touchdown's.
+
+    Args:
+        plays: ``NFLPlayProcess(...).plays_frame`` (one game or many).
+
+    Returns:
+        The rows of ``plays`` in their original order, each folded try right after its touchdown, plus
+        ``pat_of_id`` (Int64).
+
+    Raises:
+        ValueError: If a synthetic id (touchdown ``id + 1``) is already a play's id.
+
+    Example:
+        Split the tries out of a processed game::
+
+            from sportsdataverse.nfl import NFLPlayProcess, split_pat_rows
+            proc = NFLPlayProcess(gameId=401671740)
+            proc.espn_nfl_pbp()
+            proc.run_processing_pipeline()
+            plays = split_pat_rows(proc.plays_frame)
+    """
+    key = pl.lit(None, dtype=pl.Int64).alias("pat_of_id")
+    if not {"id", "text", "type.text", "xp_attempt", "two_point_attempt"} <= set(plays.columns):
+        return plays.with_columns(key)
+    has = set(plays.columns)
+    text = pl.col("text").fill_null("")
+    pat_text = pl.coalesce(
+        text.str.extract(r"(TWO-POINT CONVERSION ATTEMPT\..*)$", 1),
+        text.str.extract(r"TOUCHDOWN\.?\s*(.*\bextra point\b.*)$", 1),
+        text.str.extract(r"(\S+ extra point .*)$", 1),
+        # ESPN's scoring-summary form: "(Joey Slye Kick)" (good), "(... PAT failed)", "(... PAT blocked)"
+        text.str.extract(r"\(([^()]*\b(?:PAT|Kick)\b[^()]*)\)\s*$", 1),
+    )
+    paa = pl.col("pointAfterAttempt.text") if "pointAfterAttempt.text" in has else pl.lit(None, dtype=pl.Utf8)
+    # a try a penalty wiped out keeps the PAT flags on a Penalty / no-play row: never a PAT of its own
+    nullified = pl.col("type.text") == "Penalty"
+    if "penalty_no_play" in has:
+        nullified = nullified | (pl.col("penalty_no_play") == True)  # noqa: E712
+    folded = (
+        ((pl.col("xp_attempt") == True) | (pl.col("two_point_attempt") == True))  # noqa: E712
+        & ~pl.col("type.text").is_in(list(_ESPN_SEPARATE_PAT_TYPES))
+        & ~nullified.fill_null(False)
+        # evidence of the try itself: its text, or ESPN's pointAfterAttempt (a flag alone is not enough;
+        # 2019 has 13 touchdown rows flagged with no try in the text, and nflverse has no PAT for them)
+        & (pat_text.is_not_null() | paa.is_not_null())
+    ).fill_null(False)
+    marked = plays.with_row_index("_pat_row").with_columns(folded.alias("_pat_folded"))
+    td = marked.filter(pl.col("_pat_folded"))
+    if td.is_empty():
+        return plays.with_columns(key)
+    clash = set((td["id"].cast(pl.Int64) + 1).to_list()) & set(plays["id"].cast(pl.Int64).to_list())
+    if clash:
+        raise ValueError(f"split_pat_rows: synthetic PAT id(s) {sorted(clash)[:5]} already belong to a play")
+
+    xp = pl.col("xp_attempt") == True  # noqa: E712
+    blocked = (paa == "Blocked PAT").fill_null(False) | pat_text.str.contains(r"(?i)\bblocked\b").fill_null(False)
+    xp_from_text = (
+        pl.when(pat_text.str.contains(r"(?i)\bno good\b|\bfailed\b|\bmissed\b"))
+        .then(pl.lit("failed"))
+        # "is GOOD", or the summary form naming the kicker alone ("(Joey Slye Kick)"): a made kick
+        .when(pat_text.is_not_null())
+        .then(pl.lit("good"))
+    )
+    xp_col = pl.col("extra_point_result") if "extra_point_result" in has else pl.lit(None, dtype=pl.Utf8)
+    xp_result = pl.when(xp).then(pl.when(blocked).then(pl.lit("blocked")).otherwise(pl.coalesce(xp_col, xp_from_text)))
+    tp_from_text = (
+        pl.when(pat_text.str.contains(r"(?i)attempt succeeds|\bsucceed"))
+        .then(pl.lit("success"))
+        .when(pat_text.str.contains(r"(?i)attempt fails|\bfail"))
+        .then(pl.lit("failure"))
+    )
+    tp_col = pl.col("two_point_conv_result") if "two_point_conv_result" in has else pl.lit(None, dtype=pl.Utf8)
+    tp_result = pl.when(~xp).then(pl.coalesce(tp_col, tp_from_text))
+    two_pass = pl.coalesce(
+        pl.when(paa.is_in(["Two Point Pass", "Two Point Rush"])).then(paa == "Two Point Pass"),
+        pat_text.str.contains(r"(?i)\bpass").fill_null(False),
+    )
+    type_text = (
+        pl.when(xp & (xp_result == "blocked"))
+        .then(pl.lit("Blocked PAT"))
+        .when(xp & (xp_result == "failed"))
+        .then(pl.lit("Extra Point Missed"))
+        .when(xp & (xp_result == "good"))
+        .then(pl.lit("Extra Point Good"))
+        .when(xp)
+        .then(pl.lit("Extra Point"))
+        .when(two_pass)
+        .then(pl.lit("Two Point Pass"))
+        .otherwise(pl.lit("Two Point Rush"))
+    )
+    extra = []
+    if "aborted_play" in has:
+        extra.append(
+            pat_text.str.contains("Aborted", literal=True)
+            .fill_null(False)
+            .cast(plays.schema["aborted_play"])
+            .alias("aborted_play")
+        )
+    pat = td.select(
+        "_pat_row",
+        *[c for c in _PAT_CONTEXT_COLUMNS if c in has],
+        (pl.col("id").cast(pl.Int64) + 1).alias("id"),
+        pl.col("id").cast(pl.Int64).alias("pat_of_id"),
+        type_text.cast(plays.schema["type.text"]).alias("type.text"),
+        pat_text.cast(plays.schema["text"]).alias("text"),
+        "xp_attempt",
+        "two_point_attempt",
+        xp_result.cast(pl.Utf8).alias("extra_point_result"),
+        tp_result.cast(pl.Utf8).alias("two_point_conv_result"),
+        pl.when(xp).then(pl.lit("XP_KICK")).otherwise(pl.lit("PAT2")).alias("play_type_nfl"),
+        *extra,
+    )
+    cleared = marked.with_columns(
+        pl.when(pl.col("_pat_folded")).then(False).otherwise(pl.col("xp_attempt")).alias("xp_attempt"),
+        pl.when(pl.col("_pat_folded")).then(False).otherwise(pl.col("two_point_attempt")).alias("two_point_attempt"),
+        *[
+            pl.when(pl.col("_pat_folded")).then(None).otherwise(pl.col(c)).alias(c)
+            for c in ("extra_point_result", "two_point_conv_result")
+            if c in has
+        ],
+        key,
+    )
+    return (
+        pl.concat([cleared.with_columns(_pat_ord=pl.lit(0)), pat.with_columns(_pat_ord=pl.lit(1))], how="diagonal")
+        .sort(["_pat_row", "_pat_ord"])
+        .drop("_pat_row", "_pat_ord", "_pat_folded")
+    )
+
+
 class NFLPlayProcess(object):
     """Process ESPN NFL play-by-play feeds into a tidy game-level dictionary.
 

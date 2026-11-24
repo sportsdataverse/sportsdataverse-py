@@ -101,10 +101,10 @@ exactly.
 | `nflverse/2014_11_MIN_CHI.parquet` | 2014_11_MIN_CHI | 400554340 | 161 x 42 |
 | `nflverse/2018_13_IND_JAX.parquet` | 2018_13_IND_JAX | 401030962 | 170 x 42 |
 | `nflverse/2021_10_JAX_IND.parquet` | 2021_10_JAX_IND | 401326467 | 180 x 42 |
-| `nflverse/play_type_nfl_2024.parquet` | 2024_01_BAL_KC (Shield `fixtures/nfl_shield/2024_01_BAL_KC.json.gz`) + 2024_04_PHI_TB | 401671740 | 351 x 5 |
+| `nflverse/play_type_nfl_2024.parquet` | 2024_01_BAL_KC (Shield `fixtures/nfl_shield/2024_01_BAL_KC.json.gz`) + 2024_04_PHI_TB | 401671740 | 351 x 7 |
 
-`play_type_nfl_2024.parquet` is the oracle for `play_type_nfl` / `aborted_play` (Shield and ESPN):
-`game_id, play_id, play_type_nfl, aborted_play, desc`, cut on 2026-11-24 from the nflverse-data `pbp`
+`play_type_nfl_2024.parquet` is the oracle for `play_type_nfl` / `aborted_play` (Shield and ESPN) and for the PAT rows `split_pat_rows` builds:
+`game_id, play_id, play_type_nfl, aborted_play, desc, extra_point_result, two_point_conv_result`, cut on 2026-11-24 from the nflverse-data `pbp`
 release asset `play_by_play_2024.parquet`:
 `pl.read_parquet(src, columns=[...]).filter(pl.col("game_id").is_in(["2024_01_BAL_KC", "2024_04_PHI_TB"]))`.
 
