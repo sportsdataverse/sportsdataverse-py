@@ -1,4 +1,369 @@
 Team,Conf,Year
+Abilene Christian,UAC,2027
+Air Force,MWC,2027
+Akron,MAC,2027
+Alabama,SEC,2027
+Alabama A&M,SWAC,2027
+Alabama St.,SWAC,2027
+Albany,AE,2027
+Alcorn St.,SWAC,2027
+American,PL,2027
+Appalachian St.,SB,2027
+Arizona,B12,2027
+Arizona St.,B12,2027
+Arkansas,SEC,2027
+Arkansas Pine Bluff,SWAC,2027
+Arkansas St.,SB,2027
+Army,PL,2027
+Auburn,SEC,2027
+Austin Peay,UAC,2027
+BYU,B12,2027
+Ball St.,MAC,2027
+Baylor,B12,2027
+Bellarmine,ASun,2027
+Belmont,MVC,2027
+Bethune Cookman,SWAC,2027
+Binghamton,AE,2027
+Boise St.,P12,2027
+Boston College,ACC,2027
+Boston University,PL,2027
+Bowling Green,MAC,2027
+Bradley,MVC,2027
+Brown,Ivy,2027
+Bryant,AE,2027
+Bucknell,PL,2027
+Buffalo,MAC,2027
+Butler,BE,2027
+CSUN,BW,2027
+Cal Baptist,BW,2027
+Cal Poly,BW,2027
+Cal St. Bakersfield,BW,2027
+Cal St. Fullerton,BW,2027
+California,ACC,2027
+Campbell,CAA,2027
+Canisius,MC,2027
+Central Arkansas,UAC,2027
+Central Connecticut,NEC,2027
+Central Michigan,MAC,2027
+Charleston,CAA,2027
+Charleston Southern,BSth,2027
+Charlotte,Amer,2027
+Chattanooga,SC,2027
+Chicago St.,NEC,2027
+Cincinnati,B12,2027
+Clemson,ACC,2027
+Cleveland St.,Horz,2027
+Coastal Carolina,SB,2027
+Colgate,PL,2027
+Colorado,B12,2027
+Colorado St.,P12,2027
+Columbia,Ivy,2027
+Connecticut,BE,2027
+Coppin St.,MEAC,2027
+Cornell,Ivy,2027
+Creighton,BE,2027
+Dartmouth,Ivy,2027
+Davidson,A10,2027
+Dayton,A10,2027
+DePaul,BE,2027
+Delaware,CUSA,2027
+Delaware St.,MEAC,2027
+Denver,WCC,2027
+Detroit Mercy,Horz,2027
+Drake,MVC,2027
+Drexel,CAA,2027
+Duke,ACC,2027
+Duquesne,A10,2027
+East Carolina,Amer,2027
+East Tennessee St.,SC,2027
+East Texas A&M,Slnd,2027
+Eastern Illinois,OVC,2027
+Eastern Kentucky,UAC,2027
+Eastern Michigan,MAC,2027
+Eastern Washington,BSky,2027
+Elon,CAA,2027
+Evansville,MVC,2027
+FIU,CUSA,2027
+Fairfield,MC,2027
+Fairleigh Dickinson,NEC,2027
+Florida,SEC,2027
+Florida A&M,SWAC,2027
+Florida Atlantic,Amer,2027
+Florida Gulf Coast,ASun,2027
+Florida St.,ACC,2027
+Fordham,A10,2027
+Fresno St.,P12,2027
+Furman,SC,2027
+Gardner Webb,BSth,2027
+George Mason,A10,2027
+George Washington,A10,2027
+Georgetown,BE,2027
+Georgia,SEC,2027
+Georgia Southern,SB,2027
+Georgia St.,SB,2027
+Georgia Tech,ACC,2027
+Gonzaga,P12,2027
+Grambling St.,SWAC,2027
+Grand Canyon,MWC,2027
+Green Bay,Horz,2027
+Hampton,CAA,2027
+Harvard,Ivy,2027
+Hawaii,MWC,2027
+High Point,BSth,2027
+Hofstra,CAA,2027
+Holy Cross,PL,2027
+Houston,B12,2027
+Houston Christian,Slnd,2027
+Howard,MEAC,2027
+IU Indy,Horz,2027
+Idaho,BSky,2027
+Idaho St.,BSky,2027
+Illinois,B10,2027
+Illinois Chicago,MVC,2027
+Illinois St.,MVC,2027
+Incarnate Word,Slnd,2027
+Indiana,B10,2027
+Indiana St.,MVC,2027
+Iona,MC,2027
+Iowa,B10,2027
+Iowa St.,B12,2027
+Jackson St.,SWAC,2027
+Jacksonville,ASun,2027
+Jacksonville St.,CUSA,2027
+James Madison,SB,2027
+Kansas,B12,2027
+Kansas City,Sum,2027
+Kansas St.,B12,2027
+Kennesaw St.,CUSA,2027
+Kent St.,MAC,2027
+Kentucky,SEC,2027
+LIU,NEC,2027
+LSU,SEC,2027
+LSU New Orleans,Slnd,2027
+La Salle,A10,2027
+Lafayette,PL,2027
+Lamar,Slnd,2027
+Le Moyne,NEC,2027
+Lehigh,PL,2027
+Liberty,CUSA,2027
+Lindenwood,OVC,2027
+Lipscomb,ASun,2027
+Little Rock,UAC,2027
+Long Beach St.,BW,2027
+Longwood,BSth,2027
+Louisiana,SB,2027
+Louisiana Monroe,SB,2027
+Louisiana Tech,SB,2027
+Louisville,ACC,2027
+Loyola Chicago,A10,2027
+Loyola MD,PL,2027
+Loyola Marymount,WCC,2027
+Maine,AE,2027
+Manhattan,MC,2027
+Marist,MC,2027
+Marquette,BE,2027
+Marshall,SB,2027
+Maryland,B10,2027
+Maryland Eastern Shore,MEAC,2027
+Massachusetts,MAC,2027
+McNeese,Slnd,2027
+Memphis,Amer,2027
+Mercer,SC,2027
+Mercyhurst,NEC,2027
+Merrimack,MC,2027
+Miami FL,ACC,2027
+Miami OH,MAC,2027
+Michigan,B10,2027
+Michigan St.,B10,2027
+Middle Tennessee,CUSA,2027
+Milwaukee,Horz,2027
+Minnesota,B10,2027
+Mississippi,SEC,2027
+Mississippi St.,SEC,2027
+Mississippi Valley St.,SWAC,2027
+Missouri,SEC,2027
+Missouri St.,CUSA,2027
+Monmouth,CAA,2027
+Montana,BSky,2027
+Montana St.,BSky,2027
+Morehead St.,OVC,2027
+Morgan St.,MEAC,2027
+Mount St. Mary's,MC,2027
+Murray St.,MVC,2027
+N.C. State,ACC,2027
+NJIT,AE,2027
+Navy,PL,2027
+Nebraska,B10,2027
+Nebraska Omaha,Sum,2027
+Nevada,MWC,2027
+New Hampshire,AE,2027
+New Haven,NEC,2027
+New Mexico,MWC,2027
+New Mexico St.,CUSA,2027
+Niagara,MC,2027
+Nicholls,Slnd,2027
+Norfolk St.,MEAC,2027
+North Alabama,UAC,2027
+North Carolina,ACC,2027
+North Carolina A&T,CAA,2027
+North Carolina Central,MEAC,2027
+North Dakota,Sum,2027
+North Dakota St.,Sum,2027
+North Florida,ASun,2027
+North Texas,Amer,2027
+Northeastern,CAA,2027
+Northern Arizona,BSky,2027
+Northern Colorado,BSky,2027
+Northern Illinois,Horz,2027
+Northern Iowa,MVC,2027
+Northern Kentucky,Horz,2027
+Northwestern,B10,2027
+Northwestern St.,Slnd,2027
+Notre Dame,ACC,2027
+Oakland,Horz,2027
+Ohio,MAC,2027
+Ohio St.,B10,2027
+Oklahoma,SEC,2027
+Oklahoma St.,B12,2027
+Old Dominion,SB,2027
+Oral Roberts,Sum,2027
+Oregon,B10,2027
+Oregon St.,P12,2027
+Pacific,WCC,2027
+Penn,Ivy,2027
+Penn St.,B10,2027
+Pepperdine,WCC,2027
+Pittsburgh,ACC,2027
+Portland,WCC,2027
+Portland St.,BSky,2027
+Prairie View A&M,SWAC,2027
+Presbyterian,BSth,2027
+Princeton,Ivy,2027
+Providence,BE,2027
+Purdue,B10,2027
+Purdue Fort Wayne,Horz,2027
+Queens,ASun,2027
+Quinnipiac,MC,2027
+Radford,BSth,2027
+Rhode Island,A10,2027
+Rice,Amer,2027
+Richmond,A10,2027
+Rider,MC,2027
+Robert Morris,Horz,2027
+Rutgers,B10,2027
+SIUE,OVC,2027
+SMU,ACC,2027
+Sacramento St.,BW,2027
+Sacred Heart,MC,2027
+Saint Joseph's,A10,2027
+Saint Louis,A10,2027
+Saint Mary's,WCC,2027
+Saint Peter's,MC,2027
+Sam Houston St.,CUSA,2027
+Samford,SC,2027
+San Diego,WCC,2027
+San Diego St.,P12,2027
+San Francisco,WCC,2027
+San Jose St.,MWC,2027
+Santa Clara,WCC,2027
+Seattle,WCC,2027
+Seton Hall,BE,2027
+Siena,MC,2027
+South Alabama,SB,2027
+South Carolina,SEC,2027
+South Carolina St.,MEAC,2027
+South Dakota,Sum,2027
+South Dakota St.,Sum,2027
+South Florida,Amer,2027
+Southeast Missouri,OVC,2027
+Southeastern Louisiana,Slnd,2027
+Southern,SWAC,2027
+Southern Illinois,MVC,2027
+Southern Indiana,OVC,2027
+Southern Miss,SB,2027
+Southern Utah,BSky,2027
+St. Bonaventure,A10,2027
+St. John's,BE,2027
+St. Thomas,Sum,2027
+Stanford,ACC,2027
+Stephen F. Austin,Slnd,2027
+Stetson,ASun,2027
+Stonehill,NEC,2027
+Stony Brook,CAA,2027
+Syracuse,ACC,2027
+TCU,B12,2027
+Tarleton St.,UAC,2027
+Temple,Amer,2027
+Tennessee,SEC,2027
+Tennessee Martin,OVC,2027
+Tennessee St.,OVC,2027
+Tennessee Tech,SC,2027
+Texas,SEC,2027
+Texas A&M,SEC,2027
+Texas A&M Corpus Chris,Slnd,2027
+Texas Southern,SWAC,2027
+Texas St.,P12,2027
+Texas Tech,B12,2027
+The Citadel,SC,2027
+Toledo,MAC,2027
+Towson,CAA,2027
+Troy,SB,2027
+Tulane,Amer,2027
+Tulsa,Amer,2027
+UAB,Amer,2027
+UC Davis,MWC,2027
+UC Irvine,BW,2027
+UC Riverside,BW,2027
+UC San Diego,BW,2027
+UC Santa Barbara,BW,2027
+UCF,B12,2027
+UCLA,B10,2027
+UMBC,AE,2027
+UMass Lowell,AE,2027
+UNC Asheville,BSth,2027
+UNC Greensboro,SC,2027
+UNC Wilmington,CAA,2027
+UNLV,MWC,2027
+USC,B10,2027
+USC Upstate,BSth,2027
+UT Arlington,UAC,2027
+UT Rio Grande Valley,Slnd,2027
+UTEP,MWC,2027
+UTSA,Amer,2027
+Utah,B12,2027
+Utah St.,P12,2027
+Utah Tech,BSky,2027
+Utah Valley,BW,2027
+VCU,A10,2027
+VMI,SC,2027
+Valparaiso,MVC,2027
+Vanderbilt,SEC,2027
+Vermont,AE,2027
+Villanova,BE,2027
+Virginia,ACC,2027
+Virginia Tech,ACC,2027
+Wagner,NEC,2027
+Wake Forest,ACC,2027
+Washington,B10,2027
+Washington St.,P12,2027
+Weber St.,BSky,2027
+West Florida,ASun,2027
+West Georgia,UAC,2027
+West Virginia,B12,2027
+Western Carolina,SC,2027
+Western Illinois,OVC,2027
+Western Kentucky,CUSA,2027
+Western Michigan,MAC,2027
+Wichita St.,Amer,2027
+William & Mary,CAA,2027
+Winthrop,BSth,2027
+Wisconsin,B10,2027
+Wofford,SC,2027
+Wright St.,Horz,2027
+Wyoming,MWC,2027
+Xavier,BE,2027
+Yale,Ivy,2027
+Youngstown St.,Horz,2027
 Abilene Christian,WAC,2026
 Air Force,MWC,2026
 Akron,MAC,2026

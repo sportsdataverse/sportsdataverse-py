@@ -420,6 +420,7 @@ def test_kenpom_teams_has_no_rows_for_an_unbundled_season() -> None:
     ``mbb_crosswalk.R:349-354`` substitutes ``max(kp_yrs)``, which stamped the
     newest season's conferences on any season the bundle lacks.
     """
+    assert mbb_crosswalk._kenpom_teams(2027).height == 365
     assert mbb_crosswalk._kenpom_teams(2026).height == 365
     assert mbb_crosswalk._kenpom_teams(2002).height == 327
     assert mbb_crosswalk._kenpom_teams(1999).height == 0
