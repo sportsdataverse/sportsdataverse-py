@@ -1270,8 +1270,11 @@ def _espn_pat_scoring_side(td: pl.DataFrame, pat: pl.DataFrame) -> pl.DataFrame:
     flip = pl.lit(False)
     if "defense_score_play" in td.columns:
         flip = (pl.col("defense_score_play") == True).fill_null(False)  # noqa: E712
-    if {"end.pos_team.id", "def_pos_team_id"} <= set(td.columns):
-        end_says = pl.col("end.pos_team.id").cast(pl.Int64) == pl.col("def_pos_team_id").cast(pl.Int64)
+    # the defense's numeric team id: NFLPlayProcess output carries it as ``def_pos_team`` itself; the
+    # flattened release adds ``def_pos_team_id`` (and makes ``def_pos_team`` the name)
+    def_id = "def_pos_team_id" if "def_pos_team_id" in td.columns else "def_pos_team"
+    if "end.pos_team.id" in td.columns and def_id in td.columns and td.schema[def_id].is_numeric():
+        end_says = pl.col("end.pos_team.id").cast(pl.Int64) == pl.col(def_id).cast(pl.Int64)
         flip = end_says.fill_null(flip)
     f = pl.lit(td.select(flip.fill_null(False).alias("f"))["f"])
     pairs = [

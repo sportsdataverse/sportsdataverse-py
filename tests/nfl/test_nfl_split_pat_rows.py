@@ -221,3 +221,31 @@ def test_a_defensive_touchdowns_try_belongs_to_the_scoring_team():
     # without end-of-play possession, defense_score_play decides
     no_end = split_pat_rows(plays.drop("end.pos_team.id")).filter(pl.col("pat_of_id").is_not_null())
     assert no_end["pos_team_id"].to_list() == [7, 8]
+
+
+def test_processor_shape_end_possession_wins_over_defense_score_play():
+    """Review #1255: NFLPlayProcess output keeps the numeric team ids in pos_team / def_pos_team (no *_id
+    columns); end-of-play possession must still decide, also where defense_score_play disagrees."""
+    plays = pl.DataFrame(
+        {
+            "game_id": [406] * 2,
+            "id": [406100, 406200],
+            "game_play_number": [1, 2],
+            "type.text": ["Fumble Return Touchdown", "Passing Touchdown"],
+            "text": [
+                "J.Goff FUMBLES, RECOVERED by DEN-D.Bush, TOUCHDOWN. W.Lutz extra point is GOOD.",
+                "J.Goff pass to S.LaPorta for 9 yards, TOUCHDOWN. J.Bates extra point is GOOD.",
+            ],
+            "pos_team": pl.Series([8, 8], dtype=pl.Int64),
+            "def_pos_team": pl.Series([7, 7], dtype=pl.Int32),
+            "end.pos_team.id": pl.Series([7, 8], dtype=pl.Int32),
+            # the two signals disagree on both rows: end-of-play possession wins
+            "defense_score_play": [False, True],
+            "xp_attempt": [True, True],
+            "two_point_attempt": [False, False],
+        }
+    )
+    out = split_pat_rows(plays)
+    pats = out.filter(pl.col("pat_of_id").is_not_null())
+    assert pats["pos_team"].to_list() == [7, 8] and pats["def_pos_team"].to_list() == [8, 7]
+    assert out.schema["pos_team"] == pl.Int64 and out.schema["def_pos_team"] == pl.Int32  # dtypes kept
