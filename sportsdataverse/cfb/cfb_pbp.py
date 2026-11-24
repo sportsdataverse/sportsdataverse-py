@@ -8473,10 +8473,12 @@ class CFBPlayProcess(object):
                 # period or the same half of regulation, both rows in regulation (_in_same_half, R905-2,
                 # WB-cfb-4: an overtime period hands the ball back to the team that just had it; it moves 0 rows
                 # over the 573 cfb-raw OT games with a Q3/Q4 fumble, the only games it can reach). Fumble plays only: the same end block on other play types is
-                # EX-3.4-c. Reach over all 20,719 cfb-raw games: 20 rows in 18 games.
+                # EX-3.4-c. Reach over all 20,719 cfb-raw games: 20 rows in 18 games. ESPN's fumble type
+                # counts too: on 401856814559 ("Fumble", the review's reason; the fumble was reversed)
+                # fumble_vec reads the ruling and is false, but the end block is still the fumble record's.
                 _supp_002=(pl.col("end.yardLine") == 0)
                 .and_(pl.col("end.yardsToEndzone") == 0)
-                .and_(pl.col("fumble_vec") == True)
+                .and_((pl.col("fumble_vec") == True) | pl.col("type.text").str.contains("(?i)fumble"))
                 .and_(pl.col("scoring_play") == False)
                 .and_(pl.col("change_of_pos_team") == False)
                 .and_(_next_real_play("start.pos_team.id") == pl.col("start.pos_team.id"))
