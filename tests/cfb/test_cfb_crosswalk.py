@@ -1421,10 +1421,15 @@ def test_live_cfb_teams_crosswalk_matches_majority() -> None:
     # every Yahoo team resolves to an ESPN id. Observed 2026-11-24: 265/266 (only UT Rio Grande
     # Valley, absent from ESPN's directory); all divisions 478/540. The margin allows future Yahoo
     # additions that predate an alias entry.
-    division = yahoo.select(pl.col("team_id").alias("yahoo_team_id"), "division")
-    assert df.schema["yahoo_team_id"] == division.schema["yahoo_team_id"]
-    yahoo = df.join(division, on="yahoo_team_id", how="inner").filter(pl.col("division").is_in(["FBS", "FCS"]))
-    assert yahoo.height > 250, yahoo.height
+    # Start from Yahoo's own FBS + FCS ids, so an id the crosswalk drops counts as unmatched.
+    top = yahoo.filter(pl.col("division").is_in(["FBS", "FCS"])).select(pl.col("team_id").alias("yahoo_team_id"))
+    assert top.height > 250, top.height
+    assert df.schema["yahoo_team_id"] == top.schema["yahoo_team_id"]
+    # one row per FBS/FCS id (below that, ESPN lists some schools twice, e.g. two Roosevelt Lakers ids)
+    ids = df.filter(pl.col("yahoo_team_id").is_in(top["yahoo_team_id"].implode())).select(
+        "yahoo_team_id", "espn_team_id"
+    )
+    yahoo = top.join(ids, on="yahoo_team_id", how="left", validate="1:1")
     matched = yahoo.filter(pl.col("espn_team_id").is_not_null())
     rate = matched.height / yahoo.height
     assert rate >= 0.97, f"Yahoo->ESPN match rate {rate:.3f} ({matched.height}/{yahoo.height})"
