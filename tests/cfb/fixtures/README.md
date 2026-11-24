@@ -147,7 +147,7 @@ p <- cfb4th::add_4th_probs(f)   # -> cfb4th_oracle_2023.csv (sha256 prefix 0c3f8
 docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_espn_summary.py`),
 `yahoo_cfb/` (`tests/cfb/yahoo_pbp/test_to_espn_summary.py`, `tests/cfb/test_cfb_yahoo_ext.py`),
 `participants_401856682.json` (`tests/cfb/test_cfb_box_score_denominators.py`,
-`tests/cfb/test_cfb_jersey_special_teams.py`) and `fox_cfb_event_41616_data.json`
+`tests/cfb/test_cfb_jersey_special_teams.py`), `lateral_aux_401856666.json.gz` and `lateral_aux_401858440.json.gz` (`tests/cfb/test_cfb_review_and_laterals.py`: the game's `cfbfastR-cfb-raw` play participants and its roster cut to the id, name, team and jersey fields) and `fox_cfb_event_41616_data.json`
 (`tests/cfb/test_cfb_pbp_fox_offline.py`). `supp002/` holds 37 trimmed captures (the `trimmed` form above,
 from `cfbfastR-cfb-raw` at `98deb3f091`) for the supp-002 candidate count
 (`tests/cfb/test_cfb_supp002_degenerate_end.py`); they are not `summary_*` files, so the whole-game
@@ -215,7 +215,9 @@ one request each) for the NCAA box-score rushing convention (`tests/cfb/test_cfb
 | 302450154 | 2010 | Presbyterian College Blue Hose @ Wake Forest Demon Deacons | 4 | trimmed | `summary_302450154_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
 | 302540025 | 2010 | Colorado Buffaloes @ California Golden Bears | 4 | raw allowlist | `summary_302540025.json` | `e9c3ca7c48` 2026-09-18 #538 |
 | 303102638 | 2010 | SMU Mustangs @ UTEP Miners | 4 | trimmed | `summary_303102638_trimmed.json.gz` | `88acd48d21` 2026-09-30 #643 |
+| 303580202 | 2010 | Hawai'i Rainbow Warriors @ Tulsa Golden Hurricane | 4 | trimmed | `summary_303580202_trimmed.json.gz` | this PR 2026-11-24 |
 | 313090025 | 2011 | Washington State Cougars @ California Golden Bears | 4 | trimmed | `summary_313090025_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
+| 313160024 | 2011 | Oregon Ducks @ Stanford Cardinal | 4 | trimmed | `summary_313160024_trimmed.json.gz` | this PR 2026-11-24 |
 | 322430041 | 2012 | Massachusetts Minutemen @ Connecticut Huskies | 4 | trimmed | `summary_322430041_trimmed.json.gz` | `c146e82803` 2026-09-26 #585 |
 | 322590228 | 2012 | Furman Paladins @ Clemson Tigers | 4 | trimmed | `summary_322590228_trimmed.json.gz` | `50d24c9978` 2026-09-26 #588 |
 | 322802005 | 2012 | Navy Midshipmen @ Air Force Falcons | 5 | trimmed | `summary_322802005_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
@@ -281,6 +283,7 @@ one request each) for the NCAA box-score rushing convention (`tests/cfb/test_cfb
 | 401752684 | 2025 | South Florida Bulls @ Florida Gators | 4 | trimmed | `summary_401752684_trimmed.json.gz` | `29c209708f` 2026-09-27 #595 |
 | 401752744 | 2025 | Oklahoma Sooners @ South Carolina Gamecocks | 4 | trimmed | `summary_401752744_trimmed.json.gz` | `29c209708f` 2026-09-27 #595 |
 | 401752746 | 2025 | Auburn Tigers @ Arkansas Razorbacks | 4 | full summary | `summary_401752746.json` | `fe8e1077f5` 2026-08-29 |
+| 401752747 | 2025 | Tennessee Volunteers @ Kentucky Wildcats | 4 | trimmed | `summary_401752747_trimmed.json.gz` | this PR 2026-11-24 |
 | 401752753 | 2025 | Mississippi State Bulldogs @ Arkansas Razorbacks | 4 | full summary | `summary_401752753.json` | `fe8e1077f5` 2026-08-29 |
 | 401752817 | 2025 | Western Illinois Leathernecks @ Northwestern Wildcats | 4 | trimmed | `summary_401752817_trimmed.json.gz` | `a69a6d063e` 2026-09-30 #631 |
 | 401752844 | 2025 | Iowa Hawkeyes @ Rutgers Scarlet Knights | 4 | raw allowlist | `summary_401752844.json` | `7c30c24442` 2026-09-17 #506 |
@@ -308,6 +311,8 @@ one request each) for the NCAA box-score rushing convention (`tests/cfb/test_cfb
 | 401777353 | 2025 | Indiana Hoosiers @ Ohio State Buckeyes | 4 | trimmed | `summary_401777353_trimmed.json.gz` | `408a21e9cb` 2026-09-30 #626 |
 | 401778334 | 2025 | Wake Forest Demon Deacons @ Mississippi State Bulldogs | 4 | trimmed | `summary_401778334_trimmed.json.gz` | `edd88af3b2` 2026-09-26 #580 |
 | 401831583 | 2025 | Arizona Wildcats @ SMU Mustangs | 4 | trimmed | `summary_401831583_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
+| 401856666 | 2026 | Furman Paladins @ Tennessee Volunteers | 4 | trimmed | `summary_401856666_trimmed.json.gz` | this PR 2026-11-24 |
+| 401856671 | 2026 | Southern Miss Golden Eagles @ Auburn Tigers | 4 | trimmed | `summary_401856671_trimmed.json.gz` | this PR 2026-11-24 |
 | 401856682 | 2026 | Ohio State Buckeyes @ Texas Longhorns | 4 | full summary | `summary_401856682.json` | `f9e3485176` 2026-09-15 #499 |
 | 401856766 | 2026 | North Carolina Tar Heels @ TCU Horned Frogs | 4 | full summary | `summary_401856766.json` | `bc9664a898` 2026-08-29 |
 | 401858213 | 2026 | Florida A&M Rattlers @ Miami Hurricanes | 4 | raw allowlist | `summary_401858213.json` | `5538e69b03` 2026-09-17 #503 |
@@ -317,4 +322,5 @@ one request each) for the NCAA box-score rushing convention (`tests/cfb/test_cfb
 | 401858426 | 2026 | Northern Illinois Huskies @ Iowa Hawkeyes | 4 | raw allowlist | `summary_401858426.json` | `7c30c24442` 2026-09-17 #506 |
 | 401858435 | 2026 | Indiana State Sycamores @ Purdue Boilermakers | 4 | raw allowlist | `summary_401858435.json` | `5538e69b03` 2026-09-17 #503 |
 | 401858439 | 2026 | Howard Bison @ Indiana Hoosiers | 4 | raw allowlist | `summary_401858439.json` | `5538e69b03` 2026-09-17 #503 |
+| 401858440 | 2026 | Eastern Michigan Eagles @ Michigan State Spartans | 4 | trimmed | `summary_401858440_trimmed.json.gz` | this PR 2026-11-24 |
 | 401866418 | 2026 | Jacksonville State Gamecocks @ Ohio Bobcats | 8 | trimmed | `summary_401866418_trimmed.json.gz` | task 3.4 (g), 2026-10-18, from `cfbfastR-cfb-raw` `89812aa7b4` |

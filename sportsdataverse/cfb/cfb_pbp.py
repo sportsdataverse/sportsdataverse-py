@@ -36,9 +36,48 @@ from xgboost import Booster, DMatrix
 #: 0.727-0.782 against a 0.155 no-penalty baseline.
 _PENALTY_NEGATED_TEXT = r"(?i)no play|nullified by penalty"
 
+#: A replay review's account of the call it reversed, which follows the ruling that stood. 2021+
+#: feeds append the whole reversed play: "... pass incomplete ... The previous play is under
+#: automatic review - "Incomplete pass". CALL OVERTURNED. (Original Play: ... TOUCHDOWN ...)",
+#: 2021-23 "(OVERTURNED PLAY: ...)". 2009-16 feeds close with a note: "(Originally ruled a
+#: touchdown, overturned after replay review.)", "Ruling on field of a fumble was reviewed and
+#: overturned.", "(RULED TD ON FIELD, OVERTURNED AFTER REVIEW)", "Play reviewed and overtuned
+#: (originally ruled a 3-yard completion)". The note is cut from its lead words only, never back
+#: to a sentence break: "#6 J.Aguilar" holds a period. "Play reviewed and overturned" leads no cut:
+#: 2009 writes the ruling after it ("... play reviewed and overturned. The pass was incomplete to
+#: Keith Smith."), and the others carry an "originally ruled" parenthetical.
+_REVIEW_TAIL_RE = r"(?i)\s*(?:The previous play is under|\(\s*(?:original|overturned) play\s*:).*$"
+_REVIEW_NOTE_RE = (
+    r"(?i)\s*\(?\s*(?:originally ruled|initially ruled|ruled [a-z0-9 ]{1,25} on (?:the )?field"
+    r"|ruling on (?:the )?field of).*$"
+)
+
+
+def _ruling_text() -> pl.Expr:
+    """The play text without a replay review's account of the call it reversed (``_REVIEW_TAIL_RE``)."""
+    return pl.col("text").str.replace(_REVIEW_TAIL_RE, "").str.replace(_REVIEW_NOTE_RE, "")
+
+
+def _review_reversed_touchdown() -> pl.Expr:
+    """A touchdown replay took away: the row was reviewed, the ruling that stood names no
+    touchdown, and ESPN did not score it.
+
+    ESPN keeps the reversed call's type ("Passing Touchdown") and its text, so the row booked
+    six points it never scored: in the 2004-26 releases 108 rows named a touchdown only in the
+    reversed call (78 in 2026) and 95 kept a touchdown type, the scoreboard still on every one,
+    EP_end 6.92. "for 29 yards to the USM00 TOUCHDOWN" in "(Original Play:
+    ...)" after "pass incomplete deep left" (401856671) is the common shape.
+    """
+    ruling = _ruling_text()
+    return (
+        (pl.col("text") != ruling).fill_null(False)
+        & ~ruling.str.contains(r"(?i)touchdown|for a TD").fill_null(False)
+        & ((pl.col("scoringPlay") == True).fill_null(False) == False)  # noqa: E712
+    )
+
 
 def _touchdown_negated() -> pl.Expr:
-    """Whether ESPN's no-play marker negates the touchdown a row's text names.
+    """Whether ESPN's no-play marker, or a replay reversal, negates the touchdown a row names.
 
     The 2025+ vendor template appends the try to the touchdown row, penalties and all:
     "... rush left for 1 yard gain to the CIN00 TOUCHDOWN, clock 13:34 #13 S.Robertson
@@ -46,7 +85,9 @@ def _touchdown_negated() -> pl.Expr:
     attempt Successful". On a row ESPN scored, a marker after the touchdown's clock tail is
     the try's, and the touchdown stood (16 rows in 2025-26, every one of them moving the
     score by 6-8). A touchdown that did not stand reads "TOUCHDOWN nullified by penalty,
-    clock ..." and is not a scoring play; elsewhere the whole text is read, as before.
+    clock ..." and is not a scoring play; elsewhere the whole text is read, as before. A
+    touchdown named only in a review's reversed call did not stand either
+    (``_review_reversed_touchdown``).
     """
     text = pl.col("text")
     head = text.str.replace(r"(?i)(touchdown, clock \d{1,2}:\d{2}).*$", "$1")
@@ -54,7 +95,7 @@ def _touchdown_negated() -> pl.Expr:
         pl.when(pl.col("scoringPlay") == True)  # noqa: E712
         .then(head.str.contains(_PENALTY_NEGATED_TEXT))
         .otherwise(text.str.contains(_PENALTY_NEGATED_TEXT))
-    )
+    ) | _review_reversed_touchdown()
 
 
 def _opening_kicker(plays: pl.DataFrame, home_id: int, away_id: int) -> int | None:
@@ -199,7 +240,7 @@ def _fumbler_name(text: pl.Expr, legacy: pl.Expr) -> pl.Expr:
       (Original Play: ... fumbled by #0 C.Bell ...)", 2023's "(OVERTURNED PLAY: ...)"): only the
       ruling is read, and the legacy fallback is off, so an overturned fumble names nobody.
     """
-    review = r"(?i)\s*(?:The previous play is under|\(\s*(?:original|overturned) play\s*:).*$"
+    review = _REVIEW_TAIL_RE
     ruling = text.str.replace(review, "")
     before = (
         r"(?i)(?:for a (?-i:SAFETY|TD)\s+)?(?:#\d+\s+)?(" + _FUMBLER_NAME + r")\s+(?-i:fumbled?|FUMBLED?)(\s+by\b)?"
@@ -4449,6 +4490,33 @@ class CFBPlayProcess(object):
                 .alias("type.text"),
             )
             .with_columns(
+                # A touchdown replay took away keeps ESPN's touchdown type (95 rows in 2004-26: 55
+                # Passing / 34 Rushing Touchdown, six return or fumble ones), and the type alone
+                # books the score. It takes the type of the play that stood.
+                pl.when(pl.col("type.text").str.contains("(?i)touchdown") & _review_reversed_touchdown())
+                .then(
+                    pl.when(pl.col("type.text") == "Passing Touchdown")
+                    .then(
+                        pl.when(_ruling_text().str.contains(r"(?i)\bincomplete\b"))
+                        .then(pl.lit("Pass Incompletion"))
+                        .when(_ruling_text().str.contains(r"(?i)\bintercept"))
+                        .then(pl.lit("Interception Return"))
+                        .when(_ruling_text().str.contains(r"(?i)\bsacked\b"))
+                        .then(pl.lit("Sack"))
+                        .otherwise(pl.lit("Pass Reception"))
+                    )
+                    .when(pl.col("type.text") == "Rushing Touchdown")
+                    .then(pl.lit("Rush"))
+                    .when(pl.col("type.text") == "Kickoff Return Touchdown")
+                    .then(pl.lit("Kickoff Return (Offense)"))
+                    .when(pl.col("type.text") == "Fumble Return Touchdown")
+                    .then(pl.lit("Fumble Recovery (Opponent)"))
+                    .otherwise(pl.col("type.text").str.replace(r"(?i)\s*touchdown$", ""))
+                )
+                .otherwise(pl.col("type.text"))
+                .alias("type.text"),
+            )
+            .with_columns(
                 # Such a row keeps the try's start state (down -1, often the 3). A touchdown's
                 # gain is its distance to the end zone, so the text's "for 19 yards" is where
                 # the snap was (it matches ESPN's own start on 195 of the 245 rows naming one).
@@ -4848,24 +4916,11 @@ class CFBPlayProcess(object):
                 ## Portion of touchdown check for plays where touchdown is not listed in the play_type--
                 td_check=pl.col("text").str.contains("(?i)touchdown") & ~_touchdown_negated(),
                 safety=pl.col("text").str.contains("(?i)safety"),
-                fumble_vec=pl.when(pl.col("text").str.contains("(?i)fumble"))
-                .then(True)
-                .when(
-                    (pl.col("text").str.contains("(?i)fumble")).and_(
-                        pl.col("type.text") == "Rush",
-                        pl.col("start.pos_team.id") != pl.col("end.pos_team.id"),
-                    ),
-                )
-                .then(True)
-                .when(
-                    (pl.col("text").str.contains("(?i)fumble")).and_(
-                        pl.col("type.text") == "Sack",
-                        pl.col("start.pos_team.id") != pl.col("end.pos_team.id"),
-                    ),
-                )
-                .then(True)
-                .otherwise(False),
-                forced_fumble=pl.when(pl.col("text").str.contains("(?i)forced by")).then(True).otherwise(False),
+                # a fumble named only in a review's reversed call ("(Original Play: ... fumbled by
+                # #3 A.Allen ...)", "Ruling on field of a fumble was reviewed and overturned.") was no
+                # fumble: 94 such rows in 2025-26
+                fumble_vec=_ruling_text().str.contains("(?i)fumble").fill_null(False),
+                forced_fumble=_ruling_text().str.contains("(?i)forced by").fill_null(False),
                 # --- Kicks----
                 kickoff_play=pl.col("type.text").is_in(kickoff_vec),
             )
@@ -6389,9 +6444,12 @@ class CFBPlayProcess(object):
                 # ESPN phrasing -- e.g. "rush middle for 5 yards" -> "rush for 5 yards".
                 # Without this, main's `rush for`/`complete to` extractors miss every
                 # play that carries a direction word. Ported from cfbfastR-cfb-data
-                # 0.36-live. pass_direction/rush_direction still read raw `text`.
+                # 0.36-live. pass_direction/rush_direction still read raw `text`. A replay
+                # review's account of the reversed call is no part of it: "pass incomplete
+                # ... (Original Play: ... pass complete ... for 29 yards ...)" read 29
+                # receiving yards on an incompletion.
                 cleaned_text=(
-                    pl.col("text")
+                    _ruling_text()
                     .str.replace(r"^\(\d{1,2}:\d{2}\)\s*", "")
                     .str.replace_all(r"(?i)\s*No Huddle-Shotgun\s+", " ")
                     .str.replace_all(r"(?i)No Huddle-", "")
@@ -7722,6 +7780,30 @@ class CFBPlayProcess(object):
                     "fumble_forced_player",
                     "fumble_recovered_player",
                 ],
+            )
+            .with_columns(
+                # A lateral is one row: "... pass complete short right to #12 D.Haughton caught at
+                # TENN45, for 2 yards to the TENN39 lateral to #6 C.Nettles for 9 yards gain ...".
+                # The catch, the carry and the return stay with the player who made them; the
+                # first player to take a lateral is named here (nflfastR's lateral_receiver, as
+                # in the NFL frame). 2004 files the recipient as the subject: "Jason Carter
+                # (TA&M) took lateral and rushed for 2 yards." 2017-20 texts never name a
+                # lateral. No lateral yards: since 2025 ESPN's per-carrier clauses do not add up
+                # to the play's gain ("for 33 yards ... lateral to #1 D.Haskin for 29 yards
+                # gain" on a 4-yard play).
+                lateral_play=_ruling_text()
+                .str.contains(r"(?i)\blaterals?(?: back)? to\b|\btook lateral\b")
+                .fill_null(False),
+                lateral_player_name=_strip_presentational_tokens(
+                    pl.coalesce(
+                        _ruling_text().str.extract(r"(?i)\blaterals?(?: back)? to (?:#\d+\s+)?(.{1,30})", 1),
+                        _ruling_text().str.extract(r"(?i)^(.{1,40}?) took lateral\b", 1),
+                    )
+                    .str.replace(r"(?i)\s+(?:touchdown|fumbled?)\b.*$", "")
+                    .str.replace(r"\s*\(.*$", "")
+                    # a placeholder, not a player: "lateral to N/A", "lateral to Team", "lateral to WKU"
+                    .str.replace(r"^\s*(?:N/?A|(?i:team)|[A-Z]{2,5})\s*$", "")
+                ),
             )
         )
         return play_df
@@ -10901,6 +10983,9 @@ class CFBPlayProcess(object):
         ("punt_block_player_name", "punt_block_player_id", "return_team"),
         ("fg_return_player_name", "fg_return_player_id", "return_team"),
         ("punt_block_return_player_name", "punt_block_return_player_id", "return_team"),
+        # ponytail: the offence's roster, so a lateral on an interception or fumble return falls back
+        # to the globally unique name. A lateral_team column if those need their side.
+        ("lateral_player_name", "lateral_player_id", "pos_team"),
     ]
 
     @staticmethod
@@ -11114,7 +11199,12 @@ class CFBPlayProcess(object):
             if aid is not None:
                 return aid
             parts = nn.split()
-            local = initial_lu.get((f"{parts[0][0]} {parts[-1]}", tid)) if len(parts) >= 2 else None
+            # 2021+ text writes "#12 D.Haughton", which normalizes to one token ("dhaughton"); the
+            # catcher on a lateral keeps that name (coalesce_participants), so read it as an initial
+            dotted = re.match(r"^\s*([A-Za-z])\.\s*([A-Za-z'\-]{2,})", str(name))  # not "A.J. Brown"
+            if dotted:
+                parts = [dotted[1].lower(), _norm_player_name(dotted[2])]
+            local = initial_lu.get((f"{parts[0][0]} {parts[-1]}", tid)) if len(parts) >= 2 and parts[-1] else None
             aid = global_lu.get(nn)
             if aid is not None:
                 # a local player known only by initial (a current game's roster) beats the other team's full name
