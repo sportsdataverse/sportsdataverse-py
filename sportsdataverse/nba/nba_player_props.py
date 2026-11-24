@@ -12,10 +12,11 @@ per-minute rate times projected minutes times a pace factor
 possession column the loader doesn't provide. `# ponytail: per-minute x pace
 factor captures the pace linkage without a per-game team-possession join.`
 
-Fitted-constant note: the Normal points SD and the count-dispersion are seeded
-(``_PTS_SD_A/_B``, ``_COUNT_DISPERSION``) from the box-log residuals in
-``tools/models/nba_prediction/fit_player_props.py``; refit there if the Phase-5 gate
-floors move.
+Fitted-constant note: the Normal points SD law and the count dispersion are per league
+(``pts_sd_a/pts_sd_b/count_dispersion`` in
+:data:`~sportsdataverse.nba.nba_prediction_constants.LEAGUE_CONSTANTS`), fitted from each
+league's box-log residuals by ``tools/models/nba_prediction/fit_player_props.py``; refit there
+if the Phase-5 gate floors move.
 """
 
 from __future__ import annotations
@@ -45,15 +46,6 @@ __all__ = [
 ]
 
 _COUNT_STATS = ("reb", "ast", "fg3m")
-# points SD law sd = a + b*sqrt(mu), FITTED (tools/models/nba_prediction/fit_player_props.py,
-# 2026-07-08: least squares of per-player realized pts-SD on sqrt(mean) over 320
-# rotation players).
-_PTS_SD_A = 1.406
-_PTS_SD_B = 1.396
-# count over-dispersion var/mean for the Negative-Binomial (> 1 -> NB, ~1 -> Poisson),
-# FITTED: median var/mean over rotation players is reb 1.33 / ast 1.25 / fg3m 1.13; the
-# shared value below is their mean.
-_COUNT_DISPERSION = 1.24
 
 _RATES_SCHEMA = {
     "player_id": pl.Utf8,
@@ -157,7 +149,8 @@ def prop_distribution(exp_value: float, stat: str, *, league_id: str = "00") -> 
     Args:
         exp_value: Projected mean of the stat.
         stat: One of ``"pts"``, ``"reb"``, ``"ast"``, ``"fg3m"``.
-        league_id: Accepted for parity (dispersion is currently league-shared).
+        league_id: ``"00"`` NBA / ``"10"`` WNBA / ``"20"`` G-League; selects that
+            league's fitted SD law and dispersion.
 
     Returns:
         ``(family, params)`` where family is ``"normal"``, ``"nbinom"`` or
@@ -170,9 +163,10 @@ def prop_distribution(exp_value: float, stat: str, *, league_id: str = "00") -> 
             fam, par = prop_distribution(24.0, "pts")
     """
     mu = max(float(exp_value), 1e-6)
+    c = get_constants(league_id)
     if stat == "pts":
-        return "normal", {"mu": mu, "sd": _PTS_SD_A + _PTS_SD_B * math.sqrt(mu)}
-    var = _COUNT_DISPERSION * mu
+        return "normal", {"mu": mu, "sd": c.pts_sd_a + c.pts_sd_b * math.sqrt(mu)}
+    var = c.count_dispersion * mu
     if var <= mu * 1.0001:  # not over-dispersed -> Poisson
         return "poisson", {"mu": mu}
     # NB parameterization: var = mu + mu^2 / r  => r = mu^2 / (var - mu); p = r / (r + mu)
@@ -188,7 +182,8 @@ def prob_over(exp_value: float, line: float, stat: str, *, league_id: str = "00"
         exp_value: Projected mean of the stat.
         line: The prop line.
         stat: One of ``"pts"``, ``"reb"``, ``"ast"``, ``"fg3m"``.
-        league_id: Accepted for parity.
+        league_id: ``"00"`` NBA / ``"10"`` WNBA / ``"20"`` G-League (passed to
+            :func:`prop_distribution`).
 
     Returns:
         ``P(stat > line)`` in ``[0, 1]``.

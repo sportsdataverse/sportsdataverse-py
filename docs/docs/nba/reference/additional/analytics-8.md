@@ -175,7 +175,7 @@ Probability a stat finishes strictly above `line`.
 | `exp_value` | `float` |  | Projected mean of the stat. |
 | `line` | `float` |  | The prop line. |
 | `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
-| `league_id` | `str` | `'00'` | Accepted for parity. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League (passed to `prop_distribution`). |
 
 **Returns**
 
@@ -233,7 +233,7 @@ variance `dispersion*mu` (Poisson if dispersion <= 1).
 |---|---|---|---|
 | `exp_value` | `float` |  | Projected mean of the stat. |
 | `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
-| `league_id` | `str` | `'00'` | Accepted for parity (dispersion is currently league-shared). |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League; selects that league's fitted SD law and dispersion. |
 
 **Returns**
 
