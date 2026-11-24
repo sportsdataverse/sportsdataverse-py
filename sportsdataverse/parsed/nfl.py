@@ -376,6 +376,7 @@ from sportsdataverse.nfl import season_not_found_error as season_not_found_error
 from sportsdataverse.nfl import shield_nfl_pbp as shield_nfl_pbp  # noqa: F401
 from sportsdataverse.nfl import shield_to_espn_summary as shield_to_espn_summary  # noqa: F401
 from sportsdataverse.nfl import special_teams_ratings as special_teams_ratings  # noqa: F401
+from sportsdataverse.nfl import split_pat_rows as split_pat_rows  # noqa: F401
 from sportsdataverse.nfl import team_game_pace as team_game_pace  # noqa: F401
 from sportsdataverse.nfl import team_name_fn as team_name_fn  # noqa: F401
 from sportsdataverse.nfl import team_pressure_rates as team_pressure_rates  # noqa: F401
@@ -738,6 +739,7 @@ __all__ = [
     "sleeper_users",
     "sleeper_winners_bracket",
     "special_teams_ratings",
+    "split_pat_rows",
     "team_game_pace",
     "team_name_fn",
     "team_pressure_rates",
