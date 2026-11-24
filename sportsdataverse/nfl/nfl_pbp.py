@@ -1131,11 +1131,16 @@ ESPN_PLAY_TYPE_NFL: dict[str, str] = {
     "Timeout": "TIMEOUT",
     "Two Point Pass": "PAT2",
     "Two Point Rush": "PAT2",
+    # not in the fit: labels this processor itself gives a standalone two-point try
+    # (``__add_new_play_types``); none in 2002-2026 published data, but the code path exists
+    "Two-Point Conversion Good": "PAT2",
+    "Two-Point Conversion Missed": "PAT2",
 }
 #: ESPN types whose nflverse label depends on what happened on the play: read from the pass/rush flags.
 _ESPN_FLAG_RESOLVED_TYPES = (
     "Fumble",
     "Fumble Recovery (Own)",
+    "Fumble Recovery (Own) Touchdown",
     "Fumble Recovery (Opponent)",
     "Fumble Recovery (Opponent) Touchdown",
     "Fumble Return Touchdown",

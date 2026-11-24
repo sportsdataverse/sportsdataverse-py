@@ -150,3 +150,18 @@ def test_espn_matches_nflverse_on_a_real_game():
     assert (j["play_type_nfl"] == j["nv_type"]).mean() >= 0.97
     assert (j["aborted_play"] == j["nv_aborted"]).all()
     assert j["nv_aborted"].sum() >= 1  # this game has an aborted play, so the flag is exercised
+
+
+def test_espn_processor_two_point_labels_and_own_fumble_touchdown_resolve():
+    """Review #1255: labels the processor itself emits map to nflverse types, never UNSPECIFIED."""
+    df = _espn_rows(
+        **{
+            "type.text": [
+                "Two-Point Conversion Good",
+                "Two-Point Conversion Missed",
+                "Fumble Recovery (Own) Touchdown",
+            ],
+            "rush": [False, False, True],
+        }
+    )
+    assert _describe(df)["play_type_nfl"].to_list() == ["PAT2", "PAT2", "RUSH"]
