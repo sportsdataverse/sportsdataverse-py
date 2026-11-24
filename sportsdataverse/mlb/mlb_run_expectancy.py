@@ -42,14 +42,46 @@ def _occ(col: str) -> pl.Expr:
     return (pl.col(col).is_not_null()).cast(pl.Int8)
 
 
+_POST_ON = ("matchup_post_on_first_id", "matchup_post_on_second_id", "matchup_post_on_third_id")
+# ``runners`` is the parser's stringified list of runner dicts (repr or JSON quoting).
+_FROM_2B = r"""["']originBase["']:\s*["']2B["']"""
+
+
+def _placed_runner_signal(pbp: pl.DataFrame) -> pl.Expr:
+    """True where the PA shows a runner the batter did not put on base.
+
+    Applied only to a half-inning's first PA, where the only such runner is
+    the extra-inning automatic runner on 2nd. Checked on 24 April 2023
+    extra-inning games: all 62 extra half-openings flagged, 0 of 432
+    regulation half-openings.
+    """
+    signals = []
+    if "matchup_batter_id" in pbp.columns:
+        batter = pl.col("matchup_batter_id").cast(pl.Int64, strict=False)
+        signals += [
+            pl.col(c).is_not_null() & (pl.col(c).cast(pl.Int64, strict=False) != batter).fill_null(False)
+            for c in _POST_ON
+        ]
+    if "runners" in pbp.columns:
+        signals.append(pl.col("runners").cast(pl.Utf8).str.contains(_FROM_2B).fill_null(False))
+    return pl.any_horizontal(signals) if signals else pl.lit(False)
+
+
 def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
     """Reconstruct pre-play base-out state from statsapi play-by-play.
 
     Within each ``(game_id, inning, half)`` half-inning, ordered by the
     game-global ``at_bat_index``: ``base_state``/``outs_start`` before PA
     *i* are the post-occupancy / out-count of PA *i-1* (empty/0 at the
-    half's first PA -- occupancy and outs both genuinely reset at every
-    half-inning boundary). ``runs_on_play`` is the score delta since the
+    half's first PA -- occupancy and outs both reset at every half-inning
+    boundary). The one exception is the extra-inning automatic runner
+    (MLB, 2020+), who starts the half on 2nd (``"_2_"``) without any PA
+    putting him there. It is detected from the half's first PA itself, not
+    from a rule-era/inning table: after that PA a base is held by someone
+    other than the batter, or ``runners`` shows a movement from
+    ``originBase`` 2B (the placed runner scored or was put out on the play).
+    Frames without ``matchup_batter_id``/``runners`` keep the empty start.
+    ``runs_on_play`` is the score delta since the
     *previous PA in the game* (``over("game_id")``, **not** reset per
     half-inning -- the score itself carries across the half-inning
     boundary even though outs/bases do not).  ``runs_rest_of_inning`` is
@@ -60,7 +92,9 @@ def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
             across games), carrying ``game_id``, ``about_inning``,
             ``about_half_inning``, ``about_at_bat_index``, ``count_outs``,
             ``result_home_score``, ``result_away_score``,
-            ``matchup_post_on_{first,second,third}_id``.
+            ``matchup_post_on_{first,second,third}_id``, and optionally
+            ``matchup_batter_id`` and ``runners`` (used to seed the
+            extra-inning runner on 2nd).
 
     Returns:
         pl.DataFrame: one row per plate appearance.
@@ -97,13 +131,22 @@ def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
         _occ("matchup_post_on_first_id").alias("post_1"),
         _occ("matchup_post_on_second_id").alias("post_2"),
         _occ("matchup_post_on_third_id").alias("post_3"),
+        _placed_runner_signal(pbp).alias("placed_signal"),
     ).sort(["game_id", "at_bat_index"])
 
     half_grp = ["game_id", "inning", "half"]
     total = pl.col("result_home_score") + pl.col("result_away_score")
+    # Extra-inning automatic runner: no prior PA in the half put him on 2nd, so
+    # the shifted post-occupancy reads empty. Only a half's FIRST PA can carry
+    # him in; later PAs read the previous PA's post-occupancy as usual.
+    first_pa = pl.col("at_bat_index") == pl.col("at_bat_index").min().over(half_grp)
+    placed_on_2nd = first_pa & pl.col("placed_signal")
     df = df.with_columns(
         pl.col("post_1").shift(1, fill_value=0).over(half_grp).alias("pre_1"),
-        pl.col("post_2").shift(1, fill_value=0).over(half_grp).alias("pre_2"),
+        pl.when(placed_on_2nd)
+        .then(pl.lit(1, dtype=pl.Int8))
+        .otherwise(pl.col("post_2").shift(1, fill_value=0).over(half_grp))
+        .alias("pre_2"),
         pl.col("post_3").shift(1, fill_value=0).over(half_grp).alias("pre_3"),
         pl.col("count_outs").shift(1, fill_value=0).over(half_grp).alias("outs_start"),
         # Score carries across half-inning boundaries -- shift over the WHOLE

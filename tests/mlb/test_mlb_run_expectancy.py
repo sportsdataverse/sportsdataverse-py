@@ -105,3 +105,51 @@ def test_matrix_from_synthetic_pbp_has_24_states():
     m = mlb_run_expectancy_matrix(pbp=pbp)
     assert set(m.columns) == {"base_state", "outs", "re", "n"}
     assert m.height <= 24 and m["re"].min() >= 0.0
+
+
+# Real statsapi captures (2023): 718735 CLE @ SEA (10 inn) and 718511 (11 inn;
+# the bottom-11 automatic runner scores on the half's first PA, a double, so
+# he is on no base afterwards and only ``runners`` shows him).
+EXTRA_INNINGS_FIXTURE = "tests/fixtures/mlb_game_state/pbp_extra_innings_2023.parquet"
+
+
+def _half_openers(pbp):
+    states = pbp_base_out_states(pbp).sort(["game_id", "at_bat_index"])
+    return states.group_by(["game_id", "inning", "half"], maintain_order=True).first()
+
+
+def test_extra_innings_automatic_runner_on_second():
+    # Since 2020 each extra half-inning starts with a runner placed on 2nd.
+    pbp = pl.read_parquet(EXTRA_INNINGS_FIXTURE)
+    firsts = _half_openers(pbp)
+
+    extra = firsts.filter(pl.col("inning") >= 10)
+    assert extra.height == 6  # 718735 top/bottom 10; 718511 top/bottom 10 and 11
+    assert extra["base_state"].unique().to_list() == ["_2_"]
+    assert extra["outs_start"].unique().to_list() == [0]
+    scored = extra.filter((pl.col("game_id") == "718511") & (pl.col("inning") == 11) & (pl.col("half") == "bottom"))
+    assert scored["runs_on_play"].to_list() == [1]
+
+    regulation = firsts.filter(pl.col("inning") <= 9)
+    assert regulation.height == 36  # 18 regulation half-innings per game
+    assert regulation["base_state"].unique().to_list() == ["___"]
+
+
+def test_extra_innings_rest_of_half_and_runs_unchanged():
+    pbp = pl.read_parquet(EXTRA_INNINGS_FIXTURE)
+    states = pbp_base_out_states(pbp).sort(["game_id", "at_bat_index"])
+    # 2nd/3rd PA of 718735 top 10 still read the previous PA's post-occupancy.
+    top10 = states.filter((pl.col("game_id") == "718735") & (pl.col("inning") == 10) & (pl.col("half") == "top"))
+    assert top10["base_state"].to_list()[:3] == ["_2_", "_2_", "12_"]
+    # Every run counted once: per-game runs_on_play sums to the final score.
+    final = pbp.sort("about_at_bat_index").group_by("game_id").last()
+    runs = states.group_by("game_id").agg(pl.col("runs_on_play").sum())
+    j = final.join(runs, on="game_id", validate="1:1")
+    assert (j["runs_on_play"] == j["result_home_score"] + j["result_away_score"]).all()
+
+
+def test_extra_innings_without_signal_columns_keeps_empty_start():
+    # Older captures (the 1999-2002 oracle corpus) carry neither
+    # matchup_batter_id nor runners; behaviour there must not change.
+    pbp = pl.read_parquet(EXTRA_INNINGS_FIXTURE).drop("matchup_batter_id", "runners")
+    assert _half_openers(pbp)["base_state"].unique().to_list() == ["___"]
