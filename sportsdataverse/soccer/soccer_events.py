@@ -17,6 +17,7 @@ import importlib
 import json
 import os
 from typing import TYPE_CHECKING, Any, Dict, Union
+from urllib.parse import quote
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import AssetFetchError
@@ -67,9 +68,25 @@ _OPEN_DATA_FILES: Dict[str, tuple] = {
 
 
 def _open_data_urls(key: str, match_id: Union[int, str]) -> list:
-    github_url = importlib.import_module("kloppy.utils").github_resolve_raw_data_url
+    """Every URL a cached copy of the match's files can sit under; the events file's resolved URL first.
+
+    kloppy's ``github_resolve_raw_data_url`` makes a live HEAD request and returns where GitHub redirects
+    (``statsbomb/open-data`` now lands on ``raw.githubusercontent.com/hudl/open-data/refs/heads/...``),
+    or, when that request fails, ``raw.githubusercontent.com/<repository>/<branch>/<file>``. Two calls
+    can therefore disagree, and kloppy keys its cache by the URL it got, so both forms are returned:
+    evicting only one let a cut-off body survive the retry whenever the two requests disagreed.
+    """
+    resolve = importlib.import_module("kloppy.utils").github_resolve_raw_data_url
     repository, paths = _OPEN_DATA_FILES[key]
-    return [github_url(repository=repository, branch="master", file=p.format(match_id=match_id)) for p in paths]
+    files = [p.format(match_id=match_id) for p in paths]
+    resolved = [resolve(repository=repository, branch="master", file=f) for f in files]
+    # kloppy's own fallback, encoded the same way (each path part quoted, safe="")
+    fallback = [
+        f"https://raw.githubusercontent.com/{repository}/master/"
+        + "/".join(quote(part, safe="") for part in f.split("/"))
+        for f in files
+    ]
+    return list(dict.fromkeys([*resolved, *fallback]))
 
 
 def _evict_cached(urls: list) -> None:
