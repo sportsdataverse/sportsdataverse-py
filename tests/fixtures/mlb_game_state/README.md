@@ -23,7 +23,7 @@ integer (never a float) at capture time.
 | `winprob_game.parquet` | `mlb_win_probability` (statsapi) | Game 7746 (2001-06-21) -- era-matched to `pbp_corpus`, not a modern game (see below) -- per-play win-probability timeline |
 | `results_corpus.parquet` | `mlb_schedule` (statsapi) | Game-level final scores + team ids for the same windows |
 | `savant_called_pitches.parquet` | `mlb_statcast_search` (Baseball Savant) + `mlb_boxscore` (statsapi, `officials`) | 2023-06-01..2023-06-28 called pitches (`description in {called_strike, ball}`), real per-game home-plate umpire id; 53,667 pitches (widened from an initial 1-week/12,920-pitch pass -- see below) |
-| `pbp_extra_innings_2023.parquet` | `mlb_play_by_play` (statsapi), captured 2026-11-24 | Games 718735 (2023-04-02 CLE @ SEA, 10 inn) and 718511 (11 inn), 176 PAs: the extra-inning automatic-runner test for `pbp_base_out_states`. Columns = the `pbp_corpus` set plus `matchup_batter_id`, `runners` (parser string) and `result_event`; ids cast int -> Utf8. 718511's bottom-11 runner scores on the half's first PA, so only `runners` shows him |
+| `pbp_extra_innings_2023.parquet` | `mlb_play_by_play` (statsapi `https://statsapi.mlb.com/api/v1/game/{718735,718511}/playByPlay`), captured 2026-11-24 | Games 718735 (2023-04-02 CLE @ SEA, 10 inn) and 718511 (11 inn), 176 PAs: the extra-inning automatic-runner test for `pbp_base_out_states`. Columns = the `pbp_corpus` set plus `matchup_batter_id`, `runners` (parser string) and `result_event`; ids cast int -> Utf8. 718511's bottom-11 runner scores on the half's first PA, so only `runners` shows him |
 
 ## Capture-window rationale (pbp_corpus / results_corpus)
 

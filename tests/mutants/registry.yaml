@@ -11589,3 +11589,24 @@
   test: tests/nhl/test_nhl_rapm.py::test_build_stints_eventless_penalty_expiry_is_not_carried
   expected: kill
   note: An expired penalty with no event after it would carry 4v5 onto five skaters a side.
+
+# --- gh-1262: extra-inning automatic runner in pbp_base_out_states ------------------------------
+- id: mlb-re24-automatic-runner-not-seeded
+  group: mlb-extra-innings-runner
+  finding: gh-1262
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: 'return pl.when(first_pa & placed).then(pl.lit(1, dtype=pl.Int8)).otherwise(shifted)'
+  mutant: 'return shifted'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_extra_innings_automatic_runner_on_second
+  expected: kill
+  note: Every 2020+ extra half-inning would open bases empty instead of with the runner on 2nd.
+
+- id: mlb-re24-automatic-runner-runners-signal
+  group: mlb-extra-innings-runner
+  finding: gh-1262
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '        signals.append(pl.col("runners").cast(pl.Utf8).str.contains(_FROM_2B).fill_null(False))'
+  mutant: '        pass'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_extra_innings_automatic_runner_on_second
+  expected: kill
+  note: An automatic runner who scores on the half's first PA (718511 bottom 11) would be missed.

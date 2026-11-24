@@ -54,9 +54,10 @@ def _pre_on_second(columns: List[str], half_grp: List[str]) -> pl.Expr:
     post-occupancy reads empty. He is detected from the half's FIRST PA itself
     rather than a rule-era/inning table: after it a base is held by someone other
     than the batter, or ``runners`` shows a movement from ``originBase`` 2B (he
-    scored or was put out on the play). Checked on 24 April 2023 extra-inning
-    games: 62 of 62 extra half-openings flagged, 0 of 432 regulation ones. Frames
-    without ``matchup_batter_id``/``runners`` keep the empty start.
+    scored or was put out on the play). Checked on all 425 April 2023 games: 74 of
+    74 extra half-openings flagged, 0 of 7,460 regulation ones (so a pinch runner
+    for the leadoff batter does not appear in that PA's post-occupancy). Frames
+    without ``matchup_batter_id``/``runners`` keep the empty start; the parser emits both.
     """
     signals = []
     if "matchup_batter_id" in columns:
