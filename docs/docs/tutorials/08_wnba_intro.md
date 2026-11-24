@@ -614,8 +614,8 @@ double_doubles
     │ ---                  ┆ ---               ┆ ---            ┆ ---            │
     │ str                  ┆ str               ┆ u32            ┆ u32            │
     ╞══════════════════════╪═══════════════════╪════════════════╪════════════════╡
-    │ Angel Reese          ┆ CHI               ┆ 26             ┆ 0              │
     │ A'ja Wilson          ┆ LV                ┆ 26             ┆ 0              │
+    │ Angel Reese          ┆ CHI               ┆ 26             ┆ 0              │
     │ Breanna Stewart      ┆ NY                ┆ 22             ┆ 0              │
     │ Tina Charles         ┆ ATL               ┆ 21             ┆ 1              │
     │ Napheesa Collier     ┆ MIN               ┆ 21             ┆ 0              │
@@ -894,21 +894,21 @@ position_mix
 
     shape: (12, 4)
     ┌───────────────────┬─────┬─────┬─────┐
-    │ team_abbreviation ┆ G   ┆ F   ┆ C   │
+    │ team_abbreviation ┆ G   ┆ C   ┆ F   │
     │ ---               ┆ --- ┆ --- ┆ --- │
     │ str               ┆ u32 ┆ u32 ┆ u32 │
     ╞═══════════════════╪═════╪═════╪═════╡
-    │ ATL               ┆ 7   ┆ 4   ┆ 1   │
-    │ CHI               ┆ 9   ┆ 3   ┆ 2   │
-    │ CONNECTICU        ┆ 8   ┆ 5   ┆ 2   │
-    │ DALLAS            ┆ 7   ┆ 6   ┆ 1   │
-    │ IND               ┆ 8   ┆ 3   ┆ 2   │
+    │ ATL               ┆ 7   ┆ 1   ┆ 4   │
+    │ CHI               ┆ 9   ┆ 2   ┆ 3   │
+    │ CONNECTICU        ┆ 8   ┆ 2   ┆ 5   │
+    │ DALLAS            ┆ 7   ┆ 1   ┆ 6   │
+    │ IND               ┆ 8   ┆ 2   ┆ 3   │
     │ …                 ┆ …   ┆ …   ┆ …   │
-    │ MIN               ┆ 5   ┆ 8   ┆ 1   │
-    │ NY                ┆ 8   ┆ 5   ┆ 2   │
-    │ PHX               ┆ 7   ┆ 7   ┆ 1   │
-    │ SEA               ┆ 6   ┆ 5   ┆ 3   │
-    │ WSH               ┆ 9   ┆ 3   ┆ 2   │
+    │ MIN               ┆ 5   ┆ 1   ┆ 8   │
+    │ NY                ┆ 8   ┆ 2   ┆ 5   │
+    │ PHX               ┆ 7   ┆ 1   ┆ 7   │
+    │ SEA               ┆ 6   ┆ 3   ┆ 5   │
+    │ WSH               ┆ 9   ┆ 2   ┆ 3   │
     └───────────────────┴─────┴─────┴─────┘
 
 
@@ -993,13 +993,13 @@ wdf
 ```
 
     ✅ wnba_stats_leaguedashplayerstats
-    shape: (239, 69)
+    shape: (238, 69)
 
 
 
 
 
-    shape: (239, 69)
+    shape: (238, 69)
     ┌───────────┬───────────┬───────────┬───────────┬───┬──────────┬───────────┬───────────┬───────────┐
     │ player_id ┆ player_na ┆ nickname  ┆ team_id   ┆ … ┆ td3_rank ┆ wnba_fant ┆ fp_high_s ┆ team_coun │
     │ ---       ┆ me        ┆ ---       ┆ ---       ┆   ┆ ---      ┆ asy_pts_r ┆ core_rank ┆ t         │
@@ -1011,9 +1011,9 @@ wdf
     │           ┆ Wilson    ┆           ┆ 9         ┆   ┆          ┆           ┆           ┆           │
     │ 1642290   ┆ Aaliyah   ┆ Aaliyah   ┆ 161166132 ┆ … ┆ 5        ┆ 85        ┆ 88        ┆ 1         │
     │           ┆ Edwards   ┆           ┆ 3         ┆   ┆          ┆           ┆           ┆           │
-    │ 1642801   ┆ Aaliyah   ┆ Aaliyah   ┆ 161166132 ┆ … ┆ 5        ┆ 203       ┆ 206       ┆ 2         │
+    │ 1642801   ┆ Aaliyah   ┆ Aaliyah   ┆ 161166132 ┆ … ┆ 5        ┆ 202       ┆ 205       ┆ 2         │
     │           ┆ Nye       ┆           ┆ 0         ┆   ┆          ┆           ┆           ┆           │
-    │ 1630462   ┆ Aari      ┆ Aari      ┆ 161166132 ┆ … ┆ 5        ┆ 203       ┆ 202       ┆ 1         │
+    │ 1630462   ┆ Aari      ┆ Aari      ┆ 161166132 ┆ … ┆ 5        ┆ 202       ┆ 201       ┆ 1         │
     │           ┆ McDonald  ┆           ┆ 4         ┆   ┆          ┆           ┆           ┆           │
     │ 1642786   ┆ Aicha     ┆ Aicha     ┆ 161166132 ┆ … ┆ 5        ┆ 130       ┆ 129       ┆ 1         │
     │           ┆ Coulibaly ┆           ┆ 9         ┆   ┆          ┆           ┆           ┆           │
@@ -1024,7 +1024,7 @@ wdf
     │           ┆ Ayayi     ┆           ┆ 7         ┆   ┆          ┆           ┆           ┆           │
     │ 1631007   ┆ Veronica  ┆ Veronica  ┆ 161166133 ┆ … ┆ 5        ┆ 23        ┆ 18        ┆ 1         │
     │           ┆ Burton    ┆           ┆ 1         ┆   ┆          ┆           ┆           ┆           │
-    │ 1642791   ┆ Zaay      ┆ Zaay      ┆ 161166133 ┆ … ┆ 5        ┆ 212       ┆ 216       ┆ 1         │
+    │ 1642791   ┆ Zaay      ┆ Zaay      ┆ 161166133 ┆ … ┆ 5        ┆ 211       ┆ 215       ┆ 1         │
     │           ┆ Green     ┆           ┆ 2         ┆   ┆          ┆           ┆           ┆           │
     │ 1641660   ┆ Zia Cooke ┆ Zia       ┆ 161166132 ┆ … ┆ 5        ┆ 99        ┆ 103       ┆ 1         │
     │           ┆           ┆           ┆ 8         ┆   ┆          ┆           ┆           ┆           │

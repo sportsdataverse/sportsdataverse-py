@@ -248,22 +248,22 @@ else:
 
 
     shape: (10, 2)
-    ┌─────────────────┬────────┐
-    │ type_desc_key   ┆ events │
-    │ ---             ┆ ---    │
-    │ str             ┆ u32    │
-    ╞═════════════════╪════════╡
-    │ faceoff         ┆ 59     │
-    │ hit             ┆ 53     │
-    │ stoppage        ┆ 52     │
-    │ shot-on-goal    ┆ 42     │
-    │ missed-shot     ┆ 36     │
-    │ blocked-shot    ┆ 32     │
-    │ giveaway        ┆ 22     │
-    │ takeaway        ┆ 19     │
-    │ period-start    ┆ 3      │
-    │ delayed-penalty ┆ 3      │
-    └─────────────────┴────────┘
+    ┌───────────────┬────────┐
+    │ type_desc_key ┆ events │
+    │ ---           ┆ ---    │
+    │ str           ┆ u32    │
+    ╞═══════════════╪════════╡
+    │ faceoff       ┆ 59     │
+    │ hit           ┆ 53     │
+    │ stoppage      ┆ 52     │
+    │ shot-on-goal  ┆ 42     │
+    │ missed-shot   ┆ 36     │
+    │ blocked-shot  ┆ 32     │
+    │ giveaway      ┆ 22     │
+    │ takeaway      ┆ 19     │
+    │ period-start  ┆ 3      │
+    │ penalty       ┆ 3      │
+    └───────────────┴────────┘
 
 
 
@@ -506,6 +506,8 @@ out
 ```
 
     ✅ FLA schedule
+
+
     ✅ FLA roster
     games: 114 | roster size: 22
 
@@ -990,8 +992,6 @@ out
 ```
 
     ✅ franchise team totals
-
-
     ✅ franchises
 
 
@@ -1004,16 +1004,16 @@ out
     │ ---                 ┆ ---          ┆ ---    ┆ ---    ┆ ---    ┆ ---  │
     │ str                 ┆ f64          ┆ f64    ┆ f64    ┆ f64    ┆ i64  │
     ╞═════════════════════╪══════════════╪════════╪════════╪════════╪══════╡
-    │ Montréal Canadiens  ┆ 7217.0       ┆ 3656.0 ┆ 2491.0 ┆ 8382.0 ┆ 23   │
-    │ Boston Bruins       ┆ 7056.0       ┆ 3495.0 ┆ 2533.0 ┆ 8018.0 ┆ 6    │
-    │ New York Rangers    ┆ 6991.0       ┆ 3122.0 ┆ 2868.0 ┆ 7245.0 ┆ 4    │
-    │ Toronto Maple Leafs ┆ 6948.0       ┆ 3115.0 ┆ 2838.0 ┆ 7225.0 ┆ 11   │
-    │ Detroit Red Wings   ┆ 6724.0       ┆ 3087.0 ┆ 2631.0 ┆ 7180.0 ┆ 11   │
-    │ Chicago Blackhawks  ┆ 6990.0       ┆ 2948.0 ┆ 3003.0 ┆ 6935.0 ┆ 6    │
-    │ Philadelphia Flyers ┆ 4604.0       ┆ 2255.0 ┆ 1646.0 ┆ 5213.0 ┆ 2    │
-    │ St. Louis Blues     ┆ 4603.0       ┆ 2148.0 ┆ 1810.0 ┆ 4941.0 ┆ 1    │
-    │ Pittsburgh Penguins ┆ 4601.0       ┆ 2109.0 ┆ 1894.0 ┆ 4816.0 ┆ 5    │
-    │ Buffalo Sabres      ┆ 4375.0       ┆ 2012.0 ┆ 1743.0 ┆ 4644.0 ┆ 0    │
+    │ Montréal Canadiens  ┆ 7221.0       ┆ 3658.0 ┆ 2493.0 ┆ 8386.0 ┆ 23   │
+    │ Boston Bruins       ┆ 7059.0       ┆ 3497.0 ┆ 2534.0 ┆ 8022.0 ┆ 6    │
+    │ New York Rangers    ┆ 6993.0       ┆ 3123.0 ┆ 2869.0 ┆ 7247.0 ┆ 4    │
+    │ Toronto Maple Leafs ┆ 6951.0       ┆ 3115.0 ┆ 2840.0 ┆ 7226.0 ┆ 11   │
+    │ Detroit Red Wings   ┆ 6726.0       ┆ 3087.0 ┆ 2633.0 ┆ 7180.0 ┆ 11   │
+    │ Chicago Blackhawks  ┆ 6994.0       ┆ 2951.0 ┆ 3004.0 ┆ 6941.0 ┆ 6    │
+    │ Philadelphia Flyers ┆ 4607.0       ┆ 2258.0 ┆ 1646.0 ┆ 5219.0 ┆ 2    │
+    │ St. Louis Blues     ┆ 4607.0       ┆ 2152.0 ┆ 1810.0 ┆ 4949.0 ┆ 1    │
+    │ Pittsburgh Penguins ┆ 4604.0       ┆ 2109.0 ┆ 1897.0 ┆ 4816.0 ┆ 5    │
+    │ Buffalo Sabres      ┆ 4379.0       ┆ 2014.0 ┆ 1745.0 ┆ 4648.0 ┆ 0    │
     └─────────────────────┴──────────────┴────────┴────────┴────────┴──────┘
 
 

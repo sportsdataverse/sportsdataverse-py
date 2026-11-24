@@ -743,8 +743,6 @@ else:
 
 
 
-
-
     shape: (10, 6)
     ┌─────────┬──────────────┬───────────────────┬────────┬─────────────┬──────┐
     │ team_id ┆ team_name    ┆ team_abbreviation ┆ losses ┆ win_percent ┆ wins │
@@ -898,7 +896,7 @@ else:
     │ ACU        ┆ 000000    ┆ Abilene   ┆ 669     ┆ … ┆ Abilene   ┆ Abilene   ┆ abilene-c ┆ s:1~l:102 │
     │            ┆           ┆ Christian ┆         ┆   ┆ Chrstn    ┆ Chrstn    ┆ hristian- ┆ ~t:669    │
     │            ┆           ┆ Wildcats  ┆         ┆   ┆           ┆           ┆ wildcats  ┆           │
-    │ AF         ┆ 004A7B    ┆ Air Force ┆ 567     ┆ … ┆ Air Force ┆ Air Force ┆ air-force ┆ s:1~l:102 │
+    │ AFA        ┆ 004A7B    ┆ Air Force ┆ 567     ┆ … ┆ Air Force ┆ Air Force ┆ air-force ┆ s:1~l:102 │
     │            ┆           ┆ Falcons   ┆         ┆   ┆           ┆           ┆ -falcons  ┆ ~t:567    │
     │ AKR        ┆ 0A1E5B    ┆ Akron     ┆ 670     ┆ … ┆ Akron     ┆ Akron     ┆ akron-zip ┆ s:1~l:102 │
     │            ┆           ┆ Zips      ┆         ┆   ┆           ┆           ┆ s         ┆ ~t:670    │
@@ -1118,15 +1116,15 @@ else:
     │ i64     ┆ str             ┆ str               ┆ f64    ┆ f64         ┆ f64  │
     ╞═════════╪═════════════════╪═══════════════════╪════════╪═════════════╪══════╡
     │ 349     ┆ Black Knights   ┆ ARMY              ┆ 2.0    ┆ 0.8         ┆ 8.0  │
-    │ 2099    ┆ Golden Griffins ┆ CAN               ┆ 6.0    ┆ 0.4         ┆ 4.0  │
-    │ 2523    ┆ Colonials       ┆ RMU               ┆ 7.0    ┆ 0.363636    ┆ 4.0  │
     │ 178     ┆ Tigers          ┆ RIT               ┆ 8.0    ┆ 0.272727    ┆ 3.0  │
-    │ 315     ┆ Purple Eagles   ┆ NIA               ┆ 5.0    ┆ 0.545455    ┆ 6.0  │
-    │ 2005    ┆ Falcons         ┆ AFA               ┆ 7.0    ┆ 0.416667    ┆ 5.0  │
     │ 2060    ┆ Falcons         ┆ BENT              ┆ 6.0    ┆ 0.5         ┆ 6.0  │
-    │ 2529    ┆ Pioneers        ┆ SHU               ┆ 6.0    ┆ 0.5         ┆ 6.0  │
-    │ 107     ┆ Crusaders       ┆ HC                ┆ 9.0    ┆ 0.357143    ┆ 5.0  │
-    │ 127     ┆ Spartans        ┆ MSU               ┆ 3.0    ┆ 0.6666667   ┆ 6.0  │
+    │ 2099    ┆ Golden Griffins ┆ CAN               ┆ 7.0    ┆ 0.363636    ┆ 4.0  │
+    │ 2523    ┆ Colonials       ┆ RMU               ┆ 7.0    ┆ 0.461538    ┆ 6.0  │
+    │ 315     ┆ Purple Eagles   ┆ NIA               ┆ 5.0    ┆ 0.5833333   ┆ 7.0  │
+    │ 2005    ┆ Falcons         ┆ AFA               ┆ 9.0    ┆ 0.357143    ┆ 5.0  │
+    │ 2529    ┆ Pioneers        ┆ SHU               ┆ 8.0    ┆ 0.428571    ┆ 6.0  │
+    │ 107     ┆ Crusaders       ┆ HC                ┆ 10.0   ┆ 0.333333    ┆ 5.0  │
+    │ 127     ┆ Spartans        ┆ MSU               ┆ 4.0    ┆ 0.6363636   ┆ 7.0  │
     └─────────┴─────────────────┴───────────────────┴────────┴─────────────┴──────┘
 
 
@@ -1156,16 +1154,16 @@ else:
     │ ---     ┆ ---  ┆ ---    ┆ ---               ┆ ---            │
     │ i64     ┆ i64  ┆ f64    ┆ i64               ┆ str            │
     ╞═════════╪══════╪════════╪═══════════════════╪════════════════╡
-    │ 130     ┆ 1    ┆ 0.0    ┆ null              ┆ Wolverines     │
-    │ 275     ┆ 2    ┆ 0.0    ┆ null              ┆ Badgers        │
-    │ 2172    ┆ 3    ┆ 0.0    ┆ null              ┆ Pioneers       │
-    │ 2711    ┆ 4    ┆ 0.0    ┆ null              ┆ Broncos        │
-    │ 134     ┆ 5    ┆ 0.0    ┆ null              ┆ Bulldogs       │
-    │ 159     ┆ 6    ┆ 0.0    ┆ null              ┆ Big Green      │
-    │ 155     ┆ 7    ┆ 0.0    ┆ null              ┆ Fighting Hawks │
+    │ 275     ┆ 1    ┆ 0.0    ┆ null              ┆ Badgers        │
+    │ 130     ┆ 2    ┆ 0.0    ┆ null              ┆ Wolverines     │
+    │ 134     ┆ 3    ┆ 0.0    ┆ null              ┆ Bulldogs       │
+    │ 155     ┆ 4    ┆ 0.0    ┆ null              ┆ Fighting Hawks │
+    │ 159     ┆ 5    ┆ 0.0    ┆ null              ┆ Big Green      │
+    │ 2043    ┆ 6    ┆ 0.0    ┆ null              ┆ Vikings        │
+    │ 2172    ┆ 7    ┆ 0.0    ┆ null              ┆ Pioneers       │
     │ 2514    ┆ 8    ┆ 0.0    ┆ null              ┆ Bobcats        │
-    │ 127     ┆ 9    ┆ 0.0    ┆ null              ┆ Spartans       │
-    │ 2043    ┆ 10   ┆ 0.0    ┆ null              ┆ Vikings        │
+    │ 2507    ┆ 9    ┆ 0.0    ┆ null              ┆ Friars         │
+    │ 127     ┆ 10   ┆ 0.0    ┆ null              ┆ Spartans       │
     └─────────┴──────┴────────┴───────────────────┴────────────────┘
 
 
@@ -1418,13 +1416,13 @@ else:
     │ 194     ┆ 1    ┆ 0.0    ┆ null              ┆ Buckeyes       │
     │ 135     ┆ 2    ┆ 0.0    ┆ null              ┆ Golden Gophers │
     │ 275     ┆ 3    ┆ 0.0    ┆ null              ┆ Badgers        │
-    │ 163     ┆ 4    ┆ 0.0    ┆ null              ┆ Tigers         │
-    │ 111     ┆ 5    ┆ 0.0    ┆ null              ┆ Huskies        │
-    │ 2514    ┆ 6    ┆ 0.0    ┆ null              ┆ Bobcats        │
-    │ 213     ┆ 7    ┆ 0.0    ┆ null              ┆ Nittany Lions  │
-    │ 2137    ┆ 8    ┆ 0.0    ┆ null              ┆ Golden Knights │
+    │ 111     ┆ 4    ┆ 0.0    ┆ null              ┆ Huskies        │
+    │ 163     ┆ 5    ┆ 0.0    ┆ null              ┆ Tigers         │
+    │ 2137    ┆ 6    ┆ 0.0    ┆ null              ┆ Golden Knights │
+    │ 2514    ┆ 7    ┆ 0.0    ┆ null              ┆ Bobcats        │
+    │ 213     ┆ 8    ┆ 0.0    ┆ null              ┆ Nittany Lions  │
     │ 41      ┆ 9    ┆ 0.0    ┆ null              ┆ Huskies        │
-    │ 2142    ┆ 10   ┆ 0.0    ┆ null              ┆ Raiders        │
+    │ 172     ┆ 10   ┆ 0.0    ┆ null              ┆ Big Red        │
     └─────────┴──────┴────────┴───────────────────┴────────────────┘
 
 
@@ -1478,6 +1476,8 @@ else:
     ✅ ufl teams
     ✅ xfl teams
     ✅ cfl teams
+
+
     ✅ college_baseball teams
 
 
@@ -1528,7 +1528,7 @@ else:
     print('no CFL games today (or offseason)')
 ```
 
-    ✅ today's CFL slate (20261116)
+    ✅ today's CFL slate (20261124)
     no CFL games today (or offseason)
 
 
@@ -1563,8 +1563,6 @@ player_info
 ```
 
     No site v2 athlete page for the first 5 roster players; showing the core v2 record
-
-
     ✅ MCH player core (id=5136656)
 
 

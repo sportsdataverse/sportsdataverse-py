@@ -254,7 +254,7 @@ pbp.select(have).head() if have else 'pbp not published for these seasons right 
 ```
 
     ✅ load_cfb_pbp 2023
-    pbp season: 2023 | pbp shape: (153899, 507)
+    pbp season: 2023 | pbp shape: (153867, 507)
 
 
 
@@ -491,7 +491,7 @@ out
     │ ---        ┆ ---   ┆ ---          │
     │ str        ┆ u32   ┆ f64          │
     ╞════════════╪═══════╪══════════════╡
-    │ LSU        ┆ 939   ┆ 0.388        │
+    │ LSU        ┆ 938   ┆ 0.389        │
     │ Oregon     ┆ 1052  ┆ 0.311        │
     │ Georgia    ┆ 1064  ┆ 0.24         │
     │ USC        ┆ 958   ┆ 0.207        │
@@ -547,12 +547,12 @@ out
     │ Offensive Lineman ┆ 21      │
     │ Linebacker        ┆ 18      │
     │ Wide Receiver     ┆ 18      │
-    │ Defensive End     ┆ 12      │
     │ Defensive Lineman ┆ 12      │
+    │ Defensive End     ┆ 12      │
     │ Running Back      ┆ 11      │
     │ Tight End         ┆ 10      │
-    │ Quarterback       ┆ 6       │
     │ Place Kicker      ┆ 6       │
+    │ Quarterback       ┆ 6       │
     └───────────────────┴─────────┘
 
 
@@ -650,16 +650,16 @@ standings_tbl.head(10)
     │ ---                      ┆ ---  ┆ ---    ┆ ---     │
     │ str                      ┆ u32  ┆ u32    ┆ f64     │
     ╞══════════════════════════╪══════╪════════╪═════════╡
-    │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
     │ Michigan                 ┆ 15   ┆ 0      ┆ 1.0     │
+    │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
     │ Harding                  ┆ 15   ┆ 0      ┆ 1.0     │
-    │ Colorado School of Mines ┆ 14   ┆ 1      ┆ 0.933   │
-    │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
-    │ SUNY Cortland            ┆ 14   ┆ 1      ┆ 0.933   │
     │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
+    │ SUNY Cortland            ┆ 14   ┆ 1      ┆ 0.933   │
+    │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
+    │ Colorado School of Mines ┆ 14   ┆ 1      ┆ 0.933   │
     │ Randolph Macon           ┆ 13   ┆ 1      ┆ 0.929   │
-    │ Liberty                  ┆ 13   ┆ 1      ┆ 0.929   │
     │ Florida State            ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
     └──────────────────────────┴──────┴────────┴─────────┘
 
 
@@ -751,8 +751,8 @@ gamelog.head(16) if gamelog.height else f'no games found for {team}'
     │ i64  ┆ str           ┆ i64     ┆ i64         ┆ i64    ┆ bool         │
     ╞══════╪═══════════════╪═════════╪═════════════╪════════╪══════════════╡
     │ 1    ┆ Alabama       ┆ 27      ┆ 20          ┆ 7      ┆ true         │
-    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
     │ 1    ┆ Washington    ┆ 34      ┆ 13          ┆ 21     ┆ true         │
+    │ 1    ┆ East Carolina ┆ 30      ┆ 3           ┆ 27     ┆ false        │
     │ 2    ┆ UNLV          ┆ 35      ┆ 7           ┆ 28     ┆ false        │
     │ 3    ┆ Bowling Green ┆ 31      ┆ 6           ┆ 25     ┆ false        │
     │ …    ┆ …             ┆ …       ┆ …           ┆ …      ┆ …            │
@@ -1075,12 +1075,12 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
     │ Conference ┆            ┆         ┆ s          ┆   ┆            ┆           ┆           ┆        │
     │ American   ┆ American   ┆ 235     ┆ Tigers     ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 249     ┆ Mean Green ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
-    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
-    │ American   ┆ American   ┆ 5       ┆ Blazers    ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
-    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
     │ American   ┆ American   ┆ 151     ┆ Pirates    ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
     │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 249     ┆ Mean Green ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆            ┆   ┆            ┆           ┆           ┆        │
+    │ American   ┆ American   ┆ 202     ┆ Golden     ┆ … ┆ null       ┆ null      ┆ null      ┆ null   │
+    │ Conference ┆            ┆         ┆ Hurricane  ┆   ┆            ┆           ┆           ┆        │
     └────────────┴────────────┴─────────┴────────────┴───┴────────────┴───────────┴───────────┴────────┘
 
 

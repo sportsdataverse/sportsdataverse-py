@@ -309,7 +309,7 @@ if isinstance(summary_raw, dict):
 ```
 
     ✅ match summary 1535465
-    Top-level keys: ['notes', 'gameInfo', 'debuts', 'rosters', 'article', 'videos', 'matchcards', 'leaders', 'news', 'header', 'wallclockAvailable', 'meta', 'standings']
+    Top-level keys: ['notes', 'gameInfo', 'debuts', 'rosters', 'matchcards', 'article', 'videos', 'news', 'leaders', 'header', 'wallclockAvailable', 'meta', 'standings']
 
 
 ### Parsing all 8 sections at once
@@ -556,11 +556,11 @@ else:
     │ ---                             ┆ ---                  ┆ ---          │
     │ str                             ┆ str                  ┆ str          │
     ╞═════════════════════════════════╪══════════════════════╪══════════════╡
-    │ One for dad, one for daughter:… ┆ 2026-11-16T18:16:48Z ┆ Story        │
-    │ Litton: 'I always see crisis s… ┆ 2026-11-16T18:07:27Z ┆ HeadlineNews │
-    │ Bishnoi: 'Spinners also need t… ┆ 2026-11-16T17:06:19Z ┆ HeadlineNews │
-    │ LSG set to trade Shami to RR f… ┆ 2026-11-16T16:59:29Z ┆ HeadlineNews │
-    │ Gavin Larsen and the lost art … ┆ 2026-11-16T16:14:13Z ┆ Story        │
+    │ India a cut above New Zealand … ┆ 2026-11-23T16:50:18Z ┆ Story        │
+    │ South Africa dominate after bo… ┆ 2026-11-23T16:43:18Z ┆ Recap        │
+    │ Fernando, Wanuja help SL A sta… ┆ 2026-11-23T15:54:54Z ┆ Recap        │
+    │ Peshawar added as PSL's sixth … ┆ 2026-11-23T15:42:20Z ┆ HeadlineNews │
+    │ Bangladesh bring back Yasir Al… ┆ 2026-11-23T13:39:48Z ┆ HeadlineNews │
     └─────────────────────────────────┴──────────────────────┴──────────────┘
 
 
