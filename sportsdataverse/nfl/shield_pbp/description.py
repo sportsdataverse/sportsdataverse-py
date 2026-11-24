@@ -33,7 +33,9 @@ def add_description_features(df: pl.DataFrame) -> pl.DataFrame:
         The frame with ``pass_length``, ``pass_location``, ``run_location``,
         ``run_gap``, ``qb_kneel``, ``qb_spike``, ``qb_scramble``, ``shotgun``,
         ``no_huddle``, ``aborted_play`` (nflfastR ``clean_pbp``: ``desc`` contains the fixed,
-        case-sensitive string ``"Aborted"``) added and ``play_type`` refined for kneels/spikes.
+        case-sensitive string ``"Aborted"``), ``touchback``, ``out_of_bounds``,
+        ``replay_or_challenge``, ``replay_or_challenge_result`` and ``penalty_type`` added, and
+        ``play_type`` refined for kneels/spikes.
     """
     if df.height == 0:
         return df
@@ -65,7 +67,48 @@ def add_description_features(df: pl.DataFrame) -> pl.DataFrame:
         .then(pl.lit("qb_spike"))
         .otherwise(pl.col("play_type"))
     )
-    return df
+    return _add_desc_flags(df)
+
+
+# nflfastR's penalty-type pattern, ``(?<=PENALTY on .{1,50}, ).{1,50}(?=, [0-9]{1,2} yard)``, without the
+# lookaround Rust's regex lacks: the lazy player part takes the first ", " (the lookbehind's leftmost start),
+# the greedy group the longest type that still ends in ", <yards> yard".
+_PENALTY_TYPE = r"PENALTY on .{1,50}?, (.{1,50}), [0-9]{1,2} yard"
+
+
+def _add_desc_flags(df: pl.DataFrame) -> pl.DataFrame:
+    """nflfastR's description flags: touchback, out of bounds, replay or challenge (and result), penalty type.
+
+    Ports of ``add_nflscrapr_mutations`` (touchback, replay, penalty type) and ``clean_pbp`` (out of bounds).
+    ``replay_or_challenge_result`` is ``upheld`` / ``reversed`` / ``confirmed`` from the text, else ``denied``,
+    on a reviewed play only. ``penalty_type`` is set on penalty plays: the type named after the penalized
+    player, a face mask's ``(15 Yards)`` dropped, with the two dynamic-kickoff types (2024+) winning.
+    """
+    d = pl.col("desc").fill_null("")
+    lower = d.str.to_lowercase()
+    penalized = ((pl.col("penalty") == 1) if "penalty" in df.columns else pl.lit(False)).fill_null(False)
+    reviewed = d.str.contains(r"(?:Replay Official reviewed)|(?: challenged? )|(?:Challenged)")
+    penalty_type = (
+        d.str.extract(_PENALTY_TYPE, 1)
+        .str.replace(r"\([0-9]{2} Yards\)", "")
+        .str.replace_all(r"\s+", " ")
+        .str.strip_chars()
+    )
+    return df.with_columns(
+        touchback=lower.str.contains("touchback", literal=True).cast(pl.Int64),
+        out_of_bounds=d.str.contains(r"(?:ran ob)|(?:pushed ob)|(?:sacked ob)").cast(pl.Int64),
+        replay_or_challenge=reviewed.cast(pl.Int64),
+        replay_or_challenge_result=pl.when(reviewed)
+        .then(lower.str.extract(r" (upheld|reversed|confirmed)", 1).fill_null("denied"))
+        .otherwise(None),
+        penalty_type=pl.when(penalized == False)  # noqa: E712
+        .then(None)
+        .when(lower.str.contains("kickoff out of bounds", literal=True))
+        .then(pl.lit("Kickoff Out of Bounds"))
+        .when(lower.str.contains("kickoff short of landing zone", literal=True))
+        .then(pl.lit("Kickoff Short of Landing Zone"))
+        .otherwise(penalty_type),
+    )
 
 
 def add_pass_rush(df: pl.DataFrame) -> pl.DataFrame:
