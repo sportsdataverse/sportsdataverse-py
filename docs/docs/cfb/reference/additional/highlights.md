@@ -463,8 +463,8 @@ Engine design adapted from nflseedR (MIT, Sebastian Carl & Lee Sharpe);
 see the module docstring for the documented CFB simplifications, and its
 "Official per-conference tiebreakers (registry)" section for how
 `CONFERENCE_TIEBREAKERS` overrides the generic cascade for the SEC,
-Big Ten, Big 12, ACC, MAC, American, Conference USA, Mountain West and
-Sun Belt.
+Big Ten, Big 12, ACC, MAC, American, Conference USA, Mountain West, Sun
+Belt and (from 2026) Pac-12.
 
 **Parameters**
 

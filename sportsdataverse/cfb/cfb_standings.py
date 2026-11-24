@@ -38,10 +38,10 @@ same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
   is likewise scoped to conference REG games.
 * **Official per-conference tiebreakers (registry).** ``CONFERENCE_TIEBREAKERS``
   registers the official procedures for the SEC, Big Ten, Big 12, ACC, MAC,
-  American, Conference USA, Mountain West and Sun Belt (cfbseedR 0.2.0
-  parity) as season-scoped epochs of plain rung-dict lists; any conference not
-  in the registry (e.g. the re-formed Pac-12, which has not published one)
-  uses the generic cascade above. Every cascade — generic included — restarts
+  American, Conference USA, Mountain West, Sun Belt and (from 2026) the
+  re-formed Pac-12 (cfbseedR 0.3.0 parity) as season-scoped epochs of plain
+  rung-dict lists; any conference not in the registry, and the Pac-12 before
+  2026, uses the generic cascade above. Every cascade — generic included — restarts
   at its first rung after a partial elimination (see ``_pick_winner``).
   Registry cascades
   always run in full (``tiebreaker_depth`` gates only the generic fallback).
@@ -53,7 +53,11 @@ same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
   2025 order (SportSource right after common opponents, then order of finish,
   then opponents' win pct) and Conference USA's 2025 policy (common opponents,
   their top-down descent, average computer ranking, opponents' win pct) apply
-  from 2025, with their 2024 procedures before that. Optional ``teams``
+  from 2025, with their 2024 procedures before that. The Pac-12's 2026
+  procedure (Pac-12 release, 2026-09-03) has separate two-team and
+  multiple-team lists: an epoch's ``two_team`` list replaces ``rungs``
+  whenever two teams remain tied ("if the process reduces the tie to two
+  teams, the two-team procedure will then be applied"). Optional ``teams``
   columns ``conf_division`` (division format: each division's best eligible
   team takes a top rank, as in the 2026 Sun Belt) and ``postseason_eligible`` (an
   explicit ``False`` team cannot hold a championship-game berth; its games
@@ -240,13 +244,51 @@ _SUNBELT_OFFICIAL: list[_Rung] = [
 ]
 
 
-def _epoch(rungs: list[_Rung], start: int = 0, pool: str | None = None) -> dict[str, Any]:
-    return {"from": start, "rungs": rungs, "pool": pool}
+# Pac-12 2026 (the re-formed conference's first football season; published in
+# the Pac-12 release of 2026-09-03,
+# pac-12.com/news/2026/9/3/pac-12-announces-commercial-and-operational-updates-ahead-of-its-2026-football-season-kickoff.aspx,
+# repeated in its 2026-11-15 championship scenarios release). Multiple teams:
+# combined head-to-head only "if every tied team has played one another"
+# (otherwise "the process moves to the next criterion", so no defeated-all
+# elimination); win pct vs all common conference opponents; record vs the
+# next-highest-placed common opponent down the standings (a tied group taken
+# collectively); opponents' combined conference win pct; SportSource Team Rating
+# Score; coin toss.
+_PAC12_2026: list[_Rung] = [
+    {"kind": "h2h", "round_robin_only": True},
+    {"kind": "record_vs_common"},
+    {"kind": "record_vs_common_desc", "mode": "next_highest", "grouped_ties": True, "common_only": True},
+    {"kind": "opp_conf_win_pct"},
+    {"kind": "analytics_rating"},
+    {"kind": "coin_toss"},
+]
+# Two teams: head-to-head; the next-highest-placed common opponent descent; win
+# pct vs all common conference opponents; the highest CFP ranking on the Tuesday
+# before week 13 (``tiebreaker_data["cfp_rankings"]``); SportSource Team Rating
+# Score; coin toss. ``ponytail:`` "common opponent" is read as an opponent both
+# teams played (``common_only``), as the Pac-12's pre-2024 procedure spelled
+# out; the 2026 text does not define it.
+_PAC12_2026_TWO_TEAM: list[_Rung] = [
+    {"kind": "h2h"},
+    {"kind": "record_vs_common_desc", "mode": "next_highest", "grouped_ties": True, "common_only": True},
+    {"kind": "record_vs_common"},
+    {"kind": "cfp_ranking"},
+    {"kind": "analytics_rating"},
+    {"kind": "coin_toss"},
+]
+
+
+def _epoch(
+    rungs: list[_Rung], start: int = 0, pool: str | None = None, two_team: list[_Rung] | None = None
+) -> dict[str, Any]:
+    return {"from": start, "rungs": rungs, "pool": pool, "two_team": two_team}
 
 
 #: Official conference tiebreaker procedures, mirroring cfbseedR 0.2.0's
 #: ``CONFERENCE_TIEBREAKERS``: conference -> list of season-scoped epochs
-#: ``{"from": <first season>, "rungs": [<rung dict>, ...], "pool": <str|None>}``.
+#: ``{"from": <first season>, "rungs": [<rung dict>, ...], "pool": <str|None>,
+#: "two_team": [<rung dict>, ...] | None}`` (``two_team`` replaces ``rungs``
+#: whenever two teams remain tied; only the Pac-12 2026 epoch sets it).
 #: :func:`cfb_standings` applies the epoch with the largest ``from`` not
 #: exceeding the season being ranked (unknown season = current rules). The
 #: cross-language parity fixtures under ``tests/fixtures/seedr/`` pin the
@@ -286,6 +328,7 @@ CONFERENCE_TIEBREAKERS: dict[str, list[dict[str, Any]]] = {
     "Conference USA": [_epoch(_CUSA_2024), _epoch(_CUSA_2025, 2025)],
     "Mountain West": [_epoch(_MW_OFFICIAL)],
     "Sun Belt": [_epoch(_SUNBELT_OFFICIAL)],
+    "Pac-12": [_epoch(_GENERIC_CASCADE), _epoch(_PAC12_2026, 2026, two_team=_PAC12_2026_TWO_TEAM)],
 }
 
 
@@ -302,17 +345,18 @@ _CONF_ALIASES: dict[str, str] = {
     "Mid-American Conference": "MAC",
     "Mountain West Conference": "Mountain West",
     "Sun Belt Conference": "Sun Belt",
+    "Pac-12 Conference": "Pac-12",
 }
 
 
-def _conf_rules(conf_name: str, season: int | None) -> tuple[list[_Rung], str | None]:
-    """(rungs, pool) for one conference-season; unregistered -> the generic cascade."""
+def _conf_rules(conf_name: str, season: int | None) -> tuple[list[_Rung], str | None, list[_Rung] | None]:
+    """(rungs, pool, two_team) for one conference-season; unregistered -> the generic cascade."""
     epochs = CONFERENCE_TIEBREAKERS.get(conf_name) or CONFERENCE_TIEBREAKERS.get(_CONF_ALIASES.get(conf_name, ""))
     if not epochs:
-        return _GENERIC_CASCADE, None
+        return _GENERIC_CASCADE, None, None
     eligible = [e for e in epochs if season is None or e["from"] <= season] or epochs[:1]
     e = max(eligible, key=lambda x: x["from"])
-    return e["rungs"], e.get("pool")
+    return e["rungs"], e.get("pool"), e.get("two_team")
 
 
 def _to_polars(df: FrameLike) -> pl.DataFrame:
@@ -636,14 +680,21 @@ class _TieCtx:
     conf_pct_by_team: dict[str, float]
     division_absent: bool
     notes: list[str]
+    two_team_rungs: list[_Rung] | None = None
 
     def note(self, msg: str) -> None:
         if msg not in self.notes:
             self.notes.append(msg)
 
 
-def _apply_h2h(cands: list[str], rec_sim: dict[str, dict[str, list[float]]], generic: bool) -> list[str]:
-    """Head-to-head rung: generic (existing, unchanged) vs registry multi-team semantics."""
+def _apply_h2h(
+    cands: list[str], rec_sim: dict[str, dict[str, list[float]]], generic: bool, round_robin_only: bool = False
+) -> list[str]:
+    """Head-to-head rung: generic (existing, unchanged) vs registry multi-team semantics.
+
+    ``round_robin_only`` (Pac-12 2026) skips the defeated-all elimination: when
+    not every tied pair played, the rung keeps every candidate.
+    """
     if generic or len(cands) == 2:
         # generic cascade (byte-identical to the pre-registry implementation) and the
         # registry's 2-team walk (same aggregate-vs-the-rest computation for n=2).
@@ -658,6 +709,8 @@ def _apply_h2h(cands: list[str], rec_sim: dict[str, dict[str, list[float]]], gen
     if pairs_played:
         pct = {c: _pct_vs(rec_sim, c, [x for x in cands if x != c]) for c in cands}
         return _keep_max(cands, {c: (p / n if n > 0 else 0.0) for c, (p, n) in pct.items()})
+    if round_robin_only:
+        return cands
     for c in cands:
         others = [o for o in cands if o != c]
         recs = [rec_sim.get(c, {}).get(o) for o in others]
@@ -734,7 +787,9 @@ def _apply_rung(
 ) -> list[str]:
     kind = rung["kind"]
     if kind == "h2h":
-        return _apply_h2h(cands, rec_sim, generic=bool(rung.get("generic")))
+        return _apply_h2h(
+            cands, rec_sim, generic=bool(rung.get("generic")), round_robin_only=bool(rung.get("round_robin_only"))
+        )
     if kind == "record_vs_common":
         return _apply_record_vs_common(cands, rec_sim)
     if kind == "record_vs_common_desc":
@@ -786,6 +841,16 @@ def _apply_rung(
             "(best-ranked tied team lost its final conference game)"
         )
         return cands
+    if kind == "cfp_ranking":
+        # Pac-12 2026 two-team step: the best (lowest) committee rank advances;
+        # an unranked team ranks behind every ranked one.
+        cfp = {c: metrics[c]["cfp_rank"] for c in cands}
+        if all(v is None for v in cfp.values()):
+            ctx.note(
+                f"{ctx.conf_name}: cfp_ranking skipped (no tiebreaker_data.cfp_rankings supplied, or no tied team ranked)"
+            )
+            return cands
+        return _keep_max(cands, {c: -float("inf") if r is None else -float(r) for c, r in cfp.items()})
     if kind in ("apr", "div_pct"):
         vals = {c: metrics[c][kind] for c in cands}
         if any(v is None for v in vals.values()):
@@ -827,8 +892,16 @@ def _pick_winner(
     """
     cands = sorted(tied)
     i = 0
-    while i < len(rungs) and len(cands) > 1:
-        rung = rungs[i]
+    # A conference with a separate two-team procedure (``ctx.two_team_rungs``)
+    # switches to it whenever two teams remain; that only happens after an
+    # elimination, which restarts at rung 1 anyway.
+    two_team = ctx.two_team_rungs
+
+    def active() -> list[_Rung]:
+        return two_team if two_team is not None and len(cands) == 2 else rungs
+
+    while i < len(active()) and len(cands) > 1:
+        rung = active()[i]
         min_depth = rung.get("min_depth")
         if isinstance(min_depth, int) and depth < min_depth:
             i += 1
@@ -879,14 +952,14 @@ def _order_set(
     rungs: list[_Rung],
     depth: int,
     rng: np.random.Generator,
-    ctx_args: tuple[str, bool, list[str]],
+    ctx_args: tuple[str, bool, list[str], list[_Rung] | None],
 ) -> list[str]:
     """Order ``team_set``: win-pct tiers (rounded to kill float fuzz), tiebreak
     walk inside each. ``pct_by_team`` is the descent-rung universe (the whole
     conference, or one division); ``wl`` maps team -> (conf wins, conf losses).
     """
-    conf_name, division_absent, notes = ctx_args
-    ctx = _TieCtx(conf_name, pct_by_team, division_absent, notes)
+    conf_name, division_absent, notes, two_team = ctx_args
+    ctx = _TieCtx(conf_name, pct_by_team, division_absent, notes, two_team)
     pct = {t: round(pct_by_team[t], 9) for t in team_set}
     if pool == "wins_or_losses":
         # ACC 2026: alternate-game-count teams join the leaders' tier on matching
@@ -943,7 +1016,7 @@ def _add_conf_ranks(
         groups.setdefault((row["sim"], str(row["conference"])), []).append(row)
     for sim, conf_name in sorted(groups):
         rows = groups[(sim, conf_name)]
-        rungs, pool = _conf_rules(conf_name, season_of(sim))
+        rungs, pool, two_team = _conf_rules(conf_name, season_of(sim))
         rec_sim = rec.get(sim, {})
         metrics: _Metrics = {r["team"]: {k: r[v] for k, v in metric_map.items()} for r in rows}
         conf_pct = {r["team"]: r["conf_pct"] for r in rows}
@@ -955,7 +1028,7 @@ def _add_conf_ranks(
             rungs=rungs,
             depth=depth,
             rng=rng,
-            ctx_args=(conf_name, division_absent, notes),
+            ctx_args=(conf_name, division_absent, notes, two_team),
         )
         teams_in = [r["team"] for r in rows]
         out = (
@@ -1035,8 +1108,8 @@ def cfb_standings(
     see the module docstring for the documented CFB simplifications, and its
     "Official per-conference tiebreakers (registry)" section for how
     ``CONFERENCE_TIEBREAKERS`` overrides the generic cascade for the SEC,
-    Big Ten, Big 12, ACC, MAC, American, Conference USA, Mountain West and
-    Sun Belt.
+    Big Ten, Big 12, ACC, MAC, American, Conference USA, Mountain West, Sun
+    Belt and (from 2026) Pac-12.
 
     Args:
         games: Game results with columns ``sim`` (or ``season``), ``week``,

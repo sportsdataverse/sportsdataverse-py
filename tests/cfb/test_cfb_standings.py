@@ -501,6 +501,7 @@ class TestConferenceTiebreakerRegistry:
 
     def test_registry_membership(self) -> None:
         assert set(CONFERENCE_TIEBREAKERS) == {
+            "Pac-12",
             "SEC",
             "Big Ten",
             "ACC",
@@ -528,7 +529,7 @@ class TestConferenceTiebreakerRegistry:
                 ("Z", "Q", 4.0),
             ]
         )
-        teams = pl.DataFrame({"team": ["X", "Y", "Z", "Q"], "conference": ["Pac-12"] * 4})
+        teams = pl.DataFrame({"team": ["X", "Y", "Z", "Q"], "conference": ["Ivy League"] * 4})
         st = cfb_standings(games, teams, tiebreaker_depth="PRE-SOV")
         assert isinstance(st, pl.DataFrame)
         ranks = {r["team"]: r["conf_rank"] for r in st.iter_rows(named=True)}
@@ -940,3 +941,88 @@ class TestPlayoffSeeds2026:
         seeded = {(r["sim"], r["team"]): r["seed"] for r in st.iter_rows(named=True)}
         assert seeded[(2025, "O1")] is not None
         assert seeded[(2026, "O1")] is None
+
+
+class TestPac12_2026:
+    """Re-formed Pac-12, published 2026 procedure (Pac-12 release, 2026-09-03):
+    separate two-team and multiple-team lists; a tie reduced to two switches to
+    the two-team list. Mirrors cfbseedR's ``test-tiebreakers.R`` Pac-12 tests.
+    """
+
+    def test_epochs(self) -> None:
+        from sportsdataverse.cfb.cfb_standings import _GENERIC_CASCADE, _conf_rules
+
+        rungs_25, _, two_25 = _conf_rules("Pac-12", 2025)
+        assert rungs_25 is _GENERIC_CASCADE and two_25 is None
+        rungs_26, _, two_26 = _conf_rules("Pac-12", 2026)
+        assert [r["kind"] for r in rungs_26] == [
+            "h2h",
+            "record_vs_common",
+            "record_vs_common_desc",
+            "opp_conf_win_pct",
+            "analytics_rating",
+            "coin_toss",
+        ]
+        assert two_26 is not None
+        assert [r["kind"] for r in two_26] == [
+            "h2h",
+            "record_vs_common_desc",
+            "record_vs_common",
+            "cfp_ranking",
+            "analytics_rating",
+            "coin_toss",
+        ]
+        assert _conf_rules("Pac-12", None) == (rungs_26, None, two_26)  # plain sim ids: current rules
+        assert _conf_rules("Pac-12 Conference", 2026) == (rungs_26, None, two_26)
+
+    def test_two_team_tie_reads_the_descent_before_all_common_opponents(self) -> None:
+        # X and Y never met. Against the common opponents X is 1-2 and Y 2-1, but
+        # against the highest-placed one (P) X won and Y lost. The two-team
+        # procedure descends first, so X; the multiple-team order would give Y.
+        from sportsdataverse.cfb.cfb_standings import _conf_rules
+
+        rungs, _, two_team = _conf_rules("Pac-12", 2026)
+        rec = _h2h_rec([("X", "P"), ("Q", "X"), ("R", "X"), ("P", "Y"), ("Y", "Q"), ("Y", "R")])
+        pct = {"X": 0.5, "Y": 0.5, "P": 0.9, "Q": 0.3, "R": 0.2}
+        metrics: dict[str, dict[str, float | None]] = {
+            t: {"opp_wp_pooled": 0.5, "analytics_rating": None, "cfp_rank": None} for t in pct
+        }
+
+        def pick(two: list[dict[str, object]] | None) -> str:
+            ctx = _TieCtx("Pac-12", pct, False, [], two)
+            return _pick_winner(["X", "Y"], metrics, rec, rungs, 3, np.random.default_rng(0), ctx)
+
+        assert pick(two_team) == "X"
+        assert pick(None) == "Y"
+
+    def test_cfb_standings_applies_the_2026_procedure_by_season(self) -> None:
+        # A, B, C are 2-1. A beat B and C, but B and C never met, so not every
+        # tied team played the others: from 2026 head-to-head is skipped, A falls
+        # to the common opponent D (A lost to it, B and C beat it), and the B-C
+        # pair goes to the two-team procedure, where only the CFP ranking splits
+        # them (C ranked). Then A beats B head-to-head. Before 2026 the generic
+        # cascade's head-to-head seeds A (2-0 against B and C).
+        rows = [
+            ("A", "B", 7.0),
+            ("A", "C", 7.0),
+            ("D", "A", 7.0),
+            ("B", "D", 7.0),
+            ("C", "D", 7.0),
+            ("B", "E", 7.0),
+            ("C", "E", 7.0),
+            ("E", "D", 7.0),
+        ]
+        teams = pl.DataFrame({"team": ["A", "B", "C", "D", "E"], "conference": ["Pac-12"] * 5})
+        cfp = {"cfp_rankings": pl.DataFrame({"team": ["C"], "rank": [20]})}
+
+        def order(season: int, **kw: object) -> tuple[list[str], list[str]]:
+            games = _conf_games(rows, sim=season).rename({"sim": "season"})
+            st = cfb_standings(games, teams, **kw)  # type: ignore[arg-type]
+            assert isinstance(st, pl.DataFrame)
+            ranked = st.sort("conf_rank")["team"].to_list()
+            return ranked, list(st.tiebreak_notes)  # type: ignore[attr-defined]
+
+        assert order(2026, tiebreaker_data=cfp)[0][:3] == ["C", "A", "B"]
+        assert order(2025, tiebreaker_data=cfp)[0][0] == "A"
+        # Without the CFP ranking the rung is skipped (noted) and the coin decides.
+        assert any("Pac-12: cfp_ranking skipped" in n for n in order(2026)[1])
