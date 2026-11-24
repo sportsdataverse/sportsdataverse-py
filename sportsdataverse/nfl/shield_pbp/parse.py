@@ -184,6 +184,19 @@ _UNSPECIFIED_PLAY_TYPES = (
 )
 
 
+def _play_type_nfl(shield_play_type: Optional[str], row: Dict[str, Any]) -> Optional[str]:
+    """nflverse ``play_type_nfl``: the feed's own ``playType``, an intercepted pass relabelled.
+
+    nflverse's feed types an intercepted pass ``INTERCEPTION`` where the Shield feed keeps
+    ``PASS``; on 2024 that relabel covers every intercepted pass (405 of 405) and leaves 29 of
+    47,365 joined plays differing (nflverse's ``FUMBLE_RECOVERED_BY_OPPONENT`` and a few
+    interceptions the stats do not carry).
+    """
+    if shield_play_type == "PASS" and int(row.get("interception") or 0) == 1:
+        return "INTERCEPTION"
+    return shield_play_type
+
+
 def _play_type(row: Dict[str, Any], shield_play_type: Optional[str], desc: Optional[str] = None) -> Optional[str]:
     """nflverse-style play_type from the summed stat outcomes + the feed's playType.
 
@@ -651,6 +664,7 @@ def parse_game(game: Dict[str, Any], game_id: Optional[str] = None) -> pl.DataFr
             "yards_gained": yards_gained,
             "desc": p.get("playDescription"),
             "shield_play_type": p.get("playType"),
+            "play_type_nfl": _play_type_nfl(p.get("playType"), stat_row),
             "special_teams_play_type": p.get("specialTeamsPlayType"),
             "sp": 1 if p.get("playScored") else 0,  # nflverse scoring-play indicator
         }

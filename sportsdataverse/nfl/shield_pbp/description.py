@@ -32,7 +32,8 @@ def add_description_features(df: pl.DataFrame) -> pl.DataFrame:
     Returns:
         The frame with ``pass_length``, ``pass_location``, ``run_location``,
         ``run_gap``, ``qb_kneel``, ``qb_spike``, ``qb_scramble``, ``shotgun``,
-        ``no_huddle`` added and ``play_type`` refined for kneels/spikes.
+        ``no_huddle``, ``aborted_play`` (nflfastR ``clean_pbp``: ``desc`` contains the fixed,
+        case-sensitive string ``"Aborted"``) added and ``play_type`` refined for kneels/spikes.
     """
     if df.height == 0:
         return df
@@ -47,6 +48,7 @@ def add_description_features(df: pl.DataFrame) -> pl.DataFrame:
         qb_scramble=d.str.contains(" scrambles").cast(pl.Int64),
         shotgun=d.str.contains("Shotgun").cast(pl.Int64),
         no_huddle=d.str.contains("No Huddle").cast(pl.Int64),
+        aborted_play=d.str.contains("Aborted", literal=True).cast(pl.Int64),
     )
     # run_location / run_gap only meaningful on runs.
     df = df.with_columns(

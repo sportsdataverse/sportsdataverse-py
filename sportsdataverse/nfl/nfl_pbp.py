@@ -1089,6 +1089,83 @@ def _aborted_snap_carrier() -> pl.Expr:
     )
 
 
+#: ESPN ``type.text`` -> nflverse ``play_type_nfl`` (ESPN carries no NFL play type). Fit 2026-11-24 as the
+#: majority nflverse value per ESPN type over the joined plays of the even seasons 2006-2024 (types seen on
+#: fewer than 5 plays dropped). The full rule (``_espn_play_type_nfl``) agrees with nflverse on 98.5-99.5%
+#: of every odd season 2007-2025, out of sample (mean 99.31%). Before 2006 the ESPN play id does not embed the
+#: GSIS play_id, so those seasons cannot be checked. Fit + check: ClaudeCowork
+#: ``notes/2026-11-24-nfl-espn-pbp-column-gap/fit_multi.py``. A type not listed is ``UNSPECIFIED``,
+#: nflverse's own catch-all.
+ESPN_PLAY_TYPE_NFL: dict[str, str] = {
+    "Blocked Field Goal": "FIELD_GOAL",
+    "Blocked Field Goal Touchdown": "FIELD_GOAL",
+    "Blocked PAT": "XP_KICK",
+    "Blocked Punt": "PUNT",
+    "Blocked Punt Touchdown": "PUNT",
+    "Defensive 2pt Conversion": "PAT2",
+    "Extra Point Good": "XP_KICK",
+    "Extra Point Missed": "XP_KICK",
+    "Field Goal Good": "FIELD_GOAL",
+    "Field Goal Missed": "FIELD_GOAL",
+    "Interception Return": "INTERCEPTION",
+    "Interception Return Touchdown": "INTERCEPTION",
+    "Kickoff": "KICK_OFF",
+    "Kickoff Return (Offense)": "KICK_OFF",
+    "Kickoff Return Touchdown": "KICK_OFF",
+    "Kickoff Team Fumble Recovery": "KICK_OFF",
+    "Missed Field Goal Return": "FIELD_GOAL",
+    "Muffed Punt Recovery (Opponent)": "PUNT",
+    "Pass": "PASS",
+    "Pass Completion": "PASS",
+    "Pass Incompletion": "PASS",
+    "Pass Reception": "PASS",
+    "Passing Touchdown": "PASS",
+    "Penalty": "PENALTY",
+    "Punt": "PUNT",
+    "Punt (Safety)": "PUNT",
+    "Punt Return Touchdown": "PUNT",
+    "Punt Team Fumble Recovery": "PUNT",
+    "Rush": "RUSH",
+    "Rushing Touchdown": "RUSH",
+    "Sack": "SACK",
+    "Timeout": "TIMEOUT",
+    "Two Point Pass": "PAT2",
+    "Two Point Rush": "PAT2",
+}
+#: ESPN types whose nflverse label depends on what happened on the play: read from the pass/rush flags.
+_ESPN_FLAG_RESOLVED_TYPES = (
+    "Fumble",
+    "Fumble Recovery (Own)",
+    "Fumble Recovery (Opponent)",
+    "Fumble Recovery (Opponent) Touchdown",
+    "Fumble Return Touchdown",
+    "Safety",
+    "Unknown",
+)
+
+
+def _espn_play_type_nfl() -> pl.Expr:
+    """nflverse ``play_type_nfl`` from ESPN ``type.text`` and the processor's play flags.
+
+    A penalty no-play is ``PENALTY`` and a sack ``SACK`` whatever ESPN typed them; a fumble / safety
+    type takes ``PASS`` / ``RUSH`` from the flags; every other play uses :data:`ESPN_PLAY_TYPE_NFL`.
+    """
+    t = pl.col("type.text")
+    flagged = t.is_in(list(_ESPN_FLAG_RESOLVED_TYPES))
+    return (
+        pl.when(pl.col("penalty_no_play") == True)  # noqa: E712
+        .then(pl.lit("PENALTY"))
+        .when(pl.col("sack") == True)  # noqa: E712
+        .then(pl.lit("SACK"))
+        .when(flagged & (pl.col("pass") == True))  # noqa: E712
+        .then(pl.lit("PASS"))
+        .when(flagged & (pl.col("rush") == True))  # noqa: E712
+        .then(pl.lit("RUSH"))
+        .otherwise(t.replace_strict(ESPN_PLAY_TYPE_NFL, default="UNSPECIFIED", return_dtype=pl.Utf8))
+        .cast(pl.Utf8)
+    )
+
+
 class NFLPlayProcess(object):
     """Process ESPN NFL play-by-play feeds into a tidy game-level dictionary.
 
@@ -6770,6 +6847,9 @@ class NFLPlayProcess(object):
           sees real middle-of-field info instead of the default 0.
         * ``shotgun`` — ``Int8`` 1 when the text contains ``"Shotgun"``.
         * ``no_huddle`` — ``Int8`` 1 when the text contains ``"No Huddle"``.
+        * ``aborted_play`` — ``Int8`` 1 when the text contains the fixed, case-sensitive string
+          ``"Aborted"`` (nflfastR ``clean_pbp``).
+        * ``play_type_nfl`` — nflverse's NFL play type (:func:`_espn_play_type_nfl`).
 
         Documented gaps (NOT text-derivable on the ESPN path): ``air_yards``
         (a tracking/GSIS measure, absent here) and ``qb_hit`` (left at 0).
@@ -6780,6 +6860,8 @@ class NFLPlayProcess(object):
             pass_location=text.str.extract(r"(?:short|deep) (left|middle|right)", 1),
             shotgun=text.str.contains("Shotgun").cast(pl.Int8),
             no_huddle=text.str.contains("No Huddle").cast(pl.Int8),
+            aborted_play=text.str.contains("Aborted", literal=True).cast(pl.Int8),
+            play_type_nfl=_espn_play_type_nfl(),
         )
         return play_df.with_columns(
             pass_middle=(pl.col("pass_location") == "middle").fill_null(False).cast(pl.Int8),

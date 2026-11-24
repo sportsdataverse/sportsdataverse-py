@@ -46400,6 +46400,10 @@ load_nfl_model_pbp:
     passer.
   rusher_id: GSIS id of the rusher as nflfastR clean_pbp derives it -- the most frequent rusher_player_id of that name within
     the possession team and season; on an aborted snap, the player charged with the fumble.
+  aborted_play: Binary indicator (1/0) that the play description contains "Aborted" (a botched snap or exchange),
+    nflfastR's clean_pbp rule.
+  play_type_nfl: nflverse NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PENALTY, TIMEOUT, ...) -- the Shield
+    feed's playType with an intercepted pass labelled INTERCEPTION, as nflverse labels it.
   sack_epa: EPA credited to the play's sack component (clipped at -5).
   sack_weight: Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0).
   shield_play_type: Raw NFL.com Shield play-type enum for the play (e.g. RUSH, PASS, FIELD_GOAL, KICK_OFF, PENALTY, END_QUARTER,
