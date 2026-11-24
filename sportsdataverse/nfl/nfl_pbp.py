@@ -7137,9 +7137,11 @@ class NFLPlayProcess(object):
 
         play_df = play_df.join(cp_frame, on="_cp_row_idx", how="left").drop("_cp_row_idx")
 
-        # cpoe = actual completion - predicted completion probability
+        # nflfastR: cpoe = 100 * (complete_pass - cp), in percentage points (as ep_wp and the Shield pbp)
         if "completion" in play_df.columns:
-            play_df = play_df.with_columns((pl.col("completion").cast(pl.Float64) - pl.col("cp")).alias("cpoe"))
+            play_df = play_df.with_columns(
+                (100.0 * (pl.col("completion").cast(pl.Float64) - pl.col("cp"))).alias("cpoe")
+            )
         else:
             play_df = play_df.with_columns(pl.lit(None, dtype=pl.Float64).alias("cpoe"))
 

@@ -292,3 +292,31 @@ def test_one_name_per_player_across_roles() -> None:
     )
     out = _one_name_per_player(df)
     assert out["rusher_player_name"].to_list() == [None, None, "Noah Kim"]
+
+
+def test_espn_cpoe_is_percentage_points() -> None:
+    """ESPN cpoe is nflfastR's 100 * (complete_pass - cp), like the Shield pbp: the 2025 ESPN cpoe averaged
+    0.28 against nflverse's 28.7 while on the 0-1 scale."""
+    process_cp = NFLPlayProcess._NFLPlayProcess__process_cp
+    df = pl.DataFrame(
+        {
+            "season": [2025, 2025, 2025],
+            "air_yards": [8.0, 25.0, None],
+            "start.yardsToEndzone": [60.0, 60.0, 60.0],
+            "start.distance": [10.0, 10.0, 10.0],
+            "down_1": [True, True, True],
+            "down_2": [False, False, False],
+            "down_3": [False, False, False],
+            "down_4": [False, False, False],
+            "pass_middle": [0, 1, 0],
+            "start.is_home": [True, False, True],
+            "roof": ["outdoors"] * 3,
+            "completion": [True, False, False],
+        }
+    )
+    out = process_cp(None, df)
+    cp, cpoe = out["cp"].to_list(), out["cpoe"].to_list()
+    assert 0.0 < cp[0] < 1.0 and 0.0 < cp[1] < 1.0
+    assert cpoe[0] == pytest.approx(100.0 * (1.0 - cp[0]))
+    assert cpoe[1] == pytest.approx(-100.0 * cp[1])
+    assert cp[2] is None and cpoe[2] is None
