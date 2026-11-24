@@ -1404,14 +1404,14 @@ def cfb_playoff_seeds(
     ranking is the intended input). Notre Dame's "ranked inside the field"
     test reads its position in that same ordering.
 
-    Differs from cfbseedR 0.2.0 (``autobid``) in three places: cfbseedR gives
+    Differs from cfbseedR 0.3.0 (``autobid``) in two places: cfbseedR gives
     the Group-of-6 bid to the best-ranked G6 team whether or not it won its
-    conference; it tests Notre Dame's committee ``rank`` only (no bid without
-    ``rankings``); and it matches ``"Notre Dame"`` but not ``"87"``. Its
-    ``cfb_standings()`` / ``cfb_simulations()`` also always apply the current
-    rules, where :func:`cfb_standings` and
-    :func:`sportsdataverse.cfb.cfb_simulations` here follow a
-    ``season``-keyed input.
+    conference, and it tests Notre Dame's committee ``rank`` only (no bid
+    without ``rankings``). Both match Notre Dame as ``"Notre Dame"`` or
+    ``"87"``, and cfbseedR's ``cfb_standings()`` keys the rule by a
+    ``season``-keyed input as :func:`cfb_standings` does here; its
+    ``cfb_simulations()`` takes an explicit ``autobid`` (default ``"2026"``)
+    where :func:`sportsdataverse.cfb.cfb_simulations` follows the season.
 
     Called on its own, this function cannot see a season: pass ``season=``
     for standings of a pre-2026 season (``cfb_standings(...,
