@@ -41,6 +41,18 @@ CORE_COLUMNS = {
 }
 
 
+@pytest.fixture
+def offline_github_resolver(monkeypatch: pytest.MonkeyPatch) -> None:
+    """kloppy's ``github_resolve_raw_data_url`` makes a live HEAD request; give it GitHub's real redirect
+    form (statsbomb/open-data lands on hudl/open-data) so the eviction tests are offline and deterministic."""
+    import kloppy.utils
+
+    def resolve(repository: str, branch: str, file: str) -> str:
+        return f"https://raw.githubusercontent.com/hudl/open-data/refs/heads/{branch}/{file}"
+
+    monkeypatch.setattr(kloppy.utils, "github_resolve_raw_data_url", resolve)
+
+
 def _dataset(**kwargs: Any) -> Any:
     return statsbomb.load(event_data=str(EVENTS), lineup_data=str(LINEUPS), **kwargs)
 
@@ -137,6 +149,7 @@ def test_open_events_dispatches_to_kloppy_and_forwards_kwargs(monkeypatch: pytes
     assert df["coordinates_x"].max() > 1.0  # provider units survived the kwarg
 
 
+@pytest.mark.usefixtures("offline_github_resolver")
 def test_truncated_body_is_retried_once_after_evicting_the_cached_copy(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
@@ -169,6 +182,34 @@ def test_truncated_body_is_retried_once_after_evicting_the_cached_copy(
     assert seen[0][0] == seen[1][0] == str(cache)  # the process-wide cache setting was never touched
 
 
+@pytest.mark.usefixtures("offline_github_resolver")
+def test_the_retry_evicts_kloppys_fallback_url_form_too(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    """kloppy cached the body under its fallback URL (its HEAD request failed) while our eviction resolves the
+    redirect: the two forms differ, and evicting only the resolved one left the cut-off body for the retry."""
+    import fsspec
+    from kloppy.config import config_context
+
+    fallback = "https://raw.githubusercontent.com/statsbomb/open-data/master/data/events/8658.json"
+    cache = tmp_path / "kloppy_cache"
+    fs = fsspec.filesystem("simplecache", target_protocol="http", cache_storage=str(cache))
+    poisoned = Path(cache) / fs._mapper(fs._strip_protocol(fallback))
+    calls: list = []
+
+    def flaky_load_open_data(**kwargs: Any) -> Any:
+        calls.append(poisoned.exists())
+        if len(calls) == 1:
+            raise json.JSONDecodeError("Unterminated string starting at", "{...", 1505556)
+        return _dataset(coordinates=kwargs["coordinates"])
+
+    monkeypatch.setattr(statsbomb, "load_open_data", flaky_load_open_data)
+    with config_context("cache", str(cache)):
+        poisoned.parent.mkdir(parents=True, exist_ok=True)
+        poisoned.write_text('{"cut off', encoding="utf-8")
+        assert soccer_open_events("statsbomb", 8658).height > 0
+    assert calls == [True, False]  # present on the first read, evicted before the retry
+
+
+@pytest.mark.usefixtures("offline_github_resolver")
 def test_a_second_truncated_body_is_an_asset_fetch_error(monkeypatch: pytest.MonkeyPatch) -> None:
     calls: list = []
 
