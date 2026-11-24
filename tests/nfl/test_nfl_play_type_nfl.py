@@ -7,7 +7,7 @@ nflfastR's ``aborted_play`` is ``desc`` containing the fixed string ``"Aborted"`
   ``INTERCEPTION`` as nflverse's feed does (every 2024 intercepted pass; 99.94% of 2024 plays agree).
 * ESPN (``espn_nfl_pbp``): no NFL play type in the feed, so a lookup from ESPN ``type.text`` plus the
   processor's own penalty / sack / pass / rush flags, fit on the even seasons 2006-2024 (98.5-99.5% on every
-  odd season 2007-2025, out of sample; ClaudeCowork ``notes/2026-11-24-nfl-espn-pbp-column-gap/fit_multi.py``).
+  odd season 2007-2025, out of sample; see the provenance comment on ``ESPN_PLAY_TYPE_NFL``).
 
 Oracle: ``fixtures/nflverse/play_type_nfl_2024.parquet`` (provenance in ``fixtures/README.md``).
 """

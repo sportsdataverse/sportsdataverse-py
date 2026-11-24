@@ -1093,9 +1093,9 @@ def _aborted_snap_carrier() -> pl.Expr:
 #: majority nflverse value per ESPN type over the joined plays of the even seasons 2006-2024 (types seen on
 #: fewer than 5 plays dropped). The full rule (``_espn_play_type_nfl``) agrees with nflverse on 98.5-99.5%
 #: of every odd season 2007-2025, out of sample (mean 99.31%). Before 2006 the ESPN play id does not embed the
-#: GSIS play_id, so those seasons cannot be checked. Fit + check: ClaudeCowork
-#: ``notes/2026-11-24-nfl-espn-pbp-column-gap/fit_multi.py``. A type not listed is ``UNSPECIFIED``,
-#: nflverse's own catch-all.
+#: GSIS play_id, so those seasons cannot be checked. Reproducible from the public releases: join
+#: sportsdataverse-data ``espn_nfl_pbp`` to nflverse-data ``play_by_play`` on (``nflverse_game_id``, the ESPN
+#: ``id`` minus its game-id prefix). A type not listed is ``UNSPECIFIED``, nflverse's own catch-all.
 ESPN_PLAY_TYPE_NFL: dict[str, str] = {
     "Blocked Field Goal": "FIELD_GOAL",
     "Blocked Field Goal Touchdown": "FIELD_GOAL",
