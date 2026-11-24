@@ -11,11 +11,16 @@ the SAME semantics so outputs cross-validate):
 
 * **Sequential loop, no chunking.** nflseedR chunks simulations for
   parallelism; this port stacks all sims in one frame and loops weeks once.
-* **Default results model** is nflseedR's ELO variant with its exact
-  constants (init ``N(1500, 150)``, +20 non-neutral home bump, x1.2
-  postseason multiplier, estimate ``elo_diff / 25``, margin
-  ``N(estimate, 13)`` rounded away from zero, K=20 with log-MOV
-  multiplier). The NFL rest-day adjustment is dropped (CFB plays weekly).
+* **Default results model** is nflseedR's ELO variant (init
+  ``N(1500, 150)``, x1.2 postseason multiplier, estimate ``elo_diff / 25``,
+  K=20 with log-MOV multiplier) with the home bump and the margin noise
+  fitted to FBS results instead of nflseedR's NFL values: +59.4 ELO for a
+  non-neutral home team (2.38 points; NFL 20) and margins drawn from
+  ``N(estimate, 16.7)`` (NFL 13), rounded away from zero. Both are
+  :func:`cfb_compute_results` arguments, the same defaults as cfbseedR's
+  ``cfbseedR_compute_results()``, fitted by cfbseedR's
+  ``data-raw/cfb_elo_constants.R``. The NFL rest-day adjustment is dropped
+  (CFB plays weekly).
   Ties remain possible in REG games (engine parity with nflseedR; real CFB
   has had overtime since 1996) and are re-broken by win probability in
   postseason games.
@@ -72,15 +77,26 @@ def cfb_compute_results(
     *,
     rng: np.random.Generator | None = None,
     elo: dict[str, float] | None = None,
+    home_field: float = 59.4,
+    margin_sd: float = 16.7,
     **kwargs: Any,
 ) -> dict[str, pl.DataFrame]:
     """Default results generator — nflseedR's dynamic ELO model for CFB.
 
     Fills ``result`` for week ``week_num`` games that are still unplayed and
     updates each team's ELO rating from that week's results (real results
-    included). Constants are nflseedR's ``nflseedR_compute_results`` exactly,
+    included). The ELO machinery is nflseedR's ``nflseedR_compute_results``
     minus the NFL rest-day adjustment (CFB plays weekly — documented
-    simplification).
+    simplification); the home-field bonus and the margin noise are fitted to
+    FBS results (``home_field``, ``margin_sd``).
+
+    The defaults come from cfbseedR's ``data-raw/cfb_elo_constants.R``, fitted
+    on 8,551 completed FBS-vs-FBS games from 2014-2025 (2020 left out):
+    ``home_field = 25 * 2.376`` points of within-season home edge (SE 0.168),
+    and ``margin_sd`` = 16.724 points, the spread of real margins around the
+    pregame-ELO estimate this function computes (SE 0.128). They replace
+    nflseedR's NFL values (20 ELO = 0.8 points, sd 13). cfbseedR uses the
+    same numbers; refit both together.
 
     Args:
         teams: Per-sim team table (``sim``, ``team``, ``conference``,
@@ -94,6 +110,11 @@ def cfb_compute_results(
             Teams missing from the dict start at 1500. When neither ``elo``
             nor a ``teams.elo`` column exists, ratings initialize randomly
             at ``N(1500, 150)`` per (sim, team) — nflseedR behavior.
+        home_field: Home-field advantage in ELO points, added for games that
+            are not neutral (default 59.4, i.e. 2.38 points of margin at 25
+            ELO per point). ``20.0`` restores the pre-fit NFL value.
+        margin_sd: Standard deviation, in points, of a simulated margin around
+            its ELO estimate (default 16.7). ``13.0`` restores the NFL value.
         **kwargs: Ignored (forward-compatibility for custom callers).
 
     Returns:
@@ -106,6 +127,13 @@ def cfb_compute_results(
             from sportsdataverse.cfb.cfb_simulations import cfb_compute_results
             out = cfb_compute_results(teams, games, 5, rng=rng)
             teams, games = out["teams"], out["games"]
+
+        Simulate with the NFL constants instead (``cfb_simulations`` passes
+        only ``rng``, so bind overrides with ``functools.partial``)::
+
+            import functools
+            nfl_elo = functools.partial(cfb_compute_results, home_field=20.0, margin_sd=13.0)
+            sims = cfb_simulations(games, teams, compute_results=nfl_elo, seed=1)
 
     See Also:
         * `nflseedR <https://nflseedr.com>`_ -- ``nflseedR_compute_results``.
@@ -133,7 +161,9 @@ def cfb_compute_results(
         )
         .with_columns(
             (
-                pl.col("_home_elo") - pl.col("_away_elo") + pl.when(pl.col("neutral") == 0).then(20.0).otherwise(0.0)
+                pl.col("_home_elo")
+                - pl.col("_away_elo")
+                + pl.when(pl.col("neutral") == 0).then(home_field).otherwise(0.0)
             ).alias("_elo_diff")
         )
         .with_columns(
@@ -148,7 +178,7 @@ def cfb_compute_results(
         )
     )
     n = g.height
-    draws = pl.Series("_draw", rng.normal(0.0, 13.0, n), dtype=pl.Float64)
+    draws = pl.Series("_draw", rng.normal(0.0, margin_sd, n), dtype=pl.Float64)
     unifs = pl.Series("_unif", rng.uniform(0.0, 1.0, n), dtype=pl.Float64)
     is_week = pl.col("week") == week_num
     g = (

@@ -52,15 +52,24 @@ tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
 
 ### cfb_compute_results {#cfb_compute_results}
 
-`cfb_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, rng: 'np.random.Generator | None' = None, elo: 'dict[str, float] | None' = None, **kwargs: 'Any') -> 'dict[str, pl.DataFrame]'`
+`cfb_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, rng: 'np.random.Generator | None' = None, elo: 'dict[str, float] | None' = None, home_field: 'float' = 59.4, margin_sd: 'float' = 16.7, **kwargs: 'Any') -> 'dict[str, pl.DataFrame]'`
 
 Default results generator — nflseedR's dynamic ELO model for CFB.
 
 Fills `result` for week `week_num` games that are still unplayed and
 updates each team's ELO rating from that week's results (real results
-included). Constants are nflseedR's `nflseedR_compute_results` exactly,
+included). The ELO machinery is nflseedR's `nflseedR_compute_results`
 minus the NFL rest-day adjustment (CFB plays weekly — documented
-simplification).
+simplification); the home-field bonus and the margin noise are fitted to
+FBS results (`home_field`, `margin_sd`).
+
+The defaults come from cfbseedR's `data-raw/cfb_elo_constants.R`, fitted
+on 8,551 completed FBS-vs-FBS games from 2014-2025 (2020 left out):
+`home_field = 25 * 2.376` points of within-season home edge (SE 0.168),
+and `margin_sd` = 16.724 points, the spread of real margins around the
+pregame-ELO estimate this function computes (SE 0.128). They replace
+nflseedR's NFL values (20 ELO = 0.8 points, sd 13). cfbseedR uses the
+same numbers; refit both together.
 
 **Parameters**
 
@@ -71,6 +80,8 @@ simplification).
 | `week_num` | `int` |  | The week to fill. |
 | `rng` | `Generator \| None` | `None` | numpy Generator (seeded by `cfb_simulations`). A fresh default generator is created when omitted. |
 | `elo` | `dict[str, float] \| None` | `None` | Optional initial ratings `{team: elo}` applied to every sim. Teams missing from the dict start at 1500. When neither `elo` nor a `teams.elo` column exists, ratings initialize randomly at `N(1500, 150)` per (sim, team) — nflseedR behavior. |
+| `home_field` | `float` | `59.4` | Home-field advantage in ELO points, added for games that are not neutral (default 59.4, i.e. 2.38 points of margin at 25 ELO per point). `20.0` restores the pre-fit NFL value. |
+| `margin_sd` | `float` | `16.7` | Standard deviation, in points, of a simulated margin around its ELO estimate (default 16.7). `13.0` restores the NFL value. |
 
 **Returns**
 
@@ -92,6 +103,12 @@ simplification).
 from sportsdataverse.cfb.cfb_simulations import cfb_compute_results
 out = cfb_compute_results(teams, games, 5, rng=rng)
 teams, games = out["teams"], out["games"]
+
+# Simulate with the NFL constants instead (``cfb_simulations`` passes only ``rng``, so bind overrides with ``functools.partial``)
+
+import functools
+nfl_elo = functools.partial(cfb_compute_results, home_field=20.0, margin_sd=13.0)
+sims = cfb_simulations(games, teams, compute_results=nfl_elo, seed=1)
 ```
 
 ### cfb_draft_projection {#cfb_draft_projection}
