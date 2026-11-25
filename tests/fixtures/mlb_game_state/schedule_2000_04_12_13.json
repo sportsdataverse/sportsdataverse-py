@@ -1,0 +1,658 @@
+{
+ "dates": [
+  {
+   "date": "2000-04-12",
+   "games": [
+    {
+     "gamePk": 3351,
+     "gameDate": "2000-04-12T17:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 140
+       },
+       "score": 6
+      },
+      "home": {
+       "team": {
+        "id": 147
+       },
+       "score": 8
+      }
+     }
+    },
+    {
+     "gamePk": 4981,
+     "gameDate": "2000-04-12T18:20:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 144
+       },
+       "score": 4
+      },
+      "home": {
+       "team": {
+        "id": 112
+       },
+       "score": 11
+      }
+     }
+    },
+    {
+     "gamePk": 4002,
+     "gameDate": "2000-04-12T19:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 113
+       },
+       "score": 5
+      },
+      "home": {
+       "team": {
+        "id": 115
+       },
+       "score": 7
+      }
+     }
+    },
+    {
+     "gamePk": 4979,
+     "gameDate": "2000-04-12T19:35:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 114
+       },
+       "score": 5
+      },
+      "home": {
+       "team": {
+        "id": 133
+       },
+       "score": 0
+      }
+     }
+    },
+    {
+     "gamePk": 5029,
+     "gameDate": "2000-04-12T22:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 142
+       },
+       "score": 3
+      },
+      "home": {
+       "team": {
+        "id": 111
+       },
+       "score": 7
+      }
+     }
+    },
+    {
+     "gamePk": 4982,
+     "gameDate": "2000-04-12T23:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 120
+       },
+       "score": 4
+      },
+      "home": {
+       "team": {
+        "id": 134
+       },
+       "score": 6
+      }
+     }
+    },
+    {
+     "gamePk": 3350,
+     "gameDate": "2000-04-12T23:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 136
+       },
+       "score": 4
+      },
+      "home": {
+       "team": {
+        "id": 116
+       },
+       "score": 0
+      }
+     }
+    },
+    {
+     "gamePk": 4003,
+     "gameDate": "2000-04-12T23:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 121
+       },
+       "score": 5
+      },
+      "home": {
+       "team": {
+        "id": 143
+       },
+       "score": 8
+      }
+     }
+    },
+    {
+     "gamePk": 5030,
+     "gameDate": "2000-04-12T23:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 146
+       },
+       "score": 11
+      },
+      "home": {
+       "team": {
+        "id": 158
+       },
+       "score": 4
+      }
+     }
+    },
+    {
+     "gamePk": 3352,
+     "gameDate": "2000-04-12T23:15:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 145
+       },
+       "score": 7
+      },
+      "home": {
+       "team": {
+        "id": 139
+       },
+       "score": 1
+      }
+     }
+    },
+    {
+     "gamePk": 4980,
+     "gameDate": "2000-04-13T00:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 110
+       },
+       "score": 6
+      },
+      "home": {
+       "team": {
+        "id": 118
+       },
+       "score": 7
+      }
+     }
+    },
+    {
+     "gamePk": 4004,
+     "gameDate": "2000-04-13T00:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 138
+       },
+       "score": 5
+      },
+      "home": {
+       "team": {
+        "id": 117
+       },
+       "score": 7
+      }
+     }
+    },
+    {
+     "gamePk": 5031,
+     "gameDate": "2000-04-13T02:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 109
+       },
+       "score": 2
+      },
+      "home": {
+       "team": {
+        "id": 135
+       },
+       "score": 4
+      }
+     }
+    },
+    {
+     "gamePk": 5032,
+     "gameDate": "2000-04-13T02:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 141
+       },
+       "score": 6
+      },
+      "home": {
+       "team": {
+        "id": 108
+       },
+       "score": 2
+      }
+     }
+    },
+    {
+     "gamePk": 5028,
+     "gameDate": "2000-04-13T02:35:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 119
+       },
+       "score": 6
+      },
+      "home": {
+       "team": {
+        "id": 137
+       },
+       "score": 5
+      }
+     }
+    }
+   ]
+  },
+  {
+   "date": "2000-04-13",
+   "games": [
+    {
+     "gamePk": 5028,
+     "gameDate": "2000-04-13T03:33:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 119
+       },
+       "score": 6
+      },
+      "home": {
+       "team": {
+        "id": 137
+       },
+       "score": 5
+      }
+     }
+    },
+    {
+     "gamePk": 5100,
+     "gameDate": "2000-04-13T16:15:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 145
+       },
+       "score": 5
+      },
+      "home": {
+       "team": {
+        "id": 139
+       },
+       "score": 6
+      }
+     }
+    },
+    {
+     "gamePk": 3353,
+     "gameDate": "2000-04-13T18:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 110
+       },
+       "score": 5
+      },
+      "home": {
+       "team": {
+        "id": 118
+       },
+       "score": 6
+      }
+     }
+    },
+    {
+     "gamePk": 4005,
+     "gameDate": "2000-04-13T18:20:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 144
+       },
+       "score": 2
+      },
+      "home": {
+       "team": {
+        "id": 112
+       },
+       "score": 3
+      }
+     }
+    },
+    {
+     "gamePk": 5101,
+     "gameDate": "2000-04-13T22:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 109
+       },
+       "score": 5
+      },
+      "home": {
+       "team": {
+        "id": 135
+       },
+       "score": 4
+      }
+     }
+    },
+    {
+     "gamePk": 3354,
+     "gameDate": "2000-04-13T22:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 142
+       },
+       "score": 3
+      },
+      "home": {
+       "team": {
+        "id": 111
+       },
+       "score": 4
+      }
+     }
+    },
+    {
+     "gamePk": 4007,
+     "gameDate": "2000-04-13T23:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 120
+       },
+       "score": 3
+      },
+      "home": {
+       "team": {
+        "id": 134
+       },
+       "score": 4
+      }
+     }
+    },
+    {
+     "gamePk": 5033,
+     "gameDate": "2000-04-13T23:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 136
+       },
+       "score": 0
+      },
+      "home": {
+       "team": {
+        "id": 116
+       },
+       "score": 2
+      }
+     }
+    },
+    {
+     "gamePk": 4006,
+     "gameDate": "2000-04-13T23:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 121
+       },
+       "score": 2
+      },
+      "home": {
+       "team": {
+        "id": 143
+       },
+       "score": 1
+      }
+     }
+    },
+    {
+     "gamePk": 3420,
+     "gameDate": "2000-04-13T23:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 140
+       },
+       "score": 1
+      },
+      "home": {
+       "team": {
+        "id": 147
+       },
+       "score": 5
+      }
+     }
+    },
+    {
+     "gamePk": 5102,
+     "gameDate": "2000-04-13T23:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 146
+       },
+       "score": 0
+      },
+      "home": {
+       "team": {
+        "id": 158
+       },
+       "score": 4
+      }
+     }
+    },
+    {
+     "gamePk": 5099,
+     "gameDate": "2000-04-14T01:05:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 138
+       },
+       "score": 6
+      },
+      "home": {
+       "team": {
+        "id": 115
+       },
+       "score": 12
+      }
+     }
+    },
+    {
+     "gamePk": 4048,
+     "gameDate": "2000-04-14T02:35:00Z",
+     "gameNumber": 1,
+     "status": {
+      "codedGameState": "F",
+      "detailedState": "Final"
+     },
+     "teams": {
+      "away": {
+       "team": {
+        "id": 119
+       },
+       "score": 11
+      },
+      "home": {
+       "team": {
+        "id": 137
+       },
+       "score": 7
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

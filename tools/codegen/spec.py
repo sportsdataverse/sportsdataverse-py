@@ -296,6 +296,18 @@ class League:
     scopes: List[str]
     league_param: bool = False
     group: str = ""
+    # Allowlist of endpoint short names emitted for this league, on top of ``scopes``. Empty =
+    # every in-scope endpoint. For a sport whose ESPN surface was live-probed and is thin
+    # (lacrosse, golf): a short no probe saw return data gets no wrapper.
+    endpoints: List[str] = field(default_factory=list)
+
+    def emits(self, ep: "Endpoint") -> bool:
+        """True when this league gets a wrapper for ``ep`` (scope, exclusions, both allowlists)."""
+        if ep.scope not in self.scopes or self.league in ep.exclude_leagues:
+            return False
+        if ep.include_prefixes and self.prefix not in ep.include_prefixes:
+            return False
+        return not self.endpoints or ep.short in self.endpoints
 
 
 @dataclass(frozen=True)
@@ -338,6 +350,7 @@ def load_leagues(path: Path) -> LeaguesConfig:
             scopes=list(lg["scopes"]),
             league_param=bool(lg.get("league_param", False)),
             group=str(lg.get("group", "")),
+            endpoints=list(lg.get("endpoints", [])),
         )
         for lg in raw["leagues"]
     ]
@@ -525,6 +538,15 @@ def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
         for e in raw["endpoints"]
     ]
     return EspnApi(api=raw["api"], host=raw["host"], name_pattern=raw["name_pattern"], endpoints=endpoints)
+
+
+def validate_league_endpoints(apis: List[EspnApi], cfg: "LeaguesConfig") -> None:
+    """Reject a league ``endpoints`` allowlist entry that names no short in ``apis`` (the full ESPN
+    family set) -- a typo would otherwise silently drop that wrapper for the league."""
+    shorts = {e.short for a in apis for e in a.endpoints}
+    for lg in cfg.leagues:
+        if set(lg.endpoints) - shorts:
+            raise SpecError(f"leagues.{lg.prefix}: unknown endpoint short(s) {sorted(set(lg.endpoints) - shorts)}")
 
 
 def validate_league_keys(apis: List[EspnApi], cfg: "LeaguesConfig") -> None:

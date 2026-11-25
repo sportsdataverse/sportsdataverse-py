@@ -1,8 +1,15 @@
 """Tests for the RE24 base-out-state substrate + run-expectancy matrix."""
 
+import json
+
 import polars as pl
 
-from sportsdataverse.mlb.mlb_run_expectancy import mlb_run_expectancy_matrix, pbp_base_out_states, run_value
+from sportsdataverse.mlb.mlb_run_expectancy import (
+    _season_game_pks,
+    mlb_run_expectancy_matrix,
+    pbp_base_out_states,
+    run_value,
+)
 
 
 def _half():
@@ -153,3 +160,35 @@ def test_extra_innings_without_signal_columns_keeps_empty_start():
     # matchup_batter_id nor runners; behaviour there must not change.
     pbp = pl.read_parquet(EXTRA_INNINGS_FIXTURE).drop("matchup_batter_id", "runners")
     assert _half_openers(pbp)["base_state"].unique().to_list() == ["___"]
+
+
+# Real statsapi schedule for 2000-04-12/13 (trimmed to gamePk, date, status, teams): game 5028 was
+# suspended on the 12th and resumed on the 13th, so the schedule lists it on both dates.
+SCHEDULE_FIXTURE = "tests/fixtures/mlb_game_state/schedule_2000_04_12_13.json"
+CORPUS = "tests/fixtures/mlb_game_state/pbp_corpus.parquet"
+
+
+def test_season_game_pks_lists_a_suspended_game_once(monkeypatch):
+    import sportsdataverse.mlb.mlb_api_extra as api_extra
+
+    with open(SCHEDULE_FIXTURE, encoding="utf-8") as fh:
+        raw = json.load(fh)
+    listed = [g["gamePk"] for d in raw["dates"] for g in d["games"] if g["status"]["codedGameState"] == "F"]
+    assert listed.count(5028) == 2
+    monkeypatch.setattr(api_extra, "mlb_schedule", lambda **_: raw)
+    pks = _season_game_pks(2000)
+    assert pks.count(5028) == 1
+    assert pks == list(dict.fromkeys(listed))
+
+
+def test_twice_collected_games_count_once():
+    # The corpus collected 5028 and 6146 twice (both listed on two schedule dates): 155 repeated PAs.
+    pbp = pl.read_parquet(CORPUS)
+    states = pbp_base_out_states(pbp)
+    for game_id in ("5028", "6146"):
+        raw = pbp.filter(pl.col("game_id") == game_id)
+        assert raw.height == 2 * raw["about_at_bat_index"].n_unique()
+        assert states.filter(pl.col("game_id") == game_id).height == raw["about_at_bat_index"].n_unique()
+    deduped = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)
+    assert states.height == deduped.height == pbp.height - 155
+    assert mlb_run_expectancy_matrix(pbp=pbp).equals(mlb_run_expectancy_matrix(pbp=deduped))

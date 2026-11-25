@@ -6,6 +6,62 @@ description: "WNBA — additional Python functions — Analytics: wnba_player–
 ---
 # WNBA — additional Python functions — Analytics: wnba_player–wnba_team
 
+### wnba_player_season_box_rates {#wnba_player_season_box_rates}
+
+`wnba_player_season_box_rates(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA per-36 points, rebounds and assists per player-season, ranked, with the season usage.
+
+Over the regular season (a playoff or play-in game is measured against it), from ESPN's player box. `pts_per36` / `reb_per36` /
+`ast_per36` are 36 x the total / minutes, each with `_n` (the minutes) and
+`_rank` / `_pct` among the season's players whose minutes reach the rate's gate (the
+minutes at which it is half signal on odd / even games). `usg_pct` is the season usage
+(FGA + 0.44 FTA + TOV over the team's while on the floor), not ranked.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (2025 is the 2025 season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, athlete_id)` (the ESPN id): `team_id` (his last game's team), `games`, `minutes`, `pts` / `reb` / `ast`, `usg_pct` with `usg_pct_n`, and the three per-36 rates with `_n` / `_rank` / `_pct`. A season without a release returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `athlete_id` | Int64 | ESPN athlete id of the player, the join key to the player box score. |
+| `team_id` | Int64 | ESPN team id of the player's last game of the season (a traded player has one row). |
+| `games` | Int64 | Games played (the pros' regular season, every college game). |
+| `minutes` | Float64 | Minutes played in those games. |
+| `pts` | Int64 | Points in those games. |
+| `reb` | Int64 | Rebounds in those games. |
+| `ast` | Int64 | Assists in those games. |
+| `usg_pct` | Float64 | Season usage: 100 x sum(uses) / sum(minutes x team uses / (team minutes / 5)), uses = FGA + 0.44 FTA + TOV; not ranked. |
+| `usg_pct_n` | Int64 | Minutes of the games with a usage behind usg_pct. |
+| `pts_per36` | Float64 | Points per 36 minutes: 36 x pts / minutes. |
+| `pts_per36_n` | Int64 | Minutes behind pts_per36. |
+| `reb_per36` | Float64 | Rebounds per 36 minutes: 36 x reb / minutes. |
+| `reb_per36_n` | Int64 | Minutes behind reb_per36. |
+| `ast_per36` | Float64 | Assists per 36 minutes: 36 x ast / minutes. |
+| `ast_per36_n` | Int64 | Minutes behind ast_per36. |
+| `pts_per36_rank` | Float64 | Rank of pts_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `pts_per36_pct` | Float64 | Percentile of pts_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+| `reb_per36_rank` | Float64 | Rank of reb_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `reb_per36_pct` | Float64 | Percentile of reb_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+| `ast_per36_rank` | Float64 | Rank of ast_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
+| `ast_per36_pct` | Float64 | Percentile of ast_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
+
+**Example**
+
+```python
+from sportsdataverse.wnba.wnba_player_box_expected import wnba_player_season_box_rates
+rates = wnba_player_season_box_rates(2025)
+rates.sort("pts_per36_rank").select("athlete_id", "minutes", "pts_per36", "pts_per36_pct").head()
+```
+
 ### wnba_player_shot_zones {#wnba_player_shot_zones}
 
 `wnba_player_shot_zones(seasons: 'int | list[int]', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -715,50 +771,3 @@ One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `hom
 | `pts` | Int64 | Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free throws. |
 | `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
 | `seconds` | Float64 | Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60 x (poss + opp_poss) / 2 / summed seconds. |
-
-### wnba_team_luck {#wnba_team_luck}
-
-`wnba_team_luck(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA luck and close-game record: Pythagorean expected wins vs actual, close-game W-L (league_id='10'). See sportsdataverse.nba.nba_team_luck.nba_team_luck.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `season_type` | `str` | `'regular-season'` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, team_id)`; `team_id` is the stats.nba.com team id (Int64). `games`, `wins`, `losses`, `pts` and `opp_pts` are from the final scores; `win_pct`, `pythag_win_pct`, `exp_wins` and `luck_wins` (`wins - exp_wins`) follow. `pbp_games` counts the games with published possessions, and `close_games`, `close_wins`, `close_losses` and `close_win_pct` (null with no close game) are the close games among them. `pythag_win_pct`, `luck_wins` and `close_win_pct` have `<m>_rank` (1 = highest), `<m>_pct` (the Weibull percentile) and `<m>_n` (games, or close games); ranks are within the season, among teams with at least half the most games (`close_win_pct` also needs possessions for half of them and five close games), and null under five teams. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, the calendar year. |
-| `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
-| `games` | Int64 | Games in the season type's completed games (the stats schedule's final scores). |
-| `wins` | Int64 | Wins in the season type's completed games (the stats schedule's final scores). |
-| `losses` | Int64 | Losses in the season type's completed games (the stats schedule's final scores). |
-| `pts` | Int64 | Points scored in those games (final scores). |
-| `opp_pts` | Int64 | Points allowed in those games (final scores). |
-| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
-| `pythag_win_pct` | Float64 | Pythagorean win fraction: pts^x / (pts^x + opp_pts^x), x = PYTHAG_EXPONENT['wnba'], fitted on past seasons by tools/fit_team_luck_pythag.py. |
-| `exp_wins` | Float64 | Expected wins: pythag_win_pct * games. |
-| `luck_wins` | Float64 | Luck in wins: wins minus exp_wins. Positive means the team won more games than its scoring says it should have. |
-| `pbp_games` | Int64 | Games with published possessions (wnba_stats_possessions); close_games is counted among these. A game whose late possessions are missing from the release counts as not close. |
-| `close_games` | Int64 | Close games: at least one possession in play with 5:00 or less left (starting there, or starting before 5:00 and ending after it) in the 4th quarter (the 2nd half through 2005, when the WNBA played two 20-minute halves) or an overtime, the score within 5 as that possession starts (stats.nba.com's clutch window; BB-D3's close split). The margin is the running sum of the possessions' points, so it can drift from the scoreboard: NBA 2025-26 agrees with an independent ESPN play-by-play recount on 1215 of 1229 games. |
-| `close_wins` | Int64 | Wins in close games. |
-| `close_losses` | Int64 | Losses in close games. |
-| `close_win_pct` | Float64 | close_wins / close_games; null with no close game. |
-| `pythag_win_pct_rank` | Float64 | Rank of pythag_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
-| `luck_wins_rank` | Float64 | Rank of luck_wins within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season; null for a non-qualifier, a null value, or fewer than five qualifiers, or when every qualifier has the same value. |
-| `close_win_pct_rank` | Float64 | Rank of close_win_pct within the season (the highest value ranks 1; ties average), among teams that played at least half the most games any team played in the season, have possessions for at least half their games and played at least five close games (MIN_CLOSE_GAMES); null otherwise, for a null value, or with fewer than five qualifiers, or when every qualifier has the same value. |
-| `pythag_win_pct_pct` | Float64 | Percentile of pythag_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `luck_wins_pct` | Float64 | Percentile of luck_wins within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `close_win_pct_pct` | Float64 | Percentile of close_win_pct within the season among the same qualified teams: 100 * (n + 1 - rank) / (n + 1), n the number ranked, so the best team is under 100 and nobody is 0; null when the rank is null. |
-| `pythag_win_pct_n` | Int64 | Sample size of pythag_win_pct: games. |
-| `luck_wins_n` | Int64 | Sample size of luck_wins: games. |
-| `close_win_pct_n` | Int64 | Sample size of close_win_pct: close games. |
