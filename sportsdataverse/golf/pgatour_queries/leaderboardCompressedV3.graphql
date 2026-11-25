@@ -1,0 +1,6 @@
+query LeaderboardCompressedV3($id: ID!) {
+  leaderboardCompressedV3(id: $id) {
+    id
+    payload
+  }
+}

@@ -81794,3 +81794,178 @@ leaderboard:
   earnings: Prize money won, in the tour's currency (0.0 for a missed cut). Null on the scoreboard.
   cup_points: Season-long points earned at the event (FedExCup on the PGA Tour, the Race to the CME Globe on the LPGA).
     Null on the scoreboard.
+# PGA TOUR GraphQL API (orchestrator.pgatour.com): the pgatour_* wrappers, sportsdataverse.golf.pgatour_parsers.
+pgatour_schedule:
+  season: Season year the schedule belongs to (e.g. 2026).
+  schedule_status: '"completed" for an event already played, "upcoming" for one still to come.'
+  tournament_id: PGA TOUR tournament id (tour code + season + event number, e.g. "R2026014"); the id the
+    leaderboard, scorecard, tee-times and shot-details wrappers take.
+  tournament_name: Tournament name.
+  date: Tournament dates as the site displays them (e.g. "Apr 9 - 12").
+  start_date: Tournament start (UTC).
+  sequence_number: Event's order in the season.
+  tournament_status: Tournament status (e.g. "COMPLETED", "IN_PROGRESS", "NOT_STARTED").
+  course_name: Host course.
+  city: Host city.
+  state: Host state or province.
+  state_code: Host state or province abbreviation.
+  country: Host country.
+  country_code: Host country code (e.g. "USA").
+  purse: Total purse as displayed (e.g. "$9,100,000").
+  champion: Winner's name; null before the event finishes.
+  champion_id: Winner's PGA TOUR player id.
+  champion_earnings: Winner's share of the purse as displayed.
+  standing_heading: Season points race the event counts toward (e.g. "FEDEXCUP").
+  standing_value: Points on offer to the winner as displayed (e.g. "500 pts").
+pgatour_leaderboard:
+  tournament_id: PGA TOUR tournament id.
+  tournament_status: Tournament status (e.g. "COMPLETED", "IN_PROGRESS").
+  sort_order: Leaderboard order (0 = leader).
+  player_id: PGA TOUR player id.
+  first_name: Player's first name.
+  last_name: Player's last name.
+  display_name: Player's full name.
+  short_name: Player's short name (e.g. "R. McIlroy").
+  country: Player's country code (e.g. "NIR").
+  amateur: True for an amateur.
+  position: Position as displayed ("1", "T3", "CUT", "WD").
+  total: Total score to par as displayed ("-12", "E", "+6").
+  to_par: Total score to par as an integer (E is 0); null before a score is posted.
+  total_strokes: Total strokes over the rounds played.
+  thru: Holes completed in the current round as displayed ("F" when finished, "-" when not started).
+  today: Score to par in the current round as displayed.
+  current_round: Round in play (or last played).
+  player_state: Player's state in the event (e.g. "COMPLETE", "ACTIVE", "CUT").
+  round_1: Strokes in round 1; null when not played.
+  round_2: Strokes in round 2; null when not played.
+  round_3: Strokes in round 3; null when not played (a missed cut, or not started).
+  round_4: Strokes in round 4; null when not played.
+  fedexcup_official: Player's official FedExCup rank going into the event, as displayed.
+  fedexcup_projected: Player's FedExCup rank projected from this leaderboard, as displayed.
+pgatour_scorecard:
+  tournament_id: PGA TOUR tournament id (the answer's own id carries the player id too; it is stripped).
+  player_id: PGA TOUR player id.
+  round_number: Round number.
+  course_id: Course id (an event played on more than one course carries one per round).
+  course_name: Course name.
+  hole_number: Hole number (1-18).
+  par: Hole par.
+  yardage: Hole length in yards that round.
+  score: Strokes on the hole; null when the hole is not yet played.
+  score_status: Result on the hole (e.g. "BIRDIE", "PAR", "BOGEY", "EAGLE", "DOUBLE_BOGEY").
+  round_to_par: Running score to par for the round after this hole, as displayed.
+pgatour_tee_times:
+  tournament_id: PGA TOUR tournament id.
+  round_number: Round number.
+  round_status: Round status (e.g. "COMPLETE", "IN_PROGRESS", "UPCOMING").
+  group_number: Tee-time group number within the round.
+  tee_time: Group's tee time (UTC).
+  start_tee: Starting hole (1, or 10 for a two-tee start).
+  back_nine: True when the group starts on the back nine.
+  course_id: Course id.
+  course_name: Course name.
+  player_id: PGA TOUR player id.
+  display_name: Player's full name.
+  country: Player's country code.
+  amateur: True for an amateur.
+pgatour_player:
+  player_id: PGA TOUR player id.
+  first_name: First name.
+  last_name: Last name.
+  display_name: Full name.
+  country: Country the player represents.
+  country_code: Country code (e.g. "NIR").
+  owgr: Official World Golf Ranking position as displayed.
+  height: Height in feet and inches as displayed.
+  height_meters: Height in meters.
+  weight: Weight in pounds.
+  weight_kilograms: Weight in kilograms.
+  age: Age in years.
+  born: Birth date as displayed (e.g. "May 4, 1989").
+  birthplace_city: Birthplace city.
+  birthplace_state: Birthplace state or province.
+  birthplace_country: Birthplace country.
+  turned_pro: Year the player turned professional.
+  school: College or university.
+  residence_city: City of residence.
+  residence_state: State or province of residence.
+  residence_country: Country of residence.
+  family: Family as listed on the profile.
+  bio_link: The player's pgatour.com profile URL.
+pgatour_player_directory:
+  tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
+  player_id: PGA TOUR player id.
+  is_active: True for a player active on the tour.
+  first_name: First name.
+  last_name: Last name.
+  short_name: Short name.
+  display_name: Full name.
+  country: Country the player represents.
+  country_code: Country code.
+  age: Age in years.
+  education: College or university.
+  turned_pro: Year the player turned professional.
+pgatour_stat_catalog:
+  tour_code: Tour code.
+  year: Season year.
+  category: Stat category key (e.g. "STROKES_GAINED", "SCORING").
+  category_name: Stat category name (e.g. "Strokes Gained").
+  sub_category: Sub-category the stat is listed under.
+  stat_id: PGA TOUR stat id (e.g. "02675" for SG Total); the id pgatour_stat_details takes.
+  stat_title: Stat name.
+pgatour_stat_details:
+  tour_code: Tour code.
+  year: Season year.
+  stat_id: PGA TOUR stat id.
+  stat_title: Stat name (e.g. "Scoring Average").
+  stat_type: Stat window (e.g. "YTD").
+  tour_average: Tour average for the stat, as displayed.
+  player_id: PGA TOUR player id.
+  player_name: Player's full name.
+  country: Player's country.
+  country_code: Player's country code.
+  rank: Player's rank in the stat.
+  rank_change: Change in rank since the last update, as displayed.
+  stat_name: The stat table's column (e.g. "Avg", "Total Strokes", "Total Rounds").
+  stat_value: That column's value as displayed (e.g. "68.619", "5,293").
+pgatour_tour_cup:
+  cup_id: Points race id with season (e.g. "R-02671-2025" for the 2025 FedExCup).
+  title: Points race name (e.g. "FedExCup Standings").
+  season: Season year (read from the race's title, e.g. "2025 Standings").
+  player_id: PGA TOUR player id.
+  first_name: First name.
+  last_name: Last name.
+  display_name: Full name.
+  country: Country the player represents.
+  country_code: Country code.
+  rank_official: Official rank as displayed ("-" for none).
+  rank_projected: Rank projected from live results, as displayed.
+  rank_movement: Direction of the projected rank change (e.g. "UP", "DOWN", "CONSTANT").
+  points_official: Official points as displayed.
+  points_projected: Points projected from live results, as displayed.
+  points_event: Points earned at the current event, as displayed.
+pgatour_shot_details:
+  tournament_id: PGA TOUR tournament id.
+  player_id: PGA TOUR player id.
+  round_number: Round number.
+  hole_number: Hole number.
+  par: Hole par.
+  yardage: Hole length in yards.
+  hole_score: Strokes on the hole.
+  hole_status: Result on the hole (e.g. "BIRDIE", "PAR").
+  stroke_number: Stroke number on the hole.
+  stroke_type: Stroke kind (e.g. "STROKE", "PENALTY", "DROP").
+  play_by_play: ShotLink description of the shot (e.g. "356 yds to left fairway, 134 yds to hole").
+  distance: Shot distance as displayed (e.g. "356 yds").
+  distance_remaining: Distance to the hole after the shot, as displayed.
+  from_location_code: ShotLink lie code the shot was played from (e.g. "OTB" tee box).
+  from_location: Lie the shot was played from (e.g. "Tee Box").
+  to_location_code: ShotLink lie code the shot finished in (e.g. "ELF" left fairway).
+  to_location: Lie the shot finished in (e.g. "Left Fairway").
+  final_stroke: True for the stroke that holed out.
+  from_x: ShotLink tourcast x coordinate of the shot's start.
+  from_y: ShotLink tourcast y coordinate of the shot's start.
+  from_z: ShotLink tourcast z (elevation) coordinate of the shot's start.
+  to_x: ShotLink tourcast x coordinate where the shot finished.
+  to_y: ShotLink tourcast y coordinate where the shot finished.
+  to_z: ShotLink tourcast z (elevation) coordinate where the shot finished.

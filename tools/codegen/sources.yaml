@@ -592,6 +592,15 @@ providers:
     modules:
       - sportsdataverse.f1.f1_extra
 
+  pgatour:
+    label: PGA TOUR GraphQL API
+    home: https://www.pgatour.com
+    auth: public frontend key (read from pgatour.com on first use; $PGA_API_KEY to supply one)
+    flat_apis: [pgatour]
+    modules:
+      - sportsdataverse.golf.pgatour_runtime
+      - sportsdataverse.golf.pgatour_parsers
+
   kenpom:
     label: KenPom
     featured: true
