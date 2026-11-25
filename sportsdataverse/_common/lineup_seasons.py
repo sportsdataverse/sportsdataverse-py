@@ -31,6 +31,11 @@ rates have no measured gate and rank on ``min_poss`` alone. The shot
 zone shares (``rim_rate``, ``mid_rate``, ``fg3_rate`` and their ``opp_`` twins) describe a style,
 not a quality: they rank high first on both sides.
 
+**Factor points** (BB-D42): ``lg_rtg`` (the season's league-average rating, pooled over every
+five-man unit) and ``net_rtg`` split into eight parts per 100 possessions, ``off_*_pts`` and
+``def_*_pts`` for eFG, turnovers, offensive rebounds and free throws, which add up to ``net_rtg``
+exactly (:mod:`sportsdataverse._common.factor_points`).
+
 **Bases** (BB-G8): ``pts_per75`` / ``opp_pts_per75`` / ``plus_minus_per75`` are 0.75 times
 ``off_rtg`` / ``def_rtg`` / ``net_rtg``, with the rating's ``_rank`` / ``_pct`` / ``_n`` copied, so a
 board's basis select never converts. There is no per-game basis: a unit plays stretches of many
@@ -45,6 +50,7 @@ from itertools import combinations
 
 import polars as pl
 
+from sportsdataverse._common.factor_points import FACTOR_POINTS_SCHEMA, attach_factor_points, league_prices
 from sportsdataverse._common.game_impact import AWAY_SLOTS, HOME_SLOTS, game_lineups_used, games_with_possessions
 from sportsdataverse._common.league_context import (
     LEAGUE_AVERAGES_SCHEMA,
@@ -154,6 +160,7 @@ def lineup_seasons_schema(player_dtype: pl.DataType, *, zones: bool = False) -> 
         **{f"{m}_rank": pl.Float64() for m in _PER_75},
         **{f"{m}_pct": pl.Float64() for m in _PER_75},
         **{f"{m}_n": pl.Int64() for m in _PER_75},
+        **FACTOR_POINTS_SCHEMA,
     }
 
 
@@ -310,8 +317,10 @@ def lineup_seasons(
     count_cols = [f"{s}_{c}" for s in ("o", "d") for c in names]
     fives = fives.join(tallies, on=keys, how="left", validate="1:1").with_columns(pl.col(count_cols).fill_null(0))
     lower = [m for m, (_, low) in rated.items() if low]
+    prices = league_prices(fives, convention="side")  # the fives partition the league's possessions
     return (
         _rates(_units(fives, [*_TOTALS, *count_cols]), zones)
+        .pipe(attach_factor_points, prices, convention="side")
         .pipe(attach_sample_sizes, {m: e for m, (e, _) in rated.items()})
         .pipe(
             attach_ranks,
