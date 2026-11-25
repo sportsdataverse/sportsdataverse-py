@@ -11846,6 +11846,36 @@
   expected: kill
   note: Processor output would carry no game id, so the view would need the schedule on the live path.
 
+- id: nfl-espn-view-split-two-point-run-is-a-rush
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'pl.when(two).then((pl.col("play_type") == "run").cast(pl.Int64)).otherwise(pl.col("rush")).alias("rush"),'
+  mutant: 'pl.col("rush"),'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_split_two_point_run_is_a_rush_without_players
+  expected: kill
+  note: Without players a split two-point run has no rusher name, so it would be rush 0 (nflverse 1).
+
+- id: nfl-espn-view-folded-try-text-left-out
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '.str.replace(r"(?i)TWO-POINT CONVERSION ATTEMPT.*$", "")'
+  mutant: '.str.replace(r"(?i)NO-SUCH-TEXT", "")'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_rushing_touchdown_with_a_folded_passing_try_is_a_rush
+  expected: kill
+  note: A rushing touchdown whose text folds a passing try would match " pass " and be a pass.
+
+- id: nfl-espn-view-end-of-half-drive
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '_tmp=pl.coalesce(drive_level_tmp_result(pl.col("_swap")), half_end)'
+  mutant: '_tmp=drive_level_tmp_result(pl.col("_swap"))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_drive_that_ends_the_half_is_end_of_half
+  expected: kill
+  note: The processor drops the period-end text, so a drive ending the half would get no result.
+
 # --- nflverse play_by_play columns on the Shield path (shield_pbp + enrich_nfl_pbp) ----------------
 - id: shield-stat-flag-kept
   group: nflverse-pbp-columns
