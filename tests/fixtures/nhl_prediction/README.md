@@ -151,8 +151,11 @@ to stay comparable with MoneyPuck's `regular` folder.
 ## Regulation score and goalie saves holdouts (2023-24 .. 2025-26)
 
 Written 2026-11-25 by `tools/models/nhl_prediction/fit_score_saves.py`, which also fits the
-`reg_draw_inflation` and saves constants in `LEAGUE_CONSTANTS["nhl"]`. Neither file holds a season
-those constants were fitted on.
+`reg_draw_inflation` and saves constants in `LEAGUE_CONSTANTS["nhl"]`. The saves constants are fitted
+on 2023-24, so `goalie_box_2026.parquet` is a true holdout. The shipped `reg_draw_inflation` is fitted on
+all four seasons 2022-23 .. 2025-26, so the regulation fixture is scored leave one season out: each
+season with the draw inflation and flat outcome rates fitted on the other three (the script prints
+both; the test carries them).
 
 | File | Source | Rows | Notes |
 |---|---|---:|---|
@@ -161,11 +164,12 @@ those constants were fitted on.
 
 Gates (set from the observed values; see each test's docstring):
 
-- Each holdout season's 3-way log loss beats independent Poissons and the flat 2022-23 outcome
-  rates (home / tie / away 0.3952 / 0.2402 / 0.3646).
-- Pooled predicted tie probability within 0.03 of the observed rate (0.244 against 0.221). The tie
-  rate itself swings by season (0.240 / 0.208 / 0.206 / 0.249 for 2022-23 .. 2025-26), so there is
-  no per-season band.
+- Each held-out season's leave-one-out 3-way log loss beats independent Poissons and the other
+  seasons' flat outcome rates (1.0324 / 1.0401 / 1.0619 against 1.0380 / 1.0442 / 1.0838 and
+  1.0598 / 1.0548 / 1.0834).
+- Pooled leave-one-out predicted tie probability within 0.02 of the observed rate (0.2285 against
+  0.2207). The tie rate itself swings by season (0.240 / 0.208 / 0.206 / 0.249 for 2022-23 ..
+  2025-26), so there is no per-season band.
 - The 80% saves interval's realized coverage within 0.02 of what the model says it covers, and mean
   projected saves within 0.5 of the mean realized.
 

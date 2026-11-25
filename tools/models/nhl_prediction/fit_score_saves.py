@@ -4,9 +4,9 @@ Regulation score (``reg_draw_inflation``): walks 2022-23 .. 2025-26 with strict 
 ``fit_pregame.py`` does, feeding each day's slate through ``nhl_predict_games``. Outcomes come from
 ``load_nhl_pbp_full``'s GOAL events by ``period_type``: REGULAR goals give the 60-minute score, and a game
 level after regulation adds one goal for the OVERTIME scorer or the shootout winner (the pbp logs every
-shootout attempt as a GOAL, so counting them all would overstate the final total). The draw inflation is
-the 3-way log-loss MLE on 2022-23 (the season ``hfa`` / ``margin_sd`` are fitted on); 2023-24 .. 2025-26
-are the holdout.
+shootout attempt as a GOAL, so counting them all would overstate the final total). The shipped draw
+inflation is the 3-way log-loss MLE on all four seasons. Each of 2023-24 .. 2025-26 is evaluated leave one
+season out: scored with a draw inflation and flat outcome rates fitted on the other three seasons.
 
 Goalie saves: ``load_nhl_goalie_boxscores`` publishes 2023-24 onward, so the saves constants are fitted on
 2023-24 and 2024-25 / 2025-26 are the holdout. Regular-season starters only.
@@ -127,31 +127,28 @@ def brier(P: np.ndarray, y: np.ndarray) -> float:
 
 def fit_regulation() -> None:
     corpus = pl.concat([walk_season(s) for s in SCORE_SEASONS])
-    fit = corpus.filter(pl.col("season") == SCORE_FIT)
-    y_fit = outcome(fit)
-    res = minimize_scalar(lambda t: log_loss(three_way(fit, t), y_fit), bounds=(0.0, 2.0), method="bounded")
-    theta = float(res.x)
-    base = np.bincount(y_fit, minlength=3) / len(y_fit)
-    print(f"reg_draw_inflation = {theta:.4f}  <- 3-way log-loss MLE on {SCORE_FIT} ({fit.height} games)")
-    print(f"  {SCORE_FIT} outcome rates home/tie/away = {base.round(4).tolist()}")
+    theta = _theta_mle(corpus)
+    print(f"reg_draw_inflation = {theta:.4f}  <- 3-way log-loss MLE on {SCORE_SEASONS} ({corpus.height} games)")
+    print(f"  (reference) MLE on {SCORE_FIT} alone: {_theta_mle(corpus.filter(pl.col('season') == SCORE_FIT)):.4f}")
+    # Leave one season out: each holdout season is scored with a theta and flat outcome rates fitted on the
+    # other three seasons only, so no scored season is in its own fit.
     for season in SCORE_SEASONS[1:]:
-        d = corpus.filter(pl.col("season") == season)
-        y = outcome(d)
-        fitted, indep = three_way(d, theta), three_way(d, 0.0)
+        rest, d = corpus.filter(pl.col("season") != season), corpus.filter(pl.col("season") == season)
+        loso, y = _theta_mle(rest), outcome(d)
+        base = np.bincount(outcome(rest), minlength=3) / rest.height
+        fitted, indep = three_way(d, loso), three_way(d, 0.0)
         flat = np.tile(base, (len(y), 1))
         print(
-            f"  holdout {season} n={len(y)}: log loss {log_loss(fitted, y):.4f} "
-            f"(independent Poisson {log_loss(indep, y):.4f}, {SCORE_FIT} rates {log_loss(flat, y):.4f}); "
-            f"Brier {brier(fitted, y):.4f} ({brier(indep, y):.4f}, {brier(flat, y):.4f}); "
-            f"tie pred/actual {fitted[:, 1].mean():.4f}/{(y == 1).mean():.4f}; "
+            f"  LOSO {season} n={len(y)}: theta {loso:.4f}, other-season rates {base.round(4).tolist()}; "
+            f"log loss {log_loss(fitted, y):.4f} (independent Poisson {log_loss(indep, y):.4f}, "
+            f"flat rates {log_loss(flat, y):.4f}); Brier {brier(fitted, y):.4f} ({brier(indep, y):.4f}, "
+            f"{brier(flat, y):.4f}); tie pred/actual {fitted[:, 1].mean():.4f}/{(y == 1).mean():.4f}; "
             f"home-reg pred/actual {fitted[:, 0].mean():.4f}/{(y == 0).mean():.4f}"
         )
-    pooled = corpus.filter(pl.col("season") != SCORE_FIT)
-    print(
-        f"  (sensitivity) MLE on all four seasons: {_theta_mle(corpus):.4f}; on the holdout only: {_theta_mle(pooled):.4f}"
-    )
     set_constants(reg_draw_inflation=theta)
-    pooled.sort("game_id").write_parquet(FIXTURES / "regulation_holdout_2024_2026.parquet")
+    corpus.filter(pl.col("season") != SCORE_FIT).sort("game_id").write_parquet(
+        FIXTURES / "regulation_holdout_2024_2026.parquet"
+    )
 
 
 def _theta_mle(frame: pl.DataFrame) -> float:

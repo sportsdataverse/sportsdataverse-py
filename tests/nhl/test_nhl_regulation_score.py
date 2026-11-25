@@ -1,8 +1,10 @@
 """Regulation 3-way, final-score and total-goals distributions behind ``nhl_predict_games``.
 
 The oracle half reads ``tests/fixtures/nhl_prediction/regulation_holdout_2024_2026.parquet``: as-of pregame
-predictions and pbp-derived regulation / final scores for 2023-24 .. 2025-26, the seasons the draw inflation
-was NOT fitted on (``tools/models/nhl_prediction/fit_score_saves.py``; see the fixtures README).
+predictions and pbp-derived regulation / final scores for 2023-24 .. 2025-26. The shipped ``reg_draw_inflation``
+is fitted on all four seasons 2022-23 .. 2025-26, so it is never scored here. Each season is scored leave one
+season out instead: with the draw inflation and flat outcome rates ``tools/models/nhl_prediction/fit_score_saves.py``
+fits on the other three seasons (see the fixtures README).
 """
 
 from __future__ import annotations
@@ -27,8 +29,13 @@ from sportsdataverse.nhl.nhl_market import (
 from sportsdataverse.nhl.nhl_prediction_constants import get_constants
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "nhl_prediction" / "regulation_holdout_2024_2026.parquet"
-# 2022-23 (the fit season) regulation outcome rates, home / tie / away, printed by fit_score_saves.py.
-FIT_SEASON_RATES = np.array([0.3952, 0.2402, 0.3646])
+# Leave one season out, printed by fit_score_saves.py: for each held-out season, the draw-inflation MLE and the
+# home / tie / away regulation rates on the other three of 2022-23 .. 2025-26.
+LOSO = {
+    2024: (0.5601, np.array([0.4182, 0.2315, 0.3502])),
+    2025: (0.5696, np.array([0.4068, 0.2324, 0.3608])),
+    2026: (0.4457, np.array([0.4266, 0.2178, 0.3556])),
+}
 
 
 def _preds(p: list[float], total: list[float]) -> pl.DataFrame:
@@ -128,37 +135,41 @@ def _log_loss(P: np.ndarray, y: np.ndarray) -> float:
     return float(-np.mean(np.log(P[np.arange(len(y)), y])))
 
 
-def _three_way(frame: pl.DataFrame) -> np.ndarray:
+def _three_way(frame: pl.DataFrame, theta: float, monkeypatch: pytest.MonkeyPatch) -> np.ndarray:
+    monkeypatch.setitem(
+        const_mod.LEAGUE_CONSTANTS, "nhl", replace(const_mod.LEAGUE_CONSTANTS["nhl"], reg_draw_inflation=theta)
+    )
     out = _with_regulation_outcomes(frame, "nhl")
     return out.select("home_reg_win_prob", "reg_tie_prob", "away_reg_win_prob").to_numpy()
 
 
-def test_holdout_three_way_beats_independent_poisson_and_base_rates(holdout, monkeypatch):
-    """Per holdout season, log loss of the shipped model < independent Poisson < flat 2022-23 rates.
+def test_leave_one_season_out_beats_independent_poisson_and_flat_rates(holdout, monkeypatch):
+    """Each held-out season: log loss with its leave-one-out draw inflation < independent Poisson < flat rates.
 
-    Observed (fit_score_saves.py): 1.0343 / 1.0419 / 1.0594 against 1.0380 / 1.0442 / 1.0838 and
-    1.0615 / 1.0577 / 1.0808 for 2023-24 / 2024-25 / 2025-26.
+    Observed (fit_score_saves.py): 1.0324 / 1.0401 / 1.0619 against 1.0380 / 1.0442 / 1.0838 for independent
+    Poissons and 1.0598 / 1.0548 / 1.0834 for the other seasons' flat rates (2023-24 / 2024-25 / 2025-26).
     """
-    fitted = {s: _three_way(d) for (s,), d in holdout.group_by("season")}
-    flat = replace(const_mod.LEAGUE_CONSTANTS["nhl"], reg_draw_inflation=0.0)
-    monkeypatch.setitem(const_mod.LEAGUE_CONSTANTS, "nhl", flat)
     for (season,), d in holdout.group_by("season"):
+        theta, rates = LOSO[season]
         y = _outcome(d)
-        base = _log_loss(np.tile(FIT_SEASON_RATES, (len(y), 1)), y)
-        indep = _log_loss(_three_way(d), y)
-        model = _log_loss(fitted[season], y)
+        model = _log_loss(_three_way(d, theta, monkeypatch), y)
+        indep = _log_loss(_three_way(d, 0.0, monkeypatch), y)
+        flat = _log_loss(np.tile(rates, (len(y), 1)), y)
         assert model < indep, (season, model, indep)
-        assert model < base, (season, model, base)
+        assert model < flat, (season, model, flat)
 
 
-def test_holdout_tie_probability_calibration(holdout):
-    """Pooled 2023-24 .. 2025-26: mean predicted tie 0.244 against 0.221 observed.
+def test_leave_one_season_out_tie_calibration(holdout, monkeypatch):
+    """Pooled over the three held-out seasons: mean predicted tie 0.2285 against 0.2207 observed.
 
     The tie rate itself moves between seasons (0.240 / 0.208 / 0.206 / 0.249 for 2022-23 .. 2025-26, about
-    3 standard errors apart), so the gate is 0.03 on the pooled mean, not a per-season band. The tie
-    probability barely separates games (the top and bottom predicted-tie thirds tie at 0.226 / 0.227), so
-    the 3-way gain over independent Poissons is in its level, not in ranking games.
+    3 standard errors apart), so per season the leave-one-out prediction runs 2.4 / 2.8 points high and 3.0
+    low; the gate is on the pooled mean, 0.02 (about 3 pooled standard errors). The tie probability barely
+    separates games (the top and bottom predicted-tie thirds tie at 0.226 / 0.227), so the gain over
+    independent Poissons is in its level, not in ranking games.
     """
-    P = _three_way(holdout)
-    y = _outcome(holdout)
-    assert abs(P[:, 1].mean() - (y == 1).mean()) < 0.03
+    predicted, tied = [], []
+    for (season,), d in holdout.group_by("season"):
+        predicted.append(_three_way(d, LOSO[season][0], monkeypatch)[:, 1])
+        tied.append(_outcome(d) == 1)
+    assert abs(np.concatenate(predicted).mean() - np.concatenate(tied).mean()) < 0.02
