@@ -1,0 +1,478 @@
+{
+ "id": 2025020026,
+ "season": 20252026,
+ "gameType": 2,
+ "gameDate": "2025-10-11",
+ "gameState": "OFF",
+ "awayTeam": {
+  "id": 1,
+  "abbrev": "NJD",
+  "score": 5
+ },
+ "homeTeam": {
+  "id": 14,
+  "abbrev": "TBL",
+  "score": 3
+ },
+ "playerByGameStats": {
+  "awayTeam": {
+   "forwards": [
+    {
+     "playerId": 8479996,
+     "sweaterNumber": 12,
+     "name": {
+      "default": "C. Glass"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 2,
+     "sog": 0
+    },
+    {
+     "playerId": 8480002,
+     "sweaterNumber": 13,
+     "name": {
+      "default": "N. Hischier"
+     },
+     "position": "C",
+     "goals": 1,
+     "assists": 1,
+     "plusMinus": 2,
+     "sog": 3
+    },
+    {
+     "playerId": 8476822,
+     "sweaterNumber": 14,
+     "name": {
+      "default": "L. Glendening"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -2,
+     "sog": 0
+    },
+    {
+     "playerId": 8479772,
+     "sweaterNumber": 15,
+     "name": {
+      "default": "Z. MacEwen",
+      "cs": "Z. Macewen",
+      "de": "Z. Macewen",
+      "es": "Z. Macewen",
+      "fi": "Z. Macewen",
+      "sk": "Z. Macewen",
+      "sv": "Z. Macewen"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8477015,
+     "sweaterNumber": 16,
+     "name": {
+      "default": "C. Brown"
+     },
+     "position": "R",
+     "goals": 2,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 3
+    },
+    {
+     "playerId": 8476292,
+     "sweaterNumber": 18,
+     "name": {
+      "default": "O. Palat",
+      "cs": "O. Palát",
+      "sk": "O. Palát"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 2
+    },
+    {
+     "playerId": 8478414,
+     "sweaterNumber": 28,
+     "name": {
+      "default": "T. Meier"
+     },
+     "position": "R",
+     "goals": 1,
+     "assists": 1,
+     "plusMinus": 1,
+     "sog": 3
+    },
+    {
+     "playerId": 8481032,
+     "sweaterNumber": 47,
+     "name": {
+      "default": "P. Cotter"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -2,
+     "sog": 0
+    },
+    {
+     "playerId": 8479407,
+     "sweaterNumber": 63,
+     "name": {
+      "default": "J. Bratt"
+     },
+     "position": "L",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": 1,
+     "sog": 3
+    },
+    {
+     "playerId": 8481721,
+     "sweaterNumber": 81,
+     "name": {
+      "default": "A. Gritsyuk"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 2,
+     "plusMinus": 1,
+     "sog": 3
+    },
+    {
+     "playerId": 8481559,
+     "sweaterNumber": 86,
+     "name": {
+      "default": "J. Hughes"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 7
+    },
+    {
+     "playerId": 8482110,
+     "sweaterNumber": 91,
+     "name": {
+      "default": "D. Mercer"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 3,
+     "sog": 0
+    }
+   ],
+   "defense": [
+    {
+     "playerId": 8475455,
+     "sweaterNumber": 5,
+     "name": {
+      "default": "B. Dillon"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "playerId": 8476462,
+     "sweaterNumber": 7,
+     "name": {
+      "default": "D. Hamilton"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 1,
+     "sog": 1
+    },
+    {
+     "playerId": 8483495,
+     "sweaterNumber": 17,
+     "name": {
+      "default": "S. Nemec",
+      "cs": "Š. Nemec",
+      "sk": "Š. Nemec"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8477488,
+     "sweaterNumber": 22,
+     "name": {
+      "default": "B. Pesce"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "playerId": 8482684,
+     "sweaterNumber": 43,
+     "name": {
+      "default": "L. Hughes"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 2,
+     "plusMinus": 2,
+     "sog": 2
+    },
+    {
+     "playerId": 8478399,
+     "sweaterNumber": 71,
+     "name": {
+      "default": "J. Siegenthaler"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 1,
+     "sog": 0
+    }
+   ]
+  },
+  "homeTeam": {
+   "forwards": [
+    {
+     "playerId": 8483447,
+     "sweaterNumber": 14,
+     "name": {
+      "default": "C. Geekie"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8478010,
+     "sweaterNumber": 21,
+     "name": {
+      "default": "B. Point"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": -2,
+     "sog": 0
+    },
+    {
+     "playerId": 8477416,
+     "sweaterNumber": 22,
+     "name": {
+      "default": "O. Bjorkstrand"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": -1,
+     "sog": 1
+    },
+    {
+     "playerId": 8480995,
+     "sweaterNumber": 29,
+     "name": {
+      "default": "P. Holmberg"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "playerId": 8476826,
+     "sweaterNumber": 37,
+     "name": {
+      "default": "Y. Gourde"
+     },
+     "position": "C",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 2
+    },
+    {
+     "playerId": 8479542,
+     "sweaterNumber": 38,
+     "name": {
+      "default": "B. Hagel"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "playerId": 8482070,
+     "sweaterNumber": 41,
+     "name": {
+      "default": "M. Chaffee"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "playerId": 8477404,
+     "sweaterNumber": 59,
+     "name": {
+      "default": "J. Guentzel"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 4
+    },
+    {
+     "playerId": 8482090,
+     "sweaterNumber": 62,
+     "name": {
+      "default": "J. Finley"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "playerId": 8478519,
+     "sweaterNumber": 71,
+     "name": {
+      "default": "A. Cirelli"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8476453,
+     "sweaterNumber": 86,
+     "name": {
+      "default": "N. Kucherov",
+      "cs": "N. Kučerov",
+      "fi": "N. Kutsherov",
+      "sk": "N. Kučerov"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -3,
+     "sog": 1
+    },
+    {
+     "playerId": 8482201,
+     "sweaterNumber": 93,
+     "name": {
+      "default": "G. Goncalves"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 0,
+     "sog": 0
+    }
+   ],
+   "defense": [
+    {
+     "playerId": 8481719,
+     "sweaterNumber": 24,
+     "name": {
+      "default": "M. Crozier"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 2,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "playerId": 8474151,
+     "sweaterNumber": 27,
+     "name": {
+      "default": "R. McDonagh"
+     },
+     "position": "D",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 1
+    },
+    {
+     "playerId": 8478178,
+     "sweaterNumber": 43,
+     "name": {
+      "default": "D. Raddysh"
+     },
+     "position": "D",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": -2,
+     "sog": 2
+    },
+    {
+     "playerId": 8475167,
+     "sweaterNumber": 77,
+     "name": {
+      "default": "V. Hedman"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 1,
+     "sog": 1
+    },
+    {
+     "playerId": 8482929,
+     "sweaterNumber": 78,
+     "name": {
+      "default": "E. Lilleberg"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -2,
+     "sog": 0
+    },
+    {
+     "playerId": 8478416,
+     "sweaterNumber": 81,
+     "name": {
+      "default": "E. Cernak",
+      "cs": "E. Černák",
+      "sk": "E. Černák"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 1
+    }
+   ]
+  }
+ }
+}
