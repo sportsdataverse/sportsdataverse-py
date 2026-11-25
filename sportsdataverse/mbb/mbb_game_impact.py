@@ -114,8 +114,9 @@ def ncaa_impact_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: st
         is_free_throw=pl.col("event_type") == "Free Throw",
         is_foul=pl.col("foul_class").is_not_null(),
         period="period",
-        clock="clock",
-    ).drop("period", "clock", "order")
+        clock_ran=pl.col("_clock_ran"),
+        clock="_reading",
+    ).drop("period", "clock", "order", "_reading", "_clock_ran")
     parts = [events.select(list(_ROWS))]
     if possessions.height:
         parts.append(_possession_rows(possessions, events["game_id"].unique()))
@@ -178,6 +179,10 @@ def _events(pbp: pl.DataFrame, league: str) -> pl.DataFrame:
             "period",
             pl.when(is_last).then(0.0).otherwise(end - elapsed).alias("clock"),
             pl.col("_order").cast(pl.Int64).alias("order"),
+            # the recorded reading, for the free-throw foul rule: ``clock`` is 0 on a period's last
+            # event and ``seconds`` carries its tail, so neither says when the event happened
+            elapsed.alias("_reading"),
+            (elapsed > start).cum_max().over(in_period).alias("_clock_ran"),
         )
     )
 

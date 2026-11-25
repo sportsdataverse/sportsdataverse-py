@@ -199,6 +199,7 @@ def credit_free_throws_to_foul_row(
     order: str | None = None,
     period: str | None = None,
     clock: str | None = None,
+    clock_ran: pl.Expr | None = None,
 ) -> pl.DataFrame:
     """Move each free throw's points onto the game's most recent foul row.
 
@@ -219,19 +220,21 @@ def credit_free_throws_to_foul_row(
             has run in its period (the twin's rule). None keeps the game-wide rule.
         clock: With ``period``, the clock-reading column: a free throw whose shooting foul is logged
             after it at the same reading takes that foul (the twin's rule).
+        clock_ran: With ``period``, True on a row once clock has run in its period (the twin's
+            argument). None derives it from ``seconds``.
 
     Returns:
         ``actions`` with the same rows in the same order and the free-throw points moved
         (plus ``ft_foul_order`` when ``order`` is given).
     """
     marked = actions.with_columns(pl.int_range(pl.len()).over(game).alias("_i")).with_columns(
-        _at_last_foul(pl.col("_i"), is_foul, game=game, period=period, clock=clock).alias("_f")
+        _at_last_foul(pl.col("_i"), is_foul, game=game, period=period, clock=clock, clock_ran=clock_ran).alias("_f")
     )
     moving = is_free_throw.fill_null(False) & pl.col("_f").is_not_null()
     if order is not None:
         marked = marked.with_columns(
             pl.when(moving)
-            .then(_at_last_foul(pl.col(order), is_foul, game=game, period=period, clock=clock))
+            .then(_at_last_foul(pl.col(order), is_foul, game=game, period=period, clock=clock, clock_ran=clock_ran))
             .cast(pl.Int64)
             .alias("ft_foul_order")
         )

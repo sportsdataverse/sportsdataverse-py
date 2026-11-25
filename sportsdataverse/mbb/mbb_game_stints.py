@@ -163,8 +163,9 @@ def ncaa_stint_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: str
         is_foul=pl.col("foul_class").is_not_null(),
         order="order",
         period="period",
-        clock="clock",
-    )
+        clock_ran=pl.col("_clock_ran"),
+        clock="_reading",
+    ).drop("_reading", "_clock_ran")
     starts = pl.DataFrame(
         schema={"game_id": pl.Utf8(), "order": pl.Int64(), "home_poss": pl.Int64(), "away_poss": pl.Int64()}
     )

@@ -110,7 +110,8 @@ def ncaa_lineup_count_rows(pbp: pl.DataFrame, *, league: str = "mens") -> pl.Dat
         "foul_class",
         "period",
         pl.col("game_seconds").alias("_clock"),
-        (pl.col("game_seconds").cast(pl.Float64) > start).alias("_clock_ran"),
+        # once clock has run in a period it has run: a later clock correction does not undo it
+        (pl.col("game_seconds").cast(pl.Float64) > start).cum_max().over("contest_id", "period").alias("_clock_ran"),
         # The foul-lineup helper moves points and splits clocked rows; with neither, it only moves
         # the slots of each free throw.
         pl.lit(0.0).alias("seconds"),
