@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Play-by-play processing: build_nfl–calculate_nfl"
-sidebar_label: "Play-by-play processing: build_nfl–calculate_nfl"
+title: "NFL — additional Python functions — Play-by-play processing: build_nfl"
+sidebar_label: "Play-by-play processing: build_nfl"
 sidebar_position: 12
-description: "NFL — additional Python functions — Play-by-play processing: build_nfl–calculate_nfl — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Play-by-play processing: build_nfl — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Play-by-play processing: build_nfl–calculate_nfl
+# NFL — additional Python functions — Play-by-play processing: build_nfl
 
 ### build_nfl_season {#build_nfl_season}
 
@@ -42,16 +42,16 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 
 | col_name | type | description |
 |---|---|---|
-| `game_play_number` | Int64 |  |
+| `game_play_number` | Int64 | 1-based order of the row in the game, numbered after duplicate plays are dropped (it skips the coin-toss and end-of-period / half / game rows removed later). |
 | `id` | Int64 | ID of the player in the 'name' column. |
-| `sequenceNumber` | Int64 |  |
-| `text` | String |  |
-| `awayScore` | Int64 |  |
-| `homeScore` | Int64 |  |
+| `sequenceNumber` | Int64 | ESPN's sequenceNumber, the feed's ordering number for the play within the game. |
+| `text` | String | ESPN's play description, with the HTML entities `&apos;`, `&quot;` and `&amp;` unescaped. |
+| `awayScore` | Int64 | Away team's running score after the play -- ESPN's awayScore with feed errors repaired (a score rises only on or right after a scoring play). |
+| `homeScore` | Int64 | Home team's running score after the play -- ESPN's homeScore with feed errors repaired (a score rises only on or right after a scoring play). |
 | `scoringPlay` | Boolean | ESPN flag marking the play as a scoring play. |
-| `priority` | Boolean |  |
-| `modified` | String |  |
-| `wallclock` | String |  |
+| `priority` | Boolean | ESPN's priority flag for the play, passed through as sent. |
+| `modified` | String | ESPN's modified timestamp for the play record (ISO 8601, UTC). |
+| `wallclock` | String | ESPN's wallclock -- the real-world time of the play (ISO 8601, UTC). |
 | `teamParticipants` | Int64 | Raw ESPN team-level participants payload carried through from the plays feed (stringified). |
 | `isPenalty` | Boolean | ESPN's per-play flag that a penalty occurred on the play. |
 | `statYardage` | Int64 | Yardage ESPN credits to the play for statistical purposes. |
@@ -110,7 +110,7 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `seasonType` | Int64 | ESPN season type for the game (2 = regular season, 3 = postseason). |
 | `week` | Int64 | Season week. |
-| `status_type_completed` | Boolean |  |
+| `status_type_completed` | Boolean | True when ESPN's game header marks the game completed (one value per game). |
 | `homeTeamId` | Int64 | ESPN's home-team Id for the game, stamped on every play. |
 | `awayTeamId` | Int64 | ESPN's away-team Id for the game, stamped on every play. |
 | `homeTeamName` | String | ESPN's home-team Name for the game, stamped on every play. |
@@ -129,12 +129,12 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `homeTeamSpread` | Float64 | ESPN's home-team Spread for the game, stamped on every play. |
 | `clock.minutes` | Int64 | Minutes remaining on the game clock at the play. |
 | `clock.seconds` | Int64 | Seconds component of the game clock at the play. |
-| `half` | Int64 |  |
+| `half` | Int64 | Half of the game -- 1 for periods 1-2, 2 for period 3 onward (overtime included). |
 | `lag_half` | Int64 | Value of half on the previous play, used for sequence-aware derivations. |
 | `lead_half` | Int64 | Value of half on the next play, used for sequence-aware derivations. |
 | `start.TimeSecsRem` | Int64 | Seconds remaining in the half from ESPN's clock stamp for this play, which is the end-of-play time in 2005 and 2007+ (the snap time in 2004 and most of 2006); tops out at 1800. |
 | `start.adj_TimeSecsRem` | Int64 | ESPN's `adj_TimeSecsRem` value for the play state at the start of the play. |
-| `orig_play_type` | String |  |
+| `orig_play_type` | String | ESPN's play type (type.text) as the feed sent it, before the processor re-classifies plays (only a mistyped two-minute warning is relabelled first). |
 | `lead_text` | String | Value of text on the next play, used for sequence-aware derivations. |
 | `lead_start_team` | String | Value of start_team on the next play, used for sequence-aware derivations. |
 | `lead_start_yardsToEndzone` | Int64 | Value of start_yardsToEndzone on the next play, used for sequence-aware derivations. |
@@ -165,11 +165,11 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `end.posTeamTimeouts` | Int64 | ESPN's `posTeamTimeouts` value for the play state at the end of the play. |
 | `end.defPosTeamTimeouts` | Int64 | ESPN's `defPosTeamTimeouts` value for the play state at the end of the play. |
 | `firstHalfKickoffTeamId` | Int64 | ESPN id of the team that kicked the opening kickoff (it receives the second-half kickoff), one value per game. |
-| `period` | Int64 |  |
+| `period` | Int64 | Quarter of the game from ESPN's period.number (5 and up in overtime), with out-of-place periods repaired. |
 | `start.yard` | Int64 | ESPN's `yard` value for the play state at the start of the play. |
 | `end.yard` | Int64 | ESPN's `yard` value for the play state at the end of the play. |
 | `lag_scoringPlay` | Boolean | Value of scoringPlay on the previous play, used for sequence-aware derivations. |
-| `end_of_half` | Boolean |  |
+| `end_of_half` | Boolean | True on the play that ends a half -- the first half's last play, regulation's last play before overtime, and a completed game's last play (clock stoppages excluded). |
 | `down_1` | Boolean | True when it is 1st down at the start of the play. |
 | `down_2` | Boolean | True when it is 2nd down at the start of the play. |
 | `down_3` | Boolean | True when it is 3rd down at the start of the play. |
@@ -178,36 +178,36 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `down_2_end` | Boolean | True when it is 2nd down at the end of the play. |
 | `down_3_end` | Boolean | True when it is 3rd down at the end of the play. |
 | `down_4_end` | Boolean | True when it is 4th down at the end of the play. |
-| `scoring_play` | Boolean |  |
-| `td_play` | Boolean |  |
+| `scoring_play` | Boolean | True when ESPN's play type is in the processor's scoring list (touchdowns other than kickoff returns, a made field goal, safeties, a defensive two-point return); a try is not one. |
+| `td_play` | Boolean | True when the play text or type names a touchdown that stood ("touchdown", "for a TD"). |
 | `touchdown` | Boolean | Binary indicator for if the play resulted in a TD. |
 | `td_check` | Boolean | Internal flag used while reconciling whether the play produced a touchdown. |
 | `safety` | Boolean | Binary indicator for whether or not a safety occurred. |
-| `fumble_vec` | Boolean |  |
+| `fumble_vec` | Boolean | True when the play text mentions a fumble. |
 | `forced_fumble` | Boolean | True when the defense forced a fumble on the play. |
-| `kickoff_play` | Boolean |  |
-| `kickoff_tb` | Boolean |  |
-| `kickoff_onside` | Boolean |  |
-| `kickoff_oob` | Boolean |  |
+| `kickoff_play` | Boolean | True when ESPN's play type is a kickoff type (kickoff, kickoff return or touchdown, kicking-team recovery, kickoff safety, kickoff penalty). |
+| `kickoff_tb` | Boolean | True on a kickoff whose text says touchback (or ends in "kickoff"). |
+| `kickoff_onside` | Boolean | True on a kickoff whose text calls it onside. |
+| `kickoff_oob` | Boolean | True on a kickoff whose text says it went out of bounds. |
 | `kickoff_fair_catch` | Boolean | Binary indicator for if the kickoff was caught with a fair catch. |
 | `kickoff_downed` | Boolean | Binary indicator for if the kickoff was downed. |
-| `kick_play` | Boolean |  |
-| `kickoff_safety` | Boolean |  |
-| `punt` | Boolean |  |
-| `punt_play` | Boolean |  |
-| `punt_tb` | Boolean |  |
-| `punt_oob` | Boolean |  |
+| `kick_play` | Boolean | True when the play text mentions a kick (kickoffs, and any text naming a kick). |
+| `kickoff_safety` | Boolean | True on a safety whose text mentions a kickoff (a blocked punt or penalty excluded). |
+| `punt` | Boolean | True when ESPN's play type is a punt type (punt, punt return or touchdown, blocked punt, punt safety, ...). |
+| `punt_play` | Boolean | True when the play text mentions a punt (including the "(Punt formation)" annotation). |
+| `punt_tb` | Boolean | True on a punt whose text says touchback. |
+| `punt_oob` | Boolean | True on a punt whose text says it went out of bounds. |
 | `punt_fair_catch` | Boolean | Binary indicator for if the punt was caught with a fair catch. |
 | `punt_downed` | Boolean | Binary indicator for if the punt was downed. |
-| `punt_safety` | Boolean |  |
+| `punt_safety` | Boolean | True on a safety whose text mentions a punt. |
 | `punt_blocked` | Boolean | Binary indicator for if the punt was blocked. |
-| `penalty_safety` | Boolean |  |
+| `penalty_safety` | Boolean | True on a safety that ESPN types "Penalty". |
 | `rush` | Boolean | Binary indicator if the play was a rushing play. |
 | `pass` | Boolean | Binary indicator if the play was a pass play (sacks and scrambles included). |
-| `sack_vec` | Boolean |  |
-| `pos_team` | Int64 |  |
-| `def_pos_team` | Int64 |  |
-| `is_home` | Boolean |  |
+| `sack_vec` | Boolean | True when ESPN types the play a sack, or a fumble recovery on a pass whose text says "sacked". |
+| `pos_team` | Int64 | ESPN team id of the team in possession at the start of the play (the receiving team on a kickoff). |
+| `def_pos_team` | Int64 | ESPN team id of the team on defense at the start of the play (the kicking team on a kickoff). |
+| `is_home` | Boolean | True when the possession team (pos_team) is the home team. |
 | `lag_HA_score_diff` | Int64 | Value of HA_score_diff on the previous play, used for sequence-aware derivations. |
 | `HA_score_diff` | Int64 | Home score minus away score for the play. |
 | `net_HA_score_pts` | Int64 | Net points the play added to the home-minus-away score margin. |
@@ -219,66 +219,66 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `start.awayScore` | Int64 | ESPN's `awayScore` value for the play state at the start of the play. |
 | `end.homeScore` | Int64 | ESPN's `homeScore` value for the play state at the end of the play. |
 | `end.awayScore` | Int64 | ESPN's `awayScore` value for the play state at the end of the play. |
-| `pos_team_score` | Int64 |  |
-| `def_pos_team_score` | Int64 |  |
+| `pos_team_score` | Int64 | Possession team's score after the play. |
+| `def_pos_team_score` | Int64 | Defensive team's score after the play. |
 | `start.pos_team_score` | Int64 | ESPN's `pos_team_score` value for the play state at the start of the play. |
 | `start.def_pos_team_score` | Int64 | ESPN's `def_pos_team_score` value for the play state at the start of the play. |
 | `start.pos_score_diff` | Int64 | ESPN's `pos_score_diff` value for the play state at the start of the play. |
 | `end.pos_team_score` | Int64 | ESPN's `pos_team_score` value for the play state at the end of the play. |
 | `end.def_pos_team_score` | Int64 | ESPN's `def_pos_team_score` value for the play state at the end of the play. |
 | `end.pos_score_diff` | Int64 | ESPN's `pos_score_diff` value for the play state at the end of the play. |
-| `lag_pos_team` | Int64 |  |
-| `lead_pos_team` | Int64 |  |
+| `lag_pos_team` | Int64 | Previous row's possession team id; this row's own on the first row. |
+| `lead_pos_team` | Int64 | Next row's possession team id; null on the last row. |
 | `lead_pos_team2` | Int64 | Value of pos_team 2 plays ahead, used for sequence-aware derivations. |
-| `pos_score_diff` | Int64 |  |
-| `lag_pos_score_diff` | Int64 |  |
-| `pos_score_pts` | Int64 |  |
-| `pos_score_diff_start` | Int64 |  |
+| `pos_score_diff` | Int64 | Possession team's score minus the defense's, after the play. |
+| `lag_pos_score_diff` | Int64 | Previous row's pos_score_diff (from that row's possession team's side); 0 on the first row. |
+| `pos_score_pts` | Int64 | Points the play put on the board, from the possession team's side (negative when the defense scored). |
+| `pos_score_diff_start` | Int64 | Possession team's score differential before the play -- the previous row's pos_score_diff, sign-flipped when that row's possession team was the other team. |
 | `start.pos_team_receives_2H_kickoff` | Boolean | ESPN's `pos_team_receives_2H_kickoff` value for the play state at the start of the play. |
 | `end.pos_team_receives_2H_kickoff` | Boolean | ESPN's `pos_team_receives_2H_kickoff` value for the play state at the end of the play. |
-| `change_of_poss` | Boolean |  |
-| `penalty_flag` | Boolean |  |
-| `penalty_declined` | Boolean |  |
-| `penalty_no_play` | Boolean |  |
-| `penalty_offset` | Boolean |  |
-| `penalty_1st_conv` | Boolean |  |
+| `change_of_poss` | Boolean | True when ESPN's end-of-play team differs from the start-of-play possession team. |
+| `penalty_flag` | Boolean | True when ESPN types the play "Penalty" or the text reads "PENALTY on". |
+| `penalty_declined` | Boolean | True when the play text mentions a penalty that was declined. |
+| `penalty_no_play` | Boolean | True when the penalty wiped the play out ("No Play" / "nullified by penalty"). |
+| `penalty_offset` | Boolean | True when the play text mentions offsetting penalties. |
+| `penalty_1st_conv` | Boolean | True when an accepted foul by the defense gave the offense a first down -- an automatic first-down foul, or one whose yardage reached the line to gain (never on a kickoff, touchdown, try, possession change or offsetting fouls). |
 | `penalty_in_text` | Boolean | True when the play description mentions a penalty. |
-| `penalty_detail` | String |  |
-| `penalty_text` | String |  |
-| `yds_penalty` | String |  |
+| `penalty_detail` | String | Name of the foul -- ESPN's penalty.type.text when the feed has it, else matched from the text; "Offsetting" / "Declined" / "Missing" when no foul name is found, null on plays with no penalty. |
+| `penalty_text` | String | The play text after "Penalty" (" on NE-M.Onwenu, False Start, 5 yards, ..."); null when no penalty is flagged. |
+| `yds_penalty` | String | Penalty yards as a signed whole number in text form -- from the penalty clause ("5 yards") or ESPN's penalty.yards, else ESPN's statYardage less the play's own gain; null when no penalty or an implausible number. |
 | `penalty_count` | Int64 | Number of penalties flagged on the play (0-4 observed). |
 | `penalty_declined_count` | Int64 | Number of the flagged penalties that were declined. |
 | `penalty_all_declined` | Boolean | Whether every penalty flagged on the play was declined. |
 | `penalty_enforcement` | String | How the penalty was resolved: one of no_play, declined, offsetting, negating_foul, play_stands, unknown. |
 | `penalty_negated_play` | Boolean | Whether the penalty negated the play's result. |
 | `sack` | Boolean | Binary indicator for if the play ended in a sack. |
-| `int` | Boolean |  |
-| `int_td` | Boolean |  |
-| `completion` | Boolean |  |
+| `int` | Boolean | True when ESPN types the play "Interception Return" or "Interception Return Touchdown". |
+| `int_td` | Boolean | True when ESPN types the play "Interception Return Touchdown". |
+| `completion` | Boolean | True on a completed pass; False when a penalty wiped the play out. |
 | `pass_attempt` | Boolean | Binary indicator for if the play was a pass attempt (includes sacks). |
-| `target` | Boolean |  |
+| `target` | Boolean | True on a pass attempt that targeted a receiver (any pass that is not a sack); False when a penalty wiped the play out. |
 | `pass_breakup` | Boolean | True when a defender broke up the pass. |
-| `pass_td` | Boolean |  |
-| `rush_td` | Boolean |  |
+| `pass_td` | Boolean | True on the offense's passing touchdown; False on a return touchdown and on a touchdown that did not stand. |
+| `rush_td` | Boolean | True on the offense's rushing touchdown; False on a return touchdown and on a touchdown that did not stand. |
 | `pass_depth` | String | Thrown-pass depth parsed from ESPN play text ("short" or "deep"); null when the text omits it (sacks, screens, pre-2025 text). |
 | `pass_direction` | String | Pass direction parsed from ESPN play text ("left", "middle", or "right"); null when the text omits it. |
 | `rush_direction` | String | Rush direction parsed from ESPN play text ("left", "middle", or "right"); null when the text omits it. |
-| `turnover_vec` | Boolean |  |
-| `offense_score_play` | Boolean |  |
-| `defense_score_play` | Boolean |  |
-| `downs_turnover` | Boolean |  |
-| `yds_punted` | Int64 |  |
-| `yds_punt_gained` | Int64 |  |
+| `turnover_vec` | Boolean | True when ESPN's play type is a turnover type (interception, opponent fumble recovery, blocked or missed field goal, blocked punt, punt-return touchdown, ...). |
+| `offense_score_play` | Boolean | True when ESPN's play type is an offensive score (passing, rushing or kick-return touchdown, made field goal, ...). |
+| `defense_score_play` | Boolean | True when ESPN's play type is a defensive score (return touchdown, safety, defensive two-point return, ...). |
+| `downs_turnover` | Boolean | True on a 4th-down rush, pass or sack whose ESPN statYardage fell short of the distance and drew no penalty first down. |
+| `yds_punted` | Int64 | Distance of the punt in yards ("punts 46 yards"), 0 on a blocked punt; null on other plays. |
+| `yds_punt_gained` | Int64 | ESPN's statYardage on a punt play; null on other plays. |
 | `fg_attempt` | Boolean | True when the play was a field-goal attempt. |
-| `fg_made` | Boolean |  |
-| `yds_fg` | Int64 |  |
-| `pos_unit` | String |  |
-| `def_pos_unit` | String |  |
-| `lead_play_type` | String |  |
+| `fg_made` | Boolean | True when ESPN types the play "Field Goal Good". |
+| `yds_fg` | Int64 | Distance of the field-goal attempt in yards, parsed from the play text; null on other plays. |
+| `pos_unit` | String | Possession team's unit on the play -- "Punt Offense", "Kickoff Return", "Field Goal Offense" or "Offense". |
+| `def_pos_unit` | String | Defensive unit on the play -- "Punt Return", "Kickoff Defense", "Field Goal Defense" or "Defense". |
+| `lead_play_type` | String | Play type (type.text, as the processor has re-typed it) of the next row; null on the last row. |
 | `sp` | Boolean | Binary indicator for whether or not a score occurred on the play. |
 | `play` | Boolean | Binary indicator: 1 if the play was a 'normal' play (including penalties), 0 otherwise. |
 | `scrimmage_play` | Boolean | True when the play is a play from scrimmage rather than a special-teams or administrative row. |
-| `change_of_pos_team` | Boolean |  |
+| `change_of_pos_team` | Boolean | True when the next row's possession team differs from this one's, and on the game's last row. |
 | `pos_score_diff_end` | Int64 | Score differential from the possessing team's perspective at the end of the play. |
 | `fumble_lost` | Boolean | Binary indicator for if the fumble was lost. |
 | `fumble_recovered` | Boolean | True when a fumble on the play was recovered. |
@@ -292,37 +292,37 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `two_point_attempt` | Boolean | Binary indicator for two point conversion attempt. |
 | `defensive_two_point_attempt` | Boolean | Binary indicator whether or not the defense was able to have an attempt on a two point conversion, this results following a turnover. |
 | `defensive_two_point_conv` | Boolean | Binary indicator whether or not the defense successfully scored on the two point conversion. |
-| `two_point_pass` | Boolean |  |
-| `two_point_rush` | Boolean |  |
-| `yds_rushed` | Int64 |  |
-| `yds_receiving` | Int64 |  |
-| `yds_int_return` | String |  |
-| `yds_kickoff` | Int64 |  |
-| `yds_kickoff_return` | Int64 |  |
-| `yds_punt_return` | Int64 |  |
-| `yds_fumble_return` | String |  |
-| `yds_sacked` | Int64 |  |
-| `sack_players` | String |  |
+| `two_point_pass` | Boolean | True on a two-point try whose text describes a pass. |
+| `two_point_rush` | Boolean | True on a two-point try whose text describes no pass. |
+| `yds_rushed` | Int64 | Rushing yards credited on a rush (ESPN's statYardage on a plain run, the gain to the spot of an offensive foul, 0 when a penalty wiped it out); null on non-rush plays. |
+| `yds_receiving` | Int64 | Receiving yards credited on a pass play (0 on an incompletion, sack or interception, the gain to the spot of an offensive foul); null on non-pass plays. |
+| `yds_int_return` | String | Yards the interception was returned (0 when the text gives none); null on other plays. |
+| `yds_kickoff` | Int64 | Distance of the kickoff in yards ("kicks 65 yards"); null on other plays. |
+| `yds_kickoff_return` | Int64 | Kickoff return yards (0 on a fair catch or no gain); on a touchback, the season's touchback yard line (the 30 in 2024); null on other plays. |
+| `yds_punt_return` | Int64 | Punt return yards (0 on a fair catch, touchback, downed or out-of-bounds punt); null on other plays. |
+| `yds_fumble_return` | String | Yards the recovering player returned the fumble (0 when the text gives none); null when there was no fumble. |
+| `yds_sacked` | Int64 | Yards lost on the sack, as a negative number; null on other plays. |
+| `sack_players` | String | The play text after "sacked by" on a sack or fumbled pass (the college phrasing); null when the text has none. |
 | `xp_kicker_player_name` | String | Name of the kicker attempting the extra point. |
 | `passer_player_name` | String | String name for the player that attempted the pass. |
 | `rusher_player_name` | String | String name for the player that attempted the run. |
 | `receiver_player_name` | String | String name for the targeted receiver. |
 | `sack_player_name` | String | String name of the player who recorded a solo sack. |
-| `sack_player_name2` | String |  |
-| `pass_breakup_player_name` | String |  |
+| `sack_player_name2` | String | Second defender on a split sack ("sack split by A and B") -- ESPN's second sackedBy participant, else parsed from the play text. |
+| `pass_breakup_player_name` | String | Name of the defender credited with defending the pass (not an interceptor) -- ESPN's per-play participant name, else parsed from the play text. |
 | `interception_player_name` | String | String name for the player that intercepted the pass. |
-| `fg_kicker_player_name` | String |  |
-| `fg_block_player_name` | String |  |
-| `fg_return_player_name` | String |  |
-| `kickoff_player_name` | String |  |
+| `fg_kicker_player_name` | String | Name of the field-goal kicker -- ESPN's per-play participant name, else parsed from the play text; null on other plays. |
+| `fg_block_player_name` | String | Name of the player who blocked the field goal, parsed from the play text; null when none. |
+| `fg_return_player_name` | String | Name of the player returning a blocked or missed field goal, parsed from the play text. |
+| `kickoff_player_name` | String | Name of the kicker on a kickoff, parsed from the play text ("C.Little kicks 65 yards ..."). |
 | `kickoff_return_player_name` | String | Name of the player returning the kickoff, when the play was returned. |
 | `punter_player_name` | String | String name for the punter. |
-| `punt_block_player_name` | String |  |
+| `punt_block_player_name` | String | Name of the player who blocked the punt, parsed from the play text; null when none. |
 | `punt_return_player_name` | String | Name of the player returning the punt, when the punt was returned. |
-| `punt_block_return_player_name` | String |  |
-| `fumble_player_name` | String |  |
-| `fumble_forced_player_name` | String |  |
-| `fumble_recovered_player_name` | String |  |
+| `punt_block_return_player_name` | String | Name of the player returning a blocked punt, parsed from the play text. |
+| `fumble_player_name` | String | Name of the player who fumbled or muffed, parsed from the play text; null on non-fumble plays. |
+| `fumble_forced_player_name` | String | Name of the player who forced the fumble -- ESPN's per-play participant name, else parsed from the play text. |
+| `fumble_recovered_player_name` | String | Name of the player who recovered the fumble -- ESPN's per-play participant name, else parsed from the play text. |
 | `kicking_team` | Int64 | Team id of the kicking team on kickoff, punt, and field-goal plays. |
 | `return_team` | Int64 | Team id of the returning side; set on interception, fumble, kickoff, punt, and blocked-kick returns. |
 | `fumble_or_muff` | Boolean | Whether the play includes a fumble or a muffed kick or punt (widened beyond ESPN's fumble play types). |
@@ -356,21 +356,21 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `penalty_side` | String | Which side committed the penalty -- 'off' (offense) or 'def' (defense). |
 | `penalty_yards_net` | Int64 | Net yardage assessed for the penalty, signed relative to the possession team (observed -25 to 25). |
 | `penalty_team_id` | Int64 | Team id of the side that committed the penalty. |
-| `lateral_player_name` | String |  |
-| `yds_lateral` | String |  |
+| `lateral_player_name` | String | After a completed pass, the player the ball was lateraled to ("Lateral to ..."); null otherwise. |
+| `yds_lateral` | String | After a completed pass, the yards gained by the player the ball was lateraled to; null otherwise. |
 | `yards_after_catch` | String | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
 | `air_yards` | String | Numeric value for distance in yards perpendicular to the line of scrimmage at where the targeted receiver either caught or didn't catch the ball. |
 | `air_yardsToEndzone` | String | Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025 or when unresolvable. |
 | `new_down` | Int64 | Down after the play, including any penalty enforcement. |
 | `new_distance` | Int64 | Distance to go after the play, including any penalty enforcement. |
-| `middle_8` | Boolean |  |
-| `rz_play` | Boolean |  |
+| `middle_8` | Boolean | True in the middle eight minutes -- the last four of the first half and the first four of the second (34:00 to 26:00 of game time remaining). |
+| `rz_play` | Boolean | True when the play starts 20 or fewer yards from the end zone. |
 | `under_2` | Boolean | Whether the play began with two minutes or less remaining in the half. |
 | `goal_to_go` | Boolean | Binary indicator for whether or not the posteam is in a goal down situation. |
-| `scoring_opp` | Boolean |  |
-| `stuffed_run` | Boolean |  |
+| `scoring_opp` | Boolean | True when the play starts 40 or fewer yards from the end zone. |
+| `stuffed_run` | Boolean | True on a play ESPN types "Rush" that gained zero or fewer yards. |
 | `stopped_run` | Boolean | True when the rush was stopped at or behind the line of scrimmage. |
-| `opportunity_run` | Boolean |  |
+| `opportunity_run` | Boolean | True on a rush that gained 4 or more yards. |
 | `highlight_run` | Boolean | True when the rush gained 8 or more yards. |
 | `adj_rush_yardage` | Int64 | Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the 2026-10 line-yards fix cap at 8. |
 | `line_yards` | Float64 | Yards credited to the offensive line on a rush, on the standard adjusted-line-yards band: 1.2x the yardage on a loss, all of yards 0-4, half of each yard from 5 to 10, and nothing beyond 10 (a 7-yard ceiling). Line, second-level and open-field yards sum to the carry on every gain. Assets published before the 2026-10 line-yards fix carry the old band (all of yards 0-3, half of 4-8, a 5.5-yard ceiling). |
@@ -397,11 +397,11 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `first_down_yards` | Boolean | Whether the play gained enough yardage to earn a first down. |
 | `first_down_penalty` | Boolean | Binary indicator for if a penalty converted the first down. |
 | `first_down_earned` | Boolean | Whether the play earned a first down by means other than yardage (e.g. by penalty). |
-| `new_series` | Boolean |  |
-| `firstD_by_kickoff` | Boolean |  |
-| `firstD_by_poss` | Boolean |  |
-| `firstD_by_penalty` | Boolean |  |
-| `firstD_by_yards` | Boolean |  |
+| `new_series` | Boolean | True on the first play of a series of downs -- a half's first row, a new drive, or the play after a first down earned by yards or penalty (cfbfastR's rule). |
+| `firstD_by_kickoff` | Boolean | Series-start flag (cfbfastR's rule) set on every kickoff; not an earned first down. |
+| `firstD_by_poss` | Boolean | Series-start flag (cfbfastR's rule), True on a possession's first play -- after a kickoff, punt, turnover, turnover on downs or scoring play, or a drive's first play that is not a kickoff; not an earned first down. |
+| `firstD_by_penalty` | Boolean | Series-start flag (cfbfastR's rule), True on the play after a first down earned by penalty with no change of possession (a timeout or end-of-period row in between is skipped). |
+| `firstD_by_yards` | Boolean | Series-start flag (cfbfastR's rule), True on the play after a first down earned by yards with no change of possession (a timeout or end-of-period row in between is skipped). |
 | `start.pos_team_spread` | Float64 | ESPN's `pos_team_spread` value for the play state at the start of the play. |
 | `start.elapsed_share` | Float64 | ESPN's `elapsed_share` value for the play state at the start of the play. |
 | `start.spread_time` | Float64 | ESPN's `spread_time` value for the play state at the start of the play. |
@@ -412,9 +412,9 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `pass_location` | String | String indicator for pass location: left, middle, or right. |
 | `shotgun` | Int64 | Binary indicator for whether or not the play was in shotgun formation. |
 | `no_huddle` | Int64 | Binary indicator for whether or not the play was in no_huddle formation. |
-| `pass_middle` | Int64 |  |
+| `pass_middle` | Int64 | 1 when the pass location parsed from the text is "middle", else 0. |
 | `down` | Int64 | The down for the given play. |
-| `distance` | Int64 |  |
+| `distance` | Int64 | Yards to go for a first down at the start of the play (10 on a kickoff). |
 | `start.yardsToEndzone.touchback` | Int64 | ESPN's `yardsToEndzone.touchback` value for the play state at the start of the play. |
 | `penalty_assessed_on_kickoff` | Boolean | Whether a penalty was assessed on a kickoff; such plays take the kickoff/touchback win-probability handling. |
 | `EP_start_touchback` | Float64 | Expected points the offense would have had from a touchback on this play. |
@@ -423,10 +423,10 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `EP_penalty_cf` | String | Counterfactual expected points for the penalty branch -- the EP had the alternative penalty outcome been taken (null unless a penalty decision existed). |
 | `penalty_cf_yardsToEndzone` | String | Yards to the end zone in the counterfactual penalty branch. |
 | `lag_EP_end` | Float64 | Value of EP_end on the previous play, used for sequence-aware derivations. |
-| `lag_change_of_pos_team` | Boolean |  |
+| `lag_change_of_pos_team` | Boolean | Previous row's change_of_pos_team within the game; False on the first row. |
 | `EP_between` | Float64 | Change in expected points across the play, before penalty adjustment. |
-| `EPA` | Float64 |  |
-| `def_EPA` | Float64 |  |
+| `EPA` | Float64 | Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules -- 0 on a clock stoppage; -EP_start on an unscored play that ends a half (this rule wins); otherwise plus EP_between (the gap from the previous play's end EP, sign-adjusted for a possession change) on a play whose text carries a penalty and that is neither a kickoff nor typed "Penalty". |
+| `def_EPA` | Float64 | EPA for the defensive team on the play (-1 * EPA). |
 | `EPA_scrimmage` | Float64 | EPA credited to the play on plays from scrimmage. |
 | `EPA_rush` | Float64 | EPA credited to the play on rush plays. |
 | `EPA_pass` | Float64 | EPA credited to the play on pass plays. |
@@ -467,17 +467,17 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `start.ExpScoreDiff_Time_Ratio` | Float64 | ESPN's `ExpScoreDiff_Time_Ratio` value for the play state at the start of the play. |
 | `end.ExpScoreDiff` | Float64 | ESPN's `ExpScoreDiff` value for the play state at the end of the play. |
 | `end.ExpScoreDiff_Time_Ratio` | Float64 | ESPN's `ExpScoreDiff_Time_Ratio` value for the play state at the end of the play. |
-| `wp_before` | Float64 |  |
+| `wp_before` | Float64 | Win probability before the play for the possession team (0-1), from the bundled spread-adjusted wp_spread model; a kickoff takes the touchback state's value. |
 | `wp_touchback` | Float64 | Win probability the offense would have had starting from a touchback. |
-| `wp_after` | Float64 |  |
-| `def_wp_before` | Float64 |  |
-| `home_wp_before` | Float64 |  |
-| `away_wp_before` | Float64 |  |
+| `wp_after` | Float64 | Win probability after the play for the team that had the ball at the snap (0-1), from the bundled wp_spread model; 1 or 0 on a completed game's last play. |
+| `def_wp_before` | Float64 | Defensive team's win probability before the play (1 - wp_before). |
+| `home_wp_before` | Float64 | Home team's win probability before the play (0-1). |
+| `away_wp_before` | Float64 | Away team's win probability before the play (0-1). |
 | `lead_wp_before` | Float64 | Value of wp_before on the next play, used for sequence-aware derivations. |
 | `lead_wp_before2` | Float64 | Value of wp_before 2 plays ahead, used for sequence-aware derivations. |
-| `def_wp_after` | Float64 |  |
-| `home_wp_after` | Float64 |  |
-| `away_wp_after` | Float64 |  |
+| `def_wp_after` | Float64 | Defensive team's win probability after the play (1 - wp_after). |
+| `home_wp_after` | Float64 | Home team's win probability after the play (0-1). |
+| `away_wp_after` | Float64 | Away team's win probability after the play (0-1). |
 | `wpa` | Float64 | Win probability added (WPA) for the posteam. |
 | `wp` | Float64 | Estimated win probability for the posteam given the current situation at the start of the given play. |
 | `vegas_wp` | Float64 | Estimated win probability for the posteam given the current situation at the start of the given play, incorporating pre-game Vegas line. |
@@ -522,7 +522,7 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `first_down_prob` | Float64 | Modeled probability of converting the fourth down when going for it. |
 | `wp_succeed` | Float64 | Mean win probability across yardage outcomes given the fourth-down attempt converts. |
 | `wp_fail` | Float64 | Mean win probability given the fourth-down attempt fails. |
-| `fg_make_prob` | Float64 |  |
+| `fg_make_prob` | Float64 | Fourth downs only. Probability a field-goal attempt from this spot is good, from the bundled nfl4th fg_model; null on every other row. |
 | `make_fg_wp` | Float64 | Win probability given the field-goal attempt is made. |
 | `miss_fg_wp` | Float64 | Win probability given the field-goal attempt misses. |
 | `fg_wp` | Float64 | Make-probability-weighted win probability of attempting the field goal. |
@@ -533,8 +533,8 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `fg_wp_diff` | Float64 | fg_wp minus the recommended option's WP (0 when the field goal is the recommendation, otherwise <= 0). |
 | `fourth_down_recommendation` | String | Max-WP fourth-down choice among "go", "punt", and "field_goal". |
 | `two_pt_wp` | Float64 | Win probability of going for two: conversion-probability-weighted mean of the 2-point and 0-point outcomes (cfb4th port). |
-| `xp_wp` | Float64 |  |
-| `prob_2pt` | Float64 |  |
+| `xp_wp` | Float64 | Touchdowns with a try only. Win probability of kicking the extra point for the scoring team (the make probability at the PAT spot weighs the 1- and 0-point outcomes, nfl4th's method); null on every other row. |
+| `prob_2pt` | Float64 | Touchdowns with a try only. Two-point conversion probability for the scoring team, from the bundled nfl4th two-point model; null on every other row. |
 | `two_pt_wp_diff` | Float64 | two_pt_wp minus xp_wp; positive favors going for two. |
 | `two_pt_recommendation` | String | Point-after recommendation: "go_for_2" when two_pt_wp exceeds xp_wp, otherwise "kick_xp". |
 | `qbr_epa` | Float64 | EPA variant used as an input to the QBR calculation. |
@@ -549,7 +549,7 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `rush_weight` | Float64 | Weighting applied to the rush component of the play. |
 | `pen_weight` | Float64 | Weighting applied to the penalty component of the play. |
 | `action_play` | Boolean | True when the play advanced the game state -- excludes timeouts, end-of-period markers and other non-action rows. |
-| `athlete_name` | String |  |
+| `athlete_name` | String | The play's passer, else its rusher (passer_player_name, then rusher_player_name); null when neither. |
 | `sack_player_id2` | String | ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot). |
 | `passer_player_id` | String | Unique identifier for the player that attempted the pass. |
 | `rusher_player_id` | String | Unique identifier for the player that attempted the run. |
@@ -560,16 +560,16 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `punt_return_player_id` | String | ESPN athlete id of the punt returner. |
 | `kickoff_return_player_id` | String | ESPN athlete id of the kickoff returner. |
 | `interception_player_id` | String | Unique identifier for the player that intercepted the pass. |
-| `pass_breakup_player_id` | String |  |
-| `fumble_forced_player_id` | String |  |
-| `fumble_recovered_player_id` | String |  |
-| `fumble_player_id` | String |  |
+| `pass_breakup_player_id` | String | ESPN athlete id of the defender credited with defending the pass (the play's participants, else matched by name in the game's box score). |
+| `fumble_forced_player_id` | String | ESPN athlete id of the player who forced the fumble (the play's participants, else matched by name in the game's box score). |
+| `fumble_recovered_player_id` | String | ESPN athlete id of the player who recovered the fumble (the play's participants, else matched by name in the game's box score). |
+| `fumble_player_id` | String | ESPN athlete id of the player who fumbled, matched by name and team in the game's box score. |
 | `punt_block_player_id` | String | ESPN athlete id of the player who blocked the punt. |
 | `punt_block_return_player_id` | String | ESPN athlete id of the player who returned the blocked punt. |
 | `kickoff_player_id` | String | ESPN athlete id of the player kicking off. |
 | `fg_block_player_id` | String | ESPN athlete id of the player who blocked the field goal. |
 | `fg_return_player_id` | String | ESPN athlete id of the player who returned the blocked or missed field goal. |
-| `xp_kicker_player_id` | String |  |
+| `xp_kicker_player_id` | String | ESPN athlete id of the extra-point kicker, matched by name and team in the game's box score. |
 
 **Raises**
 
@@ -608,226 +608,4 @@ df2 = build_nfl_season(game_ids=[401671801, 401671802]) # served from cache
 from sportsdataverse.nfl import build_nfl_season
 df_pd = build_nfl_season(game_ids=[401671801], return_as_pandas=True)
 print(df_pd.shape)
-```
-
-### build_nfl_team_stats {#build_nfl_team_stats}
-
-`build_nfl_team_stats(seasons: 'List[int]', *, summary_level: 'str' = 'week', season_type: 'str' = 'REG', source: 'str' = 'sdv', return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"`
-
-Build nflverse **team_stats** by aggregating SDV-native play-by-play.
-
-A faithful polars port of nflfastR's `calculate_stats(stat_type = "team")`
-(the `aggregate_game_stats*` family). Offense is keyed on `posteam`,
-defense on the tackler's team (per-play `*_team` slot tags -- NOT
-`defteam`, which double-counts on return plays), kicking on `posteam`,
-and returns / penalties / timeouts on the relevant play team tag. See the
-module docstring for the full grouping + SDV-PBP gap notes (`passing_epa`
-uses the exact `qb_epa`; `gwfg_*` derive from `fixed_drive`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  | Four-digit NFL seasons to aggregate (e.g. `[2023]`). |
-| `summary_level` | `str` | `'week'` | `"week"` (group on season + week + team, with `opponent_team`) or `"season"` (group on season + team, with a `games` distinct-game count replacing week / season_type / opponent_team). |
-| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"REG+POST"`. Pre-filters the play-by-play before aggregation. |
-| `source` | `str` | `'sdv'` | Play-by-play release passed to `load_nfl_pbp`. Defaults to `"sdv"` (the SDV-native enriched release). |
-| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
-
-**Returns**
-
-A polars (or pandas) DataFrame in the published `load_nfl_team_stats` schema (~102 columns). At `summary_level="season"` the `week` / `season_type` / `opponent_team` columns are replaced by a `games` column.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `week` | Int64 | Season week. |
-| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
-| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `opponent_team` | String |  |
-| `completions` | Int64 | The number of completed passes. |
-| `attempts` | Int64 | The number of pass attempts as defined by the NFL. |
-| `passing_yards` | Float64 | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
-| `passing_tds` | Int64 | The number of passing touchdowns. |
-| `passing_interceptions` | Int64 |  |
-| `sacks_suffered` | Int64 |  |
-| `sack_yards_lost` | Float64 |  |
-| `sack_fumbles` | Int64 | The number of sacks with a fumble. |
-| `sack_fumbles_lost` | Int64 | The number of sacks with a lost fumble. |
-| `passing_air_yards` | Float64 | Passing air yards (includes incomplete passes). |
-| `passing_yards_after_catch` | Float64 | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
-| `passing_first_downs` | Int64 | First downs on pass attempts. |
-| `passing_epa` | Float64 | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
-| `passing_cpoe` | Float64 |  |
-| `passing_2pt_conversions` | Int64 | Two-point conversion passes. |
-| `carries` | Int64 | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
-| `rushing_yards` | Float64 | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
-| `rushing_tds` | Int64 | The number of rushing touchdowns (incl. scrambles). Also includes touchdowns after obtaining a lateral on a play that started with a rushing attempt. |
-| `rushing_fumbles` | Int64 | The number of rushes with a fumble. |
-| `rushing_fumbles_lost` | Int64 | The number of rushes with a lost fumble. |
-| `rushing_first_downs` | Int64 | First downs on rush attempts (incl. scrambles). |
-| `rushing_epa` | Float64 | Expected points added on rush attempts (incl. scrambles and kneel downs). |
-| `rushing_2pt_conversions` | Int64 | Two-point conversion rushes |
-| `receptions` | Int64 | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `targets` | Int64 | The number of pass plays where the player was the targeted receiver. |
-| `receiving_yards` | Float64 | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
-| `receiving_tds` | Int64 | The number of touchdowns following a pass reception. Also includes touchdowns after receiving a lateral on a play that started as a pass play. |
-| `receiving_fumbles` | Int64 | The number of fumbles after a pass reception. |
-| `receiving_fumbles_lost` | Int64 | The number of fumbles lost after a pass reception. |
-| `receiving_air_yards` | Float64 | Receiving air yards (incl. incomplete passes). |
-| `receiving_yards_after_catch` | Float64 | Yards after the catch gained on plays in which player was receiver (this is an unofficial stat and may differ slightly between different sources). |
-| `receiving_first_downs` | Int64 | Total number of first downs gained on receptions |
-| `receiving_epa` | Float64 | Total EPA on plays where this receiver was targeted |
-| `receiving_2pt_conversions` | Int64 | Two-point conversion receptions |
-| `special_teams_tds` | Int64 | Total number of kick/punt return touchdowns |
-| `def_tackles_solo` | Int64 | Total number of solo tackles for this player |
-| `def_tackles_with_assist` | Int64 | Number of tackles this player had with an assisted tackle |
-| `def_tackle_assists` | Int64 | Number of assisted tackles for this player |
-| `def_tackles_for_loss` | Int64 | Number of tackles for loss (TFL) for this player |
-| `def_tackles_for_loss_yards` | Int64 | Yards lost from TFLs involving this player |
-| `def_fumbles_forced` | Int64 | Number of times a fumble was forced from this player |
-| `def_sacks` | Float64 | Number of sacks form this player |
-| `def_sack_yards` | Float64 | Yards lost from sacks forced by this player |
-| `def_qb_hits` | Int64 | Number of QB hits from this player (should not include plays where the QB was sacked) |
-| `def_interceptions` | Int64 | Number of interceptions forced by this player |
-| `def_interception_yards` | Float64 | yards gained/lost by interception returns from this player |
-| `def_pass_defended` | Int64 | Number of passes defended/broken up by this player |
-| `def_tds` | Int64 | Number of defensive touchdowns scored by this player |
-| `def_fumbles` | Int64 | Number of fumbles by this player |
-| `def_safeties` | Int64 |  |
-| `misc_yards` | Int64 |  |
-| `fumble_recovery_own` | Int64 |  |
-| `fumble_recovery_yards_own` | Int64 |  |
-| `fumble_recovery_opp` | Int64 |  |
-| `fumble_recovery_yards_opp` | Int64 |  |
-| `fumble_recovery_tds` | Int64 |  |
-| `penalties` | Int64 |  |
-| `penalty_yards` | Int64 | Yards gained (or lost) by the posteam from the penalty. |
-| `timeouts` | Int64 |  |
-| `punt_returns` | Int64 |  |
-| `punt_return_yards` | Int64 |  |
-| `kickoff_returns` | Int64 |  |
-| `kickoff_return_yards` | Int64 |  |
-| `fg_made` | Int64 |  |
-| `fg_att` | Int64 |  |
-| `fg_missed` | Int64 |  |
-| `fg_blocked` | Int64 |  |
-| `fg_long` | Float64 |  |
-| `fg_pct` | Float64 |  |
-| `fg_made_0_19` | Int64 |  |
-| `fg_made_20_29` | Int64 |  |
-| `fg_made_30_39` | Int64 |  |
-| `fg_made_40_49` | Int64 |  |
-| `fg_made_50_59` | Int64 |  |
-| `fg_made_60_` | Int64 |  |
-| `fg_missed_0_19` | Int64 |  |
-| `fg_missed_20_29` | Int64 |  |
-| `fg_missed_30_39` | Int64 |  |
-| `fg_missed_40_49` | Int64 |  |
-| `fg_missed_50_59` | Int64 |  |
-| `fg_missed_60_` | Int64 |  |
-| `fg_made_list` | String |  |
-| `fg_missed_list` | String |  |
-| `fg_blocked_list` | String |  |
-| `fg_made_distance` | Int64 |  |
-| `fg_missed_distance` | Int64 |  |
-| `fg_blocked_distance` | Int64 |  |
-| `pat_made` | Int64 |  |
-| `pat_att` | Int64 |  |
-| `pat_missed` | Int64 |  |
-| `pat_blocked` | Int64 |  |
-| `pat_pct` | Float64 |  |
-| `gwfg_made` | Int64 |  |
-| `gwfg_att` | Int64 |  |
-| `gwfg_missed` | Int64 |  |
-| `gwfg_blocked` | Int64 |  |
-| `gwfg_distance` | Int64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `summary_level` is not `"week"`/`"season"` or `season_type` is not `"REG"`/`"POST"`/`"REG+POST"`. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import build_nfl_team_stats
-wk = build_nfl_team_stats([2023], summary_level="week")
-print(wk.shape)
-
-# Season totals as pandas
-
-df_pd = build_nfl_team_stats([2023], summary_level="season",
-                             return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-wk.sort("def_sacks", descending=True).head()
-```
-
-### calculate_nfl_series_conversion_rates {#calculate_nfl_series_conversion_rates}
-
-`calculate_nfl_series_conversion_rates(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"`
-
-Compute per-team offense + defense series conversion rates.
-
-A faithful polars port of nflfastR's `calculate_series_conversion_rates`.
-Series where `down` is null (kickoffs, PAT/2pt attempts, non-plays, no
-`posteam`) and series ending in a `"QB kneel"` are excluded from the
-series count before rates are computed, matching the R source.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play frame carrying `season`, `week`, `posteam`, `defteam`, `down`, `series`, `series_success`, and `series_result` (added by the `add_series_data` port). Rows must already be in play order within each series so the internal `first()`/`last()` series collapse is correct. |
-| `weekly` | `bool` | `False` | If `True`, group on `(season, team, week)`; if `False` (default), group on `(season, team)` -- collapsing every week into one season-level rate. |
-| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
-
-**Returns**
-
-A polars (or pandas) DataFrame with one row per team (per week when `weekly=True`), `off_n`/`def_n` (series count) plus the `off_*`/`def_*` rate columns documented in reference Sec 11. A team with offensive series but zero defensive series in a group (or vice versa -- effectively never happens in real data) carries nulls in the missing side rather than being dropped (full outer join).
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
-| `off_n` | Int64 |  |
-| `off_scr` | Float64 |  |
-| `off_scr_1st` | Float64 |  |
-| `off_scr_2nd` | Float64 |  |
-| `off_scr_3rd` | Float64 |  |
-| `off_scr_4th` | Float64 |  |
-| `off_1st` | Float64 |  |
-| `off_td` | Float64 |  |
-| `off_fg` | Float64 |  |
-| `off_punt` | Float64 |  |
-| `off_to` | Float64 |  |
-| `def_n` | Int64 |  |
-| `def_scr` | Float64 |  |
-| `def_scr_1st` | Float64 |  |
-| `def_scr_2nd` | Float64 |  |
-| `def_scr_3rd` | Float64 |  |
-| `def_scr_4th` | Float64 |  |
-| `def_1st` | Float64 |  |
-| `def_td` | Float64 |  |
-| `def_fg` | Float64 |  |
-| `def_punt` | Float64 |  |
-| `def_to` | Float64 |  |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import calculate_nfl_series_conversion_rates
-rates = calculate_nfl_series_conversion_rates(pbp)
-rates.filter(pl.col("team") == "KC").select("off_scr", "def_scr")
-
-# Weekly grain
-
-weekly = calculate_nfl_series_conversion_rates(pbp, weekly=True)
-
-# Pipeline next step (one line)
-
-rates.sort("off_scr", descending=True).head()
 ```
