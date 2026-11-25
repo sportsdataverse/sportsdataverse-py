@@ -11920,18 +11920,18 @@
   group: ncaa-denial-rotation
   finding: ncaa-denial-convoy
   file: sportsdataverse/mbb/mbb_ncaa_fetch.py
-  snippet: '        if jump and n > 2:'
-  mutant: '        if False:'
+  snippet: 'self._proxy_idx += self._rng.randrange(1, n) if jump and n > 2 else 1'
+  mutant: 'self._proxy_idx += 1'
   test: tests/mbb/test_mbb_ncaa_fetch.py::test_session_denial_jumps_a_random_distance_other_errors_step_one
   expected: kill
   note: Back to +1 after a denial, so sharded runs bunch on the sticky-IP ring (baseball 2013, 2026-11-24).
 
-- id: ncaa-denial-jump-revisits-tried-proxy
+- id: ncaa-pick-proxy-revisits-tried-proxy
   group: ncaa-denial-rotation
   finding: ncaa-denial-convoy
   file: sportsdataverse/mbb/mbb_ncaa_fetch.py
-  snippet: '            skip = self._tried | self._dead'
-  mutant: '            skip = self._dead'
-  test: tests/mbb/test_mbb_ncaa_fetch.py::test_denial_jumps_never_revisit_a_proxy_within_one_fetch
+  snippet: '        for skip in (self._tried | self._dead, self._dead):'
+  mutant: '        for skip in (self._dead,):'
+  test: tests/mbb/test_mbb_ncaa_fetch.py -k "never_revisit or try_every_proxy"
   expected: kill
-  note: A jump could land on a proxy this fetch already tried, so the healthy one can go untried.
+  note: Without the untried-first pass, a jump or a +1 step can revisit a proxy within one fetch and leave a healthy one untried.

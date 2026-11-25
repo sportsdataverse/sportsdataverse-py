@@ -1140,7 +1140,7 @@ class NcaaFetcher:
         self._proxy_idx = 0
         # Step size after an Akamai session denial (see _rotate). Its own instance so tests can seed it.
         self._rng = random.Random()
-        # Proxies handed out during the current _get_with_rotation call; a denial jump skips them.
+        # Proxies handed out during the current _get_with_rotation call; _pick_proxy prefers the others.
         self._tried: "set[str]" = set()
         # Successful fetches on the CURRENT proxy (drives config.rotate_every).
         self._since_rotate = 0
@@ -1318,27 +1318,24 @@ class NcaaFetcher:
         contest that way. A random step breaks the bunch.
         """
         n = len(self._pool)
-        if jump and n > 2:
-            # Only to a proxy this fetch has not tried yet (and not retired); random among those.
-            skip = self._tried | self._dead
-            fresh = [k for k in range(1, n) if self._pool[(self._proxy_idx + k) % n] not in skip]
-            self._proxy_idx += self._rng.choice(fresh) if fresh else self._rng.randrange(1, n)
-        else:
-            self._proxy_idx += 1
+        self._proxy_idx += self._rng.randrange(1, n) if jump and n > 2 else 1
         self._since_rotate = 0
         logger.debug("rotating proxy: %s%s", why, " (session denied: random jump)" if jump else "")
 
     def _pick_proxy(self, pool: "list[str]") -> Optional[str]:
-        """Next non-dead proxy, or ``None`` when every proxy is burned.
+        """Next non-dead proxy in ring order, or ``None`` when every proxy is burned.
 
+        Within one fetch, a proxy not tried yet comes first, so a mix of denial jumps and +1 steps cannot use
+        up the attempts while a live proxy goes untried. Once all are tried, any live proxy will do.
         The ``[""]`` sentinel (custom transport, no pool) is never marked dead.
         """
-        for _ in range(len(pool)):
-            proxy = pool[self._proxy_idx % len(pool)]
-            if proxy not in self._dead:
-                self._tried.add(proxy)
-                return proxy
-            self._proxy_idx += 1
+        for skip in (self._tried | self._dead, self._dead):
+            for k in range(len(pool)):
+                proxy = pool[(self._proxy_idx + k) % len(pool)]
+                if proxy not in skip:
+                    self._proxy_idx += k
+                    self._tried.add(proxy)
+                    return proxy
         return None
 
     def fetch_html(self, path: str, *, force: bool = False) -> str:
