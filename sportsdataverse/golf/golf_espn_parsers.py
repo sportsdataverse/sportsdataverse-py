@@ -162,9 +162,8 @@ def parse_golf_leaderboard(
         competitions = event.get("competitions")
         for competition in competitions if isinstance(competitions, list) else []:
             competitors = _dict(competition).get("competitors")
-            for comp in competitors if isinstance(competitors, list) else []:
-                if isinstance(comp, dict):
-                    rows.append(_player_row(event, comp))
+            players = competitors if isinstance(competitors, list) else []
+            rows.extend(_player_row(event, comp) for comp in players if isinstance(comp, dict))
     df = (
         pl.DataFrame(rows, schema=GOLF_LEADERBOARD_SCHEMA, strict=False)
         if rows
