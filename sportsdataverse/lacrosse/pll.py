@@ -11,7 +11,7 @@ from typing import Dict, List, Optional, Union  # noqa: F401
 import pandas as pd  # noqa: F401
 import polars as pl  # noqa: F401
 
-from sportsdataverse.lacrosse.pll_runtime import _get
+from sportsdataverse.lacrosse.pll_runtime import _get, slug
 from sportsdataverse.lacrosse.pll_parsers import (
     parse_pll_career_leaders,
     parse_pll_game,
@@ -167,8 +167,10 @@ def pll_game(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
     _params.update(_caller_params)
+    event_slug = slug(event_slug)
+    __url = f"https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}"
     raw = _get(
-        f"https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}",
+        __url,
         params=_params,
         **kwargs,
     )
@@ -184,7 +186,7 @@ def pll_play_by_play(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """A game's play-by-play: one row per logged play (clock, score, play type, shot value, the players involved, the win probability after it).
+    """A game's play-by-play: one row per logged play (clock, play type, shot value, the players involved, the win probability after it; the score is the running score on shot rows only).
 
     Endpoint: ``GET https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}/playlogs``
     Example URL: https://stats.premierlacrosseleague.com/api/v4/events/2026-ev-4/playlogs
@@ -226,8 +228,10 @@ def pll_play_by_play(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
     _params.update(_caller_params)
+    event_slug = slug(event_slug)
+    __url = f"https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}/playlogs"
     raw = _get(
-        f"https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}/playlogs",
+        __url,
         params=_params,
         **kwargs,
     )
@@ -285,8 +289,10 @@ def pll_player_box(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
     _params.update(_caller_params)
+    event_slug = slug(event_slug)
+    __url = f"https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}/players/stats"
     raw = _get(
-        f"https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}/players/stats",
+        __url,
         params=_params,
         **kwargs,
     )
@@ -344,8 +350,10 @@ def pll_team_box(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
     _params.update(_caller_params)
+    event_slug = slug(event_slug)
+    __url = f"https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}/teams/stats"
     raw = _get(
-        f"https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}/teams/stats",
+        __url,
         params=_params,
         **kwargs,
     )
@@ -403,8 +411,10 @@ def pll_game_insights(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
     _params.update(_caller_params)
+    event_slug = slug(event_slug)
+    __url = f"https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}/insights"
     raw = _get(
-        f"https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}/insights",
+        __url,
         params=_params,
         **kwargs,
     )
@@ -596,8 +606,10 @@ def pll_team_stats(
         "year": year,
     }
     _params.update(_caller_params)
+    team_slug = slug(team_slug)
+    __url = f"https://stats.premierlacrosseleague.com/api/v4/teams/{team_slug}/stats"
     raw = _get(
-        f"https://stats.premierlacrosseleague.com/api/v4/teams/{team_slug}/stats",
+        __url,
         params=_params,
         **kwargs,
     )
@@ -664,8 +676,10 @@ def pll_team_roster(
         "seasonSegment": season_segment,
     }
     _params.update(_caller_params)
+    team_slug = slug(team_slug)
+    __url = f"https://stats.premierlacrosseleague.com/api/v4/teams/{team_slug}/roster"
     raw = _get(
-        f"https://stats.premierlacrosseleague.com/api/v4/teams/{team_slug}/roster",
+        __url,
         params=_params,
         **kwargs,
     )
@@ -995,8 +1009,10 @@ def pll_player(
         "year": year,
     }
     _params.update(_caller_params)
+    player_slug = slug(player_slug)
+    __url = f"https://stats.premierlacrosseleague.com/api/v4/players/{player_slug}"
     raw = _get(
-        f"https://stats.premierlacrosseleague.com/api/v4/players/{player_slug}",
+        __url,
         params=_params,
         **kwargs,
     )
@@ -1054,8 +1070,10 @@ def pll_player_seasons(
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
     _params.update(_caller_params)
+    player_slug = slug(player_slug)
+    __url = f"https://stats.premierlacrosseleague.com/api/v4/players/{player_slug}/stats/seasons"
     raw = _get(
-        f"https://stats.premierlacrosseleague.com/api/v4/players/{player_slug}/stats/seasons",
+        __url,
         params=_params,
         **kwargs,
     )

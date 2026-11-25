@@ -81980,7 +81980,7 @@ pll_schedule:
   season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
   week: Week of the season (0 for the Championship Series).
   game_number: Game number within the season.
-  start_time: Start time, UTC.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
   event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
   period: Period (quarter; 5 and up is overtime).
   home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
@@ -82010,7 +82010,7 @@ pll_glg_schedule:
   season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
   week: Week of the season (0 for the Championship Series).
   game_number: Game number within the season.
-  start_time: Start time, UTC.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
   event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
   period: Period (quarter; 5 and up is overtime).
   home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
@@ -82040,7 +82040,7 @@ pll_wll_schedule:
   season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
   week: Week of the season (0 for the Championship Series).
   game_number: Game number within the season.
-  start_time: Start time, UTC.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
   event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
   period: Period (quarter; 5 and up is overtime).
   home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
@@ -82070,7 +82070,7 @@ pll_game:
   season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
   week: Week of the season (0 for the Championship Series).
   game_number: Game number within the season.
-  start_time: Start time, UTC.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
   event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
   period: Period (quarter; 5 and up is overtime).
   home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
@@ -82090,8 +82090,8 @@ pll_game:
   broadcaster: Broadcast and streaming outlets, comma-separated.
   description: Game description (round labels on Championship Series games; null on most), or the play text.
   url_streaming: Streaming link.
-  home_period_scores: Home team points per period.
-  away_period_scores: Away team points per period.
+  home_period_scores: 'Home team points per period: a list of integers (List(Int64)), one per period played.'
+  away_period_scores: 'Away team points per period: a list of integers (List(Int64)), one per period played.'
   home_team_wins: Home team wins, as the API reports them on the game.
   home_team_losses: Home team losses, as the API reports them on the game.
   home_team_ties: Home team ties.
@@ -82627,7 +82627,7 @@ pll_player:
   injury_description: Injury description (null when healthy).
   status: Player status (current on a roster; active or retired on career leaderboards).
   contract_status: Final season under contract (e.g. 2028).
-  all_years: Seasons the player has a PLL record in.
+  all_years: 'Seasons the player has a PLL record in: a list of integers (List(Int64)).'
   bio: Player biography text.
 pll_player_seasons:
   player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).

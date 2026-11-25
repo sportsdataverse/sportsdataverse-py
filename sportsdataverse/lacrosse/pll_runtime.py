@@ -24,10 +24,12 @@ vocabulary: 404 -> ``NoDataError``, 400 / 422 -> ``ValueError``, any other non-2
 
 from __future__ import annotations
 
+import contextlib
 import itertools
 import re
 import threading
 import time
+from collections.abc import Iterator
 from typing import Any
 from urllib.parse import urlsplit
 
@@ -72,12 +74,30 @@ ROUTE = re.compile(
 _RETRY = frozenset({429, 500, 502, 503, 504})
 
 
-def _throttle() -> None:
+@contextlib.contextmanager
+def _throttle() -> Iterator[None]:
+    """Hold the process's one request slot across the send: requests never overlap, and each starts
+    at least :data:`MIN_INTERVAL` seconds after the previous one ended."""
     with _lock:
         wait = _last[0] + MIN_INTERVAL - time.monotonic()
         if wait > 0:
             time.sleep(wait)
-        _last[0] = time.monotonic()
+        try:
+            yield
+        finally:
+            _last[0] = time.monotonic()
+
+
+def slug(value: Any) -> str:
+    """``value`` as a route slug (letters, digits, ``_ . @ -``), checked before it enters a URL path.
+
+    Raises:
+        ValueError: anything else (a ``/``, ``?`` or ``#`` would change the route or the query).
+    """
+    text = str(value)
+    if not re.fullmatch(_SLUG, text):
+        raise ValueError(f"not a PLL slug: {value!r} (letters, digits, _ . @ - only)")
+    return text
 
 
 def _wire(params: dict | None) -> dict[str, Any]:
@@ -132,11 +152,16 @@ def _get(url: str, params: dict | None = None, **kwargs: Any) -> dict[str, Any]:
         )
     wire = _wire(params)
     headers = {**GATE_HEADERS, **(kwargs.pop("headers", None) or {})}
-    _throttle()
     try:
-        body = _rt._get(
-            url, params=wire, headers=headers, transport=_rt._no_content_transport(), retry_statuses=_RETRY, **kwargs
-        )
+        with _throttle():
+            body = _rt._get(
+                url,
+                params=wire,
+                headers=headers,
+                transport=_rt._no_content_transport(),
+                retry_statuses=_RETRY,
+                **kwargs,
+            )
     except AssetFetchError as exc:
         if "HTTP 403" in str(exc) and "Origin not allowed" in str(exc):
             raise AssetFetchError(

@@ -312,7 +312,7 @@ One player's profile: team, position, jersey, birth date, height, weight, hometo
 | `injury_description` | String | Injury description (null when healthy). |
 | `status` | String | Player status (current on a roster; active or retired on career leaderboards). |
 | `contract_status` | String | Final season under contract (e.g. 2028). |
-| `all_years` | Int64 | Seasons the player has a PLL record in. |
+| `all_years` | Int64 | Seasons the player has a PLL record in: a list of integers (List(Int64)). |
 | `bio` | String | Player biography text. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

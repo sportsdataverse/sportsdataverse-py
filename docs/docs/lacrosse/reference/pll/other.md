@@ -35,7 +35,7 @@ A season's schedule and results: one row per game (teams, score, UTC start time,
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `week` | Int64 | Week of the season (0 for the Championship Series). |
 | `game_number` | Int64 | Game number within the season. |
-| `start_time` | String | Start time, UTC. |
+| `start_time` | String | Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says. |
 | `event_status` | Int64 | Game status code (3 on final 2021-2026 games; the 2019 games carry 2). |
 | `period` | Int64 | Period (quarter; 5 and up is overtime). |
 | `home_team_id` | String | Home team code (e.g. WAT; equals ESPN's abbreviation). |
@@ -99,7 +99,7 @@ One game's header: teams and records, score by period, clock, venue, broadcast a
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `week` | Int64 | Week of the season (0 for the Championship Series). |
 | `game_number` | Int64 | Game number within the season. |
-| `start_time` | String | Start time, UTC. |
+| `start_time` | String | Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says. |
 | `event_status` | Int64 | Game status code (3 on final 2021-2026 games; the 2019 games carry 2). |
 | `period` | Int64 | Period (quarter; 5 and up is overtime). |
 | `home_team_id` | String | Home team code (e.g. WAT; equals ESPN's abbreviation). |
@@ -119,8 +119,8 @@ One game's header: teams and records, score by period, clock, venue, broadcast a
 | `broadcaster` | String | Broadcast and streaming outlets, comma-separated. |
 | `description` | String | Game description (round labels on Championship Series games; null on most), or the play text. |
 | `url_streaming` | String | Streaming link. |
-| `home_period_scores` | Int64 | Home team points per period. |
-| `away_period_scores` | Int64 | Away team points per period. |
+| `home_period_scores` | Int64 | Home team points per period: a list of integers (List(Int64)), one per period played. |
+| `away_period_scores` | Int64 | Away team points per period: a list of integers (List(Int64)), one per period played. |
 | `home_team_wins` | Int64 | Home team wins, as the API reports them on the game. |
 | `home_team_losses` | Int64 | Home team losses, as the API reports them on the game. |
 | `home_team_ties` | Int64 | Home team ties. |
@@ -148,7 +148,7 @@ pll_game(event_slug='2026-ev-4')
 
 ## pll_play_by_play
 
-A game's play-by-play: one row per logged play (clock, score, play type, shot value, the players involved, the win probability after it).
+A game's play-by-play: one row per logged play (clock, play type, shot value, the players involved, the win probability after it; the score is the running score on shot rows only).
 
 **Endpoint URL:** `GET https://stats.premierlacrosseleague.com/api/v4/events/{event_slug}/playlogs`
 
@@ -446,7 +446,7 @@ Global Lacrosse Games (national teams) schedule and results: one row per game, i
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `week` | Int64 | Week of the season (0 for the Championship Series). |
 | `game_number` | Int64 | Game number within the season. |
-| `start_time` | String | Start time, UTC. |
+| `start_time` | String | Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says. |
 | `event_status` | Int64 | Game status code (3 on final 2021-2026 games; the 2019 games carry 2). |
 | `period` | Int64 | Period (quarter; 5 and up is overtime). |
 | `home_team_id` | String | Home team code (e.g. WAT; equals ESPN's abbreviation). |
@@ -567,7 +567,7 @@ Women's Lacrosse League schedule and results: one row per game, in the pll_sched
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `week` | Int64 | Week of the season (0 for the Championship Series). |
 | `game_number` | Int64 | Game number within the season. |
-| `start_time` | String | Start time, UTC. |
+| `start_time` | String | Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says. |
 | `event_status` | Int64 | Game status code (3 on final 2021-2026 games; the 2019 games carry 2). |
 | `period` | Int64 | Period (quarter; 5 and up is overtime). |
 | `home_team_id` | String | Home team code (e.g. WAT; equals ESPN's abbreviation). |

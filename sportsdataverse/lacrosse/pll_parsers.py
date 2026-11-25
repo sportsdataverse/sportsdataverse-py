@@ -203,7 +203,7 @@ def _d(value: Any) -> dict[str, Any]:
 
 
 def _l(value: Any) -> list[Any]:
-    return [v for v in value if isinstance(v, dict)] if isinstance(value, list) else []
+    return [v for v in value if isinstance(v, dict) and v] if isinstance(value, list) else []
 
 
 def _first(*values: Any) -> Any:
@@ -256,8 +256,13 @@ def _cell(value: Any, dtype: Any) -> Any:
     if dtype == B:
         return value if isinstance(value, bool) else None
     if dtype == F:
-        ok = isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
-        return float(value) if ok else None
+        if not isinstance(value, (int, float)) or isinstance(value, bool):
+            return None
+        try:
+            out = float(value)
+        except OverflowError:  # an int too large for a double
+            return None
+        return out if math.isfinite(out) else None
     if dtype == INT_LIST:
         return [i for i in (_int(v) for v in value) if i is not None] if isinstance(value, list) else None
     return value if isinstance(value, datetime) else None
@@ -677,9 +682,9 @@ def parse_pll_player(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame |
     team = _d(p.get("team"))
     row = {
         **_bio(p), "team_id": team.get("officialId"), "team_name": team.get("fullName"),
-        "position": _first(team.get("position"), p.get("position")),
-        "position_name": _first(team.get("positionName"), p.get("positionName")),
-        "jersey_number": _first(team.get("jerseyNum"), p.get("jerseyNum")), "all_years": p.get("allYears"),
+        "position": _first(p.get("position"), team.get("position")),
+        "position_name": _first(p.get("positionName"), team.get("positionName")),
+        "jersey_number": _first(p.get("jerseyNum"), team.get("jerseyNum")), "all_years": p.get("allYears"),
         "bio": p.get("bio"),
     }  # fmt: skip
     return _frame([row], PLAYER_SCHEMA, return_as_pandas)

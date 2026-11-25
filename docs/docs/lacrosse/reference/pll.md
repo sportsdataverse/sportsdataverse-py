@@ -44,7 +44,7 @@ toc_max_heading_level: 2
 |---|---|
 | [pll_schedule](pll/other.md#pll_schedule) | A season's schedule and results: one row per game (teams, score, UTC start time, segment, week, venue, broadcast and the event_slug every per-game wrapper … |
 | [pll_game](pll/other.md#pll_game) | One game's header: teams and records, score by period, clock, venue, broadcast and the pregame win probability. |
-| [pll_play_by_play](pll/other.md#pll_play_by_play) | A game's play-by-play: one row per logged play (clock, score, play type, shot value, the players involved, the win probability after it). |
+| [pll_play_by_play](pll/other.md#pll_play_by_play) | A game's play-by-play: one row per logged play (clock, play type, shot value, the players involved, the win probability after it; the score is the running … |
 | [pll_game_insights](pll/other.md#pll_game_insights) | The league's written insights on a game: one row per streak, milestone or matchup note. |
 | [pll_standings](pll/other.md#pll_standings) | Standings: one row per team (record, scores for and against, conference record; seeds, null until the league sets them). |
 | [pll_season_leaders](pll/other.md#pll_season_leaders) | A season's leaderboards in long format: one row per stat and ranked player. |

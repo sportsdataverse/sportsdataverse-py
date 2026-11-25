@@ -64,6 +64,7 @@ endpoints:
   path_params:
   - description: Game slug (event_slug in pll_schedule), e.g. 2026-ev-4.
     name: event_slug
+    transform: slug
     type: str
   returns_schema: native/pll/game
   short: game
@@ -76,11 +77,12 @@ endpoints:
   path_params:
   - description: Game slug (event_slug in pll_schedule), 2021 onward.
     name: event_slug
+    transform: slug
     type: str
   returns_schema: native/pll/play_by_play
   short: play_by_play
-  summary: 'A game''s play-by-play: one row per logged play (clock, score, play type, shot value,
-    the players involved, the win probability after it).'
+  summary: 'A game''s play-by-play: one row per logged play (clock, play type, shot value, the
+    players involved, the win probability after it; the score is the running score on shot rows only).'
 - example_args:
     event_slug: 2026-ev-4
   parser: parse_pll_player_box
@@ -88,6 +90,7 @@ endpoints:
   path_params:
   - description: Game slug (event_slug in pll_schedule), 2021 onward.
     name: event_slug
+    transform: slug
     type: str
   returns_schema: native/pll/player_box
   short: player_box
@@ -100,6 +103,7 @@ endpoints:
   path_params:
   - description: Game slug (event_slug in pll_schedule), 2021 onward.
     name: event_slug
+    transform: slug
     type: str
   returns_schema: native/pll/team_box
   short: team_box
@@ -112,6 +116,7 @@ endpoints:
   path_params:
   - description: Game slug (event_slug in pll_schedule), 2021 onward.
     name: event_slug
+    transform: slug
     type: str
   returns_schema: native/pll/game_insights
   short: game_insights
@@ -166,6 +171,7 @@ endpoints:
   path_params:
   - description: Team slug (team_slug in pll_team_season_stats), e.g. waterdogs, boston-cannons.
     name: team_slug
+    transform: slug
     type: str
   returns_schema: native/pll/team_stats
   short: team_stats
@@ -190,6 +196,7 @@ endpoints:
   path_params:
   - description: Team slug (team_slug in pll_team_season_stats), e.g. waterdogs.
     name: team_slug
+    transform: slug
     type: str
   returns_schema: native/pll/team_roster
   short: team_roster
@@ -293,6 +300,7 @@ endpoints:
   path_params:
   - description: Player slug (player_slug in pll_player_season_stats), e.g. michael-sowers.
     name: player_slug
+    transform: slug
     type: str
   returns_schema: native/pll/player
   short: player
@@ -305,6 +313,7 @@ endpoints:
   path_params:
   - description: Player slug (player_slug in pll_player_season_stats), e.g. michael-sowers.
     name: player_slug
+    transform: slug
     type: str
   returns_schema: native/pll/player_seasons
   short: player_seasons

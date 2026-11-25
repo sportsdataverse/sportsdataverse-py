@@ -207,8 +207,10 @@ def test_throttle_spaces_requests(monkeypatch):
     monkeypatch.setattr(rt.time, "monotonic", lambda: next(clock))
     monkeypatch.setattr(rt.time, "sleep", slept.append)
     monkeypatch.setattr(rt, "_last", [0.0])
-    rt._throttle()
-    rt._throttle()
+    with rt._throttle():
+        pass
+    with rt._throttle():
+        pass
     assert slept == [pytest.approx(rt.MIN_INTERVAL - 0.1)]
 
 
@@ -254,3 +256,25 @@ def test_get_does_not_retry_the_origin_refusal(monkeypatch):
 def test_out_of_range_numbers_are_null_not_errors():
     df = P.parse_pll_schedule({"items": [{"slugname": "x", "startTime": 10**20, "week": 2**70, "id": 1}]})
     assert df.height == 1 and df["start_time"][0] is None and df["week"][0] is None
+
+
+def test_empty_records_and_huge_numbers_make_no_rows_or_errors():
+    assert P.parse_pll_schedule({"items": [{}, {}]}).height == 0
+    assert P.parse_pll_play_by_play({"items": [{}]}).height == 0
+    box = P.parse_pll_player_box({"items": [{"officialId": "003009", "shotPct": 10**400, "points": 10**400}]})
+    assert box["shot_pct"][0] is None and box["points"][0] is None
+
+
+def test_profile_prefers_the_players_own_jersey_and_position():
+    raw = {"officialId": "003009", "jerseyNum": "22", "position": "A", "team": {"jerseyNum": "9", "position": "M"}}
+    row = P.parse_pll_player(raw).row(0, named=True)
+    assert (row["jersey_number"], row["position"]) == ("22", "A")
+    row = P.parse_pll_player({"officialId": "003009", "team": {"jerseyNum": 9, "position": "M"}}).row(0, named=True)
+    assert (row["jersey_number"], row["position"]) == ("9", "M")
+
+
+@pytest.mark.parametrize("bad", ["2026-ev-4/playlogs", "a?b", "a#b", ""])
+def test_slug_transform_refuses_route_changing_text(bad):
+    with pytest.raises(ValueError, match="not a PLL slug"):
+        rt.slug(bad)
+    assert rt.slug("2026-ev-4") == "2026-ev-4"
