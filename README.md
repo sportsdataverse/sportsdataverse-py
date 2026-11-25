@@ -86,7 +86,7 @@ provider. The [Getting Started table](https://py.sportsdataverse.org/docs/intro)
 | [Baseball](https://py.sportsdataverse.org/docs/leagues/baseball) | MLB; college baseball & softball | `sportsdataverse.mlb`, `.baseball` | ESPN, **MLB Stats API**, **Baseball Savant / Statcast** (`mlb_statcast_*`), stats.ncaa.org, Fox Sports |
 | [Soccer](https://py.sportsdataverse.org/docs/leagues/soccer) | 12 leagues (EPL, LaLiga, Bundesliga, Serie A, Ligue 1, MLS, Liga MX, UCL, UEL, NWSL, WWC, WC) | `sportsdataverse.soccer` | ESPN, ASA, FotMob, UEFA, FIFA, MLS and NWSL APIs, Football-Data.co.uk, OpenLigaDB, kloppy open event data |
 | [More sports & sources](https://py.sportsdataverse.org/docs/leagues/other) | Cricket | `sportsdataverse.cricket` | ESPN + bundled win-probability models |
-| | Lacrosse (PLL, men's and women's college) | `sportsdataverse.lacrosse` | ESPN |
+| | Lacrosse (PLL, men's and women's college) | `sportsdataverse.lacrosse` | ESPN, **PLL stats API** (`pll_*`: schedule, play-by-play, box scores, standings, team and player stats, leaders, rosters, bios; runtime only) |
 | | Formula 1 | `sportsdataverse.f1` | Jolpica |
 | | Odds & prediction markets | `sportsdataverse.odds` | The Odds API, Kalshi, Polymarket |
 | | Cross-sport providers | `sportsdataverse.providers.<name>` (`cbs`, `fox`, `yahoo`, `espn_content`, `thesportsdb`) | CBS Sports, Fox Sports, Yahoo Sports, ESPN content, TheSportsDB |

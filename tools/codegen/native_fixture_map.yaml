@@ -430,3 +430,24 @@ sihf_api_web:
   table__goalkeeperShotDetail__2026__1.json: goalie_shots
   table__goalkeeperWin__2026__1.json: goalie_wins
   table__goalkeeperShootout__2026__1.json: goalie_shootouts
+pll:
+  # GET stats.premierlacrosseleague.com/api/... (routes and arguments in tests/fixtures/pll/README.md)
+  schedule_2026.json: schedule
+  game_2026-ev-4.json: game
+  play_by_play_2026-ev-4.json: play_by_play
+  player_box_2026-ev-4.json: player_box
+  team_box_2026-ev-4.json: team_box
+  game_insights_2026-ev-4.json: game_insights
+  standings_2026.json: standings
+  team_season_stats_2026_regular.json: team_season_stats
+  team_stats_waterdogs_2026.json: team_stats
+  team_roster_waterdogs_2026_regular.json: team_roster
+  player_season_stats_2026_regular.json: player_season_stats
+  player_advanced_stats_2026_regular.json: player_advanced_stats
+  season_leaders_2026_regular.json: season_leaders
+  career_leaders_points_goals_saves.json: career_leaders
+  player_michael-sowers.json: player
+  player_seasons_michael-sowers.json: player_seasons
+  glg_schedule_intlm_2026.json: glg_schedule
+  glg_standings_intlm_2026.json: glg_standings
+  wll_schedule_2026.json: wll_schedule
