@@ -1140,6 +1140,8 @@ class NcaaFetcher:
         self._proxy_idx = 0
         # Step size after an Akamai session denial (see _rotate). Its own instance so tests can seed it.
         self._rng = random.Random()
+        # Proxies handed out during the current _get_with_rotation call; a denial jump skips them.
+        self._tried: "set[str]" = set()
         # Successful fetches on the CURRENT proxy (drives config.rotate_every).
         self._since_rotate = 0
         # Proxies that returned a ban this session. stats.ncaa.org's per-IP bans
@@ -1208,6 +1210,7 @@ class NcaaFetcher:
         attempts = len(pool) + self.config.max_retries
         last_err = "no proxies in pool"
         accept_failures = 0
+        self._tried.clear()
         for i in range(attempts):
             if i and self.config.rotation_backoff > 0:
                 time.sleep(self.config.rotation_backoff)
@@ -1247,10 +1250,7 @@ class NcaaFetcher:
                     accept_failures += 1
                     if accept_failures >= _ACCEPT_FAILURES_MAX:
                         raise _TermsGateError(f"{exc} (on {accept_failures} proxies)") from exc
-                if isinstance(exc, _SessionDeniedError):
-                    self._rotate("session denied", jump=True)
-                else:
-                    self._rotate("transport error")
+                self._rotate("transport error", jump=isinstance(exc, _SessionDeniedError))
                 continue
             if _is_terms_gate(text):
                 # Only a browser transport can try the Terms gate (_raw_fetch).
@@ -1318,9 +1318,15 @@ class NcaaFetcher:
         contest that way. A random step breaks the bunch.
         """
         n = len(self._pool)
-        self._proxy_idx += self._rng.randrange(1, n) if jump and n > 2 else 1
+        if jump and n > 2:
+            # Only to a proxy this fetch has not tried yet (and not retired); random among those.
+            skip = self._tried | self._dead
+            fresh = [k for k in range(1, n) if self._pool[(self._proxy_idx + k) % n] not in skip]
+            self._proxy_idx += self._rng.choice(fresh) if fresh else self._rng.randrange(1, n)
+        else:
+            self._proxy_idx += 1
         self._since_rotate = 0
-        logger.debug("rotating proxy: %s", why)
+        logger.debug("rotating proxy: %s%s", why, " (session denied: random jump)" if jump else "")
 
     def _pick_proxy(self, pool: "list[str]") -> Optional[str]:
         """Next non-dead proxy, or ``None`` when every proxy is burned.
@@ -1330,6 +1336,7 @@ class NcaaFetcher:
         for _ in range(len(pool)):
             proxy = pool[self._proxy_idx % len(pool)]
             if proxy not in self._dead:
+                self._tried.add(proxy)
                 return proxy
             self._proxy_idx += 1
         return None
