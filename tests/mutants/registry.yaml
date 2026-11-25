@@ -12186,3 +12186,44 @@
   test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_rejects_unknown_short
   expected: kill
   note: A typo in a league allowlist would silently drop that wrapper instead of failing the build.
+
+# --- ESPN golf field-of-players parser (golf_espn_parsers) ----------------------------------------
+- id: golf-playoff-line-is-not-a-round
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '        if not isinstance(line, dict) or line.get("isPlayoff") is True:'
+  mutant: '        if not isinstance(line, dict):'
+  test: tests/test_espn_golf_parsers.py::test_playoff_line_is_not_a_round
+  expected: kill
+  note: On a 54-hole event the playoff sits at period 4 and would be counted as round 4.
+
+- id: golf-unplayed-round-is-null
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '        played = isinstance(value, (int, float)) and value > 0'
+  mutant: '        played = isinstance(value, (int, float))'
+  test: tests/test_espn_golf_parsers.py::test_leaderboard_missed_cut_has_null_weekend_rounds
+  expected: kill
+  note: ESPN's 0.0 placeholder for a round not played would read as a 0-stroke round.
+
+- id: golf-off-board-position-is-null
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '    on_board = isinstance(shown, str) and shown not in ("", "-")'
+  mutant: '    on_board = True'
+  test: tests/test_espn_golf_parsers.py::test_leaderboard_missed_cut_has_null_weekend_rounds
+  expected: kill
+  note: A missed-cut player would carry ESPN's "-" as a position and a tie flag.
+
+- id: golf-leaderboard-sorted-by-order
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '    df = df.sort(["event_id", "sort_order"], nulls_last=True, maintain_order=True)'
+  mutant: '    df = df'
+  test: tests/test_espn_golf_parsers.py::test_leaderboard_one_row_per_player_with_string_ids
+  expected: kill
+  note: The leaderboard payload is not in leaderboard order; unsorted, row 0 is not the leader.
