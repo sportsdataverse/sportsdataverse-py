@@ -114,7 +114,7 @@ def _frame(rows: List[Dict[str, Any]], return_as_pandas: bool) -> Union[pl.DataF
         import pandas as pd
 
         return pd.DataFrame(rows)
-    return pl.DataFrame(rows, strict=False)
+    return pl.DataFrame(rows, strict=False, infer_schema_length=None)
 
 
 @overload

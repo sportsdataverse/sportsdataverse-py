@@ -420,7 +420,7 @@ def parse_cfb_ncaa_player_stats(
             buckets.setdefault(cat, []).append(row)
     out: "dict" = {}
     for cat, rows in buckets.items():
-        df = pl.DataFrame(rows)
+        df = pl.DataFrame(rows, infer_schema_length=None)
         out[cat] = df.to_pandas() if return_as_pandas else df
     return out
 

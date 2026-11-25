@@ -12196,3 +12196,13 @@
   test: tests/wnba/test_wnba_player_props_cold_start.py::test_an_expansion_teams_first_game_returns_the_empty_schema
   expected: kill
   note: An expansion team's first game (no ratings row yet) would raise KeyError again.
+
+- id: soccer-standings-infer-all-rows
+  group: polars-2.2
+  finding: polars-2.2-from-dicts-extra-key
+  file: sportsdataverse/soccer/soccer_espn_parsers.py
+  snippet: 'return _out(pl.DataFrame(rows, infer_schema_length=None), return_as_pandas)'
+  mutant: 'return _out(pl.DataFrame(rows), return_as_pandas)'
+  test: tests/test_espn_soccer_parsers.py::test_parse_soccer_standings_keeps_a_stat_first_seen_after_row_100
+  expected: kill
+  note: A stat first seen after row 100 is dropped on polars 2.0 and raises on 2.2 unless every row is inferred.
