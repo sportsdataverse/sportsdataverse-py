@@ -404,7 +404,9 @@ function resolves in `tools/codegen/sources.yaml`, or `--check` fails naming it.
   its `exclude_leagues` (the `espn_cdn` endpoints also take an `include_prefixes` allowlist,
   so a new league reaches them only when added there). A league whose ESPN surface is thin lists
   the shorts a live probe saw return data in its own `endpoints:` allowlist (lacrosse), and gets
-  wrappers for those alone; an unknown short fails the build. The regen writes `sportsdataverse/<lg>/<lg>_espn_ext.py` and wires
+  wrappers for those alone; an unknown short fails the build. An endpoint whose ESPN path has no
+  `{league}` segment sends the slug as a query param instead (`league_query: league`, golf's
+  leaderboard). The regen writes `sportsdataverse/<lg>/<lg>_espn_ext.py` and wires
   the league's `__init__.py`. For a top-level league to reach the flat `sportsdataverse.<fn>`
   namespace, add its `from sportsdataverse.<lg> import *` line to the hand-written
   `sportsdataverse/__init__.py`.

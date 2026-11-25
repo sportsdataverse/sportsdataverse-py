@@ -81638,3 +81638,37 @@ split_pat_rows:
     play_type_nfl carry the try).
   pat_of_id: On a split PAT / two-point try row, the id of the touchdown it was folded into (the row's own id is that
     id + 1); null on every other row.
+# ESPN golf: espn_golf_leaderboard (parse_golf_leaderboard). espn_golf_scoreboard's golf table inherits these
+# through generate._DESC_INHERITS ("golf/scoreboard").
+leaderboard:
+  event_id: ESPN event (tournament) id, as a string.
+  event_name: Tournament name (e.g. "Masters Tournament").
+  event_date: Tournament start date, ISO 8601 UTC as ESPN sends it.
+  event_status: Tournament status name (e.g. "STATUS_FINAL", "STATUS_IN_PROGRESS", "STATUS_SCHEDULED").
+  player_id: ESPN golfer (athlete) id, as a string.
+  player_name: Golfer's display name.
+  player_short_name: Golfer's short name (e.g. "R. McIlroy").
+  country: Country the golfer represents, from the flag ESPN shows beside the name.
+  amateur: True for an amateur in the field. Null on the scoreboard, which does not carry it.
+  sort_order: Leaderboard order (1 = leader). Players tied on score keep distinct values here.
+  position: Displayed position, with a "T" prefix for a tie (e.g. "1", "T3"). Null for a player off the board (missed
+    cut, withdrawn) and on the scoreboard.
+  position_is_tie: True when the position is shared. Null for a player off the board and on the scoreboard.
+  player_status: Player status name (e.g. "STATUS_FINISH", "STATUS_CUT", "STATUS_WD", "STATUS_IN_PROGRESS"). Null on the
+    scoreboard.
+  thru: Hole the player last completed in the current round (18 when the round is done). Null on the scoreboard.
+  to_par: Total score relative to par as an integer ("E" is 0, "-12" is -12); null when no score is posted.
+  to_par_display: Total score relative to par as ESPN displays it (e.g. "-12", "E", "+3").
+  total_strokes: Total strokes over the rounds played. On the scoreboard it is summed from round_1 to round_4.
+  round_1: Strokes in round 1; null when the round was not played. A round in progress holds the strokes so far (see
+    thru); a playoff is never a round.
+  round_2: Strokes in round 2; null when the round was not played.
+  round_3: Strokes in round 3; null when the round was not played (a missed cut, or not started).
+  round_4: Strokes in round 4; null when the round was not played (a missed cut, a 54-hole event, or not started).
+  round_1_to_par: Round 1 score relative to par as ESPN displays it (e.g. "-5"); null when the round was not played.
+  round_2_to_par: Round 2 score relative to par as ESPN displays it; null when the round was not played.
+  round_3_to_par: Round 3 score relative to par as ESPN displays it; null when the round was not played.
+  round_4_to_par: Round 4 score relative to par as ESPN displays it; null when the round was not played.
+  earnings: Prize money won, in the tour's currency (0.0 for a missed cut). Null on the scoreboard.
+  cup_points: Season-long points earned at the event (FedExCup on the PGA Tour, the Race to the CME Globe on the LPGA).
+    Null on the scoreboard.

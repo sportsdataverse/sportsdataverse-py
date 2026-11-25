@@ -43,7 +43,7 @@ box score, schedule, roster, and other sports data across the NBA (+ G-League),
 WNBA, NFL, MLB, NHL, MBB (men's college basketball), WBB (women's college
 basketball), CFB (college football), PWHL + 19 HockeyTech minor/junior hockey
 leagues, college hockey (M/W), college baseball + softball, soccer, cricket,
-lacrosse, UFL/XFL/CFL, and odds endpoints, plus international basketball (EuroLeague and
+lacrosse, golf, UFL/XFL/CFL, and odds endpoints, plus international basketball (EuroLeague and
 24 provider families), European hockey (SIHF and 12 leagues), Formula 1, the
 Kalshi and Polymarket prediction markets, and the cross-sport providers (CBS,
 Fox, Yahoo, ESPN content, TheSportsDB).
@@ -487,7 +487,7 @@ uv add --dev some-package           # add dev-only dep
 One package per primary league (`cfb/ mbb/ mlb/ nba/ nfl/ nhl/ wbb/ wnba/ pwhl/ nbagl/ odds/`), the
 cross-sport sources under `providers/` (`cbs/ fox/ yahoo/ espn_content/ thesportsdb/`), the HockeyTech core
 (`hockeytech/`) and its 19 league families under `hockey/`, `baseball/` (college
-baseball + softball), `soccer/` (+ `mls/`, `nwsl/`), `cricket/`, `lacrosse/`, `football/`
+baseball + softball), `soccer/` (+ `mls/`, `nwsl/`), `cricket/`, `lacrosse/`, `golf/`, `football/`
 (UFL/XFL/CFL + the `sources/` adapters), `scrape/` (`espn/ ncaa/ stats/`),
 `registry/`, `validation/`, `wexp/`, `parsed/` (DEPRECATED generated aliases) and
 `sdv_docs/` (the MCP server, which must never import `sportsdataverse`). `basketball/` holds
@@ -499,8 +499,8 @@ EuroLeague, the international families and the ESPN side leagues (`nbl/ fiba/ ol
 ## ESPN Cross-League Architecture
 
 Each `<league>/<prefix>_espn_ext.py` is **codegen output** (~5,700 lines) written by
-`build_live()` from the five ESPN endpoint YAMLs — 126 short names across 41
-league modules, 4,598 wrappers. Never hand-edit one; edit the YAML and regenerate.
+`build_live()` from the five ESPN endpoint YAMLs — 127 short names across 42
+league modules, 4,626 wrappers. Never hand-edit one; edit the YAML and regenerate.
 
 ## Parser Layer
 

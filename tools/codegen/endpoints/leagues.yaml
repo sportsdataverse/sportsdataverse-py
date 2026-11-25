@@ -95,3 +95,41 @@ leagues:
       - season_week_rankings
       - franchises
       - franchise
+  # --- Golf: param-mode family over league=pga | lpga | liv | eur | champions-tour. A golf event is a
+  # field of players (no teams, rosters or standings), so ``endpoints`` allowlists the shorts a live probe
+  # (2026-11-25, the 2026 Masters and CME Group Tour Championship) saw return data; the golf-scoped
+  # ``leaderboard`` adds the full field with positions and player status. ``leaders`` answered for pga only. ---
+  - prefix: golf
+    sport: golf
+    league: pga
+    league_param: true
+    scopes: [universal, golf]
+    endpoints:
+      - scoreboard
+      - leaderboard
+      - news
+      - statistics_league
+      - athlete_overview
+      - leaders
+      - league_root
+      - season_pointer
+      - seasons
+      - season_info
+      - season_types
+      - season_type
+      - season_type_leaders
+      - season_athletes
+      - athletes_index
+      - athlete_core
+      - athlete_statisticslog
+      - athlete_seasons
+      - events
+      - event
+      - event_competition
+      - event_competitors
+      - event_status
+      - event_broadcasts
+      - event_leaders
+      - venues
+      - venue
+      - tournaments

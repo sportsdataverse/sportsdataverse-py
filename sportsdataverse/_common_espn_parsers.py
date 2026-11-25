@@ -2794,6 +2794,8 @@ def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
 ENDPOINT_PARSERS = {
     # Site v2 (rich nested)
     "scoreboard": parse_scoreboard,
+    # golf-only; golf leagues route it to parse_golf_leaderboard (_SPORT_PARSER_OVERRIDES)
+    "leaderboard": parse_scoreboard,
     "teams_site": parse_teams,
     # summary is the dispatcher — returns dict of sub-frames by default
     "summary": parse_summary,

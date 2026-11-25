@@ -58,7 +58,7 @@
 to play-by-play, box score, schedule, roster, and other sports data across
 multiple leagues (NBA + G-League, WNBA, NFL, MLB, NHL, MBB, WBB, CFB, PWHL +
 19 HockeyTech minor/junior leagues, college hockey M/W, college baseball +
-softball, soccer, cricket, lacrosse, UFL/XFL/CFL, plus odds), plus international
+softball, soccer, cricket, lacrosse, golf, UFL/XFL/CFL, plus odds), plus international
 basketball (EuroLeague and 24 provider families), European hockey (SIHF and 12
 leagues), Formula 1, the Kalshi and Polymarket prediction markets, and the
 cross-sport providers (CBS, Fox, Yahoo, ESPN content, TheSportsDB).
@@ -206,6 +206,7 @@ sportsdataverse/
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
   lacrosse/   # ESPN lacrosse (league-parameterized: PLL, men's and women's college; probed endpoint allowlist)
+  golf/       # ESPN golf (league-parameterized: pga, lpga, liv, eur, champions-tour) + golf_espn_parsers (field-of-players leaderboard)
   football/   # UFL / XFL / CFL ESPN families
   nbagl/      # NBA G League: ESPN wrappers, nbagl_stats (stats.nba.com, LeagueID=20) and engine helpers
   providers/  # cross-sport sources: cbs/ (CBS NAPI), fox/ (Fox Sports API), yahoo/ (Yahoo Shangrila),
@@ -259,10 +260,10 @@ last remnants (`_common_espn.py`, the `extract*.py` bootstraps and the committed
 `tools/codegen/_generated/` staging copies) are deleted on main and ship in 0.2.0. If you find a
 description of that pattern anywhere, it predates 0.1.x.
 
-Total cross-league surface: **126 short names** (from the five ESPN
-endpoint YAMLs in `generate.ESPN_APIS`) emitted across 41 league modules
-= **4,598 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
-lacrosse emits 32). The `espn_cdn` family (`cdn.espn.com/core`, shorts
+Total cross-league surface: **127 short names** (from the five ESPN
+endpoint YAMLs in `generate.ESPN_APIS`) emitted across 42 league modules
+= **4,626 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
+lacrosse emits 32, golf 28). The `espn_cdn` family (`cdn.espn.com/core`, shorts
 `cdn_playbyplay` / `cdn_boxscore` / `cdn_schedule` / `cdn_scoreboard` /
 `cdn_rankings`) is the one family whose per-league reach was live-probed:
 each endpoint carries an `include_prefixes` allowlist (league prefixes, so
@@ -294,7 +295,7 @@ The rest follow the same contract, one per provider family, among them `provider
 `hockeytech/_parsers.py`, `odds/the_odds_api_parsers.py`,
 `mlb/mlb_statcast_parsers.py`, `soccer/` (`soccer_espn`, `asa`, `fotmob`, `uefa`,
 `fifa`, `mls/mls_api`, `nwsl/nwsl_api`), `basketball/euroleague/euroleague_parsers.py`,
-`cricket/cricket_espn_parsers.py`, and the NCAA HTML parsers
+`cricket/cricket_espn_parsers.py`, `golf/golf_espn_parsers.py`, and the NCAA HTML parsers
 `mbb/mbb_ncaa_team_parsers.py` + `wbb/wbb_ncaa_team_parsers.py`, plus the international
 basketball and European hockey families under `basketball/` and `hockey/`.
 
@@ -344,7 +345,7 @@ cover the long tail:
   per game).
 
 Three regression tests in `tests/test_espn_universal_parsers.py`
-lock in the 126/126 coverage invariant + the shim invariant. Any
+lock in the 127/127 coverage invariant + the shim invariant. Any
 new wrapper short name added without a matching `ENDPOINT_PARSERS`
 entry fails CI.
 

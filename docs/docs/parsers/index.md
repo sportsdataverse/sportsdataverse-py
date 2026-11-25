@@ -110,7 +110,7 @@ Every parser obeys these rules:
 
 ## ENDPOINT_PARSERS registry
 
-The registry maps each wrapper *short name* to its parser. **All 131 entries are
+The registry maps each wrapper *short name* to its parser. **All 132 entries are
 registered**, so every generated wrapper accepts `return_parsed=` without any
 per-league wiring. (The wrapper factory this page once described is retired: the
 `*_espn_ext.py` modules are codegen output — see
@@ -119,7 +119,9 @@ per-league wiring. (The wrapper factory this page once described is retired: the
 The package ships one parser module per data surface
 (`find sportsdataverse -name '*_parsers.py'` lists them); `_common_espn_parsers.py`
 holds the ESPN cross-league parsers, including the 21-section `parse_summary`
-dispatcher.
+dispatcher. A sport whose payloads do not fit the generic shape routes a short to its own
+module (soccer, cricket and golf: `golf_espn_parsers.parse_golf_leaderboard` turns a
+field-of-players scoreboard or leaderboard into one row per player).
 
 **Errors.** A parser never raises on an empty or malformed payload — it
 returns a zero-row frame with the documented schema. The *fetch* is what raises:
@@ -133,7 +135,7 @@ failed, and `ValueError` on a 400 / 422.
 >>> parser_for("venue").__name__
 'parse_single_entity'
 >>> len(ENDPOINT_PARSERS)
-131
+132
 ```
 
 The registry uses three generic parsers as fall-throughs for

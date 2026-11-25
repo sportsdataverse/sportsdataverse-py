@@ -40,6 +40,29 @@ endpoints:
   returns_schema: scoreboard
   example_args:
     dates: '20240115'
+# Golf only. The tournament leaderboard lives at /golf/leaderboard with the league as a
+# query param (``/golf/{league}/leaderboard`` is 404), so the slug travels as ``league=``
+# (``league_query``). It carries what the scoreboard lacks: the displayed position (``T5``)
+# and tie flag, player status (cut, withdrawn), holes completed, total strokes, earnings and
+# cup points. Checked 2026-11-25 for pga, lpga, liv, eur and champions-tour.
+- short: leaderboard
+  scope: golf
+  path: /{sport}/leaderboard
+  league_query: league
+  summary: >-
+    Tournament leaderboard: the full field of one golf event (the current one when
+    ``event_id`` is omitted), one row per player.
+  extra_params:
+  - name: event_id
+    query_key: event
+    type: int|str
+    description: ESPN event (tournament) id; omitted, the tour's current or most recent event.
+  # The registry default only; golf (the one league in scope) routes it to parse_golf_leaderboard
+  # through generate._SPORT_PARSER_OVERRIDES.
+  parser: parse_scoreboard
+  returns_schema: leaderboard
+  example_args:
+    event_id: '401811941'
 - short: summary
   scope: universal
   path: /{sport}/{league}/summary
