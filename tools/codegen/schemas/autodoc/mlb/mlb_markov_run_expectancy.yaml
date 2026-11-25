@@ -1,0 +1,16 @@
+schema: mlb_markov_run_expectancy
+kind: dataframe
+hand_authored: true
+columns:
+- name: base_state
+  type: character
+  description: ''
+- name: outs
+  type: integer
+  description: ''
+- name: re
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''

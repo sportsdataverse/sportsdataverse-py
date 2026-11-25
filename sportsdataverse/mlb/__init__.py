@@ -33,7 +33,15 @@ from sportsdataverse.mlb.mlb_pitch_injury import mlb_injury_risk, pitcher_appear
 from sportsdataverse.mlb.mlb_pitch_sequencing import mlb_pitch_tunneling, mlb_sequence_run_value
 from sportsdataverse.mlb.mlb_player_stats import *
 from sportsdataverse.mlb.mlb_prop_projection import mlb_prop_strikeouts, mlb_prop_team_runs, mlb_props, prop_over_prob
-from sportsdataverse.mlb.mlb_run_expectancy import mlb_run_expectancy_matrix, pbp_base_out_states, run_value
+from sportsdataverse.mlb.mlb_run_expectancy import (
+    MLB_PA_EVENT_MAP,
+    MLB_PA_OUTCOMES,
+    mlb_base_out_transitions,
+    mlb_markov_run_expectancy,
+    mlb_run_expectancy_matrix,
+    pbp_base_out_states,
+    run_value,
+)
 from sportsdataverse.mlb.mlb_run_values import (
     RUN_VALUES,
     as_of_split,
