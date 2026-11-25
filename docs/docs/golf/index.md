@@ -10,6 +10,7 @@ description: "sdv-py Golf: endpoint references, dataset loaders and parsers for 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [ESPN](#espn) | `site.api.espn.com`, `site.web.api.espn.com`, `sports.core.api.espn.com` | 28 | none |
+| [PGA TOUR GraphQL API](#pga-tour-graphql-api) | `orchestrator.pgatour.com` | 10 | public frontend key (read from pgatour.com on first use; $PGA_API_KEY to supply one) |
 
 ## ESPN {#espn}
 
@@ -18,6 +19,12 @@ description: "sdv-py Golf: endpoint references, dataset loaders and parsers for 
 | [ESPN site API (v2)](reference/site) | 4 |
 | [ESPN web API (v3)](reference/web) | 2 |
 | [ESPN core API (v2)](reference/core) | 22 |
+
+## PGA TOUR GraphQL API {#pga-tour-graphql-api}
+
+| Reference | Functions |
+|---|---:|
+| [PGA TOUR GraphQL API (orchestrator.pgatour.com; runtime only, public frontend key or $PGA_API_KEY)](reference/pgatour) | 10 |
 
 ## Examples
 

@@ -167,7 +167,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 | Soccer (Leagues) | [FIFA World Cup](wc/) | `sportsdataverse.soccer.wc` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
 | More sports & sources (Cricket) | [Cricket](cricket/) | `sportsdataverse.cricket` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
 | More sports & sources (Lacrosse) | [Lacrosse](lacrosse/) | `sportsdataverse.lacrosse` | ESPN (32): site API (v2) 10, core API (v2) 22 |
-| More sports & sources (Golf) | [Golf](golf/) | `sportsdataverse.golf` | ESPN (28): site API (v2) 4, web API (v3) 2, core API (v2) 22 |
+| More sports & sources (Golf) | [Golf](golf/) | `sportsdataverse.golf` | ESPN (28), PGA TOUR GraphQL API (10) |
 | More sports & sources (Betting & prediction markets) | [Betting odds](odds/) | `sportsdataverse.odds` | The Odds API (11), Polymarket (14), Kalshi (9) |
 | More sports & sources (Cross-sport providers) | [CBS Sports](cbs/) | `sportsdataverse.providers.cbs` | CBS Sports NAPI (82) |
 | More sports & sources (Cross-sport providers) | [Yahoo Sports](yahoo/) | `sportsdataverse.providers.yahoo` | Yahoo Sports Shangrila (105) |

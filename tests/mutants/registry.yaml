@@ -12227,3 +12227,44 @@
   test: tests/test_espn_golf_parsers.py::test_leaderboard_one_row_per_player_with_string_ids
   expected: kill
   note: The leaderboard payload is not in leaderboard order; unsorted, row 0 is not the leader.
+
+# --- PGA TOUR GraphQL runtime + parsers (pgatour_*) ----------------------------------------------
+- id: pgatour-key-from-the-prod-block
+  group: pgatour
+  finding: pgatour-graphql
+  file: sportsdataverse/golf/pgatour_runtime.py
+  snippet: '_PROD_KEY = re.compile(r''"prod":\{[^{}]*?"apiKey":"([^"]+)"'')'
+  mutant: '_PROD_KEY = re.compile(r''"apiKey":"([^"]+)"'')'
+  test: tests/test_pgatour.py::test_site_key_is_read_from_the_app_bundle
+  expected: kill
+  note: The bundle lists several environments; the first apiKey is not the production one.
+
+- id: pgatour-compressed-payload-decoded
+  group: pgatour
+  finding: pgatour-graphql
+  file: sportsdataverse/golf/pgatour_runtime.py
+  snippet: '    return {**value, "payload": decoded}'
+  mutant: '    return value'
+  test: tests/test_pgatour.py::test_decode_payload_round_trip_and_bad_payload
+  expected: kill
+  note: An undecoded payload is a base64 string every parser reads as an empty answer.
+
+- id: pgatour-int-variables-typed
+  group: pgatour
+  finding: pgatour-graphql
+  file: sportsdataverse/golf/pgatour_runtime.py
+  snippet: '            out[key] = whole'
+  mutant: '            out[key] = value'
+  test: tests/test_pgatour.py::test_variables_take_the_declared_type
+  expected: kill
+  note: A string year or round reaches an Int variable and the API rejects the query.
+
+- id: pgatour-leaderboard-drops-information-rows
+  group: pgatour
+  finding: pgatour-graphql
+  file: sportsdataverse/golf/pgatour_parsers.py
+  snippet: 'if r.get("__typename", "PlayerRowV3") == "PlayerRowV3"'
+  mutant: 'if True'
+  test: tests/test_pgatour.py::test_ids_are_strings_and_join
+  expected: kill
+  note: The cut-line banner would become a player row keyed by its own id.

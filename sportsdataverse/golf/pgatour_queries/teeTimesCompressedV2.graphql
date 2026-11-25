@@ -1,0 +1,6 @@
+query TeeTimesCompressedV2($id: ID!) {
+  teeTimesCompressedV2(id: $id) {
+    id
+    payload
+  }
+}

@@ -207,6 +207,7 @@ sportsdataverse/
   cricket/    # ESPN cricket + bundled win-probability models
   lacrosse/   # ESPN lacrosse (league-parameterized: PLL, men's and women's college; probed endpoint allowlist)
   golf/       # ESPN golf (league-parameterized: pga, lpga, liv, eur, champions-tour) + golf_espn_parsers (field-of-players leaderboard)
+              #   + the PGA TOUR GraphQL family pgatour_* (runtime only; pgatour_runtime posts pgatour_queries/*.graphql)
   football/   # UFL / XFL / CFL ESPN families
   nbagl/      # NBA G League: ESPN wrappers, nbagl_stats (stats.nba.com, LeagueID=20) and engine helpers
   providers/  # cross-sport sources: cbs/ (CBS NAPI), fox/ (Fox Sports API), yahoo/ (Yahoo Shangrila),
@@ -295,7 +296,7 @@ The rest follow the same contract, one per provider family, among them `provider
 `hockeytech/_parsers.py`, `odds/the_odds_api_parsers.py`,
 `mlb/mlb_statcast_parsers.py`, `soccer/` (`soccer_espn`, `asa`, `fotmob`, `uefa`,
 `fifa`, `mls/mls_api`, `nwsl/nwsl_api`), `basketball/euroleague/euroleague_parsers.py`,
-`cricket/cricket_espn_parsers.py`, `golf/golf_espn_parsers.py`, and the NCAA HTML parsers
+`cricket/cricket_espn_parsers.py`, `golf/golf_espn_parsers.py` + `golf/pgatour_parsers.py`, and the NCAA HTML parsers
 `mbb/mbb_ncaa_team_parsers.py` + `wbb/wbb_ncaa_team_parsers.py`, plus the international
 basketball and European hockey families under `basketball/` and `hockey/`.
 
