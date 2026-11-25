@@ -90,10 +90,13 @@ def test_slope_curve_is_monotone_in_games_played() -> None:
     Errors-in-variables: a noisier predictor attenuates the OLS slope toward
     zero, so an as-of rating built on two games must be trusted less than one
     built on twelve. A non-monotone curve would mean the fit found noise.
+    The ratings now shrink a thin team toward average before the slope sees
+    it, so the curve's own discount is smaller than it was for the unshrunk
+    engine (0-3 games 41.2 vs 8+ 65.6, ratio 0.63; it was 0.17).
     """
     slopes = [slope_for_games(g) for g in (1, 4, 6, 9)]
     assert slopes == sorted(slopes)
-    assert slopes[0] < slopes[-1] / 2  # the early-season discount is substantial
+    assert slopes[0] < 0.75 * slopes[-1]  # the early-season discount is still real
 
 
 def test_slope_without_games_played_is_the_flat_scale() -> None:

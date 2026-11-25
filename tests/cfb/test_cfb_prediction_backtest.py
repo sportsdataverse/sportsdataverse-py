@@ -24,8 +24,10 @@ pass, per the binding "never lower a gate" rule.
 
 AS-OF CONSTRUCTION
 ------------------
-Ratings come from the published `cfb_ratings_weekly`, which is as-of by
-construction. `through_week == W` is INCLUSIVE of week W (verified empirically
+Ratings are the 2024 `cfb_ratings_weekly` snapshots, which are as-of by
+construction, with `adj_off_epa` / `adj_def_epa` / `adj_net` rebuilt by the
+current `efficiency_ratings` (every other column is the published 2026-09-27
+vintage; see the fixture README). `through_week == W` is INCLUSIVE of week W (verified empirically
 at 97.0% against 58.7% for the exclusive reading), so a week-W game is
 predicted from the `W-1` snapshot. That is also how a caller uses the surface,
 which the old gate's week-by-week ridge refitting only approximated -- and it
@@ -58,16 +60,22 @@ _BURN_IN_WEEK = 5  # weeks 1-4 rest on too few games to rate
 # Floors: MEASURED on this fixture, then given headroom. The measured value is
 # recorded beside each so a future change can see exactly what moved.
 _MIN_GAMES = 500  # measured 557
-_MARGIN_MAE_FLOOR = 14.65  # measured 13.35 (2026-08-03 constants 13.32, superseded 14.49)
-_BRIER_FLOOR = 0.2298  # measured 0.2087 (2026-08-03 constants 0.2090)
-_ACCURACY_FLOOR = 0.6089  # measured 0.6481 (2026-08-03 constants 0.6409)
-_SPREAD_AGREEMENT_FLOOR = 6.41  # measured 5.79 (was 5.83) -- AGREEMENT, not accuracy
-#: Calibration slope of actual ~ predicted margin. MEASURED 0.926 on this
-#: fixture, game-bootstrap 95% CI [0.791, 1.067] (2,000 resamples, seed 0);
+_MARGIN_MAE_FLOOR = 14.65  # measured 12.90 (replaced system 13.30)
+_BRIER_FLOOR = 0.2298  # measured 0.1945 (replaced system 0.2077)
+_ACCURACY_FLOOR = 0.6089  # measured 0.6984 (replaced system 0.6768)
+_SPREAD_AGREEMENT_FLOOR = 6.41  # measured 5.03 (replaced system 5.93) -- AGREEMENT, not accuracy
+#: Calibration slope of actual ~ predicted margin. MEASURED 0.862 on this
+#: fixture, game-bootstrap 95% CI [0.756, 0.975] (2,000 resamples, seed 0);
 #: the band is that CI with 0.05 headroom each side. A scale error is what the
-#: MAE floor cannot see: the superseded 44.5367 constants score slope 0.592
-#: (predictions ~1.7x too wide) and still clear MAE 14.65.
-_CAL_SLOPE_BAND = (0.74, 1.12)
+#: MAE floor cannot see: predictions 1.7x too wide score slope 0.507 and still
+#: clear MAE 14.65.
+_CAL_SLOPE_BAND = (0.70, 1.03)
+#: The system these constants replaced, scored on the SAME 557 games: the
+#: 2026-09-27 constants on the pre-2026-11-25 `efficiency_ratings` (spread-aware
+#: 0.1-0.9 band, lambda 0.035), the published 2024 snapshots.
+_REPLACED_MAE = 13.2989
+_REPLACED_BRIER = 0.20770
+_REPLACED_LOGLOSS = 0.60129
 
 
 def _asof_predictions() -> pl.DataFrame:
@@ -148,13 +156,8 @@ def test_margin_calibration_slope_within_band() -> None:
 
 
 def test_calibration_band_rejects_the_superseded_scale() -> None:
-    """Guard the guard: the 1.7x-too-wide constants must fall outside the band."""
-    old = 44.5367 * (
-        _PREDS["home_adj_net"].to_numpy()
-        - _PREDS["away_adj_net"].to_numpy()
-        + np.where(_PREDS["neutral_site"].to_numpy(), 0.0, 2 * 0.01848)
-    )
-    assert not _CAL_SLOPE_BAND[0] <= _cal_slope(old) <= _CAL_SLOPE_BAND[1]
+    """Guard the guard: predictions 1.7x too wide (the pre-2026-08 failure) fall outside the band."""
+    assert not _CAL_SLOPE_BAND[0] <= _cal_slope(1.7 * _PREDS["exp_margin"].to_numpy()) <= _CAL_SLOPE_BAND[1]
 
 
 def test_win_prob_brier_within_floor() -> None:
@@ -185,20 +188,15 @@ def test_spread_agreement_with_market() -> None:
 
 
 def test_beats_the_superseded_constants_on_the_same_games() -> None:
-    """Regression guard that needs no absolute floor.
+    """Regression guard: no worse than the system it replaced, on the same games.
 
-    The pre-2026-08 constants (net_points_scale 44.5367, hfa_epa 0.01848) score
-    MAE 14.49 on these games against the current 13.32. Asserting the
-    COMPARISON rather than a threshold means this survives any future refit --
-    it fails only if a change is genuinely worse than what it replaced.
+    ``_REPLACED_MAE`` is that system measured on these 557 games (13.30 against
+    the current 12.90). The old ratings are not in the fixture any more, so the
+    comparison is against their recorded score; a future refit replaces both
+    numbers together.
     """
-    old = 44.5367 * (
-        _PREDS["home_adj_net"].to_numpy()
-        - _PREDS["away_adj_net"].to_numpy()
-        + np.where(_PREDS["neutral_site"].to_numpy(), 0.0, 2 * 0.01848)
-    )
     actual = _PREDS["actual_margin"].to_numpy()
-    assert float(mae(_PREDS["exp_margin"].to_numpy(), actual)) < float(mae(old, actual))
+    assert float(mae(_PREDS["exp_margin"].to_numpy(), actual)) < _REPLACED_MAE
 
 
 def test_beats_superseded_constants_on_proper_scoring_rules() -> None:
@@ -211,23 +209,12 @@ def test_beats_superseded_constants_on_proper_scoring_rules() -> None:
     a calibration slope of 0.55. A comparison, not a threshold, so this
     survives any future refit.
     """
-    from scipy.stats import norm
-
     y = _PREDS["y"].to_numpy()
-    old_m = 44.5367 * (
-        _PREDS["home_adj_net"].to_numpy()
-        - _PREDS["away_adj_net"].to_numpy()
-        + np.where(_PREDS["neutral_site"].to_numpy(), 0.0, 2 * 0.01848)
-    )
-    old_p = norm.cdf(old_m / 17.2493)
-    new_p = _PREDS["home_win_prob"].to_numpy()
+    p = np.clip(_PREDS["home_win_prob"].to_numpy(), 1e-9, 1 - 1e-9)
+    logloss = float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
 
-    def _ll(p):
-        p = np.clip(p, 1e-9, 1 - 1e-9)
-        return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
-
-    assert float(brier_score(y, new_p)) < float(brier_score(y, old_p))
-    assert _ll(new_p) < _ll(old_p)
+    assert float(brier_score(y, p)) < _REPLACED_BRIER  # measured 0.1945
+    assert logloss < _REPLACED_LOGLOSS  # measured 0.5703
 
 
 def test_win_prob_discriminates_favorites_from_dogs() -> None:
@@ -263,15 +250,15 @@ def test_win_prob_discriminates_favorites_from_dogs() -> None:
     dog_rate = float(dogs["y"].mean())
     fav_rate = float(favs["y"].mean())
     assert dog_rate < 0.5 < fav_rate, (dog_rate, fav_rate)
-    assert fav_rate - dog_rate >= 0.22, (dog_rate, fav_rate)  # measured 0.271 (was 0.255)
+    assert fav_rate - dog_rate >= 0.22, (dog_rate, fav_rate)  # measured 0.379 (was 0.271)
 
 
 _PRIOR_PACE = pl.read_parquet(_FIX / "prior_pace_2023.parquet")
 
-#: Measured on this fixture with the pace blend live: 13.0469. Floor carries
-#: headroom. Raw (no prior) measures 13.2620, so the floor sits BELOW that --
+#: Measured on this fixture with the pace blend live: 12.9771. Floor carries
+#: headroom. Raw (no prior) measures 13.1355, so the floor sits BELOW that --
 #: a regression that silently disables the blend cannot pass this.
-_TOTAL_MAE_FLOOR = 13.20
+_TOTAL_MAE_FLOOR = 13.10
 
 
 def _totals_backtest(*, with_prior: bool) -> tuple[float, int]:
