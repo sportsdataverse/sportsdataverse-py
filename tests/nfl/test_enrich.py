@@ -443,6 +443,16 @@ class TestLeadDiffWiring:
         out_explicit = enrich_nfl_pbp(_synthetic_frame(), method="lead_diff")
         assert out_default["ep"].to_list() == out_explicit["ep"].to_list()
 
+    def test_gsis_player_ids_pass_through_as_string(self, patched) -> None:  # noqa: ANN001
+        # nflverse / load_nfl_model_pbp player ids are GSIS ids ("00-0035228"), not integers: an Int64
+        # cast at this boundary would raise, or with strict=False null every one. They are not the ESPN athlete ids the
+        # NFLPlayProcess frame carries as Int64, so the two never join on them anyway.
+        df = _synthetic_frame()
+        gsis = pl.Series("passer_player_id", [f"00-00{35228 + i}" for i in range(df.height)], pl.String)
+        out = enrich_nfl_pbp(df.with_columns(gsis), method="lead_diff")
+        assert out.schema["passer_player_id"] == pl.String
+        assert sorted(out["passer_player_id"].to_list()) == sorted(gsis.to_list())
+
     def test_wpa_perspective_posteam(self, patched) -> None:  # noqa: ANN001
         # wpa must be from the POSSESSION team's perspective:
         # wpa = home_wpa when posteam == home_team, else -home_wpa.
