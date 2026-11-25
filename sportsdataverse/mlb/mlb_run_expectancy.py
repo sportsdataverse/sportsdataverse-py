@@ -86,7 +86,9 @@ def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
     *previous PA in the game* (``over("game_id")``, **not** reset per
     half-inning -- the score itself carries across the half-inning
     boundary even though outs/bases do not).  ``runs_rest_of_inning`` is
-    the suffix-sum of ``runs_on_play`` within the half.
+    the suffix-sum of ``runs_on_play`` within the half. A PA repeated under
+    the same ``(game_id, about_at_bat_index)`` (a game collected twice)
+    counts once.
 
     Args:
         pbp: Parsed ``mlb_play_by_play`` frame (optionally concatenated
@@ -119,6 +121,8 @@ def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
     """
     if pbp is None or pbp.height == 0:
         return pl.DataFrame(schema=_STATES_SCHEMA)
+    # A game collected twice (listed on two schedule dates) repeats every PA key: count it once.
+    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)
 
     df = pbp.with_columns(
         pl.col("game_id").cast(pl.Utf8),
@@ -180,7 +184,8 @@ def _season_game_pks(seasons: Union[int, List[int], None]) -> List[int]:
             for game in date_entry.get("games") or []:
                 if (game.get("status") or {}).get("codedGameState") == "F":
                     pks.append(int(game["gamePk"]))
-    return pks
+    # A suspended game is listed on both its start and its resume date (e.g. 5028 on 2000-04-12/13).
+    return list(dict.fromkeys(pks))
 
 
 def mlb_run_expectancy_matrix(

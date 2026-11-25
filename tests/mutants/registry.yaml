@@ -11621,6 +11621,27 @@
   expected: kill
   note: An automatic runner who scores on the half's first PA (718511 bottom 11) would be missed.
 
+# --- mlb-dedupe-game-pks: a suspended game listed on two schedule dates counts once ----------------
+- id: mlb-season-game-pks-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    return list(dict.fromkeys(pks))'
+  mutant: '    return pks'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_season_game_pks_lists_a_suspended_game_once
+  expected: kill
+  note: 5028 (suspended 2000-04-12, resumed the 13th) would be collected twice for the RE24 matrix.
+
+- id: mlb-base-out-states-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)'
+  mutant: '    pbp = pbp'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_twice_collected_games_count_once
+  expected: kill
+  note: A game collected twice would interleave its PAs, corrupting the states and double-counting RE24.
+
 # --- WNBA prop constants: per-league SD law / dispersion + league-bound WNBA helpers -------------
 - id: wnba-props-distribution-reads-nba-constants
   group: wnba-prop-constants

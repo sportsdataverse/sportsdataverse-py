@@ -1029,7 +1029,9 @@ boundary), except that an extra half-inning's automatic runner starts on
 *previous PA in the game* (`over("game_id")`, **not** reset per
 half-inning -- the score itself carries across the half-inning
 boundary even though outs/bases do not).  `runs_rest_of_inning` is
-the suffix-sum of `runs_on_play` within the half.
+the suffix-sum of `runs_on_play` within the half. A PA repeated under
+the same `(game_id, about_at_bat_index)` (a game collected twice)
+counts once.
 
 **Parameters**
 
