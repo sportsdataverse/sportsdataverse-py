@@ -7609,8 +7609,8 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/nhl/nhl_player_props.py
-  snippet: '    "player_id": pl.Int64,'
-  mutant: '    "player_id": pl.Utf8,'
+  snippet: "    \"player_id\": pl.Int64,\n    \"team\": pl.Utf8,\n    \"opp_team\": pl.Utf8,\n    \"stat\""
+  mutant: "    \"player_id\": pl.Utf8,\n    \"team\": pl.Utf8,\n    \"opp_team\": pl.Utf8,\n    \"stat\""
   test: tests/nhl/test_nhl_player_props.py -k "props_join_the_nhl_parser_frames"
   expected: kill
   note: nhl_player_props pins player_id to Utf8 again, so it cannot join a parse_nhl_web_* frame (R986-3).
@@ -12237,6 +12237,66 @@
   test: tests/nhl/test_nhl_settled_totals.py::test_a_shootout_counts_one_goal_for_its_winner
   expected: kill
   note: Every scoring shootout attempt would count as a goal again, 0.06-0.11 goals a game on the fitted totals.
+
+- id: nhl-reg-draw-inflation-applied
+  group: nhl-score-model
+  finding: nhl-regulation-3way
+  file: sportsdataverse/nhl/nhl_market.py
+  snippet: '    grid[:, _GOALS, _GOALS] *= 1.0 + const.reg_draw_inflation'
+  mutant: '    grid[:, _GOALS, _GOALS] *= 1.0'
+  test: tests/nhl/test_nhl_regulation_score.py::test_draw_inflation_raises_the_tie_probability
+  expected: kill
+  note: Without the tied-cell boost the regulation grid is two independent Poissons, which put ~16% of games level after 60 minutes where ~22% are.
+
+- id: nhl-final-total-counts-the-deciding-goal
+  group: nhl-score-model
+  finding: nhl-regulation-3way
+  file: sportsdataverse/nhl/nhl_market.py
+  snippet: '    return (goals + (1.0 + theta) * tied.sum(axis=1)) / norm_'
+  mutant: '    return goals / norm_'
+  test: tests/nhl/test_nhl_regulation_score.py::test_score_distribution_matches_win_prob_and_total
+  expected: kill
+  note: The solver would match exp_total to regulation goals only, so the final-score distribution's mean total runs one tie probability above exp_total.
+
+- id: nhl-goalie-saves-strictly-prior
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    return (x.cum_sum() - x).over(*by)'
+  mutant: '    return x.cum_sum().over(*by)'
+  test: tests/nhl/test_nhl_goalie_saves.py
+  expected: kill
+  note: Each projection would read its own game's shots and saves.
+
+- id: nhl-goalie-saves-home-ice-sign
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    side = pl.when(pl.col("is_home") == True).then(-0.5).otherwise(0.5) * const.shots_hfa  # noqa: E712'
+  mutant: '    side = pl.when(pl.col("is_home") == True).then(0.5).otherwise(-0.5) * const.shots_hfa  # noqa: E712'
+  test: tests/nhl/test_nhl_goalie_saves.py::test_home_goalie_faces_fewer_shots_on_opening_night
+  expected: kill
+  note: The home goalie would be projected to face the extra shots the home team takes.
+
+- id: nhl-goalie-saves-interval-uses-nb-size
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    lo, hi = nbinom.ppf(tail, size, size / (size + mean)), nbinom.ppf(1.0 - tail, size, size / (size + mean))'
+  mutant: '    lo, hi = nbinom.ppf(tail, 1e9, 1e9 / (1e9 + mean)), nbinom.ppf(1.0 - tail, 1e9, 1e9 / (1e9 + mean))'
+  test: tests/nhl/test_nhl_goalie_saves.py -k "coverage_and_bias"
+  expected: kill
+  note: Near-Poisson bounds (shots_nb_size ignored) give an interval narrower than the coverage it reports.
+
+- id: nhl-goalie-saves-starters-drop-own-result
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '        box = box.join(starters.select(pl.col("game_id").cast(box.schema["game_id"])), on="game_id", how="anti")'
+  mutant: '        box = box'
+  test: tests/nhl/test_nhl_goalie_saves.py::test_starters_for_a_game_already_in_the_box_ignore_its_result
+  expected: kill
+  note: A slate re-run after puck drop would feed each game's own saves into its projection.
 
 - id: bb-factor-points-defense-sign
   group: bb-factor-points

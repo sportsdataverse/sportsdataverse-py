@@ -85,12 +85,16 @@ from sportsdataverse.nhl.nhl_market import (
     in_game_features,
     nhl_in_game_win_prob,
     nhl_predict_games,
+    nhl_score_distribution,
+    nhl_total_goals_distribution,
     predict_margin,
     predict_total,
+    regulation_goal_means,
     win_prob_from_margin,
 )
 from sportsdataverse.nhl.nhl_player_props import (
     nhl_game_total,
+    nhl_goalie_saves,
     nhl_player_props,
 )
 from sportsdataverse.nhl.nhl_edge_value import nhl_edge_skating_value
