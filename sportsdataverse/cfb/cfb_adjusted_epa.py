@@ -51,6 +51,7 @@ only for continuity until NFL is.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
@@ -452,7 +453,9 @@ def cfb_adjusted_epa(
     return out.to_pandas() if return_as_pandas else out
 
 
-def _walk_forward(base: pl.DataFrame, clean: pl.DataFrame, weeks: list, fit, lam: float) -> pl.DataFrame:
+def _walk_forward(
+    base: pl.DataFrame, clean: pl.DataFrame, weeks: list, fit: Callable[..., tuple], lam: float
+) -> pl.DataFrame:
     """Adjust each week's ``base`` games with strengths fit on ``clean`` plays from earlier weeks only."""
     parts: list[pl.DataFrame] = []
     for week in weeks:
