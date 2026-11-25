@@ -11645,7 +11645,7 @@
   group: nflverse-pbp-columns
   finding: nfl-model-pbp-columns
   file: sportsdataverse/nfl/ep_wp.py
-  snippet: '.then(pl.col("extra_point_prob") + 2 * pl.col("two_point_conversion_prob"))'
+  snippet: '.then(pl.coalesce(pl.col("extra_point_prob") + 2 * pl.col("two_point_conversion_prob"), pl.col("ep")))'
   mutant: '.then(pl.col("ep"))'
   test: tests/nfl/test_ep_wp_nflverse_columns.py::test_try_ep_is_nflfastr_try_value
   expected: kill
@@ -11690,3 +11690,43 @@
   test: tests/nfl/test_ep_wp_nflverse_columns.py::test_play_flag_and_player_aliases_match_nflverse
   expected: kill
   note: On a scramble nflfastR's fantasy player is the passer (clean_pbp moves the QB out of rusher).
+
+- id: ep-real-play-unflagged-try
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'expr = expr | (pl.col("play_type") == "extra_point").fill_null(False)'
+  mutant: 'expr = expr'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_a_kick_try_without_its_flag_keeps_its_try_value
+  expected: kill
+  note: An extra_point try without its attempt flag would be a marker row whose ep the next play overwrites.
+
+- id: ep-try-strict-fg-model
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'raise FileNotFoundError("fg_model.ubj: the field-goal model a try''s extra_point_prob needs")'
+  mutant: 'pass'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_try_values_without_the_fg_model
+  expected: kill
+  note: strict enrichment would publish null make probabilities when the fg model is missing.
+
+- id: ep-try-ep-never-null
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'pl.coalesce(pl.col("extra_point_prob") + 2 * pl.col("two_point_conversion_prob"), pl.col("ep"))'
+  mutant: '(pl.col("extra_point_prob") + 2 * pl.col("two_point_conversion_prob"))'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_try_values_without_the_fg_model
+  expected: kill
+  note: Without the fg model a kick try's ep would be null, and the fill would give it the next play's.
+
+- id: ep-ot-answering-try
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '.then(two_pt + xp * OT_ANSWERED_TD_WIN_SHARE)'
+  mutant: '.then(sudden_death)'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_overtime_answering_try_reads_its_make_probability
+  expected: kill
+  note: The answering overtime try's score classes are zeroed, so the sudden-death form gives it wp 0.

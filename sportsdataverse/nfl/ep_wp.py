@@ -1299,8 +1299,15 @@ def _apply_ot_wp_overlay(
       - answering possession trailing by a touchdown (``dd == 1``,
         ``sd <= -6``): only a touchdown keeps the answering team alive, and
         the try / tie split leaves it the complement of the opener's share::
-
             wp = td * OT_ANSWERED_TD_WIN_SHARE
+
+      - the answering possession's try after that touchdown (``dd == 1``,
+        ``sd`` -1 or -2; its score classes are 0): going ahead wins and
+        drawing level is the coin-flip share, from the try's own
+        ``extra_point_prob`` / ``two_point_conversion_prob``::
+
+            sd == -1:  wp = two_point_conversion_prob + extra_point_prob * OT_ANSWERED_TD_WIN_SHARE
+            sd == -2:  wp = two_point_conversion_prob * OT_ANSWERED_TD_WIN_SHARE
 
       - everything else (``dd == 1`` tied after an empty opening possession,
         or ``dd >= 2``): both have possessed, next score wins::
@@ -1408,6 +1415,10 @@ def _apply_ot_wp_overlay(
 
     one_fg = td + fg * win_back
     answered_td = OT_ANSWERED_TD_WIN_SHARE * tb_td
+    # the answering try (its classes are zeroed): one point ahead wins, level is the coin-flip share
+    xp = pl.col("extra_point_prob") if "extra_point_prob" in df.columns else pl.lit(0.0)
+    two_pt = pl.col("two_point_conversion_prob") if "two_point_conversion_prob" in df.columns else pl.lit(0.0)
+    is_try = (xp + two_pt) > 0
     modified = pl.when((dd == 0) | ((dd == 1) & (sd == -3))).then(one_fg).otherwise(sudden_death)
     both = (
         pl.when((dd == 0) & (sd >= 6))
@@ -1420,6 +1431,10 @@ def _apply_ot_wp_overlay(
         .then(one_fg)
         .when((dd == 1) & (sd <= -6))
         .then(td * OT_ANSWERED_TD_WIN_SHARE)
+        .when((dd == 1) & is_try & (sd == -1))
+        .then(two_pt + xp * OT_ANSWERED_TD_WIN_SHARE)
+        .when((dd == 1) & is_try & (sd == -2))
+        .then(two_pt * OT_ANSWERED_TD_WIN_SHARE)
         .otherwise(sudden_death)
     )
     ot_wp = (
@@ -3080,12 +3095,15 @@ def _is_real_play_expr(df: pl.DataFrame) -> pl.Expr:
     situation and get NA model output, later inherited via
     ``tidyr::fill(.direction = "up")``.  Operationally a real play has a
     non-null ``down`` OR is a kickoff / extra-point / two-point attempt (those
-    legitimately carry a null ``down`` but are still scored).
+    legitimately carry a null ``down`` but are still scored), or an ``extra_point``
+    play type without the attempt flag (a try :func:`_apply_try_values` values).
     """
     expr = pl.col("down").is_not_null()
     for flag in ("kickoff_attempt", "extra_point_attempt", "two_point_attempt"):
         if flag in df.columns:
             expr = expr | (pl.col(flag) == 1)
+    if "play_type" in df.columns:
+        expr = expr | (pl.col("play_type") == "extra_point").fill_null(False)
     return expr
 
 
@@ -4176,7 +4194,7 @@ def _add_success_first_down(df: pl.DataFrame) -> pl.DataFrame:
 _TWO_POINT_CONVERSION_PROB = 0.49
 
 
-def _apply_try_values(df: pl.DataFrame) -> pl.DataFrame:
+def _apply_try_values(df: pl.DataFrame, *, strict: bool = False) -> pl.DataFrame:
     """nflfastR's try value: ``extra_point_prob`` / ``two_point_conversion_prob`` and the ``ep`` they set.
 
     ``add_ep_variables`` (``helper_add_ep_wp.R``) never scores a try with the EP model: it zeroes the seven
@@ -4184,6 +4202,10 @@ def _apply_try_values(df: pl.DataFrame) -> pl.DataFrame:
     ``extra_point_attempt`` or an ``extra_point`` play type, two-point tries aside) gets the field-goal make
     probability at its snap spot (the bundled ``fg_model``, roof outdoors when unknown); a two-point try gets
     0.49 (:data:`_TWO_POINT_CONVERSION_PROB`). Both probabilities are 0 on every other play, as in nflverse.
+
+    Without the ``fg_model``, *strict* raises ``FileNotFoundError``; otherwise a kick try's
+    ``extra_point_prob`` is null and it keeps the EP model's ``ep`` (a null ``ep`` would be filled from
+    the next play).
     """
     from sportsdataverse.nfl.nfl_fourth_down import fg_make_probability
 
@@ -4200,7 +4222,9 @@ def _apply_try_values(df: pl.DataFrame) -> pl.DataFrame:
     roof = df["roof"].cast(pl.Utf8) if "roof" in df.columns else pl.Series([None] * df.height, dtype=pl.Utf8)
     outdoors = (roof.is_null() | (roof == "outdoors")).cast(pl.Float64).to_numpy()
     make = fg_make_probability(df["yardline_100"].cast(pl.Float64).to_numpy(), outdoors, era)
-    if make is None:  # pragma: no cover - the fg model ships with the package
+    if make is None:
+        if strict:
+            raise FileNotFoundError("fg_model.ubj: the field-goal model a try's extra_point_prob needs")
         make = np.full(df.height, np.nan)
     df = df.with_columns(
         extra_point_prob=pl.when(kick).then(pl.Series(make).fill_nan(None)).otherwise(0.0),
@@ -4210,7 +4234,7 @@ def _apply_try_values(df: pl.DataFrame) -> pl.DataFrame:
     return df.with_columns(
         *[pl.when(is_try).then(0.0).otherwise(pl.col(c)).alias(c) for c in _EP_CLASS_NAMES if c in df.columns],
         ep=pl.when(is_try)
-        .then(pl.col("extra_point_prob") + 2 * pl.col("two_point_conversion_prob"))
+        .then(pl.coalesce(pl.col("extra_point_prob") + 2 * pl.col("two_point_conversion_prob"), pl.col("ep")))
         .otherwise(pl.col("ep")),
     )
 
@@ -4775,7 +4799,7 @@ def enrich_nfl_pbp(
     raw = df.drop([c for c in ep_cols if c in df.columns])
     raw = pl.concat([raw, scored.select([c for c in ep_cols if c in scored.columns])], how="horizontal")
     # 1b. Tries: nflfastR's make probabilities replace the model's 1st-and-10 proxy.
-    raw = _apply_try_values(raw)
+    raw = _apply_try_values(raw, strict=strict)
 
     # 2. EPA — native lead-difference + scoring/end-of-half/OT overlays.
     raw = _derive_epa(raw)
