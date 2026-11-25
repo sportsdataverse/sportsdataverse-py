@@ -121,8 +121,10 @@ TOTAL_OVER_BRIER_FLOOR = 0.25
 # Mean exp_total - actual_total over the 1174 games: -2.2389 with the old centring on
 # avg_total_goals, -0.4239 after centring on 2 * avg_xgf (2026-11-11), both against labels that
 # counted every scoring shootout attempt. Against settled scores (a shootout is one goal):
-# -0.3139 with the 6.05 seed, -0.1740 with the fitted 6.19 (2026-11-25).
-TOTAL_BIAS_FLOOR = 0.50
+# -0.3139 with the 6.05 seed, -0.1740 with the fitted 6.19 (2026-11-25). The floor is that observed
+# -0.1740 rounded to the safe side, so it gates the level: the 6.05 seed fails it. 2022-23 is outside
+# the 2023-24 .. 2025-26 seasons the 6.19 mean is fitted on. Never loosen it to pass.
+TOTAL_BIAS_FLOOR = 0.25
 
 
 @pytest.fixture(scope="module")
