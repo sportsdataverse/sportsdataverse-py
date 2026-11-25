@@ -21,6 +21,10 @@ from sportsdataverse.nfl import NFLPlayProcess, espn_nfl_pbp_nflverse
 
 FIX = Path(__file__).parent / "fixtures"
 GAMES = {401671740: "2024_04_PHI_TB", 400554340: "2014_11_MIN_CHI", 271209010: "2007_14_SD_TEN"}
+#: Captures for single rules, kept out of the whole-game capture set (``fixtures/espn_nflverse_view/``):
+#: 2019_13_OAK_KC has a defensive two-point return its touchdown row counts; 2024_01_NYJ_SF has a split
+#: two-point pass and run (and a whole game ESPN clocks after the snap, so it is not in the floor set).
+EXTRA = {401128067: "2019_13_OAK_KC", 401671696: "2024_01_NYJ_SF"}
 
 #: Every view column nflverse also has must agree on >= 97% of each game's joined plays, except these
 #: (floor = the lowest observed game rate, rounded down; the whole-season rates are in the PR body):
@@ -80,7 +84,8 @@ SCHEDULE_COLUMNS = (
 
 @functools.cache
 def _plays(espn_game_id: int) -> pl.DataFrame:
-    summary = json.load(gzip.open(FIX / f"summary_{espn_game_id}_trimmed.json.gz", "rt", encoding="utf-8"))
+    path = FIX / ("espn_nflverse_view" if espn_game_id in EXTRA else "") / f"summary_{espn_game_id}_trimmed.json.gz"
+    summary = json.load(gzip.open(path, "rt", encoding="utf-8"))
     proc = NFLPlayProcess(gameId=espn_game_id, join_participants=False)
     proc.espn_nfl_pbp(summary=summary)
     proc.run_processing_pipeline()
@@ -184,3 +189,38 @@ def test_a_schedule_without_the_game_is_refused():
     other = _schedule().filter(pl.col("game_id") != "2024_04_PHI_TB")
     with pytest.raises(ValueError, match="401671740"):
         espn_nfl_pbp_nflverse(_plays(401671740), other)
+
+
+def _nflverse(game_id: str) -> pl.DataFrame:
+    return pl.read_parquet(FIX / "nflverse" / "espn_nflverse_view.parquet").filter(pl.col("game_id") == game_id)
+
+
+def test_a_float_game_id_is_refused_when_nflverse_game_id_is_there():
+    """The release shape (``nflverse_game_id`` already on the rows) still goes through the game-id dtype guard."""
+    plays = _plays(401671740).with_columns(pl.lit("2024_04_PHI_TB").alias("nflverse_game_id"))
+    assert espn_nfl_pbp_nflverse(plays)["game_id"].unique().to_list() == ["2024_04_PHI_TB"]
+    with pytest.raises(ValueError, match="game_id is Float64"):
+        espn_nfl_pbp_nflverse(plays.with_columns(pl.col("game_id").cast(pl.Float64)))
+
+
+def test_split_two_point_tries_keep_pass_and_run():
+    """A split two-point row carries no two_point_pass flag; its play_type still follows nflverse's (in game order)."""
+    view = espn_nfl_pbp_nflverse(_plays(401671696), _schedule())
+    ours = view.filter(pl.col("play_type_nfl") == "PAT2").sort("espn_play_id")
+    nv = _nflverse("2024_01_NYJ_SF").filter(pl.col("play_type_nfl") == "PAT2").sort("play_id")
+    assert ours.height == nv.height == 2
+    assert ours["play_type"].to_list() == nv["play_type"].to_list() == ["run", "pass"]
+
+
+def test_a_defensive_two_point_return_is_scored_on_the_try_row():
+    """2019_13_OAK_KC: KC returns LV's blocked PAT for 2. ESPN's touchdown row counts them; nflverse's PAT row does."""
+    view = espn_nfl_pbp_nflverse(_plays(401128067), _schedule())
+    cols = ["posteam_score", "defteam_score", "posteam_score_post", "defteam_score_post", "total_home_score"]
+    td = view.filter(pl.col("play_id") == 3688)
+    pat = view.filter(pl.col("espn_play_id") == td["espn_play_id"][0] + 1)
+    nv = _nflverse("2019_13_OAK_KC")
+    nv_td, nv_pat = nv.filter(pl.col("play_id") == 3688), nv.filter(pl.col("play_id") == 3713)
+    assert pat["play_type_nfl"].to_list() == nv_pat["play_type_nfl"].to_list() == ["XP_KICK"]
+    for c in cols:
+        assert td[c][0] == nv_td[c][0], c
+        assert pat[c][0] == nv_pat[c][0], c

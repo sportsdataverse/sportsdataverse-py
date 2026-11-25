@@ -11708,8 +11708,8 @@
   group: nfl-espn-view
   finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
-  snippet: '.then(pl.col("total_home_score") - pl.col("_pts"))'
-  mutant: '.then(pl.col("total_home_score"))'
+  snippet: '.otherwise(pl.col("total_home_score") - pl.when(scorer_home).then(p_).otherwise(d_))'
+  mutant: '.otherwise(pl.col("total_home_score"))'
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_split_try_rows_and_touchdown_scores
   expected: kill
   note: A home touchdown row would count its split try's points, which nflverse scores on the PAT row.
@@ -11733,3 +11733,33 @@
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_missing_game_id_and_float_ids_are_refused
   expected: kill
   note: A float ESPN id would be cast to a join key instead of refused (ID dtype discipline).
+
+- id: nfl-espn-view-float-game-id-with-nflverse-id
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '_int_id(pl.col("game_id"), plays.schema["game_id"], "game_id")  # ... and a float game id'
+  mutant: 'pass  # ... and a float game id'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_float_game_id_is_refused_when_nflverse_game_id_is_there
+  expected: kill
+  note: A float game_id on a frame that already has nflverse_game_id would slip past the id guard (CodeRabbit on #1266).
+
+- id: nfl-espn-view-split-two-point-pass
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'pl.when(b("two_point_pass") | (pl.col("type.text") == "Two Point Pass"))'
+  mutant: 'pl.when(b("two_point_pass"))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_split_two_point_tries_keep_pass_and_run
+  expected: kill
+  note: A split two-point pass (no two_point_pass flag on the synthetic row) would read play_type "run".
+
+- id: nfl-espn-view-defensive-two-point-return
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'pl.when(~pat & (pl.col("_dpts") > 0) & (other_gain >= pl.col("_dpts")))'
+  mutant: 'pl.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_defensive_two_point_return_is_scored_on_the_try_row
+  expected: kill
+  note: A defensive two-point return ESPN's touchdown row counts (2019) would stay on that row, not the PAT row.

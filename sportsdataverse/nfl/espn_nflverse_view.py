@@ -339,7 +339,12 @@ def _yards_and_types(df: pl.DataFrame) -> list[pl.Expr]:
         .when(ptn == "RUSH")
         .then(pl.lit("run"))
         .when(ptn == "PAT2")
-        .then(pl.when(b("two_point_pass")).then(pl.lit("pass")).otherwise(pl.lit("run")))
+        # a split try carries no two_point_pass flag; split_pat_rows types it "Two Point Pass"
+        .then(
+            pl.when(b("two_point_pass") | (pl.col("type.text") == "Two Point Pass"))
+            .then(pl.lit("pass"))
+            .otherwise(pl.lit("run"))
+        )
         .when(ptn.is_in(["PENALTY", "TIMEOUT"]))
         .then(pl.lit("no_play"))
         .otherwise(ptn.replace_strict(_PLAY_TYPE, default=None, return_dtype=pl.Utf8))
@@ -429,8 +434,12 @@ def _pat_scores(view: pl.DataFrame) -> pl.DataFrame:
 
     ESPN's touchdown row already counts the try (``homeScore`` / ``awayScore`` after it); the split PAT row
     copies those post-try totals. The touchdown row loses the try's points (1 for a good kick, 2 for a
-    successful two-point try) and the PAT row's pre-play scores are the touchdown's post-play ones.
+    successful two-point try) and the PAT row's pre-play scores are the touchdown's post-play ones. A
+    defensive two-point return (the try's text: ``DEFENSIVE TWO-POINT ATTEMPT ... ATTEMPT SUCCEEDS``) is taken
+    off the other side the same way, but only where the touchdown row counts it: 2019 ESPN does (2019_13_OAK_KC),
+    2024 ESPN puts it on a row of its own (2024_04_PHI_TB), which is left as it is.
     """
+    desc = pl.col("desc").fill_null("")
     pts = (
         pl.when(pl.col("extra_point_result") == "good")
         .then(1)
@@ -438,51 +447,63 @@ def _pat_scores(view: pl.DataFrame) -> pl.DataFrame:
         .then(2)
         .otherwise(0)
     )
+    dpts = pl.when(
+        desc.str.contains(r"(?i)defensive two-point attempt") & desc.str.contains(r"(?i)attempt succeeds")
+    ).then(2)
     pat = pl.col("pat_of_id").is_not_null()
-    tries = view.filter(pat).select(pl.col("pat_of_id").alias("espn_play_id"), pts.alias("_pts"))
-    assert view.schema["espn_play_id"] == tries.schema["espn_play_id"] == pl.Int64
-    v = view.join(tries, on="espn_play_id", how="left").with_columns(
-        pl.when(pat).then(pts).otherwise(pl.col("_pts").fill_null(0)).cast(pl.Float64).alias("_pts")
+    tries = view.filter(pat).select(
+        pl.col("pat_of_id").alias("espn_play_id"), pts.alias("_pts"), dpts.otherwise(0).alias("_dpts")
     )
-    home = pl.col("posteam_type") == "home"
+    assert view.schema["espn_play_id"] == tries.schema["espn_play_id"] == pl.Int64
+    # the touchdown row: whoever went up by 6+ on it scored the try; the other side scored any return
+    off = (pl.col("posteam_score_post") - pl.col("posteam_score")) >= 6
+    other_gain = (
+        pl.when(off)
+        .then(pl.col("defteam_score_post") - pl.col("defteam_score"))
+        .otherwise(pl.col("posteam_score_post") - pl.col("posteam_score"))
+    )
+    v = view.join(tries, on="espn_play_id", how="left").with_columns(
+        pl.when(~pat & (pl.col("_dpts") > 0) & (other_gain >= pl.col("_dpts")))
+        .then(pl.col("_dpts"))
+        .otherwise(0)
+        .cast(pl.Float64)
+        .alias("_dinc")
+    )
+    back = v.select(pl.col("espn_play_id").alias("pat_of_id"), pl.col("_dinc").alias("_dinc_td"))
+    v = v.join(back, on="pat_of_id", how="left").with_columns(
+        pl.when(pat).then(pts).otherwise(pl.col("_pts").fill_null(0)).cast(pl.Float64).alias("_pts"),
+        pl.when(pat).then(pl.col("_dinc_td").fill_null(0)).otherwise(pl.col("_dinc")).alias("_dinc"),
+    )
+    home, away = pl.col("posteam_type") == "home", pl.col("posteam_type") == "away"
     pos_total = pl.when(home).then(pl.col("total_home_score")).otherwise(pl.col("total_away_score"))
     def_total = pl.when(home).then(pl.col("total_away_score")).otherwise(pl.col("total_home_score"))
-    # the touchdown row: whoever went up by 6+ on it scored the try too
-    off = (pl.col("posteam_score_post") - pl.col("posteam_score")) >= 6
-    td = pl.col("_pts") > 0
-    scorer_home = (off & home) | (~off & (pl.col("posteam_type") == "away"))
+    scorer_home = (off & home) | (~off & away)
+    p_, d_ = pl.col("_pts"), pl.col("_dinc")
     v = v.with_columns(
         pl.when(pat)
         .then(pos_total)
-        .when(td & off)
-        .then(pl.col("posteam_score_post") - pl.col("_pts"))
-        .otherwise(pl.col("posteam_score_post"))
+        .otherwise(pl.col("posteam_score_post") - pl.when(off).then(p_).otherwise(d_))
         .alias("posteam_score_post"),
         pl.when(pat)
         .then(def_total)
-        .when(td & ~off)
-        .then(pl.col("defteam_score_post") - pl.col("_pts"))
-        .otherwise(pl.col("defteam_score_post"))
+        .otherwise(pl.col("defteam_score_post") - pl.when(off).then(d_).otherwise(p_))
         .alias("defteam_score_post"),
-        pl.when(td & ~pat & scorer_home)
-        .then(pl.col("total_home_score") - pl.col("_pts"))
-        .otherwise(pl.col("total_home_score"))
+        pl.when(pat)
+        .then(pl.col("total_home_score"))
+        .otherwise(pl.col("total_home_score") - pl.when(scorer_home).then(p_).otherwise(d_))
         .alias("total_home_score"),
-        pl.when(td & ~pat & ~scorer_home)
-        .then(pl.col("total_away_score") - pl.col("_pts"))
-        .otherwise(pl.col("total_away_score"))
+        pl.when(pat)
+        .then(pl.col("total_away_score"))
+        .otherwise(pl.col("total_away_score") - pl.when(scorer_home).then(d_).otherwise(p_))
         .alias("total_away_score"),
     ).with_columns(
-        pl.when(pat)
-        .then(pl.col("posteam_score_post") - pl.col("_pts"))
-        .otherwise(pl.col("posteam_score"))
-        .alias("posteam_score"),
-        pl.when(pat).then(pl.col("defteam_score_post")).otherwise(pl.col("defteam_score")).alias("defteam_score"),
+        pl.when(pat).then(pl.col("posteam_score_post") - p_).otherwise(pl.col("posteam_score")).alias("posteam_score"),
+        pl.when(pat).then(pl.col("defteam_score_post") - d_).otherwise(pl.col("defteam_score")).alias("defteam_score"),
     )
     return v.with_columns(
         (pl.col("posteam_score") - pl.col("defteam_score")).alias("score_differential"),
         (pl.col("posteam_score_post") - pl.col("defteam_score_post")).alias("score_differential_post"),
-    ).drop("_pts", "pat_of_id")
+    ).drop("_pts", "_dpts", "_dinc", "_dinc_td", "pat_of_id")
 
 
 #: Columns nflverse leaves null on a timeout row (every season 2007-2024); its ``ydstogo`` there is 0.
@@ -580,7 +601,8 @@ def espn_nfl_pbp_nflverse(
     missing = [c for c in _REQUIRED if c not in plays.columns]
     if missing:
         raise ValueError(f"espn_nfl_pbp_nflverse: plays lack {missing}; pass NFLPlayProcess output")
-    _int_id(pl.col("id"), plays.schema["id"], "id")  # refuses a float play id
+    _int_id(pl.col("id"), plays.schema["id"], "id")  # refuses a float play id ...
+    _int_id(pl.col("game_id"), plays.schema["game_id"], "game_id")  # ... and a float game id
     df = _attach_nflverse_game_id(plays, schedule)
     if split_pats and "pat_of_id" not in df.columns:  # a frame split_pat_rows already split is kept as it is
         df = split_pat_rows(df)
