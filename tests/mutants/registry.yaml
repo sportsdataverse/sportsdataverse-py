@@ -12026,3 +12026,24 @@
   test: tests/nfl/test_ep_wp_nflverse_columns.py::test_overtime_answering_try_reads_its_make_probability
   expected: kill
   note: The answering overtime try's score classes are zeroed, so the sudden-death form gives it wp 0.
+
+# --- NCAA fetcher: rotation after an Akamai session denial (#1272) -----------------------------------
+- id: ncaa-denial-jump-disabled
+  group: ncaa-denial-rotation
+  finding: ncaa-denial-convoy
+  file: sportsdataverse/mbb/mbb_ncaa_fetch.py
+  snippet: 'self._proxy_idx += self._rng.randrange(1, n) if jump and n > 2 else 1'
+  mutant: 'self._proxy_idx += 1'
+  test: tests/mbb/test_mbb_ncaa_fetch.py::test_session_denial_jumps_a_random_distance_other_errors_step_one
+  expected: kill
+  note: Back to +1 after a denial, so sharded runs bunch on the sticky-IP ring (baseball 2013, 2026-11-24).
+
+- id: ncaa-pick-proxy-revisits-tried-proxy
+  group: ncaa-denial-rotation
+  finding: ncaa-denial-convoy
+  file: sportsdataverse/mbb/mbb_ncaa_fetch.py
+  snippet: '        for skip in (self._tried | self._dead, self._dead):'
+  mutant: '        for skip in (self._dead,):'
+  test: tests/mbb/test_mbb_ncaa_fetch.py -k "never_revisit or try_every_proxy"
+  expected: kill
+  note: Without the untried-first pass, a jump or a +1 step can revisit a proxy within one fetch and leave a healthy one untried.
