@@ -340,11 +340,13 @@ def run_value(
         after_state: 3-char base occupancy after the event.
         after_outs: Outs after the event; ``>= 3`` (inning over) treated as 0 RE.
         runs_on_play: Runs scored on the event.
-        matrix: An :func:`mlb_run_expectancy_matrix` output (or any frame
-            with matching ``base_state``/``outs``/``re`` columns).
+        matrix: An :func:`mlb_run_expectancy_matrix` or
+            :func:`mlb_markov_run_expectancy` output (or any frame with
+            matching ``base_state``/``outs``/``re`` columns).
 
     Returns:
-        float: the run value of the event.
+        float: the run value of the event; NaN when the matrix has a row for
+        either state with a null ``re`` (a state the Markov fit never observed).
 
     Example:
         Quick start::
@@ -356,6 +358,8 @@ def run_value(
     lut = {(r["base_state"], r["outs"]): r["re"] for r in matrix.to_dicts()}
     re_before = 0.0 if before_outs >= 3 else lut.get((before_state, before_outs), 0.0)
     re_after = 0.0 if after_outs >= 3 else lut.get((after_state, after_outs), 0.0)
+    if re_before is None or re_after is None:
+        return float("nan")
     return float(re_after - re_before + runs_on_play)
 
 

@@ -1244,11 +1244,11 @@ individual plays against this spine's RE24 matrix.
 | `after_state` | `str` |  | 3-char base occupancy after the event. |
 | `after_outs` | `int` |  | Outs after the event; `>= 3` (inning over) treated as 0 RE. |
 | `runs_on_play` | `int` |  | Runs scored on the event. |
-| `matrix` | `DataFrame` |  | An `mlb_run_expectancy_matrix` output (or any frame with matching `base_state`/`outs`/`re` columns). |
+| `matrix` | `DataFrame` |  | An `mlb_run_expectancy_matrix` or `mlb_markov_run_expectancy` output (or any frame with matching `base_state`/`outs`/`re` columns). |
 
 **Returns**
 
-the run value of the event.
+the run value of the event; NaN when the matrix has a row for either state with a null `re` (a state the Markov fit never observed).
 
 **Example**
 

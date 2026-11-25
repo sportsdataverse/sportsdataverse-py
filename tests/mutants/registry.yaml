@@ -12318,6 +12318,16 @@
   expected: kill
   note: Leading into a state with no departures would be solved as if that state scored 0 runs.
 
+- id: mlb-markov-run-value-null-re
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    if re_before is None or re_after is None:'
+  mutant: '    if False:'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_run_value_on_a_markov_matrix_with_an_unobserved_state
+  expected: kill
+  note: run_value on a Markov matrix with an unobserved state would raise TypeError instead of returning NaN.
+
 - id: mlb-markov-by-event-prob-ignores-event
   group: mlb-markov-re24
   finding: mlb-markov-re24

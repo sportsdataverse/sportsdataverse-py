@@ -26,6 +26,7 @@ from sportsdataverse.mlb.mlb_run_expectancy import (
     mlb_base_out_transitions,
     mlb_markov_run_expectancy,
     mlb_run_expectancy_matrix,
+    run_value,
 )
 
 FIXTURE_DIR = "tests/fixtures/mlb_game_state"
@@ -213,3 +214,12 @@ def test_by_event_needs_the_event_column(corpus):
     with pytest.raises(ValueError, match="result_event_type"):
         mlb_base_out_transitions(corpus, by_event=True)
     assert "event" in mlb_base_out_transitions(pl.DataFrame(), by_event=True).columns
+
+
+def test_run_value_on_a_markov_matrix_with_an_unobserved_state():
+    # Two real 2023 games never reach bases loaded with 0 outs, so that row's RE is null.
+    tiny = mlb_markov_run_expectancy(mlb_base_out_transitions(pl.read_parquet(EXTRA_INNINGS_FIXTURE)))
+    assert np.isnan(run_value("123", 0, "___", 3, 0, tiny))
+    assert np.isnan(run_value("12_", 0, "123", 0, 0, tiny))
+    re = {(r["base_state"], r["outs"]): r["re"] for r in tiny.to_dicts()}
+    assert run_value("___", 0, "1__", 0, 0, tiny) == pytest.approx(re[("1__", 0)] - re[("___", 0)])
