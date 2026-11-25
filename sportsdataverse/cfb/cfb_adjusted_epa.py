@@ -36,8 +36,9 @@ blowout of a weak team is not scored on garbage the strength fit never saw. On a
 margins) this beat the previous design (``0.05 <= wp_before_naive <= 0.95`` for
 the strengths, own EPA on every play) by 0.19 points of MAE, 95% CI
 [0.10, 0.29] over (season, week) clusters, and no season was significantly
-worse. The WP band dropped 24% of plays, many while the game was within three
-scores; the margin rule drops about 9%, none in a one-score game.
+worse (``tools/validation/cfb_garbage_rule_walkforward.py``). The WP band
+dropped 24% of plays, many while the game was within three scores; the margin
+rule drops about 9%, none in a one-score game.
 
 ``method="pre598"`` keeps the fit these functions used before sportsdataverse-py
 #598, unchanged, for nfl-data's NFL team summaries: ``0.1 <= wp_before <= 0.9``,
@@ -115,10 +116,11 @@ _RIDGE_LAMBDA = 0.035
 # Offensive pass/rush plays per FBS team in a full FBS-vs-FBS season inside the
 # 0.05 <= wp_before_naive <= 0.95 band this fit used until 2026-11-25: the MEAN
 # of the per-season medians 595.5 / 571 / 564 (2019 / 2021 / 2022) is 576.8,
-# rounded to 577. With lambda 0.075 it fixes the penalty at ~43 plays, and that
-# 43 is what the margin-rule walk-forward validated, so it stays even though
-# the margin rule keeps more (medians 742 / 708 / 693). Reproduce with
-# tools/validation/cfb_adjusted_epa_eval.py.
+# rounded to 577. With lambda 0.075 it fixes the penalty at ~43 plays. The margin
+# rule keeps more plays (medians 742 / 708 / 693), so a full season now keeps
+# ~94% of its signal instead of ~93%; the 43-play penalty was carried over, not
+# re-tuned, and it is the one the 2014-2023 margin-rule walk-forward ran with.
+# Reproduce the #598 numbers with tools/validation/cfb_adjusted_epa_eval.py.
 _TEAM_SEASON_PLAYS = 577.0
 
 # Adjusted-EPA penalty per play of a full team season: ~43 plays, so a team keeps
@@ -257,7 +259,7 @@ def _fit_team_strengths(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.Da
 
     Every team gets its own offense and defense indicator (no reference level) and
     the same penalty ``ridge_lambda * _TEAM_SEASON_PLAYS`` in plays, so a team with
-    ``n`` fit-band plays keeps about ``n / (n + penalty)`` of its signal and the
+    ``n`` fit plays keeps about ``n / (n + penalty)`` of its signal and the
     intercept is the average team. Replaces :func:`_fit_opponent_ridge` for
     adjusted EPA, where the standardized fit shrank every team by the same ~3% and
     pinned the first team id (as a string) to the intercept on both sides.
@@ -375,7 +377,8 @@ def cfb_adjusted_epa(
             of a full team season: each team keeps
             ``n / (n + ridge_lambda * 577)`` of its own signal for its ``n``
             fit plays and is shrunk toward the league average by the rest
-            (~7% at a full season, most of it on a handful of plays); must be
+            (a fixed ~43 plays at the default, ~6% of a full season; most
+            of it on a handful of plays); must be
             > 0. Under ``method="pre598"`` it is passed unscaled to the old
             standardized ridge (the per-observation penalty; no 577 scaling,
             no positivity check). ``None`` (default) means 0.075 for
@@ -527,7 +530,9 @@ def cfb_adjusted_epa_by_game(
         KeyError: If ``plays`` is missing a required column (incl. ``week``,
             and ``seasonType`` unless ``method="pre598"``).
         ValueError: If ``method`` is unknown, or (``"current"``) if
-            ``ridge_lambda`` is not positive or every play is garbage time.
+            ``ridge_lambda`` is not positive. (Every play garbage time gives an
+            empty frame; a team-game with no non-garbage play has no row -- none
+            of 38,620 in 2014-2026.)
 
     Example:
         Quick start::

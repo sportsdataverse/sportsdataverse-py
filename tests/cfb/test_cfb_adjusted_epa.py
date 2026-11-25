@@ -230,7 +230,8 @@ def test_fit_reads_the_score_margin_not_any_win_probability() -> None:
 def _garbage_rows() -> pl.Expr:
     """The plays flag_garbage_time calls garbage on the margin at the snap (43/37/27/21)."""
     m, q = pl.col("pos_score_diff_start").abs(), pl.col("period")
-    return ((q == 1) & (m > 43)) | ((q == 2) & (m > 37)) | ((q == 3) & (m > 27)) | ((q >= 4) & (m > 21))
+    garbage = ((q == 1) & (m > 43)) | ((q == 2) & (m > 37)) | ((q == 3) & (m > 27)) | ((q >= 4) & (m > 21))
+    return garbage.fill_null(False)  # null margin = not garbage, as flag_garbage_time
 
 
 @pytest.mark.parametrize("fn", [cfb_adjusted_epa, cfb_adjusted_epa_by_game])
@@ -249,7 +250,7 @@ def test_garbage_time_reaches_neither_the_fit_nor_a_teams_own_epa(fn) -> None:
 
 def test_own_epa_is_the_mean_over_the_kept_plays() -> None:
     plays = _plays_2026().with_columns(seasonType=pl.lit(2, dtype=pl.Int64))
-    kept = plays.filter(~_garbage_rows())
+    kept = plays.filter(_garbage_rows() == False)  # noqa: E712
     by_game = cfb_adjusted_epa_by_game(plays)
     g = plays.filter(_garbage_rows()).sort("game_id").row(0, named=True)
     team, gid = str(g["pos_team_id"]), g["game_id"]
