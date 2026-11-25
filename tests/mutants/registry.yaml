@@ -11590,6 +11590,58 @@
   expected: kill
   note: An expired penalty with no event after it would carry 4v5 onto five skaters a side.
 
+- id: nfl-espn-cpoe-percentage-points
+  group: nfl-espn-cpoe
+  finding: gh-1261
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '(100.0 * (pl.col("completion").cast(pl.Float64) - pl.col("cp"))).alias("cpoe")'
+  mutant: '(pl.col("completion").cast(pl.Float64) - pl.col("cp")).alias("cpoe")'
+  test: tests/nfl/test_nfl_espn_parity_fixes.py::test_espn_cpoe_is_percentage_points
+  expected: kill
+  note: ESPN cpoe back on the 0-1 scale would read 100x smaller than nflfastR's and the Shield pbp's.
+
+# --- gh-1262: extra-inning automatic runner in pbp_base_out_states ------------------------------
+- id: mlb-re24-automatic-runner-not-seeded
+  group: mlb-extra-innings-runner
+  finding: gh-1262
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: 'return pl.when(first_pa & placed).then(pl.lit(1, dtype=pl.Int8)).otherwise(shifted)'
+  mutant: 'return shifted'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_extra_innings_automatic_runner_on_second
+  expected: kill
+  note: Every 2020+ extra half-inning would open bases empty instead of with the runner on 2nd.
+
+- id: mlb-re24-automatic-runner-runners-signal
+  group: mlb-extra-innings-runner
+  finding: gh-1262
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '        signals.append(pl.col("runners").cast(pl.Utf8).str.contains(_FROM_2B).fill_null(False))'
+  mutant: '        pass'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_extra_innings_automatic_runner_on_second
+  expected: kill
+  note: An automatic runner who scores on the half's first PA (718511 bottom 11) would be missed.
+
+# --- WNBA prop constants: per-league SD law / dispersion + league-bound WNBA helpers -------------
+- id: wnba-props-distribution-reads-nba-constants
+  group: wnba-prop-constants
+  finding: wnba-prop-constants
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    c = get_constants(league_id)'
+  mutant: '    c = get_constants("00")'
+  test: tests/wnba/test_wnba_player_props_constants.py::test_wnba_prop_distribution_uses_wnba_spread
+  expected: kill
+  note: Every league's props would price with the NBA-fitted points SD law and dispersion.
+
+- id: wnba-props-prob-over-unbound
+  group: wnba-prop-constants
+  finding: wnba-prop-constants
+  file: sportsdataverse/wnba/wnba_player_props.py
+  snippet: 'prob_over = _bind(_nba.prob_over, "WNBA P(stat > line) (league_id=''10'', WNBA-fitted SD law).")'
+  mutant: 'prob_over = _nba.prob_over'
+  test: tests/wnba/test_wnba_player_props_constants.py::test_wnba_helpers_bind_league_10
+  expected: kill
+  note: The WNBA re-export of prob_over would default to league_id "00" (NBA spread).
+
 # --- nflverse play_by_play columns on the Shield path (shield_pbp + enrich_nfl_pbp) ----------------
 - id: shield-stat-flag-kept
   group: nflverse-pbp-columns

@@ -87,6 +87,8 @@ _STALE = {
     ("pff", "player_position_pivot"): "no columns published (note: opaque); the parser emits 3",
     ("pff", "player_seasons"): "no columns published; the parser emits value",
     ("pff_api", "player_offense_pass_blocking"): "20 schema columns are missing from the parse of PFF's spec example",
+    ("pff_api", "team_leaders"): "the schema appends war/waa (+ _rank/_rank_of/_percentile) by name (gen_pff_api "
+    "_V2_LATE_COLUMNS, #1256); PFF's spec example predates them",
     # main 10-17 (#826), measured 2026-10-18 (EX-SYNC-e)
     ("liiga", "games"): "EX-SYNC-e: the schema names end, play_off_pair, play_off_phase, play_off_req_wins and "
     "buy_tickets_url, which the parser does not emit on tests/fixtures/liiga/games.json",

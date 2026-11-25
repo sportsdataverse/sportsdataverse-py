@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: get_4th"
 sidebar_label: "Models and calculators: get_4th"
-sidebar_position: 23
+sidebar_position: 24
 description: "NFL — additional Python functions — Models and calculators: get_4th — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: get_4th

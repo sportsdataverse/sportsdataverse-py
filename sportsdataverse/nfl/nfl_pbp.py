@@ -1361,7 +1361,8 @@ def split_pat_rows(plays: pl.DataFrame) -> pl.DataFrame:
         & (pat_text.is_not_null() | paa.is_not_null())
     ).fill_null(False)
     marked = plays.with_row_index("_pat_row").with_columns(folded.alias("_pat_folded"))
-    td = marked.filter(pl.col("_pat_folded"))
+    is_folded = pl.col("_pat_folded") == True  # noqa: E712
+    td = marked.filter(is_folded)
     if td.is_empty():
         return plays.with_columns(key)
     clash = set((td["id"].cast(pl.Int64) + 1).to_list()) & set(plays["id"].cast(pl.Int64).to_list())
@@ -1380,10 +1381,10 @@ def split_pat_rows(plays: pl.DataFrame) -> pl.DataFrame:
     )
     pat = _espn_pat_scoring_side(td, pat)
     cleared = marked.with_columns(
-        pl.when(pl.col("_pat_folded")).then(False).otherwise(pl.col("xp_attempt")).alias("xp_attempt"),
-        pl.when(pl.col("_pat_folded")).then(False).otherwise(pl.col("two_point_attempt")).alias("two_point_attempt"),
+        pl.when(is_folded).then(False).otherwise(pl.col("xp_attempt")).alias("xp_attempt"),
+        pl.when(is_folded).then(False).otherwise(pl.col("two_point_attempt")).alias("two_point_attempt"),
         *[
-            pl.when(pl.col("_pat_folded")).then(None).otherwise(pl.col(c)).alias(c)
+            pl.when(is_folded).then(None).otherwise(pl.col(c)).alias(c)
             for c in ("extra_point_result", "two_point_conv_result")
             if c in has
         ],
@@ -7137,9 +7138,11 @@ class NFLPlayProcess(object):
 
         play_df = play_df.join(cp_frame, on="_cp_row_idx", how="left").drop("_cp_row_idx")
 
-        # cpoe = actual completion - predicted completion probability
+        # nflfastR: cpoe = 100 * (complete_pass - cp), in percentage points (as ep_wp and the Shield pbp)
         if "completion" in play_df.columns:
-            play_df = play_df.with_columns((pl.col("completion").cast(pl.Float64) - pl.col("cp")).alias("cpoe"))
+            play_df = play_df.with_columns(
+                (100.0 * (pl.col("completion").cast(pl.Float64) - pl.col("cp"))).alias("cpoe")
+            )
         else:
             play_df = play_df.with_columns(pl.lit(None, dtype=pl.Float64).alias("cpoe"))
 

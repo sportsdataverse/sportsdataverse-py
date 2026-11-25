@@ -42,14 +42,47 @@ def _occ(col: str) -> pl.Expr:
     return (pl.col(col).is_not_null()).cast(pl.Int8)
 
 
+_POST_ON = ("matchup_post_on_first_id", "matchup_post_on_second_id", "matchup_post_on_third_id")
+# ``runners`` is the parser's stringified list of runner dicts (repr or JSON quoting).
+_FROM_2B = r"""["']originBase["']:\s*["']2B["']"""
+
+
+def _pre_on_second(columns: List[str], half_grp: List[str]) -> pl.Expr:
+    """Pre-PA occupancy of 2nd, seeding the extra-inning automatic runner (MLB, 2020+).
+
+    He starts the half on 2nd without any PA putting him there, so the shifted
+    post-occupancy reads empty. He is detected from the half's FIRST PA itself
+    rather than a rule-era/inning table: after it a base is held by someone other
+    than the batter, or ``runners`` shows a movement from ``originBase`` 2B (he
+    scored or was put out on the play). Checked on all 425 April 2023 games: 74 of
+    74 extra half-openings flagged, 0 of 7,460 regulation ones (so a pinch runner
+    for the leadoff batter does not appear in that PA's post-occupancy). Frames
+    without ``matchup_batter_id``/``runners`` keep the empty start; the parser emits both.
+    """
+    signals = []
+    if "matchup_batter_id" in columns:
+        batter = pl.col("matchup_batter_id").cast(pl.Int64, strict=False)
+        signals += [
+            pl.col(c).is_not_null() & (pl.col(c).cast(pl.Int64, strict=False) != batter).fill_null(False)
+            for c in _POST_ON
+        ]
+    if "runners" in columns:
+        signals.append(pl.col("runners").cast(pl.Utf8).str.contains(_FROM_2B).fill_null(False))
+    placed = pl.any_horizontal(signals) if signals else pl.lit(False)
+    first_pa = pl.col("at_bat_index") == pl.col("at_bat_index").min().over(half_grp)
+    shifted = pl.col("post_2").shift(1, fill_value=0).over(half_grp)
+    return pl.when(first_pa & placed).then(pl.lit(1, dtype=pl.Int8)).otherwise(shifted)
+
+
 def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
     """Reconstruct pre-play base-out state from statsapi play-by-play.
 
     Within each ``(game_id, inning, half)`` half-inning, ordered by the
     game-global ``at_bat_index``: ``base_state``/``outs_start`` before PA
     *i* are the post-occupancy / out-count of PA *i-1* (empty/0 at the
-    half's first PA -- occupancy and outs both genuinely reset at every
-    half-inning boundary). ``runs_on_play`` is the score delta since the
+    half's first PA -- occupancy and outs both reset at every half-inning
+    boundary), except that an extra half-inning's automatic runner starts on
+    2nd (``"_2_"``; see ``_pre_on_second``). ``runs_on_play`` is the score delta since the
     *previous PA in the game* (``over("game_id")``, **not** reset per
     half-inning -- the score itself carries across the half-inning
     boundary even though outs/bases do not).  ``runs_rest_of_inning`` is
@@ -60,7 +93,8 @@ def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
             across games), carrying ``game_id``, ``about_inning``,
             ``about_half_inning``, ``about_at_bat_index``, ``count_outs``,
             ``result_home_score``, ``result_away_score``,
-            ``matchup_post_on_{first,second,third}_id``.
+            ``matchup_post_on_{first,second,third}_id``; optionally
+            ``matchup_batter_id`` and ``runners`` (extra-inning runner).
 
     Returns:
         pl.DataFrame: one row per plate appearance.
@@ -103,7 +137,7 @@ def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
     total = pl.col("result_home_score") + pl.col("result_away_score")
     df = df.with_columns(
         pl.col("post_1").shift(1, fill_value=0).over(half_grp).alias("pre_1"),
-        pl.col("post_2").shift(1, fill_value=0).over(half_grp).alias("pre_2"),
+        _pre_on_second(pbp.columns, half_grp).alias("pre_2"),
         pl.col("post_3").shift(1, fill_value=0).over(half_grp).alias("pre_3"),
         pl.col("count_outs").shift(1, fill_value=0).over(half_grp).alias("outs_start"),
         # Score carries across half-inning boundaries -- shift over the WHOLE

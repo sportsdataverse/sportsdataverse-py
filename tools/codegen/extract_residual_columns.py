@@ -214,7 +214,10 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "autodoc/mbb": 619,
     "autodoc/mlb": 107,
     "autodoc/nba": 423,
-    "autodoc/nfl": 1097,
+    # +123 (2026-11-24): split_pat_rows (#1255) returns NFLPlayProcess rows, so its table carries the same
+    # 123 undescribed ESPN-processor columns build_nfl_season / calculate_epa / calculate_wpa defer. Describing
+    # them once (one shared source for all four) lowers this cap by ~490.
+    "autodoc/nfl": 1220,
     "autodoc/nhl": 208,
     "autodoc/nojhl": 1,
     "autodoc/odds": 69,
