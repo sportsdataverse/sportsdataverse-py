@@ -11620,3 +11620,24 @@
   test: tests/mlb/test_mlb_run_expectancy.py::test_extra_innings_automatic_runner_on_second
   expected: kill
   note: An automatic runner who scores on the half's first PA (718511 bottom 11) would be missed.
+
+# --- WNBA prop constants: per-league SD law / dispersion + league-bound WNBA helpers -------------
+- id: wnba-props-distribution-reads-nba-constants
+  group: wnba-prop-constants
+  finding: wnba-prop-constants
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    c = get_constants(league_id)'
+  mutant: '    c = get_constants("00")'
+  test: tests/wnba/test_wnba_player_props_constants.py::test_wnba_prop_distribution_uses_wnba_spread
+  expected: kill
+  note: Every league's props would price with the NBA-fitted points SD law and dispersion.
+
+- id: wnba-props-prob-over-unbound
+  group: wnba-prop-constants
+  finding: wnba-prop-constants
+  file: sportsdataverse/wnba/wnba_player_props.py
+  snippet: 'prob_over = _bind(_nba.prob_over, "WNBA P(stat > line) (league_id=''10'', WNBA-fitted SD law).")'
+  mutant: 'prob_over = _nba.prob_over'
+  test: tests/wnba/test_wnba_player_props_constants.py::test_wnba_helpers_bind_league_10
+  expected: kill
+  note: The WNBA re-export of prob_over would default to league_id "00" (NBA spread).

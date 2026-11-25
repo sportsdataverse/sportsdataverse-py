@@ -277,7 +277,7 @@ Forecast-accuracy metrics: predicted-vs-actual next-season rating over held-out 
 
 ### LeagueConstants {#LeagueConstants}
 
-`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', in_game_wp_artifact: 'str' = 'nba_in_game_wp.ubj') -> None`
+`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', pts_sd_a: 'float', pts_sd_b: 'float', count_dispersion: 'float', in_game_wp_artifact: 'str' = 'nba_in_game_wp.ubj') -> None`
 
 Per-`league_id` fitted constants for the NBA prediction & market stack.
 
@@ -290,6 +290,9 @@ Per-`league_id` fitted constants for the NBA prediction & market stack.
 | `avg_pace` | `float` |  | League baseline possessions per team per game (adjusted- pace anchor for `~sportsdataverse.nba.nba_team_ratings.adjust_pace`). |
 | `avg_off_rtg` | `float` |  | League baseline points per 100 possessions. |
 | `game_minutes` | `int` |  | Regulation game length in minutes (NBA/G-League 48, WNBA 40) -- structurally different, not a fitted number. |
+| `pts_sd_a` | `float` |  | Intercept of the player-prop points SD law `sd = pts_sd_a + pts_sd_b * sqrt(mu)`. |
+| `pts_sd_b` | `float` |  | Slope of that law. |
+| `count_dispersion` | `float` |  | Player-prop count over-dispersion `var/mean` for reb/ast/fg3m (Negative-Binomial when > 1). |
 | `in_game_wp_artifact` | `str` | `'nba_in_game_wp.ubj'` | Filename of the bundled in-game-WP coefficients under `sportsdataverse/nba/models` (committed in Phase 3). |
 
 ### MeasureSpec {#MeasureSpec}

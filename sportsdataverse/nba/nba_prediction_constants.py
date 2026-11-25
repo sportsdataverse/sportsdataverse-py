@@ -65,6 +65,11 @@ class LeagueConstants:
         avg_off_rtg: League baseline points per 100 possessions.
         game_minutes: Regulation game length in minutes (NBA/G-League 48,
             WNBA 40) -- structurally different, not a fitted number.
+        pts_sd_a: Intercept of the player-prop points SD law
+            ``sd = pts_sd_a + pts_sd_b * sqrt(mu)``.
+        pts_sd_b: Slope of that law.
+        count_dispersion: Player-prop count over-dispersion ``var/mean`` for
+            reb/ast/fg3m (Negative-Binomial when > 1).
         in_game_wp_artifact: Filename of the bundled in-game-WP coefficients
             under ``sportsdataverse/nba/models`` (committed in Phase 3).
     """
@@ -74,6 +79,9 @@ class LeagueConstants:
     avg_pace: float
     avg_off_rtg: float
     game_minutes: int
+    pts_sd_a: float
+    pts_sd_b: float
+    count_dispersion: float
     in_game_wp_artifact: str = "nba_in_game_wp.ubj"
 
 
@@ -89,6 +97,14 @@ class LeagueConstants:
 # norms -- the algorithms accept league_id="20" and would fit identically given a data
 # source. avg_pace/avg_off_rtg are league-norm anchors; game_minutes is structural (WNBA
 # plays 40-minute games, NBA/G-League play 48), not fitted.
+#
+# pts_sd_a/pts_sd_b/count_dispersion (player props) are FITTED per league by
+# tools/models/nba_prediction/fit_player_props.py on that league's 2024 ESPN box logs, over
+# rotation players (>= 15 games, >= 15 mpg scaled to game length):
+#   NBA  ("00"): 320 players -> sd = 1.406 + 1.396*sqrt(mu), dispersion 1.24 (2026-07-08).
+#   WNBA ("10"): 107 players -> sd = 1.190 + 1.363*sqrt(mu), dispersion 1.19 (2026-11-24); at
+#                15 pts that is 6.46 vs NBA 6.81 (player-bootstrap 95% CIs 6.23-6.71 / 6.69-6.94).
+# G-League ("20") has no box-log fixture, so it carries the NBA values as seeds, like its hfa.
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "00": LeagueConstants(
         hfa=2.184,
@@ -96,6 +112,9 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_pace=99.5,
         avg_off_rtg=114.0,
         game_minutes=48,
+        pts_sd_a=1.406,
+        pts_sd_b=1.396,
+        count_dispersion=1.24,
         in_game_wp_artifact="nba_in_game_wp.ubj",
     ),
     "10": LeagueConstants(
@@ -104,6 +123,9 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_pace=95.0,
         avg_off_rtg=101.0,
         game_minutes=40,
+        pts_sd_a=1.19,
+        pts_sd_b=1.363,
+        count_dispersion=1.19,
         in_game_wp_artifact="wnba_in_game_wp.ubj",
     ),
     "20": LeagueConstants(
@@ -112,6 +134,9 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_pace=101.0,
         avg_off_rtg=110.0,
         game_minutes=48,
+        pts_sd_a=1.406,
+        pts_sd_b=1.396,
+        count_dispersion=1.24,
         in_game_wp_artifact="nbagl_in_game_wp.ubj",
     ),
 }

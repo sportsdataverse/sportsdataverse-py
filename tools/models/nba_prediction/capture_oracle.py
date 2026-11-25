@@ -127,10 +127,18 @@ def capture_results_and_box() -> tuple[pl.DataFrame, pl.DataFrame]:
     return results, team_box
 
 
-def capture_player_box_logs() -> None:
-    print("capturing player_box_logs_2024 (ESPN release download)...")
-    pbox = load_nba_player_boxscore([SEASON_INT])
-    box = load_nba_team_boxscore([SEASON_INT]).select("game_id", "team_id", pl.col("team_home_away"))
+def capture_player_box_logs(league: str = "nba") -> None:
+    """Per-player-per-game prop-gate logs: ``player_box_logs_2024`` (NBA) or ``wnba_player_box_logs_2024``."""
+    if league == "wnba":
+        from sportsdataverse.wnba.wnba_loaders import load_wnba_player_boxscore, load_wnba_team_boxscore
+
+        out_name, pbox = "wnba_player_box_logs_2024", load_wnba_player_boxscore([WNBA_SEASON_INT])
+        team_box = load_wnba_team_boxscore([WNBA_SEASON_INT])
+    else:
+        out_name, pbox = "player_box_logs_2024", load_nba_player_boxscore([SEASON_INT])
+        team_box = load_nba_team_boxscore([SEASON_INT])
+    print(f"capturing {out_name} (ESPN release download)...")
+    box = team_box.select("game_id", "team_id", pl.col("team_home_away"))
     home_team = box.filter(pl.col("team_home_away") == "home").select(
         "game_id", pl.col("team_id").alias("home_team_id")
     )
@@ -160,8 +168,8 @@ def capture_player_box_logs() -> None:
         .select("game_id", "player_id", "team_id", "opp_team_id", "is_home", "minutes", "pts", "reb", "ast", "fg3m")
     )
     logs = _cast_ids(logs, ["game_id", "player_id", "team_id", "opp_team_id"])
-    logs.write_parquet(FIXTURE_DIR / "player_box_logs_2024.parquet")
-    print(f"  player_box_logs_2024: {logs.height} rows")
+    logs.write_parquet(FIXTURE_DIR / f"{out_name}.parquet")
+    print(f"  {out_name}: {logs.height} rows")
 
 
 def capture_team_ratings_oracle() -> None:
@@ -611,6 +619,8 @@ def main() -> None:
         capture_pbp_sample()
     if "all" in steps or "wnba" in steps:
         capture_wnba()
+    if "all" in steps or "wnba" in steps or "wnba-props" in steps:
+        capture_player_box_logs("wnba")
     print("done:", dt.datetime.now().isoformat())
 
 
