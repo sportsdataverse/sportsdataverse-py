@@ -1762,9 +1762,7 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
     for api in apis:
         host_url = hosts[api.host]
         for ep in api.endpoints:
-            if ep.scope not in league.scopes or league.league in ep.exclude_leagues:
-                continue
-            if ep.include_prefixes and league.prefix not in ep.include_prefixes:
+            if not league.emits(ep):
                 continue
             base = api.name_pattern.format(prefix=league.prefix, short=ep.short)
             if base in drops:
@@ -2384,9 +2382,7 @@ def _league_documented_tables() -> set[str]:
         overrides = _SPORT_PARSER_OVERRIDES.get(lg.sport, {})
         for api in apis:
             for ep in api.endpoints:
-                if ep.scope not in lg.scopes or lg.league in ep.exclude_leagues:
-                    continue
-                if ep.include_prefixes and lg.prefix not in ep.include_prefixes:
+                if not lg.emits(ep):
                     continue
                 if ep.short in overrides:  # the sport parser documents the sport's table, as in the views
                     out.add(_documented_table(dataclasses.replace(ep, parser=overrides[ep.short]), lg.sport))
@@ -3228,6 +3224,7 @@ def _render_all() -> dict[str, str]:
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
     apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
     spec.validate_league_keys(apis, cfg)
+    spec.validate_league_endpoints(apis, cfg)
     return {f"{lg.prefix}_espn_ext.py": _league_module_source(lg, apis, cfg.hosts) for lg in cfg.leagues}
 
 
@@ -5893,6 +5890,7 @@ _LEAGUE_GROUPS: dict[str, str] = {
         "Leagues",
     ),
     "cricket": "Cricket",
+    "lacrosse": "Lacrosse",
     "f1": "Motorsport",
     "odds": "Betting & prediction markets",
     **dict.fromkeys(("cbs", "fox", "yahoo", "espn_content", "thesportsdb"), "Cross-sport providers"),
@@ -5921,6 +5919,7 @@ _LEAGUE_LABELS = {
     "college_baseball": "College baseball",
     "college_softball": "College softball",
     "cricket": "Cricket",
+    "lacrosse": "Lacrosse",
     "fox": "Fox Sports",
     "laliga": "LaLiga",
     "ligamx": "Liga MX",

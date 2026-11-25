@@ -12398,3 +12398,24 @@
   test: tests/mlb/test_mlb_markov_run_expectancy.py::test_by_event_prob_and_event_classes
   expected: kill
   note: field_out / force_out (unmapped) would be classed as reaching base instead of outs in play.
+
+# --- ESPN league `endpoints:` allowlist (lacrosse) ------------------------------------------------
+- id: espn-league-endpoints-allowlist-applied
+  group: espn-league-allowlist
+  finding: espn-lacrosse-allowlist
+  file: tools/codegen/spec.py
+  snippet: '        return not self.endpoints or ep.short in self.endpoints'
+  mutant: '        return True'
+  test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_filters_in_scope_endpoints
+  expected: kill
+  note: An ignored allowlist would emit every in-scope ESPN wrapper for lacrosse, most of them 404.
+
+- id: espn-league-endpoints-unknown-short-rejected
+  group: espn-league-allowlist
+  finding: espn-lacrosse-allowlist
+  file: tools/codegen/spec.py
+  snippet: '        if set(lg.endpoints) - shorts:'
+  mutant: '        if False:'
+  test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_rejects_unknown_short
+  expected: kill
+  note: A typo in a league allowlist would silently drop that wrapper instead of failing the build.
