@@ -225,3 +225,32 @@ def test_wrapper_builds_the_route_and_validates_choices(monkeypatch):
         pll.pll_player_season_stats(year=2026, season_segment="allstar")
     with pytest.raises(ValueError):
         pll.pll_glg_schedule(glg_league="intlx")
+
+
+def test_get_answers_a_204_with_an_empty_dict(monkeypatch):
+    class Resp:
+        status_code, headers, text, content = 204, {}, "", b""
+
+    monkeypatch.setattr(rt._rt, "download", lambda **kw: Resp())
+    monkeypatch.setattr(rt, "MIN_INTERVAL", 0)
+    assert rt._get(f"{rt.HOST}/api/v4/standings", params={"year": 2026}) == {}
+
+
+@pytest.mark.parametrize("slug", ["a/b", "x?year=1", "x#y", "x y"])
+def test_get_refuses_a_slug_that_would_change_the_route(monkeypatch, slug):
+    monkeypatch.setattr(rt._rt, "_get", lambda *a, **k: pytest.fail("sent"))
+    with pytest.raises(ValueError, match="not a PLL stats route"):
+        rt._get(f"{rt.HOST}/api/v4/events/{slug}/playlogs")
+
+
+def test_get_does_not_retry_the_origin_refusal(monkeypatch):
+    seen = {}
+    monkeypatch.setattr(rt._rt, "_get", lambda *a, **k: seen.update(k) or {"data": {}})
+    monkeypatch.setattr(rt, "MIN_INTERVAL", 0)
+    rt._get(f"{rt.HOST}/api/v4/standings", params={"year": 2026})
+    assert 403 not in seen["retry_statuses"] and 429 in seen["retry_statuses"]
+
+
+def test_out_of_range_numbers_are_null_not_errors():
+    df = P.parse_pll_schedule({"items": [{"slugname": "x", "startTime": 10**20, "week": 2**70, "id": 1}]})
+    assert df.height == 1 and df["start_time"][0] is None and df["week"][0] is None

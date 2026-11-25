@@ -264,7 +264,7 @@ pll_game_insights(event_slug='2026-ev-4')
 
 ## pll_standings
 
-Standings: one row per team (record, scores for and against, conference record and seed).
+Standings: one row per team (record, scores for and against, conference record; seeds, null until the league sets them).
 
 **Endpoint URL:** `GET https://stats.premierlacrosseleague.com/api/v4/standings`
 

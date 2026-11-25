@@ -421,7 +421,7 @@ def pll_standings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Standings: one row per team (record, scores for and against, conference record and seed).
+    """Standings: one row per team (record, scores for and against, conference record; seeds, null until the league sets them).
 
     Endpoint: ``GET https://stats.premierlacrosseleague.com/api/v4/standings``
     Example URL: https://stats.premierlacrosseleague.com/api/v4/standings?year=2026

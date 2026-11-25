@@ -42,6 +42,7 @@ __all__ = [
 
 S, INT, F, B = pl.String, pl.Int64, pl.Float64, pl.Boolean
 UTC_DT = pl.Datetime("ms", "UTC")
+_INT64_MIN, _INT64_MAX = -(2**63), 2**63 - 1
 INT_LIST = pl.List(pl.Int64)
 
 # A stat is a rate (Float64) when its name says so; every other stat is a count (Int64).
@@ -204,6 +205,11 @@ def _l(value: Any) -> List[Any]:
     return [v for v in value if isinstance(v, dict)] if isinstance(value, list) else []
 
 
+def _first(*values: Any) -> Any:
+    """The first value that is not None or empty text (a null on the row falls back to the team's)."""
+    return next((v for v in values if v not in (None, "")), None)
+
+
 def _req(raw: Any) -> Dict[str, Any]:
     return _d(_d(raw).get("_request"))
 
@@ -213,11 +219,13 @@ def _int(value: Any) -> Optional[int]:
     if isinstance(value, bool) or value is None:
         return None
     if isinstance(value, float):
-        return int(value) if math.isfinite(value) and value.is_integer() else None
-    if isinstance(value, int):
-        return value
-    text = str(value).strip()
-    return int(text) if re.fullmatch(r"-?\d+", text) else None
+        out = int(value) if math.isfinite(value) and value.is_integer() else None
+    elif isinstance(value, int):
+        out = value
+    else:
+        text = str(value).strip()
+        out = int(text) if re.fullmatch(r"-?\d+", text) else None
+    return out if out is not None and _INT64_MIN <= out <= _INT64_MAX else None
 
 
 def _str(value: Any) -> Optional[str]:
@@ -232,7 +240,10 @@ def _str(value: Any) -> Optional[str]:
 
 def _epoch_s(value: Any) -> Optional[datetime]:
     sec = _int(value)
-    return datetime.fromtimestamp(sec, tz=timezone.utc) if sec is not None else None
+    try:
+        return datetime.fromtimestamp(sec, tz=timezone.utc) if sec is not None else None
+    except (OverflowError, OSError, ValueError):  # a start time no calendar holds
+        return None
 
 
 def _cell(value: Any, dtype: Any) -> Any:
@@ -436,7 +447,7 @@ def parse_pll_game_insights(raw: Any, return_as_pandas: bool = False) -> pl.Data
 def parse_pll_standings(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """One row per team in the standings (also the Global Lacrosse Games standings).
 
-    ``league`` is ``PLL``, or the Global Lacrosse Games code (``intlm`` / ``intlw``) for those;
+    ``league`` is ``PLL``, or the Global Lacrosse Games code (``INTLM`` / ``INTLW``) for those;
     ``season`` and ``champ_series`` repeat the request.
 
     Args:
@@ -555,8 +566,9 @@ def _player_head(req: Dict[str, Any], p: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "season": req.get("year"), "season_segment": req.get("seasonSegment"), "player_id": p.get("officialId"),
         "player_slug": p.get("slug"), "first_name": p.get("firstName"), "last_name": p.get("lastName"),
-        "jersey_number": p.get("jerseyNum", team.get("jerseyNum")), "position": p.get("position", team.get("position")),
-        "position_name": p.get("positionName", team.get("positionName")), "experience": p.get("experience"),
+        "jersey_number": _first(p.get("jerseyNum"), team.get("jerseyNum")),
+        "position": _first(p.get("position"), team.get("position")),
+        "position_name": _first(p.get("positionName"), team.get("positionName")), "experience": p.get("experience"),
         "team_id": team.get("officialId"), "team_name": team.get("fullName"),
     }  # fmt: skip
 
@@ -664,8 +676,10 @@ def parse_pll_player(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame |
     team = _d(p.get("team"))
     row = {
         **_bio(p), "team_id": team.get("officialId"), "team_name": team.get("fullName"),
-        "position": team.get("position"), "position_name": team.get("positionName"),
-        "jersey_number": team.get("jerseyNum"), "all_years": p.get("allYears"), "bio": p.get("bio"),
+        "position": _first(team.get("position"), p.get("position")),
+        "position_name": _first(team.get("positionName"), p.get("positionName")),
+        "jersey_number": _first(team.get("jerseyNum"), p.get("jerseyNum")), "all_years": p.get("allYears"),
+        "bio": p.get("bio"),
     }  # fmt: skip
     return _frame([row], PLAYER_SCHEMA, return_as_pandas)
 

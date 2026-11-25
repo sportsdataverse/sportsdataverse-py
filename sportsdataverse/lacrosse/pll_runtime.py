@@ -24,6 +24,7 @@ vocabulary: 404 -> ``NoDataError``, 400 / 422 -> ``ValueError``, any other non-2
 
 from __future__ import annotations
 
+import re
 import threading
 import time
 from typing import Any, Dict, Optional
@@ -57,6 +58,17 @@ _SLUG_AFTER = {
     "glg": "league",
 }
 _NOT_SLUGS = frozenset({"season-stats", "stats"})
+#: Every route the wrappers build. A slug is letters, digits and ``_ . @ -``: one that carries ``/``, ``?``
+#: or ``#`` would change the route or add query parameters, so it is refused before sending.
+_SLUG = r"[A-Za-z0-9_.@-]+"
+ROUTE = re.compile(
+    rf"/api/v4/(?:events|games)(?:/{_SLUG}(?:/(?:playlogs|play-by-plays|players/stats|teams/stats|insights))?)?"
+    rf"|/api/v4/standings|/api/v4/teams/(?:season-stats|{_SLUG}/(?:stats|roster))"
+    rf"|/api/v4/players/(?:season-stats|stats/(?:advanced|season-leaders|career-leaders)|{_SLUG}(?:/stats/seasons)?)"
+    rf"|/api/glg/(?:intlm|intlw)/(?:games|standings)|/api/wll/v1/events"
+)
+# 403 is a refused origin, not load: answered at once, never backed off (download retries 403 by default).
+_RETRY = frozenset({429, 500, 502, 503, 504})
 
 
 def _throttle() -> None:
@@ -68,8 +80,14 @@ def _throttle() -> None:
 
 
 def _wire(params: Optional[dict]) -> Dict[str, Any]:
-    """Query values as the site sends them: ``True`` -> ``"true"``; lists and other values unchanged."""
-    return {k: (str(v).lower() if isinstance(v, bool) else v) for k, v in (params or {}).items() if v is not None}
+    """Query values as the site sends them: ``True`` -> ``"true"`` (in a list too); a list repeats its key."""
+
+    def one(v: Any) -> Any:
+        return str(v).lower() if isinstance(v, bool) else v
+
+    return {
+        k: ([one(x) for x in v] if isinstance(v, list) else one(v)) for k, v in (params or {}).items() if v is not None
+    }
 
 
 def _stamp(url: str, params: Dict[str, Any]) -> Dict[str, Any]:
@@ -101,19 +119,28 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
             does not serve, or a 2019-2020 game slug on a per-game route).
         ValueError: the API answered 400 / 422 (a missing year, a season segment or stat name
             outside its allowed list).
-        AssetFetchError: the 403 origin refusal, any other non-2xx after retries, or a 200 that
-            is not the ``{"data": {...}}`` envelope.
+        ValueError: also, before sending, a URL that is not one of the wrappers' routes (a slug
+            carrying ``/``, ``?`` or ``#``).
+        AssetFetchError: the 403 origin refusal (not retried), any other non-2xx after retries, or
+            a 200 that is not the ``{"data": {...}}`` envelope.
     """
+    parts = urlsplit(url)
+    if parts.query or parts.fragment or not ROUTE.fullmatch(parts.path):
+        raise ValueError(
+            f"not a PLL stats route the wrappers build: {parts.path!r} (a slug is letters, digits, _ . @ -)"
+        )
     wire = _wire(params)
     headers = {**GATE_HEADERS, **(kwargs.pop("headers", None) or {})}
     _throttle()
     try:
-        body = _rt._get(url, params=wire, headers=headers, **kwargs)
+        body = _rt._get(
+            url, params=wire, headers=headers, transport=_rt._no_content_transport(), retry_statuses=_RETRY, **kwargs
+        )
     except AssetFetchError as exc:
-        if "HTTP 403" in str(exc):
+        if "HTTP 403" in str(exc) and "Origin not allowed" in str(exc):
             raise AssetFetchError(
-                f"{_rt._where(url)}: the PLL stats proxy refused the request's origin (403); "
-                f"it answers only requests carrying Referer {GATE_HEADERS['Referer']}"
+                f"{exc} -- the PLL stats proxy refused the request's origin; it answers only requests "
+                f"carrying Referer {GATE_HEADERS['Referer']}"
             ) from exc
         raise
     data = body.get("data") if isinstance(body, dict) else None

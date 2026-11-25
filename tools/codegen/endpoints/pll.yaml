@@ -132,8 +132,8 @@ endpoints:
   path: /api/v4/standings
   returns_schema: native/pll/standings
   short: standings
-  summary: 'Standings: one row per team (record, scores for and against, conference record and
-    seed).'
+  summary: 'Standings: one row per team (record, scores for and against, conference record; seeds,
+    null until the league sets them).'
 - example_args:
     year: 2026
   extra_params:

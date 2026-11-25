@@ -541,6 +541,7 @@ _URL = {
     "kzs_runtime": "https://api.kzs.si/api/v1/public/seasons/",
     "lkl_runtime": "https://lkl.lt/api/livestream/boxscore/11446",
     "nbl_rosetta_runtime": "https://prod.rosetta.nbl.com.au/get/nbl/seasons",
+    "pll_runtime": "https://stats.premierlacrosseleague.com/api/v4/standings",
     "pleague_preciser_runtime": "https://api.preciser.io/v1/chart-data/id/e6f98675-3e5b-11ed-949e-5d17350689cf",
     "pleague_runtime": "https://pleagueofficial.com/schedule/2025",
     "tbf_runtime": "https://miniappapi.tbf.org.tr/webapi-service/api/Season/get-seasons",
