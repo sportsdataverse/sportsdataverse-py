@@ -165,7 +165,7 @@ def _frame(
         return pd.DataFrame(rows, columns=list(columns) if not rows and columns else None)
     if not rows and columns:
         return pl.DataFrame(schema={c: pl.Utf8 for c in columns})
-    return pl.DataFrame(rows)
+    return pl.DataFrame(rows, infer_schema_length=None)
 
 
 @overload

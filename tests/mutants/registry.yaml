@@ -9723,8 +9723,8 @@
   group: bb-lineup-seasons
   finding: BB-D4
   file: sportsdataverse/mbb/mbb_lineup_seasons.py
-  snippet: 'events, is_free_throw=pl.col("event_type") == "Free Throw", is_foul=pl.col("foul_class").is_not_null()'
-  mutant: 'events, is_free_throw=pl.lit(False), is_foul=pl.col("foul_class").is_not_null()'
+  snippet: '        is_free_throw=pl.col("event_type") == "Free Throw",'
+  mutant: '        is_free_throw=pl.lit(False),'
   test: tests/mbb/test_mbb_lineup_seasons.py::test_free_throws_count_on_the_foul_lineup
   expected: kill
   note: Free-throw attempts would sit on the lineup at the free throw while their points sit on the foul lineup.
@@ -12165,6 +12165,47 @@
   test: tests/nhl/test_nhl_box_source_agreement.py::test_goals_assists_shots_and_plus_minus_agree_on_every_skater
   expected: kill
   note: ESPN boxscore stats zipped one key off would put assists under goals and so on.
+
+# --- wnba-props-minutes-coldstart: team minutes invariant + expansion-team cold start ------------
+- id: props-minutes-share-normalised
+  group: props-minutes-coldstart
+  finding: props-team-minutes
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '            (pl.col("_own_min") / pl.col("_own_min").sum().over("team_id") * team_minutes).alias("minutes_exp")'
+  mutant: '            (pl.col("_own_min") / pl.col("_own_min").count().over("team_id")).alias("minutes_exp")'
+  test: tests/nba/test_nba_player_props_team_minutes.py
+  expected: kill
+  note: minutes_exp as each player's average logged minutes would no longer sum to the team's game minutes.
+
+- id: props-minutes-league-game-length
+  group: props-minutes-coldstart
+  finding: props-team-minutes
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    team_minutes = float(_ON_COURT * get_constants(league_id).game_minutes)'
+  mutant: '    team_minutes = 240.0'
+  test: tests/nba/test_nba_player_props_team_minutes.py
+  expected: kill
+  note: A WNBA team would be handed the NBA's 240 minutes instead of 200.
+
+- id: props-pace-missing-team-falls-back
+  group: props-minutes-coldstart
+  finding: props-expansion-cold-start
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        return float(p) if p is not None and math.isfinite(p) else avg'
+  mutant: '        return float(pace[team_id])'
+  test: tests/wnba/test_wnba_player_props_cold_start.py::test_an_expansion_teams_first_game_returns_the_empty_schema
+  expected: kill
+  note: An expansion team's first game (no ratings row yet) would raise KeyError again.
+
+- id: soccer-standings-infer-all-rows
+  group: polars-2.2
+  finding: polars-2.2-from-dicts-extra-key
+  file: sportsdataverse/soccer/soccer_espn_parsers.py
+  snippet: 'return _out(pl.DataFrame(rows, infer_schema_length=None), return_as_pandas)'
+  mutant: 'return _out(pl.DataFrame(rows), return_as_pandas)'
+  test: tests/test_espn_soccer_parsers.py::test_parse_soccer_standings_keeps_a_stat_first_seen_after_row_100
+  expected: kill
+  note: A stat first seen after row 100 is dropped on polars 2.0 and raises on 2.2 unless every row is inferred.
 
 # --- ESPN league `endpoints:` allowlist (lacrosse) ------------------------------------------------
 - id: espn-league-endpoints-allowlist-applied

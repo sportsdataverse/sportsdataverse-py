@@ -110,8 +110,9 @@ is the sole attributable contributor.
 
 ## DataFrame Engine — Polars 2.x
 
-Runtime is `polars>=2.0,<3`; polars 1.x is not supported, so code may use 2.x-only API
-(see `CLAUDE.md`, "Polars version"). Use the modern API surface:
+Runtime is `polars>=2.0,<3` (the lock resolves 2.2, and 2.0 on Python 3.10); polars 1.x is not
+supported, so code may use 2.x-only API that 2.0 also has (see `CLAUDE.md`, "Polars version", for the
+2.0 and 2.2 behaviour rules). Use the modern API surface:
 
 | Use this | Don't use this (0.18-era) |
 |---|---|

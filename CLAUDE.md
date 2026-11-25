@@ -976,7 +976,8 @@ warns once per artifact and nulls its columns; `SDV_PY_MODELS_STRICT=1` (or
 
 ### Polars version
 
-Constrained to `polars>=2.0,<3`; the lock resolves **2.0** on every supported Python. polars 1.x
+Constrained to `polars>=2.0,<3`; the lock resolves **2.2** on Python 3.11+ and **2.0** on 3.10
+(polars 2.1 dropped Python 3.10), so code must run on both. The 3.10 CI job is the 2.0 check. polars 1.x
 is no longer supported, so code may use 2.x-only API. All seven `*_pbp.py` modules were migrated
 from the 0.18 surface to 1.x in May 2026 (about 165 call sites) and made 2.0-safe in #719. A
 0.18-style API in this codebase is a bug, not a style preference.
@@ -1005,6 +1006,18 @@ polars 2.0 behaviour rules:
 - polars 2.0 loads an Arrow extension type it does not know as an `Extension` column, which `.str`, `==`
   and `cast` all reject. R writes `glue` and other classed vectors as `arrow.r.vctrs`; `sportsdataverse/__init__.py`
   registers that one as storage. Register any other foreign extension the same way, never per call site.
+
+polars 2.1 / 2.2 behaviour rules:
+
+- A frame built from a list of dicts whose keys vary by row (stat names, flattened JSON) passes
+  `infer_schema_length=None`, or a full `schema=`. From 2.2, a key first seen after row 100 raises
+  `ComputeError`. 2.0 dropped the column without a word.
+- Never do arithmetic between a number and a string. 2.1 raises where 2.0 concatenated. Use
+  `pl.concat_str` / `pl.format`.
+- `str.find` returns character offsets from 2.2 (byte offsets on 2.0); they differ on non-ASCII text.
+- Pass a scalar argument (`head(n)`, `top_k(k)`, `quantile(q)`, `get(i)`, ...) as a Python value or
+  `.first()`, never `pl.col("n").head(1)`. 2.2 raises `ShapeError` at plan time.
+- Round a Decimal before casting it to an int: 2.1 truncates where 2.0 rounded.
 
 Use the modern API surface:
 
