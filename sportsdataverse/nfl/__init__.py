@@ -112,6 +112,7 @@ from sportsdataverse.nfl.nfl_ngs_tracking import (
 )
 from sportsdataverse.nfl.nfl_pbp import *
 from sportsdataverse.nfl.nfl_play_participants import *
+from sportsdataverse.nfl.espn_nflverse_view import espn_nfl_pbp_nflverse
 from sportsdataverse.nfl.nfl_player_props import *
 from sportsdataverse.nfl.nfl_player_stats import *
 from sportsdataverse.nfl.nfl_ratings import *

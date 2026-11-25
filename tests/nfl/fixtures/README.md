@@ -102,6 +102,16 @@ exactly.
 | `nflverse/2018_13_IND_JAX.parquet` | 2018_13_IND_JAX | 401030962 | 170 x 42 |
 | `nflverse/2021_10_JAX_IND.parquet` | 2021_10_JAX_IND | 401326467 | 180 x 42 |
 | `nflverse/play_type_nfl_2024.parquet` | 2024_01_BAL_KC (Shield `fixtures/nfl_shield/2024_01_BAL_KC.json.gz`) + 2024_04_PHI_TB | 401671740 | 351 x 7 |
+| `nflverse/espn_nflverse_view.parquet` | 2024_04_PHI_TB + 2014_11_MIN_CHI + 2007_14_SD_TEN | 401671740, 400554340, 271209010 | 527 x 120 |
+| `nflverse/espn_nflverse_view_schedule.parquet` | the same three games' schedule rows | | 3 x 46 |
+
+`espn_nflverse_view.parquet` is the oracle for `espn_nfl_pbp_nflverse` (`test_nfl_espn_nflverse_view.py`): every
+nflverse column the view also emits, for the three games of the ESPN captures 401671740 (2024), 400554340 (2014) and
+271209010 (2007), cut on 2026-11-24 from the nflverse-data `pbp` release assets `play_by_play_{2024,2014,2007}.parquet`
+(`pl.read_parquet(src).filter(pl.col("game_id") == gid).select(<shared columns>)`, `play_id` cast to Int64, the three
+games stacked). `espn_nflverse_view_schedule.parquet` is the same games' rows of nflverse's schedule, `nflverse/nfldata`
+`data/games.csv` as of its 2026-11-24 commit (the table nflverse-data publishes as `schedules/games`), read with
+`pl.read_csv(src, infer_schema_length=20000)` and filtered on `game_id`.
 
 `play_type_nfl_2024.parquet` is the oracle for `play_type_nfl` / `aborted_play` (Shield and ESPN) and for the PAT rows `split_pat_rows` builds:
 `game_id, play_id, play_type_nfl, aborted_play, desc, extra_point_result, two_point_conv_result`, cut on 2026-11-24 from the nflverse-data `pbp`

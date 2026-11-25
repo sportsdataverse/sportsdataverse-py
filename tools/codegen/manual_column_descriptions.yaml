@@ -3360,6 +3360,133 @@ espn_nfl_game_rosters:
   projections_href: ESPN API hyperlink reference URL for the player's statistical projection resource.
   statistics_href: ESPN API hyperlink reference URL for the player's career statistics resource.
   team_alternate_ids_sdr: SportsDataverse SDR alternate identifier for the team, used for cross-source joins.
+espn_nfl_pbp_nflverse:
+  aborted_play: '0/1 flag: aborted snap (the text contains Aborted, nflfastR''s rule).'
+  away_coach: Away head coach, from the schedule.
+  away_score: Final away score, from the schedule.
+  away_team: Away team, nflverse's current franchise abbreviation.
+  away_timeouts_remaining: Away timeouts left before the play (after it on a timeout row), from the ESPN processor's count.
+  complete_pass: '0/1 flag: completed pass.'
+  defteam: Team on defense; null on a timeout row.
+  defteam_score: defteam's score before the play.
+  defteam_score_post: defteam's score after the play.
+  defteam_timeouts_remaining: defteam's timeouts left before the play; null on a timeout row.
+  desc: ESPN's play text (close to, but not, the NFL feed's description nflverse carries).
+  div_game: 1 for a divisional game, from the schedule.
+  down: Down; null on kickoffs, tries and timeouts.
+  drive: ESPN's drive number within the game (the digits of ESPN's drive id after the game id).
+  drive_ended_with_score: '0/1 flag: the play''s drive ended in a score.'
+  drive_play_count: Offensive plays in the play's ESPN drive.
+  drive_quarter_end: Quarter the play's ESPN drive ended in.
+  drive_quarter_start: Quarter the play's ESPN drive started in.
+  drive_time_of_possession: Time of possession of the play's ESPN drive, M:SS.
+  espn_game_id: ESPN event id of the game.
+  espn_play_id: ESPN play id (participants and the ESPN frame are keyed on it); a split PAT row's is the touchdown's plus
+    1.
+  extra_point_attempt: '0/1 flag: extra point attempt.'
+  extra_point_result: good, failed or blocked.
+  field_goal_attempt: '0/1 flag: field goal attempt.'
+  field_goal_result: made, missed or blocked.
+  first_down: '0/1 flag: first down by yards, penalty or an offensive touchdown.'
+  first_down_pass: '0/1 flag: passing first down (a passing touchdown counts).'
+  first_down_penalty: '0/1 flag: first down awarded by penalty.'
+  first_down_rush: '0/1 flag: rushing first down (a rushing touchdown counts).'
+  fourth_down_converted: '0/1 flag: fourth down converted (first down or offensive touchdown).'
+  fourth_down_failed: '0/1 flag: fourth-down pass or run that did not convert.'
+  fumble: '0/1 flag: fumble (or muff) on the play.'
+  fumble_forced: '0/1 flag: forced fumble (the text names the forcer, FUMBLES (J.Doe)).'
+  fumble_lost: '0/1 flag: fumble recovered by the other team.'
+  fumble_not_forced: '0/1 flag: fumble with no forcer named.'
+  game_date: Game date (YYYY-MM-DD), the schedule's gameday.
+  game_half: Half1, Half2 or Overtime.
+  game_id: nflverse game id, YYYY_WW_AWAY_HOME (the old abbreviation, e.g. 2007_14_SD_TEN).
+  game_seconds_remaining: Seconds left in regulation at the snap (overtime counts only its own period).
+  game_stadium: Stadium name, from the schedule (nflverse's stadium column is the feed's own name).
+  goal_to_go: '0/1 flag: goal-to-go situation.'
+  half_seconds_remaining: Seconds left in the half at the snap (overtime counts only its own period).
+  home_coach: Home head coach, from the schedule.
+  home_score: Final home score, from the schedule.
+  home_team: Home team, nflverse's current franchise abbreviation (LA, LAC, LV for the Rams, Chargers, Raiders of every era).
+  home_timeouts_remaining: Home timeouts left before the play (after it on a timeout row), from the ESPN processor's count.
+  incomplete_pass: '0/1 flag: incomplete pass (not intercepted, not a sack).'
+  interception: '0/1 flag: intercepted pass.'
+  kickoff_attempt: '0/1 flag: kickoff.'
+  kickoff_downed: '0/1 flag: kickoff downed.'
+  kickoff_fair_catch: '0/1 flag: kickoff fair catch.'
+  kickoff_out_of_bounds: '0/1 flag: kickoff out of bounds.'
+  location: Home or Neutral, from the schedule.
+  old_game_id: NFL's old game id (YYYYMMDDGG), from the schedule.
+  pass_attempt: '0/1 flag: pass attempt, sacks included (nflverse''s convention).'
+  pass_length: short or deep, from the text.
+  pass_location: left, middle or right, from the text.
+  pass_touchdown: '0/1 flag: passing touchdown.'
+  passing_yards: Yards on a completed pass; null otherwise.
+  penalty: '0/1 flag: accepted penalty (a declined one is 0, as in nflverse).'
+  penalty_team: Team of an accepted penalty, from ESPN's penalized team id.
+  penalty_yards: Yards of an accepted penalty; null otherwise.
+  play_id: GSIS play id, the digits ESPN's play id carries after its game id (2006 on); a split PAT row is its touchdown's
+    play_id plus 1. Joins nflverse play_by_play with game_id.
+  play_type: 'nflverse''s play type: pass, run, punt, field_goal, kickoff, extra_point, qb_kneel, qb_spike, no_play, or null.'
+  play_type_nfl: nflverse's NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PUNT, FIELD_GOAL, XP_KICK, PAT2, PENALTY,
+    TIMEOUT, UNSPECIFIED).
+  posteam: Team with possession (a kickoff belongs to the receiving team); null on a timeout row.
+  posteam_score: posteam's score before the play.
+  posteam_score_post: posteam's score after the play (a touchdown row leaves out its split try's points).
+  posteam_timeouts_remaining: posteam's timeouts left before the play; null on a timeout row.
+  posteam_type: 'home or away: which side posteam is.'
+  punt_attempt: '0/1 flag: punt.'
+  punt_blocked: '0/1 flag: blocked punt.'
+  punt_downed: '0/1 flag: punt downed.'
+  punt_fair_catch: '0/1 flag: punt fair catch.'
+  punt_out_of_bounds: '0/1 flag: punt out of bounds.'
+  qb_dropback: '0/1 flag: dropback: pass attempt, sack, scramble or spike.'
+  qb_kneel: '0/1 flag: quarterback kneel.'
+  qb_scramble: '0/1 flag: quarterback scramble (the text says scrambles).'
+  qb_spike: '0/1 flag: spike (the text says spiked).'
+  qtr: Quarter (5 = overtime).
+  quarter_seconds_remaining: 'Seconds left in the quarter at the snap: the clock the NFL text opens with where it has one,
+    else ESPN''s clock.'
+  receiving_yards: Yards on a completed pass; null otherwise.
+  result: Final home score minus away score, from the schedule.
+  return_touchdown: '0/1 flag: touchdown that is neither a passing nor a rushing one (returns, recoveries).'
+  roof: outdoors, dome, closed or open, from the schedule.
+  run_location: left, middle or right, from the text.
+  rush_attempt: '0/1 flag: rushing attempt (scrambles and kneels included).'
+  rush_touchdown: '0/1 flag: rushing touchdown.'
+  rushing_yards: Yards on a run; null otherwise.
+  sack: '0/1 flag: sack.'
+  safety: '0/1 flag: safety.'
+  score_differential: posteam_score minus defteam_score.
+  score_differential_post: posteam_score_post minus defteam_score_post.
+  season: Season, from game_id.
+  season_type: REG, POST or PRE.
+  side_of_field: Abbreviation of the team whose half the ball is in, or 50 at midfield.
+  special: '0/1 flag: special-teams play (kickoff, punt, field goal, extra point).'
+  special_teams_play: '0/1 flag: special-teams play as nflverse flags it (a made field goal is left out).'
+  spread_line: 'Home team''s point spread (positive when the home team is favored): the schedule''s when given, else ESPN''s.'
+  stadium_id: nflverse stadium id, from the schedule.
+  surface: Playing surface, from the schedule.
+  tackled_for_loss: '0/1 flag: run tackled for a loss.'
+  td_team: Team that scored the touchdown.
+  temp: Temperature (F), from the schedule; null indoors.
+  third_down_converted: '0/1 flag: third down converted (first down or offensive touchdown).'
+  third_down_failed: '0/1 flag: third-down pass or run that did not convert.'
+  time: Game clock at the snap, MM:SS.
+  total: Final combined score, from the schedule.
+  total_away_score: Away score after the play (a touchdown row leaves out its split try's points).
+  total_home_score: Home score after the play (a touchdown row leaves out its split try's points).
+  total_line: 'Game total (over/under): the schedule''s when given, else ESPN''s.'
+  touchback: '0/1 flag: kickoff or punt touchback.'
+  touchdown: '0/1 flag: touchdown scored on the play.'
+  two_point_attempt: '0/1 flag: two-point conversion attempt.'
+  two_point_conv_result: success or failure.
+  week: nflverse week (playoff weeks continue the regular-season count), from game_id.
+  wind: Wind speed (mph), from the schedule; null indoors.
+  yardline_100: Yards from the opponent's end zone at the snap (a kickoff from the receiving team's side).
+  yards_gained: Yards gained on the play itself (an accepted penalty's yards excluded; 0 on kicks and no-play penalties).
+  ydsnet: Net yards of the play's ESPN drive.
+  ydstogo: Yards to go for a first down (0 on kickoffs and timeouts).
+  yrdln: Field position as nflverse writes it (e.g. KC 35, MID 50).
 espn_nfl_player_stats:
   defensive_assist_tackles: Number of assisted tackles credited to the player (helped bring down the ball carrier but was
     not the primary tackler).
