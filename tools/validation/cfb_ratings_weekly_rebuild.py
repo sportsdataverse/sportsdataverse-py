@@ -72,7 +72,11 @@ def _season_plays(season: int) -> pl.DataFrame:
 
 
 def rebuild(seasons: list[int], *, engine: str = "current") -> pl.DataFrame:
-    """Published snapshots for ``seasons`` with the efficiency columns refit by ``engine``."""
+    """Published snapshots for ``seasons`` with the efficiency columns refit by ``engine``.
+
+    The published ``adj_net`` is kept as ``adj_net_pre`` (the backtest fixture scores it).
+    """
+    seasons = sorted(set(seasons))  # a repeated season would duplicate every snapshot key
     fit = _pre_engine if engine == "pre" else efficiency_ratings
     pub = pl.from_pandas(p) if not isinstance(p := load_cfb_ratings_weekly(seasons), pl.DataFrame) else p
     pub = pub.with_columns(pl.col("team_id").cast(pl.Utf8), pl.col("season").cast(pl.Int64))
@@ -95,7 +99,8 @@ def rebuild(seasons: list[int], *, engine: str = "current") -> pl.DataFrame:
     print(
         f"{out.height} snapshot rows refit; max |d adj_net| vs published {(out['adj_net'] - out['adj_net_new']).abs().max()}"
     )
-    return out.with_columns([pl.coalesce(f"{c}_new", c).alias(c) for c in _EFF]).drop([f"{c}_new" for c in _EFF])
+    out = out.with_columns(adj_net_pre=pl.col("adj_net"))
+    return out.with_columns([pl.col(f"{c}_new").alias(c) for c in _EFF]).drop([f"{c}_new" for c in _EFF])
 
 
 def main(argv: list[str] | None = None) -> int:

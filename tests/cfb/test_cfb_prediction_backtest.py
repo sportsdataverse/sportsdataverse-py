@@ -115,7 +115,7 @@ def _asof_predictions(rating: str = "adj_net", era: str = "modern") -> pl.DataFr
         pl.Series("home_win_prob", [win_prob_from_margin(m, era=era) for m in margins]),
         (pl.col("home_score") - pl.col("away_score")).cast(pl.Float64).alias("actual_margin"),
         (pl.col("home_score") > pl.col("away_score")).cast(pl.Float64).alias("y"),
-    )
+    ).sort("game_id")  # joins do not fix row order; the replaced-system checks pair rows by position
 
 
 _PREDS = _asof_predictions()
