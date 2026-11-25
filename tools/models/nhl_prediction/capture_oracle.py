@@ -26,6 +26,7 @@ import polars as pl
 import requests
 
 import sportsdataverse.nhl as nhl
+from sportsdataverse.nhl.nhl_prediction_constants import _settled_scores
 
 FIXTURES_DIR = "tests/fixtures/nhl_prediction"
 SEASON = 2023  # sdv-py / MoneyPuck convention: 2023 == the 2022-23 season
@@ -90,8 +91,9 @@ def capture_results(pbp: pl.DataFrame | None = None) -> pl.DataFrame:
     loader's convention (not ``"FINAL"``, which only appears for preseason
     rows) -- confirmed against the live 2023 payload at capture time.
 
-    ``home_goals``/``away_goals`` are derived by counting the pbp's own
-    ``GOAL`` events per team, **never** from the schedule loader's
+    ``home_goals``/``away_goals`` are the settled score from the pbp's own
+    ``GOAL`` events (``_settled_scores``: a shootout counts one goal to its
+    winner, not every scoring attempt the pbp logs), **never** from the schedule loader's
     ``home_score``/``away_score``. Those columns were found at grounding to
     be a placeholder constant for every ``load_nhl_schedule(s)`` season
     <= 2023 (e.g. every single 2022-23 game reporting the same "2-3" score;
@@ -103,12 +105,7 @@ def capture_results(pbp: pl.DataFrame | None = None) -> pl.DataFrame:
 
     if pbp is None:
         pbp = nhl.load_nhl_pbp_full([SEASON])
-    goals = (
-        pbp.filter((pl.col("event_type") == "GOAL") & pl.col("game_id").is_not_null())
-        .group_by(["game_id", "event_team_abbr"])
-        .agg(pl.len().alias("goals"))
-        .with_columns(pl.col("game_id").cast(pl.Int64).cast(pl.Utf8))
-    )
+    settled = _settled_scores(pbp).with_columns(pl.col("game_id").cast(pl.Utf8))
 
     out = completed.select(
         pl.col("game_id").cast(pl.Int64).cast(pl.Utf8),
@@ -118,11 +115,7 @@ def capture_results(pbp: pl.DataFrame | None = None) -> pl.DataFrame:
         pl.col("away_team_abbr").alias("away_team"),
         pl.lit(False).alias("neutral_site"),
     )
-    home_goals = goals.rename({"event_team_abbr": "home_team", "goals": "home_goals"})
-    away_goals = goals.rename({"event_team_abbr": "away_team", "goals": "away_goals"})
-    out = out.join(home_goals, on=["game_id", "home_team"], how="left").join(
-        away_goals, on=["game_id", "away_team"], how="left"
-    )
+    out = out.join(settled, on="game_id", how="left")
     out = out.with_columns(
         pl.col("home_goals").fill_null(0).cast(pl.Int64),
         pl.col("away_goals").fill_null(0).cast(pl.Int64),
@@ -263,7 +256,7 @@ def main() -> None:
     print("Downloading full-season pbp (shared by results + pbp_sample)...")
     full_pbp = nhl.load_nhl_pbp_full([SEASON])
 
-    print("Capturing results_2023 (goals derived from pbp GOAL events)...")
+    print("Capturing results_2023 (settled scores from pbp GOAL events)...")
     results = capture_results(full_pbp)
     results.write_parquet(f"{FIXTURES_DIR}/results_2023.parquet")
     print(f"  -> {results.shape}")

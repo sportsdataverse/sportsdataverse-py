@@ -8,6 +8,9 @@ include pyproject.toml
 recursive-include sportsdataverse/cfb/models *
 recursive-include sportsdataverse/nfl/models *
 
+# GraphQL query documents the PGA TOUR runtime sends.
+recursive-include sportsdataverse/golf/pgatour_queries *.graphql
+
 # Sphinx + docs sources are NOT shipped in the wheel — only the .md outputs
 # in docs/ are kept by [tool.setuptools.packages.find] excludes.
 prune Sphinx-docs

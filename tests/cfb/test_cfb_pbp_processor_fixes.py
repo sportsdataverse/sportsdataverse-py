@@ -835,6 +835,30 @@ def test_kneels_are_not_stuffed_or_stopped_runs():
     assert kneels["stopped_run"].to_list() == [False, False]
 
 
+def test_a_loss_on_a_rush_typed_fumble_or_safety_is_a_stuff():
+    # Auburn @ Mississippi State, 2026-11-14: three carries behind the line that ESPN types as a fumble
+    # recovery or a safety are rushes in the stuff-rate denominator, so they must be stuffs too.
+    plays = _trimmed_plays(401856886, STUFF_END_STATES)
+    for needle, yards in (
+        ("B.Brown rush middle for 2 yards loss", -2),  # Fumble Recovery (Own)
+        ("K.Wilson rush middle for 6 yards loss", -6),  # Fumble Recovery (Opponent)
+        ("O.Mabson II rush middle for 2 yards loss", -2),  # Safety
+    ):
+        row = _row(plays, needle)
+        assert row["type.text"] != "Rush" and row["rush"] is True and row["yds_rushed"] == yards
+        assert row["stuffed_run"] is True and row["stopped_run"] is True
+    rate = (
+        plays.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
+        .group_by("pos_team")
+        .agg(pl.col("stuffed_run").mean())
+        .sort("pos_team")
+    )
+    assert rate["stuffed_run"].to_list() == pytest.approx([5 / 40, 11 / 39])  # Auburn (2), Mississippi State (344)
+    # the gate is the play being a rush: a 1-yard rushing touchdown is a stopped run (2 or fewer yards)
+    td = _row(plays, "B.Brown rush middle for 1 yard gain to the State00 TOUCHDOWN")
+    assert td["type.text"] == "Rushing Touchdown" and td["stopped_run"] is True and td["stuffed_run"] is False
+
+
 def test_yardless_rush_naming_a_foul_does_not_take_stat_yardage():
     # A foul named without the word "penalty" leaves penalty_flag False but sets penalty_detail;
     # statYardage there can carry the enforcement, so the fallback must not read it.

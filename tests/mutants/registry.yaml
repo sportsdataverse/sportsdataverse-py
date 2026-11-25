@@ -7609,8 +7609,8 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/nhl/nhl_player_props.py
-  snippet: '    "player_id": pl.Int64,'
-  mutant: '    "player_id": pl.Utf8,'
+  snippet: "    \"player_id\": pl.Int64,\n    \"team\": pl.Utf8,\n    \"opp_team\": pl.Utf8,\n    \"stat\""
+  mutant: "    \"player_id\": pl.Utf8,\n    \"team\": pl.Utf8,\n    \"opp_team\": pl.Utf8,\n    \"stat\""
   test: tests/nhl/test_nhl_player_props.py -k "props_join_the_nhl_parser_frames"
   expected: kill
   note: nhl_player_props pins player_id to Utf8 again, so it cannot join a parse_nhl_web_* frame (R986-3).
@@ -11621,6 +11621,37 @@
   expected: kill
   note: An automatic runner who scores on the half's first PA (718511 bottom 11) would be missed.
 
+# --- mlb-dedupe-game-pks: a suspended game listed on two schedule dates counts once ----------------
+- id: mlb-season-game-pks-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    return list(dict.fromkeys(pks))'
+  mutant: '    return pks'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_season_game_pks_lists_a_suspended_game_once
+  expected: kill
+  note: 5028 (suspended 2000-04-12, resumed the 13th) would be collected twice for the RE24 matrix.
+
+- id: mlb-base-out-states-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)'
+  mutant: '    pbp = pbp'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_twice_collected_games_count_once
+  expected: kill
+  note: A game collected twice would interleave its PAs, corrupting the states and double-counting RE24.
+
+- id: mlb-markov-post-outs-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    ).unique(subset=["game_id", "at_bat_index"], keep="first", maintain_order=True)  # match the deduped states'
+  mutant: '    )'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_transition_counts_conserve_plate_appearances
+  expected: kill
+  note: The post-PA outs of a game collected twice would no longer join 1:1 onto the deduped states.
+
 # --- WNBA prop constants: per-league SD law / dispersion + league-bound WNBA helpers -------------
 - id: wnba-props-distribution-reads-nba-constants
   group: wnba-prop-constants
@@ -12166,6 +12197,87 @@
   expected: kill
   note: ESPN boxscore stats zipped one key off would put assists under goals and so on.
 
+# --- college-possession-ft-weight: college box possessions weigh a free throw 0.475, the pros 0.44 ----
+- id: college-poss-ft-weight-constant
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: sportsdataverse/_common/possessions.py
+  snippet: 'COLLEGE_FT_POSSESSION_WEIGHT: float = 0.475'
+  mutant: 'COLLEGE_FT_POSSESSION_WEIGHT: float = 0.44'
+  test: tests/nba/test_nba_game_page_leagues.py -k weigh_free_throws_by_league
+  expected: kill
+  note: College possessions, pace, TOV% and usage would fall back to the pros' 0.44 free-throw weight.
+
+- id: college-poss-ft-weight-game-page
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: sportsdataverse/nba/nba_game_page.py
+  snippet: '(fga - pl.col("offensive_rebounds") + tov + w * fta)'
+  mutant: '(fga - pl.col("offensive_rebounds") + tov + FT_WEIGHT * fta)'
+  test: tests/nba/test_nba_game_page_leagues.py -k weigh_free_throws_by_league
+  expected: kill
+  note: The game page's college possessions would use 0.44.
+
+- id: college-poss-ft-weight-official-pace
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: sportsdataverse/_common/official_seasons.py
+  snippet: '        + ft_possession_weight(league) * pl.col("free_throws_attempted")'
+  mutant: '        + 0.44 * pl.col("free_throws_attempted")'
+  test: tests/nba/test_nba_official_seasons.py -k college_possessions_weigh
+  expected: kill
+  note: College official pace would count possessions with the pros' free-throw weight.
+
+- id: college-poss-ft-weight-four-factors
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: '    w = ft_possession_weight(league)'
+  mutant: '    w = FT_POSSESSION_WEIGHT'
+  test: tests/common/test_team_game_four_factors.py -k residual_is_the_possession_gap
+  expected: kill
+  note: College four-factor points would price a free throw at 0.44 of a chance and misstate the residual.
+
+- id: college-poss-ft-weight-wrapper-league
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: sportsdataverse/mbb/mbb_team_season_rates.py
+  snippet: 'counts=ncaa_team_box_count_rows(load_team_box(seasons)), league=league)'
+  mutant: 'counts=ncaa_team_box_count_rows(load_team_box(seasons)))'
+  test: tests/common/test_team_game_four_factors.py -k residual_is_the_possession_gap
+  expected: kill
+  note: The college four-factors wrapper would not pass its league, so it would price with the NBA weight.
+
+- id: phantom-possessions-limit
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: tools/validation/checks/phantom_possessions.py
+  snippet: '    flagged = phantom_counts(frame).filter(pl.col("phantoms") > PHANTOM_TEAM_GAME_LIMIT)'
+  mutant: '    flagged = phantom_counts(frame).filter(pl.col("phantoms") > 99)'
+  test: tests/contracts/test_phantom_possessions.py::test_only_the_tail_team_game_is_flagged
+  expected: kill
+  note: A team-game with seven phantom possessions would pass the harness silently.
+
+- id: phantom-possessions-turnover-exempt
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: tools/validation/checks/phantom_possessions.py
+  snippet: '        & (pl.col("last_event_type").is_in(_REAL_QUICK_ENDS).fill_null(False) == False)  # noqa: E712'
+  mutant: '        & pl.lit(True)'
+  test: tests/contracts/test_phantom_possessions.py::test_a_quick_turnover_is_not_a_phantom
+  expected: kill
+  note: A real quick turnover would count as a phantom possession.
+
+- id: phantom-possessions-period-last-over-frame
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: tools/validation/checks/phantom_possessions.py
+  snippet: '    last = pl.col("_period_last")'
+  mutant: '    last = pl.col("poss_num").max().over("contest_id", "period")'
+  test: tests/contracts/test_phantom_possessions.py::test_a_teams_last_possession_of_a_period_can_be_a_phantom
+  expected: kill
+  note: Inside the team group the window gives the team's last possession of the period, so its phantom is dropped.
+
 # --- wnba-props-minutes-coldstart: team minutes invariant + expansion-team cold start ------------
 - id: props-minutes-share-normalised
   group: props-minutes-coldstart
@@ -12197,6 +12309,106 @@
   expected: kill
   note: An expansion team's first game (no ratings row yet) would raise KeyError again.
 
+- id: nhl-settled-score-shootout-one-goal
+  group: nhl-pregame-labels
+  finding: nhl-settled-total-label
+  file: sportsdataverse/nhl/nhl_prediction_constants.py
+  snippet: '        (~pl.col("home") & ~pl.col("shootout")).sum().cast(pl.Int64).alias("away_goals"),'
+  mutant: '        (~pl.col("home")).sum().cast(pl.Int64).alias("away_goals"),'
+  test: tests/nhl/test_nhl_settled_totals.py::test_a_shootout_counts_one_goal_for_its_winner
+  expected: kill
+  note: Every scoring shootout attempt would count as a goal again, 0.06-0.11 goals a game on the fitted totals.
+
+- id: nhl-reg-draw-inflation-applied
+  group: nhl-score-model
+  finding: nhl-regulation-3way
+  file: sportsdataverse/nhl/nhl_market.py
+  snippet: '    grid[:, _GOALS, _GOALS] *= 1.0 + const.reg_draw_inflation'
+  mutant: '    grid[:, _GOALS, _GOALS] *= 1.0'
+  test: tests/nhl/test_nhl_regulation_score.py::test_draw_inflation_raises_the_tie_probability
+  expected: kill
+  note: Without the tied-cell boost the regulation grid is two independent Poissons, which put ~16% of games level after 60 minutes where ~22% are.
+
+- id: nhl-final-total-counts-the-deciding-goal
+  group: nhl-score-model
+  finding: nhl-regulation-3way
+  file: sportsdataverse/nhl/nhl_market.py
+  snippet: '    return (goals + (1.0 + theta) * tied.sum(axis=1)) / norm_'
+  mutant: '    return goals / norm_'
+  test: tests/nhl/test_nhl_regulation_score.py::test_score_distribution_matches_win_prob_and_total
+  expected: kill
+  note: The solver would match exp_total to regulation goals only, so the final-score distribution's mean total runs one tie probability above exp_total.
+
+- id: nhl-goalie-saves-strictly-prior
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    return (x.cum_sum() - x).over(*by)'
+  mutant: '    return x.cum_sum().over(*by)'
+  test: tests/nhl/test_nhl_goalie_saves.py
+  expected: kill
+  note: Each projection would read its own game's shots and saves.
+
+- id: nhl-goalie-saves-home-ice-sign
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    side = pl.when(pl.col("is_home") == True).then(-0.5).otherwise(0.5) * const.shots_hfa  # noqa: E712'
+  mutant: '    side = pl.when(pl.col("is_home") == True).then(0.5).otherwise(-0.5) * const.shots_hfa  # noqa: E712'
+  test: tests/nhl/test_nhl_goalie_saves.py::test_home_goalie_faces_fewer_shots_on_opening_night
+  expected: kill
+  note: The home goalie would be projected to face the extra shots the home team takes.
+
+- id: nhl-goalie-saves-interval-uses-nb-size
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    lo, hi = nbinom.ppf(tail, size, size / (size + mean)), nbinom.ppf(1.0 - tail, size, size / (size + mean))'
+  mutant: '    lo, hi = nbinom.ppf(tail, 1e9, 1e9 / (1e9 + mean)), nbinom.ppf(1.0 - tail, 1e9, 1e9 / (1e9 + mean))'
+  test: tests/nhl/test_nhl_goalie_saves.py -k "coverage_and_bias"
+  expected: kill
+  note: Near-Poisson bounds (shots_nb_size ignored) give an interval narrower than the coverage it reports.
+
+- id: nhl-goalie-saves-starters-drop-own-result
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '        box = box.join(starters.select(pl.col("game_id").cast(box.schema["game_id"])), on="game_id", how="anti")'
+  mutant: '        box = box'
+  test: tests/nhl/test_nhl_goalie_saves.py::test_starters_for_a_game_already_in_the_box_ignore_its_result
+  expected: kill
+  note: A slate re-run after puck drop would feed each game's own saves into its projection.
+
+- id: bb-factor-points-defense-sign
+  group: bb-factor-points
+  finding: bb-d42-factor-points
+  file: sportsdataverse/_common/factor_points.py
+  snippet: '    sign = {"off": 1, "def": -1}'
+  mutant: '    sign = {"off": 1, "def": 1}'
+  test: tests/common/test_factor_points.py::test_team_parts_add_up_to_net_on_every_row
+  expected: kill
+  note: The defensive parts would carry the opponents' offense sign, so the eight parts would no longer add up to net_rtg.
+
+- id: bb-factor-points-efg-price
+  group: bb-factor-points
+  finding: bb-d42-factor-points
+  file: sportsdataverse/_common/factor_points.py
+  snippet: '        - 2 * pl.col("lg_efg_pct") * fga'
+  mutant: '        - pl.col("lg_efg_pct") * fga'
+  test: tests/common/test_factor_points.py::test_team_parts_are_the_game_prices_summed
+  expected: kill
+  note: A mispriced eFG part still adds up (the free-throw remainder absorbs it); only the per-game prices catch it.
+
+- id: bb-factor-points-lineup-rebound-chances
+  group: bb-factor-points
+  finding: bb-d42-factor-points
+  file: sportsdataverse/_common/factor_points.py
+  snippet: '    "side": (pl.col("o_oreb") + pl.col("d_dreb"), pl.col("d_oreb") + pl.col("o_dreb")),'
+  mutant: '    "side": (pl.col("o_oreb") + pl.col("o_dreb"), pl.col("d_oreb") + pl.col("d_dreb")),'
+  test: tests/common/test_factor_points.py::test_lineup_rebound_part_prices_the_published_orb_rate
+  expected: kill
+  note: A lineup's rebound chances would add its own defensive rebounds, the team table's convention, not the opponent's.
+
 - id: soccer-standings-infer-all-rows
   group: polars-2.2
   finding: polars-2.2-from-dicts-extra-key
@@ -12227,6 +12439,35 @@
   test: tests/cfb/test_cfb_pbp_processor_fixes.py::test_a_returned_fumble_ends_where_the_recoverer_snaps_next
   expected: kill
   note: A fumble returned 34 yards would keep the fumble spot as its end (401856886 EPA -1.47).
+
+# --- cfb-stuff-any-rush: the stuff / stopped flags gate on rush, as their denominator does ---------
+- id: cfb-stuff-gate-on-rush
+  group: cfb-stuff-any-rush
+  finding: cfb-stuff-any-rush
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    (pl.col("rush") == True)
+                        .and_(pl.col("yds_rushed") <= 0)
+  mutant: |-
+    (pl.col("type.text") == "Rush")
+                        .and_(pl.col("yds_rushed") <= 0)
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py::test_a_loss_on_a_rush_typed_fumble_or_safety_is_a_stuff
+  expected: kill
+  note: A loss on a carry the feed types as a fumble recovery or a safety would never be a stuff.
+
+- id: cfb-stopped-gate-on-rush
+  group: cfb-stuff-any-rush
+  finding: cfb-stuff-any-rush
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    (pl.col("rush") == True)
+                        .and_(pl.col("yds_rushed") <= 2)
+  mutant: |-
+    (pl.col("type.text") == "Rush")
+                        .and_(pl.col("yds_rushed") <= 2)
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py::test_a_loss_on_a_rush_typed_fumble_or_safety_is_a_stuff
+  expected: kill
+  note: The same carries would never be stopped runs.
 
 # --- Markov-chain RE24: base-out transition counting + the absorbing-chain solve -----------------
 - id: mlb-markov-next-outs-crosses-half
@@ -12268,16 +12509,6 @@
   test: tests/mlb/test_mlb_markov_run_expectancy.py::test_walk_offs_and_incomplete_halves_are_excluded
   expected: kill
   note: The transitions would no longer cover the same halves as the empirical RE24 they are compared with.
-
-- id: mlb-markov-no-dedupe
-  group: mlb-markov-re24
-  finding: mlb-markov-re24
-  file: sportsdataverse/mlb/mlb_run_expectancy.py
-  snippet: '    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)'
-  mutant: '    pbp = pbp'
-  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_transition_counts_conserve_plate_appearances
-  expected: kill
-  note: A game collected twice (two in the corpus) would interleave its PAs and corrupt the states.
 
 - id: mlb-markov-prob-not-per-state
   group: mlb-markov-re24
@@ -12368,3 +12599,126 @@
   test: tests/mlb/test_mlb_markov_run_expectancy.py::test_by_event_prob_and_event_classes
   expected: kill
   note: field_out / force_out (unmapped) would be classed as reaching base instead of outs in play.
+
+# --- ESPN league `endpoints:` allowlist (lacrosse) ------------------------------------------------
+- id: espn-league-endpoints-allowlist-applied
+  group: espn-league-allowlist
+  finding: espn-lacrosse-allowlist
+  file: tools/codegen/spec.py
+  snippet: '        return not self.endpoints or ep.short in self.endpoints'
+  mutant: '        return True'
+  test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_filters_in_scope_endpoints
+  expected: kill
+  note: An ignored allowlist would emit every in-scope ESPN wrapper for lacrosse, most of them 404.
+
+- id: espn-league-endpoints-unknown-short-rejected
+  group: espn-league-allowlist
+  finding: espn-lacrosse-allowlist
+  file: tools/codegen/spec.py
+  snippet: '        if set(lg.endpoints) - shorts:'
+  mutant: '        if False:'
+  test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_rejects_unknown_short
+  expected: kill
+  note: A typo in a league allowlist would silently drop that wrapper instead of failing the build.
+
+# --- ESPN golf field-of-players parser (golf_espn_parsers) ----------------------------------------
+- id: golf-playoff-line-is-not-a-round
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '        if not isinstance(line, dict) or line.get("isPlayoff") is True:'
+  mutant: '        if not isinstance(line, dict):'
+  test: tests/test_espn_golf_parsers.py::test_playoff_line_is_not_a_round
+  expected: kill
+  note: On a 54-hole event the playoff sits at period 4 and would be counted as round 4.
+
+- id: golf-unplayed-round-is-null
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '        played = isinstance(value, (int, float)) and value > 0'
+  mutant: '        played = isinstance(value, (int, float))'
+  test: tests/test_espn_golf_parsers.py::test_leaderboard_missed_cut_has_null_weekend_rounds
+  expected: kill
+  note: ESPN's 0.0 placeholder for a round not played would read as a 0-stroke round.
+
+- id: golf-off-board-position-is-null
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '    on_board = isinstance(shown, str) and shown not in ("", "-")'
+  mutant: '    on_board = True'
+  test: tests/test_espn_golf_parsers.py::test_leaderboard_missed_cut_has_null_weekend_rounds
+  expected: kill
+  note: A missed-cut player would carry ESPN's "-" as a position and a tie flag.
+
+- id: golf-leaderboard-sorted-by-order
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '    df = df.sort(["event_id", "sort_order"], nulls_last=True, maintain_order=True)'
+  mutant: '    df = df'
+  test: tests/test_espn_golf_parsers.py::test_leaderboard_one_row_per_player_with_string_ids
+  expected: kill
+  note: The leaderboard payload is not in leaderboard order; unsorted, row 0 is not the leader.
+
+# --- PGA TOUR GraphQL runtime + parsers (pgatour_*) ----------------------------------------------
+- id: pgatour-key-from-the-prod-block
+  group: pgatour
+  finding: pgatour-graphql
+  file: sportsdataverse/golf/pgatour_runtime.py
+  snippet: '_PROD_KEY = re.compile(r''"prod":\{[^{}]*?"apiKey":"([^"]+)"'')'
+  mutant: '_PROD_KEY = re.compile(r''"apiKey":"([^"]+)"'')'
+  test: tests/test_pgatour.py::test_site_key_is_read_from_the_app_bundle
+  expected: kill
+  note: The bundle lists several environments; the first apiKey is not the production one.
+
+- id: pgatour-compressed-payload-decoded
+  group: pgatour
+  finding: pgatour-graphql
+  file: sportsdataverse/golf/pgatour_runtime.py
+  snippet: '    return {**value, "payload": decoded}'
+  mutant: '    return value'
+  test: tests/test_pgatour.py::test_decode_payload_round_trip_and_bad_payload
+  expected: kill
+  note: An undecoded payload is a base64 string every parser reads as an empty answer.
+
+- id: pgatour-int-variables-typed
+  group: pgatour
+  finding: pgatour-graphql
+  file: sportsdataverse/golf/pgatour_runtime.py
+  snippet: '            out[key] = whole'
+  mutant: '            out[key] = value'
+  test: tests/test_pgatour.py::test_variables_take_the_declared_type
+  expected: kill
+  note: A string year or round reaches an Int variable and the API rejects the query.
+
+- id: pgatour-leaderboard-drops-information-rows
+  group: pgatour
+  finding: pgatour-graphql
+  file: sportsdataverse/golf/pgatour_parsers.py
+  snippet: 'if r.get("__typename", "PlayerRowV3") == "PlayerRowV3"'
+  mutant: 'if True'
+  test: tests/test_pgatour.py::test_ids_are_strings_and_join
+  expected: kill
+  note: The cut-line banner would become a player row keyed by its own id.
+
+- id: pgatour-scorecard-tournament-id-strips-player
+  group: pgatour
+  finding: pgatour-graphql
+  file: sportsdataverse/golf/pgatour_parsers.py
+  snippet: '        tournament_id = tournament_id[: -len(player_id) - 1]'
+  mutant: '        tournament_id = tournament_id'
+  test: tests/test_pgatour.py::test_ids_are_strings_and_join
+  expected: kill
+  note: The scorecard answer's id is tournament-player (R2026014-28237); kept whole it joins nothing.
+
+- id: pgatour-tour-cup-season-from-title
+  group: pgatour
+  finding: pgatour-graphql
+  file: sportsdataverse/golf/pgatour_parsers.py
+  snippet: '"season": _year(raw.get("season")) or _year(raw.get("id"))'
+  mutant: '"season": _int(raw.get("season"))'
+  test: tests/test_pgatour.py::test_tour_cup_season_is_read_from_the_title
+  expected: kill
+  note: The API sends season as "2025 Standings"; read as an int it is null on every row.

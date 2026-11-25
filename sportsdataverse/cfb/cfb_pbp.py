@@ -8190,15 +8190,19 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 scoring_opp=pl.when(pl.col("start.yardsToEndzone") <= 40).then(True).otherwise(False),
+                # Gate on `rush`, the stuff-rate denominator, not `type.text == "Rush"`: a carry the
+                # feed types as a fumble recovery or a safety is a rush in the denominator, so with the
+                # literal type it could never count as a stuff (401856886: three carries lost 2-6
+                # yards that way). cfbfastR's stuffed_run gates on `rush == 1` too. Kneels stay out.
                 stuffed_run=pl.when(
-                    (pl.col("type.text") == "Rush")
+                    (pl.col("rush") == True)
                     .and_(pl.col("yds_rushed") <= 0)
                     .and_(pl.col("kneel_down").fill_null(False) == False)
                 )
                 .then(True)
                 .otherwise(False),
                 stopped_run=pl.when(
-                    (pl.col("type.text") == "Rush")
+                    (pl.col("rush") == True)
                     .and_(pl.col("yds_rushed") <= 2)
                     .and_(pl.col("kneel_down").fill_null(False) == False)
                 )

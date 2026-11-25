@@ -60,6 +60,7 @@ import polars as pl
 
 from sportsdataverse.mbb.mbb_shot_quality_constants import get_constants
 from sportsdataverse.nba.nba_game_page import _box_season, _ratio, _resolve_league, game_regulation_periods
+from sportsdataverse._common.possessions import TS_FT_WEIGHT
 from sportsdataverse.nba.nba_game_splits import _possessions, _split_events
 from sportsdataverse.nba.nba_shot_zones import add_shot_zones
 
@@ -445,7 +446,7 @@ def team_game_expected(
     rows = _split_events(pbp)
     out = _expected_rows(rows, _possessions(rows, lg, reg), _scored_shots(rows, lg, cells))
     poe = pl.col("fg_pts") - pl.col("xfg_pts")
-    tsa = 2.0 * (pl.col("fga") + 0.44 * pl.col("fta"))
+    tsa = 2.0 * (pl.col("fga") + TS_FT_WEIGHT * pl.col("fta"))
     out = out.with_columns(
         poe.alias("poe"),
         _ratio(poe, pl.col("fga")).alias("poe_per_shot"),

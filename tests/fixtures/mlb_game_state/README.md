@@ -22,6 +22,7 @@ integer (never a float) at capture time.
 | `re24_tango_book.parquet` | Tango, Lichtman & Dolphin, *The Book: Playing the Percentages in Baseball* (2007) | Published canonical 24-row RE24 table for MLB seasons 1999-2002. Widely cited (FanGraphs, Baseball-Reference's "run expectancy" glossary entry, Wikipedia's "Run expectancy" article). Transcribed by hand, not scraped. |
 | `winprob_game.parquet` | `mlb_win_probability` (statsapi) | Game 7746 (2001-06-21) -- era-matched to `pbp_corpus`, not a modern game (see below) -- per-play win-probability timeline |
 | `results_corpus.parquet` | `mlb_schedule` (statsapi) | Game-level final scores + team ids for the same windows |
+| `schedule_2000_04_12_13.json` | `mlb_schedule` (statsapi, season 2000), captured 2026-11-25 | The 2000-04-12 and 2000-04-13 date entries, trimmed to `gamePk`, `gameDate`, `gameNumber`, `status` and team ids/scores (28 listings). Game 5028 was suspended on the 12th and resumed on the 13th, so it is listed on both: the dedupe test for `_season_game_pks`. The same double listing put 5028 and 6146 into `pbp_corpus` twice (155 repeated PAs), which `pbp_base_out_states` now counts once |
 | `savant_called_pitches.parquet` | `mlb_statcast_search` (Baseball Savant) + `mlb_boxscore` (statsapi, `officials`) | 2023-06-01..2023-06-28 called pitches (`description in {called_strike, ball}`), real per-game home-plate umpire id; 53,667 pitches (widened from an initial 1-week/12,920-pitch pass -- see below) |
 | `pbp_extra_innings_2023.parquet` | `mlb_play_by_play` (statsapi `https://statsapi.mlb.com/api/v1/game/{718735,718511}/playByPlay`), captured 2026-11-24 | Games 718735 (2023-04-02 CLE @ SEA, 10 inn) and 718511 (11 inn), 176 PAs: the extra-inning automatic-runner test for `pbp_base_out_states`. Columns = the `pbp_corpus` set plus `matchup_batter_id`, `runners` (parser string) and `result_event`; ids cast int -> Utf8. 718511's bottom-11 runner scores on the half's first PA, so only `runners` shows him |
 | `pbp_opening_2023.parquet` | `mlb_play_by_play` (statsapi) via `mlb_schedule` + `collect_statsapi_pbp`, captured 2026-11-25 | The 20 final games of 2023-03-30 and 2023-03-31, 1,508 PAs: the `by_event=True` test for `mlb_base_out_transitions`. Columns = the `pbp_extra_innings_2023` set with `result_event_type` in place of `result_event`; ids cast int -> Utf8 |
@@ -76,9 +77,9 @@ narrative.
 - **Games 5028 (2000-04-12) and 6146 (2001-06-15) appear twice.** Each was
   suspended and resumed the next day, and statsapi's schedule lists it on both
   dates, so the collector fetched it twice: 155 exact duplicate PA rows in
-  `pbp_corpus`, two rows each in `results_corpus`. `mlb_base_out_transitions` keeps one copy per
-  `(game_id, about_at_bat_index)`; `tests/mlb/test_mlb_markov_run_expectancy.py`
-  (the Markov RE24 consistency gate, which also reads this corpus) relies on it.
+  `pbp_corpus`, two rows each in `results_corpus`. `pbp_base_out_states` keeps one copy per
+  `(game_id, about_at_bat_index)`, which RE24, win expectancy and the Markov RE24 consistency gate
+  (`tests/mlb/test_mlb_markov_run_expectancy.py`) all rely on.
 - **The umpire-zone calibration floor is 0.08, not the plan's draft 0.03.**
   A 1-week Savant sample (12,920 pitches) showed a 0.177 max per-decile
   calibration gap, concentrated in sparse borderline-probability deciles

@@ -331,7 +331,7 @@ class InsufficientInputError(SportsDataverseError):
     well-formed, but a term the model needs is structurally absent, so any
     number produced from it would be wrong rather than missing. The canonical
     case is a boxscore era whose ``turnovers`` column is uniformly ``0`` --
-    the possession estimate ``FGA - OREB + TO + 0.44 * FTA`` then omits ~23% of
+    the possession estimate ``FGA - OREB + TO + w * FTA`` then omits ~23% of
     possessions and every efficiency/tempo rating built on it is distorted by
     each team's own (unobserved) turnover rate.
 

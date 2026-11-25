@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_box"
-sidebar_label: "Analytics: mbb_team–ncaa_box"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_team"
+sidebar_label: "Analytics: mbb_team"
 sidebar_position: 17
-description: "Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_box — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_team–ncaa_box
+# Men's college basketball — additional Python functions — Analytics: mbb_team
 
 ### mbb_team_season_rates {#mbb_team_season_rates}
 
@@ -115,6 +115,19 @@ One row per `(season, team_id, split)`. `team_id` is the ESPN team id (Int64). `
 | `pts_per75_n` | Int64 | Sample size of pts_per75: off_rtg_n, copied. |
 | `opp_pts_per75_n` | Int64 | Sample size of opp_pts_per75: def_rtg_n, copied. |
 | `plus_minus_per75_n` | Int64 | Sample size of plus_minus_per75: net_rtg_n, copied. |
+| `lg_rtg` | Float64 | Points per 100 possessions of the season's league-average offense (all teams, all split), the zero the factor points are measured from. |
+| `off_efg_pts` | Float64 | Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `off_tov_pts` | Float64 | Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `off_orb_pts` | Float64 | Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `off_ft_pts` | Float64 | Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor's. |
+| `def_efg_pts` | Float64 | Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `def_tov_pts` | Float64 | Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `def_orb_pts` | Float64 | Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `def_ft_pts` | Float64 | Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor's. |
+| `efg_pts` | Float64 | Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `tov_pts` | Float64 | Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `orb_pts` | Float64 | Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `ft_pts` | Float64 | Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
 
 **Raises**
 
@@ -431,102 +444,4 @@ strength.sort("adj_net_rtg_rank").select("team_id", "adj_net_rtg", "sos", "sov")
 # The two methods side by side
 
 strength.select("team_id", "adj_net_rtg_rank", "adj_net_rtg_ridge_rank").head()
-```
-
-### mbb_tournament_ineligible {#mbb_tournament_ineligible}
-
-`mbb_tournament_ineligible(seasons: 'list[int] | None' = None, *, league: 'str | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Division I basketball programs that could not play in the NCAA tournament, per season.
-
-A bundled, hand-curated list (2010-2027): programs reclassifying to Division I (four seasons
-from Division II until 2025, three since the NCAA's January 2025 rule; St. Thomas came from
-Division III), and APR, NCAA-infractions and self-imposed postseason bans. Every row cites
-its source. The college season products (bracketology, season sim, strength of schedule) use
-it by default to set `eligible`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list[int] \| None` | `None` | Seasons to keep, as the end year (`2024` is 2023-24). `None` keeps all. |
-| `league` | `str \| None` | `None` | `"mens"`, `"womens"`, or `None` for both. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per ineligible `(season, league, team_id)`: `season, league, team_id` (ESPN team id, Utf8), `team`, `reason` (`reclassifying`, `apr_ban`, `infractions_ban`, `self_imposed_ban` or `other`), `detail`, `source_url` and `confidence` (`high` / `medium`).
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, as the end year (2024 is 2023-24). |
-| `league` | String | mens or womens. |
-| `team_id` | String | ESPN team id (Utf8). |
-| `team` | String | School name of the barred program, as ESPN spells it. |
-| `reason` | String | Why the program was barred: reclassifying, apr_ban, infractions_ban, self_imposed_ban or other. |
-| `detail` | String | Short note on the row, such as the reclassification year or the case behind the ban. |
-| `source_url` | String | The source that documents the row. |
-| `confidence` | String | How well the source documents the row: high (the NCAA, the school or the conference says so) or medium (a secondary source). |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"`, `"womens"` or `None`. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb import mbb_tournament_ineligible
-barred = mbb_tournament_ineligible([2023], league="mens")
-
-# Pipeline next step (one line)
-
-barred.filter(pl.col("reason") == "reclassifying").get_column("team").to_list()
-```
-
-### ncaa_box_events {#ncaa_box_events}
-
-`ncaa_box_events(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-Each player's box counts per stats.ncaa.org event, the input of the stint and split box.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release order (`season`, `contest_id`, `event_team_espn_team_id`, `player_1_id`, `player_2_id`, `event_type`, `event_result`, `shot_value`). |
-
-**Returns**
-
-Rows in `sportsdataverse._common.game_stints.box_event_schema` (String player ids), `order` the event's row in the release (the stint rows' `order`): one per event with a count for its `player_1_id`, and one per assisted field goal for its `player_2_id`. An event with no player id or no ESPN team id (a non-D1 side) has no row.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `game_id` | String | stats.ncaa.org contest id. |
-| `team_id` | Int64 | ESPN team id; a non-D1 team has none and gets no rows. |
-| `player_id` | String | stats.ncaa.org player id. |
-| `order` | Int64 | The action's place in the game: the stint rows' order (stats.nba.com order_index; for college the event's row in the pbp release). |
-| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw. |
-| `fgm` | Int64 | Field goals made. |
-| `fga` | Int64 | Field goals attempted. |
-| `fg3m` | Int64 | Three-pointers made. |
-| `fg3a` | Int64 | Three-pointers attempted. |
-| `ftm` | Int64 | Free throws made. |
-| `fta` | Int64 | Free throws attempted. |
-| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's). |
-| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's). |
-| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on. |
-| `stl` | Int64 | Steals he is credited with. |
-| `blk` | Int64 | Shots he blocked. |
-| `tov` | Int64 | Turnovers (a team turnover is no player's). |
-| `pf` | Int64 | Personal fouls (technicals are not counted). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
-from sportsdataverse.mbb.mbb_game_stints import ncaa_box_events
-ncaa_box_events(load_ncaa_mbb_pbp(2025)).head()
 ```

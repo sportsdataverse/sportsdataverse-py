@@ -43,7 +43,7 @@ box score, schedule, roster, and other sports data across the NBA (+ G-League),
 WNBA, NFL, MLB, NHL, MBB (men's college basketball), WBB (women's college
 basketball), CFB (college football), PWHL + 19 HockeyTech minor/junior hockey
 leagues, college hockey (M/W), college baseball + softball, soccer, cricket,
-UFL/XFL/CFL, and odds endpoints, plus international basketball (EuroLeague and
+lacrosse, golf, UFL/XFL/CFL, and odds endpoints, plus international basketball (EuroLeague and
 24 provider families), European hockey (SIHF and 12 leagues), Formula 1, the
 Kalshi and Polymarket prediction markets, and the cross-sport providers (CBS,
 Fox, Yahoo, ESPN content, TheSportsDB).
@@ -110,9 +110,8 @@ is the sole attributable contributor.
 
 ## DataFrame Engine — Polars 2.x
 
-Runtime is `polars>=2.0,<3` (the lock resolves 2.2, and 2.0 on Python 3.10); polars 1.x is not
-supported, so code may use 2.x-only API that 2.0 also has (see `CLAUDE.md`, "Polars version", for the
-2.0 and 2.2 behaviour rules). Use the modern API surface:
+Runtime is `polars>=2.0,<3`; polars 1.x is not supported, so code may use 2.x-only API
+(see `CLAUDE.md`, "Polars version"). Use the modern API surface:
 
 | Use this | Don't use this (0.18-era) |
 |---|---|
@@ -488,7 +487,7 @@ uv add --dev some-package           # add dev-only dep
 One package per primary league (`cfb/ mbb/ mlb/ nba/ nfl/ nhl/ wbb/ wnba/ pwhl/ nbagl/ odds/`), the
 cross-sport sources under `providers/` (`cbs/ fox/ yahoo/ espn_content/ thesportsdb/`), the HockeyTech core
 (`hockeytech/`) and its 19 league families under `hockey/`, `baseball/` (college
-baseball + softball), `soccer/` (+ `mls/`, `nwsl/`), `cricket/`, `football/`
+baseball + softball), `soccer/` (+ `mls/`, `nwsl/`), `cricket/`, `lacrosse/`, `golf/` (+ the PGA TOUR GraphQL `pgatour_*`), `football/`
 (UFL/XFL/CFL + the `sources/` adapters), `scrape/` (`espn/ ncaa/ stats/`),
 `registry/`, `validation/`, `wexp/`, `parsed/` (DEPRECATED generated aliases) and
 `sdv_docs/` (the MCP server, which must never import `sportsdataverse`). `basketball/` holds
@@ -500,8 +499,8 @@ EuroLeague, the international families and the ESPN side leagues (`nbl/ fiba/ ol
 ## ESPN Cross-League Architecture
 
 Each `<league>/<prefix>_espn_ext.py` is **codegen output** (~5,700 lines) written by
-`build_live()` from the five ESPN endpoint YAMLs — 126 short names across 40
-league modules, 4,566 wrappers. Never hand-edit one; edit the YAML and regenerate.
+`build_live()` from the five ESPN endpoint YAMLs — 127 short names across 42
+league modules, 4,632 wrappers. Never hand-edit one; edit the YAML and regenerate.
 
 ## Parser Layer
 

@@ -62,7 +62,7 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `rz_play` | Boolean | Binary flag for a red-zone play (yards_to_goal <= 20). |
 | `scoring_opp` | Boolean | Binary flag for a scoring opportunity (yards_to_goal <= 40). |
 | `middle_8` | Boolean | TRUE for plays in the middle-8 window (final 4 min of 1H, first 4 min of 2H). |
-| `stuffed_run` | Boolean | Binary flag for a stuffed run (zero or negative yards gained). |
+| `stuffed_run` | Boolean | True on a rush (any play type the processor counts as a rush, not a kneel) that gained zero or fewer yards; its mean over scrimmage rushes (rush and scrimmage_play) is the stuff rate. |
 | `change_of_pos_team` | Boolean | Binary flag for change of possession-team on the play. |
 | `downs_turnover` | Boolean | Binary flag for a turnover on downs. |
 | `pos_score_diff_start` | Int64 | Score differential for the possession team at the start of the play. |
@@ -376,7 +376,7 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `new_distance` | Int64 | Distance to go after the play, including any penalty enforcement. |
 | `under_2` | Boolean | Whether the play began with two minutes or less remaining in the half. |
 | `goal_to_go` | Boolean |  |
-| `stopped_run` | Boolean | True when the rush was stopped at or behind the line of scrimmage. |
+| `stopped_run` | Boolean | True on a rush (any play type the processor counts as a rush, not a kneel) that gained two or fewer yards; a rushing touchdown of one or two yards counts. |
 | `opportunity_run` | Boolean | True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag. |
 | `highlight_run` | Boolean | True when the rush gained 8 or more yards. |
 | `adj_rush_yardage` | Int64 | Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the 2026-10 line-yards fix cap at 8. |

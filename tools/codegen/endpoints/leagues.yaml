@@ -52,3 +52,91 @@ leagues:
   - {prefix: wc, sport: soccer, league: fifa.world, scopes: [universal], group: soccer}
   # --- Cricket: param-mode catch-all (headline cricket aliases land later after slug discovery) ---
   - {prefix: cricket, sport: cricket, league: eng.1, league_param: true, scopes: [universal]}
+  # --- Lacrosse: param-mode family over league=pll | mens-college-lacrosse | womens-college-lacrosse.
+  # ESPN's lacrosse surface is thin (no athletes, rosters, play-by-play or player box scores), so
+  # ``endpoints`` allowlists the shorts a live probe (2026-11-25, real event and team ids) saw return
+  # data for at least one of the three. College-only: rankings, season_week_rankings. PLL-only: draft,
+  # teams_site, standings, franchises, franchise. season_group_teams answers for pll and the women,
+  # season_group_children for the men (checked with each league's own group id). ---
+  - prefix: lacrosse
+    sport: lacrosse
+    league: pll
+    league_param: true
+    scopes: [universal, ncaa]
+    endpoints:
+      - scoreboard
+      - summary
+      - news
+      - draft
+      - teams_site
+      - team
+      - team_schedule
+      - standings
+      - conferences
+      - rankings
+      - league_root
+      - season_pointer
+      - seasons
+      - season_info
+      - season_types
+      - season_type
+      - season_groups
+      - season_group
+      - season_group_teams
+      - season_group_children
+      - season_teams
+      - season_team
+      - events
+      - event
+      - event_competition
+      - event_competitors
+      - event_competitor
+      - event_competitor_linescores
+      - event_status
+      - event_broadcasts
+      - teams_core
+      - team_core
+      - season_week_rankings
+      - franchises
+      - franchise
+  # --- Golf: param-mode family over league=pga | lpga | liv | eur | champions-tour. A golf event is a
+  # field of players (no teams, rosters or standings), so ``endpoints`` allowlists the shorts a live probe
+  # (2026-11-25, the 2026 Masters and CME Group Tour Championship) saw return data; the golf-scoped
+  # ``leaderboard`` adds the full field with positions and player status. ``leaders`` answered for pga only. ---
+  - prefix: golf
+    sport: golf
+    league: pga
+    league_param: true
+    scopes: [universal, golf]
+    endpoints:
+      - scoreboard
+      - leaderboard
+      - news
+      - statistics_league
+      - athlete_overview
+      - leaders
+      - league_root
+      - season_pointer
+      - seasons
+      - season_info
+      - season_types
+      - season_type
+      - season_type_leaders
+      - season_athletes
+      - athletes_index
+      - athlete_core
+      - athlete_statisticslog
+      - athlete_seasons
+      - events
+      - event
+      - event_competition
+      - event_competitors
+      - event_competitor
+      - event_competitor_linescores
+      - event_competitor_statistics
+      - event_status
+      - event_broadcasts
+      - event_leaders
+      - venues
+      - venue
+      - tournaments

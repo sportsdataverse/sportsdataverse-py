@@ -2,12 +2,12 @@
 title: ESPN cross-league architecture
 sidebar_label: ESPN cross-league architecture
 sidebar_position: 1
-description: "How sportsdataverse-py generates one ESPN wrapper per endpoint for 40 leagues, how the names are chosen and what each wrapper returns."
+description: "How sportsdataverse-py generates one ESPN wrapper per endpoint for 42 leagues, how the names are chosen and what each wrapper returns."
 ---
 
 # ESPN cross-league architecture
 
-`sportsdataverse-py` wraps **126 short names across 40 leagues** of ESPN endpoints
+`sportsdataverse-py` wraps **127 short names across 42 leagues** of ESPN endpoints
 (NBA, MBB, WNBA, WBB, CFB, NFL, MLB, NHL, plus college hockey, baseball and softball,
 spring football, soccer, cricket and international basketball — *NHL also has its own modern
 api-web.nhle.com path; see the [NHL section](../nhl/index.md)*) from a
@@ -39,10 +39,14 @@ https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/athletes/{a
 | NCAA-only extras | (6 wrappers — rankings + recruiting) | enabled for `mbb`, `wbb`, `cfb`, `mch`, `wch`, `college_baseball`, `college_softball` |
 | Football-only extras | (2 wrappers — QBR) | enabled for `nfl`, `cfb` |
 | MLB-only extras | (1 wrapper — `athlete_hotzones`) | enabled for `mlb` |
+| Golf-only extras | (1 wrapper — `leaderboard`) | enabled for `golf` |
 | CDN extras | (up to 5 — `cdn_*`) | per-endpoint `include_prefixes` allowlist in `espn_cdn.yaml` |
 
 A few leagues drop an endpoint ESPN does not serve for them (`exclude_leagues`), so a
-league's count can sit one below the sum.
+league's count can sit one below the sum. A league can also carry its own `endpoints:`
+allowlist in `leagues.yaml`, which keeps only the listed shorts: lacrosse, whose ESPN
+surface has no athletes, rosters or play-by-play, emits the 35 a live probe saw return data; golf,
+whose events are a field of players with no teams, emits 31.
 
 ## The implementation: declarative codegen
 
@@ -166,7 +170,7 @@ vocabulary, applied to **every** league:
 
 ## Per-league function counts
 
-126 ESPN short names, expanded across the 40 leagues. The eight major leagues,
+127 ESPN short names, expanded across the 42 leagues. The eight major leagues,
 as `generate._espn_league_views` resolves them today:
 
 | League | `espn_*` wrappers |

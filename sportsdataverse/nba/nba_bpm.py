@@ -6,6 +6,7 @@ from typing import Dict, Tuple
 
 import polars as pl
 
+from sportsdataverse._common.possessions import PRO_FT_POSSESSION_WEIGHT, TS_FT_WEIGHT
 from sportsdataverse.nba.nba_box_logs import box_features
 from sportsdataverse.nba.nba_model_validation import RatingsFit
 
@@ -291,8 +292,8 @@ def _team_shares(player_logs: pl.DataFrame, team_logs: pl.DataFrame) -> pl.DataF
         *[pl.col(s).sum().alias(f"team_{s}") for s in ["reb", "stl", "pf", "ast", "blk", "pts", "fga", "fta"]]
     )
     j = pl_agg.join(team_tot, on="team_id", how="left")
-    tsa = pl.col("fga") + 0.44 * pl.col("fta")
-    team_tsa = pl.col("team_fga") + 0.44 * pl.col("team_fta")
+    tsa = pl.col("fga") + TS_FT_WEIGHT * pl.col("fta")
+    team_tsa = pl.col("team_fga") + TS_FT_WEIGHT * pl.col("team_fta")
     team_pps = pl.col("team_pts") / team_tsa  # team avg pts / true-shot-attempt
     thr_pts = pl.col("pts") - (team_pps - THRESHOLD_MARGIN) * tsa  # points above threshold
     return j.with_columns(
@@ -364,7 +365,7 @@ def _league_ortg(team_logs: pl.DataFrame) -> float:
         raise ValueError(
             f"team_logs has null or non-finite {list(_ORTG_COLS)} totals; the league offensive rating needs them all"
         )
-    poss = tl["fga"].sum() - tl["oreb"].sum() + tl["tov"].sum() + 0.44 * tl["fta"].sum()
+    poss = tl["fga"].sum() - tl["oreb"].sum() + tl["tov"].sum() + PRO_FT_POSSESSION_WEIGHT * tl["fta"].sum()
     return float(tl["pts"].sum() / poss * 100) if poss else 0.0
 
 
@@ -395,11 +396,14 @@ def _nba_bpm_one(
         team_logs.group_by("team_id")
         .agg(
             pl.col("pts").sum().alias("tp"),
-            (pl.col("fga").sum() + 0.44 * pl.col("fta").sum()).alias("ttsa"),
+            (pl.col("fga").sum() + TS_FT_WEIGHT * pl.col("fta").sum()).alias("ttsa"),
             pl.col("plus_minus").sum().alias("pm"),
-            (pl.col("fga").sum() - pl.col("oreb").sum() + pl.col("tov").sum() + 0.44 * pl.col("fta").sum()).alias(
-                "poss"
-            ),
+            (
+                pl.col("fga").sum()
+                - pl.col("oreb").sum()
+                + pl.col("tov").sum()
+                + PRO_FT_POSSESSION_WEIGHT * pl.col("fta").sum()
+            ).alias("poss"),
         )
         .with_columns(
             (SHOOTING_BASELINE - pl.col("tp") / pl.col("ttsa")).alias("pps_delta"),
@@ -413,7 +417,9 @@ def _nba_bpm_one(
     feats_adj = (
         feats_renamed.join(shares.select(["player_id", "team_id"]), on="player_id")
         .join(tl.select(["team_id", "pps_delta"]), on="team_id")
-        .with_columns((pl.col("pts") + pl.col("pps_delta") * (pl.col("fga") + 0.44 * pl.col("fta"))).alias("pts"))
+        .with_columns(
+            (pl.col("pts") + pl.col("pps_delta") * (pl.col("fga") + TS_FT_WEIGHT * pl.col("fta"))).alias("pts")
+        )
     )
 
     raw = _raw_bpm(feats_adj, positions_est, roles)

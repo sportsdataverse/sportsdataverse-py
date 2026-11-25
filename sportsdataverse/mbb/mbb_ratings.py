@@ -222,6 +222,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, Literal
 
+from sportsdataverse._common.possessions import COLLEGE_FT_POSSESSION_WEIGHT
 from sportsdataverse.mbb.mbb_lineup_stats import LineupStatSet, _field_val, _num
 
 __all__ = [
@@ -976,7 +977,7 @@ def build_d_rtg(
     opponent_fta = _num(stat_set, "oppo_total_def_fta", 0.0)
     opponent_ftm = _num(stat_set, "oppo_total_def_ftm", 0.0)
     opponent_possessions_pbp = _num(stat_set, "oppo_total_def_poss", 0.0)
-    opponent_ft_poss = 0.475 * opponent_fta
+    opponent_ft_poss = COLLEGE_FT_POSSESSION_WEIGHT * opponent_fta
     opponent_possessions_box = opponent_ft_poss + opponent_fga + opponent_tov - opponent_orb
     opponent_pts = stat_get("oppo_total_def_pts")
 

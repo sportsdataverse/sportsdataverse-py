@@ -88,6 +88,9 @@ class Endpoint:
     # the caller's params, so ``params=`` can still override. A family-level
     # ``fixed_params`` in an ESPN API YAML is merged into each of its endpoints.
     fixed_params: Dict[str, object] = field(default_factory=dict)
+    # Query key the league slug is sent under, for an ESPN path with no ``{league}`` segment
+    # (golf's ``/golf/leaderboard?league=pga``). In param mode it carries the ``league`` argument.
+    league_query: Optional[str] = None
     # Same shape as FlatApi.docstring, scoped to ONE endpoint. Declared per
     # endpoint when a family is too large to opt in wholesale: the family-level
     # block rewrites every wrapper in the family, this one changes only its own.
@@ -296,6 +299,18 @@ class League:
     scopes: List[str]
     league_param: bool = False
     group: str = ""
+    # Allowlist of endpoint short names emitted for this league, on top of ``scopes``. Empty =
+    # every in-scope endpoint. For a sport whose ESPN surface was live-probed and is thin
+    # (lacrosse, golf): a short no probe saw return data gets no wrapper.
+    endpoints: List[str] = field(default_factory=list)
+
+    def emits(self, ep: "Endpoint") -> bool:
+        """True when this league gets a wrapper for ``ep`` (scope, exclusions, both allowlists)."""
+        if ep.scope not in self.scopes or self.league in ep.exclude_leagues:
+            return False
+        if ep.include_prefixes and self.prefix not in ep.include_prefixes:
+            return False
+        return not self.endpoints or ep.short in self.endpoints
 
 
 @dataclass(frozen=True)
@@ -338,6 +353,7 @@ def load_leagues(path: Path) -> LeaguesConfig:
             scopes=list(lg["scopes"]),
             league_param=bool(lg.get("league_param", False)),
             group=str(lg.get("group", "")),
+            endpoints=list(lg.get("endpoints", [])),
         )
         for lg in raw["leagues"]
     ]
@@ -474,6 +490,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         exclude_leagues=list(e.get("exclude_leagues", [])),
         include_prefixes=list(e.get("include_prefixes", [])),
         fixed_params=dict(e.get("fixed_params") or {}),
+        league_query=e.get("league_query"),
         docstring=dict(e.get("docstring") or {}),
         league_example_args={k: dict(v or {}) for k, v in (e.get("league_example_args") or {}).items()},
         league_defaults={k: dict(v or {}) for k, v in (e.get("league_defaults") or {}).items()},
@@ -525,6 +542,15 @@ def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
         for e in raw["endpoints"]
     ]
     return EspnApi(api=raw["api"], host=raw["host"], name_pattern=raw["name_pattern"], endpoints=endpoints)
+
+
+def validate_league_endpoints(apis: List[EspnApi], cfg: "LeaguesConfig") -> None:
+    """Reject a league ``endpoints`` allowlist entry that names no short in ``apis`` (the full ESPN
+    family set) -- a typo would otherwise silently drop that wrapper for the league."""
+    shorts = {e.short for a in apis for e in a.endpoints}
+    for lg in cfg.leagues:
+        if set(lg.endpoints) - shorts:
+            raise SpecError(f"leagues.{lg.prefix}: unknown endpoint short(s) {sorted(set(lg.endpoints) - shorts)}")
 
 
 def validate_league_keys(apis: List[EspnApi], cfg: "LeaguesConfig") -> None:
