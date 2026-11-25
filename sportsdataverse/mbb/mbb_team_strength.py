@@ -7,10 +7,15 @@ Two adjusted-rating methods, side by side:
   ``adj_d`` / ``adj_em`` unchanged. Strength of schedule and strength of victory use these.
 * ``adj_off_rtg_ridge`` / ``adj_def_rtg_ridge`` / ``adj_net_rtg_ridge``: the NBA / WNBA
   possession ridge (:func:`sportsdataverse._common.team_strength.possession_ridge_ratings`) on the
-  same stats.ncaa.org possessions that feed the rates, penalty
-  :data:`~sportsdataverse._common.team_strength.COLLEGE_RIDGE_LAMBDA`.
+  same stats.ncaa.org possessions that feed the rates. By default (``prior="last_season"``) each
+  team shrinks toward a regressed copy of its previous season-end rating, never faded, at
+  :data:`~sportsdataverse._common.team_strength.COLLEGE_RIDGE_PRIOR_LAMBDA`; ``prior=None`` shrinks
+  toward average at :data:`~sportsdataverse._common.team_strength.COLLEGE_RIDGE_LAMBDA`. On the
+  2024-2026 as-of holdout the prior cuts the game-margin MAE by 0.25 points men's and 0.34 women's,
+  most of it in the first eight weeks (``tools/fit_college_ridge_prior.py``).
 
-Neither method replaces the other. On the 2024-2026 as-of holdout (``tools/compare_college_team_strength.py``)
+Neither method replaces the other. On the 2024-2026 as-of holdout (``tools/compare_college_team_strength.py``, the ridge
+without its prior)
 the ridge does better in the first four weeks (clearly for women's, by 1.7 standard errors for men's);
 after that the men's fixed point is better and the women's two tie. Season-end rankings agree to a
 Spearman of 0.99 (men's) and 0.998 (women's).
@@ -34,8 +39,11 @@ from sportsdataverse._common.rate_gates import NCAA_LEVEL
 from sportsdataverse._common.team_season_rates import team_season_rates
 from sportsdataverse._common.team_strength import (
     COLLEGE_RIDGE_LAMBDA,
+    COLLEGE_RIDGE_PRIOR_LAMBDA,
+    COLLEGE_RIDGE_PRIOR_REGRESSION,
     GAMES_SCHEMA,
     RATINGS_SCHEMA,
+    last_season_prior,
     possession_ridge_ratings,
     team_strength,
 )
@@ -94,8 +102,34 @@ def _schedule_games(schedule: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+#: The first season of the ``ncaa_{mbb,wbb}_possessions`` releases: a season before it has no prior.
+_FIRST_POSSESSION_SEASON = 2010
+_PRIORS = (None, "last_season")
+
+
+def _ridge(rows: pl.DataFrame, league: str, prior: str | None) -> pl.DataFrame:
+    """The possession ridge, one fit per season, each seeded from the season before it when ``prior`` asks."""
+    if prior is None or rows.height == 0:
+        return possession_ridge_ratings(rows, lam=COLLEGE_RIDGE_LAMBDA[league])
+    lam = COLLEGE_RIDGE_PRIOR_LAMBDA[league]
+    load_possessions, _, load_schedule = _league_loaders(league)
+    fits = []
+    for (season,), sub in rows.group_by("season", maintain_order=True):
+        prev_season = int(season) - 1
+        prev = rows.filter(pl.col("season") == prev_season)
+        if prev.height == 0 and prev_season >= _FIRST_POSSESSION_SEASON:
+            prev = ncaa_possession_rate_rows(load_possessions(prev_season), load_schedule(prev_season), league=league)
+        seed = last_season_prior(prev, lam=lam, regression=COLLEGE_RIDGE_PRIOR_REGRESSION[league])
+        fits.append(possession_ridge_ratings(sub, lam=lam, prior=seed))
+    return pl.concat(fits).sort("season", "team_id")
+
+
 def mbb_team_strength(
-    seasons: int | list[int], *, league: str = "mens", return_as_pandas: bool = False
+    seasons: int | list[int],
+    *,
+    league: str = "mens",
+    prior: str | None = "last_season",
+    return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """College team strength: adjusted ratings, SOS, SOV, tempo and the four factors.
 
@@ -110,6 +144,13 @@ def mbb_team_strength(
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
         league: ``"mens"`` or ``"womens"`` (:func:`sportsdataverse.wbb.wbb_team_strength.wbb_team_strength`).
+        prior: The ridge's prior. ``"last_season"`` (default) shrinks each team toward
+            :data:`~sportsdataverse._common.team_strength.COLLEGE_RIDGE_PRIOR_REGRESSION` times its
+            previous season-end ridge rating instead of toward average, never faded, at
+            :data:`~sportsdataverse._common.team_strength.COLLEGE_RIDGE_PRIOR_LAMBDA`
+            (:func:`~sportsdataverse._common.team_strength.last_season_prior`; the previous season is
+            loaded when ``seasons`` does not hold it). ``None`` shrinks toward average. The published
+            college ratings (``adj_*_rtg``) take no prior either way.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
@@ -129,7 +170,8 @@ def mbb_team_strength(
         under five teams. Empty input returns that schema with zero rows.
 
     Raises:
-        ValueError: If ``league`` is not ``"mens"`` or ``"womens"``.
+        ValueError: If ``league`` is not ``"mens"`` or ``"womens"``, or ``prior`` is not
+            ``"last_season"`` or None.
 
     Example:
         Quick start::
@@ -143,6 +185,8 @@ def mbb_team_strength(
             strength.select("team_id", "adj_net_rtg_rank", "adj_net_rtg_ridge_rank").head()
     """
     _check_league(league)
+    if prior not in _PRIORS:
+        raise ValueError(f"prior must be one of {_PRIORS}, got {prior!r}")
     load_possessions, load_team_box, load_schedule = _league_loaders(league)
     schedule = load_schedule(seasons)
     rows = ncaa_possession_rate_rows(load_possessions(seasons), schedule, league=league)
@@ -150,6 +194,6 @@ def mbb_team_strength(
         rows, minutes_per_game=40, counts=ncaa_team_box_count_rows(load_team_box(seasons)), level=NCAA_LEVEL[league]
     )
     games = _schedule_games(schedule) if schedule.height else pl.DataFrame(schema=GAMES_SCHEMA)
-    ridge = possession_ridge_ratings(rows, lam=COLLEGE_RIDGE_LAMBDA[league])
+    ridge = _ridge(rows, league, prior)
     out = team_strength(rates, _ratings(_load_ratings(league)(seasons)), games, ridge=ridge)
     return out.to_pandas() if return_as_pandas else out

@@ -167,7 +167,7 @@ wbb_team_shot_zones(2025).sort("opp_rim_freq").head()
 
 ### wbb_team_strength {#wbb_team_strength}
 
-`wbb_team_strength(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`wbb_team_strength(seasons: 'int | list[int]', *, prior: 'str | None' = 'last_season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors.
 
@@ -180,6 +180,7 @@ the possession ridge on the `ncaa_wbb_possessions` release.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `prior` | `str \| None` | `'last_season'` | The possession ridge's prior, `"last_season"` (default) or None (see the mbb core). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
@@ -277,6 +278,12 @@ One row per `(season, team_id)`: `games`, `wins`, `losses`, `poss`, `opp_poss`, 
 | `adj_off_rtg_ridge_n` | Int64 | Sample size of adj_off_rtg_ridge: the team's offensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
 | `adj_def_rtg_ridge_n` | Int64 | Sample size of adj_def_rtg_ridge: the team's defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
 | `adj_net_rtg_ridge_n` | Int64 | Sample size of adj_net_rtg_ridge: the team's offensive plus defensive possessions in the season, counting any against a non-Division I opponent that the fit leaves out. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `prior` is not `"last_season"` or None. |
 
 **Example**
 

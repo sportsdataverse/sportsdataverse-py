@@ -299,7 +299,7 @@ teams.sort("opp_corner_3_freq").select("team_id", "opp_corner_3_freq").head()
 
 ### mbb_team_strength {#mbb_team_strength}
 
-`mbb_team_strength(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`mbb_team_strength(seasons: 'int | list[int]', *, league: 'str' = 'mens', prior: 'str | None' = 'last_season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 College team strength: adjusted ratings, SOS, SOV, tempo and the four factors.
 
@@ -317,6 +317,7 @@ SOV the same over its wins. Bracketology and the season sims keep the fixed poin
 |---|---|---|---|
 | `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
 | `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_team_strength.wbb_team_strength`). |
+| `prior` | `str \| None` | `'last_season'` | The ridge's prior. `"last_season"` (default) shrinks each team toward `~sportsdataverse._common.team_strength.COLLEGE_RIDGE_PRIOR_REGRESSION` times its previous season-end ridge rating instead of toward average, never faded, at `~sportsdataverse._common.team_strength.COLLEGE_RIDGE_PRIOR_LAMBDA` (`~sportsdataverse._common.team_strength.last_season_prior`; the previous season is loaded when `seasons` does not hold it). `None` shrinks toward average. The published college ratings (`adj_*_rtg`) take no prior either way. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
@@ -419,7 +420,7 @@ One row per `(season, team_id)`; `team_id` is the ESPN team id (Int64). `games`,
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+| `ValueError` | If `league` is not `"mens"` or `"womens"`, or `prior` is not `"last_season"` or None. |
 
 **Example**
 

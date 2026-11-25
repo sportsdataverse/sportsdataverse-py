@@ -18,8 +18,10 @@ ratings, pace and the four factors for and against).
     ``wbb_ratings`` (the :mod:`sportsdataverse.mbb.mbb_team_ratings` fixed point on ESPN
     box-score games), ``adj_o`` / ``adj_d`` / ``adj_em``. SOS and SOV use these.
   * ``adj_off_rtg_ridge`` / ``adj_def_rtg_ridge`` / ``adj_net_rtg_ridge`` are the NBA / WNBA
-    possession ridge above, fit on the stats.ncaa.org possessions at
-    :data:`COLLEGE_RIDGE_LAMBDA`, with ESPN's neutral-site flags. A possession against a
+    possession ridge above, fit on the stats.ncaa.org possessions with ESPN's neutral-site flags.
+    By default each team shrinks toward :data:`COLLEGE_RIDGE_PRIOR_REGRESSION` times its previous
+    season-end rating (:func:`last_season_prior`) at :data:`COLLEGE_RIDGE_PRIOR_LAMBDA`; without the
+    prior it shrinks toward average at :data:`COLLEGE_RIDGE_LAMBDA`. A possession against a
     non-Division I opponent (no ESPN team id) is left out of the fit.
 * **Strength of schedule** (``sos``): the mean ``adj_net_rtg`` of the opponents of every game the
   team played, one weight per game (an opponent met four times counts four times). Opponents
@@ -49,11 +51,14 @@ from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA
 __all__ = [
     "COLLEGE_RIDGE_FIT_SEASONS",
     "COLLEGE_RIDGE_LAMBDA",
+    "COLLEGE_RIDGE_PRIOR_LAMBDA",
+    "COLLEGE_RIDGE_PRIOR_REGRESSION",
     "COLLEGE_TEAM_STRENGTH_SCHEMA",
     "GAMES_SCHEMA",
     "RATINGS_SCHEMA",
     "RIDGE_LAMBDA",
     "TEAM_STRENGTH_SCHEMA",
+    "last_season_prior",
     "possession_ridge_ratings",
     "ridge_design",
     "schedule_strength",
@@ -78,6 +83,21 @@ RIDGE_LAMBDA: dict[str, float] = {"00": 1600.0, "10": 800.0}
 #: 100); each held-out season gets 50, regret <= 0.022. College penalties are far below the NBA's
 #: 1600: college teams spread much wider, so shrinking a rating toward average costs more.
 COLLEGE_RIDGE_LAMBDA: dict[str, float] = {"mens": 200.0, "womens": 50.0}
+#: league -> ``r``: with the last-season prior a college team's ridge rating is shrunk toward ``r``
+#: times its previous season-end rating (:func:`last_season_prior`) instead of toward average, never
+#: faded, at the penalty :data:`COLLEGE_RIDGE_PRIOR_LAMBDA`. Both are fit jointly by
+#: ``tools/fit_college_ridge_prior.py`` (2026-11-25) on an as-of walk of the 2022-2023 seasons only
+#: (weekly cutoffs, possessions strictly before each; ``r`` the no-intercept regression of season-end
+#: net on the previous season-end net at each penalty; the penalty with the lowest train as-of margin
+#: MAE), then scored once on 2024-2026. Men's: lambda 200 (the no-prior value; train MAE 8.899 vs
+#: 8.924 at 100 and 8.899 at 400), r 0.7762; holdout MAE 9.152 vs 9.399 for the no-prior ridge,
+#: -0.247 +/- 0.051 (SE clustered by week, 15,725 games), -0.76 in weeks 1-4, -0.03 from week 9.
+#: Women's: lambda 200 (the grid's top; train 9.578 vs 9.580 at 100 and 9.625 at the no-prior 50),
+#: r 0.8858; holdout 9.704 vs 10.044, -0.340 +/- 0.092 (14,645 games), and -0.084 +/- 0.021 against
+#: the prior at 50. Fading the prior out over a team's first games was tested and is worse.
+COLLEGE_RIDGE_PRIOR_REGRESSION: dict[str, float] = {"mens": 0.7762, "womens": 0.8858}
+#: league -> the ridge penalty when the last-season prior is on (fit with it; see above).
+COLLEGE_RIDGE_PRIOR_LAMBDA: dict[str, float] = {"mens": 200.0, "womens": 200.0}
 #: The seasons :data:`COLLEGE_RIDGE_LAMBDA` was fit on: the comparison tool refuses to score them.
 COLLEGE_RIDGE_FIT_SEASONS: tuple[int, ...] = (2016, 2017, 2018, 2019, 2020, 2022, 2023)
 
@@ -274,6 +294,40 @@ def possession_ridge_ratings(
     if not frames:
         return pl.DataFrame(schema=schema)
     return pl.concat(frames).sort("season", "team_id").cast(schema)
+
+
+def last_season_prior(prev_rows: pl.DataFrame, *, lam: float, regression: float) -> pl.DataFrame:
+    """The prior means for :func:`possession_ridge_ratings` from one previous season's possessions.
+
+    The previous season's ridge at ``lam`` (no prior), each team's offensive and defensive rating as
+    a deviation from that season's team mean, times ``regression``. Built from a season that is over
+    before the one it seeds, so an as-of fit never reads the season it rates.
+
+    Args:
+        prev_rows: One season's possessions in
+            :data:`~sportsdataverse._common.team_season_rates.RATE_ROWS_SCHEMA`.
+        lam: The ridge penalty of the previous season's fit.
+        regression: The factor the deviations are shrunk by (:data:`COLLEGE_RIDGE_PRIOR_REGRESSION`).
+            ``lam`` is :data:`COLLEGE_RIDGE_PRIOR_LAMBDA`, the penalty the factor was fit at.
+
+    Returns:
+        ``team_id`` (Int64), ``off_dev``, ``def_dev``: the ``prior`` of :func:`possession_ridge_ratings`.
+        Empty input returns those columns with zero rows.
+
+    Raises:
+        ValueError: If ``prev_rows`` holds more than one season.
+    """
+    schema = {"team_id": pl.Int64(), "off_dev": pl.Float64(), "def_dev": pl.Float64()}
+    if prev_rows.height == 0:
+        return pl.DataFrame(schema=schema)
+    if prev_rows["season"].n_unique() != 1:
+        raise ValueError("last_season_prior: prev_rows must hold one season")
+    final = possession_ridge_ratings(prev_rows, lam=lam)
+    return final.select(
+        "team_id",
+        (regression * (pl.col("adj_off_rtg") - pl.col("adj_off_rtg").mean())).alias("off_dev"),
+        (regression * (pl.col("adj_def_rtg") - pl.col("adj_def_rtg").mean())).alias("def_dev"),
+    ).cast(schema)
 
 
 def schedule_strength(games: pl.DataFrame, ratings: pl.DataFrame) -> pl.DataFrame:
