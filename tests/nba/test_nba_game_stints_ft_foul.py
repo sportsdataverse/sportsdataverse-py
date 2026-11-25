@@ -7,8 +7,8 @@
   him. Counted on that row's own lineup, the free throw fell out of his stints (20 of his 21).
 * 0022400149 (2024-25): Durant's and-one at 11:33 of the 2nd, the made shot (order 151) and the free
   throw (152) one row before their shooting foul (153). The game's most recent foul before the free
-  throw is at 0:26.3 of the 1st (140), which is not its: clock has run in the 2nd, so the free throw
-  keeps its own row and lineup, points and box alike.
+  throw is at 0:26.3 of the 1st (140), which is not its: clock has run in the 2nd. Its own foul is
+  the one logged after it at the same reading, so the point and the box go to 153's row and lineup.
 """
 
 from __future__ import annotations
@@ -85,23 +85,37 @@ def test_without_the_foul_order_the_free_throw_falls_out_of_his_stints() -> None
     assert old.select("points", "ftm").row(0) == (20, 8)
 
 
-def test_a_foul_from_an_earlier_period_is_not_a_free_throws_once_clock_has_run() -> None:
+def test_a_shooting_foul_logged_after_its_free_throw_is_still_its_foul() -> None:
     pbp, rows = _read("pbp", FOUL_AFTER), _rows(FOUL_AFTER)
     assert pbp.filter(pl.col("order_index") == 153)["is_foul"][0] is True  # its foul, one row late
-    ft = rows.filter(pl.col("order") == 152)
-    assert ft.select("period", "ft_foul_order").row(0) == (2, None) and ft["clock"][0] < 720
-    assert ft["home_pts"][0] + ft["away_pts"][0] == 1  # its point stays on its own row
+    ft, foul = rows.filter(pl.col("order") == 152), rows.filter(pl.col("order") == 153)
+    assert ft.select("period", "ft_foul_order").row(0) == (2, 153) and ft["clock"][0] == foul["clock"][0] < 720
+    # its point moves onto its own foul's row, not the 1st quarter's last foul (order 140)
+    assert ft["home_pts"][0] + ft["away_pts"][0] == 0 and foul["home_pts"][0] + foul["away_pts"][0] == 1
 
 
-def test_the_lineup_twin_keeps_its_own_lineup_once_clock_has_run() -> None:
+def _durant_actions() -> pl.DataFrame:
     games = _read("schedules", FOUL_AFTER).select(
         pl.col("game_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Int64), pl.col("away_team_id").cast(pl.Int64)
     )
-    actions = _actions(_read("pbp", FOUL_AFTER), _read("game_lineups", FOUL_AFTER), games, 720.0)
+    return _actions(_read("pbp", FOUL_AFTER), _read("game_lineups", FOUL_AFTER), games, 720.0)
+
+
+def test_the_lineup_twin_takes_the_foul_logged_after_at_the_same_reading() -> None:
+    actions = _durant_actions()
     flags = {"is_free_throw": pl.col("is_free_throw").eq(True), "is_foul": pl.col("is_foul").eq(True)}
     lineup = lambda df, o: df.filter(pl.col("order_index") == o).select(_SLOTS).row(0)  # noqa: E731
-    own, at_140 = lineup(actions, 152), lineup(actions, 140)
-    assert own != at_140  # the lineups differ, so the rule is observable on this game
-    assert lineup(credit_free_throws_to_foul_lineup(actions, **flags, period="period"), 152) == own
+    at_153, at_140 = lineup(actions, 153), lineup(actions, 140)
+    assert at_153 != at_140  # the lineups differ, so the rule is observable on this game
+    with_clock = credit_free_throws_to_foul_lineup(actions, **flags, period="period", clock="seconds_remaining")
+    assert lineup(with_clock, 152) == at_153
     # the game-wide rule (no period) gives it the 1st quarter's lineup
     assert lineup(credit_free_throws_to_foul_lineup(actions, **flags), 152) == at_140
+
+
+def test_without_the_clock_the_free_throw_only_keeps_its_own_lineup() -> None:
+    """The period rule alone refuses the 1st quarter's foul but cannot find the one logged after."""
+    actions = _durant_actions()
+    flags = {"is_free_throw": pl.col("is_free_throw").eq(True), "is_foul": pl.col("is_foul").eq(True)}
+    lineup = lambda df, o: df.filter(pl.col("order_index") == o).select(_SLOTS).row(0)  # noqa: E731
+    assert lineup(credit_free_throws_to_foul_lineup(actions, **flags, period="period"), 152) == lineup(actions, 152)

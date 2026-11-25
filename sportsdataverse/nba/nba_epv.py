@@ -762,6 +762,11 @@ def _on_court(plays: pl.DataFrame, game_lineups: pl.DataFrame | None) -> pl.Data
         rows,
         is_free_throw=(pl.col("event_type") == "free_throw") & ~technical,
         is_foul=(pl.col("event_type") == "foul") & ~technical,
+        period="period",
+        # seconds is zeroed above, so clock run is read off the period clock: below the period's
+        # first (fullest) reading once any clock has run
+        clock_ran=pl.col("seconds_remaining") < pl.col("seconds_remaining").max().over("game_id", "period"),
+        clock="seconds_remaining",
     )
     away_team = pl.when(home).then(pl.col("defense_team_id")).otherwise(pl.col("offense_team_id"))
     sides = []

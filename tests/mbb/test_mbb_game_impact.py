@@ -126,26 +126,50 @@ def test_free_throws_take_the_whole_lineup_at_the_foul() -> None:
     # Every free throw carries its foul row's ten slots exactly, nulls included, when that foul is
     # its own: one of its period, or any earlier one while no clock has run in its period. A foul
     # from an earlier period once clock has run is not (its own went unlogged): it keeps its lineup.
+    # Once clock has run, a free throw whose latest foul is at another reading takes the foul printed
+    # after it at its own reading, when there is one (a missed free throw listed before its foul).
     # The event rows come first, in the builder's (contest, release order) order.
     in_order = pbp.with_row_index("_o").sort("contest_id", "_o")
-    timing = _events(pbp, "mens").select("period", pl.col("seconds").alias("_ran"))  # before crediting
+    timing = _events(pbp, "mens").select("period", "clock", pl.col("seconds").alias("_ran"))  # before crediting
     ev = rows.head(pbp.height).with_columns(in_order.select("event_type", "foul_class")).hstack(timing)
     own_lineup = raw.head(pbp.height).select(*[pl.col(c).alias(f"o_{c}") for c in _SLOTS])
     is_foul = pl.col("foul_class").is_not_null()
     foul_row = pl.when(is_foul).then(pl.col("_i")).forward_fill().over("game_id")
     foul_period = pl.when(is_foul).then(pl.col("period")).forward_fill().over("game_id")
-    no_clock_run = pl.col("_ran").fill_null(0).cum_sum().over("game_id", "period") == 0
+    no_clock_run = (pl.col("_ran").fill_null(0) > 0).cum_sum().over("game_id", "period") == 0
     ev = (
         ev.with_row_index("_i")
         .hstack(own_lineup)
         .with_columns(foul_row.alias("_f"), ((foul_period == pl.col("period")) | no_clock_run).alias("_own"))
     )
-    fts = ev.filter((pl.col("event_type") == "Free Throw") & pl.col("_f").is_not_null())
+    ran = (pl.col("_ran").fill_null(0) > 0).cum_sum().over("game_id", "period") > 0
+    ev = ev.with_columns(ran.alias("_clock_ran"))
+    fouls = ev.filter(is_foul).select("game_id", "period", "clock", pl.col("_i").alias("_later"))
+    reading = ev.select(pl.col("_i").alias("_f"), pl.col("period").alias("_fp"), pl.col("clock").alias("_fc"))
+    fts = ev.filter(pl.col("event_type") == "Free Throw").join(reading, on="_f", how="left")
+    ahead = (
+        fts.select("_i", "game_id", "period", "clock")
+        .join(fouls, on=["game_id", "period", "clock"])
+        .filter(pl.col("_later") > pl.col("_i"))
+        .group_by("_i")
+        .agg(pl.col("_later").min())
+    )
+    fts = fts.join(ahead, on="_i", how="left")
+    take = pl.col("_later").is_not_null() & (pl.col("_clock_ran") == True)  # noqa: E712
+    take = take & ((pl.col("_fp") != pl.col("period")) | (pl.col("_fc") != pl.col("clock")) | pl.col("_f").is_null())
+    assert fts.filter(take).height > 0  # the look-ahead occurs on this corpus
+    fts = fts.with_columns(
+        pl.when(take).then(pl.col("_later")).otherwise(pl.col("_f")).alias("_f"),
+        pl.when(take).then(True).otherwise(pl.col("_own")).alias("_own"),
+    ).filter(pl.col("_f").is_not_null())
     at = ev.select(pl.col("_i").alias("_f"), *[pl.col(c).alias(f"f_{c}") for c in _SLOTS])
     pair = fts.join(at, on="_f")
     assert pair.height == fts.height > 0
-    credited, kept = pair.filter(pl.col("_own")), pair.filter(~pl.col("_own"))
-    assert credited.height > 0 and kept.height > 0  # both branches occur on this corpus
+    credited, kept = pair.filter(pl.col("_own") == True), pair.filter(pl.col("_own") == False)  # noqa: E712
+    # On this corpus every free throw whose latest foul is from an earlier period, once clock has run,
+    # has its own foul printed after it at its reading, so the look-ahead takes all of them and the
+    # kept branch is empty (it is pinned on NBA 0022400149 without the clock column).
+    assert credited.height > 0 and kept.height == 0
     for c in _SLOTS:
         assert credited[c].eq_missing(credited[f"f_{c}"]).all(), c
         assert kept[c].eq_missing(kept[f"o_{c}"]).all(), c

@@ -198,6 +198,7 @@ def credit_free_throws_to_foul_row(
     game: str = "game_id",
     order: str | None = None,
     period: str | None = None,
+    clock: str | None = None,
 ) -> pl.DataFrame:
     """Move each free throw's points onto the game's most recent foul row.
 
@@ -216,19 +217,21 @@ def credit_free_throws_to_foul_row(
             shooter's own box counts can follow the points onto the lineup at the foul.
         period: The period column: a foul from an earlier period is not the free throw's once clock
             has run in its period (the twin's rule). None keeps the game-wide rule.
+        clock: With ``period``, the clock-reading column: a free throw whose shooting foul is logged
+            after it at the same reading takes that foul (the twin's rule).
 
     Returns:
         ``actions`` with the same rows in the same order and the free-throw points moved
         (plus ``ft_foul_order`` when ``order`` is given).
     """
     marked = actions.with_columns(pl.int_range(pl.len()).over(game).alias("_i")).with_columns(
-        _at_last_foul(pl.col("_i"), is_foul, game=game, period=period).alias("_f")
+        _at_last_foul(pl.col("_i"), is_foul, game=game, period=period, clock=clock).alias("_f")
     )
     moving = is_free_throw.fill_null(False) & pl.col("_f").is_not_null()
     if order is not None:
         marked = marked.with_columns(
             pl.when(moving)
-            .then(_at_last_foul(pl.col(order), is_foul, game=game, period=period))
+            .then(_at_last_foul(pl.col(order), is_foul, game=game, period=period, clock=clock))
             .cast(pl.Int64)
             .alias("ft_foul_order")
         )
@@ -245,6 +248,37 @@ def credit_free_throws_to_foul_row(
         kept.join(moved, on=[game, "_i"], how="left", validate="1:1", maintain_order="left")
         .with_columns((pl.col(s) + pl.col(f"_{s[:4]}").fill_null(0)).alias(s) for s in ("home_pts", "away_pts"))
         .drop("_i", "_f", "_home", "_away")
+    )
+
+
+def _box_by_stint(events: pl.DataFrame, ordered: pl.DataFrame, stint_of: pl.DataFrame) -> pl.DataFrame:
+    """Each player's box counts per stint (:func:`game_stints`).
+
+    An event sits on its action's run (``_seq``) and is in the stint of his that holds that run. A
+    free throw sits on its foul's run first (where its points are, ``ft_foul_order``: already null
+    when the foul is not the free throw's own), when the shooter is on it.
+    """
+    player = ["season", "game_id", "team_id", "player_id"]
+    seq = ordered.select("game_id", "order", "_seq")
+    return (
+        events.join(ordered.select("game_id", "order", "_seq", "ft_foul_order"), on=["game_id", "order"], how="inner")
+        .join(
+            seq.rename({"order": "ft_foul_order", "_seq": "_foul_seq"}),
+            on=["game_id", "ft_foul_order"],
+            how="left",
+            validate="m:1",
+        )
+        .join(
+            stint_of.rename({"_seq": "_foul_seq", "stint_number": "_at_foul"}),
+            on=[*player, "_foul_seq"],
+            how="left",
+            validate="m:1",
+        )
+        .join(stint_of, on=[*player, "_seq"], how="left", validate="m:1")
+        .with_columns(pl.coalesce("_at_foul", "stint_number").alias("stint_number"))
+        .drop_nulls("stint_number")
+        .group_by([*player, "stint_number"])
+        .agg(pl.col(_EVENT_COUNTS).sum())
     )
 
 
@@ -339,33 +373,7 @@ def game_stints(rows: pl.DataFrame, *, player_dtype: pl.DataType, events: pl.Dat
         )
     )
     if events is not None:
-        # An event sits on its action's run and is in the stint of his that holds that run. A free
-        # throw sits on its foul's run first (where its points are, ``ft_foul_order``: already null
-        # when the foul is not the free throw's own), when the shooter is on it.
-        stint_of = on.select(*player, "_seq", "stint_number")
-        seq = ordered.select("game_id", "order", "_seq")
-        box = (
-            events.join(
-                ordered.select("game_id", "order", "_seq", "ft_foul_order"), on=["game_id", "order"], how="inner"
-            )
-            .join(
-                seq.rename({"order": "ft_foul_order", "_seq": "_foul_seq"}),
-                on=["game_id", "ft_foul_order"],
-                how="left",
-                validate="m:1",
-            )
-            .join(
-                stint_of.rename({"_seq": "_foul_seq", "stint_number": "_at_foul"}),
-                on=[*player, "_foul_seq"],
-                how="left",
-                validate="m:1",
-            )
-            .join(stint_of, on=[*player, "_seq"], how="left", validate="m:1")
-            .with_columns(pl.coalesce("_at_foul", "stint_number").alias("stint_number"))
-            .drop_nulls("stint_number")
-            .group_by([*player, "stint_number"])
-            .agg(pl.col(_EVENT_COUNTS).sum())
-        )
+        box = _box_by_stint(events, ordered, on.select(*player, "_seq", "stint_number"))
         out = out.join(box, on=[*player, "stint_number"], how="left", validate="1:1", maintain_order="left")
         out = out.with_columns(pl.col(_EVENT_COUNTS).fill_null(0)).with_columns(_reb())
     else:

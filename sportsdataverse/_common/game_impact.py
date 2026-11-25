@@ -112,7 +112,15 @@ def game_lineups_used_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType
     return {**_KEY_SCHEMA, "lineup_id": pl.Utf8(), **players, **_TOTALS}
 
 
-def _at_last_foul(value: pl.Expr, is_foul: pl.Expr, *, game: str = "game_id", period: str | None = None) -> pl.Expr:
+def _at_last_foul(
+    value: pl.Expr,
+    is_foul: pl.Expr,
+    *,
+    game: str = "game_id",
+    period: str | None = None,
+    clock_ran: pl.Expr | None = None,
+    clock: str | None = None,
+) -> pl.Expr:
     """``value`` on the game's most recent foul row, null where that foul is not the row's own.
 
     The foul a free throw belongs to, shared by :func:`credit_free_throws_to_foul_lineup` and
@@ -123,13 +131,25 @@ def _at_last_foul(value: pl.Expr, is_foul: pl.Expr, *, game: str = "game_id", pe
     the free throw's: its own foul went unlogged or was logged after it (2025-26 NBA: 12 such free
     throws, each with its shooting foul one row later), and the free throw keeps its own lineup.
     Without ``period``, any earlier foul of the game counts. The frame must be in game order and,
-    with ``period``, carry ``seconds`` (the clock each row ran).
+    with ``period``, carry ``seconds`` (the clock each row ran) or pass ``clock_ran``.
+
+    With ``clock`` (and ``period``), a free throw whose most recent foul is at another clock
+    reading, once clock has run in its period, takes the foul logged after it at its own reading
+    instead, when there is one: its
+    shooting foul, filed a row or two late (2025-26 NBA: 68 free throws, 56 of them with an
+    unrelated earlier foul in the same period that would otherwise take them). pbpstats looks
+    ahead for the foul the same way.
 
     Args:
         value: The expression to read on the foul row.
         is_foul: True on a foul row.
         game: The game key column.
         period: The period column, or None for the game-wide rule.
+        clock_ran: True on a row once clock has run in its period; None derives it from ``seconds``
+            (any earlier or own row of the period with positive ``seconds``). For frames whose
+            ``seconds`` carry no clock.
+        clock: The clock-reading column (any one value per instant of a period), for the foul
+            logged after its free throw; None keeps the most recent foul. Used only with ``period``.
 
     Returns:
         An expression: ``value`` at the qualifying foul, null on rows with none.
@@ -139,8 +159,18 @@ def _at_last_foul(value: pl.Expr, is_foul: pl.Expr, *, game: str = "game_id", pe
     if period is None:
         return at
     foul_period = pl.when(foul).then(pl.col(period)).forward_fill().over(game)
-    no_clock_run = pl.col("seconds").fill_null(0).cum_sum().over(game, period) == 0
-    own = (foul_period == pl.col(period)) | no_clock_run
+    if clock_ran is None:
+        # a count of clocked rows, not a sum: a clock correction (negative seconds) never unwinds it
+        clock_ran = (pl.col("seconds").fill_null(0) > 0).cum_sum().over(game, period) > 0
+    if clock is not None:
+        last_clock = pl.when(foul).then(pl.col(clock)).forward_fill().over(game)
+        later = pl.when(foul).then(value).backward_fill().over(game, period, clock)  # a foul at its reading
+        other = last_clock.ne_missing(pl.col(clock)) | foul_period.ne_missing(pl.col(period))
+        # not at a period's opening tick: those free throws are the previous period's last foul's
+        use_later = later.is_not_null() & other & clock_ran.fill_null(False)
+        at = pl.when(use_later).then(later).otherwise(at)
+        foul_period = pl.when(use_later).then(pl.col(period)).otherwise(foul_period)
+    own = (foul_period == pl.col(period)) | ~clock_ran
     return pl.when(own.fill_null(False)).then(at)
 
 
@@ -151,6 +181,8 @@ def credit_free_throws_to_foul_lineup(
     is_foul: pl.Expr,
     game: str = "game_id",
     period: str | None = None,
+    clock_ran: pl.Expr | None = None,
+    clock: str | None = None,
 ) -> pl.DataFrame:
     """Give each free throw the lineup on the floor at the game's most recent foul.
 
@@ -166,6 +198,10 @@ def credit_free_throws_to_foul_lineup(
         game: The game key column.
         period: The period column: a foul from an earlier period is not the free throw's once clock
             has run in its period (:func:`_at_last_foul`). None keeps the game-wide rule.
+        clock_ran: With ``period``, True on a row once clock has run in its period. None derives it
+            from ``seconds``; pass it when ``seconds`` is zeroed to move the slots only.
+        clock: With ``period``, the clock-reading column: a free throw whose shooting foul is logged
+            after it at the same reading takes that foul (:func:`_at_last_foul`).
 
     Returns:
         ``actions`` with the ten slot columns replaced and ``seconds`` zeroed on free-throw rows,
@@ -173,7 +209,7 @@ def credit_free_throws_to_foul_lineup(
         The split rows come last.
     """
     # The foul row's whole lineup as one struct (a null slot stays null), never a slot-by-slot fill.
-    at_foul = _at_last_foul(pl.struct(_SLOTS), is_foul, game=game, period=period)
+    at_foul = _at_last_foul(pl.struct(_SLOTS), is_foul, game=game, period=period, clock_ran=clock_ran, clock=clock)
     marked = actions.with_columns(
         pl.when(is_free_throw.fill_null(False)).then(at_foul).alias("_at_foul"),
     )

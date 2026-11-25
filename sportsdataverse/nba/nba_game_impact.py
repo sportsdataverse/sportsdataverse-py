@@ -112,12 +112,13 @@ def _actions(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, quar
 
 
 def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, quarter: float) -> pl.DataFrame:
-    """One impact row per play-by-play action, free throws on the lineup of the last foul."""
+    """One impact row per play-by-play action, free throws on the lineup of their foul."""
     actions = credit_free_throws_to_foul_lineup(
         _actions(pbp, lineups, games, quarter),
         is_free_throw=pl.col("is_free_throw").eq(True),
         is_foul=pl.col("is_foul").eq(True),
         period="period",
+        clock="seconds_remaining",
     )
     return actions.with_columns(pl.lit(0).alias("home_poss"), pl.lit(0).alias("away_poss"))
 
@@ -159,7 +160,7 @@ def nba_impact_rows(
     """Map the stats.nba.com releases onto the game-impact row frame.
 
     One row per play-by-play action (its clock and points, on the lineup at that action; a free
-    throw on the lineup at the last foul) and one per possession (its lineup and which side had
+    throw on the lineup at its own foul (the latest, or the one logged after it at the same clock reading; not an earlier period's once clock has run)) and one per possession (its lineup and which side had
     the ball). Games not in ``schedule`` are dropped, and so are the possessions of a game with
     no play-by-play actions and those whose offense is neither team.
 
