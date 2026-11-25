@@ -521,7 +521,7 @@ def pgatour_stat_details(
     Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "StatDetails", "query": "query StatDetails($tourCode: TourCode!, $statId: String!, $year: Int) {\\n  statDetails(tourCode: $tourCode, statId: $statId, year: $year) {\\n    tourCode\\n    year\\n    statId\\n    statType\\n    statTitle\\n    statDescription\\n    tourAvg\\n    lastProcessed\\n    statHeaders\\n    rows {\\n      __typename\\n      ... on StatDetailsPlayer {\\n        playerId\\n        playerName\\n        country\\n        countryFlag\\n        rank\\n        rankDiff\\n        rankChangeTendency\\n        stats { statName statValue }\\n      }\\n    }\\n  }\\n}\\n", "variables": {"statId": "120", "tourCode": "R", "year": 2026}}'``
 
     Args:
-        stat_id: Stat id (stat_id in pgatour_stat_catalog), e.g. 120 (scoring average) or 02675 (SG Total).
+        stat_id: Stat id (stat_id in pgatour_stat_catalog), as a string (leading zeros matter), e.g. '120' (scoring average) or '02675' (SG Total).
         tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
         year: Season year; omitted, the current season.
         return_parsed: parse the payload through parse_pgatour_stat_details -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -593,7 +593,7 @@ def pgatour_tour_cup(
 
     Args:
         tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
-        cup_id: Points race id; 02671 is the FedExCup, 02698 the FedExCup Fall. Omitted, the tour's current race.
+        cup_id: Points race id, as a string (leading zeros matter); 02671 (the default) is the FedExCup, 02698 the FedExCup Fall.
         year: Season year; omitted, the current season.
         return_parsed: parse the payload through parse_pgatour_tour_cup -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.

@@ -59,6 +59,9 @@ def test_ids_are_strings_and_join():
     for df in (lb, sc, tt):
         assert df.schema["player_id"] == pl.String and df.schema["tournament_id"] == pl.String
     assert sc["player_id"].unique().to_list() == ["28237"]
+    # the scorecard answer's own id is "R2026014-28237": the tournament id must still join
+    assert sc["tournament_id"].unique().to_list() == lb["tournament_id"].unique().to_list() == ["R2026014"]
+    assert sc.join(lb, on=["tournament_id", "player_id"]).height == sc.height
     assert set(sc["player_id"]) <= set(lb["player_id"]) and set(tt["player_id"]) >= set(lb["player_id"])
 
 
@@ -262,3 +265,25 @@ def test_site_key_missing_raises(monkeypatch):
             rt._site_api_key()
     finally:
         rt._site_api_key.cache_clear()
+
+
+def test_tour_cup_season_is_read_from_the_title():
+    cup = P.parse_pgatour_tour_cup(_load("tour_cup_02671_R_2025.json"))
+    assert cup["season"].unique().to_list() == [2025]
+    assert (
+        P.parse_pgatour_tour_cup({"id": "R-02671-2024", "season": None, "players": [{"id": "1"}]})["season"][0] == 2024
+    )
+
+
+@pytest.mark.parametrize("bad", [99999999999999999999, "99999999999999999999", 1e300, float("inf"), -(10**15), 2.5])
+def test_out_of_range_numbers_and_times_never_raise(bad):
+    sched = P.parse_pgatour_schedule(
+        {"completed": [{"tournaments": [{"id": "R1", "startDate": bad, "sequenceNumber": bad}]}]}
+    )
+    assert sched.height == 1 and sched["start_date"][0] is None
+    # -(10**15) is a valid Int64 (kept); the rest are out of range or not whole (null)
+    assert sched["sequence_number"][0] == (bad if bad == -(10**15) else None)
+    tt = P.parse_pgatour_tee_times(
+        {"rounds": [{"roundInt": bad, "groups": [{"teeTime": bad, "players": [{"id": "1"}]}]}]}
+    )
+    assert tt.height == 1 and tt["tee_time"][0] is None

@@ -28,7 +28,7 @@ import json as _json
 import os
 import re
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from sportsdataverse._codegen_runtime import _get as _http_get
 from sportsdataverse._codegen_runtime import _integral, _wire_text
@@ -80,13 +80,30 @@ def _site_api_key() -> str:
 
 
 def api_key() -> str:
-    """``$PGA_API_KEY`` when set, else the key read from pgatour.com."""
+    """The ``x-api-key`` the requests send.
+
+    Returns:
+        ``$PGA_API_KEY`` when set, else the public key read from pgatour.com (once per process).
+
+    Raises:
+        AssetFetchError: no environment key, and the site no longer carries one.
+    """
     return os.environ.get(KEY_ENV) or _site_api_key()
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def query_document(operation: str) -> str:
-    """The GraphQL document for ``operation`` (``pgatour_queries/<operation>.graphql``)."""
+    """The GraphQL document for ``operation``.
+
+    Args:
+        operation: The query's root field (``leaderboardCompressedV3``), also its file name.
+
+    Returns:
+        The text of ``pgatour_queries/<operation>.graphql``.
+
+    Raises:
+        ValueError: no document of that name ships with the package.
+    """
     path = QUERY_DIR / f"{operation}.graphql"
     if not path.is_file():
         raise ValueError(f"no PGA Tour query named {operation!r}")
@@ -95,6 +112,12 @@ def query_document(operation: str) -> str:
 
 def decode_payload(value: Any) -> Any:
     """``value`` with a base64 + gzip JSON ``payload`` decoded in place; anything else unchanged.
+
+    Args:
+        value: One operation's ``data`` value (``{"id": ..., "payload": "<base64>"}`` when compressed).
+
+    Returns:
+        ``value`` with ``payload`` replaced by the decoded JSON; a value without one, as given.
 
     Raises:
         AssetFetchError: the payload is not base64-encoded gzip JSON.
@@ -115,7 +138,7 @@ _STRING_VARS = {"schedule": frozenset({"year"})}
 _TEXT_VARS = frozenset({"id", "tournamentId", "playerId", "statId", "tourCode"})
 
 
-def _whole(value: Any) -> Optional[int]:
+def _whole(value: Any) -> int | None:
     """``2026`` / ``"2026"`` / ``2026.0`` -> 2026; ``2026.7``, ``True``, ``"last"`` -> None."""
     if isinstance(value, str):
         text = value.strip()
@@ -123,13 +146,13 @@ def _whole(value: Any) -> Optional[int]:
     return _integral(value)
 
 
-def _variables(operation: str, body: Optional[dict]) -> Dict[str, Any]:
+def _variables(operation: str, body: dict | None) -> dict[str, Any]:
     """The non-None variables of ``body``, each sent as the type the API declares.
 
     Raises:
         ValueError: an ``Int`` variable is not a whole number.
     """
-    out: Dict[str, Any] = {k: v for k, v in (body or {}).items() if v is not None}
+    out: dict[str, Any] = {k: v for k, v in (body or {}).items() if v is not None}
     for key, value in list(out.items()):
         if key in _TEXT_VARS or key in _STRING_VARS.get(operation, frozenset()):
             out[key] = _wire_text(value)
@@ -141,11 +164,17 @@ def _variables(operation: str, body: Optional[dict]) -> Dict[str, Any]:
     return out
 
 
-def graphql_body(body: Dict[str, Any]) -> Dict[str, Any]:
+def graphql_body(body: dict[str, Any]) -> dict[str, Any]:
     """The wrapper's flat body (its variables plus a fixed ``operation``) as a GraphQL request.
 
     ``{"operation": "statDetails", "statId": "120", ...}`` becomes ``{"operationName":
     "StatDetails", "query": <pgatour_queries/statDetails.graphql>, "variables": {...}}``.
+
+    Args:
+        body: The generated wrapper's body: its variables (None for unset) and ``operation``.
+
+    Returns:
+        The JSON body to POST to ``/graphql``.
 
     Raises:
         ValueError: an unknown operation, or a variable of the wrong type.
@@ -182,13 +211,13 @@ def _graphql_error(operation: str, errors: Any) -> Exception:
 _RETRY = frozenset({429, 500, 502, 503, 504})
 
 
-def _send(body: Dict[str, Any], headers: Dict[str, str], **kwargs: Any) -> Any:
+def _send(body: dict[str, Any], headers: dict[str, str], **kwargs: Any) -> Any:
     return _http_get(
         GRAPHQL_URL, json=body, headers={"x-api-key": api_key(), **headers}, retry_statuses=_RETRY, **kwargs
     )
 
 
-def _post(body: Dict[str, Any], headers: Dict[str, str], **kwargs: Any) -> Any:
+def _post(body: dict[str, Any], headers: dict[str, str], **kwargs: Any) -> Any:
     """POST ``body`` with the API key; a refused key read from the site is re-read once (it may have rotated)."""
     try:
         return _send(body, headers, **kwargs)
@@ -199,7 +228,7 @@ def _post(body: Dict[str, Any], headers: Dict[str, str], **kwargs: Any) -> Any:
     return _send(body, headers, **kwargs)
 
 
-def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, **kwargs: Any) -> Any:
+def _get(url: str, params: dict | None = None, json: dict | None = None, **kwargs: Any) -> Any:
     """POST the GraphQL request ``json`` (built by :func:`graphql_body`) to ``url``.
 
     Returns the operation's ``data`` field (a dict), with a compressed ``payload`` decoded.

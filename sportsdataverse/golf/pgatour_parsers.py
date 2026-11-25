@@ -10,23 +10,24 @@ strings (``"R2026014"``, ``"28237"``, ``"02675"``).
 from __future__ import annotations
 
 import math
+import re
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pandas as pd
 import polars as pl
 
 __all__ = [
-    "parse_pgatour_schedule",
     "parse_pgatour_leaderboard",
-    "parse_pgatour_scorecard",
-    "parse_pgatour_tee_times",
     "parse_pgatour_player",
     "parse_pgatour_player_directory",
+    "parse_pgatour_schedule",
+    "parse_pgatour_scorecard",
+    "parse_pgatour_shot_details",
     "parse_pgatour_stat_catalog",
     "parse_pgatour_stat_details",
+    "parse_pgatour_tee_times",
     "parse_pgatour_tour_cup",
-    "parse_pgatour_shot_details",
 ]
 
 S, INT, F, B = pl.String, pl.Int64, pl.Float64, pl.Boolean
@@ -85,39 +86,55 @@ SHOT_DETAILS_SCHEMA = {
 }  # fmt: skip
 
 
-def _d(value: Any) -> Dict[str, Any]:
+def _d(value: Any) -> dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
-def _l(value: Any) -> List[Any]:
+def _l(value: Any) -> list[Any]:
     return [v for v in value if isinstance(v, dict)] if isinstance(value, list) else []
 
 
-def _payload(raw: Any) -> Dict[str, Any]:
+def _payload(raw: Any) -> dict[str, Any]:
     """The decoded body of a compressed answer (``{"id", "payload"}``), else ``raw`` itself."""
     raw = _d(raw)
     return _d(raw["payload"]) if "payload" in raw else raw
 
 
-def _int(value: Any) -> Optional[int]:
-    """``"276"`` / ``276`` / ``276.0`` -> 276; ``"-"``, ``"E"``, ``""``, None -> None."""
+_INT64_MIN, _INT64_MAX = -(2**63), 2**63 - 1
+
+
+def _year(value: Any) -> int | None:
+    """The first four-digit year in ``value`` (``"2025 Standings"`` -> 2025, ``"R-02671-2025"`` -> 2025)."""
+    found = re.search(r"(?<!\d)(\d{4})(?!\d)", value) if isinstance(value, str) else None
+    return int(found.group(1)) if found else _int(value)
+
+
+def _int(value: Any) -> int | None:
+    """``"276"`` / ``276`` / ``276.0`` -> 276; ``"-"``, ``"E"``, ``""``, ``2.5``, None, or outside Int64 -> None."""
     if isinstance(value, bool) or value is None:
         return None
-    if isinstance(value, (int, float)):
-        return int(value) if math.isfinite(value) else None
-    try:
-        return int(str(value).replace(",", "").strip())
-    except ValueError:
-        return None
+    if isinstance(value, float):
+        value = int(value) if math.isfinite(value) and value.is_integer() else None
+    elif not isinstance(value, int):
+        try:
+            value = int(str(value).replace(",", "").strip())
+        except ValueError:
+            return None
+    return value if value is not None and _INT64_MIN <= value <= _INT64_MAX else None
 
 
-def _str(value: Any) -> Optional[str]:
+def _str(value: Any) -> str | None:
     return None if value is None or isinstance(value, (dict, list)) else str(value)
 
 
-def _epoch_ms(value: Any) -> Optional[datetime]:
+def _epoch_ms(value: Any) -> datetime | None:
     ms = _int(value)
-    return datetime.fromtimestamp(ms / 1000, tz=timezone.utc) if ms is not None else None
+    if ms is None:
+        return None
+    try:
+        return datetime.fromtimestamp(ms / 1000, tz=timezone.utc)
+    except (OverflowError, OSError, ValueError):  # out of the platform's range (Windows rejects negatives)
+        return None
 
 
 def _cell(value: Any, dtype: Any) -> Any:
@@ -134,7 +151,7 @@ def _cell(value: Any, dtype: Any) -> Any:
     return value if isinstance(value, datetime) else None
 
 
-def _frame(rows: List[Dict[str, Any]], schema: Dict[str, Any], return_as_pandas: bool) -> pl.DataFrame | pd.DataFrame:
+def _frame(rows: list[dict[str, Any]], schema: dict[str, Any], return_as_pandas: bool) -> pl.DataFrame | pd.DataFrame:
     clean = [{k: _cell(r.get(k), t) for k, t in schema.items()} for r in rows]
     df = pl.DataFrame(clean, schema=schema) if clean else pl.DataFrame(schema=schema)
     return df.to_pandas() if return_as_pandas else df
@@ -149,6 +166,12 @@ def parse_pgatour_schedule(raw: Any, return_as_pandas: bool = False) -> pl.DataF
 
     Returns:
         A frame with :data:`SCHEDULE_SCHEMA` columns.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_schedule, pgatour_schedule
+            parse_pgatour_schedule(pgatour_schedule(tour_code="R", year=2026, return_parsed=False))
     """
     raw = _d(raw)
     rows = []
@@ -171,7 +194,7 @@ def parse_pgatour_schedule(raw: Any, return_as_pandas: bool = False) -> pl.DataF
     return _frame(rows, SCHEDULE_SCHEMA, return_as_pandas)
 
 
-def _leaderboard_row(body: Dict[str, Any], row: Dict[str, Any]) -> Dict[str, Any]:
+def _leaderboard_row(body: dict[str, Any], row: dict[str, Any]) -> dict[str, Any]:
     player, scoring = _d(row.get("player")), _d(row.get("scoringData"))
     rounds = scoring.get("rounds") if isinstance(scoring.get("rounds"), list) else []
     return {
@@ -202,6 +225,12 @@ def parse_pgatour_leaderboard(raw: Any, return_as_pandas: bool = False) -> pl.Da
 
     Returns:
         A frame with :data:`LEADERBOARD_SCHEMA` columns.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_leaderboard, pgatour_leaderboard
+            parse_pgatour_leaderboard(pgatour_leaderboard(tournament_id="R2026014", return_parsed=False))
     """
     body = _payload(raw)
     rows = [
@@ -221,10 +250,19 @@ def parse_pgatour_scorecard(raw: Any, return_as_pandas: bool = False) -> pl.Data
 
     Returns:
         A frame with :data:`SCORECARD_SCHEMA` columns; ``score`` is null on a hole not yet played.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_scorecard, pgatour_scorecard
+            parse_pgatour_scorecard(pgatour_scorecard(tournament_id="R2026014", player_id="28237", return_parsed=False))
     """
     body = _payload(raw)
     player_id = _str(_d(body.get("player")).get("id"))
+    # the answer's id is "<tournament id>-<player id>" (R2026014-28237); keep the tournament part
     tournament_id = _str(body.get("id"))
+    if tournament_id and player_id and tournament_id.endswith(f"-{player_id}"):
+        tournament_id = tournament_id[: -len(player_id) - 1]
     rows = []
     for rnd in _l(body.get("roundScores")):
         for nine in ("firstNine", "secondNine"):
@@ -250,6 +288,12 @@ def parse_pgatour_tee_times(raw: Any, return_as_pandas: bool = False) -> pl.Data
 
     Returns:
         A frame with :data:`TEE_TIMES_SCHEMA` columns; ``tee_time`` is UTC.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_tee_times, pgatour_tee_times
+            parse_pgatour_tee_times(pgatour_tee_times(tournament_id="R2026014", return_parsed=False))
     """
     body = _payload(raw)
     rows = []
@@ -278,6 +322,12 @@ def parse_pgatour_player(raw: Any, return_as_pandas: bool = False) -> pl.DataFra
 
     Returns:
         A frame with :data:`PLAYER_SCHEMA` columns; zero rows when ``raw`` carries no player id.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_player, pgatour_player
+            parse_pgatour_player(pgatour_player(player_id="28237", return_parsed=False))
     """
     p = _d(raw)
     bio, born, home = (
@@ -308,6 +358,12 @@ def parse_pgatour_player_directory(raw: Any, return_as_pandas: bool = False) -> 
 
     Returns:
         A frame with :data:`PLAYER_DIRECTORY_SCHEMA` columns.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_player_directory, pgatour_player_directory
+            parse_pgatour_player_directory(pgatour_player_directory(tour_code="R", return_parsed=False))
     """
     raw = _d(raw)
     rows = [
@@ -334,6 +390,12 @@ def parse_pgatour_stat_catalog(raw: Any, return_as_pandas: bool = False) -> pl.D
 
     Returns:
         A frame with :data:`STAT_CATALOG_SCHEMA` columns.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_stat_catalog, pgatour_stat_catalog
+            parse_pgatour_stat_catalog(pgatour_stat_catalog(tour_code="R", year=2026, return_parsed=False))
     """
     raw = _d(raw)
     rows = [
@@ -362,6 +424,12 @@ def parse_pgatour_stat_details(raw: Any, return_as_pandas: bool = False) -> pl.D
 
     Returns:
         A frame with :data:`STAT_DETAILS_SCHEMA` columns.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_stat_details, pgatour_stat_details
+            parse_pgatour_stat_details(pgatour_stat_details(stat_id="120", year=2026, return_parsed=False))
     """
     raw = _d(raw)
     head = {
@@ -392,6 +460,12 @@ def parse_pgatour_tour_cup(raw: Any, return_as_pandas: bool = False) -> pl.DataF
 
     Returns:
         A frame with :data:`TOUR_CUP_SCHEMA` columns.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_tour_cup, pgatour_tour_cup
+            parse_pgatour_tour_cup(pgatour_tour_cup(year=2025, return_parsed=False))
     """
     raw = _d(raw)
     rows = []
@@ -400,7 +474,7 @@ def parse_pgatour_tour_cup(raw: Any, return_as_pandas: bool = False) -> pl.DataF
             continue
         rank, points = _d(p.get("rankingData")), _d(p.get("pointData"))
         rows.append({
-            "cup_id": _str(raw.get("id")), "title": raw.get("title"), "season": _int(raw.get("season")),
+            "cup_id": _str(raw.get("id")), "title": raw.get("title"), "season": _year(raw.get("season")) or _year(raw.get("id")),
             "player_id": _str(p.get("id")), "first_name": p.get("firstName"), "last_name": p.get("lastName"),
             "display_name": p.get("displayName"), "country": p.get("country"), "country_code": p.get("countryFlag"),
             "rank_official": _str(rank.get("official")), "rank_projected": _str(rank.get("projected")),
@@ -410,10 +484,10 @@ def parse_pgatour_tour_cup(raw: Any, return_as_pandas: bool = False) -> pl.DataF
     return _frame(rows, TOUR_CUP_SCHEMA, return_as_pandas)
 
 
-def _coords(stroke: Dict[str, Any]) -> Dict[str, Optional[float]]:
+def _coords(stroke: dict[str, Any]) -> dict[str, float | None]:
     """ShotLink ``tourcastX/Y/Z`` coordinates of a stroke's start and end."""
     lr = _d(_d(stroke.get("overview")).get("leftToRightCoords"))
-    out: Dict[str, Optional[float]] = {}
+    out: dict[str, float | None] = {}
     for end, key in (("from", "fromCoords"), ("to", "toCoords")):
         c = _d(lr.get(key))
         for axis in ("x", "y", "z"):
@@ -434,6 +508,12 @@ def parse_pgatour_shot_details(raw: Any, return_as_pandas: bool = False) -> pl.D
 
     Returns:
         A frame with :data:`SHOT_DETAILS_SCHEMA` columns.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_shot_details, pgatour_shot_details
+            parse_pgatour_shot_details(pgatour_shot_details(tournament_id="R2026006", player_id="59095", round=4, return_parsed=False))
     """
     body = _payload(raw)
     head = {

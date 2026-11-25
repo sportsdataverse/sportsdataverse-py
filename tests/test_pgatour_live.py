@@ -27,5 +27,10 @@ pytestmark = skip_if_no_live
 def test_pgatour_graphql_live(short, kwargs, min_rows):
     from sportsdataverse.golf import pgatour
 
+    from sportsdataverse.golf import pgatour_parsers
+
     df = getattr(pgatour, f"pgatour_{short}")(**kwargs)
     assert df.height >= min_rows, f"pgatour_{short}: {df.height} rows"
+    assert df.schema == getattr(pgatour_parsers, f"parse_pgatour_{short}")(None).schema
+    id_cols = [c for c in ("tournament_id", "player_id", "stat_id") if c in df.columns]
+    assert df.select(id_cols).null_count().row(0) == (0,) * len(id_cols), "an id column came back null"

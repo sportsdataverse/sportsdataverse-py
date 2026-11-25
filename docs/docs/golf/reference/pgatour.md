@@ -149,7 +149,7 @@ One player's scorecard for a tournament: one row per hole per round (par, yardag
 
 | col_name | type | description |
 |---|---|---|
-| `tournament_id` | String | PGA TOUR tournament id. |
+| `tournament_id` | String | PGA TOUR tournament id (the answer's own id carries the player id too; it is stripped). |
 | `player_id` | String | PGA TOUR player id. |
 | `round_number` | Int64 | Round number. |
 | `course_id` | String | Course id (an event played on more than one course carries one per round). |
@@ -384,7 +384,7 @@ One stat's season table, long form: one row per player per stat column (rank, co
 
 | API Parameter | Python | In | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|:---:|---|
-| `statId` | `stat_id` | body |  | `Y` |  | Stat id (stat_id in pgatour_stat_catalog), e.g. 120 (scoring average) or 02675 (SG Total). |
+| `statId` | `stat_id` | body |  | `Y` |  | Stat id (stat_id in pgatour_stat_catalog), as a string (leading zeros matter), e.g. '120' (scoring average) or '02675' (SG Total). |
 | `tourCode` | `tour_code` | body |  |  | `Y` | Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour). |
 | `year` | `year` | body |  |  | `Y` | Season year; omitted, the current season. |
 
@@ -436,7 +436,7 @@ A season-long points race (the FedExCup by default): one row per player with off
 | API Parameter | Python | In | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|:---:|---|
 | `tourCode` | `tour_code` | body |  |  | `Y` | Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour). |
-| `id` | `cup_id` | body |  |  | `Y` | Points race id; 02671 is the FedExCup, 02698 the FedExCup Fall. Omitted, the tour's current race. |
+| `id` | `cup_id` | body |  |  | `Y` | Points race id, as a string (leading zeros matter); 02671 (the default) is the FedExCup, 02698 the FedExCup Fall. |
 | `year` | `year` | body |  |  | `Y` | Season year; omitted, the current season. |
 
 ### Returns {#pgatour_tour_cup-returns}
@@ -447,7 +447,7 @@ A season-long points race (the FedExCup by default): one row per player with off
 |---|---|---|
 | `cup_id` | String | Points race id with season (e.g. "R-02671-2025" for the 2025 FedExCup). |
 | `title` | String | Points race name (e.g. "FedExCup Standings"). |
-| `season` | String | Season year. |
+| `season` | String | Season year (read from the race's title, e.g. "2025 Standings"). |
 | `player_id` | String | PGA TOUR player id. |
 | `first_name` | String | First name. |
 | `last_name` | String | Last name. |

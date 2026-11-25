@@ -81839,7 +81839,7 @@ pgatour_leaderboard:
   fedexcup_official: Player's official FedExCup rank going into the event, as displayed.
   fedexcup_projected: Player's FedExCup rank projected from this leaderboard, as displayed.
 pgatour_scorecard:
-  tournament_id: PGA TOUR tournament id.
+  tournament_id: PGA TOUR tournament id (the answer's own id carries the player id too; it is stripped).
   player_id: PGA TOUR player id.
   round_number: Round number.
   course_id: Course id (an event played on more than one course carries one per round).
@@ -81927,7 +81927,7 @@ pgatour_stat_details:
 pgatour_tour_cup:
   cup_id: Points race id with season (e.g. "R-02671-2025" for the 2025 FedExCup).
   title: Points race name (e.g. "FedExCup Standings").
-  season: Season year.
+  season: Season year (read from the race's title, e.g. "2025 Standings").
   player_id: PGA TOUR player id.
   first_name: First name.
   last_name: Last name.

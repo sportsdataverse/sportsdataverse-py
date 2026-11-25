@@ -186,8 +186,8 @@ endpoints:
     tour_code: R
     year: 2026
   extra_params:
-  - description: Stat id (stat_id in pgatour_stat_catalog), e.g. 120 (scoring average) or
-      02675 (SG Total).
+  - description: Stat id (stat_id in pgatour_stat_catalog), as a string (leading zeros matter),
+      e.g. '120' (scoring average) or '02675' (SG Total).
     name: stat_id
     query_key: statId
     required: true
@@ -221,8 +221,8 @@ endpoints:
     query_key: tourCode
     type: str
     default: R
-  - description: Points race id; 02671 is the FedExCup, 02698 the FedExCup Fall. Omitted,
-      the tour's current race.
+  - description: Points race id, as a string (leading zeros matter); 02671 (the default) is
+      the FedExCup, 02698 the FedExCup Fall.
     name: cup_id
     query_key: id
     type: str
