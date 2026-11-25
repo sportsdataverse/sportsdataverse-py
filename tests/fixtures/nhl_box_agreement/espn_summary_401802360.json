@@ -1,0 +1,707 @@
+{
+ "header": {
+  "id": "401802360",
+  "competitions": [
+   {
+    "id": "401802360",
+    "date": "2025-10-09T23:00Z",
+    "competitors": [
+     {
+      "homeAway": "home",
+      "id": "2",
+      "team": {
+       "abbreviation": "BUF"
+      }
+     },
+     {
+      "homeAway": "away",
+      "id": "13",
+      "team": {
+       "abbreviation": "NYR"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "boxscore": {
+  "players": [
+   {
+    "team": {
+     "id": "13",
+     "abbreviation": "NYR",
+     "displayName": "New York Rangers",
+     "location": "New York"
+    },
+    "statistics": [
+     {
+      "name": "forwards",
+      "keys": [
+       "goals",
+       "assists",
+       "shotsTotal",
+       "plusMinus"
+      ],
+      "athletes": [
+       {
+        "athlete": {
+         "id": "5474",
+         "displayName": "Sam Carrick",
+         "shortName": "S. Carrick",
+         "jersey": "39",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "1",
+         "0",
+         "1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4697468",
+         "displayName": "Will Cuylle",
+         "shortName": "W. Cuylle",
+         "jersey": "50",
+         "position": {
+          "abbreviation": "LW"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "2",
+         "1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4894222",
+         "displayName": "Adam Edstrom",
+         "shortName": "A. Edstrom",
+         "jersey": "84",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "2",
+         "0"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "5188370",
+         "displayName": "Noah Laba",
+         "shortName": "N. Laba",
+         "jersey": "42",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "2",
+         "0"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4697382",
+         "displayName": "Alexis Lafreniere",
+         "shortName": "A. Lafreniere",
+         "jersey": "13",
+         "position": {
+          "abbreviation": "LW"
+         }
+        },
+        "stats": [
+         "1",
+         "1",
+         "5",
+         "2"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "2590852",
+         "displayName": "J.T. Miller",
+         "shortName": "J.T. Miller",
+         "jersey": "8",
+         "position": {
+          "abbreviation": "LW"
+         }
+        },
+        "stats": [
+         "1",
+         "1",
+         "1",
+         "3"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "3891952",
+         "displayName": "Artemi Panarin",
+         "shortName": "A. Panarin",
+         "jersey": "10",
+         "position": {
+          "abbreviation": "LW"
+         }
+        },
+        "stats": [
+         "0",
+         "1",
+         "2",
+         "3"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4063502",
+         "displayName": "Taylor Raddysh",
+         "shortName": "T. Raddysh",
+         "jersey": "14",
+         "position": {
+          "abbreviation": "RW"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "2",
+         "0"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4697820",
+         "displayName": "Matt Rempe",
+         "shortName": "M. Rempe",
+         "jersey": "73",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "1",
+         "1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "3149827",
+         "displayName": "Conor Sheary",
+         "shortName": "C. Sheary",
+         "jersey": "43",
+         "position": {
+          "abbreviation": "LW"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "1",
+         "0"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "2563036",
+         "displayName": "Vincent Trocheck",
+         "shortName": "V. Trocheck",
+         "jersey": "16",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "1",
+         "1",
+         "1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "2562637",
+         "displayName": "Mika Zibanejad",
+         "shortName": "M. Zibanejad",
+         "jersey": "93",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "1",
+         "0"
+        ]
+       }
+      ]
+     },
+     {
+      "name": "defenses",
+      "keys": [
+       "goals",
+       "assists",
+       "shotsTotal",
+       "plusMinus"
+      ],
+      "athletes": [
+       {
+        "athlete": {
+         "id": "3941946",
+         "displayName": "Will Borgen",
+         "shortName": "W. Borgen",
+         "jersey": "17",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "0",
+         "1",
+         "1",
+         "2"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4197146",
+         "displayName": "Adam Fox",
+         "shortName": "A. Fox",
+         "jersey": "23",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "1",
+         "0",
+         "4",
+         "1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "3942292",
+         "displayName": "Vladislav Gavrikov",
+         "shortName": "V. Gavrikov",
+         "jersey": "44",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "2",
+         "2"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4697402",
+         "displayName": "Braden Schneider",
+         "shortName": "B. Schneider",
+         "jersey": "4",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "0",
+         "1",
+         "3",
+         "1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "3042198",
+         "displayName": "Carson Soucy",
+         "shortName": "C. Soucy",
+         "jersey": "24",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "1",
+         "0",
+         "2",
+         "2"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4233619",
+         "displayName": "Urho Vaakanainen",
+         "shortName": "U. Vaakanainen",
+         "jersey": "18",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "1",
+         "0"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "team": {
+     "id": "2",
+     "abbreviation": "BUF",
+     "displayName": "Buffalo Sabres",
+     "location": "Buffalo"
+    },
+    "statistics": [
+     {
+      "name": "forwards",
+      "keys": [
+       "goals",
+       "assists",
+       "shotsTotal",
+       "plusMinus"
+      ],
+      "athletes": [
+       {
+        "athlete": {
+         "id": "4894355",
+         "displayName": "Justin Danforth",
+         "shortName": "J. Danforth",
+         "jersey": "15",
+         "position": {
+          "abbreviation": "RW"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "2",
+         "-1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4874870",
+         "displayName": "Josh Doan",
+         "shortName": "J. Doan",
+         "jersey": "91",
+         "position": {
+          "abbreviation": "RW"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "2",
+         "-1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "3042103",
+         "displayName": "Mason Geertsen",
+         "shortName": "M. Geertsen",
+         "jersey": "55",
+         "position": {
+          "abbreviation": "LW"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "0",
+         "-1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4565238",
+         "displayName": "Peyton Krebs",
+         "shortName": "P. Krebs",
+         "jersey": "19",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "0",
+         "-2"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "5080176",
+         "displayName": "Jiri Kulich",
+         "shortName": "J. Kulich",
+         "jersey": "20",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "2",
+         "0"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4063240",
+         "displayName": "Beck Malenstyn",
+         "shortName": "B. Malenstyn",
+         "jersey": "29",
+         "position": {
+          "abbreviation": "LW"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "1",
+         "-2"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4378669",
+         "displayName": "Ryan McLeod",
+         "shortName": "R. McLeod",
+         "jersey": "71",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "2",
+         "-3"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4233627",
+         "displayName": "Josh Norris",
+         "shortName": "J. Norris",
+         "jersey": "9",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "4",
+         "0"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4697389",
+         "displayName": "Jack Quinn",
+         "shortName": "J. Quinn",
+         "jersey": "22",
+         "position": {
+          "abbreviation": "RW"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "1",
+         "0"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4024988",
+         "displayName": "Tage Thompson",
+         "shortName": "T. Thompson",
+         "jersey": "72",
+         "position": {
+          "abbreviation": "C"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "5",
+         "-1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "3114766",
+         "displayName": "Alex Tuch",
+         "shortName": "A. Tuch",
+         "jersey": "89",
+         "position": {
+          "abbreviation": "RW"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "6",
+         "-1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "2593315",
+         "displayName": "Jason Zucker",
+         "shortName": "J. Zucker",
+         "jersey": "17",
+         "position": {
+          "abbreviation": "LW"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "5",
+         "-1"
+        ]
+       }
+      ]
+     },
+     {
+      "name": "defenses",
+      "keys": [
+       "goals",
+       "assists",
+       "shotsTotal",
+       "plusMinus"
+      ],
+      "athletes": [
+       {
+        "athlete": {
+         "id": "4197014",
+         "displayName": "Jacob Bryson",
+         "shortName": "J. Bryson",
+         "jersey": "78",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "0",
+         "-1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4565225",
+         "displayName": "Bowen Byram",
+         "shortName": "B. Byram",
+         "jersey": "4",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "1",
+         "-2"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4294163",
+         "displayName": "Rasmus Dahlin",
+         "shortName": "R. Dahlin",
+         "jersey": "26",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "4",
+         "-2"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4565252",
+         "displayName": "Ryan Johnson",
+         "shortName": "R. Johnson",
+         "jersey": "33",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "0",
+         "-1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4378656",
+         "displayName": "Mattias Samuelsson",
+         "shortName": "M. Samuelsson",
+         "jersey": "23",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "1",
+         "-1"
+        ]
+       },
+       {
+        "athlete": {
+         "id": "4233868",
+         "displayName": "Conor Timmins",
+         "shortName": "C. Timmins",
+         "jersey": "21",
+         "position": {
+          "abbreviation": "D"
+         }
+        },
+        "stats": [
+         "0",
+         "0",
+         "1",
+         "-1"
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}
