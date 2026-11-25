@@ -49793,6 +49793,15 @@ mjhl_standings:
     such as '14' or '-10'.
   percentage: 'Points percentage (feed header ''Percentage''): points earned divided by the maximum points available from games
     played, as a three-decimal string, e.g. ''0.833'' for 5 of 6 possible points; ''0.000'' before a team has played.'
+mlb_base_out_transitions:
+  from_base_state: 3-char base occupancy before the plate appearance ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3".
+  from_outs: Outs before the plate appearance (0-2).
+  n: Number of plate appearances observed with this (from, to, runs) transition; with by_event=True, those of that event only.
+  prob: Share of the from-state's departures that took this transition (n over the from-state's total n); with by_event=True,
+    the share of that (from-state, event) cell's departures.
+  runs: Runs scored on the transition (the plate appearance's runs_on_play).
+  to_base_state: Base occupancy before the next plate appearance of the half-inning; "___" for the 3-out state.
+  to_outs: Outs before the next plate appearance; 3 means the half-inning ended on this plate appearance.
 mlb_catcher_framing:
   abs_era: The pitch is from 2026 on -- Savant location at the middle of the plate against the ABS zone, and the call was challengeable (rules/mlb.yaml#mlb-2026-abs-challenge-system); excluded from the fit, scored and reported on its own row.
 mlb_command_plus:
@@ -49813,6 +49822,11 @@ mlb_injury_risk:
   game_pk: Game identifier.
   injury_risk_index: Equal-weighted composite of standardized adverse trailing features (higher = more risk).
   pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
+mlb_markov_run_expectancy:
+  base_state: 3-char base occupancy code ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third.
+  n: Number of plate appearances observed departing this base-out state.
+  outs: Outs at the start of the base-out state (0-2).
+  re: Markov-chain expected runs from this state through the end of the half-inning, (I - Q)^-1 r; null when the state was never observed.
 mlb_pitch_classify:
   pitch_type: Savant-reported pitch-type abbreviation.
   pitch_type_reclass: Reclassified pitch-type label from the per-pitcher GMM clustering (may differ from pitch_type).
