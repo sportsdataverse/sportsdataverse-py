@@ -240,12 +240,13 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         # Regulation score + goalie saves, fitted 2026-11-25 by tools/models/nhl_prediction/fit_score_saves.py.
         # reg_draw_inflation: 3-way log-loss MLE on the 2022-23 as-of backtest (1174 games; the season hfa /
         #   margin_sd are fitted on). Regulation ties are 24.0% there; independent Poissons put ~16% level.
-        #   Holdout 2023-24 / 2024-25 / 2025-26 log loss 1.0342 / 1.0420 / 1.0594 against 1.0373 / 1.0436 /
-        #   1.0825 for independent Poissons and 1.0615 / 1.0577 / 1.0808 for flat 2022-23 rates. The tie
+        #   Holdout 2023-24 / 2024-25 / 2025-26 log loss 1.0343 / 1.0419 / 1.0594 against 1.0380 / 1.0442 /
+        #   1.0838 for independent Poissons and 1.0615 / 1.0577 / 1.0808 for flat 2022-23 rates. The tie
         #   rate moves by season (0.240 / 0.208 / 0.206 / 0.249), so predicted ties (0.244) run 3.6 points
-        #   high on 2023-24 and 2024-25 and 0.5 low on 2025-26. Refits: 0.486 on all four seasons; expanding
-        #   windows 0.482 (-> 2024-25, better than 0.636) and 0.424 (-> 2025-26, worse), so no window wins.
-        #   The regulation means are solved to match exp_total, so they inherit its centring.
+        #   high on 2023-24 and 2024-25 and 0.5 low on 2025-26. Refits read 0.508 on all four seasons and
+        #   0.459 on the holdout alone; the fit stays on 2022-23 like hfa / margin_sd.
+        #   The regulation means are solved to match exp_total, so they inherit its level: fitted against
+        #   the settled-total avg_total_goals = 6.19 / total_scale = 2.5392 (0.636 under the old 6.05 seed).
         # Saves (load_nhl_goalie_boxscores starts in 2023-24, so the fit season is 2023-24):
         #   avg_shots_against = shots on goal per team-game; shots_hfa = away minus home team shots against;
         #   starter_shot_share = starters' shots against / expected; save_pct_prior = starters' save %;
@@ -253,7 +254,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         #   against. Holdout 80% intervals cover 0.828 / 0.828 (model 0.826) in 2024-25 / 2025-26; 50%:
         #   0.562 / 0.545 (0.547 / 0.548); 90%: 0.909 / 0.908 (0.915); mean saves 24.74 / 24.25 against
         #   24.68 / 24.16 actual.
-        reg_draw_inflation=0.636,
+        reg_draw_inflation=0.661,
         avg_shots_against=29.98,
         league_shots_k=64.0,
         shots_hfa=1.419,
@@ -304,7 +305,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         in_game_wp_artifact="pwhl_in_game_wp.json",
         min_season=2024,
         # SEEDED placeholders: the NHL fits, until PWHL regulation scores and goalie boxes are fitted.
-        reg_draw_inflation=0.636,
+        reg_draw_inflation=0.661,
         avg_shots_against=29.98,
         league_shots_k=64.0,
         shots_hfa=1.419,
