@@ -12439,6 +12439,37 @@
   expected: kill
   note: A stat first seen after row 100 is dropped on polars 2.0 and raises on 2.2 unless every row is inferred.
 
+# --- college-ridge-prior: the college possession ridge seeded from last season's rating ----------
+- id: college-ridge-prior-applied
+  group: college-ridge-prior
+  finding: college-ridge-prior
+  file: sportsdataverse/mbb/mbb_team_strength.py
+  snippet: '        fits.append(possession_ridge_ratings(sub, lam=fit_lam, prior=seed))'
+  mutant: '        fits.append(possession_ridge_ratings(sub, lam=fit_lam, prior=None))'
+  test: tests/mbb/test_mbb_team_strength.py -k "ridge_ratings_are_the_possession_ridge or prior_seeds"
+  expected: kill
+  note: The default ridge would build the prior and then never use it.
+
+- id: college-ridge-prior-previous-season
+  group: college-ridge-prior
+  finding: college-ridge-prior
+  file: sportsdataverse/mbb/mbb_team_strength.py
+  snippet: '        prev_season = int(season) - 1'
+  mutant: '        prev_season = int(season)'
+  test: tests/mbb/test_mbb_team_strength.py -k ridge_ratings_are_the_possession_ridge
+  expected: kill
+  note: The prior would be built from the season it rates, an as-of leak.
+
+- id: college-ridge-prior-regression
+  group: college-ridge-prior
+  finding: college-ridge-prior
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '        (regression * (pl.col("adj_off_rtg") - pl.col("adj_off_rtg").mean())).alias("off_dev"),'
+  mutant: '        (pl.col("adj_off_rtg") - pl.col("adj_off_rtg").mean()).alias("off_dev"),'
+  test: tests/mbb/test_mbb_team_strength.py -k last_season_prior_is_the_regressed_previous_fit
+  expected: kill
+  note: Last season's offensive rating would seed this season unregressed.
+
 # --- cfb-end-state-parse: an off-field end yard line, a fumble return kept at the fumble spot ------
 - id: cfb-end-off-field-yard-line-degenerate
   group: cfb-end-state-parse
@@ -12619,6 +12650,16 @@
   test: tests/mlb/test_mlb_markov_run_expectancy.py::test_by_event_prob_and_event_classes
   expected: kill
   note: field_out / force_out (unmapped) would be classed as reaching base instead of outs in play.
+
+- id: college-ridge-prior-no-seed-penalty
+  group: college-ridge-prior
+  finding: college-ridge-prior
+  file: sportsdataverse/mbb/mbb_team_strength.py
+  snippet: '        fit_lam = lam if seed.height else COLLEGE_RIDGE_LAMBDA[league]'
+  mutant: '        fit_lam = lam'
+  test: tests/mbb/test_mbb_team_strength.py -k no_previous_season
+  expected: kill
+  note: A season with no previous season would be fit at the prior's penalty with no prior.
 
 # --- ESPN league `endpoints:` allowlist (lacrosse) ------------------------------------------------
 - id: espn-league-endpoints-allowlist-applied

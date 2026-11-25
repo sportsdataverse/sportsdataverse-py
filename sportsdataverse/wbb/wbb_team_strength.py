@@ -25,6 +25,7 @@ __all__ = ["wbb_team_strength"]
 def wbb_team_strength(
     seasons: int | list[int],
     *,
+    prior: str | None = "last_season",
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors.
@@ -35,6 +36,7 @@ def wbb_team_strength(
 
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
+        prior: The possession ridge's prior, ``"last_season"`` (default) or None (see the mbb core).
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
@@ -42,10 +44,13 @@ def wbb_team_strength(
         ``opp_poss``, ``pts``, ``opp_pts``, both sets of adjusted ratings, ``sos``, ``sov``, the BB-D3
         rates and their ``_rank`` / ``_pct`` / ``_n``. See the mbb core for the definitions.
 
+    Raises:
+        ValueError: If ``prior`` is not ``"last_season"`` or None.
+
     Example:
         Quick start::
 
             from sportsdataverse.wbb import wbb_team_strength
             wbb_team_strength(2025).sort("adj_net_rtg_rank").head()
     """
-    return mbb_team_strength(seasons, league="womens", return_as_pandas=return_as_pandas)
+    return mbb_team_strength(seasons, league="womens", prior=prior, return_as_pandas=return_as_pandas)
