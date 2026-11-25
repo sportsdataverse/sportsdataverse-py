@@ -77,9 +77,9 @@ narrative.
 - **Games 5028 (2000-04-12) and 6146 (2001-06-15) appear twice.** Each was
   suspended and resumed the next day, and statsapi's schedule lists it on both
   dates, so the collector fetched it twice: 155 exact duplicate PA rows in
-  `pbp_corpus`, two rows each in `results_corpus`. `mlb_base_out_transitions` keeps one copy per
-  `(game_id, about_at_bat_index)`; `tests/mlb/test_mlb_markov_run_expectancy.py`
-  (the Markov RE24 consistency gate, which also reads this corpus) relies on it.
+  `pbp_corpus`, two rows each in `results_corpus`. `pbp_base_out_states` keeps one copy per
+  `(game_id, about_at_bat_index)`, which RE24, win expectancy and the Markov RE24 consistency gate
+  (`tests/mlb/test_mlb_markov_run_expectancy.py`) all rely on.
 - **The umpire-zone calibration floor is 0.08, not the plan's draft 0.03.**
   A 1-week Savant sample (12,920 pitches) showed a 0.177 max per-decile
   calibration gap, concentrated in sparse borderline-probability deciles

@@ -372,9 +372,7 @@ def _pa_transitions(pbp: pl.DataFrame, by_event: bool) -> pl.DataFrame:
     """One row per counted PA: from-state -> to-state with ``runs`` (and ``event`` when ``by_event``)."""
     if by_event and "result_event_type" not in pbp.columns:
         raise ValueError("by_event=True needs the pbp's result_event_type column")
-    # A game collected twice (statsapi's schedule lists some games twice) repeats every PA key.
-    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)
-    states = pbp_base_out_states(pbp)
+    states = pbp_base_out_states(pbp)  # already one row per (game_id, at_bat_index)
 
     half_grp = ["game_id", "inning", "half"]
     event_type = [pl.col("result_event_type").cast(pl.Utf8).alias("event_type")] if by_event else []
@@ -383,7 +381,7 @@ def _pa_transitions(pbp: pl.DataFrame, by_event: bool) -> pl.DataFrame:
         pl.col("about_at_bat_index").cast(pl.Int64).alias("at_bat_index"),
         pl.col("count_outs").cast(pl.Int64).alias("outs_end"),
         *event_type,
-    )
+    ).unique(subset=["game_id", "at_bat_index"], keep="first", maintain_order=True)  # match the deduped states
     pa = (
         states.join(post, on=["game_id", "at_bat_index"], how="left", validate="1:1")
         .sort("game_id", "at_bat_index")
