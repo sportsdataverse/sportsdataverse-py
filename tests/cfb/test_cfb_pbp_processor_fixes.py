@@ -73,6 +73,8 @@ pytestmark = [
 ]
 
 FIX = Path(__file__).parent / "fixtures"
+#: Auburn @ Mississippi State, 2026-11-14 (not a ``summary_*`` capture, so outside the whole-game oracle)
+STUFF_END_STATES = FIX / "stuff_end_states" / "401856886_trimmed.json.gz"
 
 
 def _summary(game_id: int) -> dict:
@@ -659,8 +661,8 @@ def test_timeout_after_a_score_does_not_inherit_the_realized_ep():
 # --- C29 follow-up: a repaired row anchors the next; points the feed takes back are not kept ------
 
 
-def _trimmed_plays(game_id: int) -> pl.DataFrame:
-    with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+def _trimmed_plays(game_id: int, path: Path | None = None) -> pl.DataFrame:
+    with gzip.open(path or FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         summary = json.load(fh)
     proc = CFBPlayProcess(gameId=game_id)
     proc.espn_cfb_pbp(summary=summary)
@@ -981,3 +983,28 @@ def test_drive_columns_no_drive_carries_keep_the_documented_type(game_id, missin
     drive = {c: want[c] for c in want if c.startswith("drive.") and c in frame.columns}
     assert all(frame[c].null_count() == frame.height for c in missing)
     assert {c: frame.schema[c] for c in drive} == drive
+
+
+# --- end states ESPN leaves broken: an off-field end yard line, a fumble return kept at the fumble ----
+
+
+def test_an_off_field_end_yard_line_takes_the_next_snaps_start():
+    # Auburn @ Mississippi State, 2026-11-14: a 0-yard rush plus a 13-yard personal foul to the AU 11
+    # arrives with end.yardLine 101 ("4th & 24 at AUB -1"), read as 99 to go: EPA -7.02.
+    plays = _trimmed_plays(401856886, STUFF_END_STATES)
+    row = _row(plays, "13 yards from AU 24 to AU 11, 1ST DOWN")
+    nxt = plays.filter(pl.col("game_play_number") == row["game_play_number"] + 1).row(0, named=True)
+    assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (1, 10, 11)
+    assert (nxt["start.down"], nxt["start.yardsToEndzone"]) == (1, 11)
+    assert row["EPA"] == pytest.approx(nxt["EP_start"] - row["EP_start"], abs=1e-4)
+    assert 1.0 < row["EPA"] < 2.5
+
+
+def test_a_returned_fumble_ends_where_the_recoverer_snaps_next():
+    # The sack-fumble returned 34 yards to the State01 kept the fumble spot (4th & 10 at the 35): EPA
+    # -1.47. Auburn's next snap is 1st & 1 at the 1, so Mississippi State's play is worth about -7.3.
+    plays = _trimmed_plays(401856886, STUFF_END_STATES)
+    row = _row(plays, "return 34 yards to the State01")
+    assert row["end.pos_team.id"] == 2 and row["start.pos_team.id"] == 344
+    assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (1, 1, 1)
+    assert row["EPA"] < -6.5
