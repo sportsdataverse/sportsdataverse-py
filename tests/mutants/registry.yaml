@@ -12232,8 +12232,8 @@
   group: props-minutes-coldstart
   finding: props-team-minutes
   file: sportsdataverse/nba/nba_player_props.py
-  snippet: '    logs = logs.sort("game_date", "game_id")'
-  mutant: '    logs = logs'
+  snippet: 'rates = player_rates(logs.sort("game_date", "game_id"))'
+  mutant: 'rates = player_rates(logs)'
   test: tests/nba/test_nba_player_props_team_minutes.py -k traded
   expected: kill
   note: The release logs come newest first, so a traded player would project for his first team.
