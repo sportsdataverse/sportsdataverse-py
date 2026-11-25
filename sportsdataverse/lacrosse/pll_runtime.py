@@ -24,10 +24,11 @@ vocabulary: 404 -> ``NoDataError``, 400 / 422 -> ``ValueError``, any other non-2
 
 from __future__ import annotations
 
+import itertools
 import re
 import threading
 import time
-from typing import Any, Dict, Optional
+from typing import Any
 from urllib.parse import urlsplit
 
 from sportsdataverse import _codegen_runtime as _rt
@@ -79,7 +80,7 @@ def _throttle() -> None:
         _last[0] = time.monotonic()
 
 
-def _wire(params: Optional[dict]) -> Dict[str, Any]:
+def _wire(params: dict | None) -> dict[str, Any]:
     """Query values as the site sends them: ``True`` -> ``"true"`` (in a list too); a list repeats its key."""
 
     def one(v: Any) -> Any:
@@ -90,11 +91,11 @@ def _wire(params: Optional[dict]) -> Dict[str, Any]:
     }
 
 
-def _stamp(url: str, params: Dict[str, Any]) -> Dict[str, Any]:
+def _stamp(url: str, params: dict[str, Any]) -> dict[str, Any]:
     """The request's path slugs and query values (``{"event_slug": "2026-ev-4"}``, ``{"year": 2026, ...}``)."""
     parts = [p for p in urlsplit(url).path.split("/") if p]
-    out: Dict[str, Any] = {}
-    for here, nxt in zip(parts, parts[1:]):
+    out: dict[str, Any] = {}
+    for here, nxt in itertools.pairwise(parts):
         key = _SLUG_AFTER.get(here)
         if key and nxt not in _NOT_SLUGS and key not in out:
             out[key] = nxt
@@ -103,7 +104,7 @@ def _stamp(url: str, params: Dict[str, Any]) -> Dict[str, Any]:
 
 
 @_rt._no_content_is_empty
-def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
+def _get(url: str, params: dict | None = None, **kwargs: Any) -> dict[str, Any]:
     """GET a stats route with the site's Referer; return its ``data`` object, request stamped.
 
     Args:

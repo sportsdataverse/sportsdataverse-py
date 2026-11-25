@@ -14,7 +14,8 @@ from __future__ import annotations
 import math
 import re
 from datetime import datetime, timezone
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any
+from collections.abc import Iterable
 
 import pandas as pd
 import polars as pl
@@ -22,22 +23,22 @@ import polars as pl
 from sportsdataverse.dl_utils import underscore
 
 __all__ = [
-    "parse_pll_schedule",
+    "parse_pll_career_leaders",
     "parse_pll_game",
-    "parse_pll_play_by_play",
-    "parse_pll_player_box",
-    "parse_pll_team_box",
     "parse_pll_game_insights",
+    "parse_pll_play_by_play",
+    "parse_pll_player",
+    "parse_pll_player_advanced_stats",
+    "parse_pll_player_box",
+    "parse_pll_player_season_stats",
+    "parse_pll_player_seasons",
+    "parse_pll_schedule",
+    "parse_pll_season_leaders",
     "parse_pll_standings",
+    "parse_pll_team_box",
+    "parse_pll_team_roster",
     "parse_pll_team_season_stats",
     "parse_pll_team_stats",
-    "parse_pll_team_roster",
-    "parse_pll_player_season_stats",
-    "parse_pll_player_advanced_stats",
-    "parse_pll_season_leaders",
-    "parse_pll_career_leaders",
-    "parse_pll_player",
-    "parse_pll_player_seasons",
 ]
 
 S, INT, F, B = pl.String, pl.Int64, pl.Float64, pl.Boolean
@@ -101,11 +102,11 @@ ADVANCED_STAT_KEYS = (
 )  # fmt: skip
 
 
-def _stat_schema(keys: Iterable[str]) -> Dict[str, Any]:
+def _stat_schema(keys: Iterable[str]) -> dict[str, Any]:
     return {underscore(k): (F if _RATE.search(k) else INT) for k in keys}
 
 
-def _stats(src: Any, keys: Iterable[str]) -> Dict[str, Any]:
+def _stats(src: Any, keys: Iterable[str]) -> dict[str, Any]:
     src = _d(src)
     return {underscore(k): src.get(k) for k in keys}
 
@@ -197,11 +198,11 @@ PLAYER_SEASONS_SCHEMA = {
 }  # fmt: skip
 
 
-def _d(value: Any) -> Dict[str, Any]:
+def _d(value: Any) -> dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
-def _l(value: Any) -> List[Any]:
+def _l(value: Any) -> list[Any]:
     return [v for v in value if isinstance(v, dict)] if isinstance(value, list) else []
 
 
@@ -210,11 +211,11 @@ def _first(*values: Any) -> Any:
     return next((v for v in values if v not in (None, "")), None)
 
 
-def _req(raw: Any) -> Dict[str, Any]:
+def _req(raw: Any) -> dict[str, Any]:
     return _d(_d(raw).get("_request"))
 
 
-def _int(value: Any) -> Optional[int]:
+def _int(value: Any) -> int | None:
     """``468`` / ``"468"`` / ``468.0`` -> 468; ``2.5``, ``""``, ``True``, None -> None."""
     if isinstance(value, bool) or value is None:
         return None
@@ -228,7 +229,7 @@ def _int(value: Any) -> Optional[int]:
     return out if out is not None and _INT64_MIN <= out <= _INT64_MAX else None
 
 
-def _str(value: Any) -> Optional[str]:
+def _str(value: Any) -> str | None:
     """Text of a scalar; a whole float id (``468.0``) loses its ``.0``; dicts, lists and None are null."""
     if value is None or isinstance(value, (dict, list, bool)):
         return None
@@ -238,7 +239,7 @@ def _str(value: Any) -> Optional[str]:
     return text if text != "" else None
 
 
-def _epoch_s(value: Any) -> Optional[datetime]:
+def _epoch_s(value: Any) -> datetime | None:
     sec = _int(value)
     try:
         return datetime.fromtimestamp(sec, tz=timezone.utc) if sec is not None else None
@@ -262,17 +263,17 @@ def _cell(value: Any, dtype: Any) -> Any:
     return value if isinstance(value, datetime) else None
 
 
-def _frame(rows: List[Dict[str, Any]], schema: Dict[str, Any], return_as_pandas: bool) -> pl.DataFrame | pd.DataFrame:
+def _frame(rows: list[dict[str, Any]], schema: dict[str, Any], return_as_pandas: bool) -> pl.DataFrame | pd.DataFrame:
     clean = [{k: _cell(r.get(k), t) for k, t in schema.items()} for r in rows]
     df = pl.DataFrame(clean, schema=schema) if clean else pl.DataFrame(schema=schema)
     return df.to_pandas() if return_as_pandas else df
 
 
-def _items(raw: Any) -> List[Dict[str, Any]]:
+def _items(raw: Any) -> list[dict[str, Any]]:
     return _l(_d(raw).get("items"))
 
 
-def _team_side(team: Any, side: str) -> Dict[str, Any]:
+def _team_side(team: Any, side: str) -> dict[str, Any]:
     t = _d(team)
     return {
         f"{side}_team_id": t.get("officialId"), f"{side}_team_name": t.get("fullName"),
@@ -281,7 +282,7 @@ def _team_side(team: Any, side: str) -> Dict[str, Any]:
     }  # fmt: skip
 
 
-def _game_row(g: Dict[str, Any]) -> Dict[str, Any]:
+def _game_row(g: dict[str, Any]) -> dict[str, Any]:
     casts = g.get("broadcaster")
     return {
         "game_id": g.get("id"), "event_slug": g.get("slugname"), "event_id": g.get("eventId"),
@@ -478,7 +479,7 @@ def parse_pll_standings(raw: Any, return_as_pandas: bool = False) -> pl.DataFram
     return _frame(rows, STANDINGS_SCHEMA, return_as_pandas)
 
 
-def _team_head(t: Dict[str, Any]) -> Dict[str, Any]:
+def _team_head(t: dict[str, Any]) -> dict[str, Any]:
     return {
         "team_id": t.get("officialId"), "team_slug": t.get("slug"), "full_name": t.get("fullName"),
         "location": t.get("location"), "location_code": t.get("locationCode"), "conference": t.get("conference"),
@@ -546,7 +547,7 @@ def parse_pll_team_roster(raw: Any, return_as_pandas: bool = False) -> pl.DataFr
     return _frame(rows, TEAM_ROSTER_SCHEMA, return_as_pandas)
 
 
-def _bio(p: Dict[str, Any]) -> Dict[str, Any]:
+def _bio(p: dict[str, Any]) -> dict[str, Any]:
     return {
         "player_id": p.get("officialId"), "player_slug": p.get("slug"), "first_name": p.get("firstName"),
         "last_name": p.get("lastName"), "last_name_suffix": p.get("lastNameSuffix"), "nickname": p.get("nickname"),
@@ -561,7 +562,7 @@ def _bio(p: Dict[str, Any]) -> Dict[str, Any]:
     }  # fmt: skip
 
 
-def _player_head(req: Dict[str, Any], p: Dict[str, Any]) -> Dict[str, Any]:
+def _player_head(req: dict[str, Any], p: dict[str, Any]) -> dict[str, Any]:
     team = _d(p.get("team"))
     return {
         "season": req.get("year"), "season_segment": req.get("seasonSegment"), "player_id": p.get("officialId"),
@@ -603,7 +604,7 @@ def parse_pll_player_advanced_stats(raw: Any, return_as_pandas: bool = False) ->
     return _frame(rows, PLAYER_ADVANCED_STATS_SCHEMA, return_as_pandas)
 
 
-def _leaderboards(raw: Any) -> List[Tuple[str, int, Dict[str, Any]]]:
+def _leaderboards(raw: Any) -> list[tuple[str, int, dict[str, Any]]]:
     """(stat, 1-based rank, row) for every ranked player of every stat in a leaders answer."""
     out = []
     for stat, rows in _d(raw).items():
