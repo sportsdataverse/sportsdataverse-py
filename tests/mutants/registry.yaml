@@ -11764,6 +11764,88 @@
   expected: kill
   note: A defensive two-point return ESPN's touchdown row counts (2019) would stay on that row, not the PAT row.
 
+# --- espn_nfl_pbp_nflverse phases 3-5: players, drives, text features, the processor's game id -------
+# Killers: tests/nfl/test_nfl_espn_nflverse_view.py, the captures plus the participants / players cuts.
+- id: nfl-espn-view-participants-win
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '.then(pl.col(f"_r_{r}_feed"))'
+  mutant: '.then(pl.col(f"_r_{r}"))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_player_ids_agree_with_nflverse
+  expected: kill
+  note: The processor's own ids would win over ESPN's participants, and it carries no tacklers or penalized players.
+
+- id: nfl-espn-view-no-play-keeps-penalized-only
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'out[s] = e if s == "penalty" else pl.when(no_play).then(None).otherwise(e)'
+  mutant: 'out[s] = e'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_no_play_keeps_only_the_penalized_player
+  expected: kill
+  note: A play a penalty wiped out would keep its passer / tacklers, which nflverse leaves null.
+
+- id: nfl-espn-view-tackle-with-assist
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'tackler_alone = (n("assisted_by") == 0) & (n("tackler") > 0)'
+  mutant: 'tackler_alone = n("tackler") > 0'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_player_ids_agree_with_nflverse
+  expected: kill
+  note: A tackle ESPN credits an assist on would also be a solo tackle; nflverse has it as tackle_with_assist_1.
+
+- id: nfl-espn-view-kicker-on-kicks-only
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'kick_play = pt.is_in(["kickoff", "field_goal", "extra_point"]).fill_null(False)'
+  mutant: 'kick_play = pl.lit(True)'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_split_try_takes_its_touchdowns_kicker
+  expected: kill
+  note: The touchdown row would name the PAT kicker ESPN lists on it; nflverse gives the kicker to the try row.
+
+- id: nfl-espn-view-defenders-team
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'swap = (pl.col("play_type") == "punt") | (pl.col("interception") == 1)'
+  mutant: 'swap = pl.lit(False)'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_player_ids_agree_with_nflverse
+  expected: kill
+  note: A punt's tacklers would be the receiving team (nflverse's posteam is the punting team, which tackles).
+
+- id: nfl-espn-game-id-postseason-week
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then((weeks + week - (week >= 5).cast(pl.Int64)).cast(pl.Utf8).str.zfill(2))'
+  mutant: '.then((weeks + week).cast(pl.Utf8).str.zfill(2))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_espn_header_to_nflverse_game_id
+  expected: kill
+  note: The Super Bowl (ESPN week 5, after the Pro Bowl week) would be week 23, not nflverse's 22.
+
+- id: nfl-espn-game-id-relocation
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'a = pl.when((a == new) & (season <= last)).then(pl.lit(old)).otherwise(a)'
+  mutant: 'a = a'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_espn_header_to_nflverse_game_id
+  expected: kill
+  note: A 2015 Rams game would get LA where nflverse's game id keeps STL.
+
+- id: nfl-espn-game-id-stamped
+  group: nfl-espn-view
+  finding: gh-1270
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.with_columns(nflverse_game_id=_espn_nflverse_game_id())'
+  mutant: '.with_columns(nflverse_game_id=pl.lit(None, dtype=pl.Utf8))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_the_processor_stamps_the_nflverse_game_id
+  expected: kill
+  note: Processor output would carry no game id, so the view would need the schedule on the live path.
+
 # --- nflverse play_by_play columns on the Shield path (shield_pbp + enrich_nfl_pbp) ----------------
 - id: shield-stat-flag-kept
   group: nflverse-pbp-columns
