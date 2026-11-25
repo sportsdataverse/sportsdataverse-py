@@ -11721,6 +11721,16 @@
   expected: kill
   note: Without the fg model a kick try's ep would be null, and the fill would give it the next play's.
 
+- id: ep-try-missing-fg-model-warns
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'if "fg_model.ubj" not in _WARNED_MISSING:'
+  mutant: 'if False:'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_try_values_without_the_fg_model
+  expected: kill
+  note: Non-strict enrichment without the fg model would drop the try values silently.
+
 - id: ep-ot-answering-try
   group: nflverse-pbp-columns
   finding: nfl-model-pbp-columns

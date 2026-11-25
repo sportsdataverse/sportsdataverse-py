@@ -76,9 +76,11 @@ def test_a_kick_try_without_its_flag_keeps_its_try_value(tries):
 
 def test_try_values_without_the_fg_model(tries, monkeypatch):
     monkeypatch.setattr(nfl_fourth_down, "fg_make_probability", lambda *a, **k: None)
+    monkeypatch.setattr(nfl_fourth_down, "_WARNED_MISSING", set())
     with pytest.raises(FileNotFoundError):
         ep_wp._apply_try_values(_proxy(tries), strict=True)
-    out = ep_wp._apply_try_values(_proxy(tries))
+    with pytest.warns(RuntimeWarning, match="fg_model.ubj is unavailable"):
+        out = ep_wp._apply_try_values(_proxy(tries))
     kick = out.filter(pl.col("two_point_attempt") == 0)
     # no make probability: the kick try keeps the model's ep instead of a null the fill would overwrite
     assert kick["extra_point_prob"].null_count() == kick.height

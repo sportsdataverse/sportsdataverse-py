@@ -4207,7 +4207,7 @@ def _apply_try_values(df: pl.DataFrame, *, strict: bool = False) -> pl.DataFrame
     ``extra_point_prob`` is null and it keeps the EP model's ``ep`` (a null ``ep`` would be filled from
     the next play).
     """
-    from sportsdataverse.nfl.nfl_fourth_down import fg_make_probability
+    from sportsdataverse.nfl.nfl_fourth_down import _WARNED_MISSING, fg_make_probability
 
     def flag(col: str) -> pl.Expr:
         return (pl.col(col) == 1) if col in df.columns else pl.lit(False)
@@ -4225,6 +4225,14 @@ def _apply_try_values(df: pl.DataFrame, *, strict: bool = False) -> pl.DataFrame
     if make is None:
         if strict:
             raise FileNotFoundError("fg_model.ubj: the field-goal model a try's extra_point_prob needs")
+        if "fg_model.ubj" not in _WARNED_MISSING:
+            _WARNED_MISSING.add("fg_model.ubj")
+            warnings.warn(
+                "fg_model.ubj is unavailable, so a kick try's extra_point_prob is null and its ep stays the "
+                "EP model's 1st-and-10 proxy. Pass strict=True to raise instead.",
+                RuntimeWarning,
+                stacklevel=2,
+            )
         make = np.full(df.height, np.nan)
     df = df.with_columns(
         extra_point_prob=pl.when(kick).then(pl.Series(make).fill_nan(None)).otherwise(0.0),
