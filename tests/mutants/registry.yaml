@@ -12226,3 +12226,13 @@
   test: tests/common/test_factor_points.py::test_lineup_rebound_part_prices_the_published_orb_rate
   expected: kill
   note: A lineup's rebound chances would add its own defensive rebounds, the team table's convention, not the opponent's.
+
+- id: soccer-standings-infer-all-rows
+  group: polars-2.2
+  finding: polars-2.2-from-dicts-extra-key
+  file: sportsdataverse/soccer/soccer_espn_parsers.py
+  snippet: 'return _out(pl.DataFrame(rows, infer_schema_length=None), return_as_pandas)'
+  mutant: 'return _out(pl.DataFrame(rows), return_as_pandas)'
+  test: tests/test_espn_soccer_parsers.py::test_parse_soccer_standings_keeps_a_stat_first_seen_after_row_100
+  expected: kill
+  note: A stat first seen after row 100 is dropped on polars 2.0 and raises on 2.2 unless every row is inferred.
