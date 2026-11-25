@@ -273,7 +273,13 @@ def _clock_and_situation() -> list[pl.Expr]:
     try_row = ((pl.col("xp_attempt") == True) | (pl.col("two_point_attempt") == True)).fill_null(False)  # noqa: E712
     no_down = kickoff | try_row | (pl.col("start.down") == 0).fill_null(True)
     mmss = pl.format("{}:{}", mins.cast(pl.Utf8).str.zfill(2), secs.cast(pl.Utf8).str.zfill(2))
-    pos_post, def_post = pl.col("pos_team_score"), pl.col("def_pos_team_score")
+    # a penalized kickoff is the receiver's ball (_keys_and_teams): its posteam-relative columns swap sides
+    flip = _penalized_kick()
+
+    def side(own: str, other: str) -> pl.Expr:
+        return pl.when(flip).then(pl.col(other)).otherwise(pl.col(own))
+
+    pos_post, def_post = side("pos_team_score", "def_pos_team_score"), side("def_pos_team_score", "pos_team_score")
     half = pl.when(q <= 2).then(pl.lit("Half1")).when(q <= 4).then(pl.lit("Half2")).otherwise(pl.lit("Overtime"))
     return [
         q.cast(pl.Float64).alias("qtr"),
@@ -284,9 +290,13 @@ def _clock_and_situation() -> list[pl.Expr]:
         mmss.alias("time"),
         pl.when(no_down).then(None).otherwise(pl.col("start.down")).cast(pl.Float64).alias("down"),
         pl.when(kickoff).then(0).otherwise(pl.col("start.distance")).cast(pl.Float64).alias("ydstogo"),
-        pl.col("start.pos_team_score").cast(pl.Float64).alias("posteam_score"),
-        pl.col("start.def_pos_team_score").cast(pl.Float64).alias("defteam_score"),
-        pl.col("start.pos_score_diff").cast(pl.Float64).alias("score_differential"),
+        side("start.pos_team_score", "start.def_pos_team_score").cast(pl.Float64).alias("posteam_score"),
+        side("start.def_pos_team_score", "start.pos_team_score").cast(pl.Float64).alias("defteam_score"),
+        pl.when(flip)
+        .then(-pl.col("start.pos_score_diff"))
+        .otherwise(pl.col("start.pos_score_diff"))
+        .cast(pl.Float64)
+        .alias("score_differential"),
         pos_post.cast(pl.Float64).alias("posteam_score_post"),
         def_post.cast(pl.Float64).alias("defteam_score_post"),
         (pos_post - def_post).cast(pl.Float64).alias("score_differential_post"),
@@ -294,8 +304,8 @@ def _clock_and_situation() -> list[pl.Expr]:
         pl.col("awayScore").cast(pl.Float64).alias("total_away_score"),
         _timeouts("home").alias("home_timeouts_remaining"),
         _timeouts("away").alias("away_timeouts_remaining"),
-        pl.col("start.posTeamTimeouts").cast(pl.Float64).alias("posteam_timeouts_remaining"),
-        pl.col("start.defPosTeamTimeouts").cast(pl.Float64).alias("defteam_timeouts_remaining"),
+        side("start.posTeamTimeouts", "start.defPosTeamTimeouts").cast(pl.Float64).alias("posteam_timeouts_remaining"),
+        side("start.defPosTeamTimeouts", "start.posTeamTimeouts").cast(pl.Float64).alias("defteam_timeouts_remaining"),
     ]
 
 

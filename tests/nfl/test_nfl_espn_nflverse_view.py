@@ -495,5 +495,8 @@ def test_a_penalized_kickoff_is_the_receivers_kickoff():
     row = j.filter(pl.col("play_id") == 3203)
     assert row.select("play_type", "posteam", "yardline_100").row(0) == ("kickoff", "LAC", 35.0)
     assert row["yardline_100"].item() == row["yardline_100__nv"].item()
+    # its posteam-relative score and timeouts are the receiver's too
+    for c in ("score_differential", "posteam_score", "posteam_timeouts_remaining"):
+        assert row[c].item() == row[f"{c}__nv"].item(), c
     ko = j.filter(pl.col("play_type__nv") == "kickoff")
     assert (ko["posteam"] == ko["posteam__nv"]).all() and (ko["play_type"] == "kickoff").all()

@@ -12078,3 +12078,13 @@
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_penalized_kickoff_is_the_receivers_kickoff
   expected: kill
   note: A penalized kickoff would stay with the kicking team, flipping that row's WP.
+
+- id: nfl-espn-view-penalized-kickoff-relative-columns
+  group: nfl-espn-view
+  finding: nfl-espn-view-wpa
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '        return pl.when(flip).then(pl.col(other)).otherwise(pl.col(own))'
+  mutant: '        return pl.col(own)'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_penalized_kickoff_is_the_receivers_kickoff
+  expected: kill
+  note: A penalized kickoff given to the receiver would keep the kicker's score differential and timeouts.
