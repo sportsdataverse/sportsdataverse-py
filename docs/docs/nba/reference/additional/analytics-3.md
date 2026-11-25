@@ -114,7 +114,7 @@ units.filter(game_id="0022500101", n_players=2).head()
 Map the stats.nba.com releases onto the game-impact row frame.
 
 One row per play-by-play action (its clock and points, on the lineup at that action; a free
-throw on the lineup at the last foul) and one per possession (its lineup and which side had
+throw on the lineup at its own foul (the latest, or the one logged after it at the same clock reading; not an earlier period's once clock has run)) and one per possession (its lineup and which side had
 the ball). Games not in `schedule` are dropped, and so are the possessions of a game with
 no play-by-play actions and those whose offense is neither team.
 

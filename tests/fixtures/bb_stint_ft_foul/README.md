@@ -9,7 +9,9 @@
 # Free throws on the lineup at their foul
 
 Real captures for `tests/nba/test_nba_game_stints_ft_foul.py`, downloaded from the
-sportsdataverse-data releases on 2026-11-24 with the package loaders (zstd level 19). Nothing is
+sportsdataverse-data releases (<https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_pbp>,
+`.../tag/nba_stats_game_lineups`, `.../tag/nba_stats_possessions`, `.../tag/nba_stats_schedules`,
+`.../tag/nba_stats_player_boxscores`) on 2026-11-24 with the package loaders (zstd level 19). Nothing is
 synthetic or edited: rows are only filtered to whole games, and every column is kept. Files are named
 by the loader season (the start year), one season per file.
 

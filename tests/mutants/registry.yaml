@@ -11641,3 +11641,38 @@
   test: tests/wnba/test_wnba_player_props_constants.py::test_wnba_helpers_bind_league_10
   expected: kill
   note: The WNBA re-export of prob_over would default to league_id "00" (NBA spread).
+
+# --- PR #1268: free throws on the lineup at their foul -------------------------------------------
+- id: ft-box-follows-the-foul
+  group: ft-foul
+  finding: PR-1268
+  file: sportsdataverse/_common/game_stints.py
+  snippet: '.with_columns(pl.coalesce("_at_foul", "stint_number").alias("stint_number"))'
+  mutant: '.with_columns(pl.col("stint_number"))'
+  test: tests/nba/test_nba_game_stints_ft_foul.py::test_free_throw_counts_follow_the_points_onto_the_lineup_at_the_foul
+  expected: kill
+  note: >-
+    The old crediting: a free throw's box counts on its own row's lineup, which a substitution
+    between the foul and the free throw drops the shooter from (Reaves, 0022500024).
+- id: ft-foul-logged-after
+  group: ft-foul
+  finding: PR-1268
+  file: sportsdataverse/_common/game_impact.py
+  snippet: 'use_later = later.is_not_null() & other & clock_ran.fill_null(False)'
+  mutant: 'use_later = later.is_not_null() & pl.lit(False)'
+  test: tests/nba/test_nba_game_stints_ft_foul.py::test_a_shooting_foul_logged_after_its_free_throw_is_still_its_foul
+  expected: kill
+  note: >-
+    Without the look-ahead, a free throw whose shooting foul is logged a row after it takes an
+    earlier, unrelated foul (Durant, 0022400149).
+- id: ft-foul-opening-tick
+  group: ft-foul
+  finding: PR-1268
+  file: sportsdataverse/_common/game_impact.py
+  snippet: 'use_later = later.is_not_null() & other & clock_ran.fill_null(False)'
+  mutant: 'use_later = later.is_not_null() & other'
+  test: tests/nba/test_nba_player_on_off.py::test_matches_stats_nba_on_off_summary
+  expected: kill
+  note: >-
+    Free throws at a period's opening tick belong to the previous period's last foul, which is the
+    lineup stats.nba.com credits them to; letting the look-ahead take them misses its on/off.

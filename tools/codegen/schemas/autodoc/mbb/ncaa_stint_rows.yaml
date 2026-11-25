@@ -70,3 +70,6 @@ columns:
 - name: is_garbage_time
   type: logical
   description: ''
+- name: ft_foul_order
+  type: integer
+  description: ''

@@ -54,7 +54,7 @@ Stints in `~sportsdataverse._common.coach_seasons.STINTS_SCHEMA` with no counts 
 Map the stats.ncaa.org pbp and possessions onto the game-impact row frame.
 
 One row per event (the clock since the previous event in the period and the points scored on
-it, on that event's lineup; a free throw on the lineup at the last foul) and one per
+it, on that event's lineup; a free throw on the lineup at its own foul (the latest, or the one logged after it at the same clock reading; not an earlier period's once clock has run)) and one per
 possession (its lineup and which side had it, `poss_team == home`). The clock left in a
 period after its last event goes to that event's lineup, so each period's clock is whole. The
 possessions of a contest with no pbp events, and those whose `poss_team` is neither side,
@@ -110,20 +110,22 @@ rows = ncaa_impact_rows(load_ncaa_mbb_pbp(2025), load_ncaa_mbb_possessions(2025)
 
 ### ncaa_lineup_count_rows {#ncaa_lineup_count_rows}
 
-`ncaa_lineup_count_rows(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
+`ncaa_lineup_count_rows(pbp: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
 
 Map the stats.ncaa.org pbp onto the lineup-seasons count frame.
 
 Each shot, free throw, rebound and turnover counts for the side whose `event_team` it is,
 on the lineup at the event; a free throw on the lineup at the most recent foul
-(`sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`). Events with
-no count are dropped.
+(`sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`), unless that
+foul is from an earlier period and clock has run in the free throw's. Events with no count are
+dropped.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | `load_ncaa_mbb_pbp` / `load_ncaa_wbb_pbp` rows, in release (game) order. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`: halves, or the women's quarters from 2016, set where each period's clock starts. |
 
 **Returns**
 
@@ -859,7 +861,7 @@ rows = ncaa_situation_rows(load_ncaa_mbb_possessions(2025), load_mbb_schedule(20
 Map the stats.ncaa.org pbp and possessions onto the stint-row frame.
 
 One row per event in game order, on the event's lineup: its clock, its points (a free throw's
-on the row of the game's last foul) and the possessions that start at it. A possession starts
+on the row of its own foul (the latest, or the one logged after it at the same clock reading; not an earlier period's once clock has run)) and the possessions that start at it. A possession starts
 at the first event of its `poss_num`; one whose `poss_team` is neither side is dropped.
 
 **Parameters**
@@ -891,14 +893,15 @@ Rows in `sportsdataverse._common.game_stints.stint_row_schema` with String playe
 | `away_4` | String | Away player 4 on the floor. |
 | `away_5` | String | Away player 5 on the floor. |
 | `seconds` | Float64 | Game clock that ran into this action (from the previous action of the period). |
-| `home_pts` | Int64 | Points the home team scored on this action; a free throw's points sit on the row of the game's last foul. |
-| `away_pts` | Int64 | Points the away team scored on this action; a free throw's points sit on the row of the game's last foul. |
+| `home_pts` | Int64 | Points the home team scored on this action; a free throw's points sit on the row of its foul (`ft_foul_order`). |
+| `away_pts` | Int64 | Points the away team scored on this action; a free throw's points sit on the row of its foul (`ft_foul_order`). |
 | `home_poss` | Int64 | Possessions of the home team that start at this action. |
 | `away_poss` | Int64 | Possessions of the away team that start at this action. |
 | `period` | Int64 | Period of the action. |
 | `clock` | Float64 | Period clock (seconds left) after the event; 0 on the period's last event, which takes the period's tail. |
 | `order` | Int64 | The event's row in the pbp release (its place in the game). |
 | `is_garbage_time` | Boolean | Whether the event is in garbage time: the release's own is_garbage_time (bigballR's rule). |
+| `ft_foul_order` | Int64 | On a free throw whose points moved, the order of its foul's row: the game's latest foul, or the one logged after it at the same clock reading; an earlier period's foul only while no clock has run in the free throw's period. Null on every other row. game_stints puts the free throw's box counts on that row's stint when the shooter is on it. |
 
 **Raises**
 
