@@ -6,6 +6,92 @@ description: "NBA — additional Python functions — Analytics: nba_player–nb
 ---
 # NBA — additional Python functions — Analytics: nba_player–nba_situational
 
+### nba_player_war {#nba_player_war}
+
+`nba_player_war(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WAR and VORP per player-season, from our BPM, RAPM and BOBAN (regular season).
+
+Each rating is anchored to the team (its players' possession-weighted mean rating over the
+season is the team's net rating / 5; it is a season constraint, not an estimate for each
+five-man lineup) and centred on the league, so 0 is a league-average player. `vorp` is points per
+100 team possessions above a replacement player over one team's season of possessions
+(Basketball-Reference's VORP scale); `war` is wins above replacement. A replacement-level
+player has 0, and a season's `war` adds up to the league's wins minus those of a team of
+replacement players. `rating` / `war` are the mean of the three sources; `rating_<s>`
+/ `war_<s>` are each one. The replacement level and points per win are fitted per league
+(`~sportsdataverse._common.player_war.REPLACEMENT_LEVEL`,
+`~sportsdataverse._common.player_war.PTS_PER_WIN`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, player_id)` (stats.nba.com ids, Int64): `player_name`, `team_id` (the team he played most possessions for), `teams` (how many he played for), `min`, `poss` (on-court possessions, offensive plus defensive over 2), `rating` and `rating_bpm` / `rating_rapm` / `rating_boban` (anchored, per 100), `vorp`, `war` with `war_lo` / `war_hi` (a nominal 90% interval from a bootstrap over each team-season's games: the sampling uncertainty of the team side and the playing time) and `war_bpm` / `war_rapm` / `war_boban` (the source spread), with `_rank` (1 = most), `_pct` and `_n` (possessions) for `vorp` and `war` among every player of the season. Sorted by season and `war`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26; the WNBA season is its calendar year). |
+| `player_id` | Int64 | stats.nba.com player id. |
+| `player_name` | String | Player name, from the player impact release. |
+| `team_id` | Int64 | stats.nba.com team id of the team he played the most possessions for. |
+| `teams` | Int64 | How many teams he played for in the regular season. |
+| `min` | Float64 | Regular-season minutes (the player impact release's). |
+| `poss` | Float64 | On-court possessions, offensive plus defensive over 2, counted from the stats.nba.com possessions (every possession row, BB-D3's convention). The minutes basis of vorp and war. |
+| `rating` | Float64 | Points per 100 possessions above a league-average player: the mean of rating_bpm, rating_rapm and rating_boban. |
+| `rating_bpm` | Float64 | Our BPM per 100, team-anchored and centred: the release's bpm with its team constant repaired (minute-weighted team mean = net rating / 5, BPM 2.0's), minus the player's team mean, plus the team's net rating / 5, centred so the league's possession-weighted mean is 0. |
+| `rating_rapm` | Float64 | Our prior-informed RAPM (adj_rapm) per 100, team-anchored and centred like rating_bpm. Only the net adj_rapm is read: the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset. |
+| `rating_boban` | Float64 | Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm. |
+| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per team, R the league's replacement level (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference's VORP scale: a season of possessions at R + 1 is 1. |
+| `war` | Float64 | Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement level; a season's war adds up to the league's wins minus a team of replacement players' (.189 NBA 2024-25, .104 WNBA 2025). |
+| `war_lo` | Float64 | Low end of the nominal 90% interval for war (5th percentile of 1000 bootstrap replicates, each team-season seeded on its own): each team-season's games resampled with replacement (a game's player possessions, team possessions and margin move together), then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level are held fixed, so this is the sampling uncertainty of the team side and the playing time; the war_bpm / war_rapm / war_boban spread is the source uncertainty. |
+| `war_hi` | Float64 | High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo). |
+| `war_bpm` | Float64 | war from rating_bpm alone. Every source shares the league's replacement level, so war_bpm, war_rapm and war_boban add up to the same league total. |
+| `war_rapm` | Float64 | war from rating_rapm alone. |
+| `war_boban` | Float64 | war from rating_boban alone. BOBAN shrinks low-minute players toward average, so the replacement pool carries more war_boban than war_bpm (the replacement level is a box-score level). |
+| `vorp_rank` | Float64 | Rank of vorp within the season among every player (1 = most; ties average); null under 10 players. |
+| `war_rank` | Float64 | Rank of war within the season among every player (1 = most; ties average); null under 10 players. |
+| `vorp_pct` | Float64 | Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
+| `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
+| `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
+| `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
+| `pts_pg` | Float64 | Points per game he played (minutes over 0), from the regular-season stats game logs. |
+| `reb_pg` | Float64 | Rebounds per game he played (minutes over 0), from the regular-season stats game logs. |
+| `ast_pg` | Float64 | Assists per game he played (minutes over 0), from the regular-season stats game logs. |
+| `pts_pg_rank` | Float64 | Rank of pts_pg among the season's players with at least the games gate (1 game); 1 = most, ties averaged. Null under ten ranked players. |
+| `reb_pg_rank` | Float64 | Rank of reb_pg among the season's players with at least the games gate (1 game); 1 = most, ties averaged. Null under ten ranked players. |
+| `ast_pg_rank` | Float64 | Rank of ast_pg among the season's players with at least the games gate (1 game); 1 = most, ties averaged. Null under ten ranked players. |
+| `pts_pg_pct` | Float64 | Percentile of pts_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
+| `reb_pg_pct` | Float64 | Percentile of reb_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
+| `ast_pg_pct` | Float64 | Percentile of ast_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
+| `pts_pg_n` | Int64 | Games behind pts_pg: the games he played (0 with no box line). |
+| `reb_pg_n` | Int64 | Games behind reb_pg: the games he played (0 with no box line). |
+| `ast_pg_n` | Int64 | Games behind ast_pg: the games he played (0 with no box line). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"` (checked before any data is loaded). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_war import nba_player_war
+war = nba_player_war(2026)
+war.select("player_name", "poss", "rating", "vorp", "war").head(10)
+
+# WNBA via ``league_id``
+
+wnba = nba_player_war(2025, league_id="10")
+```
+
 ### nba_player_wowy {#nba_player_wowy}
 
 `nba_player_wowy(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -917,118 +1003,4 @@ One row per `(season, team_id, lineup_id, family, split)`: `lineup_id` is the fi
 from sportsdataverse.nba.nba_situational import nba_situational_lineup
 units = nba_situational_lineup(2026).filter(split="transition")
 units.sort("poss", descending=True).head()
-```
-
-### nba_situational_player {#nba_situational_player}
-
-`nba_situational_player(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', top_n: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Player on-floor splits by situation: the team splits over the possessions each player started on the floor.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`. |
-| `top_n` | `int \| None` | `None` | As `nba_situational_team`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, player_id, family, split)`, the columns of `nba_situational_team`: the team's possessions, points and ratings with the player on the floor as the possession starts. `player_id` is the stats.nba.com person id (Int64). Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `player_id` | Int64 | stats.nba.com person id. A possession counts for the five on the floor as it starts, with all its points. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id`, `season_type` or `top_n` is invalid. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_situational import nba_situational_player
-clutch = nba_situational_player(2026).filter(split="clutch")
-clutch.filter(clutch["net_rtg_n"] >= 200).sort("net_rtg", descending=True).head()
-```
-
-### nba_situational_team {#nba_situational_team}
-
-`nba_situational_team(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', top_n: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type, chance.
-
-The families and their splits are in `sportsdataverse._common.situational_splits`; within
-a family the splits add up to the `all` row.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. |
-| `top_n` | `int \| None` | `None` | How many of the season's best teams (BB-D19 regular-season `adj_net_rtg`) are `vs_top`. Default 10 (NBA) or 4 (WNBA). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, family, split)`: `games`, `minutes` / `seconds`, `poss` / `opp_poss`, `pts` / `opp_pts`, `plus_minus`, `off_rtg` / `def_rtg` / `net_rtg` (per 100 possessions) and their `_n`. Ids are the stats.nba.com ids (Int64). Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id`, `season_type` or `top_n` is invalid. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_situational import nba_situational_team
-splits = nba_situational_team(2026)
-splits.filter(split="clutch").sort("net_rtg", descending=True).head()
 ```

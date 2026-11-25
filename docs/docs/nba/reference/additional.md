@@ -303,7 +303,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_player_props](additional/analytics-4.md#nba_player_props) | Per-player expected prop lines + team pace projection for a matchup. |
 | [nba_player_season_box_rates](additional/analytics-4.md#nba_player_season_box_rates) | NBA per-36 points, rebounds and assists per player-season, ranked, with the season usage. |
 | [nba_player_shot_zones](additional/analytics-4.md#nba_player_shot_zones) | Season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |
-| [nba_player_war](additional/analytics-4.md#nba_player_war) | WAR and VORP per player-season, from our BPM, RAPM and BOBAN (regular season). |
+| [nba_player_war](additional/analytics-5.md#nba_player_war) | WAR and VORP per player-season, from our BPM, RAPM and BOBAN (regular season). |
 | [nba_player_wowy](additional/analytics-5.md#nba_player_wowy) | WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
 | [nba_playtype_ratings](additional/analytics-5.md#nba_playtype_ratings) | Season play-type-adjusted offensive/defensive team ratings. |
 | [nba_possession_rate_rows](additional/analytics-5.md#nba_possession_rate_rows) | Map `nba_stats_possessions` rows onto the team-season-rates possession frame. |
@@ -319,8 +319,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_shot_value_lineups](additional/analytics-5.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
 | [nba_situation_rows](additional/analytics-5.md#nba_situation_rows) | Map the stats.nba.com releases onto the situational-splits possession frame. |
 | [nba_situational_lineup](additional/analytics-5.md#nba_situational_lineup) | Five-man unit splits by situation: the team splits over the possessions each unit started. |
-| [nba_situational_player](additional/analytics-5.md#nba_situational_player) | Player on-floor splits by situation: the team splits over the possessions each player started on the floor. |
-| [nba_situational_team](additional/analytics-5.md#nba_situational_team) | Team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type, chance. |
+| [nba_situational_player](additional/analytics-6.md#nba_situational_player) | Player on-floor splits by situation: the team splits over the possessions each player started on the floor. |
+| [nba_situational_team](additional/analytics-6.md#nba_situational_team) | Team splits by situation: clutch, period, half, garbage time, score, venue, opponent, play type, chance. |
 | [nba_situational_team_games](additional/analytics-6.md#nba_situational_team_games) | Team splits by situation, one game at a time: `nba_situational_team` per game. |
 | [nba_stint_rows](additional/analytics-6.md#nba_stint_rows) | Map the stats.nba.com releases onto the stint-row frame. |
 | [nba_team_clutch](additional/analytics-6.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |
