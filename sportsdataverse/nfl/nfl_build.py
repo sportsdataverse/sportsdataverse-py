@@ -45,7 +45,9 @@ if TYPE_CHECKING:
 #      a v2 frame would keep every 2002-2005 dome game's outdoors EP / CP.
 # 4 -> play-level cpoe is in percentage points, 100 * (completion - cp): a v3 frame would keep the
 #      0-1 difference and mix scales in a season frame.
-PIPELINE_VERSION: int = 4
+# 5 -> a game's frame is NFLPlayProcess.plays_frame with its documented dtypes, not one re-inferred
+#      from the plays dicts: a v4 frame would keep its all-null `*_player_id` columns as pl.Null.
+PIPELINE_VERSION: int = 5
 
 logger = logging.getLogger("sdv.nfl_build")
 logger.addHandler(logging.NullHandler())
@@ -85,8 +87,12 @@ def _build_game_espn(game_id: int) -> pl.DataFrame:
     proc = NFLPlayProcess(gameId=game_id)
     proc.espn_nfl_pbp()
     result: dict = proc.run_processing_pipeline()
-    plays = result.get("plays", [])
-    return pl.DataFrame(plays, infer_schema_length=None)
+    # plays_frame carries the documented dtypes; rebuilding from result["plays"] (a list of dicts)
+    # re-infers them, so an all-null id comes back pl.Null and every Int32 column Int64.
+    if proc.plays_frame is not None:
+        return proc.plays_frame
+    # a short-circuited game (corrupt feed, no play-by-play) never builds plays_frame
+    return pl.DataFrame(result.get("plays", []), infer_schema_length=None)
 
 
 # ---------------------------------------------------------------------------
