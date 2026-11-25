@@ -7609,8 +7609,8 @@
   group: dtype-contract-5-2
   finding: B-H5
   file: sportsdataverse/nhl/nhl_player_props.py
-  snippet: '    "player_id": pl.Int64,'
-  mutant: '    "player_id": pl.Utf8,'
+  snippet: "    \"player_id\": pl.Int64,\n    \"team\": pl.Utf8,\n    \"opp_team\": pl.Utf8,\n    \"stat\""
+  mutant: "    \"player_id\": pl.Utf8,\n    \"team\": pl.Utf8,\n    \"opp_team\": pl.Utf8,\n    \"stat\""
   test: tests/nhl/test_nhl_player_props.py -k "props_join_the_nhl_parser_frames"
   expected: kill
   note: nhl_player_props pins player_id to Utf8 again, so it cannot join a parse_nhl_web_* frame (R986-3).
