@@ -29,6 +29,7 @@ import numpy as np
 import polars as pl
 import pytest
 
+from sportsdataverse._common.factor_points import FACTOR_POINTS_SCHEMA
 from sportsdataverse._common.team_season_rates import RATE_ROWS_SCHEMA
 from sportsdataverse._common.team_strength import (
     GAMES_SCHEMA,
@@ -110,13 +111,14 @@ def test_schema_and_carried_rates(nba_2026: pl.DataFrame) -> None:
         mp.setattr(tsr, "load_nba_stats_possessions", _fixture_loader("nba_possessions_2026.parquet", [2025]))
         mp.setattr(tsr, "load_nba_stats_schedules", _fixture_loader("nba_schedule_2026.parquet", [2025]))
         rates = tsr.nba_team_season_rates(2026).filter(split="all").drop("split")
-    # every BB-D3 rate and its context is carried; BB-G8's scoring bases and the league FT% stay on the rates table
+    # every BB-D3 rate and its context is carried; BB-G8's scoring bases, the league FT% and the BB-D42
+    # factor points stay on the rates table
     shared = [c for c in rates.columns if c in TEAM_STRENGTH_SCHEMA]
     assert set(rates.columns) - set(shared) == {
         f"{m}{s}"
         for m in ("pts_pg", "opp_pts_pg", "plus_minus_pg", "pts_per75", "opp_pts_per75", "plus_minus_per75")
         for s in ("", "_rank", "_pct", "_n")
-    } | {"plus_minus", "lg_ft_pct"}
+    } | {"plus_minus", "lg_ft_pct", *FACTOR_POINTS_SCHEMA}
     assert nba_2026.select(shared).equals(rates.sort("season", "team_id").select(shared))
 
 

@@ -6,9 +6,10 @@ re24_tango_book.parquet covers -- see tests/fixtures/mlb_game_state/README.md
 for full provenance + the capture-window rationale).
 
 Gate (never lower to pass -- debug the model / widen the corpus instead):
-  - per-state |re_mine - re_tango| <= 0.05 runs (observed max 0.048 -- only
-    ~0.002 headroom; a drift to 0.051 is a genuine signal to re-derive from a
-    fresh capture, not to widen the tolerance)
+  - per-state |re_mine - re_tango| <= 0.05 runs (observed max 0.0496, bases
+    loaded / 0 out, since games 5028 and 6146 stopped counting twice; it was
+    0.048 before. Only ~0.0004 headroom: a drift to 0.051 is a genuine signal
+    to re-derive from a fresh capture, not to widen the tolerance)
   - bases-empty/0-out anchor in [0.45, 0.58] (observed 0.562)
   - strict monotonicity: RE non-increasing in outs within a base_state
 """

@@ -124,8 +124,13 @@ TANGO_RE24 = [
 
 def _completed_games(start_date: str, end_date: str, season: int) -> list[dict]:
     raw = mlb_schedule(start_date=start_date, end_date=end_date, season=season, game_type="R")
-    games = [g for d in (raw.get("dates") or []) for g in (d.get("games") or [])]
-    return [g for g in games if (g.get("status") or {}).get("codedGameState") == "F"]
+    # A suspended game is listed on both its start and its resume date: keep its first listing.
+    by_pk: dict[int, dict] = {}
+    for d in raw.get("dates") or []:
+        for g in d.get("games") or []:
+            if (g.get("status") or {}).get("codedGameState") == "F":
+                by_pk.setdefault(int(g["gamePk"]), g)
+    return list(by_pk.values())
 
 
 def _game_row(g: dict, *, default_season: int) -> dict:
