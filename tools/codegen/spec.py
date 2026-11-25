@@ -88,6 +88,9 @@ class Endpoint:
     # the caller's params, so ``params=`` can still override. A family-level
     # ``fixed_params`` in an ESPN API YAML is merged into each of its endpoints.
     fixed_params: Dict[str, object] = field(default_factory=dict)
+    # Query key the league slug is sent under, for an ESPN path with no ``{league}`` segment
+    # (golf's ``/golf/leaderboard?league=pga``). In param mode it carries the ``league`` argument.
+    league_query: Optional[str] = None
     # Same shape as FlatApi.docstring, scoped to ONE endpoint. Declared per
     # endpoint when a family is too large to opt in wholesale: the family-level
     # block rewrites every wrapper in the family, this one changes only its own.
@@ -487,6 +490,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         exclude_leagues=list(e.get("exclude_leagues", [])),
         include_prefixes=list(e.get("include_prefixes", [])),
         fixed_params=dict(e.get("fixed_params") or {}),
+        league_query=e.get("league_query"),
         docstring=dict(e.get("docstring") or {}),
         league_example_args={k: dict(v or {}) for k, v in (e.get("league_example_args") or {}).items()},
         league_defaults={k: dict(v or {}) for k, v in (e.get("league_defaults") or {}).items()},

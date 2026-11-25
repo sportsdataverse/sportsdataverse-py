@@ -558,7 +558,7 @@ def test_espn_page_per_league_counts_match_the_code():
     cfg = spec.load_leagues(generate.ENDPOINTS / "leagues.yaml")
     apis = [spec.load_espn_api(generate.ENDPOINTS / f"{a}.yaml", params) for a in generate.ESPN_APIS]
     body = flat("espn")
-    assert f"126 short names across {len(cfg.leagues)} leagues" in body
+    assert f"127 short names across {len(cfg.leagues)} leagues" in body
     universal = sum(
         1 for a in apis if a.api != "espn_cdn" for e in a.endpoints if e.scope == "universal" and not e.include_prefixes
     )

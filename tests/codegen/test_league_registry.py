@@ -50,6 +50,7 @@ def test_registry_sports_and_labels():
         "thesportsdb": "TheSportsDB",
         "cricket": "Cricket",
         "lacrosse": "Lacrosse",
+        "golf": "Golf",
         "odds": "Betting odds",
         "cbs": "CBS Sports",
         "yahoo": "Yahoo Sports",
