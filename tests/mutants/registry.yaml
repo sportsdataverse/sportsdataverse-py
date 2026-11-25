@@ -9723,8 +9723,8 @@
   group: bb-lineup-seasons
   finding: BB-D4
   file: sportsdataverse/mbb/mbb_lineup_seasons.py
-  snippet: 'events, is_free_throw=pl.col("event_type") == "Free Throw", is_foul=pl.col("foul_class").is_not_null()'
-  mutant: 'events, is_free_throw=pl.lit(False), is_foul=pl.col("foul_class").is_not_null()'
+  snippet: '        is_free_throw=pl.col("event_type") == "Free Throw",'
+  mutant: '        is_free_throw=pl.lit(False),'
   test: tests/mbb/test_mbb_lineup_seasons.py::test_free_throws_count_on_the_foul_lineup
   expected: kill
   note: Free-throw attempts would sit on the lineup at the free throw while their points sit on the foul lineup.
