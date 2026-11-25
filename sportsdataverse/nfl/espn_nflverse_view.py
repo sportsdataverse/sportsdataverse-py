@@ -583,6 +583,7 @@ def _carried(df: pl.DataFrame) -> list[pl.Expr]:
         col("drive.end.clock.displayValue", pl.Utf8).alias("_c_clock_end"),
         col("drive.start.text", pl.Utf8).alias("_c_start_text"),
         col("rusher_player_name", pl.Utf8).alias("_c_rusher"),
+        col("end_of_half", pl.Boolean).alias("_c_end_of_half"),
     ]
 
 
@@ -620,14 +621,25 @@ def _text_features(view: pl.DataFrame) -> pl.DataFrame:
         v.select(
             "game_id",
             "play_id",
-            "desc",
+            # the play's own text: a touchdown row can still carry its folded try ("... TWO-POINT CONVERSION
+            # ATTEMPT. J.Allen pass to ..."), whose " pass " would make a rushing touchdown a pass
+            # ESPN's scoring-summary form ("D.Prescott 10 Yd Pass From ...") names the pass in title case
+            pl.col("desc")
+            .str.replace(r"(?i)TWO-POINT CONVERSION ATTEMPT.*$", "")
+            .str.replace_all(r" Pass [Ff]rom ", " pass from ")
+            .alias("desc"),
             "qb_scramble",
             "qb_kneel",
             "kickoff_attempt",
             rusher.alias("rusher_player_name"),
         )
     )
-    return v.with_columns(with_pr["pass"], with_pr["rush"])
+    # a split two-point try is a pass or a run by its own type (its rusher may be on the touchdown row only)
+    two = (pl.col("play_type_nfl") == "PAT2").fill_null(False)
+    return v.with_columns(with_pr["pass"], with_pr["rush"]).with_columns(
+        pl.when(two).then((pl.col("play_type") == "pass").cast(pl.Int64)).otherwise(pl.col("pass")).alias("pass"),
+        pl.when(two).then((pl.col("play_type") == "run").cast(pl.Int64)).otherwise(pl.col("rush")).alias("rush"),
+    )
 
 
 def _drive_detail(view: pl.DataFrame) -> pl.DataFrame:
@@ -642,7 +654,12 @@ def _drive_detail(view: pl.DataFrame) -> pl.DataFrame:
     v = view.with_row_index("_order").with_columns(
         fixed_drive=pl.col("drive"), play_seq=pl.int_range(pl.len()).over("game_id")
     )
-    v = v.with_columns(_swap=swapped_posteam(v)).with_columns(_tmp=drive_level_tmp_result(pl.col("_swap")))
+    # NFLPlayProcess drops the period-end text ("END QUARTER 2") the cascade reads and flags end_of_half instead;
+    # a stronger result earlier in the drive (Touchdown, Field goal) still wins in last_or_first_result
+    half_end = pl.when((pl.col("_c_end_of_half") == True).fill_null(False)).then(pl.lit("End of half"))  # noqa: E712
+    v = v.with_columns(_swap=swapped_posteam(v)).with_columns(
+        _tmp=pl.coalesce(drive_level_tmp_result(pl.col("_swap")), half_end)
+    )
     # a play outside any drive (null fixed_drive) matches no drive's result: null keys never join
     v = last_or_first_result(v, g, "_tmp", "fixed_drive_result")
     v = add_series_data(v.drop("_swap", "_tmp"))

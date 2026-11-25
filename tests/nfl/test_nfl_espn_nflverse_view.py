@@ -26,7 +26,7 @@ GAMES = {401671740: "2024_04_PHI_TB", 400554340: "2014_11_MIN_CHI", 271209010: "
 #: Captures for single rules, kept out of the whole-game capture set (``fixtures/espn_nflverse_view/``):
 #: 2019_13_OAK_KC has a defensive two-point return its touchdown row counts; 2024_01_NYJ_SF has a split
 #: two-point pass and run (and a whole game ESPN clocks after the snap, so it is not in the floor set).
-EXTRA = {401128067: "2019_13_OAK_KC", 401671696: "2024_01_NYJ_SF"}
+EXTRA = {401128067: "2019_13_OAK_KC", 401671696: "2024_01_NYJ_SF", 401671886: "2024_20_BAL_BUF"}
 
 #: Every view column nflverse also has must agree on >= 97% of each game's joined plays, except these
 #: (floor = the lowest observed game rate, rounded down; the whole-season rates are in the PR body):
@@ -429,3 +429,36 @@ def test_a_game_between_non_nfl_sides_is_dropped():
     assert espn_nfl_pbp_nflverse(pro_bowl).height == 0
     with pytest.raises(ValueError, match="401671740"):
         espn_nfl_pbp_nflverse(plays.with_columns(pl.lit(None, dtype=pl.Utf8).alias("nflverse_game_id")))
+
+
+def test_a_split_two_point_run_is_a_rush_without_players():
+    """2024_01_NYJ_SF: the split run try is ``rush`` 1 by its own type, players table or not (nflverse: run 1/0)."""
+    nv = _nflverse("2024_01_NYJ_SF").filter(pl.col("play_type_nfl") == "PAT2").sort("play_id")
+    for players in (None, _players()):
+        view = espn_nfl_pbp_nflverse(_plays(401671696), players=players)
+        ours = view.filter(pl.col("play_type_nfl") == "PAT2").sort("espn_play_id")
+        assert ours.select("play_type", "pass", "rush").rows() == [("run", 0, 1), ("pass", 1, 0)]
+        assert ours["rush"].to_list() == nv["rush"].cast(pl.Int64).to_list()
+
+
+def test_a_rushing_touchdown_with_a_folded_passing_try_is_a_rush():
+    """2024_20_BAL_BUF: "D.Henry right guard for 5 yards, TOUCHDOWN. TWO-POINT CONVERSION ATTEMPT. L.Jackson pass" is a run."""
+    j = espn_nfl_pbp_nflverse(_plays(401671886)).join(
+        _nflverse("2024_20_BAL_BUF"), on=["game_id", "play_id"], suffix="__nv"
+    )
+    folded = j.filter((pl.col("touchdown") == 1) & pl.col("desc").str.contains("TWO-POINT CONVERSION ATTEMPT"))
+    rushing = folded.filter(pl.col("rush__nv") == 1)
+    assert rushing.height >= 1 and rushing["desc"].str.contains(" pass ").all()
+    assert (folded["rush"] == folded["rush__nv"]).all() and (folded["pass"] == folded["pass__nv"]).all()
+
+
+def test_a_drive_that_ends_the_half_is_end_of_half():
+    """The processor flags end_of_half (it drops the period-end text): nflverse's "End of half" drives match."""
+    j = _joined()
+    half = j.filter(pl.col("fixed_drive_result__nv") == "End of half")
+    assert half.height >= 10
+    assert (half["fixed_drive_result"] == "End of half").mean() >= 0.9
+    # a stronger result earlier in the drive still wins
+    assert (
+        j.filter(pl.col("fixed_drive_result__nv") == "Touchdown")["fixed_drive_result"] == "Touchdown"
+    ).mean() >= 0.97
