@@ -43,7 +43,10 @@ __all__ = [
     "espn_lacrosse_season_info",
     "espn_lacrosse_season_types",
     "espn_lacrosse_season_type",
+    "espn_lacrosse_season_group",
     "espn_lacrosse_season_groups",
+    "espn_lacrosse_season_group_teams",
+    "espn_lacrosse_season_group_children",
     "espn_lacrosse_season_teams",
     "espn_lacrosse_season_team",
     "espn_lacrosse_games",
@@ -857,6 +860,58 @@ def espn_lacrosse_season_type(
     return raw
 
 
+def espn_lacrosse_season_group(
+    league: str,
+    season: Union[int, str],
+    season_type: Union[int, str],
+    group_id: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        group_id: group_id path parameter.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_lacrosse_season_group(league='pll', season=2024, season_type=2, group_id=80)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_lacrosse_season_group", kwargs)
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def espn_lacrosse_season_groups(
     league: str,
     season: Union[int, str],
@@ -899,6 +954,118 @@ def espn_lacrosse_season_groups(
     _params.update(_caller_params)
     raw = _get(
         f"https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_lacrosse_season_group_teams(
+    league: str,
+    season: Union[int, str],
+    season_type: Union[int, str],
+    group_id: Union[int, str],
+    limit: Optional[int] = 500,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/teams``
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/teams?limit=500
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        group_id: group_id path parameter.
+        limit: Maximum number of items to return.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_lacrosse_season_group_teams(league='pll', season=2024, season_type=2, group_id=80)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_lacrosse_season_group_teams", kwargs)
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/teams",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_lacrosse_season_group_children(
+    league: str,
+    season: Union[int, str],
+    season_type: Union[int, str],
+    group_id: Union[int, str],
+    limit: Optional[int] = 500,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children``
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/children?limit=500
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        group_id: group_id path parameter.
+        limit: Maximum number of items to return.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_lacrosse_season_group_children(league='pll', season=2024, season_type=2, group_id=80)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_lacrosse_season_group_children", kwargs)
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/children",
         params=_params,
         **kwargs,
     )

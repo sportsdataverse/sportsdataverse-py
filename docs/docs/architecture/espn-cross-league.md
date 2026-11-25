@@ -44,7 +44,7 @@ https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/athletes/{a
 A few leagues drop an endpoint ESPN does not serve for them (`exclude_leagues`), so a
 league's count can sit one below the sum. A league can also carry its own `endpoints:`
 allowlist in `leagues.yaml`, which keeps only the listed shorts: lacrosse, whose ESPN
-surface has no athletes, rosters or play-by-play, emits the 32 a live probe saw return data.
+surface has no athletes, rosters or play-by-play, emits the 35 a live probe saw return data.
 
 ## The implementation: declarative codegen
 

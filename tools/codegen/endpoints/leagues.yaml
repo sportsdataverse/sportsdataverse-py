@@ -56,7 +56,8 @@ leagues:
   # ESPN's lacrosse surface is thin (no athletes, rosters, play-by-play or player box scores), so
   # ``endpoints`` allowlists the shorts a live probe (2026-11-25, real event and team ids) saw return
   # data for at least one of the three. College-only: rankings, season_week_rankings. PLL-only: draft,
-  # teams_site, standings, franchises, franchise. ---
+  # teams_site, standings, franchises, franchise. season_group_teams answers for pll and the women,
+  # season_group_children for the men (checked with each league's own group id). ---
   - prefix: lacrosse
     sport: lacrosse
     league: pll
@@ -80,6 +81,9 @@ leagues:
       - season_types
       - season_type
       - season_groups
+      - season_group
+      - season_group_teams
+      - season_group_children
       - season_teams
       - season_team
       - events
