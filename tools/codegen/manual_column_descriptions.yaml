@@ -9773,7 +9773,10 @@ load_cfb_pbp:
   start.yardsToEndzone: ESPN's `yardsToEndzone` value for the play state at the start of the play.
   start.yardsToEndzone.touchback: ESPN's `yardsToEndzone.touchback` value for the play state at the start of the play.
   statYardage: Yardage ESPN credits to the play for statistical purposes.
-  stopped_run: True when the rush was stopped at or behind the line of scrimmage.
+  stopped_run: True on a rush (any play type the processor counts as a rush, not a kneel) that gained two or
+    fewer yards; a rushing touchdown of one or two yards counts.
+  stuffed_run: True on a rush (any play type the processor counts as a rush, not a kneel) that gained zero or
+    fewer yards; its mean over scrimmage rushes (rush and scrimmage_play) is the stuff rate.
   td_check: Internal flag used while reconciling whether the play produced a touchdown.
   teamParticipants: Raw ESPN team-level participants payload carried through from the plays feed (stringified).
   text_dupe: Always False in the emitted frame -- the duplicate-row filter it gates runs before the column is
@@ -81693,7 +81696,8 @@ build_nfl_season:
     returns, a made field goal, safeties, a defensive two-point return); a try is not one.
   sequenceNumber: ESPN's sequenceNumber, the feed's ordering number for the play within the game.
   status_type_completed: True when ESPN's game header marks the game completed (one value per game).
-  stuffed_run: True on a play ESPN types "Rush" that gained zero or fewer yards.
+  stopped_run: True on a play whose processed type.text is "Rush" that gained two or fewer yards.
+  stuffed_run: True on a play whose processed type.text is "Rush" that gained zero or fewer yards.
   target: True on a pass attempt that targeted a receiver (any pass that is not a sack); False when a penalty wiped
     the play out.
   td_play: True when the play text or type names a touchdown that stood ("touchdown", "for a TD").
