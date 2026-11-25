@@ -117,6 +117,8 @@ MATCHED_ODDS_MIN = 12  # documented matched-odds count; a silent join drop must 
 # Brier must beat the line's own implied 50/50 (0.25; the ESPN feed carries no over price, so even
 # odds is the only implied probability). Observed on the 12 games: 0.2380 with the fitted 6.19,
 # 0.2402 with the 6.05 seed; the model's side matches the result in 7 / 12 under either seed.
+# A gross-error sanity guard, not a level gate: on 12 games both seeds pass (0.2402 / 0.2380), so
+# it cannot tell 6.05 from 6.19. TOTAL_BIAS_FLOOR below is the level check.
 TOTAL_OVER_BRIER_FLOOR = 0.25
 # Mean exp_total - actual_total over the 1174 games: -2.2389 with the old centring on
 # avg_total_goals, -0.4239 after centring on 2 * avg_xgf (2026-11-11), both against labels that
@@ -220,7 +222,8 @@ def test_pregame_favorite_agreement_and_total_side_vs_espn_odds(pregame_backtest
     )
 
     # Closing total as an over/under side: P(over the line) under a Poisson around exp_total, scored
-    # against whether the game went over (see TOTAL_OVER_BRIER_FLOOR).
+    # against whether the game went over (see TOTAL_OVER_BRIER_FLOOR). A gross-error sanity guard on
+    # 12 games; the level check is test_pregame_total_is_unbiased_against_realized_goals.
     mt = m.filter(pl.col("close_total").is_not_null())
     assert mt.height >= MATCHED_ODDS_MIN
     line = mt["close_total"].to_numpy()
