@@ -95,26 +95,35 @@ class _TeamWalk:
         tt, kd = self.next_event(p, t)
         return ({"in": 0, None: 1, "act": 2, "out": 3}[kd], -tt)
 
-    def put_on(self, p: str, lo: int, t: int) -> None:
-        """``p`` was on from walk position ``lo`` + 1 through ``t``: replace the likeliest absentee."""
+    def put_on(self, p: str, lo: int, t: int, *, from_lo: bool = False) -> None:
+        """``p`` was on from walk position ``lo`` + 1 (``lo`` itself with ``from_lo``) through ``t``.
+
+        He replaces the likeliest absentee. ``from_lo`` is for a dead ball that is not his own sub: he
+        came on there, so that row's five (which holds the clock until it moves) has him.
+        """
+        start = lo if from_lo and lo >= 0 else lo + 1
         evict = None
         if len(self.on) >= 5:
             cands = [x for x in self.on if x not in self.moved_in]
             if cands:
-                evict = min(cands, key=lambda x: self.surplus_rank(x, t, lo + 1))
+                evict = min(cands, key=lambda x: self.surplus_rank(x, t, start))
                 self.on.remove(evict)
         self.on.append(p)
-        for f in self.fives[lo + 1 : t]:
+        for f in self.fives[start:t]:
             if p not in f:
                 if evict is not None and evict in f:
                     f[f.index(evict)] = p
                 elif len(f) < 5:
                     f.append(p)
 
-    def balance(self, t: int) -> None:
-        """End of a clock reading: back to five on the look-ahead (see :func:`_event_walk`)."""
+    def balance(self, t: int, keep: str | None = None) -> None:
+        """End of a clock reading: back to five on the look-ahead (see :func:`_event_walk`).
+
+        ``keep`` (the reading's last row's actor) is never the one taken off.
+        """
         while len(self.on) > 5:
-            cands = [x for x in self.on if x not in self.moved_in] or list(self.on)
+            others = [x for x in self.on if x != keep]
+            cands = [x for x in others if x not in self.moved_in] or others
             self.on.remove(min(cands, key=lambda x: self.surplus_rank(x, t, t + 1)))
         if len(self.on) < 5:
             rank = {"out": 0, "act": 1}
@@ -137,19 +146,21 @@ class _TeamWalk:
                 p = r["player_1"]
                 if et == "Leaves Game":
                     if p not in self.on:  # he left without having come on: on since the dead ball before
-                        self.put_on(p, max(sec_dead, self.last_sub(p, t)), t)
+                        last = self.last_sub(p, t)
+                        self.put_on(p, max(sec_dead, last), t, from_lo=sec_dead > last)
                     self.on.remove(p)
                     self.moved_out.add(p)
                 elif p not in self.on:
                     self.on.append(p)
                     self.moved_in.add(p)
             elif (a := self.actor(r)) is not None and a not in self.on and et != "Free Throw":
-                self.put_on(a, max(dead, self.last_sub(a, t)), t)
+                last = self.last_sub(a, t)
+                self.put_on(a, max(dead, last), t, from_lo=dead > last)
             if et in _DEAD_BALL_TYPES:
                 dead = t
             nxt = self.order[t + 1] if t + 1 < self.n else None
             if nxt is None or self.prs[nxt]["game_seconds"] != r["game_seconds"]:
-                self.balance(t)
+                self.balance(t, keep=self.actor(r))
                 sec_dead = dead
             self.fives[t] = list(self.on)
 
@@ -193,7 +204,7 @@ def _event_walk(
     team: str | None,
     starters: list[str],
     skip_sub: Callable[[dict[str, Any]], bool],
-) -> list[list[str | None]]:
+) -> tuple[list[list[str | None]], list[str]]:
     """One team's five on the floor at each of a period's rows, applying every sub at its own dead ball.
 
     bigballR pairs the period's i-th ``Leaves Game`` with its i-th ``Enters Game`` and freezes
@@ -220,8 +231,10 @@ def _event_walk(
             and never an actor, so no placeholder enters a five.
 
     Returns:
-        One five per row of ``prs``, in ``prs`` order, padded with None (at most five names).
+        One five per row of ``prs``, in ``prs`` order, padded with None (at most five names), and
+        the walk's five at the period's end: the next period's carry-over. That can differ from the
+        last row's five, which keeps a scorer whose own sub follows his shot.
     """
     team_walk = _TeamWalk(prs, team, starters, skip_sub)
     team_walk.walk()
-    return team_walk.rows()
+    return team_walk.rows(), list(team_walk.on)
