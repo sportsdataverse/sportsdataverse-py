@@ -4197,7 +4197,7 @@ def _apply_try_values(df: pl.DataFrame) -> pl.DataFrame:
     kick = kick & (two == False)  # noqa: E712
     season = df["season"].cast(pl.Float64).to_numpy()
     era = np.eye(5)[np.searchsorted(np.asarray(ERA_SEASON_CUTS), season, side="left").clip(0, 4)]
-    roof = df["roof"] if "roof" in df.columns else pl.Series([None] * df.height, dtype=pl.Utf8)
+    roof = df["roof"].cast(pl.Utf8) if "roof" in df.columns else pl.Series([None] * df.height, dtype=pl.Utf8)
     outdoors = (roof.is_null() | (roof == "outdoors")).cast(pl.Float64).to_numpy()
     make = fg_make_probability(df["yardline_100"].cast(pl.Float64).to_numpy(), outdoors, era)
     if make is None:  # pragma: no cover - the fg model ships with the package
