@@ -43,7 +43,7 @@ def _fixture_html(game_id: str) -> str:
 
 @pytest.mark.parametrize("game_id", GAMES["mbb"])
 def test_mbb_pbp_parity(game_id: str, oracle: pl.DataFrame) -> None:
-    got = parse_ncaa_bb_game_pbp(_fixture_html(game_id), game_id, fix_technicals=False)
+    got = parse_ncaa_bb_game_pbp(_fixture_html(game_id), game_id, fix_technicals=False, event_lineups=False)
     exp = oracle.filter(pl.col("game_id") == game_id)
 
     assert got.columns == list(PBP_SCHEMA)

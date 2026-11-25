@@ -893,6 +893,7 @@ files = [
     "sportsdataverse/wbb/wbb_ncaa_strength.py",
     "sportsdataverse/mbb/mbb_ncaa_box_stats.py",
     "sportsdataverse/mbb/mbb_ncaa_box_tabs.py",
+    "sportsdataverse/mbb/mbb_ncaa_event_lineups.py",
     "sportsdataverse/mbb/mbb_ncaa_game_pbp.py",
     "sportsdataverse/mbb/mbb_ncaa_lineups.py",
     "sportsdataverse/mbb/mbb_ncaa_possession_seg.py",
