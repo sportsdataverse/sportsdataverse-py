@@ -591,6 +591,193 @@ def _infer_starters(
     return starters
 
 
+#: Rows after which the ball is dead, so an unlogged substitution can have happened: the
+#: latest of them before a player's act is where :func:`_event_walk` puts him on the floor.
+_DEAD_BALL_TYPES = frozenset({"Enters Game", "Leaves Game", "Timeout", "Commits Foul", "Turnover", "Free Throw"})
+
+
+def _event_walk(
+    prs: "list[dict[str, Any]]",
+    team: Optional[str],
+    starters: "list[Optional[str]]",
+    skip_sub: "Callable[[dict[str, Any]], bool]",
+) -> "list[list[Optional[str]]]":
+    """One team's five on the floor at each of a period's rows, applying every sub at its own dead ball.
+
+    bigballR pairs the period's i-th ``Leaves Game`` with its i-th ``Enters Game`` and freezes
+    each possession on its first row's lineup, so a substitution in a mid-possession dead ball
+    (after a foul, at a timeout, between free throws) is lost until the next possession, and one
+    unmatched sub shifts every later pairing. This walk applies each sub as a set change instead,
+    on the NCAA rules (Rule 3-6.2; ``ClaudeCowork notes/2026-11-25-ncaa-bb-lineup-attribution``):
+
+    * Within one clock reading the page prints rows out of order, and a free thrower cannot be
+      replaced: a player's own ``Leaves Game`` counts after his last act of that second, his own
+      ``Enters Game`` before his first.
+    * After each clock reading the team is balanced to five: a surplus drops the player whose
+      next sub is an ``Enters Game`` (he cannot be on) or who never acts again; a shortfall adds
+      the player whose next sub is a ``Leaves Game`` (he must be on), else the next to act.
+    * A player who acts while off the floor (a shot, rebound, foul, turnover ... but not a free
+      throw: substitute and technical shooters are legal) came on at the latest dead ball before
+      the act, unlogged: he goes on from there, replacing the player least likely to be on.
+
+    Args:
+        prs: The period's rows, in the parser's arranged order.
+        team: The team whose lineup to walk.
+        starters: Its five at the period's start (:func:`_infer_starters`).
+        skip_sub: True on a sub row to ignore (a placeholder such as ``UNKNOWN.TEAM``).
+
+    Returns:
+        One five per row of ``prs``, in ``prs`` order, padded with None (at most five names).
+    """
+    n = len(prs)
+
+    def own_sub(r: "dict[str, Any]") -> bool:
+        return r["event_team"] == team and r["event_type"] in _SUB_TYPES and bool(r["player_1"]) and not skip_sub(r)
+
+    def actor(r: "dict[str, Any]") -> Optional[str]:
+        if r["event_team"] != team or r["event_type"] in _SUB_TYPES or r["player_1"] in (None, "TEAM"):
+            return None
+        return r["player_1"]
+
+    # same-second order: a player's own sub moves past his own acts in that clock reading
+    first: "dict[tuple[Any, str], int]" = {}
+    last: "dict[tuple[Any, str], int]" = {}
+    for j, r in enumerate(prs):
+        a = actor(r)
+        if a is not None:
+            first.setdefault((r["game_seconds"], a), j)
+            last[(r["game_seconds"], a)] = j
+    key = []
+    for j, r in enumerate(prs):
+        k: float = j
+        if own_sub(r):
+            sk = (r["game_seconds"], r["player_1"])
+            if r["event_type"] == "Leaves Game" and last.get(sk, -1) > j:
+                k = last[sk] + 0.5
+            elif r["event_type"] == "Enters Game" and first.get(sk, n) < j:
+                k = first[sk] - 0.5
+        key.append(k)
+    order = sorted(range(n), key=lambda j: key[j])
+
+    # every player's subs and acts by walk position, for the look-ahead in balancing and repair
+    timeline: "dict[str, list[tuple[int, str]]]" = {}
+    for t, j in enumerate(order):
+        r = prs[j]
+        if own_sub(r):
+            timeline.setdefault(r["player_1"], []).append((t, "in" if r["event_type"] == "Enters Game" else "out"))
+        elif (a := actor(r)) is not None:
+            timeline.setdefault(a, []).append((t, "act"))
+
+    def next_event(p: str, t: int) -> "tuple[int, Optional[str]]":
+        return next(((tt, kd) for tt, kd in timeline.get(p, ()) if tt > t), (n, None))
+
+    def last_sub(p: str, t: int) -> int:
+        return max((tt for tt, kd in timeline.get(p, ()) if tt < t and kd != "act"), default=-1)
+
+    def acted(p: str, lo: int, hi: int) -> bool:
+        return any(lo <= tt <= hi and kd == "act" for tt, kd in timeline.get(p, ()))
+
+    def surplus_rank(p: str, t: int, lo: int) -> "tuple[int, int]":
+        tt, kd = next_event(p, t)
+        if acted(p, lo, t):
+            return (4, 0)  # he played in the span: never the one to take off
+        return ({"in": 0, None: 1, "act": 2, "out": 3}[kd], -tt)
+
+    on: "list[str]" = list(dict.fromkeys(x for x in starters if x is not None and x != _SENTINEL))
+    fives: "list[list[str]]" = [[] for _ in range(n)]
+    dead = -1  # walk position of the latest dead ball
+    sec_dead = -1  # ... as of the start of the current clock reading
+    moved_in: "set[str]" = set()
+    moved_out: "set[str]" = set()
+
+    def put_on(p: str, lo: int, t: int) -> None:
+        """``p`` was on from walk position ``lo`` + 1 through ``t``: replace the likeliest absentee."""
+        evict = None
+        if len(on) >= 5:
+            cands = [x for x in on if x not in moved_in]
+            if cands:
+                evict = min(cands, key=lambda x: surplus_rank(x, t, lo + 1))
+                on.remove(evict)
+        on.append(p)
+        for s in range(lo + 1, t):
+            f = fives[s]
+            if p not in f:
+                if evict is not None and evict in f:
+                    f[f.index(evict)] = p
+                elif len(f) < 5:
+                    f.append(p)
+
+    before: "dict[Any, list[str]]" = {}  # each clock reading's five before its first row
+    for t, j in enumerate(order):
+        r = prs[j]
+        et = r["event_type"]
+        before.setdefault(r["game_seconds"], list(on))
+        if own_sub(r):
+            p = r["player_1"]
+            if et == "Leaves Game":
+                if p not in on:  # he left without having come on: on since the dead ball before
+                    put_on(p, max(sec_dead, last_sub(p, t)), t)
+                on.remove(p)
+                moved_out.add(p)
+            elif p not in on:
+                on.append(p)
+                moved_in.add(p)
+        elif (a := actor(r)) is not None and a not in on and et != "Free Throw":
+            put_on(a, max(dead, last_sub(a, t)), t)
+        if et in _DEAD_BALL_TYPES:
+            dead = t
+        fives[t] = list(on)
+        nxt = order[t + 1] if t + 1 < n else None
+        if nxt is None or prs[nxt]["game_seconds"] != r["game_seconds"]:
+            # balance to five at the end of the clock reading
+            while len(on) > 5:
+                cands = [x for x in on if x not in moved_in] or list(on)
+                on.remove(min(cands, key=lambda x: surplus_rank(x, t, t + 1)))
+            if len(on) < 5:
+                for p in sorted(
+                    (x for x in timeline if x not in on and x not in moved_out),
+                    key=lambda x: ({"out": 0, "act": 1}.get(next_event(x, t)[1] or "", 9), next_event(x, t)[0]),
+                ):
+                    if len(on) == 5 or next_event(p, t)[1] not in ("out", "act"):
+                        break
+                    on.append(p)
+            fives[t] = list(on)
+            moved_in.clear()
+            moved_out.clear()
+            sec_dead = dead
+
+    # A sub row, and the clock reading's last row (which holds the five until the clock moves),
+    # carry the reading's balanced five. Any other row caught between two of the reading's subs
+    # with a team not at five sees one of the two real states: the subs of a dead ball go in at one
+    # moment (Rule 3-6.2), so the five before the reading or the five after it, whichever holds its
+    # actor; when neither does, the walk's own state (which has him).
+    pos = {j: t for t, j in enumerate(order)}
+    final: "dict[Any, int]" = {}  # clock reading -> walk position of its last row
+    last_j: "dict[Any, int]" = {}  # clock reading -> its last row in page order
+    for j, r in enumerate(prs):
+        sec = r["game_seconds"]
+        last_j[sec] = j
+        final[sec] = max(final.get(sec, -1), pos[j])
+    out: "list[list[Optional[str]]]" = [[] for _ in range(n)]
+    for j, r in enumerate(prs):
+        sec = r["game_seconds"]
+        after = fives[final[sec]]
+        use = fives[pos[j]]
+        is_ft = r["event_type"] == "Free Throw"
+        if r["event_type"] in _SUB_TYPES or (last_j[sec] == j and not is_ft):
+            use = after
+        elif len(use) != 5:
+            a = actor(r)
+            if a is None or a in after:
+                use = after
+            elif a in before[sec]:
+                use = before[sec]
+            # else his own (repaired) state: neither real five has him, yet he acted
+        five: "list[Optional[str]]" = list(sorted(use)[:5])
+        out[j] = five + [None] * (5 - len(five))
+    return out
+
+
 def _assemble(
     rows: "list[dict[str, Any]]",
     game_id: str,
@@ -667,6 +854,7 @@ def parse_ncaa_bb_game_pbp(
     *,
     period_model: "tuple[int, int, int]" = _MBB_PERIOD_MODEL,
     fix_technicals: bool = True,
+    event_lineups: bool = True,
 ) -> pl.DataFrame:
     """Parse one stats.ncaa.org play-by-play page (bigballR ``scrape_game``).
 
@@ -692,6 +880,16 @@ def parse_ncaa_bb_game_pbp(
             ``poss_switch`` and flips ``poss_team``, inventing a possession
             change that never happened). Parity tests pass False. Same
             spirit as ``mbb_ncaa_lineups.fix_tip_in``.
+        event_lineups: When True (default, and the CORRECT behavior), each row carries the five
+            on the floor at that row: every substitution applies at its own dead ball, a
+            player's own sub moves past his own acts within one clock reading, each team is
+            balanced to five after it, a player who acts while off the floor goes on at the
+            latest dead ball before the act, and a placeholder sub (``UNKNOWN.TEAM``) is skipped
+            (:func:`_event_walk`). When False, reproduce bigballR: its queue-paired walk, every
+            row frozen on its possession's first lineup (``all_functions.R:1037-1049``, bigballR
+            issue #48), and a game with a placeholder sub shipped with no lineups at all. That
+            freeze dropped 1.4% of points from their scorer's lineup (2026 MBB). Parity tests
+            pass False.
 
     Page format: the layout bigballR reads, i.e. 2019-era and current
     stats.ncaa.org markup, where the line score is the page's second table and
@@ -921,11 +1119,16 @@ def parse_ncaa_bb_game_pbp(
     player_subs = [r["player_1"] for r in rows if r["event_type"] in ("Enters Game", "Exits Game")]
     # Team names interpolated unescaped, matching R's paste0-into-regex (:481).
     team_pattern = re.compile(rf"^\.?({home_team.upper()}|{away_team.upper()})$")
-    invalid_sub = any(
-        _SUB_NUMBER_RE.search(s) is not None or _SUB_TEAM_RE.search(s) is not None or team_pattern.search(s) is not None
-        for s in player_subs
-        if s is not None
-    )
+
+    def placeholder(name: Optional[str]) -> bool:
+        return name is not None and (
+            _SUB_NUMBER_RE.search(name) is not None
+            or _SUB_TEAM_RE.search(name) is not None
+            or team_pattern.search(name) is not None
+        )
+
+    # event_lineups skips a placeholder sub row instead of shipping the game without lineups
+    invalid_sub = not event_lineups and any(placeholder(s) for s in player_subs)
     if len({r["player_1"] for r in rows}) == 1 or invalid_sub or not player_subs:
         return _assemble(
             rows,
@@ -1018,6 +1221,16 @@ def parse_ncaa_bb_game_pbp(
         )
         home_prev, away_prev = home_starters, away_starters
 
+        if event_lineups:
+            skip = lambda r: placeholder(r["player_1"])  # noqa: E731
+            home_fives = _event_walk(prs, home_team, home_starters, skip)
+            away_fives = _event_walk(prs, away_team, away_starters, skip)
+            for r, h, a in zip(prs, home_fives, away_fives):
+                r["home_lineup"], r["away_lineup"] = h, a
+            # the next period's starter inference falls back to this period's last five
+            home_prev, away_prev = list(home_fives[-1]), list(away_fives[-1])
+            continue
+
         # walk-forward (R :874-965)
         home_exit = list(home_leaving) if home_leaving else [_SENTINEL]
         home_enter = list(home_entering) if home_entering else [_SENTINEL]
@@ -1099,7 +1312,7 @@ def parse_ncaa_bb_game_pbp(
 
     # -- possession-lineup freeze (R :1037-1049) ---------------------------------
     poss_lineups: "dict[int, tuple[list[Optional[str]], list[Optional[str]]]]" = {}
-    for r in rows:
+    for r in [] if event_lineups else rows:
         p = r["poss_num"]
         if p not in poss_lineups:
             poss_lineups[p] = (r["home_lineup"], r["away_lineup"])
