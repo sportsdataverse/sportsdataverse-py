@@ -2791,11 +2791,31 @@ def parse_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
 # for ``return_parsed=True``; a short name without a registered parser passes
 # through as raw Dict.
 
+
+def parse_leaderboard(payload: Any, return_as_pandas: bool = False):
+    """Golf leaderboard / scoreboard field: one row per player per event (the ``leaderboard`` registry entry).
+
+    Delegates to :func:`sportsdataverse.golf.golf_espn_parsers.parse_golf_leaderboard`, imported on
+    first call: the golf package imports this module through its generated wrappers, so a
+    module-level import here would be circular.
+
+    Args:
+        payload: The raw ESPN golf ``leaderboard`` or ``scoreboard`` JSON ``Dict``.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with the ``GOLF_LEADERBOARD_SCHEMA`` columns; zero rows for an empty payload.
+    """
+    from sportsdataverse.golf.golf_espn_parsers import parse_golf_leaderboard
+
+    return parse_golf_leaderboard(payload, return_as_pandas=return_as_pandas)
+
+
 ENDPOINT_PARSERS = {
     # Site v2 (rich nested)
     "scoreboard": parse_scoreboard,
-    # golf-only; golf leagues route it to parse_golf_leaderboard (_SPORT_PARSER_OVERRIDES)
-    "leaderboard": parse_scoreboard,
+    # golf-only (scope: golf): the golf field-of-players parser, imported on first use
+    "leaderboard": parse_leaderboard,
     "teams_site": parse_teams,
     # summary is the dispatcher — returns dict of sub-frames by default
     "summary": parse_summary,

@@ -507,7 +507,7 @@ WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba
 
 **Returns**
 
-One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, pace_proj`. Empty input returns that schema with zero rows.
+One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj`. The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the team's minutes, counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -517,6 +517,7 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 | `stat_reb_exp` | Float64 |  |
 | `stat_ast_exp` | Float64 |  |
 | `stat_fg3m_exp` | Float64 |  |
+| `minutes_exp` | Float64 |  |
 | `pace_proj` | Float64 |  |
 
 ### wnba_player_season_box_rates {#wnba_player_season_box_rates}

@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # Lacrosse — ESPN core API (v2)
 
-`sportsdataverse.lacrosse` — 22 endpoints.
+`sportsdataverse.lacrosse` — 25 endpoints.
 
 ## espn_lacrosse_league_root
 
@@ -365,6 +365,57 @@ ESPN endpoint.
 espn_lacrosse_season_type(league='pll', season=2024, season_type=2)
 ```
 
+## espn_lacrosse_season_group
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/types/{season_type}/groups/{group_id}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
+| `group_id` | `group_id` |  | `Y` |  | group_id path parameter. |
+
+### Returns {#espn_lacrosse_season_group-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | String |  |
+| `id` | Int64 |  |
+| `is_conference` | Boolean |  |
+| `links` | String |  |
+| `midsize_name` | String |  |
+| `name` | String |  |
+| `short_name` | String |  |
+| `slug` | String |  |
+| `uid` | String |  |
+| `children_$ref` | String |  |
+| `parent_$ref` | String |  |
+| `season_$ref` | String |  |
+| `standings_$ref` | String |  |
+| `teams_$ref` | String |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_lacrosse_season_group-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_lacrosse_season_group-example}
+
+```python
+espn_lacrosse_season_group(league='pll', season=2024, season_type=2, group_id=80)
+```
+
 ## espn_lacrosse_season_groups
 
 ESPN endpoint.
@@ -402,6 +453,88 @@ ESPN endpoint.
 
 ```python
 espn_lacrosse_season_groups(league='pll', season=2024, season_type=2)
+```
+
+## espn_lacrosse_season_group_teams
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/types/{season_type}/groups/{group_id}/teams`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/teams?limit=500](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/teams?limit=500)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
+| `group_id` | `group_id` |  | `Y` |  | group_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_lacrosse_season_group_teams-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_lacrosse_season_group_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_lacrosse_season_group_teams-example}
+
+```python
+espn_lacrosse_season_group_teams(league='pll', season=2024, season_type=2, group_id=80)
+```
+
+## espn_lacrosse_season_group_children
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/types/{season_type}/groups/{group_id}/children`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/children?limit=500](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/children?limit=500)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  | `Y` |  | season path parameter. |
+| `season_type` | `season_type` |  | `Y` |  | season_type path parameter. |
+| `group_id` | `group_id` |  | `Y` |  | group_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_lacrosse_season_group_children-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | String |  |
+| `count` | Int64 | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | Int64 | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_lacrosse_season_group_children-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_lacrosse_season_group_children-example}
+
+```python
+espn_lacrosse_season_group_children(league='pll', season=2024, season_type=2, group_id=80)
 ```
 
 ## espn_lacrosse_season_teams

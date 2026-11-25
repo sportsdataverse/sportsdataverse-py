@@ -57,9 +57,9 @@ endpoints:
     query_key: event
     type: int|str
     description: ESPN event (tournament) id; omitted, the tour's current or most recent event.
-  # The registry default only; golf (the one league in scope) routes it to parse_golf_leaderboard
-  # through generate._SPORT_PARSER_OVERRIDES.
-  parser: parse_scoreboard
+  # The registry entry delegates to golf_espn_parsers; golf wrappers call parse_golf_leaderboard
+  # directly (generate._SPORT_PARSER_OVERRIDES).
+  parser: parse_leaderboard
   returns_schema: leaderboard
   example_args:
     event_id: '401811941'

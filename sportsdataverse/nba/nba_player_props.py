@@ -208,6 +208,10 @@ def team_pace_projection(
 ) -> float:
     """Expected possessions for a matchup (Phase-3 :func:`expected_possessions`).
 
+    A team with no row in ``ratings`` (no game before the cut yet: opening night,
+    or an expansion team's first game) or with a null or non-finite ``adj_pace``
+    is given the league's ``avg_pace``, so the projection stays finite.
+
     Args:
         home_team_id: Home team id (matched against ``ratings['team_id']``).
         away_team_id: Away team id.
@@ -223,8 +227,14 @@ def team_pace_projection(
             from sportsdataverse.nba.nba_player_props import team_pace_projection
             poss = team_pace_projection("1", "2", ratings)
     """
+    avg = get_constants(league_id).avg_pace
     pace = dict(zip(ratings["team_id"].to_list(), ratings["adj_pace"].to_list()))
-    return expected_possessions(float(pace[home_team_id]), float(pace[away_team_id]), league_id=league_id)
+
+    def _pace(team_id: str) -> float:
+        p = pace.get(team_id)
+        return float(p) if p is not None and math.isfinite(p) else avg
+
+    return expected_possessions(_pace(home_team_id), _pace(away_team_id), league_id=league_id)
 
 
 def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:
@@ -279,8 +289,35 @@ _PROPS_SCHEMA = {
     "stat_reb_exp": pl.Float64,
     "stat_ast_exp": pl.Float64,
     "stat_fg3m_exp": pl.Float64,
+    "minutes_exp": pl.Float64,
     "pace_proj": pl.Float64,
 }
+_ON_COURT = 5  # players per side, so a team plays 5 x game_minutes (200 WNBA, 240 NBA)
+
+
+def _expected_minutes(rates: pl.DataFrame, logs: pl.DataFrame, league_id: str) -> pl.DataFrame:
+    """Add ``minutes_exp``: each player's share of their team's logged minutes x the team's game minutes.
+
+    The share is the player's minutes with their current team (``rates['team_id']``) over the
+    sum of those minutes for every player in ``rates`` on that team, so ``minutes_exp`` sums to
+    exactly ``5 * game_minutes`` per team. A player who sits counts at zero, which is what keeps
+    the total right; ``minutes_pg`` (the stat lines' basis) is minutes when the player plays.
+    """
+    own = (
+        logs.drop_nulls("minutes")
+        .filter(pl.col("minutes") > 0)
+        .group_by("player_id", "team_id")
+        .agg(pl.col("minutes").sum().alias("_own_min"))
+    )
+    team_minutes = float(_ON_COURT * get_constants(league_id).game_minutes)
+    return (
+        rates.join(own, on=["player_id", "team_id"], how="left")
+        .with_columns(pl.col("_own_min").fill_null(0.0))
+        .with_columns(
+            (pl.col("_own_min") / pl.col("_own_min").sum().over("team_id") * team_minutes).alias("minutes_exp")
+        )
+        .drop("_own_min")
+    )
 
 
 @overload
@@ -344,8 +381,14 @@ def nba_player_props(
 
     Returns:
         One row per player on either team: ``player_id, team_id, stat_pts_exp,
-        stat_reb_exp, stat_ast_exp, stat_fg3m_exp, pace_proj``. Empty input
-        returns that schema with zero rows.
+        stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj``.
+        The ``stat_*_exp`` lines assume the player plays (per-minute rate x
+        mean minutes when playing x pace factor). ``minutes_exp`` is the
+        player's share of the team's minutes, counting a game sat as zero, so
+        it sums to ``5 * game_minutes`` per team: 200 in the WNBA, 240 in the
+        NBA. A team with no game before the cut has no player rows, and its
+        pace is the league average. Empty input returns that schema with zero
+        rows.
 
     Raises:
         ValueError: The box logs carry no ``game_date`` (the as-of cut cannot be applied).
@@ -390,7 +433,8 @@ def nba_player_props(
     pace_factor = pace_proj / get_constants(league_id).avg_pace
     rates = rates.filter(pl.col("team_id").is_in([home_team_id, away_team_id]))
     out = (
-        rates.with_columns(
+        _expected_minutes(rates, logs, league_id)
+        .with_columns(
             (pl.col("pts_per_min") * pl.col("minutes_pg") * pace_factor).alias("stat_pts_exp"),
             (pl.col("reb_per_min") * pl.col("minutes_pg") * pace_factor).alias("stat_reb_exp"),
             (pl.col("ast_per_min") * pl.col("minutes_pg") * pace_factor).alias("stat_ast_exp"),
