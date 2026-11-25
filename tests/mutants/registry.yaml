@@ -12237,6 +12237,16 @@
   expected: kill
   note: A real quick turnover would count as a phantom possession.
 
+- id: phantom-possessions-period-last-over-frame
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: tools/validation/checks/phantom_possessions.py
+  snippet: '    last = pl.col("_period_last")'
+  mutant: '    last = pl.col("poss_num").max().over("contest_id", "period")'
+  test: tests/contracts/test_phantom_possessions.py::test_a_teams_last_possession_of_a_period_can_be_a_phantom
+  expected: kill
+  note: Inside the team group the window gives the team's last possession of the period, so its phantom is dropped.
+
 # --- wnba-props-minutes-coldstart: team minutes invariant + expansion-team cold start ------------
 - id: props-minutes-share-normalised
   group: props-minutes-coldstart

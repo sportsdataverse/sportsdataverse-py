@@ -1,4 +1,4 @@
-"""The phantom-possession check on two real contests of the 2026 ``ncaa_mbb_possessions`` release.
+"""The phantom-possession check on three real contests of the 2026 ``ncaa_mbb_possessions`` release.
 
 Fixture: tests/fixtures/ncaa_mbb_possessions/phantom_contests_2026.parquet (provenance in its README).
 """
@@ -21,9 +21,19 @@ def test_phantom_counts_per_team_game() -> None:
     assert counts.rows() == [
         ("6388769", "Buffalo", 0, 66),
         ("6388769", "Southern Miss.", 1, 67),
+        ("6406421", "Lindenwood", 1, 72),
+        ("6406421", "Southern Ind.", 0, 73),
         ("6465160", "Hampton", 4, 76),
         ("6465160", "Howard", 7, 79),
     ]
+
+
+def test_a_teams_last_possession_of_a_period_can_be_a_phantom() -> None:
+    # Lindenwood's phantom is its own last possession of the period, not the period's last: a window
+    # taken inside the team group would read it as the period's last and drop it.
+    frame = pl.read_parquet(FIX).filter(pl.col("contest_id") == "6406421")
+    counts = phantom_possessions.phantom_counts(frame)
+    assert counts.filter(pl.col("poss_team") == "Lindenwood")["phantoms"].item() == 1
 
 
 def test_only_the_tail_team_game_is_flagged() -> None:

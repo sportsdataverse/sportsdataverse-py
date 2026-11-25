@@ -49,7 +49,9 @@ def phantom_counts(frame: pl.DataFrame) -> pl.DataFrame:
     Returns:
         One row per ``(contest_id, poss_team)``: ``phantoms`` and ``possessions``.
     """
-    last = pl.col("poss_num").max().over("contest_id", "period")
+    # The period's last possession, taken over the whole frame: inside the team group a window would
+    # give the team's own last possession of the period instead.
+    last = pl.col("_period_last")
     phantom = (
         pl.col("first_shot_type").is_null()
         & (pl.col("pts").fill_null(0) == 0)
@@ -58,7 +60,8 @@ def phantom_counts(frame: pl.DataFrame) -> pl.DataFrame:
         & ~pl.col("last_event_type").is_in(_REAL_QUICK_ENDS).fill_null(False)
     )
     return (
-        frame.group_by("contest_id", "poss_team")
+        frame.with_columns(pl.col("poss_num").max().over("contest_id", "period").alias("_period_last"))
+        .group_by("contest_id", "poss_team")
         .agg(phantom.sum().cast(pl.Int64).alias("phantoms"), pl.len().cast(pl.Int64).alias("possessions"))
         .sort("contest_id", "poss_team")
     )
