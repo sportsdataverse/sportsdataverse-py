@@ -142,11 +142,11 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [build_nfl_team_stats](additional/play-by-play-processing-3.md#build_nfl_team_stats) | Build nflverse **team_stats** by aggregating SDV-native play-by-play. |
 | [calculate_nfl_series_conversion_rates](additional/play-by-play-processing-3.md#calculate_nfl_series_conversion_rates) | Compute per-team offense + defense series conversion rates. |
 | [clean_nfl_pbp](additional/play-by-play-processing-3.md#clean_nfl_pbp) | Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port). |
-| [espn_nfl_pbp_nflverse](additional/play-by-play-processing-3.md#espn_nfl_pbp_nflverse) | ESPN NFL play-by-play in nflverse `play_by_play` names, conventions and dtypes. |
-| [shield_nfl_pbp](additional/play-by-play-processing-4.md#shield_nfl_pbp) | Build one NFL game's nflverse-shape play-by-play from Shield, at ANY game phase. |
-| [shield_to_espn_summary](additional/play-by-play-processing-4.md#shield_to_espn_summary) | Project one Shield game (any phase) onto an ESPN-summary-shaped dict. |
-| [split_pat_rows](additional/play-by-play-processing-5.md#split_pat_rows) | Give every PAT that ESPN folded into its touchdown row a row of its own, as nflverse does. |
-| [team_name_fn](additional/play-by-play-processing-5.md#team_name_fn) | Fold historical/relocated team codes onto their current abbreviation. |
+| [espn_nfl_pbp_nflverse](additional/play-by-play-processing-4.md#espn_nfl_pbp_nflverse) | ESPN NFL play-by-play in nflverse `play_by_play` names, conventions and dtypes. |
+| [shield_nfl_pbp](additional/play-by-play-processing-5.md#shield_nfl_pbp) | Build one NFL game's nflverse-shape play-by-play from Shield, at ANY game phase. |
+| [shield_to_espn_summary](additional/play-by-play-processing-5.md#shield_to_espn_summary) | Project one Shield game (any phase) onto an ESPN-summary-shaped dict. |
+| [split_pat_rows](additional/play-by-play-processing-6.md#split_pat_rows) | Give every PAT that ESPN folded into its touchdown row a row of its own, as nflverse does. |
+| [team_name_fn](additional/play-by-play-processing-6.md#team_name_fn) | Fold historical/relocated team codes onto their current abbreviation. |
 
 ## Models and calculators
 

@@ -91,6 +91,7 @@ from sportsdataverse.nfl.ep_wp import (
 )
 from sportsdataverse.nfl.model_vars import (
     ESPN_FULL_KICK_TEXT_FROM,
+    FIRST_18_WEEK_SEASON,
     ESPN_PERIOD_REPAIR_BEFORE,
     SPREAD_TIME_DECAY_EXPONENT,
     touchback_yardline_expr,
@@ -1171,6 +1172,42 @@ def _espn_play_type_nfl() -> pl.Expr:
     )
 
 
+#: Last season under a relocated franchise's old abbreviation, which nflverse's ``game_id`` keeps.
+_NFLVERSE_GAME_ID_RELOCATIONS = {"LA": (2015, "STL"), "LAC": (2016, "SD"), "LV": (2019, "OAK")}
+
+
+def _espn_nflverse_game_id() -> pl.Expr:
+    """nflverse ``game_id`` (``YYYY_WW_AWAY_HOME``) from the ESPN header columns of a processor frame.
+
+    ESPN numbers postseason weeks 1-5 with the Pro Bowl as week 4; nflverse continues the regular season's
+    count (17 weeks through 2020, 18 from 2021), so the Super Bowl of 2024 is week 22. Abbreviations are
+    nflverse's for the season (``WSH`` -> ``WAS``, ``LAR`` -> ``LA``, the Rams ``STL`` through 2015). A preseason
+    game gets the Shield builder's ``PRE<week>`` token; a game between non-NFL sides (the Pro Bowl) is null.
+    Matches the schedule's id on every game of 2007, 2014, 2019 and 2024.
+    """
+    from sportsdataverse.nfl.datasets import team_abbr_mapping_norelocate
+
+    season, week, st = (pl.col(c).cast(pl.Int64) for c in ("season", "week", "seasonType"))
+    weeks = pl.when(season >= FIRST_18_WEEK_SEASON).then(18).otherwise(17)
+    wk = (
+        pl.when(st == 2)
+        .then(week.cast(pl.Utf8).str.zfill(2))
+        .when(st == 3)
+        .then((weeks + week - (week >= 5).cast(pl.Int64)).cast(pl.Utf8).str.zfill(2))
+        .when(st == 1)
+        .then(pl.format("PRE{}", week))
+    )
+    clubs = set(team_abbr_mapping_norelocate.values()) - {"AFC", "NFC", "NFL"}
+
+    def abbr(c: str) -> pl.Expr:
+        a = pl.col(c).replace_strict(team_abbr_mapping_norelocate, default=None, return_dtype=pl.Utf8)
+        for new, (last, old) in _NFLVERSE_GAME_ID_RELOCATIONS.items():
+            a = pl.when((a == new) & (season <= last)).then(pl.lit(old)).otherwise(a)
+        return pl.when(a.is_in(clubs)).then(a)
+
+    return pl.format("{}_{}_{}_{}", season, wk, abbr("awayTeamAbbrev"), abbr("homeTeamAbbrev"))
+
+
 #: ESPN types that already ARE the try's own row (the pre-2014 feed, and its rare later strays): never split
 #: again. Taken from :data:`ESPN_PLAY_TYPE_NFL`, so a new PAT type learned there is covered here too.
 _ESPN_SEPARATE_PAT_TYPES = tuple(t for t, v in ESPN_PLAY_TYPE_NFL.items() if v in ("XP_KICK", "PAT2"))
@@ -1787,6 +1824,8 @@ class NFLPlayProcess(object):
                 overUnder=pl.lit(float(np.asarray(init["overUnder"]).reshape(-1)[0])).first(),
                 roof=pl.lit(init["roof"]),
             )
+            # the nflverse game id, so espn_nfl_pbp_nflverse needs no schedule on the live path
+            .with_columns(nflverse_game_id=_espn_nflverse_game_id())
             .with_columns(
                 homeTeamSpread=pl.when(pl.col("homeFavorite") == True)
                 .then(pl.col("gameSpread"))

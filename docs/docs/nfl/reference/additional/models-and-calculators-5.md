@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: calculate_wpa"
 sidebar_label: "Models and calculators: calculate_wpa"
-sidebar_position: 20
+sidebar_position: 21
 description: "NFL — additional Python functions — Models and calculators: calculate_wpa — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: calculate_wpa

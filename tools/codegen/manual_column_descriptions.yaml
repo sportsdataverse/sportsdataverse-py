@@ -3487,6 +3487,63 @@ espn_nfl_pbp_nflverse:
   ydsnet: Net yards of the play's ESPN drive.
   ydstogo: Yards to go for a first down (0 on kickoffs and timeouts).
   yrdln: Field position as nflverse writes it (e.g. KC 35, MID 50).
+  era0: 1 for seasons through 2001, else 0 (model era feature).
+  era1: 1 for seasons 2002-2005, else 0 (model era feature).
+  era2: 1 for seasons 2006-2013, else 0 (model era feature).
+  era3: 1 for seasons 2014-2017, else 0 (model era feature).
+  era4: 1 for seasons from 2018 on, else 0 (model era feature).
+  down1: 1 on a first-down play, else 0 (expected-points model feature).
+  down2: 1 on a second-down play, else 0 (expected-points model feature).
+  down3: 1 on a third-down play, else 0 (expected-points model feature).
+  down4: 1 on a fourth-down play, else 0 (expected-points model feature).
+  home: 1 when the possession team is the home team, else 0 (model feature).
+  retractable: 1 only when the roof is the literal value "retractable", which nflverse does not ship, else 0 (model feature).
+  dome: 1 when the game is played under a dome or a closed roof, else 0 (model feature; a null roof counts as outdoors).
+  outdoors: 1 when the game is played outdoors or under an open roof, else 0 (model feature; a null roof counts as outdoors).
+  receive_2h_ko: 1 on a first-half play when the possession team receives the second-half kickoff, else 0 (win-probability model feature).
+  posteam_spread: Point spread from the possession team's side, nflverse spread_line for the home team and its negation for the away team.
+  elapsed_share: Share of regulation elapsed at the snap, (3600 - game_seconds_remaining) / 3600 clipped to [0, 1].
+  spread_time: Win-probability model feature, posteam_spread * exp(-4 * elapsed_share), so the spread fades as the game runs down; 0 when spread_line is missing.
+  Diff_Time_Ratio: Win-probability model feature, score_differential divided by exp(-4 * elapsed_share), so a lead weighs more as the game runs down.
+  qbr_epa: The quarterback's EPA on the play as the QBR model reads it, floored at -5 and set to -3.5 on a fumble.
+  non_fumble_sack: True for a sack with no fumble on the play (QBR model input).
+  sack_epa: qbr_epa on sacks without a fumble, null otherwise (QBR model input).
+  pass_epa: qbr_epa on pass plays, null otherwise (QBR model input).
+  rush_epa: qbr_epa on rushing plays, null otherwise (QBR model input).
+  pen_epa: qbr_epa on plays with a penalty, null otherwise (QBR model input).
+  sack_weight: The play's QBR weight on sacks without a fumble, null otherwise.
+  pass_weight: The play's QBR weight on pass plays, null otherwise.
+  rush_weight: The play's QBR weight on rushing plays, null otherwise.
+  pen_weight: The play's QBR weight on plays with a penalty, null otherwise.
+  action_play: True when the play's qb_epa is non-zero, i.e. the play counts toward the QBR model's inputs.
+  fixed_drive: 'Drive number in the game: ESPN''s own drive (nflfastR''s new_drive cascade on this frame agrees less often with nflverse).'
+  fixed_drive_result: 'How the drive ended (Touchdown, Punt, Field goal, Turnover, ...): nflfastR''s drive-result cascade over ESPN''s drive.'
+  series: Series number in the game (a new series on each first down or new drive), nflfastR's add_series_data on ESPN's drives.
+  drive_game_clock_start: Game clock at the drive's start (MM:SS), from ESPN's drive record.
+  drive_game_clock_end: Game clock at the drive's end (MM:SS), from ESPN's drive record.
+  drive_start_yard_line: Where the drive started (e.g. KC 30), from ESPN's drive record in nflverse's current abbreviations.
+  drive_first_downs: First downs (rush, pass or penalty) on the drive's plays.
+  drive_inside20: 1 if the drive reached the opponent's 20-yard line, else 0.
+  drive_play_id_started: play_id of the drive's first play.
+  time_of_day: UTC time of the play, ESPN's wallclock (to the second; nflverse's NFL-feed stamp has milliseconds). Null where ESPN has none.
+  timeout: '0/1 flag: a timeout row (ESPN type Timeout).'
+  timeout_team: Team that called the timeout, from ESPN's home / away timeout flags (nflverse current abbreviation).
+  air_yards: ESPN's air yards (empty in ESPN's feed, so cp / cpoe / xYAC and the air / YAC splits stay null).
+  yards_after_catch: ESPN's yards after catch (empty in ESPN's feed).
+  pass: '0/1 flag: a dropback (pass, sack or scramble text), nflfastR clean_pbp''s pass.'
+  rush: '0/1 flag: a designed run with a rusher (not a kneel or a pass), nflfastR clean_pbp''s rush.'
+  passer_player_id: 'GSIS id of the passer: ESPN''s passer participant (or the processor''s id) mapped through the nflverse players table''s espn_id.'
+  rusher_player_id: GSIS id of the rusher, from ESPN's rusher participant through the players table's espn_id.
+  receiver_player_id: GSIS id of the targeted receiver, from ESPN's receiver participant through the players table's espn_id.
+  solo_tackle_1_player_id: GSIS id of the tackler on a tackle with no ESPN assist (or the lone sacker when ESPN names no tackler).
+  tackle_with_assist_1_player_id: GSIS id of ESPN's tackler on a tackle ESPN also credits an assist on.
+  assist_tackle_1_player_id: GSIS id of ESPN's first assisted_by participant (or the first of two sackers).
+  assist_tackle_2_player_id: GSIS id of ESPN's second assisted_by participant (or the second of two sackers).
+  tackle_for_loss_1_player_id: GSIS id of the tackler on a tackle for loss, or of a lone sacker on a sack for loss.
+  sack_player_id: GSIS id of the sacker when ESPN names one (two are half_sack_1 / half_sack_2).
+  interception_player_id: GSIS id of the interceptor (ESPN's first pass defender on an interception).
+  kicker_player_id: GSIS id of the kicker on a kickoff, field goal or try (a split try takes its touchdown row's PAT kicker).
+  penalty_player_id: GSIS id of ESPN's penalized participant (the only player slot a no-play keeps).
 espn_nfl_player_stats:
   defensive_assist_tackles: Number of assisted tackles credited to the player (helped bring down the ball carrier but was
     not the primary tackler).

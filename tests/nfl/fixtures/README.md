@@ -102,8 +102,10 @@ exactly.
 | `nflverse/2018_13_IND_JAX.parquet` | 2018_13_IND_JAX | 401030962 | 170 x 42 |
 | `nflverse/2021_10_JAX_IND.parquet` | 2021_10_JAX_IND | 401326467 | 180 x 42 |
 | `nflverse/play_type_nfl_2024.parquet` | 2024_01_BAL_KC (Shield `fixtures/nfl_shield/2024_01_BAL_KC.json.gz`) + 2024_04_PHI_TB | 401671740 | 351 x 7 |
-| `nflverse/espn_nflverse_view.parquet` | 2024_04_PHI_TB + 2014_11_MIN_CHI + 2007_14_SD_TEN + 2019_13_OAK_KC + 2024_01_NYJ_SF | 401671740, 400554340, 271209010, 401128067, 401671696 | 846 x 120 |
-| `nflverse/espn_nflverse_view_schedule.parquet` | the same five games' schedule rows | | 5 x 46 |
+| `nflverse/espn_nflverse_view.parquet` | 2024_04_PHI_TB + 2014_11_MIN_CHI + 2007_14_SD_TEN + 2019_13_OAK_KC + 2024_01_NYJ_SF | 401671740, 400554340, 271209010, 401128067, 401671696 | 1004 x 266 |
+| `nflverse/espn_nflverse_view_schedule.parquet` | the same six games' schedule rows | | 6 x 46 |
+| `espn_nflverse_view/play_participants.parquet` | 2024_04_PHI_TB + 2014_11_MIN_CHI + 2019_13_OAK_KC + 2024_01_NYJ_SF | 401671740, 400554340, 401128067, 401671696 | 594 x 116 |
+| `espn_nflverse_view/players.parquet` | their athletes | | 272 x 4 |
 
 `espn_nflverse_view.parquet` is the oracle for `espn_nfl_pbp_nflverse` (`test_nfl_espn_nflverse_view.py`): every
 nflverse column the view also emits, for the games of the ESPN captures 401671740 (2024), 400554340 (2014),
@@ -115,6 +117,19 @@ split two-point pass and run), outside the whole-game capture set: nfl-raw `nfl/
 commits 96b91e56 and f5b5269e, both 2026-09-14) trimmed to the same keys as the captures above. `espn_nflverse_view_schedule.parquet` is the same games' rows of nflverse's schedule, `nflverse/nfldata`
 `data/games.csv` as of its 2026-11-24 commit (the table nflverse-data publishes as `schedules/games`), read with
 `pl.read_csv(src, infer_schema_length=20000)` and filtered on `game_id`.
+
+The oracle was re-cut on 2026-11-24 for the view's player, text, drive / series and model columns (`players=`,
+`enrich=True`): the same release assets, now every column the view with those options emits (846 x 266).
+`espn_nflverse_view/play_participants.parquet` is the sportsdataverse-data release `espn_nfl_play_participants`
+(assets `play_participants_{2014,2019,2024}.parquet`, read 2026-11-24) filtered on the four ESPN game ids from 2014 on
+(the release starts in 2014; the 2007 capture reads the processor's own athlete ids). `espn_nflverse_view/players.parquet`
+is nflverse-data release `players` asset `players.parquet` (read 2026-11-24), columns `gsis_id, espn_id, short_name,
+display_name`, filtered on the ESPN athlete ids those participants and the processed captures name.
+
+`espn_nflverse_view/summary_401671886_trimmed.json.gz` (2024_20_BAL_BUF, added 2026-11-25) is a single-rule capture: a
+rushing touchdown whose text still folds a passing two-point try. Trimmed the same way from nfl-raw
+`nfl/espn/raw/2024/401671886.json.gz` (commit f5b5269e, 2026-09-14); its nflverse rows (the same `pbp` release asset)
+were appended to `espn_nflverse_view.parquet` and its schedule row to `espn_nflverse_view_schedule.parquet`.
 
 `play_type_nfl_2024.parquet` is the oracle for `play_type_nfl` / `aborted_play` (Shield and ESPN) and for the PAT rows `split_pat_rows` builds:
 `game_id, play_id, play_type_nfl, aborted_play, desc, extra_point_result, two_point_conv_result`, cut on 2026-11-24 from the nflverse-data `pbp`

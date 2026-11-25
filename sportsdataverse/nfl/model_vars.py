@@ -88,6 +88,10 @@ TOUCHBACK_YARDLINE_PRE_2016: int = 80
 #: :func:`touchback_yardline`.
 TOUCHBACK_YARDLINE_POST_2016: int = 75
 
+#: First season of the 18-week regular season (17 weeks 1990-2020); nflverse's postseason game-id weeks
+#: continue the regular season's count from it.
+FIRST_18_WEEK_SEASON: int = 2021
+
 #: Dynamic-kickoff touchback spot, 2024 only (the 30).
 TOUCHBACK_YARDLINE_2024: int = 70
 
