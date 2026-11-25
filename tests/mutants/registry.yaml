@@ -12134,3 +12134,34 @@
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_defensive_touchdowns_try_takes_the_scorers_timeouts
   expected: kill
   note: A split try's timeouts read from the wrong side, e.g. the old offense's after a defensive touchdown.
+
+# --- wnba-props-minutes-coldstart: team minutes invariant + expansion-team cold start ------------
+- id: props-minutes-share-normalised
+  group: props-minutes-coldstart
+  finding: props-team-minutes
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '            (pl.col("_own_min") / pl.col("_own_min").sum().over("team_id") * team_minutes).alias("minutes_exp")'
+  mutant: '            (pl.col("_own_min") / pl.col("_own_min").count().over("team_id")).alias("minutes_exp")'
+  test: tests/nba/test_nba_player_props_team_minutes.py
+  expected: kill
+  note: minutes_exp as each player's average logged minutes would no longer sum to the team's game minutes.
+
+- id: props-minutes-league-game-length
+  group: props-minutes-coldstart
+  finding: props-team-minutes
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    team_minutes = float(_ON_COURT * get_constants(league_id).game_minutes)'
+  mutant: '    team_minutes = 240.0'
+  test: tests/nba/test_nba_player_props_team_minutes.py
+  expected: kill
+  note: A WNBA team would be handed the NBA's 240 minutes instead of 200.
+
+- id: props-pace-missing-team-falls-back
+  group: props-minutes-coldstart
+  finding: props-expansion-cold-start
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        return float(p) if p is not None and math.isfinite(p) else avg'
+  mutant: '        return float(pace[team_id])'
+  test: tests/wnba/test_wnba_player_props_cold_start.py::test_an_expansion_teams_first_game_returns_the_empty_schema
+  expected: kill
+  note: An expansion team's first game (no ratings row yet) would raise KeyError again.
