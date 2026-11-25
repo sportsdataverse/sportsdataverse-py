@@ -19,6 +19,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse.mbb.mbb_ncaa_game_pbp import parse_ncaa_bb_game_pbp
+from sportsdataverse.mbb.mbb_ncaa_possession_seg import ncaa_mbb_possessions
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "ncaa"
 HALVES, QUARTERS = (2, 1200, 300), (4, 600, 300)
@@ -139,3 +140,17 @@ def test_a_team_never_has_more_than_five(game: str) -> None:
             p.select(n).to_series()
             == p.select(pl.concat_list([f"{side}_{i}" for i in range(1, 6)]).list.drop_nulls().list.len()).to_series()
         ).all()
+
+
+@pytest.mark.parametrize("game", [*GAMES, "6424024"])
+@pytest.mark.parametrize("simple", [False, True])
+def test_possessions_stay_one_row_each(game: str, simple: bool) -> None:
+    """A dead-ball sub inside a possession must not split it: each possession keeps its first row's five."""
+    p = _parse(game)
+    lineup = [f"{side}_{i}" for side in ("home", "away") for i in range(1, 6)]
+    changes = p.group_by("game_id", "period", "poss_num").agg(pl.struct(lineup).n_unique().alias("n"))
+    assert (changes["n"] > 1).any()  # the fixture does change lineups mid-possession
+    poss = ncaa_mbb_possessions(p, simple=simple)
+    key = ["game_id", "poss_num"] if simple else ["game_id", "period", "poss_num"]
+    assert poss.height > 0
+    assert poss.select(key).n_unique() == poss.height
