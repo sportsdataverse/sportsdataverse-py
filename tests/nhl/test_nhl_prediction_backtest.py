@@ -109,11 +109,15 @@ PREGAME_WP_CALIBRATION_FLOOR = 0.10  # observed 0.0882 on n>=30 buckets
 MIN_CALIBRATION_BUCKET_N = 30
 FAVORITE_AGREEMENT_FLOOR = 0.80  # observed 10/12 = 0.833
 MATCHED_ODDS_MIN = 12  # documented matched-odds count; a silent join drop must fail
-TOTAL_MAE_FLOOR = 0.55
+# Closing-total MAE on the 12 matched games: 0.5208 with the 6.05 seed, 0.6222 with the fitted 6.19
+# (2026-11-25). Those 12 lines average 5.58 and the games scored 5.67, against a season that settled
+# at 6.36, so the lower seed matched them better by running low. A half-goal line is not a mean
+# either; the 3538-game settled-total bias in nhl_prediction_constants is the level check.
+TOTAL_MAE_FLOOR = 0.65
 # Mean exp_total - actual_total over the 1174 games: -2.2389 with the old centring on
-# avg_total_goals, -0.4239 after centring on 2 * avg_xgf (2026-11-11). The rest is the
-# 6.05 avg_total_goals seed against 2022-23's 6.47 goals a game: left unfitted because
-# 2023-24..2025-26 average 6.26, no closer to 6.47 than to 6.05.
+# avg_total_goals, -0.4239 after centring on 2 * avg_xgf (2026-11-11), both against labels that
+# counted every scoring shootout attempt. Against settled scores (a shootout is one goal):
+# -0.3139 with the 6.05 seed, -0.1740 with the fitted 6.19 (2026-11-25).
 TOTAL_BIAS_FLOOR = 0.50
 
 

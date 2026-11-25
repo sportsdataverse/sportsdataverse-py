@@ -12135,6 +12135,78 @@
   expected: kill
   note: A split try's timeouts read from the wrong side, e.g. the old offense's after a defensive touchdown.
 
+# --- nhl-box-source-agreement: the NHL api-web and ESPN boxscores agree per skater ----------------
+- id: nhl-box-agreement-unspaced-initial
+  group: nhl-box-agreement
+  finding: nhl-box-source-agreement
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '                    row["name"] = {lang: _space_initial(n) for lang, n in row["name"].items()}'
+  mutant: '                    pass'
+  test: tests/nhl/test_nhl_box_source_agreement.py::test_unspaced_initial_names_are_rewritten
+  expected: kill
+  note: An NHL api-web name with no space after the initial ("J.Kulich") would pass through unspaced.
+
+- id: nhl-box-agreement-home-away-tag
+  group: nhl-box-agreement
+  finding: nhl-box-source-agreement
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '        ha = "away" if side == "awayTeam" else "home"'
+  mutant: '        ha = "home" if side == "awayTeam" else "away"'
+  test: tests/nhl/test_nhl_box_source_agreement.py::test_every_skater_joins_one_to_one_across_sources
+  expected: kill
+  note: Every NHL api-web boxscore row would carry the other team's side, so no skater joins its ESPN line.
+
+- id: nhl-box-agreement-espn-stat-keys
+  group: nhl-box-agreement
+  finding: nhl-box-source-agreement
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '                for k, v in zip(keys, stats):'
+  mutant: '                for k, v in zip(keys, stats[1:] + stats[:1]):'
+  test: tests/nhl/test_nhl_box_source_agreement.py::test_goals_assists_shots_and_plus_minus_agree_on_every_skater
+  expected: kill
+  note: ESPN boxscore stats zipped one key off would put assists under goals and so on.
+
+# --- wnba-props-minutes-coldstart: team minutes invariant + expansion-team cold start ------------
+- id: props-minutes-share-normalised
+  group: props-minutes-coldstart
+  finding: props-team-minutes
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '            (pl.col("_own_min") / pl.col("_own_min").sum().over("team_id") * team_minutes).alias("minutes_exp")'
+  mutant: '            (pl.col("_own_min") / pl.col("_own_min").count().over("team_id")).alias("minutes_exp")'
+  test: tests/nba/test_nba_player_props_team_minutes.py
+  expected: kill
+  note: minutes_exp as each player's average logged minutes would no longer sum to the team's game minutes.
+
+- id: props-minutes-league-game-length
+  group: props-minutes-coldstart
+  finding: props-team-minutes
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    team_minutes = float(_ON_COURT * get_constants(league_id).game_minutes)'
+  mutant: '    team_minutes = 240.0'
+  test: tests/nba/test_nba_player_props_team_minutes.py
+  expected: kill
+  note: A WNBA team would be handed the NBA's 240 minutes instead of 200.
+
+- id: props-pace-missing-team-falls-back
+  group: props-minutes-coldstart
+  finding: props-expansion-cold-start
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        return float(p) if p is not None and math.isfinite(p) else avg'
+  mutant: '        return float(pace[team_id])'
+  test: tests/wnba/test_wnba_player_props_cold_start.py::test_an_expansion_teams_first_game_returns_the_empty_schema
+  expected: kill
+  note: An expansion team's first game (no ratings row yet) would raise KeyError again.
+
+- id: nhl-settled-score-shootout-one-goal
+  group: nhl-pregame-labels
+  finding: nhl-settled-total-label
+  file: sportsdataverse/nhl/nhl_prediction_constants.py
+  snippet: '        (~pl.col("home") & ~pl.col("shootout")).sum().cast(pl.Int64).alias("away_goals"),'
+  mutant: '        (~pl.col("home")).sum().cast(pl.Int64).alias("away_goals"),'
+  test: tests/nhl/test_nhl_settled_totals.py::test_a_shootout_counts_one_goal_for_its_winner
+  expected: kill
+  note: Every scoring shootout attempt would count as a goal again, 0.06-0.11 goals a game on the fitted totals.
+
 - id: nhl-reg-draw-inflation-applied
   group: nhl-score-model
   finding: nhl-regulation-3way

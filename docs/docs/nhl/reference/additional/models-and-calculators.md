@@ -71,7 +71,7 @@ Fitted, league-specific constants for the NHL/PWHL prediction spine.
 | `hfa` | `float` |  | home-ice edge on `exp_margin`'s own (shrunk-rating) scale. NHL: fitted jointly with `margin_sd`, so smaller than the real-goal home edge. PWHL: a seeded placeholder. |
 | `margin_sd` | `float` |  | standard deviation of the final goal margin (deliberately WIDE for hockey). |
 | `avg_xgf` | `float` |  | league mean even-strength xG-for, per game. |
-| `avg_total_goals` | `float` |  | league mean total goals per game. |
+| `avg_total_goals` | `float` |  | league mean settled total goals per game (a shootout counts one goal), the level of every predicted total. |
 | `total_scale` | `float` |  | multiplier converting rating differential to total-goals deviation. |
 | `shrink_k` | `float` |  | games-played prior strength for rating shrinkage. |
 | `prop_kappa` | `dict` |  | empirical-Bayes shrinkage strength per player-prop stat family. |

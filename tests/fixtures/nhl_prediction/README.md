@@ -24,7 +24,7 @@ to stay comparable with MoneyPuck's `regular` folder.
 | File | Source | Rows | Notes |
 |---|---|---:|---|
 | `moneypuck_teams_2023.parquet` | MoneyPuck `teams.csv`, `situation=="5on5"`, `season=2022` (2022-23) | 32 | Per-game normalised (`xgf = xGoalsFor / games_played`, etc). `team: Utf8` abbreviation, matches sdv-py's own NHL abbreviations exactly (`ARI`, not `UTA` -- pre-relocation season). |
-| `results_2023.parquet` | `load_nhl_schedules([2023])` for game_id/date/teams; `home_goals`/`away_goals` **derived from `load_nhl_pbp_full`'s own GOAL events**, not the schedule's score columns (see gap #4 below) | 1312 | `game_id: Utf8`, `date: Date`, `home_team`/`away_team: Utf8`, `home_goals`/`away_goals: Int64`, `neutral_site` hardcoded `False` (not tracked upstream; NHL had no true neutral-site games in 2022-23). |
+| `results_2023.parquet` | `load_nhl_schedules([2023])` for game_id/date/teams; `home_goals`/`away_goals` **the settled score from `load_nhl_pbp_full`'s own GOAL events** (a shootout counts one goal to its winner; relabelled 2026-11-25, 59 shootout games changed, no winner did), not the schedule's score columns (see gap #4 below) | 1312 | `game_id: Utf8`, `date: Date`, `home_team`/`away_team: Utf8`, `home_goals`/`away_goals: Int64`, `neutral_site` hardcoded `False` (not tracked upstream; NHL had no true neutral-site games in 2022-23). |
 | `espn_power_2023.parquet` | `espn_nhl_season_powerindex_leaders` | **0** | **Confirmed genuinely empty at the ESPN API** -- `count: 0` for every season tried 2021-2026 directly against `sports.core.api.espn.com/.../powerindex/leaders`. ESPN has not populated this endpoint for the NHL league. Dropped as a Phase-1 secondary oracle; the tertiary raw-vs-adjusted-xG sanity check stands in its place. |
 | `espn_predictor_sample.parquet` | `espn_nhl_game_predictor` | **0** | **Confirmed permanently unsupported** -- every call returns HTTP 400 `"Predictor is not supported for [hockey/nhl]"`. ESPN does not run a win-probability predictor model for hockey. Task 2.3's win-prob gate is adapted to compare against a documented naive baseline instead of an ESPN-predictor Brier score. |
 | `espn_odds_sample.parquet` | `espn_nhl_game_odds`, sampled across 7 dates spanning the season | 20 | `game_id: Utf8` (crosswalked from ESPN's own `event_id` via `(date, home_team, away_team)` after normalising ESPN's 4 divergent abbreviations: `LA->LAK`, `NJ->NJD`, `SJ->SJS`, `TB->TBL`). `close_puck_line_home`/`close_total` taken from the flat top-level `spread`/`over_under` fields of the first odds-provider row (see gap #5 below); not necessarily identical across games/providers -- documented limitation, not a correctness issue since MAE floors are set from these same observed values. |
@@ -35,6 +35,8 @@ to stay comparable with MoneyPuck's `regular` folder.
 | `in_game_wp_pulled_goalie_2023.parquet` | Same 2023 scoring run, subset to plays with either goalie pulled | 1 | `mean_pred, mean_actual, n` -- the Task 3.4 targeted pulled-goalie calibration check. |
 | `player_props_mae_2024.parquet` | `nhl_player_props(2024)` joined back to realized `load_nhl_skater_boxscores` values for the same player-game (Task 4.2) | 2 | `stat, mae, n` -- MAE(proj_mean, realized) per stat family. Season **2024**, not 2023 (see gap #7 below). |
 | `player_props_p_over_calibration_2024.parquet` | Same 2024 backtest, `p_over` bucketed via `calibration_table` against a synthetic fixed line (the stat's own realized median + 0.5) | 19 | `stat, bin_mid, mean_pred, mean_actual, n`. |
+| `settled_totals_2024_2026.parquet` | `tools/models/nhl_prediction/fit_pregame.py` (written by each run): every 2023-24 .. 2025-26 regular-season game with pbp, settled score from `load_nhl_pbp_full` GOAL events beside `load_nhl_schedules`' `home_score`/`away_score` (real from 2023-24 on) | 3936 | `game_id: Int64`, `season` (end year), `home_goals`, `away_goals`, `home_score`, `away_score`. The two scores agree in every row. Its per-season mean totals (6.226 / 6.081 / 6.254) average to the `avg_total_goals` seed, which `test_nhl_settled_totals.py` pins. |
+| `pbp_goals_settle_2026.parquet` | `load_nhl_pbp_full([2026])`, GOAL events only, of games 2025020001 (regulation, 3-2), 2025020008 (overtime, 4-3) and 2025020006 (shootout with three scoring attempts, 3-4) | 21 | `game_id, event_type, period, period_type, event_team_abbr, home_abbr, away_abbr`. The scores in parentheses are the schedule's; `test_nhl_settled_totals.py` checks `_settled_scores` reproduces them. |
 
 ## Deliberately not committed
 
@@ -71,7 +73,11 @@ to stay comparable with MoneyPuck's `regular` folder.
    sdv-py. **Mitigation (shipped in `nhl_team_ratings.team_game_xg_rates` and
    this capture script):** realized goals are always derived by counting the
    pbp's own `GOAL` events per team, never read from the schedule's score
-   columns. `results_2023.parquet`'s `home_goals`/`away_goals` and
+   columns. The pbp logs every scoring shootout attempt as a `GOAL`
+   (`period_type == "SHOOTOUT"`), so the fitting labels use
+   `nhl_prediction_constants._settled_scores`, which counts a shootout as one
+   goal to its winner (it agrees with the schedule's real 2023-24 .. 2025-26
+   scores in all 3936 games). `results_2023.parquet`'s `home_goals`/`away_goals` and
    `nhl_team_ratings`'s `adj_gf`/`adj_ga` both use this pbp-derived source.
 5. **ESPN's nested `home_team_odds_close_spread_value` / `close_over_value`
    odds fields are null for every NHL game/provider tried** -- only the flat
