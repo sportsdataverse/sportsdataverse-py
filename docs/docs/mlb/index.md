@@ -14,7 +14,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 | [MLB Stats API](#mlb-stats-api) | `statsapi.mlb.com` | 79 | none |
 | [Baseball Savant (Statcast)](#baseball-savant-statcast) | `baseballsavant.mlb.com` | 43 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 23 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 104 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 106 | — |
 
 ## ESPN {#espn}
 
@@ -62,10 +62,12 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 - [`event_run_value`](reference/additional/models-and-calculators#event_run_value)
 - [`leverage_index`](reference/additional/models-and-calculators#leverage_index)
 - [`mae`](reference/additional/models-and-calculators#mae)
+- [`mlb_base_out_transitions`](reference/additional/models-and-calculators#mlb_base_out_transitions)
 - [`mlb_batter_projection`](reference/additional/models-and-calculators#mlb_batter_projection)
 - [`mlb_command_plus`](reference/additional/models-and-calculators#mlb_command_plus)
 - [`mlb_expected_home_runs`](reference/additional/models-and-calculators#mlb_expected_home_runs)
 - [`mlb_expected_stats`](reference/additional/models-and-calculators#mlb_expected_stats)
+- [`mlb_markov_run_expectancy`](reference/additional/models-and-calculators#mlb_markov_run_expectancy)
 - [`mlb_pitch_classify`](reference/additional/models-and-calculators#mlb_pitch_classify)
 - [`mlb_prop_strikeouts`](reference/additional/models-and-calculators#mlb_prop_strikeouts)
 - [`mlb_prop_team_runs`](reference/additional/models-and-calculators#mlb_prop_team_runs)

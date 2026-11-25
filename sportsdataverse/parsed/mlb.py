@@ -348,6 +348,7 @@ from sportsdataverse.mlb import load_ncaa_baseball_team_stats as load_ncaa_baseb
 from sportsdataverse.mlb import load_ncaa_baseball_teams as load_ncaa_baseball_teams  # noqa: F401
 from sportsdataverse.mlb import mae as mae  # noqa: F401
 from sportsdataverse.mlb import mlb_attendance as mlb_attendance  # noqa: F401
+from sportsdataverse.mlb import mlb_base_out_transitions as mlb_base_out_transitions  # noqa: F401
 from sportsdataverse.mlb import mlb_baserunning_value as mlb_baserunning_value  # noqa: F401
 from sportsdataverse.mlb import mlb_batter_projection as mlb_batter_projection  # noqa: F401
 from sportsdataverse.mlb import mlb_catcher_blocking as mlb_catcher_blocking  # noqa: F401
@@ -360,6 +361,7 @@ from sportsdataverse.mlb import mlb_expected_home_runs as mlb_expected_home_runs
 from sportsdataverse.mlb import mlb_expected_stats as mlb_expected_stats  # noqa: F401
 from sportsdataverse.mlb import mlb_fielding_oaa as mlb_fielding_oaa  # noqa: F401
 from sportsdataverse.mlb import mlb_injury_risk as mlb_injury_risk  # noqa: F401
+from sportsdataverse.mlb import mlb_markov_run_expectancy as mlb_markov_run_expectancy  # noqa: F401
 from sportsdataverse.mlb import mlb_pbp_diff as mlb_pbp_diff  # noqa: F401
 from sportsdataverse.mlb import mlb_pbp_live as mlb_pbp_live  # noqa: F401
 from sportsdataverse.mlb import mlb_person_stats as mlb_person_stats  # noqa: F401
@@ -628,6 +630,7 @@ __all__ = [
     "mlb_attendance",
     "mlb_award_recipients",
     "mlb_awards",
+    "mlb_base_out_transitions",
     "mlb_baserunning_value",
     "mlb_batter_projection",
     "mlb_boxscore",
@@ -663,6 +666,7 @@ __all__ = [
     "mlb_jobs",
     "mlb_leagues",
     "mlb_linescore",
+    "mlb_markov_run_expectancy",
     "mlb_meta",
     "mlb_official_scorers",
     "mlb_pbp_diff",

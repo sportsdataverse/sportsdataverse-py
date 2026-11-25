@@ -20,8 +20,19 @@ from __future__ import annotations
 
 from typing import List, Optional, Union
 
+import numpy as np
 import pandas as pd
 import polars as pl
+
+__all__ = [
+    "MLB_PA_EVENT_MAP",
+    "MLB_PA_OUTCOMES",
+    "mlb_base_out_transitions",
+    "mlb_markov_run_expectancy",
+    "mlb_run_expectancy_matrix",
+    "pbp_base_out_states",
+    "run_value",
+]
 
 _STATES_SCHEMA = {
     "game_id": pl.Utf8,
@@ -36,6 +47,62 @@ _STATES_SCHEMA = {
 }
 
 _MATRIX_SCHEMA = {"base_state": pl.Utf8, "outs": pl.Int64, "re": pl.Float64, "n": pl.Int64}
+
+_TRANSITIONS_SCHEMA = {
+    "from_base_state": pl.Utf8,
+    "from_outs": pl.Int64,
+    "to_base_state": pl.Utf8,
+    "to_outs": pl.Int64,
+    "runs": pl.Int64,
+    "n": pl.Int64,
+    "prob": pl.Float64,
+}
+
+#: Plate-appearance outcome classes that ``mlb_base_out_transitions(..., by_event=True)`` keys on.
+MLB_PA_OUTCOMES = (
+    "out_inplay",
+    "so",
+    "bb",
+    "single",
+    "double",
+    "triple",
+    "hr",
+    "reach_other",
+    "other_out",
+    "gidp",
+    "sac_fly",
+)
+
+#: statsapi ``result_event_type`` -> :data:`MLB_PA_OUTCOMES` class. A type not listed here falls
+#: to ``"out_inplay"`` when the PA made an out and to ``"reach_other"`` otherwise.
+MLB_PA_EVENT_MAP = {
+    "strikeout": "so",
+    "strikeout_double_play": "so",
+    "walk": "bb",
+    "intent_walk": "bb",
+    "hit_by_pitch": "bb",
+    "single": "single",
+    "double": "double",
+    "triple": "triple",
+    "home_run": "hr",
+    "grounded_into_double_play": "gidp",
+    "double_play": "gidp",
+    "sac_fly": "sac_fly",
+    "sac_fly_double_play": "gidp",
+    "field_error": "reach_other",
+    "catcher_interf": "reach_other",
+    "fielders_choice": "reach_other",
+    "caught_stealing_2b": "other_out",
+    "caught_stealing_3b": "other_out",
+    "caught_stealing_home": "other_out",
+    "pickoff_1b": "other_out",
+    "pickoff_2b": "other_out",
+    "pickoff_3b": "other_out",
+    "other_out": "other_out",
+}
+
+#: The 24 transient base-out states, in the empirical matrix's row order (outs, then base_state).
+_STATE_KEYS = [(b, o) for o in range(3) for b in sorted(("___", "1__", "_2_", "__3", "12_", "1_3", "_23", "123"))]
 
 
 def _occ(col: str) -> pl.Expr:
@@ -290,3 +357,215 @@ def run_value(
     re_before = 0.0 if before_outs >= 3 else lut.get((before_state, before_outs), 0.0)
     re_after = 0.0 if after_outs >= 3 else lut.get((after_state, after_outs), 0.0)
     return float(re_after - re_before + runs_on_play)
+
+
+def _pa_transitions(pbp: pl.DataFrame, by_event: bool) -> pl.DataFrame:
+    """One row per counted PA: from-state -> to-state with ``runs`` (and ``event`` when ``by_event``)."""
+    if by_event and "result_event_type" not in pbp.columns:
+        raise ValueError("by_event=True needs the pbp's result_event_type column")
+    # A game collected twice (statsapi's schedule lists some games twice) repeats every PA key.
+    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)
+    states = pbp_base_out_states(pbp)
+
+    half_grp = ["game_id", "inning", "half"]
+    event_type = [pl.col("result_event_type").cast(pl.Utf8).alias("event_type")] if by_event else []
+    post = pbp.select(
+        pl.col("game_id").cast(pl.Utf8),
+        pl.col("about_at_bat_index").cast(pl.Int64).alias("at_bat_index"),
+        pl.col("count_outs").cast(pl.Int64).alias("outs_end"),
+        *event_type,
+    )
+    pa = (
+        states.join(post, on=["game_id", "at_bat_index"], how="left", validate="1:1")
+        .sort("game_id", "at_bat_index")
+        .filter(~((pl.col("half") == "bottom") & (pl.col("inning") >= 9)))
+        .filter((pl.col("outs_end").last().over(half_grp) == 3) & (pl.col("outs_start").max().over(half_grp) < 3))
+        .with_columns(
+            pl.col("base_state").shift(-1).over(half_grp).fill_null("___").alias("to_base_state"),
+            pl.col("outs_start").shift(-1).over(half_grp).fill_null(3).alias("to_outs"),
+        )
+        .rename(
+            {
+                "base_state": "from_base_state",
+                "outs_start": "from_outs",
+                "runs_on_play": "runs",
+            }
+        )
+    )
+    if not by_event:
+        return pa
+    # An unmapped type (field_out, force_out, sac_bunt, ...) is an out in play when the PA made an out.
+    mapped = pl.col("event_type").replace_strict(MLB_PA_EVENT_MAP, default=None, return_dtype=pl.Utf8)
+    made_out = pl.col("to_outs") > pl.col("from_outs")
+    fallback = pl.when(made_out).then(pl.lit("out_inplay")).otherwise(pl.lit("reach_other"))
+    return pa.with_columns(pl.coalesce(mapped, fallback).alias("event"))
+
+
+def mlb_base_out_transitions(pbp: pl.DataFrame, *, by_event: bool = False) -> pl.DataFrame:
+    """Base-out transition counts between consecutive plate appearances.
+
+    Each plate appearance moves its half-inning from its pre-PA state (the
+    :func:`pbp_base_out_states` ``base_state``/``outs_start``, so a 2020+
+    extra half-inning opens on ``"_2_"`` with the automatic runner) to the
+    next PA's pre-PA state, or to the absorbing 3-out state after the half's
+    last PA, scoring that PA's ``runs_on_play`` on the way. Rows are counted
+    per ``(from, to, runs)`` triple.
+
+    Two kinds of half-inning are left out, so every counted chain is a whole
+    one that ends in the third out:
+
+    * the bottom of the 9th and later -- the same exclusion
+      :func:`mlb_run_expectancy_matrix` makes, which keeps the two directly
+      comparable and drops every walk-off (a walk-off ends before 3 outs, so
+      its truncated chain would read as a cheap inning and bias RE down);
+    * any other half whose last PA does not leave 3 outs (a 7-inning 2020-21
+      doubleheader walk-off, a suspended or shortened game) or whose outs
+      read 3 before its last PA.
+
+    Sparse rows are kept as observed: a triple seen once stays with ``n = 1``
+    (dropping it would break each state's row sum), and no smoothing is
+    applied. Each row carries ``n`` so a caller can judge the support.
+
+    Args:
+        pbp: Parsed ``mlb_play_by_play`` frame (see
+            :func:`pbp_base_out_states` for the columns read; ``by_event``
+            also reads ``result_event_type``).
+        by_event: Also key each row on the PA's ``event``: its statsapi
+            ``result_event_type`` mapped through ``MLB_PA_EVENT_MAP`` onto
+            ``MLB_PA_OUTCOMES``, an unmapped type falling to ``"out_inplay"``
+            when the PA made an out and ``"reach_other"`` otherwise. ``prob``
+            is then normalized within each ``(from state, event)``; summing
+            ``n`` over ``event`` gives the default frame's counts.
+
+    Returns:
+        pl.DataFrame: one row per observed ``(from, to, runs)`` triple.
+
+        | Column | Type | Description |
+        |---|---|---|
+        | from_base_state | Utf8 | Base occupancy before the PA (``"1_3"`` etc.) |
+        | from_outs | Int64 | Outs before the PA (0-2) |
+        | to_base_state | Utf8 | Base occupancy before the next PA (``"___"`` for the 3-out state) |
+        | to_outs | Int64 | Outs before the next PA; 3 = the half-inning ended |
+        | runs | Int64 | Runs scored on the transition |
+        | n | Int64 | Plate appearances observed with this transition |
+        | prob | Float64 | ``n`` over all departures from the from-state |
+
+        With ``by_event=True`` an ``event`` (Utf8) column follows ``from_outs``.
+
+    Raises:
+        ValueError: ``by_event=True`` and ``pbp`` has no ``result_event_type`` column.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mlb.mlb_run_expectancy import mlb_base_out_transitions
+            transitions = mlb_base_out_transitions(pbp)
+
+        Conditioned on the PA outcome::
+
+            by_event = mlb_base_out_transitions(pbp, by_event=True)
+
+        Pipeline next step (one line)::
+
+            transitions.filter((pl.col("from_base_state") == "123") & (pl.col("from_outs") == 0))
+    """
+    state = ["from_base_state", "from_outs", *(["event"] if by_event else [])]
+    if pbp is None or pbp.height == 0:
+        head = {
+            "from_base_state": pl.Utf8,
+            "from_outs": pl.Int64,
+            **({"event": pl.Utf8} if by_event else {}),
+        }
+        return pl.DataFrame(schema={**head, **_TRANSITIONS_SCHEMA})
+    out = (
+        _pa_transitions(pbp, by_event)
+        .group_by(*state, "to_base_state", "to_outs", "runs")
+        .agg(pl.len().cast(pl.Int64).alias("n"))
+        .with_columns((pl.col("n") / pl.col("n").sum().over(state)).alias("prob"))
+        .sort("from_outs", "from_base_state", *state[2:], "to_outs", "to_base_state", "runs")
+    )
+    return out.select(*state, "to_base_state", "to_outs", "runs", "n", "prob")
+
+
+def mlb_markov_run_expectancy(transitions: pl.DataFrame) -> pl.DataFrame:
+    """Markov-chain RE24: expected runs to the end of the half-inning by base-out state.
+
+    Treats the half-inning as an absorbing Markov chain over the 24 base-out
+    states plus the 3-out state. With ``Q`` the 24x24 transient transition
+    matrix and ``r`` the expected runs scored on leaving each state, the
+    expected runs to absorption are ``(I - Q)^-1 r`` (the fundamental matrix
+    times the reward). Probabilities are re-derived from ``n``, so a filtered,
+    concatenated or ``by_event=True`` transitions frame still gives stochastic
+    rows (the ``event`` key is summed out).
+
+    A state with no observed departures gets ``re = null`` and ``n = 0``,
+    never 0 runs. The output is shaped like :func:`mlb_run_expectancy_matrix`
+    so the two can be joined on ``base_state``/``outs`` and compared.
+
+    Args:
+        transitions: An :func:`mlb_base_out_transitions` output (columns
+            ``from_base_state``, ``from_outs``, ``to_base_state``,
+            ``to_outs``, ``runs``, ``n``).
+
+    Returns:
+        pl.DataFrame: 24 rows (base_state x outs).
+
+        | Column | Type | Description |
+        |---|---|---|
+        | base_state | Utf8 | 3-char base occupancy (e.g. ``"1_3"``) |
+        | outs | Int64 | Outs at the start of the state (0-2) |
+        | re | Float64 | Expected runs through the end of the half-inning (null if unobserved) |
+        | n | Int64 | Plate appearances observed departing this state |
+
+    Raises:
+        ValueError: a row names a state outside the 24 + 3-out set, or leads
+            into a state that has no observed departures (its RE is unknown).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mlb.mlb_run_expectancy import (
+                mlb_base_out_transitions,
+                mlb_markov_run_expectancy,
+            )
+            re24 = mlb_markov_run_expectancy(mlb_base_out_transitions(pbp))
+
+        Pipeline next step (one line)::
+
+            re24.join(mlb_run_expectancy_matrix(pbp=pbp), on=["base_state", "outs"], suffix="_empirical")
+
+    See Also:
+        * Tango, Lichtman & Dolphin, *The Book* (2007) -- the RE24 table.
+        * Kemeny & Snell, *Finite Markov Chains* (1960) -- the fundamental matrix of an absorbing chain.
+    """
+    m = len(_STATE_KEYS)
+    idx = {k: i for i, k in enumerate(_STATE_KEYS)}
+    counts = np.zeros((m, m + 1))  # column m is the absorbing 3-out state
+    run_sum = np.zeros(m)
+    cols = ["from_base_state", "from_outs", "to_base_state", "to_outs", "runs", "n"]
+    for row in transitions.select(cols).iter_rows():
+        fb, fo, tb, to, runs, n = row
+        i = idx.get((fb, fo))
+        j = m if to is not None and to >= 3 else idx.get((tb, to))
+        if i is None or j is None:
+            raise ValueError(f"unknown base-out state in transitions row {row}")
+        counts[i, j] += n
+        run_sum[i] += runs * n
+
+    n_from = counts.sum(axis=1)
+    seen = n_from > 0
+    if (counts[np.ix_(seen, ~np.append(seen, True))] > 0).any():
+        raise ValueError("transitions lead into a base-out state with no observed departures")
+    q = counts[np.ix_(seen, np.append(seen, False))] / n_from[seen, None]
+    r = run_sum[seen] / n_from[seen]
+    re = np.full(m, np.nan)
+    re[seen] = np.linalg.solve(np.eye(int(seen.sum())) - q, r)
+    return pl.DataFrame(
+        {
+            "base_state": [b for b, _ in _STATE_KEYS],
+            "outs": [o for _, o in _STATE_KEYS],
+            "re": re,
+            "n": n_from.astype(np.int64),
+        },
+        schema=_MATRIX_SCHEMA,
+    ).with_columns(pl.col("re").fill_nan(None))
