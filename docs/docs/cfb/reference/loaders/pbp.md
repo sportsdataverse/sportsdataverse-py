@@ -45,7 +45,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `rz_play` | Boolean | Binary flag for a red-zone play (yards_to_goal <= 20). |
 | `scoring_opp` | Boolean | Binary flag for a scoring opportunity (yards_to_goal <= 40). |
 | `middle_8` | Boolean | TRUE for plays in the middle-8 window (final 4 min of 1H, first 4 min of 2H). |
-| `stuffed_run` | Boolean | True on a rush (any play type the processor counts as a rush, not a kneel) that gained zero or fewer yards; its mean over rushes is the stuff rate. |
+| `stuffed_run` | Boolean | True on a rush (any play type the processor counts as a rush, not a kneel) that gained zero or fewer yards; its mean over scrimmage rushes (rush and scrimmage_play) is the stuff rate. |
 | `change_of_pos_team` | Boolean | Binary flag for change of possession-team on the play. |
 | `downs_turnover` | Boolean | Binary flag for a turnover on downs. |
 | `pos_score_diff_start` | Int64 | Score differential for the possession team at the start of the play. |
