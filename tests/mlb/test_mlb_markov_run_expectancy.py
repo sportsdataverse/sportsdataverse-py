@@ -223,3 +223,13 @@ def test_run_value_on_a_markov_matrix_with_an_unobserved_state():
     assert np.isnan(run_value("12_", 0, "123", 0, 0, tiny))
     re = {(r["base_state"], r["outs"]): r["re"] for r in tiny.to_dicts()}
     assert run_value("___", 0, "1__", 0, 0, tiny) == pytest.approx(re[("1__", 0)] - re[("___", 0)])
+
+
+def test_run_value_on_an_empirical_matrix_missing_a_state():
+    # The empirical matrix emits only observed states: a missing row is NaN, as a null Markov row is, never 0.0.
+    pbp = pl.read_parquet(EXTRA_INNINGS_FIXTURE)
+    emp = mlb_run_expectancy_matrix(pbp=pbp)
+    assert emp.filter((pl.col("base_state") == "123") & (pl.col("outs") == 0)).height == 0
+    assert np.isnan(run_value("12_", 0, "123", 0, 0, emp))
+    re = {(r["base_state"], r["outs"]): r["re"] for r in emp.to_dicts()}
+    assert run_value("___", 0, "1__", 0, 0, emp) == pytest.approx(re[("1__", 0)] - re[("___", 0)])
