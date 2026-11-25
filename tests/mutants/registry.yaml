@@ -11621,6 +11621,37 @@
   expected: kill
   note: An automatic runner who scores on the half's first PA (718511 bottom 11) would be missed.
 
+# --- mlb-dedupe-game-pks: a suspended game listed on two schedule dates counts once ----------------
+- id: mlb-season-game-pks-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    return list(dict.fromkeys(pks))'
+  mutant: '    return pks'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_season_game_pks_lists_a_suspended_game_once
+  expected: kill
+  note: 5028 (suspended 2000-04-12, resumed the 13th) would be collected twice for the RE24 matrix.
+
+- id: mlb-base-out-states-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)'
+  mutant: '    pbp = pbp'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_twice_collected_games_count_once
+  expected: kill
+  note: A game collected twice would interleave its PAs, corrupting the states and double-counting RE24.
+
+- id: mlb-markov-post-outs-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    ).unique(subset=["game_id", "at_bat_index"], keep="first", maintain_order=True)  # match the deduped states'
+  mutant: '    )'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_transition_counts_conserve_plate_appearances
+  expected: kill
+  note: The post-PA outs of a game collected twice would no longer join 1:1 onto the deduped states.
+
 # --- WNBA prop constants: per-league SD law / dispersion + league-bound WNBA helpers -------------
 - id: wnba-props-distribution-reads-nba-constants
   group: wnba-prop-constants
@@ -12247,16 +12278,6 @@
   test: tests/mlb/test_mlb_markov_run_expectancy.py::test_walk_offs_and_incomplete_halves_are_excluded
   expected: kill
   note: The transitions would no longer cover the same halves as the empirical RE24 they are compared with.
-
-- id: mlb-markov-no-dedupe
-  group: mlb-markov-re24
-  finding: mlb-markov-re24
-  file: sportsdataverse/mlb/mlb_run_expectancy.py
-  snippet: '    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)'
-  mutant: '    pbp = pbp'
-  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_transition_counts_conserve_plate_appearances
-  expected: kill
-  note: A game collected twice (two in the corpus) would interleave its PAs and corrupt the states.
 
 - id: mlb-markov-prob-not-per-state
   group: mlb-markov-re24
