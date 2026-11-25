@@ -11641,6 +11641,128 @@
   test: tests/wnba/test_wnba_player_props_constants.py::test_wnba_helpers_bind_league_10
   expected: kill
   note: The WNBA re-export of prob_over would default to league_id "00" (NBA spread).
+# --- espn_nfl_pbp_nflverse: ESPN processor output in nflverse play_by_play shape ---------------------
+# Killers: tests/nfl/test_nfl_espn_nflverse_view.py, three committed captures (2024, 2014, 2007) scored
+# against nflverse's play-by-play of the same games.
+- id: nfl-espn-view-current-franchise-abbr
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'return parts.list.get(i).replace(team_abbr_mapping)'
+  mutant: 'return parts.list.get(i)'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_keys_join_nflverse_and_teams_are_nflverse_abbreviations
+  expected: kill
+  note: The 2007 Chargers would read "SD" (the game id's abbreviation) where nflverse's play-by-play writes "LAC".
+
+- id: nfl-espn-view-kickoff-receiving-side
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'then(100 - pl.col("start.yardsToEndzone"))'
+  mutant: 'then(pl.col("start.yardsToEndzone"))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_every_shared_column_meets_its_floor
+  expected: kill
+  note: A kickoff's yardline_100 would be measured from the kicking team's side (65), not the receiver's (35).
+
+- id: nfl-espn-view-timeout-rows
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 't = (pl.col("play_type_nfl") == "TIMEOUT").fill_null(False)'
+  mutant: 't = pl.lit(False)'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_every_shared_column_meets_its_floor
+  expected: kill
+  note: Timeout rows would keep a possession, down and field position nflverse leaves null.
+
+- id: nfl-espn-view-declined-penalty
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '"penalty": b("penalty_flag") & ~b("penalty_declined"),'
+  mutant: '"penalty": b("penalty_flag"),'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_declined_penalty_is_no_penalty
+  expected: kill
+  note: A declined penalty would count as a penalty; nflverse's penalty flag is 0 there.
+
+- id: nfl-espn-view-touchdown-counts-first-down
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'first = b("first_down_earned") | b("first_down_penalty") | b("pass_td") | b("rush_td")'
+  mutant: 'first = b("first_down_earned") | b("first_down_penalty")'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_every_shared_column_meets_its_floor
+  expected: kill
+  note: An offensive touchdown would not count as a first down, as it does in nflverse.
+
+- id: nfl-espn-view-text-clock
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'mins = pl.coalesce(lead.struct[0].replace("", "0").cast(pl.Int64), pl.col("clock.minutes").cast(pl.Int64))'
+  mutant: 'mins = pl.col("clock.minutes").cast(pl.Int64)'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_every_shared_column_meets_its_floor
+  expected: kill
+  note: The 2014 game's clock would take ESPN's post-snap stamp over the "(10:29)" the NFL text opens with.
+
+- id: nfl-espn-view-touchdown-row-leaves-the-try-out
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '.otherwise(pl.col("total_home_score") - pl.when(scorer_home).then(p_).otherwise(d_))'
+  mutant: '.otherwise(pl.col("total_home_score"))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_split_try_rows_and_touchdown_scores
+  expected: kill
+  note: A home touchdown row would count its split try's points, which nflverse scores on the PAT row.
+
+- id: nfl-espn-view-schedule-stadium
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '"stadium": "game_stadium",'
+  mutant: '"stadium": "stadium",'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_schedule_columns_are_exact
+  expected: kill
+  note: nflfastR writes the schedule's stadium to game_stadium (the feed's own name is stadium).
+
+- id: nfl-espn-view-float-id-refused
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'if dtype.is_float():'
+  mutant: 'if False:'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_missing_game_id_and_float_ids_are_refused
+  expected: kill
+  note: A float ESPN id would be cast to a join key instead of refused (ID dtype discipline).
+
+- id: nfl-espn-view-float-game-id-with-nflverse-id
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '_int_id(pl.col("game_id"), plays.schema["game_id"], "game_id")  # ... and a float game id'
+  mutant: 'pass  # ... and a float game id'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_float_game_id_is_refused_when_nflverse_game_id_is_there
+  expected: kill
+  note: A float game_id on a frame that already has nflverse_game_id would slip past the id guard (CodeRabbit on #1266).
+
+- id: nfl-espn-view-split-two-point-pass
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'pl.when(b("two_point_pass") | (pl.col("type.text") == "Two Point Pass"))'
+  mutant: 'pl.when(b("two_point_pass"))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_split_two_point_tries_keep_pass_and_run
+  expected: kill
+  note: A split two-point pass (no two_point_pass flag on the synthetic row) would read play_type "run".
+
+- id: nfl-espn-view-defensive-two-point-return
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: 'pl.when(~pat & (pl.col("_dpts") > 0) & (other_gain >= pl.col("_dpts")))'
+  mutant: 'pl.when(pl.lit(False))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_defensive_two_point_return_is_scored_on_the_try_row
+  expected: kill
+  note: A defensive two-point return ESPN's touchdown row counts (2019) would stay on that row, not the PAT row.
 
 # --- nflverse play_by_play columns on the Shield path (shield_pbp + enrich_nfl_pbp) ----------------
 - id: shield-stat-flag-kept

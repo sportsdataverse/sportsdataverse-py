@@ -7451,6 +7451,7 @@
   "env_adjusted_make_prob": "models-and-calculators-8",
   "espn_nfl_calendar": "espn",
   "espn_nfl_game_rosters": "espn",
+  "espn_nfl_pbp_nflverse": "play-by-play-processing-3",
   "espn_nfl_play_participants": "espn",
   "espn_nfl_player_stats": "espn",
   "espn_nfl_schedule": "espn",

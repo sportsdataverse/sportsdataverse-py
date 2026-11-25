@@ -208,6 +208,7 @@ from sportsdataverse.nfl import enrich_nfl_pbp as enrich_nfl_pbp  # noqa: F401
 from sportsdataverse.nfl import env_adjusted_make_prob as env_adjusted_make_prob  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_calendar as espn_nfl_calendar  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_game_rosters as espn_nfl_game_rosters  # noqa: F401
+from sportsdataverse.nfl import espn_nfl_pbp_nflverse as espn_nfl_pbp_nflverse  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_play_participants as espn_nfl_play_participants  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_player_stats as espn_nfl_player_stats  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_schedule as espn_nfl_schedule  # noqa: F401
@@ -461,6 +462,7 @@ __all__ = [
     "espn_nfl_league_notes",
     "espn_nfl_league_root",
     "espn_nfl_news",
+    "espn_nfl_pbp_nflverse",
     "espn_nfl_play_participants",
     "espn_nfl_player_awards",
     "espn_nfl_player_bio",

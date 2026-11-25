@@ -772,6 +772,7 @@ categories:
       - sportsdataverse.mlb.mlb_pbp
       - sportsdataverse.nba.nba_pbp
       - sportsdataverse.nfl.nfl_pbp
+      - sportsdataverse.nfl.espn_nflverse_view
       - sportsdataverse.nhl.nhl_pbp
       - sportsdataverse.wbb.wbb_ncaa_game_pbp
       - sportsdataverse.wbb.wbb_pbp
