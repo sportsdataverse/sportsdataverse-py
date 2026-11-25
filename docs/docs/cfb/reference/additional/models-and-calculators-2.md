@@ -26,7 +26,7 @@ fit uses the whole season); for leak-free per-game values use
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
-| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
+| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (a fixed ~43 plays at the default, ~6% of a full season; most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
 | `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (`0.1 <= wp_before <= 0.9` band, standardized ridge with the first team id as the reference level, lambda 0.035, own EPA on every play). pre598 reads `wp_before` instead of `period` / `pos_score_diff_start`. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
@@ -88,7 +88,7 @@ No returns table is published for this function: no capture: it needs play-by-pl
 | Exception | Description |
 |---|---|
 | `KeyError` | If `plays` is missing a required column (incl. `week`, and `seasonType` unless `method="pre598"`). |
-| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or every play is garbage time. |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive. (Every play garbage time gives an empty frame; a team-game with no non-garbage play has no row -- none of 38,620 in 2014-2026.) |
 
 **Example**
 
