@@ -24,6 +24,7 @@ integer (never a float) at capture time.
 | `results_corpus.parquet` | `mlb_schedule` (statsapi) | Game-level final scores + team ids for the same windows |
 | `savant_called_pitches.parquet` | `mlb_statcast_search` (Baseball Savant) + `mlb_boxscore` (statsapi, `officials`) | 2023-06-01..2023-06-28 called pitches (`description in {called_strike, ball}`), real per-game home-plate umpire id; 53,667 pitches (widened from an initial 1-week/12,920-pitch pass -- see below) |
 | `pbp_extra_innings_2023.parquet` | `mlb_play_by_play` (statsapi `https://statsapi.mlb.com/api/v1/game/{718735,718511}/playByPlay`), captured 2026-11-24 | Games 718735 (2023-04-02 CLE @ SEA, 10 inn) and 718511 (11 inn), 176 PAs: the extra-inning automatic-runner test for `pbp_base_out_states`. Columns = the `pbp_corpus` set plus `matchup_batter_id`, `runners` (parser string) and `result_event`; ids cast int -> Utf8. 718511's bottom-11 runner scores on the half's first PA, so only `runners` shows him |
+| `pbp_opening_2023.parquet` | `mlb_play_by_play` (statsapi) via `mlb_schedule` + `collect_statsapi_pbp`, captured 2026-11-25 | The 20 final games of 2023-03-30 and 2023-03-31, 1,508 PAs: the `by_event=True` test for `mlb_base_out_transitions`. Columns = the `pbp_extra_innings_2023` set with `result_event_type` in place of `result_event`; ids cast int -> Utf8 |
 
 ## Capture-window rationale (pbp_corpus / results_corpus)
 
@@ -72,6 +73,12 @@ narrative.
   these games -- a real historical data gap, not a bug in the collector.
   `tests/mlb/test_mlb_win_expectancy_oracle.py`'s join-count floor accounts
   for this.
+- **Games 5028 (2000-04-12) and 6146 (2001-06-15) appear twice.** Each was
+  suspended and resumed the next day, and statsapi's schedule lists it on both
+  dates, so the collector fetched it twice: 155 exact duplicate PA rows in
+  `pbp_corpus`, two rows each in `results_corpus`. `mlb_base_out_transitions` keeps one copy per
+  `(game_id, about_at_bat_index)`; `tests/mlb/test_mlb_markov_run_expectancy.py`
+  (the Markov RE24 consistency gate, which also reads this corpus) relies on it.
 - **The umpire-zone calibration floor is 0.08, not the plan's draft 0.03.**
   A 1-week Savant sample (12,920 pitches) showed a 0.177 max per-decile
   calibration gap, concentrated in sparse borderline-probability deciles
