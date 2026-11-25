@@ -252,19 +252,28 @@ def test_a_call_reference_can_name_a_module_path():
 
 
 def test_a_passthrough_transformer_inherits_its_inputs_descriptions_per_league(monkeypatch):
-    monkeypatch.setattr(generate, "_manual_col_descs", lambda: {"load_cfb_pbp": {"a": "A.", "prob_2pt": "CFB model."}})
+    monkeypatch.setattr(
+        generate,
+        "_manual_col_descs",
+        lambda: {"load_cfb_pbp": {"a": "A.", "prob_2pt": "CFB model."}, "build_nfl_season": {"b": "B."}},
+    )
     monkeypatch.setattr(
         generate,
         "_DESC_INHERITS",
         {
             "cfb/get_fg_wp": ("load_cfb_pbp", frozenset()),
             "nfl/build_nfl_season": ("load_cfb_pbp", frozenset({"prob_2pt"})),
+            "nfl/calculate_epa": ("build_nfl_season", frozenset()),
         },
     )
     assert generate._manual_col_desc("get_fg_wp", "a", "cfb") == "A."
     assert generate._manual_col_desc("get_fg_wp", "a", "nfl") == ""  # nfl's get_fg_wp is a different function
     assert generate._manual_col_desc("build_nfl_season", "a", "nfl") == "A."
     assert generate._manual_col_desc("build_nfl_season", "prob_2pt", "nfl") == ""  # excluded: college-only wording
+    # the chain: calculate_epa -> build_nfl_season -> load_cfb_pbp, each hop's exclusions applied
+    assert generate._manual_col_desc("calculate_epa", "b", "nfl") == "B."
+    assert generate._manual_col_desc("calculate_epa", "a", "nfl") == "A."
+    assert generate._manual_col_desc("calculate_epa", "prob_2pt", "nfl") == ""
 
 
 @pytest.mark.parametrize("schema", ["aggregate_stints", "stack_seasons"])
