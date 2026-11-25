@@ -18,7 +18,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [nflverse data releases](#nflverse-data-releases) | `github.com` | 48 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 23 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 173 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 174 | — |
 
 ## ESPN {#espn}
 
@@ -94,6 +94,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 - [`build_nfl_team_stats`](reference/additional/play-by-play-processing-2#build_nfl_team_stats)
 - [`calculate_nfl_series_conversion_rates`](reference/additional/play-by-play-processing-2#calculate_nfl_series_conversion_rates)
 - [`clean_nfl_pbp`](reference/additional/play-by-play-processing-3#clean_nfl_pbp)
+- [`espn_nfl_pbp_nflverse`](reference/additional/play-by-play-processing-3#espn_nfl_pbp_nflverse)
 - [`shield_nfl_pbp`](reference/additional/play-by-play-processing-4#shield_nfl_pbp)
 - [`shield_to_espn_summary`](reference/additional/play-by-play-processing-4#shield_to_espn_summary)
 - [`split_pat_rows`](reference/additional/play-by-play-processing-5#split_pat_rows)
