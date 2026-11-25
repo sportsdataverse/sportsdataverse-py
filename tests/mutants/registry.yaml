@@ -12134,3 +12134,43 @@
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_defensive_touchdowns_try_takes_the_scorers_timeouts
   expected: kill
   note: A split try's timeouts read from the wrong side, e.g. the old offense's after a defensive touchdown.
+
+- id: nhl-reg-draw-inflation-applied
+  group: nhl-score-model
+  finding: nhl-regulation-3way
+  file: sportsdataverse/nhl/nhl_market.py
+  snippet: '    grid[:, _GOALS, _GOALS] *= 1.0 + const.reg_draw_inflation'
+  mutant: '    grid[:, _GOALS, _GOALS] *= 1.0'
+  test: tests/nhl/test_nhl_regulation_score.py::test_draw_inflation_raises_the_tie_probability
+  expected: kill
+  note: Without the tied-cell boost the regulation grid is two independent Poissons, which put ~16% of games level after 60 minutes where ~22% are.
+
+- id: nhl-final-total-counts-the-deciding-goal
+  group: nhl-score-model
+  finding: nhl-regulation-3way
+  file: sportsdataverse/nhl/nhl_market.py
+  snippet: '    return (goals + (1.0 + theta) * tied.sum(axis=1)) / norm_'
+  mutant: '    return goals / norm_'
+  test: tests/nhl/test_nhl_regulation_score.py::test_score_distribution_matches_win_prob_and_total
+  expected: kill
+  note: The solver would match exp_total to regulation goals only, so the final-score distribution's mean total runs one tie probability above exp_total.
+
+- id: nhl-goalie-saves-strictly-prior
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    return (x.cum_sum() - x).over(*by)'
+  mutant: '    return x.cum_sum().over(*by)'
+  test: tests/nhl/test_nhl_goalie_saves.py
+  expected: kill
+  note: Each projection would read its own game's shots and saves.
+
+- id: nhl-goalie-saves-home-ice-sign
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    side = pl.when(pl.col("is_home")).then(-0.5).otherwise(0.5) * const.shots_hfa'
+  mutant: '    side = pl.when(pl.col("is_home")).then(0.5).otherwise(-0.5) * const.shots_hfa'
+  test: tests/nhl/test_nhl_goalie_saves.py::test_home_goalie_faces_fewer_shots_on_opening_night
+  expected: kill
+  note: The home goalie would be projected to face the extra shots the home team takes.

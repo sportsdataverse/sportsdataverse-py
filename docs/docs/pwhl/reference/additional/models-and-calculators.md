@@ -8,7 +8,7 @@ description: "PWHL — additional Python functions — Models and calculators �
 
 ### LeagueConstants {#LeagueConstants}
 
-`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int') -> None`
+`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int', reg_draw_inflation: 'float', avg_shots_against: 'float', league_shots_k: 'float', shots_hfa: 'float', starter_shot_share: 'float', save_pct_prior: 'float', save_pct_kappa: 'float', shots_nb_size: 'float') -> None`
 
 Fitted, league-specific constants for the NHL/PWHL prediction spine.
 
@@ -27,6 +27,14 @@ Fitted, league-specific constants for the NHL/PWHL prediction spine.
 | `prop_team_volume_slope` | `float` |  | game-script tilt on a player-prop projection (favored team -> fewer late shots-for). SEEDED PLACEHOLDER (~0.04), not yet fitted -- a future prop-fit task should estimate it from the realized shots-vs-exp_margin slope, mirroring how fit_props.py fits prop_kappa/pos_priors. |
 | `in_game_wp_artifact` | `str` |  | filename of the bundled in-game win-probability model under `sportsdataverse/nhl/models/`. |
 | `min_season` | `int` |  | earliest season this league's prediction spine supports. |
+| `reg_draw_inflation` | `float` |  | multiplier minus one on every tied cell of the regulation score grid (`~sportsdataverse.nhl.nhl_market.regulation_goal_means`). Independent Poissons under-predict 60-minute ties. |
+| `avg_shots_against` | `float` |  | seed for the league's in-season shots-on-goal per team-game, before any game of the season is played (`~sportsdataverse.nhl.nhl_player_props.nhl_goalie_saves`). |
+| `league_shots_k` | `float` |  | team-games of weight on `avg_shots_against` in the in-season league mean. SEEDED (two games a team), not fitted. |
+| `shots_hfa` | `float` |  | how many more shots on goal the home team takes than the away team. |
+| `starter_shot_share` | `float` |  | the starting goalie's share of his team's expected shots against (he is sometimes relieved). |
+| `save_pct_prior` | `float` |  | league save percentage a goalie's own record is shrunk toward. |
+| `save_pct_kappa` | `float` |  | shots of weight on `save_pct_prior` in a goalie's shrunk save percentage. |
+| `shots_nb_size` | `float` |  | negative-binomial size of a starter's shots against; his saves then follow a negative binomial with the same size (binomial thinning). |
 
 ### as_of_ratings_split {#as_of_ratings_split}
 

@@ -16,7 +16,7 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 | [NHL Stats REST](#nhl-stats-rest) | `api.nhle.com` | 21 | none |
 | [NHL Records](#nhl-records) | `records.nhl.com` | 50 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 88 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 92 | — |
 
 ## ESPN {#espn}
 
@@ -110,14 +110,18 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 - [`nhl_edge_skating_value`](reference/additional/analytics#nhl_edge_skating_value)
 - [`nhl_faceoff_value`](reference/additional/analytics#nhl_faceoff_value)
 - [`nhl_game_total`](reference/additional/analytics#nhl_game_total)
+- [`nhl_goalie_saves`](reference/additional/analytics#nhl_goalie_saves)
 - [`nhl_in_game_win_prob`](reference/additional/analytics#nhl_in_game_win_prob)
 - [`nhl_penalty_value`](reference/additional/analytics#nhl_penalty_value)
 - [`nhl_player_props`](reference/additional/analytics#nhl_player_props)
 - [`nhl_predict_games`](reference/additional/analytics#nhl_predict_games)
+- [`nhl_score_distribution`](reference/additional/analytics#nhl_score_distribution)
 - [`nhl_special_teams_value`](reference/additional/analytics#nhl_special_teams_value)
+- [`nhl_total_goals_distribution`](reference/additional/analytics#nhl_total_goals_distribution)
 - [`nhl_zone_transitions`](reference/additional/analytics#nhl_zone_transitions)
 - [`predict_margin`](reference/additional/analytics#predict_margin)
 - [`predict_total`](reference/additional/analytics#predict_total)
+- [`regulation_goal_means`](reference/additional/analytics#regulation_goal_means)
 - [`special_teams_split`](reference/additional/analytics#special_teams_split)
 - [`win_prob_from_margin`](reference/additional/analytics#win_prob_from_margin)
 

@@ -40,6 +40,11 @@ def test_nhl_predict_games_schema_and_values():
         "home_win_prob",
         "exp_total",
         "market_edge",
+        "home_reg_win_prob",
+        "reg_tie_prob",
+        "away_reg_win_prob",
+        "exp_home_reg_goals",
+        "exp_away_reg_goals",
     ]
     assert out.height == 2
     assert out["market_edge"].null_count() == 2  # no odds supplied
@@ -73,6 +78,11 @@ def test_nhl_predict_games_empty_input_returns_documented_schema():
         "home_win_prob",
         "exp_total",
         "market_edge",
+        "home_reg_win_prob",
+        "reg_tie_prob",
+        "away_reg_win_prob",
+        "exp_home_reg_goals",
+        "exp_away_reg_goals",
     ]
 
 

@@ -6,6 +6,7 @@
   - [Files](#files)
   - [Deliberately not committed](#deliberately-not-committed)
   - [Known gaps / adaptations (binding: gates set from what's actually observable)](#known-gaps--adaptations-binding-gates-set-from-whats-actually-observable)
+  - [Regulation score and goalie saves holdouts (2023-24 .. 2025-26)](#regulation-score-and-goalie-saves-holdouts-2023-24--2025-26)
   - [PWHL oracle gate — DEFERRED (capture contract)](#pwhl-oracle-gate--deferred-capture-contract)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -140,6 +141,27 @@ to stay comparable with MoneyPuck's `regular` folder.
     gate instead checks whether `sign(exp_margin)` agrees with the market's
     favored side (home favored iff `close_puck_line_home < 0`); observed 10/12,
     floor 0.80. The total-goals MAE (both positive totals) is kept as-is.
+
+## Regulation score and goalie saves holdouts (2023-24 .. 2025-26)
+
+Written 2026-11-25 by `tools/models/nhl_prediction/fit_score_saves.py`, which also fits the
+`reg_draw_inflation` and saves constants in `LEAGUE_CONSTANTS["nhl"]`. Neither file holds a season
+those constants were fitted on.
+
+| File | Source | Rows | Notes |
+|---|---|---:|---|
+| `regulation_holdout_2024_2026.parquet` | as-of `nhl_predict_games` over 2023-24, 2024-25 and 2025-26 (`fit_pregame.py`'s walk: ratings strictly before each date, dates[20:] onward, regular season); scores from `load_nhl_pbp_full` GOAL events | 3538 | `game_id: Int64`, `season` (end year), `home_win_prob`, `exp_total`; `reg_home` / `reg_away` count `period_type == "REGULAR"` goals; `final_home` / `final_away` add one goal to the overtime scorer or the shootout winner. The pbp logs every shootout attempt as a GOAL, so the raw GOAL count is not the final score. `test_nhl_regulation_score.py` scores it. |
+| `goalie_box_2026.parquet` | `load_nhl_goalie_boxscores([2026])` (2025-26, regular season and playoffs) | 5575 | `game_id`, `game_date`, `team_abbrev`, `home_away`, `player_id`, `starter`, `shots_against`, `saves`; every other column dropped. `test_nhl_goalie_saves.py` projects it with 2025-26 as the only history. |
+
+Gates (set from the observed values; see each test's docstring):
+
+- Each holdout season's 3-way log loss beats independent Poissons and the flat 2022-23 outcome
+  rates (home / tie / away 0.3952 / 0.2402 / 0.3646).
+- Pooled predicted tie probability within 0.03 of the observed rate (0.244 against 0.221). The tie
+  rate itself swings by season (0.240 / 0.208 / 0.206 / 0.249 for 2022-23 .. 2025-26), so there is
+  no per-season band.
+- The 80% saves interval's realized coverage within 0.02 of what the model says it covers, and mean
+  projected saves within 0.5 of the mean realized.
 
 ## PWHL oracle gate — DEFERRED (capture contract)
 

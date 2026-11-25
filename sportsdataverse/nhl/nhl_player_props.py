@@ -52,10 +52,10 @@ from typing import Any, Literal, Union, overload
 import numpy as np
 import pandas as pd
 import polars as pl
-from scipy.stats import poisson
+from scipy.stats import nbinom, poisson
 
-from sportsdataverse.nhl.nhl_loaders import load_nhl_skater_boxscores
-from sportsdataverse.nhl.nhl_prediction_constants import get_constants
+from sportsdataverse.nhl.nhl_loaders import load_nhl_goalie_boxscores, load_nhl_skater_boxscores
+from sportsdataverse.nhl.nhl_prediction_constants import LeagueConstants, get_constants
 from sportsdataverse.nhl.nhl_team_ratings import nhl_team_ratings
 
 _PROPS_SCHEMA: dict[str, pl.PolarsDataType] = {
@@ -381,4 +381,195 @@ def nhl_game_total(
 
 def _empty_props(return_as_pandas: bool) -> Union[pl.DataFrame, pd.DataFrame]:
     out = pl.DataFrame(schema=_PROPS_SCHEMA)
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+_SAVES_SCHEMA: dict[str, pl.PolarsDataType] = {
+    "season": pl.Int64,
+    "game_id": pl.Int64,
+    "game_date": pl.Date,
+    "player_id": pl.Int64,
+    "team": pl.Utf8,
+    "opp_team": pl.Utf8,
+    "is_home": pl.Boolean,
+    "exp_shots_against": pl.Float64,
+    "exp_save_pct": pl.Float64,
+    "exp_saves": pl.Float64,
+    "saves_lo": pl.Int64,
+    "saves_hi": pl.Int64,
+    "coverage": pl.Float64,
+}
+
+
+def _goalie_rows(box: pl.DataFrame, starters: pl.DataFrame | None) -> pl.DataFrame:
+    """Goalie-game rows (history, plus ``starters`` as games still to play), with ``target`` marking the projected ones.
+
+    ``season`` comes from the NHL game id (``2025020001`` -> ``20252026``), so a future game needs no season column.
+    """
+    rows = box.select(
+        pl.col("game_id").cast(pl.Int64),
+        pl.col("game_date").cast(pl.Utf8).str.strptime(pl.Date, "%Y-%m-%d", strict=False).alias("date"),
+        pl.col("team_abbrev").alias("team"),
+        (pl.col("home_away") == "home").alias("is_home"),
+        pl.col("player_id").cast(pl.Int64),
+        pl.col("shots_against").cast(pl.Float64),
+        pl.col("saves").cast(pl.Float64),
+        (pl.col("starter") == True).alias("target") if starters is None else pl.lit(False).alias("target"),  # noqa: E712
+    )
+    if starters is not None:
+        date = pl.col("game_date")
+        if starters.schema["game_date"] == pl.Utf8:
+            date = date.str.strptime(pl.Date, "%Y-%m-%d", strict=False)
+        pending = starters.select(
+            pl.col("game_id").cast(pl.Int64),
+            date.alias("date"),
+            pl.col("team").cast(pl.Utf8),
+            pl.col("is_home").cast(pl.Boolean),
+            pl.col("player_id").cast(pl.Int64),
+            pl.lit(None, dtype=pl.Float64).alias("shots_against"),
+            pl.lit(None, dtype=pl.Float64).alias("saves"),
+            pl.lit(True).alias("target"),
+        )
+        rows = pl.concat([rows, pending])
+    return rows.with_columns(((pl.col("game_id") // 1_000_000) * 10001 + 1).alias("season"))
+
+
+def _prior_sum(col: str, *by: str) -> pl.Expr:
+    """Running total of ``col`` over rows strictly before this one (nulls count as 0)."""
+    x = pl.col(col).fill_null(0.0)
+    return (x.cum_sum() - x).over(*by)
+
+
+def _team_shot_rates(rows: pl.DataFrame, const: LeagueConstants) -> pl.DataFrame:
+    """Per team-game, strictly-prior in-season shots against / for per game, shrunk toward the league's in-season mean.
+
+    Returns ``game_id, team, opp_team, sa_rate, opp_sf_rate`` for every team-game in ``rows``.
+    """
+    team = rows.group_by("season", "game_id", "date", "team").agg(
+        pl.when(pl.col("shots_against").is_not_null().any()).then(pl.col("shots_against").sum()).alias("sa")
+    )
+    opp = team.select("game_id", pl.col("team").alias("opp_team"), pl.col("sa").alias("sf"))
+    team = team.join(opp, on="game_id").filter(pl.col("team") != pl.col("opp_team"))
+    team = team.with_columns(pl.col("sa").is_not_null().cast(pl.Float64).alias("played"))
+    # League shots per team-game over the season's earlier days (an unplayed game adds nothing).
+    daily = (
+        team.group_by("season", "date")
+        .agg(pl.col("sa").fill_null(0.0).sum().alias("day_sa"), pl.col("played").sum().alias("day_n"))
+        .sort("date")
+        .with_columns(_prior_sum("day_sa", "season").alias("lg_sa"), _prior_sum("day_n", "season").alias("lg_n"))
+    )
+    k_lg, k_team = const.league_shots_k, const.shrink_k
+    lg = (pl.col("lg_sa") + k_lg * const.avg_shots_against) / (pl.col("lg_n") + k_lg)
+    daily = daily.select("season", "date", lg.alias("lg"))
+    team = team.join(daily, on=["season", "date"]).sort("team", "date")
+    team = team.with_columns(
+        _prior_sum("played", "season", "team").alias("n"),
+        _prior_sum("sa", "season", "team").alias("sa_cum"),
+        _prior_sum("sf", "season", "team").alias("sf_cum"),
+    ).with_columns(
+        ((pl.col("sa_cum") + k_team * pl.col("lg")) / (pl.col("n") + k_team)).alias("sa_rate"),
+        ((pl.col("sf_cum") + k_team * pl.col("lg")) / (pl.col("n") + k_team)).alias("sf_rate"),
+    )
+    opp_rates = team.select("game_id", pl.col("team").alias("opp_team"), pl.col("sf_rate").alias("opp_sf_rate"))
+    return team.join(opp_rates, on=["game_id", "opp_team"]).select(
+        "game_id", "team", "opp_team", "sa_rate", "opp_sf_rate"
+    )
+
+
+def nhl_goalie_saves(
+    seasons: int | list[int],
+    *,
+    starters: pl.DataFrame | None = None,
+    coverage: float = 0.8,
+    load_goalie_boxscores: Callable[[Any], pl.DataFrame] | None = None,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Starting goalie saves projection with a central interval, per goalie-game.
+
+    Expected shots against blend the goalie's team's shots-against rate with the opponent's shots-for rate
+    (strictly prior games of the season, shrunk toward the league's in-season mean by ``shrink_k`` games),
+    move by ``shots_hfa / 2`` for home ice and scale by ``starter_shot_share``. The save percentage is the
+    goalie's own record over every earlier game in ``seasons``, shrunk toward ``save_pct_prior`` by
+    ``save_pct_kappa`` shots. Saves then follow a negative binomial (size ``shots_nb_size``, mean
+    ``exp_shots_against * exp_save_pct``), and ``saves_lo`` / ``saves_hi`` are its ``(1 - coverage) / 2`` and
+    ``(1 + coverage) / 2`` quantiles. Every row uses only games before its date.
+
+    Args:
+        seasons: the seasons whose goalie boxscores make the history (``load_nhl_goalie_boxscores``
+            publishes 2024 onward). Without ``starters``, every starter-game in them is projected.
+        starters: games still to play, one row per projected starter: ``game_id``, ``game_date``
+            (``Date`` or ``"YYYY-MM-DD"``), ``team``, ``is_home``, ``player_id``. Both teams of a game
+            should be listed. When given, only these rows are returned.
+        coverage: central probability of the interval, in (0, 1).
+        load_goalie_boxscores: the goalie-box loader, called as ``f(seasons)``; ``None`` reads
+            :func:`~sportsdataverse.nhl.nhl_loaders.load_nhl_goalie_boxscores`.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame, one row per projected goalie-game. Because saves are whole numbers,
+        the interval holds at least ``coverage`` of the predicted distribution. Empty input returns a
+        zero-row frame with this schema.
+
+        |col_name          |type   |
+        |:-----------------|:------|
+        |season            |Int64  |
+        |game_id           |Int64  |
+        |game_date         |Date   |
+        |player_id         |Int64  |
+        |team              |String |
+        |opp_team          |String |
+        |is_home           |Boolean|
+        |exp_shots_against |Float64|
+        |exp_save_pct      |Float64|
+        |exp_saves         |Float64|
+        |saves_lo          |Int64  |
+        |saves_hi          |Int64  |
+        |coverage          |Float64|
+
+    Raises:
+        ValueError: if ``coverage`` is not strictly between 0 and 1.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nhl.nhl_player_props import nhl_goalie_saves
+            saves = nhl_goalie_saves(2026)
+            saves.select("game_id", "player_id", "exp_saves", "saves_lo", "saves_hi").head()
+    """
+    if not 0.0 < coverage < 1.0:
+        raise ValueError(f"coverage must be in (0, 1), got {coverage}")
+    const = get_constants("nhl")
+    box = (load_goalie_boxscores or load_nhl_goalie_boxscores)(seasons)
+    if box.is_empty() or (starters is not None and starters.is_empty()):
+        out = pl.DataFrame(schema=_SAVES_SCHEMA)
+        return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+    rows = _goalie_rows(box, starters).sort("player_id", "date")
+    rows = rows.with_columns(
+        _prior_sum("shots_against", "player_id").alias("shots_cum"),
+        _prior_sum("saves", "player_id").alias("saves_cum"),
+    )
+    proj = rows.filter(pl.col("target")).join(_team_shot_rates(rows, const), on=["game_id", "team"], how="left")
+    side = pl.when(pl.col("is_home")).then(-0.5).otherwise(0.5) * const.shots_hfa
+    proj = proj.with_columns(
+        (const.starter_shot_share * (0.5 * (pl.col("sa_rate") + pl.col("opp_sf_rate")) + side)).alias(
+            "exp_shots_against"
+        ),
+        (
+            (pl.col("saves_cum") + const.save_pct_kappa * const.save_pct_prior)
+            / (pl.col("shots_cum") + const.save_pct_kappa)
+        ).alias("exp_save_pct"),
+    ).with_columns((pl.col("exp_shots_against") * pl.col("exp_save_pct")).alias("exp_saves"))
+
+    mean = proj["exp_saves"].fill_null(float("nan")).to_numpy()
+    size = const.shots_nb_size
+    tail = (1.0 - coverage) / 2.0
+    lo, hi = nbinom.ppf(tail, size, size / (size + mean)), nbinom.ppf(1.0 - tail, size, size / (size + mean))
+    out = proj.with_columns(
+        pl.Series("saves_lo", lo).fill_nan(None).cast(pl.Int64),
+        pl.Series("saves_hi", hi).fill_nan(None).cast(pl.Int64),
+        pl.lit(coverage).alias("coverage"),
+        pl.col("date").alias("game_date"),
+    ).select(list(_SAVES_SCHEMA))
+    out = out.sort("game_id", "is_home")
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
