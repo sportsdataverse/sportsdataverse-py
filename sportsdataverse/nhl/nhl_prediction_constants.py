@@ -247,7 +247,10 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         #   0.2285 against 0.2207. 2022-23 alone would give 0.661.
         #   The regulation means are solved to match exp_total, so they inherit its level: fitted against
         #   the settled-total avg_total_goals = 6.19 / total_scale = 2.5392.
-        # Saves (load_nhl_goalie_boxscores starts in 2023-24, so the fit season is 2023-24):
+        # Saves (load_nhl_goalie_boxscores starts in 2023-24, so the fit season is 2023-24). Two shrinkage
+        #   weights are NOT fitted: team shot rates reuse shrink_k = 15 (the xG ratings' games prior), and
+        #   league_shots_k = 64 is a seed. A follow-up should fit both in fit_score_saves.py (NB likelihood of
+        #   2023-24 starters' shots against), as save_pct_kappa is.
         #   avg_shots_against = shots on goal per team-game; shots_hfa = away minus home team shots against;
         #   starter_shot_share = starters' shots against / expected; save_pct_prior = starters' save %;
         #   save_pct_kappa = binomial MLE of goals against; shots_nb_size = NB MLE of starters' shots

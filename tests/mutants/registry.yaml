@@ -12272,11 +12272,31 @@
   group: nhl-goalie-saves
   finding: nhl-goalie-saves-interval
   file: sportsdataverse/nhl/nhl_player_props.py
-  snippet: '    side = pl.when(pl.col("is_home")).then(-0.5).otherwise(0.5) * const.shots_hfa'
-  mutant: '    side = pl.when(pl.col("is_home")).then(0.5).otherwise(-0.5) * const.shots_hfa'
+  snippet: '    side = pl.when(pl.col("is_home") == True).then(-0.5).otherwise(0.5) * const.shots_hfa  # noqa: E712'
+  mutant: '    side = pl.when(pl.col("is_home") == True).then(0.5).otherwise(-0.5) * const.shots_hfa  # noqa: E712'
   test: tests/nhl/test_nhl_goalie_saves.py::test_home_goalie_faces_fewer_shots_on_opening_night
   expected: kill
   note: The home goalie would be projected to face the extra shots the home team takes.
+
+- id: nhl-goalie-saves-interval-uses-nb-size
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '    lo, hi = nbinom.ppf(tail, size, size / (size + mean)), nbinom.ppf(1.0 - tail, size, size / (size + mean))'
+  mutant: '    lo, hi = nbinom.ppf(tail, 1e9, 1e9 / (1e9 + mean)), nbinom.ppf(1.0 - tail, 1e9, 1e9 / (1e9 + mean))'
+  test: tests/nhl/test_nhl_goalie_saves.py -k "coverage_and_bias"
+  expected: kill
+  note: Near-Poisson bounds (shots_nb_size ignored) give an interval narrower than the coverage it reports.
+
+- id: nhl-goalie-saves-starters-drop-own-result
+  group: nhl-goalie-saves
+  finding: nhl-goalie-saves-interval
+  file: sportsdataverse/nhl/nhl_player_props.py
+  snippet: '        box = box.join(starters.select(pl.col("game_id").cast(box.schema["game_id"])), on="game_id", how="anti")'
+  mutant: '        box = box'
+  test: tests/nhl/test_nhl_goalie_saves.py::test_starters_for_a_game_already_in_the_box_ignore_its_result
+  expected: kill
+  note: A slate re-run after puck drop would feed each game's own saves into its projection.
 
 - id: bb-factor-points-defense-sign
   group: bb-factor-points

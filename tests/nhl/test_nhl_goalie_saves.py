@@ -98,19 +98,27 @@ def test_home_goalie_faces_fewer_shots_on_opening_night(projected):
     """With no games played every team sits at the league seed; home ice alone separates the two goalies."""
     const = get_constants("nhl")
     first = projected.filter(pl.col("game_date") == projected["game_date"].min())
-    home = first.filter(pl.col("is_home"))["exp_shots_against"]
-    away = first.filter(~pl.col("is_home"))["exp_shots_against"]
+    home = first.filter(pl.col("is_home") == True)["exp_shots_against"]  # noqa: E712
+    away = first.filter(pl.col("is_home") == False)["exp_shots_against"]  # noqa: E712
     np.testing.assert_allclose(away.to_numpy() - home.to_numpy(), const.starter_shot_share * const.shots_hfa)
+    # and the level is the league seed itself, so avg_shots_against reaches the output
+    np.testing.assert_allclose(
+        home.to_numpy(), const.starter_shot_share * (const.avg_shots_against - const.shots_hfa / 2)
+    )
 
 
-def test_holdout_interval_coverage_and_bias(box, projected):
-    """2025-26 regular-season starters (2,624): the 80% interval covers what the model says it covers.
+@pytest.mark.parametrize(("coverage", "observed_implied"), [(0.5, 0.5474), (0.8, 0.8256), (0.9, 0.9150)])
+def test_holdout_interval_coverage_and_bias(box, coverage, observed_implied):
+    """2025-26 regular-season starters (2,624): each interval covers what the model says it covers.
 
-    Saves are whole numbers, so the 10th-90th percentile interval holds ~82.5% of the model's own
-    distribution. Gate: realized within 0.02 of that (2.5 binomial standard errors at n=2,624) and the
-    mean projection within 0.5 saves of the mean realized. fit_score_saves.py observed 0.829 / 0.823 and
-    24.25 / 24.16 with 2023-24 and 2024-25 in the history; this fixture carries 2025-26 alone.
+    Saves are whole numbers, so the equal-tail interval holds a little more than ``coverage`` of the model's
+    own distribution: 0.5474 / 0.8256 / 0.9150 on this fixture. Gates: that implied coverage lies in
+    ``[coverage, coverage + 0.05]`` (so an interval of the wrong width, or one that ignores ``coverage`` or
+    ``shots_nb_size``, fails), realized coverage is within 0.02 of it (2.5 binomial standard errors), and the
+    mean projection is within 0.5 saves of the mean realized. Observed realized 0.5461 / 0.8293 / 0.9074 and
+    bias +0.087 saves, with 2025-26 as the only history. Never lower a gate in this module to make a refit pass.
     """
+    projected = nhl_goalie_saves(2026, coverage=coverage, load_goalie_boxscores=lambda _: box)
     actual = _regular_starters(box).select("game_id", "player_id", pl.col("saves").alias("actual"))
     d = projected.join(actual, on=["game_id", "player_id"])
     assert d.height > 2500
@@ -119,5 +127,46 @@ def test_holdout_interval_coverage_and_bias(box, projected):
     r = get_constants("nhl").shots_nb_size
     implied = (nbinom.cdf(hi, r, r / (r + m)) - nbinom.cdf(lo - 1, r, r / (r + m))).mean()
     realized = ((y >= lo) & (y <= hi)).mean()
+    assert coverage <= implied <= coverage + 0.05, (implied, observed_implied)
     assert abs(realized - implied) < 0.02, (realized, implied)
     assert abs(m.mean() - y.mean()) < 0.5
+
+
+def _starters_of(box: pl.DataFrame, game: int) -> pl.DataFrame:
+    return (
+        _regular_starters(box)
+        .filter(pl.col("game_id") == game)
+        .select(
+            "game_id",
+            "game_date",
+            pl.col("team_abbrev").alias("team"),
+            (pl.col("home_away") == "home").alias("is_home"),
+            "player_id",
+        )
+    )
+
+
+def test_starters_for_a_game_already_in_the_box_ignore_its_result(box):
+    """Re-running a slate after it is played must not feed each game's own saves into its projection."""
+    game = _regular_starters(box).sort("game_date")["game_id"][800]
+    date = box.filter(pl.col("game_id") == game)["game_date"][0]
+    starters = _starters_of(box, game)
+    with_game = nhl_goalie_saves(2026, starters=starters, load_goalie_boxscores=lambda _: box)
+    without = nhl_goalie_saves(
+        2026, starters=starters, load_goalie_boxscores=lambda _: box.filter(pl.col("game_date") != date)
+    )
+    np.testing.assert_allclose(with_game.sort("is_home")["exp_saves"], without.sort("is_home")["exp_saves"], rtol=1e-12)
+
+
+def test_starters_must_list_both_teams(box):
+    game = _regular_starters(box).sort("game_date")["game_id"][800]
+    with pytest.raises(ValueError, match="both teams"):
+        nhl_goalie_saves(2026, starters=_starters_of(box, game).head(1), load_goalie_boxscores=lambda _: box)
+
+
+def test_datetime_game_dates_project_like_strings(box, projected):
+    """A loader that returns ``game_date`` as Datetime must not null every projection."""
+    as_datetime = box.with_columns(pl.col("game_date").str.to_datetime("%Y-%m-%d"))
+    again = nhl_goalie_saves(2026, load_goalie_boxscores=lambda _: as_datetime)
+    key = ["game_id", "player_id"]
+    assert again.sort(key).equals(projected.sort(key))

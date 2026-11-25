@@ -5,6 +5,13 @@ predictions and pbp-derived regulation / final scores for 2023-24 .. 2025-26. Th
 is fitted on all four seasons 2022-23 .. 2025-26, so it is never scored here. Each season is scored leave one
 season out instead: with the draw inflation and flat outcome rates ``tools/models/nhl_prediction/fit_score_saves.py``
 fits on the other three seasons (see the fixtures README).
+
+Leave one season out holds out the draw inflation only. A season's theta is fitted partly on later seasons,
+and ``avg_total_goals`` (6.19) is the mean of exactly these three seasons, so the ``exp_total`` level the tie
+probability rides on is in-sample. Both effects are small: a forward-only theta (2022-23 alone, 0.661)
+still scores 1.0343 against 1.0380 on 2023-24, and moving every ``exp_total`` by -0.15 shifts the pooled
+predicted tie by +0.003. The ``LOSO`` constants cannot be recomputed from the fixture (2022-23 is not in it);
+``fit_score_saves.py`` prints them.
 """
 
 from __future__ import annotations
@@ -173,3 +180,65 @@ def test_leave_one_season_out_tie_calibration(holdout, monkeypatch):
         predicted.append(_three_way(d, LOSO[season][0], monkeypatch)[:, 1])
         tied.append(_outcome(d) == 1)
     assert abs(np.concatenate(predicted).mean() - np.concatenate(tied).mean()) < 0.02
+
+
+def _loso_frames(holdout: pl.DataFrame, monkeypatch: pytest.MonkeyPatch) -> tuple[pl.DataFrame, np.ndarray]:
+    """Every held-out game's regulation columns under its own leave-one-out draw inflation, plus independent Poisson log loss."""
+    parts, indep = [], []
+    for (season,), d in holdout.group_by("season", maintain_order=True):
+        for theta, sink in ((LOSO[season][0], parts), (0.0, indep)):
+            monkeypatch.setitem(
+                const_mod.LEAGUE_CONSTANTS, "nhl", replace(const_mod.LEAGUE_CONSTANTS["nhl"], reg_draw_inflation=theta)
+            )
+            sink.append(_with_regulation_outcomes(d, "nhl"))
+    return pl.concat(parts), pl.concat(indep)
+
+
+def test_leave_one_season_out_gain_over_independent_poisson_is_not_noise(holdout, monkeypatch):
+    """Pooled paired log-loss gain over independent Poissons: 0.0105 +/- 0.0030 (3538 games).
+
+    Per season the gain is 0.0057 / 0.0042 / 0.0220 (each +/- ~0.005), so two of three alone sit within one
+    standard error; the pooled gain is the claim. Floor 0.0045 = observed minus two standard errors. Never
+    lower a gate in this module to make a refit pass.
+    """
+    model, indep = _loso_frames(holdout, monkeypatch)
+    cols = ["home_reg_win_prob", "reg_tie_prob", "away_reg_win_prob"]
+    y = _outcome(model)
+    rows = np.arange(len(y))
+    gain = -np.log(indep.select(cols).to_numpy()[rows, y]) + np.log(model.select(cols).to_numpy()[rows, y])
+    assert gain.mean() > 0.0045, gain.mean()
+
+
+def test_leave_one_season_out_home_away_and_goal_levels(holdout, monkeypatch):
+    """Pooled level of the other two classes and of the regulation goal means.
+
+    Observed: home regulation win 0.4028 predicted against 0.4282, away 0.3687 against 0.3510 (gate 0.035;
+    the home shortfall is inherited from ``home_win_prob``, which runs 0.521 against 0.569 on 2024-25);
+    regulation goals 3.062 / 2.944 predicted against 3.097 / 2.859 (gate 0.15, about observed plus two
+    standard errors).
+    """
+    model, _ = _loso_frames(holdout, monkeypatch)
+    y = _outcome(model)
+    assert abs(model["home_reg_win_prob"].mean() - (y == 0).mean()) < 0.035
+    assert abs(model["away_reg_win_prob"].mean() - (y == 2).mean()) < 0.035
+    assert abs(model["exp_home_reg_goals"].mean() - model["reg_home"].mean()) < 0.15
+    assert abs(model["exp_away_reg_goals"].mean() - model["reg_away"].mean()) < 0.15
+
+
+def test_pwhl_regulation_and_saves_terms_are_the_nhl_seed():
+    """PWHL has no regulation-score or goalie-box fit yet: its row carries the NHL values on purpose.
+
+    A PWHL fit (it needs a PWHL regulation-score and goalie-box fixture) must change this test deliberately.
+    """
+    nhl, pwhl = get_constants("nhl"), get_constants("pwhl")
+    for field in (
+        "reg_draw_inflation",
+        "avg_shots_against",
+        "league_shots_k",
+        "shots_hfa",
+        "starter_shot_share",
+        "save_pct_prior",
+        "save_pct_kappa",
+        "shots_nb_size",
+    ):
+        assert getattr(pwhl, field) == getattr(nhl, field), field

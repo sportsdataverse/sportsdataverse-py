@@ -170,8 +170,15 @@ Gates (set from the observed values; see each test's docstring):
 - Pooled leave-one-out predicted tie probability within 0.02 of the observed rate (0.2285 against
   0.2207). The tie rate itself swings by season (0.240 / 0.208 / 0.206 / 0.249 for 2022-23 ..
   2025-26), so there is no per-season band.
-- The 80% saves interval's realized coverage within 0.02 of what the model says it covers, and mean
-  projected saves within 0.5 of the mean realized.
+- Pooled paired log-loss gain over independent Poissons above 0.0045 (observed 0.0105 +/- 0.0030;
+  per season 0.0057 / 0.0042 / 0.0220, two of them within one standard error on their own).
+- Pooled home / away regulation win within 0.035 of observed (0.4028 vs 0.4282, 0.3687 vs 0.3510;
+  the home shortfall comes from `home_win_prob`), regulation goal means within 0.15 (3.062 / 2.944
+  vs 3.097 / 2.859).
+- Saves intervals at 50 / 80 / 90%: implied coverage in `[coverage, coverage + 0.05]` (0.5474 /
+  0.8256 / 0.9150), realized within 0.02 of it (0.5461 / 0.8293 / 0.9074), and mean projected saves
+  within 0.5 of the mean realized (+0.087). Leave-one-out holds out the draw inflation only; see the
+  test module docstring for what stays in-sample.
 
 ## PWHL oracle gate — DEFERRED (capture contract)
 

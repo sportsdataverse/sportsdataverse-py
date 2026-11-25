@@ -54,6 +54,7 @@ import pandas as pd
 import polars as pl
 from scipy.stats import nbinom, poisson
 
+from sportsdataverse._temporal import as_date
 from sportsdataverse.nhl.nhl_loaders import load_nhl_goalie_boxscores, load_nhl_skater_boxscores
 from sportsdataverse.nhl.nhl_prediction_constants import LeagueConstants, get_constants
 from sportsdataverse.nhl.nhl_team_ratings import nhl_team_ratings
@@ -405,10 +406,19 @@ def _goalie_rows(box: pl.DataFrame, starters: pl.DataFrame | None) -> pl.DataFra
     """Goalie-game rows (history, plus ``starters`` as games still to play), with ``target`` marking the projected ones.
 
     ``season`` comes from the NHL game id (``2025020001`` -> ``20252026``), so a future game needs no season column.
+    A ``starters`` game already in ``box`` is dropped from the history, so its own result never reaches it.
+
+    Raises:
+        ValueError: if a ``starters`` game does not list exactly two teams.
     """
+    if starters is not None:
+        teams = starters.group_by("game_id").agg(pl.col("team").n_unique().alias("n"))
+        if teams.filter(pl.col("n") != 2).height:
+            raise ValueError("starters must list both teams of every game (one starter per team)")
+        box = box.join(starters.select(pl.col("game_id").cast(box.schema["game_id"])), on="game_id", how="anti")
     rows = box.select(
         pl.col("game_id").cast(pl.Int64),
-        pl.col("game_date").cast(pl.Utf8).str.strptime(pl.Date, "%Y-%m-%d", strict=False).alias("date"),
+        as_date(pl.col("game_date")).alias("date"),
         pl.col("team_abbrev").alias("team"),
         (pl.col("home_away") == "home").alias("is_home"),
         pl.col("player_id").cast(pl.Int64),
@@ -417,12 +427,9 @@ def _goalie_rows(box: pl.DataFrame, starters: pl.DataFrame | None) -> pl.DataFra
         (pl.col("starter") == True).alias("target") if starters is None else pl.lit(False).alias("target"),  # noqa: E712
     )
     if starters is not None:
-        date = pl.col("game_date")
-        if starters.schema["game_date"] == pl.Utf8:
-            date = date.str.strptime(pl.Date, "%Y-%m-%d", strict=False)
         pending = starters.select(
             pl.col("game_id").cast(pl.Int64),
-            date.alias("date"),
+            as_date(pl.col("game_date")).alias("date"),
             pl.col("team").cast(pl.Utf8),
             pl.col("is_home").cast(pl.Boolean),
             pl.col("player_id").cast(pl.Int64),
@@ -499,7 +506,8 @@ def nhl_goalie_saves(
             publishes 2024 onward). Without ``starters``, every starter-game in them is projected.
         starters: games still to play, one row per projected starter: ``game_id``, ``game_date``
             (``Date`` or ``"YYYY-MM-DD"``), ``team``, ``is_home``, ``player_id``. Both teams of a game
-            should be listed. When given, only these rows are returned.
+            must be listed. A game already in the boxscores is projected without its own result. When
+            given, only these rows are returned.
         coverage: central probability of the interval, in (0, 1).
         load_goalie_boxscores: the goalie-box loader, called as ``f(seasons)``; ``None`` reads
             :func:`~sportsdataverse.nhl.nhl_loaders.load_nhl_goalie_boxscores`.
@@ -527,7 +535,7 @@ def nhl_goalie_saves(
         |coverage          |Float64|
 
     Raises:
-        ValueError: if ``coverage`` is not strictly between 0 and 1.
+        ValueError: if ``coverage`` is not strictly between 0 and 1, or a ``starters`` game lacks a team.
 
     Example:
         Quick start::
@@ -549,8 +557,10 @@ def nhl_goalie_saves(
         _prior_sum("shots_against", "player_id").alias("shots_cum"),
         _prior_sum("saves", "player_id").alias("saves_cum"),
     )
-    proj = rows.filter(pl.col("target")).join(_team_shot_rates(rows, const), on=["game_id", "team"], how="left")
-    side = pl.when(pl.col("is_home")).then(-0.5).otherwise(0.5) * const.shots_hfa
+    proj = rows.filter(pl.col("target") == True).join(  # noqa: E712
+        _team_shot_rates(rows, const), on=["game_id", "team"], how="left"
+    )
+    side = pl.when(pl.col("is_home") == True).then(-0.5).otherwise(0.5) * const.shots_hfa  # noqa: E712
     proj = proj.with_columns(
         (const.starter_shot_share * (0.5 * (pl.col("sa_rate") + pl.col("opp_sf_rate")) + side)).alias(
             "exp_shots_against"
