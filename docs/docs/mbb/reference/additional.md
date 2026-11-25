@@ -392,7 +392,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_player_on_off](additional/analytics-3.md#mbb_player_on_off) | College player on/off: each player's team with him on the floor and without him, per team-season. |
 | [mbb_player_season_box_rates](additional/analytics-3.md#mbb_player_season_box_rates) | Men's college per-36 points, rebounds and assists per player-season, ranked, with the season usage. |
 | [mbb_player_shot_zones](additional/analytics-3.md#mbb_player_shot_zones) | College season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |
-| [mbb_player_war](additional/analytics-3.md#mbb_player_war) | WAR and VORP per player-season, from our box BPM. |
+| [mbb_player_war](additional/analytics-4.md#mbb_player_war) | WAR and VORP per player-season, from our box BPM. |
 | [mbb_player_wowy](additional/analytics-4.md#mbb_player_wowy) | College WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
 | [mbb_shot_selection](additional/analytics-4.md#mbb_shot_selection) | Per shooter/team expected points per attempt vs the league-average mix. |
 | [mbb_situational_lineup](additional/analytics-4.md#mbb_situational_lineup) | College five-man unit splits by situation: the team splits over the possessions each unit started. |
@@ -407,8 +407,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_team_season_rates](additional/analytics-5.md#mbb_team_season_rates) | College season team rates from possessions: ORtg/DRtg/net, tempo and the four factors, with splits. |
 | [mbb_team_shot_zones](additional/analytics-5.md#mbb_team_shot_zones) | College season shot profile by zone per team, for and allowed: rim / mid / corner 3 / above-the-break 3. |
 | [mbb_team_strength](additional/analytics-5.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
-| [mbb_tournament_ineligible](additional/analytics-5.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
-| [ncaa_box_events](additional/analytics-5.md#ncaa_box_events) | Each player's box counts per stats.ncaa.org event, the input of the stint and split box. |
+| [mbb_tournament_ineligible](additional/analytics-6.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
+| [ncaa_box_events](additional/analytics-6.md#ncaa_box_events) | Each player's box counts per stats.ncaa.org event, the input of the stint and split box. |
 | [ncaa_coach_stints](additional/analytics-6.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
 | [ncaa_impact_rows](additional/analytics-6.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
 | [ncaa_lineup_count_rows](additional/analytics-6.md#ncaa_lineup_count_rows) | Map the stats.ncaa.org pbp onto the lineup-seasons count frame. |

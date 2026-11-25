@@ -11621,6 +11621,37 @@
   expected: kill
   note: An automatic runner who scores on the half's first PA (718511 bottom 11) would be missed.
 
+# --- mlb-dedupe-game-pks: a suspended game listed on two schedule dates counts once ----------------
+- id: mlb-season-game-pks-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    return list(dict.fromkeys(pks))'
+  mutant: '    return pks'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_season_game_pks_lists_a_suspended_game_once
+  expected: kill
+  note: 5028 (suspended 2000-04-12, resumed the 13th) would be collected twice for the RE24 matrix.
+
+- id: mlb-base-out-states-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)'
+  mutant: '    pbp = pbp'
+  test: tests/mlb/test_mlb_run_expectancy.py::test_twice_collected_games_count_once
+  expected: kill
+  note: A game collected twice would interleave its PAs, corrupting the states and double-counting RE24.
+
+- id: mlb-markov-post-outs-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    ).unique(subset=["game_id", "at_bat_index"], keep="first", maintain_order=True)  # match the deduped states'
+  mutant: '    )'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_transition_counts_conserve_plate_appearances
+  expected: kill
+  note: The post-PA outs of a game collected twice would no longer join 1:1 onto the deduped states.
+
 # --- WNBA prop constants: per-league SD law / dispersion + league-bound WNBA helpers -------------
 - id: wnba-props-distribution-reads-nba-constants
   group: wnba-prop-constants
@@ -12247,6 +12278,36 @@
   expected: kill
   note: The home goalie would be projected to face the extra shots the home team takes.
 
+- id: bb-factor-points-defense-sign
+  group: bb-factor-points
+  finding: bb-d42-factor-points
+  file: sportsdataverse/_common/factor_points.py
+  snippet: '    sign = {"off": 1, "def": -1}'
+  mutant: '    sign = {"off": 1, "def": 1}'
+  test: tests/common/test_factor_points.py::test_team_parts_add_up_to_net_on_every_row
+  expected: kill
+  note: The defensive parts would carry the opponents' offense sign, so the eight parts would no longer add up to net_rtg.
+
+- id: bb-factor-points-efg-price
+  group: bb-factor-points
+  finding: bb-d42-factor-points
+  file: sportsdataverse/_common/factor_points.py
+  snippet: '        - 2 * pl.col("lg_efg_pct") * fga'
+  mutant: '        - pl.col("lg_efg_pct") * fga'
+  test: tests/common/test_factor_points.py::test_team_parts_are_the_game_prices_summed
+  expected: kill
+  note: A mispriced eFG part still adds up (the free-throw remainder absorbs it); only the per-game prices catch it.
+
+- id: bb-factor-points-lineup-rebound-chances
+  group: bb-factor-points
+  finding: bb-d42-factor-points
+  file: sportsdataverse/_common/factor_points.py
+  snippet: '    "side": (pl.col("o_oreb") + pl.col("d_dreb"), pl.col("d_oreb") + pl.col("o_dreb")),'
+  mutant: '    "side": (pl.col("o_oreb") + pl.col("o_dreb"), pl.col("d_oreb") + pl.col("d_dreb")),'
+  test: tests/common/test_factor_points.py::test_lineup_rebound_part_prices_the_published_orb_rate
+  expected: kill
+  note: A lineup's rebound chances would add its own defensive rebounds, the team table's convention, not the opponent's.
+
 - id: soccer-standings-infer-all-rows
   group: polars-2.2
   finding: polars-2.2-from-dicts-extra-key
@@ -12297,16 +12358,6 @@
   test: tests/mlb/test_mlb_markov_run_expectancy.py::test_walk_offs_and_incomplete_halves_are_excluded
   expected: kill
   note: The transitions would no longer cover the same halves as the empirical RE24 they are compared with.
-
-- id: mlb-markov-no-dedupe
-  group: mlb-markov-re24
-  finding: mlb-markov-re24
-  file: sportsdataverse/mlb/mlb_run_expectancy.py
-  snippet: '    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)'
-  mutant: '    pbp = pbp'
-  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_transition_counts_conserve_plate_appearances
-  expected: kill
-  note: A game collected twice (two in the corpus) would interleave its PAs and corrupt the states.
 
 - id: mlb-markov-prob-not-per-state
   group: mlb-markov-re24
@@ -12397,3 +12448,24 @@
   test: tests/mlb/test_mlb_markov_run_expectancy.py::test_by_event_prob_and_event_classes
   expected: kill
   note: field_out / force_out (unmapped) would be classed as reaching base instead of outs in play.
+
+# --- ESPN league `endpoints:` allowlist (lacrosse) ------------------------------------------------
+- id: espn-league-endpoints-allowlist-applied
+  group: espn-league-allowlist
+  finding: espn-lacrosse-allowlist
+  file: tools/codegen/spec.py
+  snippet: '        return not self.endpoints or ep.short in self.endpoints'
+  mutant: '        return True'
+  test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_filters_in_scope_endpoints
+  expected: kill
+  note: An ignored allowlist would emit every in-scope ESPN wrapper for lacrosse, most of them 404.
+
+- id: espn-league-endpoints-unknown-short-rejected
+  group: espn-league-allowlist
+  finding: espn-lacrosse-allowlist
+  file: tools/codegen/spec.py
+  snippet: '        if set(lg.endpoints) - shorts:'
+  mutant: '        if False:'
+  test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_rejects_unknown_short
+  expected: kill
+  note: A typo in a league allowlist would silently drop that wrapper instead of failing the build.

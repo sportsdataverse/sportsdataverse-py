@@ -514,6 +514,11 @@
           "group": "Cricket"
         },
         {
+          "prefix": "lacrosse",
+          "label": "Lacrosse",
+          "group": "Lacrosse"
+        },
+        {
           "prefix": "odds",
           "label": "Betting odds",
           "group": "Betting & prediction markets"
