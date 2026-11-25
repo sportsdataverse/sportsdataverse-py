@@ -16,6 +16,7 @@ from typing import Any, Callable, Optional
 
 import polars as pl
 
+from sportsdataverse._common.possessions import TS_FT_WEIGHT, ft_possession_weight
 from sportsdataverse.nba.nba_game_predict import nba_in_game_win_prob, win_prob_from_margin
 from sportsdataverse.nba.nba_prediction_constants import get_constants
 
@@ -40,8 +41,9 @@ __all__ = [
     "league_pbp_functions",
 ]
 
-#: Oliver's free-throw possession weight, used by every rate below.
-FT_WEIGHT: float = 0.44
+#: Oliver's free-throw weight: true shooting in every league, and the pros' possession estimate.
+#: College possessions weigh a free throw 0.475 (:func:`sportsdataverse._common.possessions.ft_possession_weight`).
+FT_WEIGHT: float = TS_FT_WEIGHT
 REGULATION_PERIODS: int = 4
 #: ESPN marks a missing play coordinate with ``-214748340``; anything below this is "no location".
 COORD_SENTINEL: float = -1000.0
@@ -927,8 +929,9 @@ def team_game_rates(
     """Four factors, possessions, ratings and pace for both teams of one game.
 
     Dean Oliver's estimates on the ``load_nba_team_boxscore`` columns: possessions =
-    FGA - ORB + TOV + 0.44 FTA, averaged over the two teams; eFG% = (FGM + 0.5 3PM) / FGA;
-    TOV% = TOV / (FGA + 0.44 FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
+    FGA - ORB + TOV + w FTA, averaged over the two teams, with w = 0.44 for NBA and WNBA and 0.475
+    for MBB and WBB (:func:`sportsdataverse._common.possessions.ft_possession_weight`); eFG% =
+    (FGM + 0.5 3PM) / FGA; TOV% = TOV / (FGA + w FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
     ORtg / DRtg per 100 possessions; pace per regulation length (48 minutes NBA; 40 WNBA, MBB and WBB). ``TOV`` is the team's player plus team turnovers:
     ``total_turnovers``, except that when it is null it is ``turnovers + team_turnovers``, and when ESPN
     has duplicated the team turnover (``team_turnovers == turnovers`` and ``total_turnovers == 2 *
@@ -994,6 +997,7 @@ def team_game_rates(
     reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=season)
     tov = _tov(team_box, lg, season)
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
+    w = ft_possession_weight(lg)
     # ESPN's NBA 2002-2012 boxes split rebounds that don't add up to total_rebounds (#757). NBA only:
     # college totals can include team rebounds, which the box doesn't carry separately.
     # A null total is no total, like a box without the column: it keeps the rate rather than nulling it.
@@ -1003,7 +1007,7 @@ def team_game_rates(
         else pl.lit(True)
     )
     own = team_box.with_columns(
-        (fga - pl.col("offensive_rebounds") + tov + FT_WEIGHT * fta).cast(pl.Float64).alias("_own_poss"),
+        (fga - pl.col("offensive_rebounds") + tov + w * fta).cast(pl.Float64).alias("_own_poss"),
         split_ok.alias("_reb_split_ok"),
     )
     opp = own.select(
@@ -1022,7 +1026,7 @@ def team_game_rates(
         "game_id",
         "team_id",
         _ratio(pl.col("field_goals_made") + 0.5 * pl.col("three_point_field_goals_made"), fga).alias("efg_pct"),
-        _ratio(tov, fga + FT_WEIGHT * fta + tov).alias("tov_pct"),
+        _ratio(tov, fga + w * fta + tov).alias("tov_pct"),
         pl.when((pl.col("_reb_split_ok") == True) & (pl.col("_opp_reb_split_ok") == True))
         .then(_ratio(pl.col("offensive_rebounds"), pl.col("offensive_rebounds") + pl.col("_opp_drb")))
         .alias("orb_pct"),
@@ -1047,8 +1051,9 @@ def player_game_rates(
 ) -> pl.DataFrame:
     """True-shooting and usage for every boxed player of one game.
 
-    TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
-    (MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in :func:`team_game_rates`
+    TS% = PTS / (2 (FGA + 0.44 FTA)) in every league; USG% = 100 ((FGA + w FTA + TOV) (team minutes / 5)) /
+    (MIN (team FGA + w team FTA + team TOV)), with the possession weight w of :func:`team_game_rates`
+    (0.44 NBA / WNBA, 0.475 MBB / WBB) and team TOV as in :func:`team_game_rates`
     (``total_turnovers``, repaired where ESPN doubled or omitted it) and team
     minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, MBB and WBB, 5 per overtime). For MBB and
     WBB team TOV follows the college rule of :func:`team_game_rates` (null in WBB before 2009 and in a
@@ -1096,10 +1101,11 @@ def player_game_rates(
     reg = regulation_periods if regulation_periods is not None else game_regulation_periods(lg, season=season)
     tov = _tov(team_box, lg, season)
     team_minutes = 5.0 * game_minutes(periods if periods is not None else reg, league=lg, regulation_periods=reg)
+    w = ft_possession_weight(lg)
     team = team_box.select(
         "game_id",
         "team_id",
-        (pl.col("field_goals_attempted") + FT_WEIGHT * pl.col("free_throws_attempted") + tov)
+        (pl.col("field_goals_attempted") + w * pl.col("free_throws_attempted") + tov)
         .cast(pl.Float64)
         .alias("_team_tsa"),
     )
@@ -1107,7 +1113,7 @@ def player_game_rates(
     fga, fta = pl.col("field_goals_attempted"), pl.col("free_throws_attempted")
     played = (pl.col("did_not_play").fill_null(False) == False) & (pl.col("minutes").fill_null(0.0) > 0)
     tsa = fga + FT_WEIGHT * fta
-    usage_num = 100.0 * (tsa + pl.col("turnovers")) * (team_minutes / 5.0)
+    usage_num = 100.0 * (fga + w * fta + pl.col("turnovers")) * (team_minutes / 5.0)
     usage_den = pl.col("minutes").cast(pl.Float64) * pl.col("_team_tsa")
     null_f = pl.lit(None, dtype=pl.Float64)
     return joined.select(

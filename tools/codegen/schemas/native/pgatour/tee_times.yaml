@@ -1,0 +1,42 @@
+schema: pgatour_tee_times
+kind: dataframe
+columns:
+- name: tournament_id
+  type: character
+  description: ''
+- name: round_number
+  type: integer
+  description: ''
+- name: round_status
+  type: character
+  description: ''
+- name: group_number
+  type: integer
+  description: ''
+- name: tee_time
+  type: character
+  description: ''
+- name: start_tee
+  type: integer
+  description: ''
+- name: back_nine
+  type: logical
+  description: ''
+- name: course_id
+  type: character
+  description: ''
+- name: course_name
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: country
+  type: character
+  description: ''
+- name: amateur
+  type: logical
+  description: ''

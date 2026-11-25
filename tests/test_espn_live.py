@@ -1096,3 +1096,31 @@ def test_espn_lacrosse_college_rankings_and_teams(league):
 
     assert espn_lacrosse_rankings(league=league, return_parsed=False)["rankings"]
     assert espn_lacrosse_teams_core(league=league, return_parsed=False)["count"] >= 50
+
+
+@pytest.mark.parametrize(
+    "league, event_id, min_players",
+    [
+        ("pga", "401811941", 80),  # 2026 Masters
+        ("lpga", "401835177", 50),  # 2026 CME Group Tour Championship
+        ("liv", "401807532", 50),  # 2026 LIV Golf Riyadh
+        ("champions-tour", "401832050", 30),  # 2026 Charles Schwab Cup Championship
+    ],
+)
+def test_espn_golf_leaderboard_field(league, event_id, min_players):
+    import polars as pl
+    from sportsdataverse.golf import espn_golf_leaderboard
+
+    df = espn_golf_leaderboard(league=league, event_id=event_id)
+    assert df.height >= min_players
+    assert df.schema["player_id"] == pl.String
+    assert df["event_id"].unique().to_list() == [event_id]
+    assert df["position"].null_count() < df.height
+
+
+@pytest.mark.parametrize("league", ["pga", "lpga", "liv", "eur", "champions-tour"])
+def test_espn_golf_scoreboard_answers(league):
+    from sportsdataverse.golf import espn_golf_scoreboard
+
+    payload = espn_golf_scoreboard(league=league, return_parsed=False)
+    assert payload["events"], f"{league}: no events on the default scoreboard"

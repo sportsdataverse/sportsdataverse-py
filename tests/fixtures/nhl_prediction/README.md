@@ -6,6 +6,7 @@
   - [Files](#files)
   - [Deliberately not committed](#deliberately-not-committed)
   - [Known gaps / adaptations (binding: gates set from what's actually observable)](#known-gaps--adaptations-binding-gates-set-from-whats-actually-observable)
+  - [Regulation score and goalie saves holdouts (2023-24 .. 2025-26)](#regulation-score-and-goalie-saves-holdouts-2023-24--2025-26)
   - [PWHL oracle gate — DEFERRED (capture contract)](#pwhl-oracle-gate--deferred-capture-contract)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -23,7 +24,7 @@ to stay comparable with MoneyPuck's `regular` folder.
 | File | Source | Rows | Notes |
 |---|---|---:|---|
 | `moneypuck_teams_2023.parquet` | MoneyPuck `teams.csv`, `situation=="5on5"`, `season=2022` (2022-23) | 32 | Per-game normalised (`xgf = xGoalsFor / games_played`, etc). `team: Utf8` abbreviation, matches sdv-py's own NHL abbreviations exactly (`ARI`, not `UTA` -- pre-relocation season). |
-| `results_2023.parquet` | `load_nhl_schedules([2023])` for game_id/date/teams; `home_goals`/`away_goals` **derived from `load_nhl_pbp_full`'s own GOAL events**, not the schedule's score columns (see gap #4 below) | 1312 | `game_id: Utf8`, `date: Date`, `home_team`/`away_team: Utf8`, `home_goals`/`away_goals: Int64`, `neutral_site` hardcoded `False` (not tracked upstream; NHL had no true neutral-site games in 2022-23). |
+| `results_2023.parquet` | `load_nhl_schedules([2023])` for game_id/date/teams; `home_goals`/`away_goals` **the settled score from `load_nhl_pbp_full`'s own GOAL events** (a shootout counts one goal to its winner; relabelled 2026-11-25, 59 shootout games changed, no winner did), not the schedule's score columns (see gap #4 below) | 1312 | `game_id: Utf8`, `date: Date`, `home_team`/`away_team: Utf8`, `home_goals`/`away_goals: Int64`, `neutral_site` hardcoded `False` (not tracked upstream; NHL had no true neutral-site games in 2022-23). |
 | `espn_power_2023.parquet` | `espn_nhl_season_powerindex_leaders` | **0** | **Confirmed genuinely empty at the ESPN API** -- `count: 0` for every season tried 2021-2026 directly against `sports.core.api.espn.com/.../powerindex/leaders`. ESPN has not populated this endpoint for the NHL league. Dropped as a Phase-1 secondary oracle; the tertiary raw-vs-adjusted-xG sanity check stands in its place. |
 | `espn_predictor_sample.parquet` | `espn_nhl_game_predictor` | **0** | **Confirmed permanently unsupported** -- every call returns HTTP 400 `"Predictor is not supported for [hockey/nhl]"`. ESPN does not run a win-probability predictor model for hockey. Task 2.3's win-prob gate is adapted to compare against a documented naive baseline instead of an ESPN-predictor Brier score. |
 | `espn_odds_sample.parquet` | `espn_nhl_game_odds`, sampled across 7 dates spanning the season | 20 | `game_id: Utf8` (crosswalked from ESPN's own `event_id` via `(date, home_team, away_team)` after normalising ESPN's 4 divergent abbreviations: `LA->LAK`, `NJ->NJD`, `SJ->SJS`, `TB->TBL`). `close_puck_line_home`/`close_total` taken from the flat top-level `spread`/`over_under` fields of the first odds-provider row (see gap #5 below); not necessarily identical across games/providers -- documented limitation, not a correctness issue since MAE floors are set from these same observed values. |
@@ -34,6 +35,8 @@ to stay comparable with MoneyPuck's `regular` folder.
 | `in_game_wp_pulled_goalie_2023.parquet` | Same 2023 scoring run, subset to plays with either goalie pulled | 1 | `mean_pred, mean_actual, n` -- the Task 3.4 targeted pulled-goalie calibration check. |
 | `player_props_mae_2024.parquet` | `nhl_player_props(2024)` joined back to realized `load_nhl_skater_boxscores` values for the same player-game (Task 4.2) | 2 | `stat, mae, n` -- MAE(proj_mean, realized) per stat family. Season **2024**, not 2023 (see gap #7 below). |
 | `player_props_p_over_calibration_2024.parquet` | Same 2024 backtest, `p_over` bucketed via `calibration_table` against a synthetic fixed line (the stat's own realized median + 0.5) | 19 | `stat, bin_mid, mean_pred, mean_actual, n`. |
+| `settled_totals_2024_2026.parquet` | `tools/models/nhl_prediction/fit_pregame.py` (written by each run): every 2023-24 .. 2025-26 regular-season game with pbp, settled score from `load_nhl_pbp_full` GOAL events beside `load_nhl_schedules`' `home_score`/`away_score` (real from 2023-24 on) | 3936 | `game_id: Int64`, `season` (end year), `home_goals`, `away_goals`, `home_score`, `away_score`. The two scores agree in every row. Its per-season mean totals (6.226 / 6.081 / 6.254) average to the `avg_total_goals` seed, which `test_nhl_settled_totals.py` pins. |
+| `pbp_goals_settle_2026.parquet` | `load_nhl_pbp_full([2026])`, GOAL events only, of games 2025020001 (regulation, 3-2), 2025020008 (overtime, 4-3) and 2025020006 (shootout with three scoring attempts, 3-4) | 21 | `game_id, event_type, period, period_type, event_team_abbr, home_abbr, away_abbr`. The scores in parentheses are the schedule's; `test_nhl_settled_totals.py` checks `_settled_scores` reproduces them. |
 
 ## Deliberately not committed
 
@@ -70,7 +73,11 @@ to stay comparable with MoneyPuck's `regular` folder.
    sdv-py. **Mitigation (shipped in `nhl_team_ratings.team_game_xg_rates` and
    this capture script):** realized goals are always derived by counting the
    pbp's own `GOAL` events per team, never read from the schedule's score
-   columns. `results_2023.parquet`'s `home_goals`/`away_goals` and
+   columns. The pbp logs every scoring shootout attempt as a `GOAL`
+   (`period_type == "SHOOTOUT"`), so the fitting labels use
+   `nhl_prediction_constants._settled_scores`, which counts a shootout as one
+   goal to its winner (it agrees with the schedule's real 2023-24 .. 2025-26
+   scores in all 3936 games). `results_2023.parquet`'s `home_goals`/`away_goals` and
    `nhl_team_ratings`'s `adj_gf`/`adj_ga` both use this pbp-derived source.
 5. **ESPN's nested `home_team_odds_close_spread_value` / `close_over_value`
    odds fields are null for every NHL game/provider tried** -- only the flat
@@ -140,6 +147,38 @@ to stay comparable with MoneyPuck's `regular` folder.
     gate instead checks whether `sign(exp_margin)` agrees with the market's
     favored side (home favored iff `close_puck_line_home < 0`); observed 10/12,
     floor 0.80. The total-goals MAE (both positive totals) is kept as-is.
+
+## Regulation score and goalie saves holdouts (2023-24 .. 2025-26)
+
+Written 2026-11-25 by `tools/models/nhl_prediction/fit_score_saves.py`, which also fits the
+`reg_draw_inflation` and saves constants in `LEAGUE_CONSTANTS["nhl"]`. The saves constants are fitted
+on 2023-24, so `goalie_box_2026.parquet` is a true holdout. The shipped `reg_draw_inflation` is fitted on
+all four seasons 2022-23 .. 2025-26, so the regulation fixture is scored leave one season out: each
+season with the draw inflation and flat outcome rates fitted on the other three (the script prints
+both; the test carries them).
+
+| File | Source | Rows | Notes |
+|---|---|---:|---|
+| `regulation_holdout_2024_2026.parquet` | as-of `nhl_predict_games` over 2023-24, 2024-25 and 2025-26 (`fit_pregame.py`'s walk: ratings strictly before each date, dates[20:] onward, regular season); scores from `load_nhl_pbp_full` GOAL events | 3538 | `game_id: Int64`, `season` (end year), `home_win_prob`, `exp_total`; `reg_home` / `reg_away` count `period_type == "REGULAR"` goals; `final_home` / `final_away` add one goal to the overtime scorer or the shootout winner. The pbp logs every shootout attempt as a GOAL, so the raw GOAL count is not the final score. `test_nhl_regulation_score.py` scores it. |
+| `goalie_box_2026.parquet` | `load_nhl_goalie_boxscores([2026])` (2025-26, regular season and playoffs) | 5575 | `game_id`, `game_date`, `team_abbrev`, `home_away`, `player_id`, `starter`, `shots_against`, `saves`; every other column dropped. `test_nhl_goalie_saves.py` projects it with 2025-26 as the only history. |
+
+Gates (set from the observed values; see each test's docstring):
+
+- Each held-out season's leave-one-out 3-way log loss beats independent Poissons and the other
+  seasons' flat outcome rates (1.0324 / 1.0401 / 1.0619 against 1.0380 / 1.0442 / 1.0838 and
+  1.0598 / 1.0548 / 1.0834).
+- Pooled leave-one-out predicted tie probability within 0.02 of the observed rate (0.2285 against
+  0.2207). The tie rate itself swings by season (0.240 / 0.208 / 0.206 / 0.249 for 2022-23 ..
+  2025-26), so there is no per-season band.
+- Pooled paired log-loss gain over independent Poissons above 0.0045 (observed 0.0105 +/- 0.0030;
+  per season 0.0057 / 0.0042 / 0.0220, two of them within one standard error on their own).
+- Pooled home / away regulation win within 0.035 of observed (0.4028 vs 0.4282, 0.3687 vs 0.3510;
+  the home shortfall comes from `home_win_prob`), regulation goal means within 0.15 (3.062 / 2.944
+  vs 3.097 / 2.859).
+- Saves intervals at 50 / 80 / 90%: implied coverage in `[coverage, coverage + 0.05]` (0.5474 /
+  0.8256 / 0.9150), realized within 0.02 of it (0.5461 / 0.8293 / 0.9074), and mean projected saves
+  within 0.5 of the mean realized (+0.087). Leave-one-out holds out the draw inflation only; see the
+  test module docstring for what stays in-sample.
 
 ## PWHL oracle gate — DEFERRED (capture contract)
 

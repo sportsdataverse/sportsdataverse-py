@@ -1,5 +1,5 @@
 {
-  "total": 82,
+  "total": 83,
   "sports": [
     {
       "label": "Football",
@@ -514,6 +514,11 @@
           "key": "jolpica",
           "label": "Jolpica F1 API (Ergast-compatible)",
           "href": "https://api.jolpi.ca/ergast/f1"
+        },
+        {
+          "key": "pgatour",
+          "label": "PGA TOUR GraphQL API",
+          "href": "https://www.pgatour.com"
         },
         {
           "key": "pll",

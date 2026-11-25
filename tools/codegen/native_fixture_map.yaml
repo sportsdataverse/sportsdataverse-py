@@ -430,6 +430,19 @@ sihf_api_web:
   table__goalkeeperShotDetail__2026__1.json: goalie_shots
   table__goalkeeperWin__2026__1.json: goalie_wins
   table__goalkeeperShootout__2026__1.json: goalie_shootouts
+pgatour:
+  # POST /graphql (operation and variables in tests/fixtures/pgatour/README.md)
+  schedule_R_2026.json: schedule
+  leaderboard_R2026014.json: leaderboard
+  scorecard_R2026014_28237.json: scorecard
+  tee_times_R2026014.json: tee_times
+  player_28237.json: player
+  player_directory_R.json: player_directory
+  stat_catalog_R_2026.json: stat_catalog
+  stat_details_120_R_2026.json: stat_details
+  tour_cup_02671_R_2025.json: tour_cup
+  shot_details_R2026006_59095_r4.json: shot_details
+
 pll:
   # GET stats.premierlacrosseleague.com/api/... (routes and arguments in tests/fixtures/pll/README.md)
   schedule_2026.json: schedule

@@ -1,0 +1,6 @@
+query ScorecardCompressedV3($tournamentId: ID!, $playerId: ID!) {
+  scorecardCompressedV3(tournamentId: $tournamentId, playerId: $playerId) {
+    id
+    payload
+  }
+}

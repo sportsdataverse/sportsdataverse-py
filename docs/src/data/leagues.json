@@ -519,6 +519,11 @@
           "group": "Lacrosse"
         },
         {
+          "prefix": "golf",
+          "label": "Golf",
+          "group": "Golf"
+        },
+        {
           "prefix": "odds",
           "label": "Betting odds",
           "group": "Betting & prediction markets"

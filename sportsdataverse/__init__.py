@@ -111,6 +111,7 @@ from sportsdataverse.providers.fox import *  # noqa: F401,F403,E402
 from sportsdataverse.pff import *  # noqa: F401,F403,E402
 from sportsdataverse.cricket import *  # noqa: F401,F403,E402
 from sportsdataverse.lacrosse import *  # noqa: F401,F403,E402
+from sportsdataverse.golf import *  # noqa: F401,F403,E402
 from sportsdataverse.football.ufl import *  # noqa: F401,F403,E402
 from sportsdataverse.football.xfl import *  # noqa: F401,F403,E402
 from sportsdataverse.football.cfl import *  # noqa: F401,F403,E402

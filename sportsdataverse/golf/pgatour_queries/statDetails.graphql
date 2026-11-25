@@ -1,0 +1,26 @@
+query StatDetails($tourCode: TourCode!, $statId: String!, $year: Int) {
+  statDetails(tourCode: $tourCode, statId: $statId, year: $year) {
+    tourCode
+    year
+    statId
+    statType
+    statTitle
+    statDescription
+    tourAvg
+    lastProcessed
+    statHeaders
+    rows {
+      __typename
+      ... on StatDetailsPlayer {
+        playerId
+        playerName
+        country
+        countryFlag
+        rank
+        rankDiff
+        rankChangeTendency
+        stats { statName statValue }
+      }
+    }
+  }
+}

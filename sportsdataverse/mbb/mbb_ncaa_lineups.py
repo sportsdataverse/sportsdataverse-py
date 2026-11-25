@@ -49,6 +49,8 @@ from typing import Literal, Optional, Sequence, Union, overload
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._common.possessions import COLLEGE_FT_POSSESSION_WEIGHT
+
 __all__ = [
     "LINEUPS_COLUMNS",
     "LINEUPS_RENAME",
@@ -384,8 +386,10 @@ def _fsum_row(df: pl.DataFrame, num_cols: Sequence[str]) -> dict[str, list[float
 
 def _eposs_expr() -> pl.Expr:
     """``ePOSS`` (``all_functions.R:2354``); R ``round()`` = half-to-even."""
-    own = _r_round(pl.col("fga") + 0.475 * pl.col("fta") - pl.col("orb") + pl.col("to"), 0)
-    opp = _r_round(pl.col("d_fga") + 0.475 * pl.col("d_fta") - pl.col("d_orb") + pl.col("d_to"), 0)
+    own = _r_round(pl.col("fga") + COLLEGE_FT_POSSESSION_WEIGHT * pl.col("fta") - pl.col("orb") + pl.col("to"), 0)
+    opp = _r_round(
+        pl.col("d_fga") + COLLEGE_FT_POSSESSION_WEIGHT * pl.col("d_fta") - pl.col("d_orb") + pl.col("d_to"), 0
+    )
     return ((own + opp) / 2).alias("e_poss")
 
 

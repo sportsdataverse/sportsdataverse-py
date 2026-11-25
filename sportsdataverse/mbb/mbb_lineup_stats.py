@@ -146,6 +146,8 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from sportsdataverse._common.possessions import COLLEGE_FT_POSSESSION_WEIGHT
+
 __all__ = [
     "LineupStatSet",
     "IGNORE_FIELDS",
@@ -455,7 +457,7 @@ def _recalculate_play_type_poss(mutable_stats: LineupStatSet) -> None:
 
             fg_missed = fga - fgm
             rebound_pct = (1.0 * var_orb) / (var_orb + var_drb) if var_orb > 0 else 0.0
-            poss = fgm + (1.0 - rebound_pct) * fg_missed + 0.475 * fta + to
+            poss = fgm + (1.0 - rebound_pct) * fg_missed + COLLEGE_FT_POSSESSION_WEIGHT * fta + to
 
             mutable_stats[f"total_{dst_prefix}_{type_prefix}poss"] = {"value": poss}
             total_pts = _num(mutable_stats, f"total_{dst_prefix}_{type_prefix}pts", 0.0)
