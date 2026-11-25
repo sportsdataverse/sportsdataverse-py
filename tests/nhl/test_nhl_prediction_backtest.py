@@ -12,6 +12,7 @@ from pathlib import Path
 import numpy as np
 import polars as pl
 import pytest
+from scipy.stats import poisson
 
 from sportsdataverse.nhl.nhl_market import expected_goals, predict_total, win_prob_from_margin
 from sportsdataverse.nhl.nhl_prediction_constants import (
@@ -19,7 +20,6 @@ from sportsdataverse.nhl.nhl_prediction_constants import (
     brier_score,
     calibration_table,
     get_constants,
-    mae,
 )
 from sportsdataverse.nhl.nhl_team_ratings import adjust_rate_opponent
 
@@ -109,11 +109,15 @@ PREGAME_WP_CALIBRATION_FLOOR = 0.10  # observed 0.0882 on n>=30 buckets
 MIN_CALIBRATION_BUCKET_N = 30
 FAVORITE_AGREEMENT_FLOOR = 0.80  # observed 10/12 = 0.833
 MATCHED_ODDS_MIN = 12  # documented matched-odds count; a silent join drop must fail
-# Closing-total MAE on the 12 matched games: 0.5208 with the 6.05 seed, 0.6222 with the fitted 6.19
-# (2026-11-25). Those 12 lines average 5.58 and the games scored 5.67, against a season that settled
-# at 6.36, so the lower seed matched them better by running low. A half-goal line is not a mean
-# either; the 3538-game settled-total bias in nhl_prediction_constants is the level check.
-TOTAL_MAE_FLOOR = 0.65
+# Closing total, scored as the over/under side it is (reworked 2026-11-25). The gate used to be
+# MAE(exp_total, close_total) <= 0.55, a distance from a mean to a half-goal number: 0.5208 with the
+# 6.05 seed, 0.6222 with the fitted 6.19. A 5.5 line says "under 6 or over 5", not "5.5 goals", so
+# a total that runs low can sit closer to it and still be on the wrong side. The check now scores
+# P(over the closing line), from a Poisson around exp_total, against whether the game went over:
+# Brier must beat the line's own implied 50/50 (0.25; the ESPN feed carries no over price, so even
+# odds is the only implied probability). Observed on the 12 games: 0.2380 with the fitted 6.19,
+# 0.2402 with the 6.05 seed; the model's side matches the result in 7 / 12 under either seed.
+TOTAL_OVER_BRIER_FLOOR = 0.25
 # Mean exp_total - actual_total over the 1174 games: -2.2389 with the old centring on
 # avg_total_goals, -0.4239 after centring on 2 * avg_xgf (2026-11-11), both against labels that
 # counted every scoring shootout attempt. Against settled scores (a shootout is one goal):
@@ -195,7 +199,7 @@ def test_pregame_total_is_unbiased_against_realized_goals(pregame_backtest):
     assert abs(bias) <= TOTAL_BIAS_FLOOR, f"mean exp_total - actual_total {bias:+.4f} beyond {TOTAL_BIAS_FLOOR}"
 
 
-def test_pregame_favorite_agreement_and_total_mae_vs_espn_odds(pregame_backtest, oracle_corpus):
+def test_pregame_favorite_agreement_and_total_side_vs_espn_odds(pregame_backtest, oracle_corpus):
     odds = oracle_corpus["espn_odds"]
     assert pregame_backtest.schema["game_id"] == odds.schema["game_id"]
     m = pregame_backtest.join(odds, on="game_id", how="inner")
@@ -213,8 +217,17 @@ def test_pregame_favorite_agreement_and_total_mae_vs_espn_odds(pregame_backtest,
         f"favorite-side agreement {agree}/{mm.height} = {agreement_rate:.3f} below floor {FAVORITE_AGREEMENT_FLOOR}"
     )
 
-    total_err = mae(m["exp_total"].to_numpy(), m["close_total"].to_numpy())
-    assert total_err <= TOTAL_MAE_FLOOR, f"total MAE {total_err:.4f} above floor {TOTAL_MAE_FLOOR}"
+    # Closing total as an over/under side: P(over the line) under a Poisson around exp_total, scored
+    # against whether the game went over (see TOTAL_OVER_BRIER_FLOOR).
+    mt = m.filter(pl.col("close_total").is_not_null())
+    assert mt.height >= MATCHED_ODDS_MIN
+    line = mt["close_total"].to_numpy()
+    p_over = poisson.sf(np.floor(line), mt["exp_total"].to_numpy())
+    went_over = (mt["actual_total"].to_numpy() > line).astype(float)
+    over_brier = brier_score(went_over, p_over)
+    assert over_brier < TOTAL_OVER_BRIER_FLOOR, (
+        f"P(over the closing total) Brier {over_brier:.4f} does not beat the line's even odds {TOTAL_OVER_BRIER_FLOOR}"
+    )
 
 
 # --- Task 3.4: in-game WP calibration gate (2023 held-out, trained on 2022) -------
