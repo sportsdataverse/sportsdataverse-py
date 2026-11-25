@@ -182,22 +182,21 @@ def _graphql_error(operation: str, errors: Any) -> Exception:
 _RETRY = frozenset({429, 500, 502, 503, 504})
 
 
+def _send(body: Dict[str, Any], headers: Dict[str, str], **kwargs: Any) -> Any:
+    return _http_get(
+        GRAPHQL_URL, json=body, headers={"x-api-key": api_key(), **headers}, retry_statuses=_RETRY, **kwargs
+    )
+
+
 def _post(body: Dict[str, Any], headers: Dict[str, str], **kwargs: Any) -> Any:
     """POST ``body`` with the API key; a refused key read from the site is re-read once (it may have rotated)."""
-    for attempt in (0, 1):
-        try:
-            return _http_get(
-                GRAPHQL_URL,
-                json=body,
-                headers={"x-api-key": api_key(), **headers},
-                retry_statuses=_RETRY,
-                **kwargs,
-            )
-        except AssetFetchError as exc:
-            if attempt or os.environ.get(KEY_ENV) or not any(f"HTTP {code}" in str(exc) for code in (401, 403)):
-                raise
-            _site_api_key.cache_clear()
-    raise AssertionError("unreachable")  # pragma: no cover
+    try:
+        return _send(body, headers, **kwargs)
+    except AssetFetchError as exc:
+        if os.environ.get(KEY_ENV) or not any(f"HTTP {code}" in str(exc) for code in (401, 403)):
+            raise
+    _site_api_key.cache_clear()
+    return _send(body, headers, **kwargs)
 
 
 def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, **kwargs: Any) -> Any:

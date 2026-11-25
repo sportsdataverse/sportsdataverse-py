@@ -154,8 +154,8 @@ def parse_pgatour_schedule(raw: Any, return_as_pandas: bool = False) -> pl.DataF
     rows = []
     for status in ("completed", "upcoming"):
         for month in _l(raw.get(status)):
-            for t in _l(month.get("tournaments")):
-                rows.append({
+            rows.extend(
+                {
                     "season": _int(raw.get("seasonYear")), "schedule_status": status,
                     "tournament_id": _str(t.get("id")), "tournament_name": t.get("tournamentName"),
                     "date": t.get("date"), "start_date": _epoch_ms(t.get("startDate")),
@@ -165,7 +165,9 @@ def parse_pgatour_schedule(raw: Any, return_as_pandas: bool = False) -> pl.DataF
                     "purse": t.get("purse"), "champion": t.get("champion"), "champion_id": _str(t.get("championId")),
                     "champion_earnings": t.get("championEarnings"), "standing_heading": t.get("tourStandingHeading"),
                     "standing_value": t.get("tourStandingValue"),
-                })  # fmt: skip
+                }
+                for t in _l(month.get("tournaments"))
+            )  # fmt: skip
     return _frame(rows, SCHEDULE_SCHEMA, return_as_pandas)
 
 
@@ -226,14 +228,16 @@ def parse_pgatour_scorecard(raw: Any, return_as_pandas: bool = False) -> pl.Data
     rows = []
     for rnd in _l(body.get("roundScores")):
         for nine in ("firstNine", "secondNine"):
-            for hole in _l(_d(rnd.get(nine)).get("holes")):
-                rows.append({
+            rows.extend(
+                {
                     "tournament_id": tournament_id, "player_id": player_id, "round_number": _int(rnd.get("roundNumber")),
                     "course_id": _str(rnd.get("courseId")), "course_name": rnd.get("courseName"),
                     "hole_number": _int(hole.get("holeNumber")), "par": _int(hole.get("par")),
                     "yardage": _int(hole.get("yardage")), "score": _int(hole.get("score")),
                     "score_status": hole.get("status"), "round_to_par": _str(hole.get("roundScore")),
-                })  # fmt: skip
+                }
+                for hole in _l(_d(rnd.get(nine)).get("holes"))
+            )  # fmt: skip
     return _frame(rows, SCORECARD_SCHEMA, return_as_pandas)
 
 
@@ -251,15 +255,17 @@ def parse_pgatour_tee_times(raw: Any, return_as_pandas: bool = False) -> pl.Data
     rows = []
     for rnd in _l(body.get("rounds")):
         for group in _l(rnd.get("groups")):
-            for p in _l(group.get("players")):
-                rows.append({
+            rows.extend(
+                {
                     "tournament_id": _str(body.get("id")), "round_number": _int(rnd.get("roundInt")),
                     "round_status": rnd.get("roundStatus"), "group_number": _int(group.get("groupNumber")),
                     "tee_time": _epoch_ms(group.get("teeTime")), "start_tee": _int(group.get("startTee")),
                     "back_nine": group.get("backNine"), "course_id": _str(group.get("courseId")),
                     "course_name": group.get("courseName"), "player_id": _str(p.get("id")),
                     "display_name": p.get("displayName"), "country": p.get("country"), "amateur": p.get("amateur"),
-                })  # fmt: skip
+                }
+                for p in _l(group.get("players"))
+            )  # fmt: skip
     return _frame(rows, TEE_TIMES_SCHEMA, return_as_pandas)
 
 
@@ -437,8 +443,8 @@ def parse_pgatour_shot_details(raw: Any, return_as_pandas: bool = False) -> pl.D
     }
     rows = []
     for hole in _l(body.get("holes")):
-        for st in _l(hole.get("strokes")):
-            rows.append({
+        rows.extend(
+            {
                 **head, "hole_number": _int(hole.get("holeNumber")), "par": _int(hole.get("par")),
                 "yardage": _int(hole.get("yardage")), "hole_score": _int(hole.get("score")),
                 "hole_status": hole.get("status"), "stroke_number": _int(st.get("strokeNumber")),
@@ -447,5 +453,7 @@ def parse_pgatour_shot_details(raw: Any, return_as_pandas: bool = False) -> pl.D
                 "from_location_code": st.get("fromLocationCode"), "from_location": st.get("fromLocation"),
                 "to_location_code": st.get("toLocationCode"), "to_location": st.get("toLocation"),
                 "final_stroke": st.get("finalStroke"), **_coords(st),
-            })  # fmt: skip
+            }
+            for st in _l(hole.get("strokes"))
+        )  # fmt: skip
     return _frame(rows, SHOT_DETAILS_SCHEMA, return_as_pandas)
