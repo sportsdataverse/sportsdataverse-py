@@ -43,8 +43,10 @@ def add_game_state(
             decision step is then skipped downstream).
 
     Returns:
-        The frame with ``score_differential``, ``posteam_timeouts_remaining``,
-        ``defteam_timeouts_remaining``, ``roof``, ``spread_line``, ``total_line`` added.
+        The frame with ``score_differential``, ``posteam_type``, the ``home`` / ``away`` / ``posteam`` /
+        ``defteam`` ``_timeouts_remaining``, the post-play ``total_home_score`` / ``total_away_score`` /
+        ``posteam_score_post`` / ``defteam_score_post`` / ``score_differential_post``, ``roof``,
+        ``spread_line`` and ``total_line`` added.
     """
     if df.height == 0:
         return df
@@ -83,21 +85,24 @@ def add_game_state(
         _home_used=pl.col("_home_to").cum_sum().over("game_half").clip(upper_bound=3),
         _away_used=pl.col("_away_to").cum_sum().over("game_half").clip(upper_bound=3),
     )
+    # nflfastR: three timeouts a half, two in overtime
+    per_half = pl.when(pl.col("qtr") <= 4).then(3).otherwise(2)
     df = (
         df.with_columns(
-            _home_rem=(3 - pl.col("_home_used")),
-            _away_rem=(3 - pl.col("_away_used")),
+            home_timeouts_remaining=(per_half - pl.col("_home_used")),
+            away_timeouts_remaining=(per_half - pl.col("_away_used")),
         )
         .with_columns(
             posteam_timeouts_remaining=pl.when(pl.col("posteam") == pl.col("home_team"))
-            .then(pl.col("_home_rem"))
-            .otherwise(pl.col("_away_rem")),
+            .then(pl.col("home_timeouts_remaining"))
+            .otherwise(pl.col("away_timeouts_remaining")),
             defteam_timeouts_remaining=pl.when(pl.col("posteam") == pl.col("home_team"))
-            .then(pl.col("_away_rem"))
-            .otherwise(pl.col("_home_rem")),
+            .then(pl.col("away_timeouts_remaining"))
+            .otherwise(pl.col("home_timeouts_remaining")),
         )
-        .drop("_home_to", "_away_to", "_home_used", "_away_used", "_home_rem", "_away_rem")
+        .drop("_home_to", "_away_to", "_home_used", "_away_used")
     )
+    df = _add_post_play_score(df)
 
     # --- game-level joins (scalars) ---
     df = df.with_columns(
@@ -106,3 +111,32 @@ def add_game_state(
         total_line=pl.lit(total_line, dtype=pl.Float64),
     )
     return df
+
+
+def _add_post_play_score(df: pl.DataFrame) -> pl.DataFrame:
+    """nflfastR's post-play score columns and ``posteam_type`` (``add_nflscrapr_mutations``).
+
+    ``total_home_score`` / ``total_away_score`` are the running score after the play;
+    ``posteam_score_post`` / ``defteam_score_post`` / ``score_differential_post`` read it from each side, and
+    are null with ``posteam_type`` where the play has no possession team (R's ``fifelse`` on an NA test).
+    """
+    home_has_ball = pl.col("posteam") == pl.col("home_team")
+    no_ball = pl.col("posteam").is_null()
+    df = df.with_columns(
+        total_home_score=pl.col("_points_home").cum_sum().over("game_id"),
+        total_away_score=pl.col("_points_away").cum_sum().over("game_id"),
+        posteam_type=pl.when(no_ball).then(None).when(home_has_ball).then(pl.lit("home")).otherwise(pl.lit("away")),
+    )
+    df = df.with_columns(
+        posteam_score_post=pl.when(no_ball)
+        .then(None)
+        .when(home_has_ball)
+        .then(pl.col("total_home_score"))
+        .otherwise(pl.col("total_away_score")),
+        defteam_score_post=pl.when(no_ball)
+        .then(None)
+        .when(home_has_ball)
+        .then(pl.col("total_away_score"))
+        .otherwise(pl.col("total_home_score")),
+    )
+    return df.with_columns(score_differential_post=pl.col("posteam_score_post") - pl.col("defteam_score_post"))
