@@ -1462,7 +1462,9 @@ class _EndpointView:
 
         # The route's own getter (``getter:``) as (module, call name); default the family's ``_get``.
         route_module, self.getter_name = route_getter or (getter_module, "_get")
-        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module, route_module)
+        # a league-param family's example may name its own league (a college-only route): the URL follows it
+        example_league = str(ep.example_args.get("league", league.league)) if league.league_param else league.league
+        self.example_url = _example_request(ep_host, ep, league.sport, example_league, getter_module, route_module)
         # A body endpoint (``body: form|json``) has no fetchable URL: the query string carries only the
         # ``in: query`` params and the rest travels in the body, so show a curl request instead.
         self.body_kind = ep.body
