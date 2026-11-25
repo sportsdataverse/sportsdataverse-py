@@ -26,6 +26,8 @@ from sportsdataverse.validation.findings import CheckContext, Finding, Severity
 PHANTOM_MAX_SECONDS = 2
 #: More phantoms than this in one team-game flags it (above the season's 99th percentile, 4).
 PHANTOM_TEAM_GAME_LIMIT = 4
+#: The datasets the limit was measured on: the women's table is not judged by the men's limit.
+DATASETS = frozenset({"ncaa_mbb_possessions"})
 #: The possession-table columns the check reads; a frame without them is skipped.
 COLUMNS = (
     "contest_id",
@@ -55,9 +57,10 @@ def phantom_counts(frame: pl.DataFrame) -> pl.DataFrame:
     phantom = (
         pl.col("first_shot_type").is_null()
         & (pl.col("pts").fill_null(0) == 0)
-        & (pl.col("last_event_time").fill_null(0) <= PHANTOM_MAX_SECONDS)
+        # a possession of unknown length is not a phantom
+        & (pl.col("last_event_time") <= PHANTOM_MAX_SECONDS).fill_null(False)
         & (pl.col("poss_num") != last)
-        & ~pl.col("last_event_type").is_in(_REAL_QUICK_ENDS).fill_null(False)
+        & (pl.col("last_event_type").is_in(_REAL_QUICK_ENDS).fill_null(False) == False)  # noqa: E712
     )
     return (
         frame.with_columns(pl.col("poss_num").max().over("contest_id", "period").alias("_period_last"))
@@ -72,14 +75,15 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
 
     Args:
         dataset: Dataset identifier recorded on each finding.
-        frame: The data frame under validation; skipped unless it has every :data:`COLUMNS` column.
+        frame: The data frame under validation; skipped unless ``dataset`` is in :data:`DATASETS`
+            and the frame has every :data:`COLUMNS` column.
         ctx: Check context supplying ``domain``.
 
     Returns:
         One WARN ``needs_judgment`` finding per flagged team-game, with its phantom count as
         ``actual`` / ``metric``; empty for any other frame.
     """
-    if frame.height == 0 or not set(COLUMNS) <= set(frame.columns):
+    if dataset not in DATASETS or frame.height == 0 or not set(COLUMNS) <= set(frame.columns):
         return []
     flagged = phantom_counts(frame).filter(pl.col("phantoms") > PHANTOM_TEAM_GAME_LIMIT)
     return [

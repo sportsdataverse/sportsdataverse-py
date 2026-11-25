@@ -12262,7 +12262,7 @@
   group: college-poss-ft-weight
   finding: college-possession-ft-weight
   file: tools/validation/checks/phantom_possessions.py
-  snippet: '        & ~pl.col("last_event_type").is_in(_REAL_QUICK_ENDS).fill_null(False)'
+  snippet: '        & (pl.col("last_event_type").is_in(_REAL_QUICK_ENDS).fill_null(False) == False)  # noqa: E712'
   mutant: '        & pl.lit(True)'
   test: tests/contracts/test_phantom_possessions.py::test_a_quick_turnover_is_not_a_phantom
   expected: kill

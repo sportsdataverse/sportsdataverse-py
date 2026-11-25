@@ -50,3 +50,11 @@ def test_a_quick_turnover_is_not_a_phantom() -> None:
 
 def test_other_frames_are_skipped() -> None:
     assert phantom_possessions.run("cfb_pbp", pl.DataFrame({"game_id": [1]}), CTX) == []
+    # the women's table has the same columns but was not measured: the men's limit does not judge it
+    assert phantom_possessions.run("ncaa_wbb_possessions", pl.read_parquet(FIX), CTX) == []
+
+
+def test_a_possession_of_unknown_length_is_not_a_phantom() -> None:
+    frame = pl.read_parquet(FIX).filter(pl.col("contest_id") == "6465160")
+    unknown = frame.with_columns(pl.lit(None, dtype=frame.schema["last_event_time"]).alias("last_event_time"))
+    assert phantom_possessions.phantom_counts(unknown)["phantoms"].sum() == 0

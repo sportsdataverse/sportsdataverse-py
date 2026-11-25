@@ -14,7 +14,16 @@ from sportsdataverse._common.possessions import (
 
 @pytest.mark.parametrize(
     ("league", "w"),
-    [("nba", 0.44), ("wnba", 0.44), ("gleague", 0.44), ("mbb", 0.475), ("wbb", 0.475), ("mens", 0.475)],
+    [
+        ("nba", 0.44),
+        ("wnba", 0.44),
+        ("gleague", 0.44),
+        ("nbagl", 0.44),
+        ("mbb", 0.475),
+        ("wbb", 0.475),
+        ("mens", 0.475),
+        ("womens", 0.475),
+    ],
 )
 def test_weight_by_league(league: str, w: float) -> None:
     assert ft_possession_weight(league) == w
