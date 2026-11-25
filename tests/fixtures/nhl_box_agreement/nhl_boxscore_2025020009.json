@@ -1,0 +1,467 @@
+{
+ "id": 2025020009,
+ "season": 20252026,
+ "gameType": 2,
+ "gameDate": "2025-10-09",
+ "gameState": "OFF",
+ "awayTeam": {
+  "id": 3,
+  "abbrev": "NYR",
+  "score": 4
+ },
+ "homeTeam": {
+  "id": 7,
+  "abbrev": "BUF",
+  "score": 0
+ },
+ "playerByGameStats": {
+  "awayTeam": {
+   "forwards": [
+    {
+     "playerId": 8476468,
+     "sweaterNumber": 8,
+     "name": {
+      "default": "J. Miller"
+     },
+     "position": "C",
+     "goals": 1,
+     "assists": 1,
+     "plusMinus": 3,
+     "sog": 1
+    },
+    {
+     "playerId": 8478550,
+     "sweaterNumber": 10,
+     "name": {
+      "default": "A. Panarin"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 3,
+     "sog": 2
+    },
+    {
+     "playerId": 8482109,
+     "sweaterNumber": 13,
+     "name": {
+      "default": "A. Lafrenière"
+     },
+     "position": "L",
+     "goals": 1,
+     "assists": 1,
+     "plusMinus": 2,
+     "sog": 5
+    },
+    {
+     "playerId": 8479390,
+     "sweaterNumber": 14,
+     "name": {
+      "default": "T. Raddysh"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8476389,
+     "sweaterNumber": 16,
+     "name": {
+      "default": "V. Trocheck"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 1,
+     "sog": 1
+    },
+    {
+     "playerId": 8475842,
+     "sweaterNumber": 39,
+     "name": {
+      "default": "S. Carrick"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "playerId": 8483690,
+     "sweaterNumber": 42,
+     "name": {
+      "default": "N. Laba"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8477839,
+     "sweaterNumber": 43,
+     "name": {
+      "default": "C. Sheary"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 1
+    },
+    {
+     "playerId": 8482157,
+     "sweaterNumber": 50,
+     "name": {
+      "default": "W. Cuylle"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 1,
+     "sog": 2
+    },
+    {
+     "playerId": 8482460,
+     "sweaterNumber": 73,
+     "name": {
+      "default": "M. Rempe"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 1,
+     "sog": 1
+    },
+    {
+     "playerId": 8481726,
+     "sweaterNumber": 84,
+     "name": {
+      "default": "A. Edstrom",
+      "cs": "A. Edström",
+      "fi": "A. Edström",
+      "sk": "A. Edström",
+      "sv": "A. Edström"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8476459,
+     "sweaterNumber": 93,
+     "name": {
+      "default": "M. Zibanejad"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 1
+    }
+   ],
+   "defense": [
+    {
+     "playerId": 8482073,
+     "sweaterNumber": 4,
+     "name": {
+      "default": "B. Schneider"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 1,
+     "sog": 3
+    },
+    {
+     "playerId": 8478840,
+     "sweaterNumber": 17,
+     "name": {
+      "default": "W. Borgen"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 2,
+     "sog": 1
+    },
+    {
+     "playerId": 8480001,
+     "sweaterNumber": 18,
+     "name": {
+      "default": "U. Vaakanainen"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 1
+    },
+    {
+     "playerId": 8479323,
+     "sweaterNumber": 23,
+     "name": {
+      "default": "A. Fox"
+     },
+     "position": "D",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": 1,
+     "sog": 4
+    },
+    {
+     "playerId": 8477369,
+     "sweaterNumber": 24,
+     "name": {
+      "default": "C. Soucy"
+     },
+     "position": "D",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": 2,
+     "sog": 2
+    },
+    {
+     "playerId": 8478882,
+     "sweaterNumber": 44,
+     "name": {
+      "default": "V. Gavrikov"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 2,
+     "sog": 2
+    }
+   ]
+  },
+  "homeTeam": {
+   "forwards": [
+    {
+     "playerId": 8480064,
+     "sweaterNumber": 9,
+     "name": {
+      "default": "J. Norris"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 4
+    },
+    {
+     "playerId": 8479941,
+     "sweaterNumber": 15,
+     "name": {
+      "default": "J. Danforth"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 2
+    },
+    {
+     "playerId": 8475722,
+     "sweaterNumber": 17,
+     "name": {
+      "default": "J. Zucker"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 5
+    },
+    {
+     "playerId": 8481522,
+     "sweaterNumber": 19,
+     "name": {
+      "default": "P. Krebs"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -2,
+     "sog": 0
+    },
+    {
+     "playerId": 8483468,
+     "sweaterNumber": 20,
+     "name": {
+      "default": "J.Kulich"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8482097,
+     "sweaterNumber": 22,
+     "name": {
+      "default": "J. Quinn"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 1
+    },
+    {
+     "playerId": 8479359,
+     "sweaterNumber": 29,
+     "name": {
+      "default": "B. Malenstyn"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -2,
+     "sog": 1
+    },
+    {
+     "playerId": 8477419,
+     "sweaterNumber": 55,
+     "name": {
+      "default": "M. Geertsen"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 0
+    },
+    {
+     "playerId": 8480802,
+     "sweaterNumber": 71,
+     "name": {
+      "default": "R. McLeod"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -3,
+     "sog": 2
+    },
+    {
+     "playerId": 8479420,
+     "sweaterNumber": 72,
+     "name": {
+      "default": "T. Thompson"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 5
+    },
+    {
+     "playerId": 8477949,
+     "sweaterNumber": 89,
+     "name": {
+      "default": "A. Tuch"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 6
+    },
+    {
+     "playerId": 8482659,
+     "sweaterNumber": 91,
+     "name": {
+      "default": "J. Doan"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 2
+    }
+   ],
+   "defense": [
+    {
+     "playerId": 8481524,
+     "sweaterNumber": 4,
+     "name": {
+      "default": "B. Byram"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -2,
+     "sog": 1
+    },
+    {
+     "playerId": 8479982,
+     "sweaterNumber": 21,
+     "name": {
+      "default": "C. Timmins"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 1
+    },
+    {
+     "playerId": 8480807,
+     "sweaterNumber": 23,
+     "name": {
+      "default": "M. Samuelsson"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 1
+    },
+    {
+     "playerId": 8480839,
+     "sweaterNumber": 26,
+     "name": {
+      "default": "R. Dahlin"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -2,
+     "sog": 4
+    },
+    {
+     "playerId": 8481564,
+     "sweaterNumber": 33,
+     "name": {
+      "default": "R. Johnson"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 0
+    },
+    {
+     "playerId": 8480196,
+     "sweaterNumber": 78,
+     "name": {
+      "default": "J. Bryson"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 0
+    }
+   ]
+  }
+ }
+}

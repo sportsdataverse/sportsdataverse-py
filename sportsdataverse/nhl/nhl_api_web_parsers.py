@@ -42,6 +42,7 @@ Parsers fall into three groups:
 
 from __future__ import annotations
 
+import re
 from typing import Dict, List
 
 import pandas as pd
@@ -124,6 +125,14 @@ def parse_nhl_web_pbp(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     return _flatten_rows(plays, return_as_pandas, where="parse_nhl_web_pbp: plays")
 
 
+_UNSPACED_INITIAL = re.compile(r"^(\S+\.)(\S+)$")
+
+
+def _space_initial(name: object) -> object:
+    """``"J.Kulich"`` -> ``"J. Kulich"``; a name holding any space (``"J.T. Compher"``) is left as is."""
+    return _UNSPACED_INITIAL.sub(r"\1 \2", name) if isinstance(name, str) else name
+
+
 def parse_nhl_web_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_boxscore()`` into one row per (team × player).
 
@@ -133,6 +142,12 @@ def parse_nhl_web_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.
     with ``home_away`` ("home" / "away") and ``position_group``
     ("forwards" / "defense" / "goalies") so the output is one tidy
     long-form frame.
+
+    The feed writes some players' names with no space after the initial
+    (``"J.Kulich"``); a ``name_*`` value with no space anywhere and a period
+    before its last part is rewritten to the ``"J. Kulich"`` form the rest of
+    the feed uses. A name that already holds a space (``"J.T. Compher"``) is
+    never touched.
     """
     if not isinstance(payload, dict):
         return _empty_frame(return_as_pandas)
@@ -146,6 +161,8 @@ def parse_nhl_web_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.
                 row = {"home_away": ha, "position_group": pos_group}
                 for k, v in (player or {}).items():
                     row[k] = v
+                if isinstance(row.get("name"), dict):
+                    row["name"] = {lang: _space_initial(n) for lang, n in row["name"].items()}
                 rows.append(row)
     return _flatten_rows(rows, return_as_pandas, where="parse_nhl_web_boxscore: rows")
 

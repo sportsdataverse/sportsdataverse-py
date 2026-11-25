@@ -12134,3 +12134,55 @@
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_defensive_touchdowns_try_takes_the_scorers_timeouts
   expected: kill
   note: A split try's timeouts read from the wrong side, e.g. the old offense's after a defensive touchdown.
+
+# --- nhl-box-source-agreement: the NHL api-web and ESPN boxscores agree per skater ----------------
+- id: nhl-box-agreement-unspaced-initial
+  group: nhl-box-agreement
+  finding: nhl-box-source-agreement
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '                    row["name"] = {lang: _space_initial(n) for lang, n in row["name"].items()}'
+  mutant: '                    pass'
+  test: tests/nhl/test_nhl_box_source_agreement.py::test_unspaced_initial_names_are_rewritten
+  expected: kill
+  note: An NHL api-web name with no space after the initial ("J.Kulich") would pass through unspaced.
+
+- id: nhl-box-agreement-home-away-tag
+  group: nhl-box-agreement
+  finding: nhl-box-source-agreement
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '        ha = "away" if side == "awayTeam" else "home"'
+  mutant: '        ha = "home" if side == "awayTeam" else "away"'
+  test: tests/nhl/test_nhl_box_source_agreement.py::test_every_skater_joins_one_to_one_across_sources
+  expected: kill
+  note: Every NHL api-web boxscore row would carry the other team's side, so no skater joins its ESPN line.
+
+- id: nhl-box-agreement-espn-stat-keys
+  group: nhl-box-agreement
+  finding: nhl-box-source-agreement
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '                for k, v in zip(keys, stats):'
+  mutant: '                for k, v in zip(keys, stats[1:] + stats[:1]):'
+  test: tests/nhl/test_nhl_box_source_agreement.py::test_goals_assists_shots_and_plus_minus_agree_on_every_skater
+  expected: kill
+  note: ESPN boxscore stats zipped one key off would put assists under goals and so on.
+
+# --- ESPN league `endpoints:` allowlist (lacrosse) ------------------------------------------------
+- id: espn-league-endpoints-allowlist-applied
+  group: espn-league-allowlist
+  finding: espn-lacrosse-allowlist
+  file: tools/codegen/spec.py
+  snippet: '        return not self.endpoints or ep.short in self.endpoints'
+  mutant: '        return True'
+  test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_filters_in_scope_endpoints
+  expected: kill
+  note: An ignored allowlist would emit every in-scope ESPN wrapper for lacrosse, most of them 404.
+
+- id: espn-league-endpoints-unknown-short-rejected
+  group: espn-league-allowlist
+  finding: espn-lacrosse-allowlist
+  file: tools/codegen/spec.py
+  snippet: '        if set(lg.endpoints) - shorts:'
+  mutant: '        if False:'
+  test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_rejects_unknown_short
+  expected: kill
+  note: A typo in a league allowlist would silently drop that wrapper instead of failing the build.

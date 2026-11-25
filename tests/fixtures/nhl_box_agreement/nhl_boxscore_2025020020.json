@@ -1,0 +1,469 @@
+{
+ "id": 2025020020,
+ "season": 20252026,
+ "gameType": 2,
+ "gameDate": "2025-10-09",
+ "gameState": "OFF",
+ "awayTeam": {
+  "id": 54,
+  "abbrev": "VGK",
+  "score": 4
+ },
+ "homeTeam": {
+  "id": 28,
+  "abbrev": "SJS",
+  "score": 3
+ },
+ "playerByGameStats": {
+  "awayTeam": {
+   "forwards": [
+    {
+     "playerId": 8478403,
+     "sweaterNumber": 9,
+     "name": {
+      "default": "J. Eichel"
+     },
+     "position": "C",
+     "goals": 1,
+     "assists": 1,
+     "plusMinus": 1,
+     "sog": 3
+    },
+    {
+     "playerId": 8476925,
+     "sweaterNumber": 10,
+     "name": {
+      "default": "C. Sissons"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 1
+    },
+    {
+     "playerId": 8481604,
+     "sweaterNumber": 16,
+     "name": {
+      "default": "P. Dorofeyev",
+      "cs": "P. Dorofejev",
+      "fi": "P. Dorofejev",
+      "sk": "P. Dorofejev"
+     },
+     "position": "R",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 4
+    },
+    {
+     "playerId": 8475191,
+     "sweaterNumber": 19,
+     "name": {
+      "default": "R. Smith"
+     },
+     "position": "R",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": 1,
+     "sog": 3
+    },
+    {
+     "playerId": 8476438,
+     "sweaterNumber": 20,
+     "name": {
+      "default": "B. Saad"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 1
+    },
+    {
+     "playerId": 8479353,
+     "sweaterNumber": 21,
+     "name": {
+      "default": "B. Howden"
+     },
+     "position": "C",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8476881,
+     "sweaterNumber": 48,
+     "name": {
+      "default": "T. Hertl"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8477964,
+     "sweaterNumber": 49,
+     "name": {
+      "default": "I. Barbashev",
+      "cs": "I. Barbašev",
+      "fi": "I. Barbashov",
+      "sk": "I. Barbašev"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 1
+    },
+    {
+     "playerId": 8478434,
+     "sweaterNumber": 55,
+     "name": {
+      "default": "K. Kolesar"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 0,
+     "sog": 1
+    },
+    {
+     "playerId": 8475913,
+     "sweaterNumber": 61,
+     "name": {
+      "default": "M. Stone"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 2,
+     "plusMinus": 1,
+     "sog": 1
+    },
+    {
+     "playerId": 8476448,
+     "sweaterNumber": 71,
+     "name": {
+      "default": "W. Karlsson"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8478483,
+     "sweaterNumber": 93,
+     "name": {
+      "default": "M. Marner"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 2,
+     "sog": 2
+    }
+   ],
+   "defense": [
+    {
+     "playerId": 8480727,
+     "sweaterNumber": 2,
+     "name": {
+      "default": "Z. Whitecloud"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 1
+    },
+    {
+     "playerId": 8475188,
+     "sweaterNumber": 3,
+     "name": {
+      "default": "B. McNabb"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "playerId": 8478468,
+     "sweaterNumber": 5,
+     "name": {
+      "default": "J. Lauzon"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 1
+    },
+    {
+     "playerId": 8481527,
+     "sweaterNumber": 6,
+     "name": {
+      "default": "K. Korczak"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 2
+    },
+    {
+     "playerId": 8477018,
+     "sweaterNumber": 17,
+     "name": {
+      "default": "B. Hutton"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 0,
+     "sog": 1
+    },
+    {
+     "playerId": 8477447,
+     "sweaterNumber": 27,
+     "name": {
+      "default": "S. Theodore"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 2,
+     "sog": 3
+    }
+   ]
+  },
+  "homeTeam": {
+   "forwards": [
+    {
+     "playerId": 8484227,
+     "sweaterNumber": 2,
+     "name": {
+      "default": "W. Smith"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 2
+    },
+    {
+     "playerId": 8480848,
+     "sweaterNumber": 10,
+     "name": {
+      "default": "T. Dellandrea"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 2,
+     "sog": 2
+    },
+    {
+     "playerId": 8477505,
+     "sweaterNumber": 21,
+     "name": {
+      "default": "A. Wennberg"
+     },
+     "position": "C",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 2
+    },
+    {
+     "playerId": 8476624,
+     "sweaterNumber": 23,
+     "name": {
+      "default": "B. Goodrow"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 0
+    },
+    {
+     "playerId": 8484911,
+     "sweaterNumber": 51,
+     "name": {
+      "default": "C. Graf"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 2,
+     "sog": 1
+    },
+    {
+     "playerId": 8475784,
+     "sweaterNumber": 53,
+     "name": {
+      "default": "J. Skinner"
+     },
+     "position": "L",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": 1,
+     "sog": 3
+    },
+    {
+     "playerId": 8484801,
+     "sweaterNumber": 71,
+     "name": {
+      "default": "M. Celebrini"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 1
+    },
+    {
+     "playerId": 8482667,
+     "sweaterNumber": 72,
+     "name": {
+      "default": "W. Eklund"
+     },
+     "position": "L",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": -1,
+     "sog": 1
+    },
+    {
+     "playerId": 8475726,
+     "sweaterNumber": 73,
+     "name": {
+      "default": "T. Toffoli"
+     },
+     "position": "C",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 2
+    },
+    {
+     "playerId": 8471817,
+     "sweaterNumber": 75,
+     "name": {
+      "default": "R. Reaves"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 0
+    },
+    {
+     "playerId": 8478874,
+     "sweaterNumber": 81,
+     "name": {
+      "default": "A. Gaudette"
+     },
+     "position": "R",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 0
+    },
+    {
+     "playerId": 8480798,
+     "sweaterNumber": 96,
+     "name": {
+      "default": "P. Kurashev"
+     },
+     "position": "C",
+     "goals": 1,
+     "assists": 0,
+     "plusMinus": 1,
+     "sog": 3
+    }
+   ],
+   "defense": [
+    {
+     "playerId": 8475906,
+     "sweaterNumber": 3,
+     "name": {
+      "default": "J. Klingberg"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": -1,
+     "sog": 3
+    },
+    {
+     "playerId": 8475181,
+     "sweaterNumber": 4,
+     "name": {
+      "default": "N. Leddy"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "playerId": 8475200,
+     "sweaterNumber": 9,
+     "name": {
+      "default": "D. Orlov"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 1,
+     "plusMinus": 1,
+     "sog": 1
+    },
+    {
+     "playerId": 8480043,
+     "sweaterNumber": 37,
+     "name": {
+      "default": "T. Liljegren"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 0
+    },
+    {
+     "playerId": 8479983,
+     "sweaterNumber": 38,
+     "name": {
+      "default": "M. Ferraro"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 0,
+     "plusMinus": -1,
+     "sog": 2
+    },
+    {
+     "playerId": 8482166,
+     "sweaterNumber": 85,
+     "name": {
+      "default": "S. Mukhamadullin"
+     },
+     "position": "D",
+     "goals": 0,
+     "assists": 2,
+     "plusMinus": 1,
+     "sog": 0
+    }
+   ]
+  }
+ }
+}
