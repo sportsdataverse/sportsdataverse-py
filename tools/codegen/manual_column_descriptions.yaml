@@ -81373,8 +81373,9 @@ yahoo_cfb_boxscore:
 # calculate_epa, calculate_wpa and split_pat_rows pass build_nfl_season's frame through and inherit this block
 # (generate._DESC_INHERITS), and build_nfl_season in turn inherits load_cfb_pbp's.
 build_nfl_season:
-  EPA: Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules (0 on a clock
-    stoppage, -EP_start on an unscored play that ends a half).
+  EPA: Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules -- 0 on a clock
+    stoppage, -EP_start on an unscored play that ends a half, and plus EP_between (the gap from the previous play's
+    end EP) on a non-kickoff play whose text carries a penalty.
   athlete_name: The play's passer, else its rusher (passer_player_name, then rusher_player_name); null when neither.
   awayScore: Away team's running score after the play -- ESPN's awayScore with feed errors repaired (a score rises
     only on or right after a scoring play).
@@ -81547,8 +81548,9 @@ build_nfl_season:
   yds_sacked: Yards lost on the sack, as a negative number; null on other plays.
 # calculate_epa adds nflverse-style lowercase aliases of the EP pair.
 calculate_epa:
-  ep_end: Alias of EP_end -- expected points for the start-of-play offense at the end of the play, the realised
-    points on a score.
+  ep_end: Alias of EP_end -- expected points for the start-of-play offense at the end of the play; on a score, the
+    points it put on the board for that offense (negative for a defensive score; 6.92 for a touchdown whose try is not
+    recognised).
   ep_start: Alias of EP_start -- expected points for the offense at the start of the play (0.92 on a try, the
     touchback state on a kickoff).
 # play_type_nfl / aborted_play (#1255). nfl_model_pbp passes the Shield build's columns through, so these
@@ -81567,5 +81569,9 @@ split_pat_rows:
     type.text and the play flags; XP_KICK / PAT2 on a split try row, UNSPECIFIED for an ESPN type with no mapping.
   game_play_number: 1-based order of the row in the game, numbered after duplicate plays are dropped; a split try row
     repeats its touchdown's.
+  two_point_pass: True on a two-point try whose text describes a pass; null on a split try row (its type.text /
+    play_type_nfl carry the try).
+  two_point_rush: True on a two-point try whose text describes no pass; null on a split try row (its type.text /
+    play_type_nfl carry the try).
   pat_of_id: On a split PAT / two-point try row, the id of the touchdown it was folded into (the row's own id is that
     id + 1); null on every other row.

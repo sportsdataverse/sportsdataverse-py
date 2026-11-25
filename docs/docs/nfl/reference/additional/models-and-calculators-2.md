@@ -434,7 +434,7 @@ The input frame with the EPA derivation applied. `EP_start` is rewritten to `0.9
 | `lag_EP_end` | Float64 | Value of EP_end on the previous play, used for sequence-aware derivations. |
 | `lag_change_of_pos_team` | Boolean | Previous row's change_of_pos_team within the game; False on the first row. |
 | `EP_between` | Float64 | Change in expected points across the play, before penalty adjustment. |
-| `EPA` | Float64 | Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules (0 on a clock stoppage, -EP_start on an unscored play that ends a half). |
+| `EPA` | Float64 | Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules -- 0 on a clock stoppage, -EP_start on an unscored play that ends a half, and plus EP_between (the gap from the previous play's end EP) on a non-kickoff play whose text carries a penalty. |
 | `def_EPA` | Float64 | EPA for the defensive team on the play (-1 * EPA). |
 | `EPA_scrimmage` | Float64 | EPA credited to the play on plays from scrimmage. |
 | `EPA_rush` | Float64 | EPA credited to the play on rush plays. |
@@ -582,7 +582,7 @@ The input frame with the EPA derivation applied. `EP_start` is rewritten to `0.9
 | `ep` | Float64 | Using the scoring event probabilities, the estimated expected points with respect to the possession team for the given play. |
 | `epa` | Float64 | Expected points added (EPA) by the posteam for the given play. |
 | `ep_start` | Float64 | Alias of EP_start -- expected points for the offense at the start of the play (0.92 on a try, the touchback state on a kickoff). |
-| `ep_end` | Float64 | Alias of EP_end -- expected points for the start-of-play offense at the end of the play, the realised points on a score. |
+| `ep_end` | Float64 | Alias of EP_end -- expected points for the start-of-play offense at the end of the play; on a score, the points it put on the board for that offense (negative for a defensive score; 6.92 for a touchdown whose try is not recognised). |
 
 **Raises**
 

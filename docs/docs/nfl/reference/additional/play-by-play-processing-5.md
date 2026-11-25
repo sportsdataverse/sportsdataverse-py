@@ -291,8 +291,8 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `two_point_attempt` | Boolean | Binary indicator for two point conversion attempt. |
 | `defensive_two_point_attempt` | Boolean | Binary indicator whether or not the defense was able to have an attempt on a two point conversion, this results following a turnover. |
 | `defensive_two_point_conv` | Boolean | Binary indicator whether or not the defense successfully scored on the two point conversion. |
-| `two_point_pass` | Boolean | True on a two-point try whose text describes a pass. |
-| `two_point_rush` | Boolean | True on a two-point try whose text describes no pass. |
+| `two_point_pass` | Boolean | True on a two-point try whose text describes a pass; null on a split try row (its type.text / play_type_nfl carry the try). |
+| `two_point_rush` | Boolean | True on a two-point try whose text describes no pass; null on a split try row (its type.text / play_type_nfl carry the try). |
 | `yds_rushed` | Int64 | Rushing yards credited on a rush (ESPN's statYardage on a plain run, the gain to the spot of an offensive foul, 0 when a penalty wiped it out); null on non-rush plays. |
 | `yds_receiving` | Int64 | Receiving yards credited on a pass play (0 on an incompletion, sack or interception, the gain to the spot of an offensive foul); null on non-pass plays. |
 | `yds_int_return` | String | Yards the interception was returned (0 when the text gives none); null on other plays. |
@@ -426,7 +426,7 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `lag_EP_end` | Float64 | Value of EP_end on the previous play, used for sequence-aware derivations. |
 | `lag_change_of_pos_team` | Boolean | Previous row's change_of_pos_team within the game; False on the first row. |
 | `EP_between` | Float64 | Change in expected points across the play, before penalty adjustment. |
-| `EPA` | Float64 | Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules (0 on a clock stoppage, -EP_start on an unscored play that ends a half). |
+| `EPA` | Float64 | Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules -- 0 on a clock stoppage, -EP_start on an unscored play that ends a half, and plus EP_between (the gap from the previous play's end EP) on a non-kickoff play whose text carries a penalty. |
 | `def_EPA` | Float64 | EPA for the defensive team on the play (-1 * EPA). |
 | `EPA_scrimmage` | Float64 | EPA credited to the play on plays from scrimmage. |
 | `EPA_rush` | Float64 | EPA credited to the play on rush plays. |
