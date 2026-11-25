@@ -11646,7 +11646,7 @@
 # against nflverse's play-by-play of the same games.
 - id: nfl-espn-view-current-franchise-abbr
   group: nfl-espn-view
-  finding: espn-nflverse-view
+  finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
   snippet: 'return parts.list.get(i).replace(team_abbr_mapping)'
   mutant: 'return parts.list.get(i)'
@@ -11656,7 +11656,7 @@
 
 - id: nfl-espn-view-kickoff-receiving-side
   group: nfl-espn-view
-  finding: espn-nflverse-view
+  finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
   snippet: 'then(100 - pl.col("start.yardsToEndzone"))'
   mutant: 'then(pl.col("start.yardsToEndzone"))'
@@ -11666,7 +11666,7 @@
 
 - id: nfl-espn-view-timeout-rows
   group: nfl-espn-view
-  finding: espn-nflverse-view
+  finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
   snippet: 't = (pl.col("play_type_nfl") == "TIMEOUT").fill_null(False)'
   mutant: 't = pl.lit(False)'
@@ -11676,7 +11676,7 @@
 
 - id: nfl-espn-view-declined-penalty
   group: nfl-espn-view
-  finding: espn-nflverse-view
+  finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
   snippet: '"penalty": b("penalty_flag") & ~b("penalty_declined"),'
   mutant: '"penalty": b("penalty_flag"),'
@@ -11686,7 +11686,7 @@
 
 - id: nfl-espn-view-touchdown-counts-first-down
   group: nfl-espn-view
-  finding: espn-nflverse-view
+  finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
   snippet: 'first = b("first_down_earned") | b("first_down_penalty") | b("pass_td") | b("rush_td")'
   mutant: 'first = b("first_down_earned") | b("first_down_penalty")'
@@ -11696,7 +11696,7 @@
 
 - id: nfl-espn-view-text-clock
   group: nfl-espn-view
-  finding: espn-nflverse-view
+  finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
   snippet: 'mins = pl.coalesce(lead.struct[0].replace("", "0").cast(pl.Int64), pl.col("clock.minutes").cast(pl.Int64))'
   mutant: 'mins = pl.col("clock.minutes").cast(pl.Int64)'
@@ -11706,7 +11706,7 @@
 
 - id: nfl-espn-view-touchdown-row-leaves-the-try-out
   group: nfl-espn-view
-  finding: espn-nflverse-view
+  finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
   snippet: '.then(pl.col("total_home_score") - pl.col("_pts"))'
   mutant: '.then(pl.col("total_home_score"))'
@@ -11716,7 +11716,7 @@
 
 - id: nfl-espn-view-schedule-stadium
   group: nfl-espn-view
-  finding: espn-nflverse-view
+  finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
   snippet: '"stadium": "game_stadium",'
   mutant: '"stadium": "stadium",'
@@ -11726,7 +11726,7 @@
 
 - id: nfl-espn-view-float-id-refused
   group: nfl-espn-view
-  finding: espn-nflverse-view
+  finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
   snippet: 'if dtype.is_float():'
   mutant: 'if False:'
