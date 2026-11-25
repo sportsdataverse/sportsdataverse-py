@@ -15,6 +15,7 @@ import pytest
 from scipy.stats import norm
 
 from sportsdataverse.cfb.cfb_game_predict import (
+    _FITTED_ADJ_NET_SD,
     assert_rating_scale,
     cfb_predict_games,
     predict_margin,
@@ -96,7 +97,7 @@ def test_slope_curve_is_monotone_in_games_played() -> None:
     """
     slopes = [slope_for_games(g) for g in (1, 4, 6, 9)]
     assert slopes == sorted(slopes)
-    assert slopes[0] < 0.75 * slopes[-1]  # the early-season discount is still real
+    assert slopes[0] < 0.75 * slopes[-1]  # measured 0.63: the early-season discount is still real
 
 
 def test_slope_without_games_played_is_the_flat_scale() -> None:
@@ -111,8 +112,8 @@ def test_rating_scale_gate_passes_on_fitted_scale_and_fires_on_a_rescale() -> No
     ignore it. Both directions are asserted for that reason.
     """
     rng = np.random.default_rng(0)
-    ok = pl.DataFrame({"adj_net": rng.normal(0, 0.2646, 400)})
-    drifted = pl.DataFrame({"adj_net": rng.normal(0, 0.2646 * 2.2, 400)})
+    ok = pl.DataFrame({"adj_net": rng.normal(0, _FITTED_ADJ_NET_SD, 400)})
+    drifted = pl.DataFrame({"adj_net": rng.normal(0, _FITTED_ADJ_NET_SD * 2.2, 400)})
 
     with warnings.catch_warnings():
         warnings.simplefilter("error")  # any warning becomes a failure

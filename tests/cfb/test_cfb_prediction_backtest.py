@@ -37,6 +37,7 @@ runs in well under a second against the predecessor's ~10 ridge fits and ~20s.
 from __future__ import annotations
 
 import warnings
+from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
@@ -48,7 +49,7 @@ from sportsdataverse.cfb.cfb_game_predict import (
     predict_margin,
     win_prob_from_margin,
 )
-from sportsdataverse.cfb.cfb_prediction_constants import brier_score, mae
+from sportsdataverse.cfb.cfb_prediction_constants import CFB_CONSTANTS, brier_score, get_constants, mae
 
 _FIX = Path(__file__).resolve().parents[1] / "fixtures" / "cfb_prediction"
 _RATINGS = pl.read_parquet(_FIX / "ratings_weekly_2024.parquet")
@@ -60,31 +61,38 @@ _BURN_IN_WEEK = 5  # weeks 1-4 rest on too few games to rate
 # Floors: MEASURED on this fixture, then given headroom. The measured value is
 # recorded beside each so a future change can see exactly what moved.
 _MIN_GAMES = 500  # measured 557
-_MARGIN_MAE_FLOOR = 14.65  # measured 12.90 (replaced system 13.30)
+_MARGIN_MAE_FLOOR = 14.65  # measured 12.90 (replaced system 13.30, see _REPLACED_CONSTANTS)
 _BRIER_FLOOR = 0.2298  # measured 0.1945 (replaced system 0.2077)
 _ACCURACY_FLOOR = 0.6089  # measured 0.6984 (replaced system 0.6768)
 _SPREAD_AGREEMENT_FLOOR = 6.41  # measured 5.03 (replaced system 5.93) -- AGREEMENT, not accuracy
 #: Calibration slope of actual ~ predicted margin. MEASURED 0.862 on this
 #: fixture, game-bootstrap 95% CI [0.756, 0.975] (2,000 resamples, seed 0);
-#: the band is that CI with 0.05 headroom each side. A scale error is what the
+#: the band is that CI with 0.05 headroom each side. The slope FELL from 0.926
+#: (pre-2026-11-25 ratings and constants): 2024 margins now run ~14% wide.
+#: Pooled over the 2024-2025 holdout the refit's slope is 0.91. A scale error is what the
 #: MAE floor cannot see: predictions 1.7x too wide score slope 0.507 and still
 #: clear MAE 14.65.
 _CAL_SLOPE_BAND = (0.70, 1.03)
-#: The system these constants replaced, scored on the SAME 557 games: the
-#: 2026-09-27 constants on the pre-2026-11-25 `efficiency_ratings` (spread-aware
-#: 0.1-0.9 band, lambda 0.035), the published 2024 snapshots.
-_REPLACED_MAE = 13.2989
-_REPLACED_BRIER = 0.20770
-_REPLACED_LOGLOSS = 0.60129
+#: The system these constants replaced: the 2026-09-27 constants on the published
+#: snapshots' `adj_net` (`adj_net_pre`, the pre-2026-11-25 engine: spread-aware
+#: 0.1-0.9 band, lambda 0.035). Scored live on the same games below; it measures
+#: MAE 13.30, Brier 0.2077, logloss 0.6013 against the current 12.90 / 0.1945 / 0.5703.
+_REPLACED_CONSTANTS = replace(
+    get_constants("modern"),
+    hfa_points=2.7936,
+    margin_sd=18.1043,
+    net_points_scale=23.6945,
+    slope_by_games={"0-3": 9.1185, "4-5": 29.7368, "6-7": 41.7733, "8-20": 55.1520},
+)
 
 
-def _asof_predictions() -> pl.DataFrame:
+def _asof_predictions(rating: str = "adj_net", era: str = "modern") -> pl.DataFrame:
     """Week-W games predicted from the W-1 ratings snapshot."""
     r = _RATINGS.select(
         pl.col("team_id"),
         (pl.col("through_week") + 1).alias("week"),  # the week it may be USED for
         "through_week",  # carried so the leakage test can check the ACTUAL join
-        "adj_net",
+        pl.col(rating).alias("adj_net"),
         "games",
     )
     g = _RES.filter(pl.col("week") >= _BURN_IN_WEEK)
@@ -98,19 +106,27 @@ def _asof_predictions() -> pl.DataFrame:
     games_played = np.minimum(g["home_games"].to_numpy(), g["away_games"].to_numpy())
     margins = np.array(
         [
-            predict_margin(h, a, neutral=bool(n), games_played=gp)
+            predict_margin(h, a, neutral=bool(n), games_played=gp, era=era)
             for h, a, n, gp in zip(g["home_adj_net"], g["away_adj_net"], g["neutral_site"], games_played)
         ]
     )
     return g.with_columns(
         pl.Series("exp_margin", margins),
-        pl.Series("home_win_prob", [win_prob_from_margin(m) for m in margins]),
+        pl.Series("home_win_prob", [win_prob_from_margin(m, era=era) for m in margins]),
         (pl.col("home_score") - pl.col("away_score")).cast(pl.Float64).alias("actual_margin"),
         (pl.col("home_score") > pl.col("away_score")).cast(pl.Float64).alias("y"),
     )
 
 
 _PREDS = _asof_predictions()
+with pytest.MonkeyPatch.context() as _mp:
+    _mp.setitem(CFB_CONSTANTS, "_replaced", _REPLACED_CONSTANTS)
+    _REPLACED = _asof_predictions("adj_net_pre", era="_replaced")
+
+
+def _logloss(frame: pl.DataFrame) -> float:
+    y, p = frame["y"].to_numpy(), np.clip(frame["home_win_prob"].to_numpy(), 1e-9, 1 - 1e-9)
+    return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
 
 
 def test_enough_games_backtested() -> None:
@@ -188,15 +204,15 @@ def test_spread_agreement_with_market() -> None:
 
 
 def test_beats_the_superseded_constants_on_the_same_games() -> None:
-    """Regression guard: no worse than the system it replaced, on the same games.
+    """Regression guard: no worse than the system it replaced, scored live on the same games.
 
-    ``_REPLACED_MAE`` is that system measured on these 557 games (13.30 against
-    the current 12.90). The old ratings are not in the fixture any more, so the
-    comparison is against their recorded score; a future refit replaces both
-    numbers together.
+    The replaced system is the 2026-09-27 constants on the pre-2026-11-25 ratings
+    (``adj_net_pre``): MAE 13.30 against the current 12.90. A comparison, not a
+    threshold, so it survives any future refit.
     """
+    assert _REPLACED["game_id"].to_list() == _PREDS["game_id"].to_list()  # same games, same order
     actual = _PREDS["actual_margin"].to_numpy()
-    assert float(mae(_PREDS["exp_margin"].to_numpy(), actual)) < _REPLACED_MAE
+    assert float(mae(_PREDS["exp_margin"].to_numpy(), actual)) < float(mae(_REPLACED["exp_margin"].to_numpy(), actual))
 
 
 def test_beats_superseded_constants_on_proper_scoring_rules() -> None:
@@ -210,11 +226,10 @@ def test_beats_superseded_constants_on_proper_scoring_rules() -> None:
     survives any future refit.
     """
     y = _PREDS["y"].to_numpy()
-    p = np.clip(_PREDS["home_win_prob"].to_numpy(), 1e-9, 1 - 1e-9)
-    logloss = float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
-
-    assert float(brier_score(y, p)) < _REPLACED_BRIER  # measured 0.1945
-    assert logloss < _REPLACED_LOGLOSS  # measured 0.5703
+    new_b = float(brier_score(y, _PREDS["home_win_prob"].to_numpy()))
+    old_b = float(brier_score(y, _REPLACED["home_win_prob"].to_numpy()))
+    assert new_b < old_b  # measured 0.1945 vs 0.2077
+    assert _logloss(_PREDS) < _logloss(_REPLACED)  # measured 0.5703 vs 0.6013
 
 
 def test_win_prob_discriminates_favorites_from_dogs() -> None:

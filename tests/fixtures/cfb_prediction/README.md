@@ -74,4 +74,5 @@ Massachusetts/UMass→113, Hawai'i→62); all 133 teams resolve in both.
 (2026-09-27 vintage, all 2,079 rows) with `adj_off_epa`, `adj_def_epa` and `adj_net` rebuilt by the
 current `efficiency_ratings` on the same as-of plays (regular-season weeks `<= through_week`,
 FBS-vs-FBS, kneels dropped). Under the previous engine that rebuild reproduces the published
-values to 6e-14. Rebuild: `python -m tools.validation.cfb_ratings_weekly_rebuild --out <f> 2024`.
+values to 6e-14; that old-engine `adj_net` is kept as `adj_net_pre` so the backtest scores the
+replaced system live. Rebuild: `python -m tools.validation.cfb_ratings_weekly_rebuild --out <f> 2024`.

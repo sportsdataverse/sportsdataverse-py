@@ -76,17 +76,25 @@ def rebuild(seasons: list[int], *, engine: str = "current") -> pl.DataFrame:
     fit = _pre_engine if engine == "pre" else efficiency_ratings
     pub = pl.from_pandas(p) if not isinstance(p := load_cfb_ratings_weekly(seasons), pl.DataFrame) else p
     pub = pub.with_columns(pl.col("team_id").cast(pl.Utf8), pl.col("season").cast(pl.Int64))
+    if pub.is_empty():
+        raise ValueError(f"no published cfb_ratings_weekly snapshots for {seasons}")
     parts = []
     for season in seasons:
         plays = _season_plays(season)
         for week in sorted(pub.filter(pl.col("season") == season)["through_week"].unique().to_list()):
             e = fit(plays.filter(pl.col("week") <= week)).select("team_id", *_EFF)
-            parts.append(e.with_columns(season=pl.lit(season, pl.Int64), through_week=pl.lit(week, pl.Int32)))
+            parts.append(
+                e.with_columns(season=pl.lit(season, pl.Int64), through_week=pl.lit(week, pub.schema["through_week"]))
+            )
     new = pl.concat(parts)
     assert all(new.schema[k] == pub.schema[k] for k in _KEY)
     out = pub.join(new, on=_KEY, how="left", suffix="_new")
-    d = (out["adj_net"] - out["adj_net_new"]).abs()
-    print(f"{out.height} snapshot rows, {out['adj_net_new'].is_not_null().sum()} refit; max |d adj_net| {d.max():.3g}")
+    missed = out["adj_net_new"].null_count()
+    if missed:  # never mix engines: every published row must be refit
+        raise ValueError(f"{missed} of {out.height} snapshot rows were not refit")
+    print(
+        f"{out.height} snapshot rows refit; max |d adj_net| vs published {(out['adj_net'] - out['adj_net_new']).abs().max()}"
+    )
     return out.with_columns([pl.coalesce(f"{c}_new", c).alias(c) for c in _EFF]).drop([f"{c}_new" for c in _EFF])
 
 
