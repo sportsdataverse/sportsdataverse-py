@@ -41,6 +41,11 @@ without a second read; null where no count carries free throws (college ``clutch
 
 **Four-factor accounting** (GOP Q20): :func:`team_game_four_factors` prices each team-game's four
 factors in points against that season's league-average offense; its docstring states the prices.
+**Factor points** (BB-D42): each row also carries ``lg_rtg`` (the season's league-average rating,
+from the ``all`` split) and ``net_rtg`` split into eight parts per 100 possessions, ``off_*_pts``
+and ``def_*_pts`` for eFG, turnovers, offensive rebounds and free throws, which add up to
+``net_rtg`` exactly (:mod:`sportsdataverse._common.factor_points`). A split's parts are against
+the same league average, so a home split's parts add up to its own ``net_rtg``.
 
 **Bases** (BB-G8): the scoring numbers also come per game and per 75 possessions, so a board's
 basis select never converts. ``plus_minus`` is ``pts - opp_pts``; ``pts_pg`` / ``opp_pts_pg`` /
@@ -60,6 +65,7 @@ from __future__ import annotations
 
 import polars as pl
 
+from sportsdataverse._common.factor_points import FACTOR_POINTS_SCHEMA, attach_factor_points, league_prices
 from sportsdataverse._common.league_context import (
     LEAGUE_AVERAGES_SCHEMA,
     MIN_COHORT_TEAMS,
@@ -192,6 +198,7 @@ TEAM_SEASON_RATES_SCHEMA: dict[str, pl.DataType] = {
     **{f"{m}_rank": pl.Float64() for m in _BASES},
     **{f"{m}_pct": pl.Float64() for m in _BASES},
     **{f"{m}_n": pl.Int64() for m in _BASES},
+    **FACTOR_POINTS_SCHEMA,
 }
 
 
@@ -349,6 +356,9 @@ def team_season_rates(
         return pl.DataFrame(schema=TEAM_SEASON_RATES_SCHEMA)
     rates = rates_from_counts(season_counts(rows, counts=counts), minutes_per_game=minutes_per_game)
     rates = rates.with_columns(_league_ft_pct().over(["season", "split"]).alias("lg_ft_pct"))
+    rates = attach_factor_points(
+        rates, league_prices(rates.filter(pl.col("split") == "all"), convention="possession"), convention="possession"
+    )
     order = pl.col("split").replace_strict({s: i for i, s in enumerate(SPLITS)}, return_dtype=pl.Int64)
     return (
         rates.pipe(attach_sample_sizes, _sizes(minutes_per_game))

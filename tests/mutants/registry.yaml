@@ -12228,6 +12228,36 @@
   expected: kill
   note: An expansion team's first game (no ratings row yet) would raise KeyError again.
 
+- id: bb-factor-points-defense-sign
+  group: bb-factor-points
+  finding: bb-d42-factor-points
+  file: sportsdataverse/_common/factor_points.py
+  snippet: '    sign = {"off": 1, "def": -1}'
+  mutant: '    sign = {"off": 1, "def": 1}'
+  test: tests/common/test_factor_points.py::test_team_parts_add_up_to_net_on_every_row
+  expected: kill
+  note: The defensive parts would carry the opponents' offense sign, so the eight parts would no longer add up to net_rtg.
+
+- id: bb-factor-points-efg-price
+  group: bb-factor-points
+  finding: bb-d42-factor-points
+  file: sportsdataverse/_common/factor_points.py
+  snippet: '        - 2 * pl.col("lg_efg_pct") * fga'
+  mutant: '        - pl.col("lg_efg_pct") * fga'
+  test: tests/common/test_factor_points.py::test_team_parts_are_the_game_prices_summed
+  expected: kill
+  note: A mispriced eFG part still adds up (the free-throw remainder absorbs it); only the per-game prices catch it.
+
+- id: bb-factor-points-lineup-rebound-chances
+  group: bb-factor-points
+  finding: bb-d42-factor-points
+  file: sportsdataverse/_common/factor_points.py
+  snippet: '    "side": (pl.col("o_oreb") + pl.col("d_dreb"), pl.col("d_oreb") + pl.col("o_dreb")),'
+  mutant: '    "side": (pl.col("o_oreb") + pl.col("o_dreb"), pl.col("d_oreb") + pl.col("d_dreb")),'
+  test: tests/common/test_factor_points.py::test_lineup_rebound_part_prices_the_published_orb_rate
+  expected: kill
+  note: A lineup's rebound chances would add its own defensive rebounds, the team table's convention, not the opponent's.
+
 - id: soccer-standings-infer-all-rows
   group: polars-2.2
   finding: polars-2.2-from-dicts-extra-key
