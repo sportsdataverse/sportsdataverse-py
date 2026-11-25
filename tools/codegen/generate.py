@@ -1029,7 +1029,7 @@ def _manual_col_descs() -> dict:
 
 # A pass-through transformer returns its input frame plus a few columns, so the input's schema
 # describes its returns table. Keyed ``league/schema`` (``get_fg_wp`` exists in cfb AND nfl):
-# ``(source schema, columns NOT to inherit)``.
+# ``(source schema, columns NOT to inherit)``. A source may inherit in turn; the chain is followed.
 _DESC_INHERITS: dict[str, tuple[str, frozenset[str]]] = {
     **{
         f"cfb/{s}": ("load_cfb_pbp", frozenset())
@@ -1037,10 +1037,10 @@ _DESC_INHERITS: dict[str, tuple[str, frozenset[str]]] = {
     },
     # NFL and CFB play-by-play come out of the same ESPN football construction pipeline. Three
     # load_cfb_pbp descriptions name college-only models, so they are not inherited.
-    **{
-        f"nfl/{s}": ("load_cfb_pbp", frozenset({"opportunity_run", "prob_2pt", "xp_wp"}))
-        for s in ("build_nfl_season", "calculate_epa", "calculate_wpa", "split_pat_rows")
-    },
+    "nfl/build_nfl_season": ("load_cfb_pbp", frozenset({"opportunity_run", "prob_2pt", "xp_wp"})),
+    # The NFL processor's own columns are described once, under build_nfl_season; the frames that pass
+    # its output through reach them (and, through it, load_cfb_pbp's) by the chain.
+    **{f"nfl/{s}": ("build_nfl_season", frozenset()) for s in ("calculate_epa", "calculate_wpa", "split_pat_rows")},
     # A Polymarket US single-market lookup answers one /v1/markets row.
     # Their own `id` line: the listing's mentions its unfiltered page.
     **{f"odds/{s}": ("us_markets", frozenset({"id"})) for s in ("us_market_by_id", "us_market_by_slug")},
@@ -1048,20 +1048,21 @@ _DESC_INHERITS: dict[str, tuple[str, frozenset[str]]] = {
 
 
 def _manual_col_desc(schema: str | None, col: str, league: str | None = None) -> str:
-    """Hand-curated description for ``col``: schema-keyed, then the schema it inherits
-    from (:data:`_DESC_INHERITS`, league-scoped), then ``_global``."""
+    """Hand-curated description for ``col``: schema-keyed, then each schema up its
+    :data:`_DESC_INHERITS` chain (league-scoped), then ``_global``."""
     if not col:
         return ""
     d = _manual_col_descs()
-    if schema:
+    for _ in range(len(_DESC_INHERITS) + 1):  # bounded: a cyclic entry cannot hang the build
+        if not schema:
+            break
         v = (d.get(schema) or {}).get(col)
         if v:
             return v
         src = _DESC_INHERITS.get(f"{league}/{schema}")
-        if src and col not in src[1]:
-            v = (d.get(src[0]) or {}).get(col)
-            if v:
-                return v
+        if not src or col in src[1]:
+            break
+        schema = src[0]
     return (d.get("_global") or {}).get(col, "") or ""
 
 
