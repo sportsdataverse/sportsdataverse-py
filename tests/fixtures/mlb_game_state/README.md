@@ -73,10 +73,10 @@ narrative.
   these games -- a real historical data gap, not a bug in the collector.
   `tests/mlb/test_mlb_win_expectancy_oracle.py`'s join-count floor accounts
   for this.
-- **Games 5028 (2000-04-12) and 6146 (2001-06-15) appear twice.** statsapi's
-  schedule lists each twice on the same date, so the collector fetched them
-  twice: 155 exact duplicate PA rows in `pbp_corpus`, two rows each in
-  `results_corpus`. `mlb_base_out_transitions` keeps one copy per
+- **Games 5028 (2000-04-12) and 6146 (2001-06-15) appear twice.** Each was
+  suspended and resumed the next day, and statsapi's schedule lists it on both
+  dates, so the collector fetched it twice: 155 exact duplicate PA rows in
+  `pbp_corpus`, two rows each in `results_corpus`. `mlb_base_out_transitions` keeps one copy per
   `(game_id, about_at_bat_index)`; `tests/mlb/test_mlb_markov_run_expectancy.py`
   (the Markov RE24 consistency gate, which also reads this corpus) relies on it.
 - **The umpire-zone calibration floor is 0.08, not the plan's draft 0.03.**
