@@ -91,6 +91,7 @@ from sportsdataverse.nfl.ep_wp import (
 )
 from sportsdataverse.nfl.model_vars import (
     ESPN_FULL_KICK_TEXT_FROM,
+    FIRST_18_WEEK_SEASON,
     ESPN_PERIOD_REPAIR_BEFORE,
     SPREAD_TIME_DECAY_EXPONENT,
     touchback_yardline_expr,
@@ -1187,7 +1188,7 @@ def _espn_nflverse_game_id() -> pl.Expr:
     from sportsdataverse.nfl.datasets import team_abbr_mapping_norelocate
 
     season, week, st = (pl.col(c).cast(pl.Int64) for c in ("season", "week", "seasonType"))
-    weeks = pl.when(season >= 2021).then(18).otherwise(17)
+    weeks = pl.when(season >= FIRST_18_WEEK_SEASON).then(18).otherwise(17)
     wk = (
         pl.when(st == 2)
         .then(week.cast(pl.Utf8).str.zfill(2))
