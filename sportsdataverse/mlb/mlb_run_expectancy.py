@@ -153,7 +153,9 @@ def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
     *previous PA in the game* (``over("game_id")``, **not** reset per
     half-inning -- the score itself carries across the half-inning
     boundary even though outs/bases do not).  ``runs_rest_of_inning`` is
-    the suffix-sum of ``runs_on_play`` within the half.
+    the suffix-sum of ``runs_on_play`` within the half. A PA repeated under
+    the same ``(game_id, about_at_bat_index)`` (a game collected twice)
+    counts once.
 
     Args:
         pbp: Parsed ``mlb_play_by_play`` frame (optionally concatenated
@@ -186,6 +188,8 @@ def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
     """
     if pbp is None or pbp.height == 0:
         return pl.DataFrame(schema=_STATES_SCHEMA)
+    # A game collected twice (listed on two schedule dates) repeats every PA key: count it once.
+    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)
 
     df = pbp.with_columns(
         pl.col("game_id").cast(pl.Utf8),
@@ -247,7 +251,8 @@ def _season_game_pks(seasons: Union[int, List[int], None]) -> List[int]:
             for game in date_entry.get("games") or []:
                 if (game.get("status") or {}).get("codedGameState") == "F":
                     pks.append(int(game["gamePk"]))
-    return pks
+    # A suspended game is listed on both its start and its resume date (e.g. 5028 on 2000-04-12/13).
+    return list(dict.fromkeys(pks))
 
 
 def mlb_run_expectancy_matrix(
@@ -367,9 +372,7 @@ def _pa_transitions(pbp: pl.DataFrame, by_event: bool) -> pl.DataFrame:
     """One row per counted PA: from-state -> to-state with ``runs`` (and ``event`` when ``by_event``)."""
     if by_event and "result_event_type" not in pbp.columns:
         raise ValueError("by_event=True needs the pbp's result_event_type column")
-    # A game collected twice (statsapi's schedule lists some games twice) repeats every PA key.
-    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)
-    states = pbp_base_out_states(pbp)
+    states = pbp_base_out_states(pbp)  # already one row per (game_id, at_bat_index)
 
     half_grp = ["game_id", "inning", "half"]
     event_type = [pl.col("result_event_type").cast(pl.Utf8).alias("event_type")] if by_event else []
@@ -378,7 +381,7 @@ def _pa_transitions(pbp: pl.DataFrame, by_event: bool) -> pl.DataFrame:
         pl.col("about_at_bat_index").cast(pl.Int64).alias("at_bat_index"),
         pl.col("count_outs").cast(pl.Int64).alias("outs_end"),
         *event_type,
-    )
+    ).unique(subset=["game_id", "at_bat_index"], keep="first", maintain_order=True)  # match the deduped states
     pa = (
         states.join(post, on=["game_id", "at_bat_index"], how="left", validate="1:1")
         .sort("game_id", "at_bat_index")

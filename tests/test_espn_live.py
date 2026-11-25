@@ -1064,3 +1064,35 @@ def test_espn_intl_basketball_teams_site_parse(prefix, min_teams):
     mod = importlib.import_module(f"sportsdataverse.{prefix}")
     teams = getattr(mod, f"espn_{prefix}_teams_site")()
     assert teams.height >= min_teams, f"{prefix}: expected >={min_teams} teams, got {teams.height}"
+
+
+@pytest.mark.parametrize(
+    "league, date, event_id",
+    [
+        ("pll", "20260801", "401867221"),
+        ("mens-college-lacrosse", "20260525", "401870925"),
+        ("womens-college-lacrosse", "20260524", "401870993"),
+    ],
+)
+def test_espn_lacrosse_scoreboard_and_summary(league, date, event_id):
+    from sportsdataverse.lacrosse import espn_lacrosse_scoreboard, espn_lacrosse_summary
+
+    games = espn_lacrosse_scoreboard(league=league, dates=date)
+    assert event_id in games["game_id"].cast(str).to_list()
+    summary = espn_lacrosse_summary(league=league, event_id=event_id, return_parsed=False)
+    assert summary["header"]["id"] == event_id
+
+
+def test_espn_lacrosse_pll_teams_and_standings():
+    from sportsdataverse.lacrosse import espn_lacrosse_standings, espn_lacrosse_teams_site
+
+    assert espn_lacrosse_teams_site(league="pll").height >= 8
+    assert espn_lacrosse_standings(league="pll").height >= 8
+
+
+@pytest.mark.parametrize("league", ["mens-college-lacrosse", "womens-college-lacrosse"])
+def test_espn_lacrosse_college_rankings_and_teams(league):
+    from sportsdataverse.lacrosse import espn_lacrosse_rankings, espn_lacrosse_teams_core
+
+    assert espn_lacrosse_rankings(league=league, return_parsed=False)["rankings"]
+    assert espn_lacrosse_teams_core(league=league, return_parsed=False)["count"] >= 50

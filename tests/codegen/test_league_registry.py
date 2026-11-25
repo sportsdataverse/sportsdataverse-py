@@ -49,6 +49,7 @@ def test_registry_sports_and_labels():
         "espn_content": "ESPN content (news)",
         "thesportsdb": "TheSportsDB",
         "cricket": "Cricket",
+        "lacrosse": "Lacrosse",
         "odds": "Betting odds",
         "cbs": "CBS Sports",
         "yahoo": "Yahoo Sports",

@@ -139,6 +139,7 @@ _LEAGUES: Dict[str, str] = {
     "wwc": "soccer.wwc",
     "wc": "soccer.wc",
     "cricket": "cricket",
+    "lacrosse": "lacrosse",
     "odds": "odds",
     "cbs": "providers.cbs",
     "yahoo": "providers.yahoo",

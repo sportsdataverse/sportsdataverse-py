@@ -104,7 +104,7 @@ produces it, so you can see at a glance what's current and where it comes from:
 sdv-py deliberately mirrors the R packages' names, so a call you know in R is the
 call you make in Python. The leagues below have an R sister; the rest of the
 registry (international basketball, European and junior hockey, soccer, cricket,
-the cross-sport providers) is Python-only for now. Each sport's R sister:
+lacrosse, the cross-sport providers) is Python-only for now. Each sport's R sister:
 
 | Sport(s) | `sportsdataverse-py` module | R sister package |
 |---|---|---|
