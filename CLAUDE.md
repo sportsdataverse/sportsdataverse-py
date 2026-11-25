@@ -58,7 +58,7 @@
 to play-by-play, box score, schedule, roster, and other sports data across
 multiple leagues (NBA + G-League, WNBA, NFL, MLB, NHL, MBB, WBB, CFB, PWHL +
 19 HockeyTech minor/junior leagues, college hockey M/W, college baseball +
-softball, soccer, cricket, UFL/XFL/CFL, plus odds), plus international
+softball, soccer, cricket, lacrosse, UFL/XFL/CFL, plus odds), plus international
 basketball (EuroLeague and 24 provider families), European hockey (SIHF and 12
 leagues), Formula 1, the Kalshi and Polymarket prediction markets, and the
 cross-sport providers (CBS, Fox, Yahoo, ESPN content, TheSportsDB).
@@ -205,6 +205,7 @@ sportsdataverse/
   baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
+  lacrosse/   # ESPN lacrosse (league-parameterized: PLL, men's and women's college; probed endpoint allowlist)
   football/   # UFL / XFL / CFL ESPN families
   nbagl/      # NBA G League: ESPN wrappers, nbagl_stats (stats.nba.com, LeagueID=20) and engine helpers
   providers/  # cross-sport sources: cbs/ (CBS NAPI), fox/ (Fox Sports API), yahoo/ (Yahoo Shangrila),
@@ -259,8 +260,9 @@ last remnants (`_common_espn.py`, the `extract*.py` bootstraps and the committed
 description of that pattern anywhere, it predates 0.1.x.
 
 Total cross-league surface: **126 short names** (from the five ESPN
-endpoint YAMLs in `generate.ESPN_APIS`) emitted across 40 league modules
-= **4,566 wrappers**. The `espn_cdn` family (`cdn.espn.com/core`, shorts
+endpoint YAMLs in `generate.ESPN_APIS`) emitted across 41 league modules
+= **4,598 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
+lacrosse emits 32). The `espn_cdn` family (`cdn.espn.com/core`, shorts
 `cdn_playbyplay` / `cdn_boxscore` / `cdn_schedule` / `cdn_scoreboard` /
 `cdn_rankings`) is the one family whose per-league reach was live-probed:
 each endpoint carries an `include_prefixes` allowlist (league prefixes, so

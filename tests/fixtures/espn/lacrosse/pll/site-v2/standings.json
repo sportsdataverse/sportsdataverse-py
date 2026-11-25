@@ -1,0 +1,971 @@
+{
+  "uid": "s:500~l:20813~g:117",
+  "id": "117",
+  "name": "Premier Lacrosse League",
+  "abbreviation": "PLL",
+  "standings": {
+    "id": "0",
+    "name": "overall",
+    "displayName": "Standings",
+    "columns": [
+      {
+        "name": "wins",
+        "displayName": "Wins",
+        "shortDisplayName": "W",
+        "description": "Wins",
+        "type": "wins",
+        "grouping": 1,
+        "sort": {
+          "direction": "desc"
+        }
+      },
+      {
+        "name": "losses",
+        "displayName": "Losses",
+        "shortDisplayName": "L",
+        "description": "Losses",
+        "type": "losses",
+        "grouping": 1,
+        "sort": {
+          "direction": "asc"
+        }
+      },
+      {
+        "name": "winPercent",
+        "displayName": "Win Percentage",
+        "shortDisplayName": "PCT",
+        "description": "Winning Percentage",
+        "type": "winpercent",
+        "grouping": 1,
+        "sort": {
+          "order": 1,
+          "direction": "desc"
+        }
+      },
+      {
+        "name": "pointsFor",
+        "displayName": "Points For",
+        "shortDisplayName": "PF",
+        "description": "Total Points For",
+        "type": "pointsfor",
+        "grouping": 1,
+        "sort": {
+          "direction": "desc"
+        }
+      },
+      {
+        "name": "pointsAgainst",
+        "displayName": "Points Against",
+        "shortDisplayName": "PA",
+        "description": "Total Points Against",
+        "type": "pointsagainst",
+        "grouping": 1,
+        "sort": {
+          "direction": "asc"
+        }
+      },
+      {
+        "name": "pointDifferential",
+        "displayName": "Point Differential",
+        "shortDisplayName": "DIFF",
+        "description": "Point Differential",
+        "type": "pointdifferential",
+        "grouping": 1,
+        "sort": {
+          "direction": "desc"
+        }
+      }
+    ],
+    "season": 2026,
+    "seasonType": 2,
+    "seasonDisplayName": "2026",
+    "entries": [
+      {
+        "team": {
+          "id": "127637",
+          "uid": "s:500~l:20813~t:127637",
+          "location": "Philadelphia",
+          "name": "Waterdogs",
+          "abbreviation": "WAT",
+          "displayName": "Philadelphia Waterdogs",
+          "shortDisplayName": "Waterdogs",
+          "isActive": true,
+          "logos": [
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500/127637.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "default"
+              ],
+              "lastUpdated": "2026-05-01T03:00Z"
+            },
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500-dark/scoreboard/127637.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "scoreboard",
+                "dark"
+              ],
+              "lastUpdated": "2026-05-01T03:01Z"
+            }
+          ]
+        },
+        "stats": [
+          {
+            "name": "wins",
+            "displayName": "Wins",
+            "shortDisplayName": "W",
+            "description": "Wins",
+            "abbreviation": "W",
+            "type": "wins",
+            "value": 9.0,
+            "displayValue": "9"
+          },
+          {
+            "name": "losses",
+            "displayName": "Losses",
+            "shortDisplayName": "L",
+            "description": "Losses",
+            "abbreviation": "L",
+            "type": "losses",
+            "value": 3.0,
+            "displayValue": "3"
+          },
+          {
+            "name": "winPercent",
+            "displayName": "Win Percentage",
+            "shortDisplayName": "PCT",
+            "description": "Winning Percentage",
+            "abbreviation": "PCT",
+            "type": "winpercent",
+            "value": 0.75,
+            "displayValue": ".750"
+          },
+          {
+            "name": "pointsFor",
+            "displayName": "Points For",
+            "shortDisplayName": "PF",
+            "description": "Total Points For",
+            "abbreviation": "PF",
+            "type": "pointsfor",
+            "value": 151.0,
+            "displayValue": "151"
+          },
+          {
+            "name": "pointsAgainst",
+            "displayName": "Points Against",
+            "shortDisplayName": "PA",
+            "description": "Total Points Against",
+            "abbreviation": "PA",
+            "type": "pointsagainst",
+            "value": 137.0,
+            "displayValue": "137"
+          },
+          {
+            "name": "pointDifferential",
+            "displayName": "Point Differential",
+            "shortDisplayName": "DIFF",
+            "description": "Point Differential",
+            "abbreviation": "DIFF",
+            "type": "pointdifferential",
+            "value": 14.0,
+            "displayValue": "+14"
+          }
+        ]
+      },
+      {
+        "team": {
+          "id": "127631",
+          "uid": "s:500~l:20813~t:127631",
+          "location": "Utah",
+          "name": "Archers",
+          "abbreviation": "ARC",
+          "displayName": "Utah Archers",
+          "shortDisplayName": "Archers",
+          "isActive": true,
+          "logos": [
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500/127631.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "default"
+              ],
+              "lastUpdated": "2024-05-01T17:31Z"
+            },
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500-dark/scoreboard/127631.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "scoreboard",
+                "dark"
+              ],
+              "lastUpdated": "2024-05-24T19:48Z"
+            }
+          ]
+        },
+        "stats": [
+          {
+            "name": "wins",
+            "displayName": "Wins",
+            "shortDisplayName": "W",
+            "description": "Wins",
+            "abbreviation": "W",
+            "type": "wins",
+            "value": 7.0,
+            "displayValue": "7"
+          },
+          {
+            "name": "losses",
+            "displayName": "Losses",
+            "shortDisplayName": "L",
+            "description": "Losses",
+            "abbreviation": "L",
+            "type": "losses",
+            "value": 5.0,
+            "displayValue": "5"
+          },
+          {
+            "name": "winPercent",
+            "displayName": "Win Percentage",
+            "shortDisplayName": "PCT",
+            "description": "Winning Percentage",
+            "abbreviation": "PCT",
+            "type": "winpercent",
+            "value": 0.5833333,
+            "displayValue": ".583"
+          },
+          {
+            "name": "pointsFor",
+            "displayName": "Points For",
+            "shortDisplayName": "PF",
+            "description": "Total Points For",
+            "abbreviation": "PF",
+            "type": "pointsfor",
+            "value": 142.0,
+            "displayValue": "142"
+          },
+          {
+            "name": "pointsAgainst",
+            "displayName": "Points Against",
+            "shortDisplayName": "PA",
+            "description": "Total Points Against",
+            "abbreviation": "PA",
+            "type": "pointsagainst",
+            "value": 113.0,
+            "displayValue": "113"
+          },
+          {
+            "name": "pointDifferential",
+            "displayName": "Point Differential",
+            "shortDisplayName": "DIFF",
+            "description": "Point Differential",
+            "abbreviation": "DIFF",
+            "type": "pointdifferential",
+            "value": 29.0,
+            "displayValue": "+29"
+          }
+        ]
+      },
+      {
+        "team": {
+          "id": "122997",
+          "uid": "s:500~l:20813~t:122997",
+          "location": "Boston",
+          "name": "Cannons",
+          "abbreviation": "CAN",
+          "displayName": "Boston Cannons",
+          "shortDisplayName": "Cannons",
+          "isActive": true,
+          "logos": [
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500/122997.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "default"
+              ],
+              "lastUpdated": "2024-05-24T20:06Z"
+            },
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500-dark/scoreboard/122997.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "scoreboard",
+                "dark"
+              ],
+              "lastUpdated": "2024-05-24T20:05Z"
+            }
+          ]
+        },
+        "stats": [
+          {
+            "name": "wins",
+            "displayName": "Wins",
+            "shortDisplayName": "W",
+            "description": "Wins",
+            "abbreviation": "W",
+            "type": "wins",
+            "value": 7.0,
+            "displayValue": "7"
+          },
+          {
+            "name": "losses",
+            "displayName": "Losses",
+            "shortDisplayName": "L",
+            "description": "Losses",
+            "abbreviation": "L",
+            "type": "losses",
+            "value": 5.0,
+            "displayValue": "5"
+          },
+          {
+            "name": "winPercent",
+            "displayName": "Win Percentage",
+            "shortDisplayName": "PCT",
+            "description": "Winning Percentage",
+            "abbreviation": "PCT",
+            "type": "winpercent",
+            "value": 0.5833333,
+            "displayValue": ".583"
+          },
+          {
+            "name": "pointsFor",
+            "displayName": "Points For",
+            "shortDisplayName": "PF",
+            "description": "Total Points For",
+            "abbreviation": "PF",
+            "type": "pointsfor",
+            "value": 154.0,
+            "displayValue": "154"
+          },
+          {
+            "name": "pointsAgainst",
+            "displayName": "Points Against",
+            "shortDisplayName": "PA",
+            "description": "Total Points Against",
+            "abbreviation": "PA",
+            "type": "pointsagainst",
+            "value": 144.0,
+            "displayValue": "144"
+          },
+          {
+            "name": "pointDifferential",
+            "displayName": "Point Differential",
+            "shortDisplayName": "DIFF",
+            "description": "Point Differential",
+            "abbreviation": "DIFF",
+            "type": "pointdifferential",
+            "value": 10.0,
+            "displayValue": "+10"
+          }
+        ]
+      },
+      {
+        "team": {
+          "id": "127636",
+          "uid": "s:500~l:20813~t:127636",
+          "location": "California",
+          "name": "Redwoods",
+          "abbreviation": "RED",
+          "displayName": "California Redwoods",
+          "shortDisplayName": "Redwoods",
+          "isActive": true,
+          "logos": [
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500/127636.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "default"
+              ],
+              "lastUpdated": "2024-05-01T17:31Z"
+            },
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500-dark/scoreboard/127636.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "scoreboard",
+                "dark"
+              ],
+              "lastUpdated": "2026-03-20T19:36Z"
+            }
+          ]
+        },
+        "stats": [
+          {
+            "name": "wins",
+            "displayName": "Wins",
+            "shortDisplayName": "W",
+            "description": "Wins",
+            "abbreviation": "W",
+            "type": "wins",
+            "value": 6.0,
+            "displayValue": "6"
+          },
+          {
+            "name": "losses",
+            "displayName": "Losses",
+            "shortDisplayName": "L",
+            "description": "Losses",
+            "abbreviation": "L",
+            "type": "losses",
+            "value": 6.0,
+            "displayValue": "6"
+          },
+          {
+            "name": "winPercent",
+            "displayName": "Win Percentage",
+            "shortDisplayName": "PCT",
+            "description": "Winning Percentage",
+            "abbreviation": "PCT",
+            "type": "winpercent",
+            "value": 0.5,
+            "displayValue": ".500"
+          },
+          {
+            "name": "pointsFor",
+            "displayName": "Points For",
+            "shortDisplayName": "PF",
+            "description": "Total Points For",
+            "abbreviation": "PF",
+            "type": "pointsfor",
+            "value": 150.0,
+            "displayValue": "150"
+          },
+          {
+            "name": "pointsAgainst",
+            "displayName": "Points Against",
+            "shortDisplayName": "PA",
+            "description": "Total Points Against",
+            "abbreviation": "PA",
+            "type": "pointsagainst",
+            "value": 151.0,
+            "displayValue": "151"
+          },
+          {
+            "name": "pointDifferential",
+            "displayName": "Point Differential",
+            "shortDisplayName": "DIFF",
+            "description": "Point Differential",
+            "abbreviation": "DIFF",
+            "type": "pointdifferential",
+            "value": -1.0,
+            "displayValue": "-1"
+          }
+        ]
+      },
+      {
+        "team": {
+          "id": "122896",
+          "uid": "s:500~l:20813~t:122896",
+          "location": "Denver",
+          "name": "Outlaws",
+          "abbreviation": "OUT",
+          "displayName": "Denver Outlaws",
+          "shortDisplayName": "Outlaws",
+          "isActive": true,
+          "logos": [
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500/122896.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "default"
+              ],
+              "lastUpdated": "2026-05-01T02:22Z"
+            },
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500-dark/scoreboard/122896.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "scoreboard",
+                "dark"
+              ],
+              "lastUpdated": "2026-05-01T02:22Z"
+            }
+          ]
+        },
+        "stats": [
+          {
+            "name": "wins",
+            "displayName": "Wins",
+            "shortDisplayName": "W",
+            "description": "Wins",
+            "abbreviation": "W",
+            "type": "wins",
+            "value": 6.0,
+            "displayValue": "6"
+          },
+          {
+            "name": "losses",
+            "displayName": "Losses",
+            "shortDisplayName": "L",
+            "description": "Losses",
+            "abbreviation": "L",
+            "type": "losses",
+            "value": 6.0,
+            "displayValue": "6"
+          },
+          {
+            "name": "winPercent",
+            "displayName": "Win Percentage",
+            "shortDisplayName": "PCT",
+            "description": "Winning Percentage",
+            "abbreviation": "PCT",
+            "type": "winpercent",
+            "value": 0.5,
+            "displayValue": ".500"
+          },
+          {
+            "name": "pointsFor",
+            "displayName": "Points For",
+            "shortDisplayName": "PF",
+            "description": "Total Points For",
+            "abbreviation": "PF",
+            "type": "pointsfor",
+            "value": 138.0,
+            "displayValue": "138"
+          },
+          {
+            "name": "pointsAgainst",
+            "displayName": "Points Against",
+            "shortDisplayName": "PA",
+            "description": "Total Points Against",
+            "abbreviation": "PA",
+            "type": "pointsagainst",
+            "value": 144.0,
+            "displayValue": "144"
+          },
+          {
+            "name": "pointDifferential",
+            "displayName": "Point Differential",
+            "shortDisplayName": "DIFF",
+            "description": "Point Differential",
+            "abbreviation": "DIFF",
+            "type": "pointdifferential",
+            "value": -6.0,
+            "displayValue": "-6"
+          }
+        ]
+      },
+      {
+        "team": {
+          "id": "127638",
+          "uid": "s:500~l:20813~t:127638",
+          "location": "Maryland",
+          "name": "Whipsnakes",
+          "abbreviation": "WHP",
+          "displayName": "Maryland Whipsnakes",
+          "shortDisplayName": "Whipsnakes",
+          "isActive": true,
+          "logos": [
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500/127638.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "default"
+              ],
+              "lastUpdated": "2026-05-01T03:06Z"
+            },
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500-dark/scoreboard/127638.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "scoreboard",
+                "dark"
+              ],
+              "lastUpdated": "2026-05-01T03:06Z"
+            }
+          ]
+        },
+        "stats": [
+          {
+            "name": "wins",
+            "displayName": "Wins",
+            "shortDisplayName": "W",
+            "description": "Wins",
+            "abbreviation": "W",
+            "type": "wins",
+            "value": 5.0,
+            "displayValue": "5"
+          },
+          {
+            "name": "losses",
+            "displayName": "Losses",
+            "shortDisplayName": "L",
+            "description": "Losses",
+            "abbreviation": "L",
+            "type": "losses",
+            "value": 7.0,
+            "displayValue": "7"
+          },
+          {
+            "name": "winPercent",
+            "displayName": "Win Percentage",
+            "shortDisplayName": "PCT",
+            "description": "Winning Percentage",
+            "abbreviation": "PCT",
+            "type": "winpercent",
+            "value": 0.41666666,
+            "displayValue": ".417"
+          },
+          {
+            "name": "pointsFor",
+            "displayName": "Points For",
+            "shortDisplayName": "PF",
+            "description": "Total Points For",
+            "abbreviation": "PF",
+            "type": "pointsfor",
+            "value": 151.0,
+            "displayValue": "151"
+          },
+          {
+            "name": "pointsAgainst",
+            "displayName": "Points Against",
+            "shortDisplayName": "PA",
+            "description": "Total Points Against",
+            "abbreviation": "PA",
+            "type": "pointsagainst",
+            "value": 135.0,
+            "displayValue": "135"
+          },
+          {
+            "name": "pointDifferential",
+            "displayName": "Point Differential",
+            "shortDisplayName": "DIFF",
+            "description": "Point Differential",
+            "abbreviation": "DIFF",
+            "type": "pointdifferential",
+            "value": 16.0,
+            "displayValue": "+16"
+          }
+        ]
+      },
+      {
+        "team": {
+          "id": "127634",
+          "uid": "s:500~l:20813~t:127634",
+          "location": "Carolina",
+          "name": "Chaos",
+          "abbreviation": "CHA",
+          "displayName": "Carolina Chaos",
+          "shortDisplayName": "Chaos",
+          "isActive": true,
+          "logos": [
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500/127634.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "default"
+              ],
+              "lastUpdated": "2024-05-01T17:31Z"
+            },
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500-dark/scoreboard/127634.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "scoreboard",
+                "dark"
+              ],
+              "lastUpdated": "2024-05-24T19:48Z"
+            }
+          ]
+        },
+        "stats": [
+          {
+            "name": "wins",
+            "displayName": "Wins",
+            "shortDisplayName": "W",
+            "description": "Wins",
+            "abbreviation": "W",
+            "type": "wins",
+            "value": 5.0,
+            "displayValue": "5"
+          },
+          {
+            "name": "losses",
+            "displayName": "Losses",
+            "shortDisplayName": "L",
+            "description": "Losses",
+            "abbreviation": "L",
+            "type": "losses",
+            "value": 7.0,
+            "displayValue": "7"
+          },
+          {
+            "name": "winPercent",
+            "displayName": "Win Percentage",
+            "shortDisplayName": "PCT",
+            "description": "Winning Percentage",
+            "abbreviation": "PCT",
+            "type": "winpercent",
+            "value": 0.41666666,
+            "displayValue": ".417"
+          },
+          {
+            "name": "pointsFor",
+            "displayName": "Points For",
+            "shortDisplayName": "PF",
+            "description": "Total Points For",
+            "abbreviation": "PF",
+            "type": "pointsfor",
+            "value": 129.0,
+            "displayValue": "129"
+          },
+          {
+            "name": "pointsAgainst",
+            "displayName": "Points Against",
+            "shortDisplayName": "PA",
+            "description": "Total Points Against",
+            "abbreviation": "PA",
+            "type": "pointsagainst",
+            "value": 149.0,
+            "displayValue": "149"
+          },
+          {
+            "name": "pointDifferential",
+            "displayName": "Point Differential",
+            "shortDisplayName": "DIFF",
+            "description": "Point Differential",
+            "abbreviation": "DIFF",
+            "type": "pointdifferential",
+            "value": -20.0,
+            "displayValue": "-20"
+          }
+        ]
+      },
+      {
+        "team": {
+          "id": "127632",
+          "uid": "s:500~l:20813~t:127632",
+          "location": "New York",
+          "name": "Atlas",
+          "abbreviation": "ATL",
+          "displayName": "New York Atlas",
+          "shortDisplayName": "Atlas",
+          "isActive": true,
+          "logos": [
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500/127632.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "default"
+              ],
+              "lastUpdated": "2024-05-01T17:31Z"
+            },
+            {
+              "href": "https://a.espncdn.com/i/teamlogos/pll/500-dark/scoreboard/127632.png",
+              "width": 500,
+              "height": 500,
+              "alt": "",
+              "rel": [
+                "full",
+                "scoreboard",
+                "dark"
+              ],
+              "lastUpdated": "2024-05-24T19:48Z"
+            }
+          ]
+        },
+        "stats": [
+          {
+            "name": "wins",
+            "displayName": "Wins",
+            "shortDisplayName": "W",
+            "description": "Wins",
+            "abbreviation": "W",
+            "type": "wins",
+            "value": 3.0,
+            "displayValue": "3"
+          },
+          {
+            "name": "losses",
+            "displayName": "Losses",
+            "shortDisplayName": "L",
+            "description": "Losses",
+            "abbreviation": "L",
+            "type": "losses",
+            "value": 9.0,
+            "displayValue": "9"
+          },
+          {
+            "name": "winPercent",
+            "displayName": "Win Percentage",
+            "shortDisplayName": "PCT",
+            "description": "Winning Percentage",
+            "abbreviation": "PCT",
+            "type": "winpercent",
+            "value": 0.25,
+            "displayValue": ".250"
+          },
+          {
+            "name": "pointsFor",
+            "displayName": "Points For",
+            "shortDisplayName": "PF",
+            "description": "Total Points For",
+            "abbreviation": "PF",
+            "type": "pointsfor",
+            "value": 130.0,
+            "displayValue": "130"
+          },
+          {
+            "name": "pointsAgainst",
+            "displayName": "Points Against",
+            "shortDisplayName": "PA",
+            "description": "Total Points Against",
+            "abbreviation": "PA",
+            "type": "pointsagainst",
+            "value": 172.0,
+            "displayValue": "172"
+          },
+          {
+            "name": "pointDifferential",
+            "displayName": "Point Differential",
+            "shortDisplayName": "DIFF",
+            "description": "Point Differential",
+            "abbreviation": "DIFF",
+            "type": "pointdifferential",
+            "value": -42.0,
+            "displayValue": "-42"
+          }
+        ]
+      }
+    ]
+  },
+  "children": [],
+  "season": {
+    "year": 2027,
+    "startDate": "2027-07-04T07:00Z",
+    "endDate": "2027-07-06T06:59Z",
+    "displayName": "2027"
+  },
+  "seasons": [
+    {
+      "year": 2026,
+      "startDate": "2026-01-01T08:00Z",
+      "endDate": "2027-01-01T07:59Z",
+      "displayName": "2026",
+      "types": [
+        {
+          "id": "2",
+          "name": "Regular Season",
+          "abbreviation": "reg",
+          "startDate": "2026-01-01T08:00Z",
+          "endDate": "2027-01-01T07:59Z",
+          "hasStandings": true
+        }
+      ],
+      "seasonYears": "2026-27"
+    },
+    {
+      "year": 2025,
+      "startDate": "2025-01-01T08:00Z",
+      "endDate": "2026-01-01T07:59Z",
+      "displayName": "2025",
+      "types": [
+        {
+          "id": "2",
+          "name": "Regular Season",
+          "abbreviation": "reg",
+          "startDate": "2025-01-01T08:00Z",
+          "endDate": "2026-01-01T07:59Z",
+          "hasStandings": true
+        }
+      ],
+      "seasonYears": "2025-26"
+    },
+    {
+      "year": 2024,
+      "startDate": "2024-01-01T08:00Z",
+      "endDate": "2025-01-01T07:59Z",
+      "displayName": "2024",
+      "types": [
+        {
+          "id": "2",
+          "name": "Regular Season",
+          "abbreviation": "reg",
+          "startDate": "2024-01-01T08:00Z",
+          "endDate": "2025-01-01T07:59Z",
+          "hasStandings": true
+        }
+      ],
+      "seasonYears": "2024-25"
+    },
+    {
+      "year": 2023,
+      "startDate": "2023-01-01T08:00Z",
+      "endDate": "2024-01-01T07:59Z",
+      "displayName": "2023",
+      "types": [
+        {
+          "id": "2",
+          "name": "Regular Season",
+          "abbreviation": "reg",
+          "startDate": "2023-01-01T08:00Z",
+          "endDate": "2024-01-01T07:59Z",
+          "hasStandings": true
+        }
+      ],
+      "seasonYears": "2023-24"
+    },
+    {
+      "year": 2022,
+      "startDate": "2022-01-01T08:00Z",
+      "endDate": "2023-01-01T07:59Z",
+      "displayName": "2022",
+      "types": [
+        {
+          "id": "2",
+          "name": "Regular Season",
+          "abbreviation": "reg",
+          "startDate": "2022-01-01T08:00Z",
+          "endDate": "2023-01-01T07:59Z",
+          "hasStandings": true
+        }
+      ],
+      "seasonYears": "2022-23"
+    }
+  ]
+}
