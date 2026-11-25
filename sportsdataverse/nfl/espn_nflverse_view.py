@@ -15,6 +15,9 @@ import polars as pl
 
 from sportsdataverse.nfl.datasets import team_abbr_mapping
 from sportsdataverse.nfl.nfl_pbp import _espn_play_type_nfl, split_pat_rows
+from sportsdataverse.nfl.shield_pbp.description import add_description_features, add_pass_rush
+from sportsdataverse.nfl.shield_pbp.drives import drive_level_tmp_result, last_or_first_result, swapped_posteam
+from sportsdataverse.nfl.shield_pbp.series import add_series_data
 
 __all__ = ["espn_nfl_pbp_nflverse"]
 
@@ -147,24 +150,41 @@ def _int_id(expr: pl.Expr, dtype: pl.DataType, name: str) -> pl.Expr:
 
 
 def _attach_nflverse_game_id(plays: pl.DataFrame, schedule: Optional[pl.DataFrame]) -> pl.DataFrame:
-    """``nflverse_game_id`` from the frame itself, else from the schedule's ``espn`` event id."""
-    if "nflverse_game_id" in plays.columns:
-        return plays
-    if schedule is None or not {"game_id", "espn"} <= set(schedule.columns):
+    """``nflverse_game_id``: the schedule's (on its ``espn`` event id) where a schedule is given, else the frame's own
+    (``NFLPlayProcess`` stamps it from ESPN's header).
+
+    A game between non-NFL sides (the Pro Bowl, which nflverse does not carry) is dropped; any other game left
+    without an id is refused.
+    """
+    have = "nflverse_game_id" in plays.columns
+    out = plays.with_columns(_int_id(pl.col("game_id"), plays.schema["game_id"], "game_id").alias("_espn"))
+    if schedule is not None and {"game_id", "espn"} <= set(schedule.columns):
+        ids = schedule.select(
+            _int_id(pl.col("espn"), schedule.schema["espn"], "schedule espn").alias("_espn"),
+            pl.col("game_id").cast(pl.Utf8).alias("_sched_id"),
+        ).drop_nulls("_espn")
+        assert out.schema["_espn"] == ids.schema["_espn"] == pl.Int64
+        out = out.join(ids.unique("_espn", keep="first", maintain_order=True), on="_espn", how="left")
+        stamped = [pl.col("nflverse_game_id").cast(pl.Utf8)] if have else []
+        out = out.with_columns(pl.coalesce("_sched_id", *stamped).alias("nflverse_game_id")).drop("_sched_id")
+    elif not have:
         raise ValueError(
             "espn_nfl_pbp_nflverse: plays carry no nflverse_game_id; pass the nflverse schedule "
             "(with its game_id and espn columns) to map the ESPN game id"
         )
-    ids = schedule.select(
-        _int_id(pl.col("espn"), schedule.schema["espn"], "schedule espn").alias("_espn"),
-        pl.col("game_id").cast(pl.Utf8).alias("nflverse_game_id"),
-    ).drop_nulls("_espn")
-    out = plays.with_columns(_int_id(pl.col("game_id"), plays.schema["game_id"], "game_id").alias("_espn"))
-    assert out.schema["_espn"] == ids.schema["_espn"] == pl.Int64
-    out = out.join(ids.unique("_espn", keep="first", maintain_order=True), on="_espn", how="left")
-    unmatched = out.filter(pl.col("nflverse_game_id").is_null())["_espn"].unique().sort().to_list()
-    if unmatched:
-        raise ValueError(f"espn_nfl_pbp_nflverse: the schedule has no game for ESPN game id(s) {unmatched[:5]}")
+    missing = out.filter(pl.col("nflverse_game_id").is_null())
+    if missing.height:
+        clubs = set(team_abbr_mapping.values()) - {"AFC", "NFC", "NFL"}
+        sides = [c for c in ("homeTeamAbbrev", "awayTeamAbbrev") if c in out.columns]
+        nfl = (
+            pl.all_horizontal([pl.col(c).replace(team_abbr_mapping).is_in(clubs) for c in sides])
+            if sides
+            else pl.lit(True)
+        )
+        refused = missing.filter(nfl.fill_null(True))["_espn"].unique().sort().to_list()
+        if refused:
+            raise ValueError(f"espn_nfl_pbp_nflverse: no nflverse game id for ESPN game id(s) {refused[:5]}")
+        out = out.filter(pl.col("nflverse_game_id").is_not_null())
     return out.drop("_espn")
 
 
@@ -207,7 +227,7 @@ def _keys_and_teams(df: pl.DataFrame) -> list[pl.Expr]:
         .then(pl.lit("PRE"))
         .otherwise(pl.lit("REG"))
         .alias("season_type"),
-        parts.list.get(1).cast(pl.Int64).alias("week"),
+        parts.list.get(1).cast(pl.Int64, strict=False).alias("week"),  # a preseason PRE<n> week is null
         parts.list.get(0).cast(pl.Int64).alias("season"),
         posteam.alias("posteam"),
         pl.when(is_home).then(pl.lit("home")).when(is_away).then(pl.lit("away")).alias("posteam_type"),
@@ -503,7 +523,7 @@ def _pat_scores(view: pl.DataFrame) -> pl.DataFrame:
     return v.with_columns(
         (pl.col("posteam_score") - pl.col("defteam_score")).alias("score_differential"),
         (pl.col("posteam_score_post") - pl.col("defteam_score_post")).alias("score_differential_post"),
-    ).drop("_pts", "_dpts", "_dinc", "_dinc_td", "pat_of_id")
+    ).drop("_pts", "_dpts", "_dinc", "_dinc_td")
 
 
 #: Columns nflverse leaves null on a timeout row (every season 2007-2024); its ``ydstogo`` there is 0.
@@ -534,19 +554,383 @@ def _timeout_rows(view: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _carried(df: pl.DataFrame) -> list[pl.Expr]:
+    """ESPN columns the later steps read: the play's wall clock, timeouts, air yards, and the drive record.
+
+    ``time_of_day`` is ESPN's ``wallclock`` (to the second; nflverse's NFL-feed stamp has milliseconds).
+    ``_c_*`` columns are inputs only and are dropped before the frame is returned.
+    """
+
+    def col(c: str, t: pl.DataType) -> pl.Expr:
+        return (pl.col(c) if c in df.columns else pl.lit(None)).cast(t)
+
+    timeout = (pl.col("type.text") == "Timeout").fill_null(False)
+    home_to, away_to = (
+        (pl.col(c) == True).fill_null(False) if c in df.columns else pl.lit(False)  # noqa: E712
+        for c in ("homeTimeoutCalled", "awayTimeoutCalled")
+    )
+    return [
+        col("wallclock", pl.Utf8).alias("time_of_day"),
+        timeout.cast(pl.Int64).alias("timeout"),
+        pl.when(timeout & home_to)
+        .then(pl.col("home_team"))
+        .when(timeout & away_to)
+        .then(pl.col("away_team"))
+        .alias("timeout_team"),
+        col("air_yards", pl.Float64).alias("air_yards"),
+        col("yards_after_catch", pl.Float64).alias("yards_after_catch"),
+        col("drive.start.clock.displayValue", pl.Utf8).alias("_c_clock_start"),
+        col("drive.end.clock.displayValue", pl.Utf8).alias("_c_clock_end"),
+        col("drive.start.text", pl.Utf8).alias("_c_start_text"),
+        col("rusher_player_name", pl.Utf8).alias("_c_rusher"),
+    ]
+
+
+#: ``add_description_features`` columns the view takes from the Shield regexes run on ESPN's text; each beats
+#: (or equals) the view's own value on 2007 / 2014 / 2019 / 2024. ``pass_length`` / ``pass_location`` /
+#: ``qb_kneel`` / ``qb_spike`` / ``aborted_play`` / ``play_type`` keep the view's (equal, or better in 2014).
+_TEXT_FEATURES = (
+    "run_location",
+    "run_gap",
+    "qb_scramble",
+    "shotgun",
+    "no_huddle",
+    "touchback",
+    "out_of_bounds",
+    "replay_or_challenge",
+    "replay_or_challenge_result",
+    "penalty_type",
+)
+
+
+def _text_features(view: pl.DataFrame) -> pl.DataFrame:
+    """nflfastR's description columns from ESPN's text (the Shield regexes), and ``clean_pbp``'s ``pass`` / ``rush``."""
+    if view.height == 0:  # the Shield helpers hand an empty frame back as it is
+        flags = {"run_location", "run_gap", "replay_or_challenge_result", "penalty_type"}
+        return view.with_columns(
+            *[pl.lit(None, dtype=pl.Utf8 if c in flags else pl.Int64).alias(c) for c in _TEXT_FEATURES],
+            pl.lit(None, dtype=pl.Int64).alias("pass"),
+            pl.lit(None, dtype=pl.Int64).alias("rush"),
+        )
+    rx = add_description_features(view.select("desc", "play_type", "penalty")).select(_TEXT_FEATURES)
+    v = view.with_columns(rx.get_column(c) for c in _TEXT_FEATURES)  # same height: rx is computed from view
+    # a rusher named by either the GSIS slot or the processor (an athlete the players table lacks)
+    rusher = pl.coalesce(*[c for c in ("rusher_player_name", "_c_rusher") if c in v.columns])
+    with_pr = add_pass_rush(
+        v.select(
+            "game_id",
+            "play_id",
+            "desc",
+            "qb_scramble",
+            "qb_kneel",
+            "kickoff_attempt",
+            rusher.alias("rusher_player_name"),
+        )
+    )
+    return v.with_columns(with_pr["pass"], with_pr["rush"])
+
+
+def _drive_detail(view: pl.DataFrame) -> pl.DataFrame:
+    """nflfastR's drive and series columns on ESPN's own drives.
+
+    ``fixed_drive`` is ESPN's drive number: nflfastR's ``new_drive`` cascade run on this frame scores 86-92%
+    against nflverse (2014-2024), ESPN's own drives 97-99%. ``fixed_drive_result`` / ``series*`` are nflfastR's
+    result cascades (the Shield ports) grouped by it; ``drive_game_clock_*`` and ``drive_start_yard_line`` come
+    from ESPN's drive record, the counts from the drive's plays.
+    """
+    g = ["game_id", "fixed_drive"]
+    v = view.with_row_index("_order").with_columns(
+        fixed_drive=pl.col("drive"), play_seq=pl.int_range(pl.len()).over("game_id")
+    )
+    v = v.with_columns(_swap=swapped_posteam(v)).with_columns(_tmp=drive_level_tmp_result(pl.col("_swap")))
+    # a play outside any drive (null fixed_drive) matches no drive's result: null keys never join
+    v = last_or_first_result(v, g, "_tmp", "fixed_drive_result")
+    v = add_series_data(v.drop("_swap", "_tmp"))
+    real = pl.col("play_type").is_not_null() & (pl.col("play_type_nfl") != "TIMEOUT").fill_null(True)
+    first_down = (
+        (pl.col("first_down_rush") == 1) | (pl.col("first_down_pass") == 1) | (pl.col("first_down_penalty") == 1)
+    )
+    agg = (
+        v.filter(real & pl.col("fixed_drive").is_not_null())
+        .group_by(g)
+        .agg(
+            drive_first_downs=first_down.sum().cast(pl.Float64),
+            drive_inside20=(pl.col("yardline_100").min() <= 20).cast(pl.Float64),
+            drive_play_id_started=pl.col("play_id").min().cast(pl.Float64),
+        )
+    )
+    v = v.join(agg, on=g, how="left")
+
+    def clock(c: str) -> pl.Expr:  # ESPN's "7:47" -> nflverse's "07:47"
+        return pl.col(c).str.zfill(5)
+
+    start = pl.col("_c_start_text").str.split(" ")
+    club = start.list.get(0, null_on_oob=True).replace({"WSH": "WAS", "LAR": "LA"}).replace(team_abbr_mapping)
+    return (
+        v.with_columns(
+            pl.col("series").cast(pl.Float64),
+            pl.col("series_success").cast(pl.Int64),
+            clock("_c_clock_start").alias("drive_game_clock_start"),
+            clock("_c_clock_end").alias("drive_game_clock_end"),
+            pl.when(pl.col("_c_start_text") == "50")
+            .then(pl.lit("50"))
+            .otherwise(pl.concat_str(club, start.list.get(1, null_on_oob=True), separator=" "))
+            .alias("drive_start_yard_line"),
+        )
+        .sort("_order")
+        .drop("play_seq", "_order")
+    )
+
+
+#: ESPN participant role -> the processor's own athlete-id columns for it (used without a participants frame).
+_PROCESSOR_ROLE_IDS = {
+    "passer": ("passer_player_id",),
+    "rusher": ("rusher_player_id",),
+    "receiver": ("receiver_player_id",),
+    "interceptor": ("interception_player_id",),
+    "sacked_by": ("sack_player_id", "sack_player_id2"),
+    "pass_defender": ("pass_breakup_player_id",),
+    "forced_by": ("fumble_forced_player_id",),
+    "recoverer": ("fumble_recovered_player_id",),
+    "fumbler": ("fumble_player_id",),
+    "punter": ("punter_player_id",),
+    "returner": ("punt_return_player_id", "kickoff_return_player_id"),
+    "blocker": ("punt_block_player_id", "fg_block_player_id"),
+    "kicker": ("kickoff_player_id", "fg_kicker_player_id", "xp_kicker_player_id"),
+}
+#: Roles whose processor columns name one athlete each (a list); the others are alternatives (first non-null).
+_PROCESSOR_LIST_ROLES = {"sacked_by"}
+#: ESPN participant roles the player slots read (``espn_nfl_play_participants`` ``{role}_player_ids``).
+_PARTICIPANT_ROLES = (
+    "passer",
+    "rusher",
+    "receiver",
+    "tackler",
+    "assisted_by",
+    "sacked_by",
+    "forced_by",
+    "fumbler",
+    "recoverer",
+    "pass_defender",
+    "kicker",
+    "punter",
+    "returner",
+    "penalized",
+    "blocker",
+    "scorer",
+    "pat_passer",
+    "pat_rusher",
+    "pat_scorer",
+)
+_ROLES = tuple(dict.fromkeys((*_PARTICIPANT_ROLES, *_PROCESSOR_ROLE_IDS)))
+
+
+def _str_id(expr: pl.Expr, dtype: pl.DataType, name: str) -> pl.Expr:
+    """An athlete id as a string; a float id is refused (``"123.0"`` would never match)."""
+    if dtype in (pl.Float32, pl.Float64):
+        raise ValueError(f"espn_nfl_pbp_nflverse: {name} is {dtype}; pass integer or string athlete ids")
+    return expr.cast(pl.Utf8)
+
+
+def _id_list(expr: pl.Expr, dtype: pl.DataType, name: str) -> pl.Expr:
+    """A participants ``{role}_player_ids`` column as a list of id strings, whatever form it comes in."""
+    if isinstance(dtype, pl.List):
+        _str_id(expr, dtype.inner, name)  # refuses a list of floats
+        return expr.cast(pl.List(pl.Utf8))
+    # the release's text: '["4039007","4568624"]' or '3121003'; split on commas, never inside a number
+    text = _str_id(expr, dtype, name).str.replace_all(r'[\[\]"\s]', "")
+    empty = pl.lit([], dtype=pl.List(pl.Utf8))
+    return pl.when(text == "").then(empty).otherwise(text.str.split(","))  # "[]": no athlete
+
+
+def _role_lists(source: pl.DataFrame, key: str, participants: bool) -> pl.DataFrame:
+    """One row per ESPN play: ``_key`` (the ESPN play id) and ``_r_<role>``, the role's ESPN athlete ids in order.
+
+    From an :func:`~sportsdataverse.nfl.espn_nfl_play_participants` frame (``{role}_player_ids``: a list column as
+    the function returns it, or the release's JSON text / single id) or, without one, from the processor's own
+    ``*_player_id`` columns.
+    """
+    lists = {}
+    for r in _ROLES:
+        if participants:
+            many, one = f"{r}_player_ids", f"{r}_player_id"
+            if many in source.columns:
+                lists[r] = _id_list(pl.col(many), source.schema[many], many)
+            elif one in source.columns:
+                lists[r] = pl.concat_list(_str_id(pl.col(one), source.schema[one], one)).list.drop_nulls()
+        else:
+            cols = [c for c in _PROCESSOR_ROLE_IDS.get(r, ()) if c in source.columns]
+            ids = [_str_id(pl.col(c), source.schema[c], c) for c in cols]
+            if ids:
+                lists[r] = pl.concat_list(ids) if r in _PROCESSOR_LIST_ROLES else pl.concat_list(pl.coalesce(ids))
+                lists[r] = lists[r].list.drop_nulls()
+    out = source.select(
+        _int_id(pl.col(key), source.schema[key], key).alias("_key"),
+        *[e.alias(f"_r_{r}") for r, e in lists.items()],
+    )
+    out = out.drop_nulls("_key").unique("_key", keep="first", maintain_order=True)
+    empty = pl.lit([], dtype=pl.List(pl.Utf8))
+    return out.with_columns(empty.alias(f"_r_{r}") for r in _ROLES if f"_r_{r}" not in out.columns)
+
+
+def _players_map(players: pl.DataFrame) -> tuple[dict[str, str], dict[str, str]]:
+    """``espn_id -> gsis_id`` and ``gsis_id -> name`` from the nflverse players table (nflverse's ``J.Allen`` form)."""
+    missing = {"gsis_id", "espn_id"} - set(players.columns)
+    if missing:
+        raise ValueError(f"espn_nfl_pbp_nflverse: players lacks {sorted(missing)}; pass load_nfl_players()")
+
+    def col(c: str) -> pl.Expr:
+        return (pl.col(c) if c in players.columns else pl.lit(None)).cast(pl.Utf8)
+
+    # nflverse's "A.St. Brown" form; a player the table has no short name for gets it from the display name
+    full = col("display_name").str.strip_chars()
+    initial = pl.format("{}.{}", full.str.slice(0, 1), full.str.splitn(" ", 2).struct[1])
+    t = players.select(
+        _str_id(pl.col("espn_id"), players.schema["espn_id"], "players espn_id").alias("e"),
+        pl.col("gsis_id").cast(pl.Utf8).alias("g"),
+        pl.coalesce(col("short_name"), initial).alias("n"),
+    ).drop_nulls(["e", "g"])
+    dupes = t.group_by("e").agg(pl.col("g").n_unique()).filter(pl.col("g") > 1)["e"].sort().to_list()
+    if dupes:
+        raise ValueError(f"espn_nfl_pbp_nflverse: players maps ESPN id(s) {dupes[:5]} to more than one gsis_id")
+    e2g = dict(t.unique("e", keep="first", maintain_order=True).select("e", "g").iter_rows())
+    g2n = dict(t.drop_nulls("n").unique("g", keep="first", maintain_order=True).select("g", "n").iter_rows())
+    return e2g, g2n
+
+
+def _player_slots(view: pl.DataFrame) -> dict[str, pl.Expr]:
+    """nflverse's player slot -> its ESPN athlete id, from the ``_r_<role>`` lists and the play's flags.
+
+    Measured on whole seasons: a tackle with an ESPN ``assisted_by`` is nflverse's ``tackle_with_assist_1`` (the
+    assisters ``assist_tackle_1/2``), else ``solo_tackle_1``; one sacker is ``sack``, two are ``half_sack_1/2``;
+    the interceptor is ESPN's first ``pass_defender`` on an interception; a no-play keeps only the penalized
+    player; a split try reads its touchdown row's PAT kicker / passer / rusher / scorer and the touchdown row
+    loses them.
+    """
+
+    def r(role: str, i: int = 0) -> pl.Expr:
+        return pl.col(f"_r_{role}").list.get(i, null_on_oob=True)
+
+    def n(role: str) -> pl.Expr:
+        return pl.col(f"_r_{role}").list.len().fill_null(0)
+
+    def f(c: str) -> pl.Expr:
+        return (pl.col(c) == 1).fill_null(False)
+
+    pt = pl.col("play_type")
+    pat = pl.col("pat_of_id").is_not_null() if "pat_of_id" in view.columns else pl.lit(False)
+    two = f("two_point_attempt")
+    kick_play = pt.is_in(["kickoff", "field_goal", "extra_point"]).fill_null(False)
+    lone_sack = f("sack") & (n("sacked_by") == 1)
+    tackler_alone = (n("assisted_by") == 0) & (n("tackler") > 0)
+    slots = {
+        "passer": r("passer"),
+        "receiver": r("receiver"),
+        "rusher": r("rusher"),
+        "interception": pl.when(f("interception")).then(pl.coalesce(r("interceptor"), r("pass_defender"))),
+        "punt_returner": pl.when(pt == "punt").then(r("returner")),
+        "kickoff_returner": pl.when(pt == "kickoff").then(r("returner")),
+        "punter": r("punter"),
+        "kicker": pl.when(kick_play).then(r("kicker")),
+        "blocked": r("blocker"),
+        # nflverse credits a lone sacker with the tackle for loss too (its tackled_for_loss flag stays 0)
+        "tackle_for_loss_1": pl.when(f("tackled_for_loss"))
+        .then(pl.coalesce(r("tackler"), r("assisted_by")))
+        .when(lone_sack & (pl.col("yards_gained") < 0).fill_null(False))
+        .then(r("sacked_by")),
+        "forced_fumble_player_1": r("forced_by"),
+        "solo_tackle_1": pl.when(tackler_alone)
+        .then(r("tackler"))
+        .when(lone_sack & (n("tackler") == 0))
+        .then(r("sacked_by")),
+        "tackle_with_assist_1": pl.when(n("assisted_by") > 0).then(r("tackler")),
+        "assist_tackle_1": pl.coalesce(r("assisted_by"), pl.when(n("sacked_by") == 2).then(r("sacked_by"))),
+        "assist_tackle_2": pl.coalesce(r("assisted_by", 1), pl.when(n("sacked_by") == 2).then(r("sacked_by", 1))),
+        "pass_defense_1": r("pass_defender"),
+        "fumbled_1": r("fumbler"),
+        "fumble_recovery_1": r("recoverer"),
+        "sack": pl.when(lone_sack).then(r("sacked_by")),
+        "half_sack_1": pl.when(f("sack") & (n("sacked_by") == 2)).then(r("sacked_by")),
+        "half_sack_2": pl.when(f("sack") & (n("sacked_by") == 2)).then(r("sacked_by", 1)),
+        "penalty": r("penalized"),
+        "td": pl.when(f("touchdown")).then(r("scorer")),
+    }
+    # a split try: its touchdown row's PAT participants, nothing else
+    on_pat = {
+        "passer": r("pat_passer"),
+        "rusher": r("pat_rusher"),
+        "receiver": pl.when(pt == "pass").then(r("pat_scorer")),
+        "kicker": pl.when(~two).then(r("kicker")),
+    }
+    no_play = (pt == "no_play").fill_null(False)
+    out = {}
+    for s, e in slots.items():
+        e = pl.when(pat).then(on_pat.get(s, pl.lit(None, dtype=pl.Utf8))).otherwise(e)
+        out[s] = e if s == "penalty" else pl.when(no_play).then(None).otherwise(e)
+    return out
+
+
+def _add_players(view: pl.DataFrame, roles: pl.DataFrame, players: pl.DataFrame) -> pl.DataFrame:
+    """nflverse's GSIS player ids and names (``<slot>_player_id`` / ``_player_name``) from ESPN athlete ids.
+
+    ESPN ids go to GSIS through the nflverse players table's ``espn_id`` (never by name); an athlete the table
+    does not carry stays null. A split try is keyed on its touchdown row (``pat_of_id``), which holds its PAT
+    participants.
+    """
+    e2g, g2n = _players_map(players)
+    key = pl.coalesce("pat_of_id", "espn_play_id") if "pat_of_id" in view.columns else pl.col("espn_play_id")
+    v = view.with_columns(key.alias("_key"))
+    assert v.schema["_key"] == roles.schema["_key"] == pl.Int64
+    v = v.join(roles, on="_key", how="left")
+    slots = _player_slots(v)
+    gsis = {s: e.replace_strict(e2g, default=None, return_dtype=pl.Utf8) for s, e in slots.items()}
+    named = []
+    for s, g in gsis.items():
+        named += [
+            g.alias(f"{s}_player_id"),
+            g.replace_strict(g2n, default=None, return_dtype=pl.Utf8).alias(f"{s}_player_name"),
+        ]
+    v = v.with_columns(named).drop("_key", *[c for c in roles.columns if c != "_key"])
+    # the defenders' side: the punting team on a punt, the passing team on an interception, else the defense
+    swap = (pl.col("play_type") == "punt") | (pl.col("interception") == 1)
+    defense = pl.when(swap.fill_null(False)).then(pl.col("posteam")).otherwise(pl.col("defteam"))
+    carrier = pl.when(swap.fill_null(False)).then(pl.col("defteam")).otherwise(pl.col("posteam"))
+    lost = (pl.col("fumble_lost") == 1).fill_null(False)
+    teams = {
+        "solo_tackle_1": defense,
+        "tackle_with_assist_1": defense,
+        "assist_tackle_1": defense,
+        "assist_tackle_2": defense,
+        "forced_fumble_player_1": defense,
+        "fumbled_1": carrier,
+        "fumble_recovery_1": pl.when(lost).then(defense).otherwise(carrier),
+    }
+    return v.with_columns(
+        pl.when(pl.col(f"{s}_player_id").is_not_null()).then(t).alias(f"{s}_team") for s, t in teams.items()
+    )
+
+
 def espn_nfl_pbp_nflverse(
     plays: pl.DataFrame,
     schedule: Optional[pl.DataFrame] = None,
     *,
     split_pats: bool = True,
+    participants: Optional[pl.DataFrame] = None,
+    players: Optional[pl.DataFrame] = None,
+    enrich: bool = False,
 ) -> pl.DataFrame:
     """ESPN NFL play-by-play in nflverse ``play_by_play`` names, conventions and dtypes.
 
     Turns :class:`~sportsdataverse.nfl.NFLPlayProcess` output (``plays_frame``, one game or many, or the
-    published ``espn_nfl_pbp`` release) into nflverse's base play-by-play: the keys, teams, field position,
-    clock, down and distance, scores, timeouts, play types, the 0/1 play flags, yardage and drive detail,
-    and, with ``schedule``, nflverse's game columns (nflfastR's ``add_game_data``). It is additive: the
-    cfbfastR-shape ESPN frame is not changed, and nothing is fetched.
+    published ``espn_nfl_pbp`` release) into nflverse's play-by-play: the keys, teams, field position,
+    clock, down and distance, scores, timeouts, play types, the 0/1 play flags, yardage, nflfastR's
+    description columns (``run_gap``, ``shotgun``, ``out_of_bounds``, ``penalty_type``, ...), drive and series
+    detail, with ``schedule`` nflverse's game columns (nflfastR's ``add_game_data``), with ``players`` the
+    GSIS player ids and names, and with ``enrich`` nflfastR's model columns
+    (:func:`~sportsdataverse.nfl.ep_wp.enrich_nfl_pbp`: EP / EPA / WP / WPA, try values, the air / YAC
+    splits). It is additive: the cfbfastR-shape ESPN frame is not changed. Nothing is fetched unless
+    ``enrich`` needs the xYAC model, which is not bundled (it is downloaded and cached on first use; without
+    ESPN air yards its step is skipped).
 
     Conventions follow nflverse, not ESPN: ``game_id`` is nflverse's ``YYYY_WW_AWAY_HOME`` and ``play_id`` the
     GSIS play id ESPN embeds in its play ``id`` (2006 on), so the frame joins nflverse ``play_by_play`` on
@@ -564,23 +948,42 @@ def espn_nfl_pbp_nflverse(
     there; the timeouts are the processor's own count; a split PAT row's ``play_id`` is the touchdown's
     plus one (ESPN gives the try no id), so it does not join nflverse's PAT row.
 
+    Players: each ESPN participant role goes to nflverse's slot by rules measured on whole seasons (a tackle
+    with an ESPN assist is ``tackle_with_assist_1``, two sackers are ``half_sack_1/2``, the interceptor is the
+    first pass defender on an interception, a no-play keeps only the penalized player, a split try takes its
+    touchdown row's PAT kicker / passer / rusher / scorer), and ESPN athlete ids go to GSIS through the players
+    table's ``espn_id``, never by name. ``fixed_drive`` is ESPN's own drive number (nflfastR's ``new_drive``
+    cascade on this frame agrees less often) and ``fixed_drive_result`` / ``series`` are nflfastR's result
+    cascades on it. ``air_yards`` / ``yards_after_catch`` are ESPN's, which are empty, so ``cp`` / ``cpoe`` /
+    xYAC / the air-yards splits stay null; ``qb_hit`` and jersey numbers are not built.
+
     Args:
         plays: ``NFLPlayProcess(...).plays_frame`` or the ``espn_nfl_pbp`` release (one or many games).
         schedule: The nflverse schedule (:func:`~sportsdataverse.nfl.load_nfl_schedule`). Adds the game
-            columns, and supplies ``nflverse_game_id`` (from its ``espn`` id) when ``plays`` has none.
+            columns, and supplies ``nflverse_game_id`` (from its ``espn`` id) when ``plays`` has none
+            (``NFLPlayProcess`` stamps it from ESPN's header since this release).
         split_pats: Give each folded PAT / two-point try its own row, as nflverse does (default ``True``).
+        participants: :func:`~sportsdataverse.nfl.espn_nfl_play_participants` output (one or many games, or
+            the ``espn_nfl_play_participants`` release), keyed on the ESPN play id. Its roles win; without it
+            (or for a role it leaves empty) the processor's own athlete ids are read. Used only with ``players``.
+        players: The nflverse players table (:func:`~sportsdataverse.nfl.load_nfl_players`; ``gsis_id``,
+            ``espn_id`` and ``short_name``). Adds the ``<slot>_player_id`` / ``_player_name`` columns and the
+            tackler / fumble teams.
+        enrich: Run :func:`~sportsdataverse.nfl.ep_wp.enrich_nfl_pbp` (without the fourth-down surface,
+            which nflverse's play-by-play does not carry) on the view (default ``False``).
 
     Returns:
         pl.DataFrame: One row per ESPN play (plus one per split try) in nflverse's column names, flags as
-        ``Int64`` 0/1, measures as ``Float64``, plus ``espn_game_id`` / ``espn_play_id`` to join back to
-        ESPN (participants are keyed on the ESPN play id). The schedule columns are present only when
-        ``schedule`` is given.
+        ``Int64`` 0/1, measures as ``Float64``, ids and names as strings, plus ``espn_game_id`` /
+        ``espn_play_id`` to join back to ESPN. The schedule columns are present only with ``schedule``, the
+        player columns only with ``players``, the model columns only with ``enrich``.
 
     Raises:
         ValueError: If ``plays`` lacks the processor's columns, or carries no ``nflverse_game_id`` and no
             ``schedule`` (with ``game_id`` and ``espn``) is given or the schedule lacks one of its games, or
-            an id column is a float, or a split try's synthetic id is already a play's
-            (:func:`~sportsdataverse.nfl.split_pat_rows`).
+            an id column is a float (a play / game id, or an athlete id in ``plays``, ``participants`` or
+            ``players``), or ``players`` lacks ``gsis_id`` / ``espn_id``, or a split try's synthetic id is
+            already a play's (:func:`~sportsdataverse.nfl.split_pat_rows`).
 
     Example:
         Process a game (fetched from ESPN) and read it as nflverse play-by-play::
@@ -591,12 +994,23 @@ def espn_nfl_pbp_nflverse(
             proc.run_processing_pipeline()
             pbp = espn_nfl_pbp_nflverse(proc.plays_frame, load_nfl_schedule([2024]))
 
-        See Also:
-            * :func:`~sportsdataverse.nfl.split_pat_rows` -- the PAT split on the ESPN frame itself
-            * :func:`~sportsdataverse.nfl.load_nfl_pbp` -- nflverse's own play-by-play, the oracle
-            * `nflfastR`_ -- the R package whose play-by-play conventions this follows
+        With GSIS player ids from ESPN's participants, and the model columns::
 
-        .. _nflfastR: https://www.nflfastr.com
+            from sportsdataverse.nfl import espn_nfl_play_participants, load_nfl_players
+            pbp = espn_nfl_pbp_nflverse(
+                proc.plays_frame,
+                participants=espn_nfl_play_participants(401671740),
+                players=load_nfl_players(),
+                enrich=True,
+            )
+
+    See Also:
+        * :func:`~sportsdataverse.nfl.split_pat_rows` -- the PAT split on the ESPN frame itself
+        * :func:`~sportsdataverse.nfl.load_nfl_pbp` -- nflverse's own play-by-play, the oracle
+        * :func:`~sportsdataverse.nfl.espn_nfl_play_participants` -- the ESPN roles the player slots read
+        * `nflfastR`_ -- the R package whose play-by-play conventions this follows
+
+    .. _nflfastR: https://www.nflfastr.com
     """
     missing = [c for c in _REQUIRED if c not in plays.columns]
     if missing:
@@ -615,10 +1029,37 @@ def espn_nfl_pbp_nflverse(
         *_flags(df),
         # an older feed can lack a column (2007 has no extra_point_result): null, so the schema is fixed
         *[(pl.col(e) if e in df.columns else pl.lit(None)).cast(t).alias(nv) for nv, (e, t) in _RENAMES.items()],
+        *_carried(df),
     ]
     df = df.with_columns(mid)
     last = _yards_and_types(df)
     names = [e.meta.output_name() for e in (*keys, *mid, *last)]
     view = df.with_columns(last).select([*names, *(["pat_of_id"] if "pat_of_id" in df.columns else [])])
     view = _timeout_rows(_pat_scores(view) if "pat_of_id" in view.columns else view)
-    return view if schedule is None else _add_schedule(view, schedule)
+    if players is not None:
+        own = df.filter(pl.col("pat_of_id").is_null()) if "pat_of_id" in df.columns else df
+        roles = _role_lists(own, "id", participants=False)
+        if participants is not None:
+            # ESPN's participants win; the processor's own id fills a role they leave empty (2024 kick returners)
+            feed = _role_lists(participants, "play_id", participants=True)
+            assert roles.schema["_key"] == feed.schema["_key"] == pl.Int64
+            roles = roles.join(feed, on="_key", how="full", coalesce=True, suffix="_feed").select(
+                "_key",
+                *[
+                    pl.when(pl.col(f"_r_{r}_feed").list.len().fill_null(0) > 0)
+                    .then(pl.col(f"_r_{r}_feed"))
+                    .otherwise(pl.col(f"_r_{r}"))
+                    .alias(f"_r_{r}")
+                    for r in _ROLES
+                ],
+            )
+        view = _add_players(view, roles, players)
+    view = _drive_detail(_text_features(view.drop("pat_of_id", strict=False)))
+    view = view.drop([c for c in view.columns if c.startswith("_c_")])
+    if schedule is not None:
+        view = _add_schedule(view, schedule)
+    if enrich:
+        from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
+
+        view = enrich_nfl_pbp(view, add_fourth_down=False)  # nflverse play_by_play has no 4th-down columns
+    return view

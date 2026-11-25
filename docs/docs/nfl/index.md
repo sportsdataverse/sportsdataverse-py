@@ -94,11 +94,11 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 - [`build_nfl_team_stats`](reference/additional/play-by-play-processing-2#build_nfl_team_stats)
 - [`calculate_nfl_series_conversion_rates`](reference/additional/play-by-play-processing-2#calculate_nfl_series_conversion_rates)
 - [`clean_nfl_pbp`](reference/additional/play-by-play-processing-3#clean_nfl_pbp)
-- [`espn_nfl_pbp_nflverse`](reference/additional/play-by-play-processing-3#espn_nfl_pbp_nflverse)
-- [`shield_nfl_pbp`](reference/additional/play-by-play-processing-4#shield_nfl_pbp)
-- [`shield_to_espn_summary`](reference/additional/play-by-play-processing-4#shield_to_espn_summary)
-- [`split_pat_rows`](reference/additional/play-by-play-processing-5#split_pat_rows)
-- [`team_name_fn`](reference/additional/play-by-play-processing-5#team_name_fn)
+- [`espn_nfl_pbp_nflverse`](reference/additional/play-by-play-processing-4#espn_nfl_pbp_nflverse)
+- [`shield_nfl_pbp`](reference/additional/play-by-play-processing-5#shield_nfl_pbp)
+- [`shield_to_espn_summary`](reference/additional/play-by-play-processing-5#shield_to_espn_summary)
+- [`split_pat_rows`](reference/additional/play-by-play-processing-6#split_pat_rows)
+- [`team_name_fn`](reference/additional/play-by-play-processing-6#team_name_fn)
 
 ### Models and calculators {#models-and-calculators}
 
