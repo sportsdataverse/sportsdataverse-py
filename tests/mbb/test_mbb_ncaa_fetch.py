@@ -441,7 +441,7 @@ def test_akamai_denial_rotates_but_does_not_retire_the_proxy(tmp_path: Path, mon
     fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
 
     assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
-    assert calls == [_POOL[0], _POOL[1]]  # rotated off the denied session
+    assert calls[0] == _POOL[0] and calls[1] in _POOL[1:]  # rotated off the denied session (a random jump)
     assert page.gotos == 1  # one solve on the denied session, not solve_attempts
     assert fetcher._dead == set()  # ...without retiring the proxy
 
@@ -486,6 +486,38 @@ def test_unsolvable_proxy_is_rotated_away_from_not_returned(tmp_path: Path) -> N
     assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
     assert calls == [_POOL[0], _POOL[1]]  # rotated off the unsolvable proxy
     assert fetcher._dead == set()  # unsolved != banned -- the IP is not retired
+
+
+def test_session_denial_jumps_a_random_distance_other_errors_step_one(tmp_path: Path) -> None:
+    """A session denial moves a random distance round the pool, so shards that bunch on a sticky-IP ring split
+    up instead of following each other onto the IP that was just denied. Any other transport error still
+    steps +1."""
+    import random
+
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _SessionDeniedError
+
+    pool = [f"http://u:p@10.0.1.{i}:1" for i in range(50)]
+    errors = [
+        _SessionDeniedError("Akamai denied this browser session (HTTP 403 Access Denied): u"),
+        RuntimeError("net::ERR_TUNNEL_CONNECTION_FAILED"),
+    ]
+    calls: "list[str]" = []
+
+    def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
+        calls.append(proxies["http"])
+        if errors:
+            raise errors.pop(0)
+        return (200, _CLEAN)
+
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=pool)
+    fetcher._rng.seed(7)
+    step = random.Random(7).randrange(1, len(pool))
+
+    assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
+    assert step > 1  # the seed gives a real jump, so +1 cannot pass by accident
+    assert calls == [pool[0], pool[step], pool[step + 1]]  # denial: jump; tunnel error: +1
+    assert fetcher._dead == set()  # a denial still does not retire the proxy
 
 
 class _DroppingPage(_FakePage):

@@ -105,6 +105,7 @@ import json
 import logging
 import math
 import os
+import random
 import re
 import shutil
 import time
@@ -1137,6 +1138,8 @@ class NcaaFetcher:
         else:
             self._pool = []
         self._proxy_idx = 0
+        # Step size after an Akamai session denial (see _rotate). Its own instance so tests can seed it.
+        self._rng = random.Random()
         # Successful fetches on the CURRENT proxy (drives config.rotate_every).
         self._since_rotate = 0
         # Proxies that returned a ban this session. stats.ncaa.org's per-IP bans
@@ -1244,7 +1247,10 @@ class NcaaFetcher:
                     accept_failures += 1
                     if accept_failures >= _ACCEPT_FAILURES_MAX:
                         raise _TermsGateError(f"{exc} (on {accept_failures} proxies)") from exc
-                self._rotate("transport error")
+                if isinstance(exc, _SessionDeniedError):
+                    self._rotate("session denied", jump=True)
+                else:
+                    self._rotate("transport error")
                 continue
             if _is_terms_gate(text):
                 # Only a browser transport can try the Terms gate (_raw_fetch).
@@ -1301,9 +1307,18 @@ class NcaaFetcher:
             # for a ban means the ban already happened -- and it's permanent.
             self._rotate(f"{self._since_rotate} fetches on this proxy")
 
-    def _rotate(self, why: str) -> None:
-        """Advance to the next proxy and reset the per-proxy fetch counter."""
-        self._proxy_idx += 1
+    def _rotate(self, why: str, *, jump: bool = False) -> None:
+        """Advance to the next proxy and reset the per-proxy fetch counter.
+
+        ``jump=True`` (an Akamai session denial) moves a random distance round the pool instead of one step.
+        A sticky residential port keeps its exit IP for minutes, and sharded runs give every shard the same
+        ring at an offset. Shards that keep getting denied step +1 while healthy ones stand still, so they
+        catch each other up and then move together. Each follower then lands on the IP the leader was just
+        denied on. Baseball 2013 on 2026-11-24 (8 shards, 50 ports) went from 0.7 to 14 denials per saved
+        contest that way. A random step breaks the bunch.
+        """
+        n = len(self._pool)
+        self._proxy_idx += self._rng.randrange(1, n) if jump and n > 2 else 1
         self._since_rotate = 0
         logger.debug("rotating proxy: %s", why)
 
