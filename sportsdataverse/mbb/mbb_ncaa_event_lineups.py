@@ -56,9 +56,10 @@ class _TeamWalk:
         )
 
     def actor(self, r: dict[str, Any]) -> str | None:
+        """The team's player on a non-sub row; None for a sub, a team row or a placeholder (UNKNOWN.TEAM)."""
         if r["event_team"] != self.team or r["event_type"] in _SUB_TYPES or r["player_1"] in (None, "TEAM"):
             return None
-        return r["player_1"]
+        return None if self.skip_sub(r) else r["player_1"]
 
     def _same_second_order(self) -> list[int]:
         """Row indices in walk order: a player's own sub moves past his own acts in that clock reading."""
@@ -170,14 +171,18 @@ class _TeamWalk:
         for j, r in enumerate(self.prs):
             sec = r["game_seconds"]
             after, use = self.fives[final[sec]], self.fives[self.pos[j]]
-            if r["event_type"] in _SUB_TYPES or (last_j[sec] == j and r["event_type"] != "Free Throw"):
+            a = self.actor(r)
+            if r["event_type"] in _SUB_TYPES or (
+                last_j[sec] == j and r["event_type"] != "Free Throw" and (a is None or a in after)
+            ):
                 use = after
-            elif len(use) != 5:
-                a = self.actor(r)
+            elif len(use) != 5 or (last_j[sec] == j and a not in use):
                 if a is None or a in after:
                     use = after
                 elif a in self.before[sec]:
                     use = self.before[sec]
+            if len(use) > 5:  # keep the actor, then the reading's balanced five, then by name
+                use = sorted(use, key=lambda x: (x != a, x not in after, x))[:5]
             five: list[str | None] = list(sorted(use)[:5])
             out.append(five + [None] * (5 - len(five)))
         return out
@@ -211,7 +216,8 @@ def _event_walk(
         prs: The period's rows, in the parser's arranged order.
         team: The team whose lineup to walk.
         starters: Its five at the period's start (:func:`~sportsdataverse.mbb.mbb_ncaa_game_pbp._infer_starters`).
-        skip_sub: True on a sub row to ignore (a placeholder such as ``UNKNOWN.TEAM``).
+        skip_sub: True on a row whose player is a placeholder such as ``UNKNOWN.TEAM``: never a sub
+            and never an actor, so no placeholder enters a five.
 
     Returns:
         One five per row of ``prs``, in ``prs`` order, padded with None (at most five names).

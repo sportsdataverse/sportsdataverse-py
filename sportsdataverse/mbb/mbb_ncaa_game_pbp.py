@@ -1043,8 +1043,10 @@ def parse_ncaa_bb_game_pbp(
 
         if event_lineups:
             skip = lambda r: placeholder(r["player_1"])  # noqa: E731
-            home_fives = _event_walk(prs, home_team, _real(home_starters), skip)
-            away_fives = _event_walk(prs, away_team, _real(away_starters), skip)
+            home_real = [x for x in _real(home_starters) if not placeholder(x)]
+            away_real = [x for x in _real(away_starters) if not placeholder(x)]
+            home_fives = _event_walk(prs, home_team, home_real, skip)
+            away_fives = _event_walk(prs, away_team, away_real, skip)
             for r, h, a in zip(prs, home_fives, away_fives, strict=True):
                 r["home_lineup"], r["away_lineup"] = h, a
             # the next period's starter inference falls back to this period's last five

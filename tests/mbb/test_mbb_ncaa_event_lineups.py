@@ -120,7 +120,12 @@ def test_a_placeholder_sub_no_longer_drops_the_games_lineups() -> None:
     old, new = _parse("6424024", event_lineups=False), _parse("6424024")
     assert old["status"][0] == "NO_PLAYER" and old["home_1"].null_count() == old.height
     assert new["home_1"].null_count() == 0 and new["away_1"].null_count() == 0
-    assert _actors_off(new) == 0
+    # an UNKNOWN.TEAM shot is no one's: the placeholder is never a sub, an actor or a starter
+    assert new.filter(pl.col("player_1") == "UNKNOWN.TEAM").height > 0
+    slots = [f"{s}_{i}" for s in ("home", "away") for i in range(1, 6)]
+    assert not new.select(pl.any_horizontal(pl.col(slots).str.contains("UNKNOWN")).fill_null(False).any()).item()
+    named = new.filter(pl.col("player_1") != "UNKNOWN.TEAM")
+    assert _actors_off(named) == 0
 
 
 @pytest.mark.parametrize("game", list(GAMES))
