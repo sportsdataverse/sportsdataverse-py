@@ -551,7 +551,7 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `pen_weight` | Float64 | Weighting applied to the penalty component of the play. |
 | `action_play` | Boolean | True when the play advanced the game state -- excludes timeouts, end-of-period markers and other non-action rows. |
 | `athlete_name` | String | The play's passer, else its rusher (passer_player_name, then rusher_player_name); null when neither. |
-| `sack_player_id2` | String | ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot). |
+| `sack_player_id2` | Int64 | ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot). |
 | `passer_player_id` | Int64 | Unique identifier for the player that attempted the pass. |
 | `rusher_player_id` | Int64 | Unique identifier for the player that attempted the run. |
 | `receiver_player_id` | Int64 | Unique identifier for the receiver that was targeted on the pass. |
@@ -560,16 +560,16 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `sack_player_id` | Int64 | Unique identifier of the player who recorded a solo sack. |
 | `punt_return_player_id` | Int64 | ESPN athlete id of the punt returner. |
 | `kickoff_return_player_id` | Int64 | ESPN athlete id of the kickoff returner. |
-| `interception_player_id` | String | Unique identifier for the player that intercepted the pass. |
+| `interception_player_id` | Int64 | Unique identifier for the player that intercepted the pass. |
 | `pass_breakup_player_id` | Int64 | ESPN athlete id of the defender credited with defending the pass (the play's participants, else matched by name in the game's box score). |
-| `fumble_forced_player_id` | String | ESPN athlete id of the player who forced the fumble (the play's participants, else matched by name in the game's box score). |
-| `fumble_recovered_player_id` | String | ESPN athlete id of the player who recovered the fumble (the play's participants, else matched by name in the game's box score). |
-| `fumble_player_id` | String | ESPN athlete id of the player who fumbled, matched by name and team in the game's box score. |
-| `punt_block_player_id` | String | ESPN athlete id of the player who blocked the punt. |
-| `punt_block_return_player_id` | String | ESPN athlete id of the player who returned the blocked punt. |
+| `fumble_forced_player_id` | Int64 | ESPN athlete id of the player who forced the fumble (the play's participants, else matched by name in the game's box score). |
+| `fumble_recovered_player_id` | Int64 | ESPN athlete id of the player who recovered the fumble (the play's participants, else matched by name in the game's box score). |
+| `fumble_player_id` | Int64 | ESPN athlete id of the player who fumbled, matched by name and team in the game's box score. |
+| `punt_block_player_id` | Int64 | ESPN athlete id of the player who blocked the punt. |
+| `punt_block_return_player_id` | Int64 | ESPN athlete id of the player who returned the blocked punt. |
 | `kickoff_player_id` | Int64 | ESPN athlete id of the player kicking off. |
-| `fg_block_player_id` | String | ESPN athlete id of the player who blocked the field goal. |
-| `fg_return_player_id` | String | ESPN athlete id of the player who returned the blocked or missed field goal. |
+| `fg_block_player_id` | Int64 | ESPN athlete id of the player who blocked the field goal. |
+| `fg_return_player_id` | Int64 | ESPN athlete id of the player who returned the blocked or missed field goal. |
 | `xp_kicker_player_id` | Int64 | ESPN athlete id of the extra-point kicker, matched by name and team in the game's box score. |
 | `pat_of_id` | Int64 | On a split PAT / two-point try row, the id of the touchdown it was folded into (the row's own id is that id + 1); null on every other row. |
 

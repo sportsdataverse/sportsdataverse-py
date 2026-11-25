@@ -1526,62 +1526,68 @@ columns:
   type: character
   description: ''
 - name: sack_player_id2
-  type: character
+  type: integer
   description: ''
 - name: passer_player_id
-  type: character
+  type: integer
   description: ''
 - name: rusher_player_id
-  type: character
+  type: integer
   description: ''
 - name: receiver_player_id
-  type: character
+  type: integer
   description: ''
 - name: punter_player_id
-  type: character
+  type: integer
   description: ''
 - name: fg_kicker_player_id
-  type: character
+  type: integer
   description: ''
 - name: sack_player_id
-  type: character
+  type: integer
   description: ''
 - name: punt_return_player_id
-  type: character
+  type: integer
   description: ''
 - name: kickoff_return_player_id
-  type: character
+  type: integer
   description: ''
 - name: interception_player_id
-  type: character
+  type: integer
   description: ''
 - name: pass_breakup_player_id
-  type: character
+  type: integer
   description: ''
 - name: fumble_forced_player_id
-  type: character
+  type: integer
   description: ''
 - name: fumble_recovered_player_id
-  type: character
+  type: integer
   description: ''
 - name: fumble_player_id
-  type: character
+  type: integer
   description: ''
 - name: punt_block_player_id
-  type: character
+  type: integer
   description: ''
 - name: punt_block_return_player_id
-  type: character
+  type: integer
   description: ''
 - name: kickoff_player_id
-  type: character
+  type: integer
   description: ''
 - name: fg_block_player_id
-  type: character
+  type: integer
   description: ''
 - name: fg_return_player_id
-  type: character
+  type: integer
   description: ''
 - name: xp_kicker_player_id
+  type: integer
+  description: ''
+- name: aborted_play
+  type: integer
+  description: ''
+- name: play_type_nfl
   type: character
   description: ''
