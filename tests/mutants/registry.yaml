@@ -12135,6 +12135,37 @@
   expected: kill
   note: A split try's timeouts read from the wrong side, e.g. the old offense's after a defensive touchdown.
 
+# --- nhl-box-source-agreement: the NHL api-web and ESPN boxscores agree per skater ----------------
+- id: nhl-box-agreement-unspaced-initial
+  group: nhl-box-agreement
+  finding: nhl-box-source-agreement
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '                    row["name"] = {lang: _space_initial(n) for lang, n in row["name"].items()}'
+  mutant: '                    pass'
+  test: tests/nhl/test_nhl_box_source_agreement.py::test_unspaced_initial_names_are_rewritten
+  expected: kill
+  note: An NHL api-web name with no space after the initial ("J.Kulich") would pass through unspaced.
+
+- id: nhl-box-agreement-home-away-tag
+  group: nhl-box-agreement
+  finding: nhl-box-source-agreement
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '        ha = "away" if side == "awayTeam" else "home"'
+  mutant: '        ha = "home" if side == "awayTeam" else "away"'
+  test: tests/nhl/test_nhl_box_source_agreement.py::test_every_skater_joins_one_to_one_across_sources
+  expected: kill
+  note: Every NHL api-web boxscore row would carry the other team's side, so no skater joins its ESPN line.
+
+- id: nhl-box-agreement-espn-stat-keys
+  group: nhl-box-agreement
+  finding: nhl-box-source-agreement
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '                for k, v in zip(keys, stats):'
+  mutant: '                for k, v in zip(keys, stats[1:] + stats[:1]):'
+  test: tests/nhl/test_nhl_box_source_agreement.py::test_goals_assists_shots_and_plus_minus_agree_on_every_skater
+  expected: kill
+  note: ESPN boxscore stats zipped one key off would put assists under goals and so on.
+
 # --- wnba-props-minutes-coldstart: team minutes invariant + expansion-team cold start ------------
 - id: props-minutes-share-normalised
   group: props-minutes-coldstart
