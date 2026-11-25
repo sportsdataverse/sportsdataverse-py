@@ -448,7 +448,7 @@ def mlb_base_out_transitions(pbp: pl.DataFrame, *, by_event: bool = False) -> pl
         | to_outs | Int64 | Outs before the next PA; 3 = the half-inning ended |
         | runs | Int64 | Runs scored on the transition |
         | n | Int64 | Plate appearances observed with this transition |
-        | prob | Float64 | ``n`` over all departures from the from-state |
+        | prob | Float64 | ``n`` over all departures from the from-state (from that (state, event) cell with ``by_event``) |
 
         With ``by_event=True`` an ``event`` (Utf8) column follows ``from_outs``.
 

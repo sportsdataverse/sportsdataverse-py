@@ -355,7 +355,7 @@ applied. Each row carries `n` so a caller can judge the support.
 
 **Returns**
 
-one row per observed `(from, to, runs)` triple. | Column | Type | Description | |---|---|---| | from_base_state | Utf8 | Base occupancy before the PA (`"1_3"` etc.) | | from_outs | Int64 | Outs before the PA (0-2) | | to_base_state | Utf8 | Base occupancy before the next PA (`"___"` for the 3-out state) | | to_outs | Int64 | Outs before the next PA; 3 = the half-inning ended | | runs | Int64 | Runs scored on the transition | | n | Int64 | Plate appearances observed with this transition | | prob | Float64 | `n` over all departures from the from-state | With `by_event=True` an `event` (Utf8) column follows `from_outs`.
+one row per observed `(from, to, runs)` triple. | Column | Type | Description | |---|---|---| | from_base_state | Utf8 | Base occupancy before the PA (`"1_3"` etc.) | | from_outs | Int64 | Outs before the PA (0-2) | | to_base_state | Utf8 | Base occupancy before the next PA (`"___"` for the 3-out state) | | to_outs | Int64 | Outs before the next PA; 3 = the half-inning ended | | runs | Int64 | Runs scored on the transition | | n | Int64 | Plate appearances observed with this transition | | prob | Float64 | `n` over all departures from the from-state (from that (state, event) cell with `by_event`) | With `by_event=True` an `event` (Utf8) column follows `from_outs`.
 
 | col_name | type | description |
 |---|---|---|
@@ -364,8 +364,8 @@ one row per observed `(from, to, runs)` triple. | Column | Type | Description | 
 | `to_base_state` | String | Base occupancy before the next plate appearance of the half-inning; "___" for the 3-out state. |
 | `to_outs` | Int64 | Outs before the next plate appearance; 3 means the half-inning ended on this plate appearance. |
 | `runs` | Int64 | Runs scored on the transition (the plate appearance's runs_on_play). |
-| `n` | Int64 | Number of plate appearances observed with this (from, to, runs) transition. |
-| `prob` | Float64 | Share of the from-state's departures that took this transition (n over the from-state's total n). |
+| `n` | Int64 | Number of plate appearances observed with this (from, to, runs) transition; with by_event=True, those of that event only. |
+| `prob` | Float64 | Share of the from-state's departures that took this transition (n over the from-state's total n); with by_event=True, the share of that (from-state, event) cell's departures. |
 
 **Raises**
 

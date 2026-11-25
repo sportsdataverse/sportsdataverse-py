@@ -49796,8 +49796,9 @@ mjhl_standings:
 mlb_base_out_transitions:
   from_base_state: 3-char base occupancy before the plate appearance ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3".
   from_outs: Outs before the plate appearance (0-2).
-  n: Number of plate appearances observed with this (from, to, runs) transition.
-  prob: Share of the from-state's departures that took this transition (n over the from-state's total n).
+  n: Number of plate appearances observed with this (from, to, runs) transition; with by_event=True, those of that event only.
+  prob: Share of the from-state's departures that took this transition (n over the from-state's total n); with by_event=True,
+    the share of that (from-state, event) cell's departures.
   runs: Runs scored on the transition (the plate appearance's runs_on_play).
   to_base_state: Base occupancy before the next plate appearance of the half-inning; "___" for the 3-out state.
   to_outs: Outs before the next plate appearance; 3 means the half-inning ended on this plate appearance.
