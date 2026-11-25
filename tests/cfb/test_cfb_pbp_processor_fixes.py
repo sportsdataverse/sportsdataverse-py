@@ -1008,3 +1008,12 @@ def test_a_returned_fumble_ends_where_the_recoverer_snaps_next():
     assert row["end.pos_team.id"] == 2 and row["start.pos_team.id"] == 344
     assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (1, 1, 1)
     assert row["EPA"] < -6.5
+
+
+def test_a_plain_fumble_return_ends_at_the_recoverers_snap():
+    # Old Dominion 2025: a fumble returned 11 yards to the ODU22, stored at the 37; Georgia Southern's
+    # next snap is 1st & 10 at the 22 (EPA -2.36 -> -4.52). Nothing else in the capture moves.
+    plays = _trimmed_plays(401761657)
+    row = _row(plays, "return 11 yards to the ODU22")
+    assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (1, 10, 22)
+    assert row["EPA"] == pytest.approx(-4.519, abs=1e-3)
