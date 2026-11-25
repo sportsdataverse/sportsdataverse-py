@@ -603,6 +603,10 @@ print(max(counts.values()))  # 10 at the opening tip
 
 Expected possessions for a matchup (Phase-3 `expected_possessions`).
 
+A team with no row in `ratings` (no game before the cut yet: opening night,
+or an expansion team's first game) or with a null or non-finite `adj_pace`
+is given the league's `avg_pace`, so the projection stays finite.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
