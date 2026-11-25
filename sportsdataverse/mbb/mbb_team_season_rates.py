@@ -328,5 +328,5 @@ def mbb_team_game_four_factors(
     _check_league(league)
     load_possessions, load_team_box, load_schedule = _league_loaders(league)
     rows = ncaa_possession_rate_rows(load_possessions(seasons), load_schedule(seasons), league=league)
-    out = team_game_four_factors(rows, counts=ncaa_team_box_count_rows(load_team_box(seasons)))
+    out = team_game_four_factors(rows, counts=ncaa_team_box_count_rows(load_team_box(seasons)), league=league)
     return out.to_pandas() if return_as_pandas else out

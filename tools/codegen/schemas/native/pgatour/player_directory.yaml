@@ -1,0 +1,39 @@
+schema: pgatour_player_directory
+kind: dataframe
+columns:
+- name: tour_code
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: is_active
+  type: logical
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: short_name
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: country
+  type: character
+  description: ''
+- name: country_code
+  type: character
+  description: ''
+- name: age
+  type: character
+  description: ''
+- name: education
+  type: character
+  description: ''
+- name: turned_pro
+  type: character
+  description: ''

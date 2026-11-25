@@ -127,6 +127,20 @@ class LeagueConstants:
         in_game_wp_artifact: filename of the bundled in-game win-probability model
             under ``sportsdataverse/nhl/models/``.
         min_season: earliest season this league's prediction spine supports.
+        reg_draw_inflation: multiplier minus one on every tied cell of the regulation score grid
+            (:func:`~sportsdataverse.nhl.nhl_market.regulation_goal_means`). Independent Poissons
+            under-predict 60-minute ties.
+        avg_shots_against: seed for the league's in-season shots-on-goal per team-game, before any game
+            of the season is played (:func:`~sportsdataverse.nhl.nhl_player_props.nhl_goalie_saves`).
+        league_shots_k: team-games of weight on ``avg_shots_against`` in the in-season league mean.
+            SEEDED (two games a team), not fitted.
+        shots_hfa: how many more shots on goal the home team takes than the away team.
+        starter_shot_share: the starting goalie's share of his team's expected shots against (he is
+            sometimes relieved).
+        save_pct_prior: league save percentage a goalie's own record is shrunk toward.
+        save_pct_kappa: shots of weight on ``save_pct_prior`` in a goalie's shrunk save percentage.
+        shots_nb_size: negative-binomial size of a starter's shots against; his saves then follow a
+            negative binomial with the same size (binomial thinning).
     """
 
     hfa: float
@@ -140,6 +154,14 @@ class LeagueConstants:
     prop_team_volume_slope: float
     in_game_wp_artifact: str
     min_season: int
+    reg_draw_inflation: float
+    avg_shots_against: float
+    league_shots_k: float
+    shots_hfa: float
+    starter_shot_share: float
+    save_pct_prior: float
+    save_pct_kappa: float
+    shots_nb_size: float
 
 
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
@@ -217,6 +239,34 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         prop_team_volume_slope=0.04,  # SEEDED placeholder -- not yet fitted (see dataclass doc)
         in_game_wp_artifact="nhl_in_game_wp.json",
         min_season=2010,
+        # Regulation score + goalie saves, fitted 2026-11-25 by tools/models/nhl_prediction/fit_score_saves.py.
+        # reg_draw_inflation: 3-way log-loss MLE on the as-of backtests of all four seasons 2022-23 .. 2025-26
+        #   (4712 games; tools/models/nhl_prediction/fit_score_saves.py). Regulation ties are 0.240 / 0.208 /
+        #   0.206 / 0.249 by season; independent Poissons put ~16% level. Evaluated leave one season out (each
+        #   season scored with the MLE on the other three: 0.560 / 0.570 / 0.446 for 2023-24 / 2024-25 /
+        #   2025-26): log loss 1.0324 / 1.0401 / 1.0619 against 1.0380 / 1.0442 / 1.0838 for independent
+        #   Poissons and 1.0598 / 1.0548 / 1.0834 for the other seasons' flat rates; pooled predicted ties
+        #   0.2285 against 0.2207. 2022-23 alone would give 0.661.
+        #   The regulation means are solved to match exp_total, so they inherit its level: fitted against
+        #   the settled-total avg_total_goals = 6.19 / total_scale = 2.5392.
+        # Saves (load_nhl_goalie_boxscores starts in 2023-24, so the fit season is 2023-24). Two shrinkage
+        #   weights are NOT fitted: team shot rates reuse shrink_k = 15 (the xG ratings' games prior), and
+        #   league_shots_k = 64 is a seed. A follow-up should fit both in fit_score_saves.py (NB likelihood of
+        #   2023-24 starters' shots against), as save_pct_kappa is.
+        #   avg_shots_against = shots on goal per team-game; shots_hfa = away minus home team shots against;
+        #   starter_shot_share = starters' shots against / expected; save_pct_prior = starters' save %;
+        #   save_pct_kappa = binomial MLE of goals against; shots_nb_size = NB MLE of starters' shots
+        #   against. Holdout 80% intervals cover 0.828 / 0.828 (model 0.826) in 2024-25 / 2025-26; 50%:
+        #   0.562 / 0.545 (0.547 / 0.548); 90%: 0.909 / 0.908 (0.915); mean saves 24.74 / 24.25 against
+        #   24.68 / 24.16 actual.
+        reg_draw_inflation=0.508,
+        avg_shots_against=29.98,
+        league_shots_k=64.0,
+        shots_hfa=1.419,
+        starter_shot_share=0.9599,
+        save_pct_prior=0.9038,
+        save_pct_kappa=4141.0,
+        shots_nb_size=30.05,
     ),
     # PWHL: shorter league history + higher game-to-game variance -> stronger
     # shrinkage prior. hfa/avg_xgf/avg_total_goals/total_scale/prop_* remain
@@ -259,6 +309,15 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         prop_team_volume_slope=0.04,  # SEEDED placeholder -- fitted when PWHL data lands
         in_game_wp_artifact="pwhl_in_game_wp.json",
         min_season=2024,
+        # SEEDED placeholders: the NHL fits, until PWHL regulation scores and goalie boxes are fitted.
+        reg_draw_inflation=0.508,
+        avg_shots_against=29.98,
+        league_shots_k=64.0,
+        shots_hfa=1.419,
+        starter_shot_share=0.9599,
+        save_pct_prior=0.9038,
+        save_pct_kappa=4141.0,
+        shots_nb_size=30.05,
     ),
 }
 

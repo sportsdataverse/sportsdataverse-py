@@ -367,7 +367,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_player_on_off](additional/analytics-3.md#wbb_player_on_off) | Women's college player on/off: each player's team with her on the floor and without her. |
 | [wbb_player_season_box_rates](additional/analytics-3.md#wbb_player_season_box_rates) | Women's college per-36 points, rebounds and assists per player-season, ranked, with the season usage. |
 | [wbb_player_shot_zones](additional/analytics-3.md#wbb_player_shot_zones) | Women's college season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |
-| [wbb_player_war](additional/analytics-3.md#wbb_player_war) | Women's college WAR and VORP per player-season, from our box BPM. |
+| [wbb_player_war](additional/analytics-4.md#wbb_player_war) | Women's college WAR and VORP per player-season, from our box BPM. |
 | [wbb_player_wowy](additional/analytics-4.md#wbb_player_wowy) | Women's college WOWY pairs: a team's season with two teammates together, apart and both off. |
 | [wbb_situational_lineup](additional/analytics-4.md#wbb_situational_lineup) | Women's college five-man unit splits by situation. |
 | [wbb_situational_player](additional/analytics-4.md#wbb_situational_player) | Women's college player on-floor splits by situation. |
@@ -378,7 +378,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_team_game_possessions](additional/analytics-4.md#wbb_team_game_possessions) | Women's college per team and game: the possession counts behind `wbb_team_season_rates`. |
 | [wbb_team_luck](additional/analytics-4.md#wbb_team_luck) | Women's college luck and close-game record: Pythagorean expected wins vs actual, close-game W-L. |
 | [wbb_team_season_flow](additional/analytics-4.md#wbb_team_season_flow) | Women's college game flow per team and season, with ranks, percentiles and `_n`. |
-| [wbb_team_season_rates](additional/analytics-4.md#wbb_team_season_rates) | Women's college season team rates from possessions, with home/away/close/clutch splits. |
+| [wbb_team_season_rates](additional/analytics-5.md#wbb_team_season_rates) | Women's college season team rates from possessions, with home/away/close/clutch splits. |
 | [wbb_team_shot_zones](additional/analytics-5.md#wbb_team_shot_zones) | Women's college season shot profile by zone per team, for and allowed. |
 | [wbb_team_strength](additional/analytics-5.md#wbb_team_strength) | Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
 | [weighted_avg](additional/analytics-5.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |

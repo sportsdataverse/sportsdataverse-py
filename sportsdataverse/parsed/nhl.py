@@ -363,6 +363,7 @@ from sportsdataverse.nhl import nhl_expected_assists as nhl_expected_assists  # 
 from sportsdataverse.nhl import nhl_faceoff_value as nhl_faceoff_value  # noqa: F401
 from sportsdataverse.nhl import nhl_game_total as nhl_game_total  # noqa: F401
 from sportsdataverse.nhl import nhl_goalie_gsax as nhl_goalie_gsax  # noqa: F401
+from sportsdataverse.nhl import nhl_goalie_saves as nhl_goalie_saves  # noqa: F401
 from sportsdataverse.nhl import nhl_in_game_win_prob as nhl_in_game_win_prob  # noqa: F401
 from sportsdataverse.nhl import nhl_pbp_disk as nhl_pbp_disk  # noqa: F401
 from sportsdataverse.nhl import nhl_penalty_value as nhl_penalty_value  # noqa: F401
@@ -374,6 +375,7 @@ from sportsdataverse.nhl import nhl_records_consecutive_goal_seasons as nhl_reco
 from sportsdataverse.nhl import nhl_records_fastest_goals as nhl_records_fastest_goals  # noqa: F401
 from sportsdataverse.nhl import nhl_records_fastest_goals_both_teams as nhl_records_fastest_goals_both_teams  # noqa: F401
 from sportsdataverse.nhl import nhl_records_games_played_streak_skaters as nhl_records_games_played_streak_skaters  # noqa: F401
+from sportsdataverse.nhl import nhl_score_distribution as nhl_score_distribution  # noqa: F401
 from sportsdataverse.nhl import nhl_skater_rapm as nhl_skater_rapm  # noqa: F401
 from sportsdataverse.nhl import nhl_skater_war as nhl_skater_war  # noqa: F401
 from sportsdataverse.nhl import nhl_special_teams_value as nhl_special_teams_value  # noqa: F401
@@ -382,6 +384,7 @@ from sportsdataverse.nhl import nhl_stats_rest_config as nhl_stats_rest_config  
 from sportsdataverse.nhl import nhl_stats_rest_content_module as nhl_stats_rest_content_module  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_ping as nhl_stats_rest_ping  # noqa: F401
 from sportsdataverse.nhl import nhl_team_ratings as nhl_team_ratings  # noqa: F401
+from sportsdataverse.nhl import nhl_total_goals_distribution as nhl_total_goals_distribution  # noqa: F401
 from sportsdataverse.nhl import nhl_unit_ratings as nhl_unit_ratings  # noqa: F401
 from sportsdataverse.nhl import nhl_xg as nhl_xg  # noqa: F401
 from sportsdataverse.nhl import nhl_zone_transitions as nhl_zone_transitions  # noqa: F401
@@ -419,6 +422,7 @@ from sportsdataverse.nhl import parser_for_nhl_stats_rest as parser_for_nhl_stat
 from sportsdataverse.nhl import predict_margin as predict_margin  # noqa: F401
 from sportsdataverse.nhl import predict_total as predict_total  # noqa: F401
 from sportsdataverse.nhl import prepare_xg_features as prepare_xg_features  # noqa: F401
+from sportsdataverse.nhl import regulation_goal_means as regulation_goal_means  # noqa: F401
 from sportsdataverse.nhl import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nhl import spearman_corr as spearman_corr  # noqa: F401
 from sportsdataverse.nhl import special_teams_split as special_teams_split  # noqa: F401
@@ -687,6 +691,7 @@ __all__ = [
     "nhl_game_total",
     "nhl_goalie_gsax",
     "nhl_goalie_leaders",
+    "nhl_goalie_saves",
     "nhl_in_game_win_prob",
     "nhl_landing",
     "nhl_pbp_disk",
@@ -752,6 +757,7 @@ __all__ = [
     "nhl_roster_season",
     "nhl_schedule_calendar",
     "nhl_score",
+    "nhl_score_distribution",
     "nhl_scoreboard",
     "nhl_skater_leaders",
     "nhl_skater_rapm",
@@ -781,6 +787,7 @@ __all__ = [
     "nhl_stats_rest_team_by_id",
     "nhl_stats_rest_team_report",
     "nhl_team_ratings",
+    "nhl_total_goals_distribution",
     "nhl_unit_ratings",
     "nhl_web_pbp",
     "nhl_web_schedule",
@@ -820,6 +827,7 @@ __all__ = [
     "predict_margin",
     "predict_total",
     "prepare_xg_features",
+    "regulation_goal_means",
     "scoreboard_event_parsing",
     "spearman_corr",
     "special_teams_split",

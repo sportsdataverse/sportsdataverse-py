@@ -124,14 +124,18 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nhl_edge_skating_value](additional/analytics.md#nhl_edge_skating_value) | Per-skater EDGE skating-value composite (z-score or percentile blend). |
 | [nhl_faceoff_value](additional/analytics.md#nhl_faceoff_value) | Per-player context-adjusted faceoff-win value. |
 | [nhl_game_total](additional/analytics.md#nhl_game_total) | Per-game expected total goals -- a thin re-export of model ②'s expected-goals helper. |
+| [nhl_goalie_saves](additional/analytics.md#nhl_goalie_saves) | Starting goalie saves projection with a central interval, per goalie-game. |
 | [nhl_in_game_win_prob](additional/analytics.md#nhl_in_game_win_prob) | Per-play live home win probability from the bundled in-game logistic. |
 | [nhl_penalty_value](additional/analytics.md#nhl_penalty_value) | Per-player net penalty drawn/taken value. |
 | [nhl_player_props](additional/analytics.md#nhl_player_props) | Empirical-Bayes shots/points player-prop projections. |
 | [nhl_predict_games](additional/analytics.md#nhl_predict_games) | Vectorized pregame margin/win-prob/total (+ market edge) over a schedule. |
+| [nhl_score_distribution](additional/analytics.md#nhl_score_distribution) | Most likely final scores per game, from the regulation score model behind `nhl_predict_games`. |
 | [nhl_special_teams_value](additional/analytics.md#nhl_special_teams_value) | Per-skater share of power-play/penalty-kill value (goals) above/below the league rate. |
+| [nhl_total_goals_distribution](additional/analytics.md#nhl_total_goals_distribution) | Distribution of the final-score total goals per game, from the same model as `nhl_score_distribution`. |
 | [nhl_zone_transitions](additional/analytics.md#nhl_zone_transitions) | Per-player controlled/dump entry & exit rates + xG-weighted values. |
 | [predict_margin](additional/analytics.md#predict_margin) | Expected home-minus-away goal margin. |
 | [predict_total](additional/analytics.md#predict_total) | Expected total goals, variance-corrected by the fitted `total_scale`. |
+| [regulation_goal_means](additional/analytics.md#regulation_goal_means) | Per-team regulation goal means consistent with a game's win probability and expected total. |
 | [special_teams_split](additional/analytics.md#special_teams_split) | Which side of a stint is on the power play, and that side's xG (shared with the fitter). |
 | [win_prob_from_margin](additional/analytics.md#win_prob_from_margin) | Convert an expected goal margin to a home win probability via Phi(margin/sigma). |
 
