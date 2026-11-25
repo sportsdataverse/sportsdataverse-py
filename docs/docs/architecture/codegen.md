@@ -14,7 +14,7 @@ drift gate, but they are not the same pipeline — see
 
 | Input | What it carries |
 |---|---|
-| `endpoints/leagues.yaml`, `endpoints/parameters.yaml` | the league registry (41 leagues) and the shared parameter catalog |
+| `endpoints/leagues.yaml`, `endpoints/parameters.yaml` | the league registry (42 leagues) and the shared parameter catalog |
 | the five ESPN YAMLs in `generate.ESPN_APIS` | `espn_site_v2`, `espn_web_v3`, `espn_core_v2`, `espn_fitt_v3`, `espn_cdn` |
 | the 79 flat-API YAMLs in `generate.FLAT_APIS` | one live API family each (NHL ×4, MLB ×2, NFL ×5 including both PFF APIs and Sleeper, F1, basketball, soccer, recruiting, prediction markets, TheSportsDB, ESPN content, Swiss hockey (SIHF), the European hockey leagues (DEL, ICEHL, EIHL, Metal Ligaen, Czech Extraliga, Liiga, SHL, HockeyAllsvenskan, National League, Ligue Magnus, KHL ×2, VHL), the international basketball leagues (FIBA, Genius, Atrium, NBL, FEB, BBL/DBBL, Lega Basket, ACB, IBBA, W League, VTB, KBL, B.LEAGUE, KZS, LKL, TBF, CEBL, ABA League, EASL, BNXT, TPBL, P. LEAGUE+, CBA, Basketligaen), the vendor networks) |
 | `endpoints/releases.yaml` | every dataset loader, its release `base`, tag and asset URL |
@@ -77,7 +77,7 @@ are hand-authored and preserved.
   family slug, and `docs/src/clientModules/anchorForward.ts` forwards a stale deep
   link at runtime.
 - **League registry.** `render_leagues_json()` writes `docs/src/data/leagues.json`
-  — 106 leagues across six sports — which `docs/sidebars.ts` imports directly, as do
+  — 107 leagues across six sports — which `docs/sidebars.ts` imports directly, as do
   the home page's league grid and the per-league search contexts in
   `docusaurus.config.ts`. A league may carry a `group` (from `generate._LEAGUE_GROUPS`,
   built from the home lists): `sportItems()` in `sidebars.ts` lists a sport's ungrouped
