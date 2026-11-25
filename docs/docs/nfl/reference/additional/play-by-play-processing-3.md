@@ -1,10 +1,232 @@
 ---
-title: "NFL — additional Python functions — Play-by-play processing: clean_nfl"
-sidebar_label: "Play-by-play processing: clean_nfl"
+title: "NFL — additional Python functions — Play-by-play processing: build_nfl–espn_nfl"
+sidebar_label: "Play-by-play processing: build_nfl–espn_nfl"
 sidebar_position: 13
-description: "NFL — additional Python functions — Play-by-play processing: clean_nfl — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Play-by-play processing: build_nfl–espn_nfl — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Play-by-play processing: clean_nfl
+# NFL — additional Python functions — Play-by-play processing: build_nfl–espn_nfl
+
+### build_nfl_team_stats {#build_nfl_team_stats}
+
+`build_nfl_team_stats(seasons: 'List[int]', *, summary_level: 'str' = 'week', season_type: 'str' = 'REG', source: 'str' = 'sdv', return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"`
+
+Build nflverse **team_stats** by aggregating SDV-native play-by-play.
+
+A faithful polars port of nflfastR's `calculate_stats(stat_type = "team")`
+(the `aggregate_game_stats*` family). Offense is keyed on `posteam`,
+defense on the tackler's team (per-play `*_team` slot tags -- NOT
+`defteam`, which double-counts on return plays), kicking on `posteam`,
+and returns / penalties / timeouts on the relevant play team tag. See the
+module docstring for the full grouping + SDV-PBP gap notes (`passing_epa`
+uses the exact `qb_epa`; `gwfg_*` derive from `fixed_drive`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `List[int]` |  | Four-digit NFL seasons to aggregate (e.g. `[2023]`). |
+| `summary_level` | `str` | `'week'` | `"week"` (group on season + week + team, with `opponent_team`) or `"season"` (group on season + team, with a `games` distinct-game count replacing week / season_type / opponent_team). |
+| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"REG+POST"`. Pre-filters the play-by-play before aggregation. |
+| `source` | `str` | `'sdv'` | Play-by-play release passed to `load_nfl_pbp`. Defaults to `"sdv"` (the SDV-native enriched release). |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame in the published `load_nfl_team_stats` schema (~102 columns). At `summary_level="season"` the `week` / `season_type` / `opponent_team` columns are replaced by a `games` column.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `week` | Int64 | Season week. |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `opponent_team` | String |  |
+| `completions` | Int64 | The number of completed passes. |
+| `attempts` | Int64 | The number of pass attempts as defined by the NFL. |
+| `passing_yards` | Float64 | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
+| `passing_tds` | Int64 | The number of passing touchdowns. |
+| `passing_interceptions` | Int64 |  |
+| `sacks_suffered` | Int64 |  |
+| `sack_yards_lost` | Float64 |  |
+| `sack_fumbles` | Int64 | The number of sacks with a fumble. |
+| `sack_fumbles_lost` | Int64 | The number of sacks with a lost fumble. |
+| `passing_air_yards` | Float64 | Passing air yards (includes incomplete passes). |
+| `passing_yards_after_catch` | Float64 | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
+| `passing_first_downs` | Int64 | First downs on pass attempts. |
+| `passing_epa` | Float64 | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
+| `passing_cpoe` | Float64 |  |
+| `passing_2pt_conversions` | Int64 | Two-point conversion passes. |
+| `carries` | Int64 | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
+| `rushing_yards` | Float64 | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
+| `rushing_tds` | Int64 | The number of rushing touchdowns (incl. scrambles). Also includes touchdowns after obtaining a lateral on a play that started with a rushing attempt. |
+| `rushing_fumbles` | Int64 | The number of rushes with a fumble. |
+| `rushing_fumbles_lost` | Int64 | The number of rushes with a lost fumble. |
+| `rushing_first_downs` | Int64 | First downs on rush attempts (incl. scrambles). |
+| `rushing_epa` | Float64 | Expected points added on rush attempts (incl. scrambles and kneel downs). |
+| `rushing_2pt_conversions` | Int64 | Two-point conversion rushes |
+| `receptions` | Int64 | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `targets` | Int64 | The number of pass plays where the player was the targeted receiver. |
+| `receiving_yards` | Float64 | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `receiving_tds` | Int64 | The number of touchdowns following a pass reception. Also includes touchdowns after receiving a lateral on a play that started as a pass play. |
+| `receiving_fumbles` | Int64 | The number of fumbles after a pass reception. |
+| `receiving_fumbles_lost` | Int64 | The number of fumbles lost after a pass reception. |
+| `receiving_air_yards` | Float64 | Receiving air yards (incl. incomplete passes). |
+| `receiving_yards_after_catch` | Float64 | Yards after the catch gained on plays in which player was receiver (this is an unofficial stat and may differ slightly between different sources). |
+| `receiving_first_downs` | Int64 | Total number of first downs gained on receptions |
+| `receiving_epa` | Float64 | Total EPA on plays where this receiver was targeted |
+| `receiving_2pt_conversions` | Int64 | Two-point conversion receptions |
+| `special_teams_tds` | Int64 | Total number of kick/punt return touchdowns |
+| `def_tackles_solo` | Int64 | Total number of solo tackles for this player |
+| `def_tackles_with_assist` | Int64 | Number of tackles this player had with an assisted tackle |
+| `def_tackle_assists` | Int64 | Number of assisted tackles for this player |
+| `def_tackles_for_loss` | Int64 | Number of tackles for loss (TFL) for this player |
+| `def_tackles_for_loss_yards` | Int64 | Yards lost from TFLs involving this player |
+| `def_fumbles_forced` | Int64 | Number of times a fumble was forced from this player |
+| `def_sacks` | Float64 | Number of sacks form this player |
+| `def_sack_yards` | Float64 | Yards lost from sacks forced by this player |
+| `def_qb_hits` | Int64 | Number of QB hits from this player (should not include plays where the QB was sacked) |
+| `def_interceptions` | Int64 | Number of interceptions forced by this player |
+| `def_interception_yards` | Float64 | yards gained/lost by interception returns from this player |
+| `def_pass_defended` | Int64 | Number of passes defended/broken up by this player |
+| `def_tds` | Int64 | Number of defensive touchdowns scored by this player |
+| `def_fumbles` | Int64 | Number of fumbles by this player |
+| `def_safeties` | Int64 |  |
+| `misc_yards` | Int64 |  |
+| `fumble_recovery_own` | Int64 |  |
+| `fumble_recovery_yards_own` | Int64 |  |
+| `fumble_recovery_opp` | Int64 |  |
+| `fumble_recovery_yards_opp` | Int64 |  |
+| `fumble_recovery_tds` | Int64 |  |
+| `penalties` | Int64 |  |
+| `penalty_yards` | Int64 | Yards gained (or lost) by the posteam from the penalty. |
+| `timeouts` | Int64 |  |
+| `punt_returns` | Int64 |  |
+| `punt_return_yards` | Int64 |  |
+| `kickoff_returns` | Int64 |  |
+| `kickoff_return_yards` | Int64 |  |
+| `fg_made` | Int64 |  |
+| `fg_att` | Int64 |  |
+| `fg_missed` | Int64 |  |
+| `fg_blocked` | Int64 |  |
+| `fg_long` | Float64 |  |
+| `fg_pct` | Float64 |  |
+| `fg_made_0_19` | Int64 |  |
+| `fg_made_20_29` | Int64 |  |
+| `fg_made_30_39` | Int64 |  |
+| `fg_made_40_49` | Int64 |  |
+| `fg_made_50_59` | Int64 |  |
+| `fg_made_60_` | Int64 |  |
+| `fg_missed_0_19` | Int64 |  |
+| `fg_missed_20_29` | Int64 |  |
+| `fg_missed_30_39` | Int64 |  |
+| `fg_missed_40_49` | Int64 |  |
+| `fg_missed_50_59` | Int64 |  |
+| `fg_missed_60_` | Int64 |  |
+| `fg_made_list` | String |  |
+| `fg_missed_list` | String |  |
+| `fg_blocked_list` | String |  |
+| `fg_made_distance` | Int64 |  |
+| `fg_missed_distance` | Int64 |  |
+| `fg_blocked_distance` | Int64 |  |
+| `pat_made` | Int64 |  |
+| `pat_att` | Int64 |  |
+| `pat_missed` | Int64 |  |
+| `pat_blocked` | Int64 |  |
+| `pat_pct` | Float64 |  |
+| `gwfg_made` | Int64 |  |
+| `gwfg_att` | Int64 |  |
+| `gwfg_missed` | Int64 |  |
+| `gwfg_blocked` | Int64 |  |
+| `gwfg_distance` | Int64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `summary_level` is not `"week"`/`"season"` or `season_type` is not `"REG"`/`"POST"`/`"REG+POST"`. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import build_nfl_team_stats
+wk = build_nfl_team_stats([2023], summary_level="week")
+print(wk.shape)
+
+# Season totals as pandas
+
+df_pd = build_nfl_team_stats([2023], summary_level="season",
+                             return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+wk.sort("def_sacks", descending=True).head()
+```
+
+### calculate_nfl_series_conversion_rates {#calculate_nfl_series_conversion_rates}
+
+`calculate_nfl_series_conversion_rates(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"`
+
+Compute per-team offense + defense series conversion rates.
+
+A faithful polars port of nflfastR's `calculate_series_conversion_rates`.
+Series where `down` is null (kickoffs, PAT/2pt attempts, non-plays, no
+`posteam`) and series ending in a `"QB kneel"` are excluded from the
+series count before rates are computed, matching the R source.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame carrying `season`, `week`, `posteam`, `defteam`, `down`, `series`, `series_success`, and `series_result` (added by the `add_series_data` port). Rows must already be in play order within each series so the internal `first()`/`last()` series collapse is correct. |
+| `weekly` | `bool` | `False` | If `True`, group on `(season, team, week)`; if `False` (default), group on `(season, team)` -- collapsing every week into one season-level rate. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with one row per team (per week when `weekly=True`), `off_n`/`def_n` (series count) plus the `off_*`/`def_*` rate columns documented in reference Sec 11. A team with offensive series but zero defensive series in a group (or vice versa -- effectively never happens in real data) carries nulls in the missing side rather than being dropped (full outer join).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `off_n` | Int64 |  |
+| `off_scr` | Float64 |  |
+| `off_scr_1st` | Float64 |  |
+| `off_scr_2nd` | Float64 |  |
+| `off_scr_3rd` | Float64 |  |
+| `off_scr_4th` | Float64 |  |
+| `off_1st` | Float64 |  |
+| `off_td` | Float64 |  |
+| `off_fg` | Float64 |  |
+| `off_punt` | Float64 |  |
+| `off_to` | Float64 |  |
+| `def_n` | Int64 |  |
+| `def_scr` | Float64 |  |
+| `def_scr_1st` | Float64 |  |
+| `def_scr_2nd` | Float64 |  |
+| `def_scr_3rd` | Float64 |  |
+| `def_scr_4th` | Float64 |  |
+| `def_1st` | Float64 |  |
+| `def_td` | Float64 |  |
+| `def_fg` | Float64 |  |
+| `def_punt` | Float64 |  |
+| `def_to` | Float64 |  |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import calculate_nfl_series_conversion_rates
+rates = calculate_nfl_series_conversion_rates(pbp)
+rates.filter(pl.col("team") == "KC").select("off_scr", "def_scr")
+
+# Weekly grain
+
+weekly = calculate_nfl_series_conversion_rates(pbp, weekly=True)
+
+# Pipeline next step (one line)
+
+rates.sort("off_scr", descending=True).head()
+```
 
 ### clean_nfl_pbp {#clean_nfl_pbp}
 
@@ -420,4 +642,185 @@ cleaned_pd = clean_nfl_pbp(pbp, return_as_pandas=True)
 
 import polars as pl
 cleaned.filter(pl.col("play") == 1).group_by("passer").len()
+```
+
+### espn_nfl_pbp_nflverse {#espn_nfl_pbp_nflverse}
+
+`espn_nfl_pbp_nflverse(plays: 'pl.DataFrame', schedule: 'Optional[pl.DataFrame]' = None, *, split_pats: 'bool' = True) -> 'pl.DataFrame'`
+
+ESPN NFL play-by-play in nflverse `play_by_play` names, conventions and dtypes.
+
+Turns `~sportsdataverse.nfl.NFLPlayProcess` output (`plays_frame`, one game or many, or the
+published `espn_nfl_pbp` release) into nflverse's base play-by-play: the keys, teams, field position,
+clock, down and distance, scores, timeouts, play types, the 0/1 play flags, yardage and drive detail,
+and, with `schedule`, nflverse's game columns (nflfastR's `add_game_data`). It is additive: the
+cfbfastR-shape ESPN frame is not changed, and nothing is fetched.
+
+Conventions follow nflverse, not ESPN: `game_id` is nflverse's `YYYY_WW_AWAY_HOME` and `play_id` the
+GSIS play id ESPN embeds in its play `id` (2006 on), so the frame joins nflverse `play_by_play` on
+`(game_id, play_id)`. Teams come from the team ids and the game id, never from ESPN's abbreviations, in
+the franchise's current abbreviation as nflverse writes them (`LA` for the 2007 Rams). A kickoff
+belongs to the receiving team; a timeout row has no possession, down or field position; an offensive
+touchdown counts as a first down; a declined penalty is no penalty. With `split_pats` the try ESPN
+folds into a touchdown row (2014 on) gets its own `extra_point` / two-point row
+(`~sportsdataverse.nfl.split_pat_rows`) and the touchdown row's scores leave the try's points out.
+
+Agreement with nflverse on whole seasons (2007, 2014, 2019, 2024) is 99%+ for most columns. The known
+gaps are ESPN's: `desc` is ESPN's text, not the NFL feed's; ESPN stamps some plays (scoring plays,
+whole 2024 games) with the clock after the snap; before 2009 many plays carry a stub text ("Rush",
+"Pass Completion"), so the text-derived columns (pass / run direction, completion, yards) are thin
+there; the timeouts are the processor's own count; a split PAT row's `play_id` is the touchdown's
+plus one (ESPN gives the try no id), so it does not join nflverse's PAT row.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | `NFLPlayProcess(...).plays_frame` or the `espn_nfl_pbp` release (one or many games). |
+| `schedule` | `Optional[DataFrame]` | `None` | The nflverse schedule (`~sportsdataverse.nfl.load_nfl_schedule`). Adds the game columns, and supplies `nflverse_game_id` (from its `espn` id) when `plays` has none. |
+| `split_pats` | `bool` | `True` | Give each folded PAT / two-point try its own row, as nflverse does (default `True`). |
+
+**Returns**
+
+One row per ESPN play (plus one per split try) in nflverse's column names, flags as `Int64` 0/1, measures as `Float64`, plus `espn_game_id` / `espn_play_id` to join back to ESPN (participants are keyed on the ESPN play id). The schedule columns are present only when `schedule` is given.
+
+| col_name | type | description |
+|---|---|---|
+| `play_id` | Int64 | GSIS play id, the digits ESPN's play id carries after its game id (2006 on); a split PAT row is its touchdown's play_id plus 1. Joins nflverse play_by_play with game_id. |
+| `game_id` | String | nflverse game id, YYYY_WW_AWAY_HOME (the old abbreviation, e.g. 2007_14_SD_TEN). |
+| `espn_game_id` | Int64 | ESPN event id of the game. |
+| `espn_play_id` | Int64 | ESPN play id (participants and the ESPN frame are keyed on it); a split PAT row's is the touchdown's plus 1. |
+| `home_team` | String | Home team, nflverse's current franchise abbreviation (LA, LAC, LV for the Rams, Chargers, Raiders of every era). |
+| `away_team` | String | Away team, nflverse's current franchise abbreviation. |
+| `season_type` | String | REG, POST or PRE. |
+| `week` | Int64 | nflverse week (playoff weeks continue the regular-season count), from game_id. |
+| `season` | Int64 | Season, from game_id. |
+| `posteam` | String | Team with possession (a kickoff belongs to the receiving team); null on a timeout row. |
+| `posteam_type` | String | home or away: which side posteam is. |
+| `defteam` | String | Team on defense; null on a timeout row. |
+| `side_of_field` | String | Abbreviation of the team whose half the ball is in, or 50 at midfield. |
+| `yardline_100` | Float64 | Yards from the opponent's end zone at the snap (a kickoff from the receiving team's side). |
+| `yrdln` | String | Field position as nflverse writes it (e.g. KC 35, MID 50). |
+| `qtr` | Float64 | Quarter (5 = overtime). |
+| `quarter_seconds_remaining` | Float64 | Seconds left in the quarter at the snap: the clock the NFL text opens with where it has one, else ESPN's clock. |
+| `half_seconds_remaining` | Float64 | Seconds left in the half at the snap (overtime counts only its own period). |
+| `game_seconds_remaining` | Float64 | Seconds left in regulation at the snap (overtime counts only its own period). |
+| `game_half` | String | Half1, Half2 or Overtime. |
+| `time` | String | Game clock at the snap, MM:SS. |
+| `down` | Float64 | Down; null on kickoffs, tries and timeouts. |
+| `ydstogo` | Float64 | Yards to go for a first down (0 on kickoffs and timeouts). |
+| `posteam_score` | Float64 | posteam's score before the play. |
+| `defteam_score` | Float64 | defteam's score before the play. |
+| `score_differential` | Float64 | posteam_score minus defteam_score. |
+| `posteam_score_post` | Float64 | posteam's score after the play (a touchdown row leaves out its split try's points). |
+| `defteam_score_post` | Float64 | defteam's score after the play. |
+| `score_differential_post` | Float64 | posteam_score_post minus defteam_score_post. |
+| `total_home_score` | Float64 | Home score after the play (a touchdown row leaves out its split try's points). |
+| `total_away_score` | Float64 | Away score after the play (a touchdown row leaves out its split try's points). |
+| `home_timeouts_remaining` | Float64 | Home timeouts left before the play (after it on a timeout row), from the ESPN processor's count. |
+| `away_timeouts_remaining` | Float64 | Away timeouts left before the play (after it on a timeout row), from the ESPN processor's count. |
+| `posteam_timeouts_remaining` | Float64 | posteam's timeouts left before the play; null on a timeout row. |
+| `defteam_timeouts_remaining` | Float64 | defteam's timeouts left before the play; null on a timeout row. |
+| `complete_pass` | Int64 | 0/1 flag: completed pass. |
+| `interception` | Int64 | 0/1 flag: intercepted pass. |
+| `sack` | Int64 | 0/1 flag: sack. |
+| `rush_attempt` | Int64 | 0/1 flag: rushing attempt (scrambles and kneels included). |
+| `touchdown` | Int64 | 0/1 flag: touchdown scored on the play. |
+| `pass_touchdown` | Int64 | 0/1 flag: passing touchdown. |
+| `rush_touchdown` | Int64 | 0/1 flag: rushing touchdown. |
+| `safety` | Int64 | 0/1 flag: safety. |
+| `fumble` | Int64 | 0/1 flag: fumble (or muff) on the play. |
+| `fumble_lost` | Int64 | 0/1 flag: fumble recovered by the other team. |
+| `first_down_penalty` | Int64 | 0/1 flag: first down awarded by penalty. |
+| `kickoff_attempt` | Int64 | 0/1 flag: kickoff. |
+| `kickoff_out_of_bounds` | Int64 | 0/1 flag: kickoff out of bounds. |
+| `kickoff_downed` | Int64 | 0/1 flag: kickoff downed. |
+| `kickoff_fair_catch` | Int64 | 0/1 flag: kickoff fair catch. |
+| `punt_attempt` | Int64 | 0/1 flag: punt. |
+| `punt_blocked` | Int64 | 0/1 flag: blocked punt. |
+| `punt_out_of_bounds` | Int64 | 0/1 flag: punt out of bounds. |
+| `punt_downed` | Int64 | 0/1 flag: punt downed. |
+| `punt_fair_catch` | Int64 | 0/1 flag: punt fair catch. |
+| `field_goal_attempt` | Int64 | 0/1 flag: field goal attempt. |
+| `extra_point_attempt` | Int64 | 0/1 flag: extra point attempt. |
+| `two_point_attempt` | Int64 | 0/1 flag: two-point conversion attempt. |
+| `qb_kneel` | Int64 | 0/1 flag: quarterback kneel. |
+| `special` | Int64 | 0/1 flag: special-teams play (kickoff, punt, field goal, extra point). |
+| `tackled_for_loss` | Int64 | 0/1 flag: run tackled for a loss. |
+| `goal_to_go` | Int64 | 0/1 flag: goal-to-go situation. |
+| `pass_attempt` | Int64 | 0/1 flag: pass attempt, sacks included (nflverse's convention). |
+| `incomplete_pass` | Int64 | 0/1 flag: incomplete pass (not intercepted, not a sack). |
+| `fumble_forced` | Int64 | 0/1 flag: forced fumble (the text names the forcer, FUMBLES (J.Doe)). |
+| `special_teams_play` | Int64 | 0/1 flag: special-teams play as nflverse flags it (a made field goal is left out). |
+| `fumble_not_forced` | Int64 | 0/1 flag: fumble with no forcer named. |
+| `penalty` | Int64 | 0/1 flag: accepted penalty (a declined one is 0, as in nflverse). |
+| `return_touchdown` | Int64 | 0/1 flag: touchdown that is neither a passing nor a rushing one (returns, recoveries). |
+| `touchback` | Int64 | 0/1 flag: kickoff or punt touchback. |
+| `qb_spike` | Int64 | 0/1 flag: spike (the text says spiked). |
+| `qb_scramble` | Int64 | 0/1 flag: quarterback scramble (the text says scrambles). |
+| `qb_dropback` | Int64 | 0/1 flag: dropback: pass attempt, sack, scramble or spike. |
+| `first_down` | Int64 | 0/1 flag: first down by yards, penalty or an offensive touchdown. |
+| `first_down_rush` | Int64 | 0/1 flag: rushing first down (a rushing touchdown counts). |
+| `first_down_pass` | Int64 | 0/1 flag: passing first down (a passing touchdown counts). |
+| `third_down_converted` | Int64 | 0/1 flag: third down converted (first down or offensive touchdown). |
+| `third_down_failed` | Int64 | 0/1 flag: third-down pass or run that did not convert. |
+| `fourth_down_converted` | Int64 | 0/1 flag: fourth down converted (first down or offensive touchdown). |
+| `fourth_down_failed` | Int64 | 0/1 flag: fourth-down pass or run that did not convert. |
+| `aborted_play` | Int64 | 0/1 flag: aborted snap (the text contains Aborted, nflfastR's rule). |
+| `drive_ended_with_score` | Int64 | 0/1 flag: the play's drive ended in a score. |
+| `desc` | String | ESPN's play text (close to, but not, the NFL feed's description nflverse carries). |
+| `field_goal_result` | String | made, missed or blocked. |
+| `extra_point_result` | String | good, failed or blocked. |
+| `two_point_conv_result` | String | success or failure. |
+| `run_location` | String | left, middle or right, from the text. |
+| `pass_location` | String | left, middle or right, from the text. |
+| `pass_length` | String | short or deep, from the text. |
+| `drive_play_count` | Float64 | Offensive plays in the play's ESPN drive. |
+| `drive_time_of_possession` | String | Time of possession of the play's ESPN drive, M:SS. |
+| `drive_quarter_start` | Float64 | Quarter the play's ESPN drive started in. |
+| `drive_quarter_end` | Float64 | Quarter the play's ESPN drive ended in. |
+| `ydsnet` | Float64 | Net yards of the play's ESPN drive. |
+| `play_type_nfl` | String | nflverse's NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PUNT, FIELD_GOAL, XP_KICK, PAT2, PENALTY, TIMEOUT, UNSPECIFIED). |
+| `play_type` | String | nflverse's play type: pass, run, punt, field_goal, kickoff, extra_point, qb_kneel, qb_spike, no_play, or null. |
+| `yards_gained` | Float64 | Yards gained on the play itself (an accepted penalty's yards excluded; 0 on kicks and no-play penalties). |
+| `passing_yards` | Float64 | Yards on a completed pass; null otherwise. |
+| `receiving_yards` | Float64 | Yards on a completed pass; null otherwise. |
+| `rushing_yards` | Float64 | Yards on a run; null otherwise. |
+| `penalty_yards` | Float64 | Yards of an accepted penalty; null otherwise. |
+| `penalty_team` | String | Team of an accepted penalty, from ESPN's penalized team id. |
+| `td_team` | String | Team that scored the touchdown. |
+| `spread_line` | Float64 | Home team's point spread (positive when the home team is favored): the schedule's when given, else ESPN's. |
+| `total_line` | Float64 | Game total (over/under): the schedule's when given, else ESPN's. |
+| `drive` | Float64 | ESPN's drive number within the game (the digits of ESPN's drive id after the game id). |
+| `old_game_id` | String | NFL's old game id (YYYYMMDDGG), from the schedule. |
+| `game_date` | String | Game date (YYYY-MM-DD), the schedule's gameday. |
+| `location` | String | Home or Neutral, from the schedule. |
+| `result` | Int64 | Final home score minus away score, from the schedule. |
+| `total` | Int64 | Final combined score, from the schedule. |
+| `home_score` | Int64 | Final home score, from the schedule. |
+| `away_score` | Int64 | Final away score, from the schedule. |
+| `div_game` | Int64 | 1 for a divisional game, from the schedule. |
+| `roof` | String | outdoors, dome, closed or open, from the schedule. |
+| `surface` | String | Playing surface, from the schedule. |
+| `temp` | Int64 | Temperature (F), from the schedule; null indoors. |
+| `wind` | Int64 | Wind speed (mph), from the schedule; null indoors. |
+| `home_coach` | String | Home head coach, from the schedule. |
+| `away_coach` | String | Away head coach, from the schedule. |
+| `game_stadium` | String | Stadium name, from the schedule (nflverse's stadium column is the feed's own name). |
+| `stadium_id` | String | nflverse stadium id, from the schedule. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `plays` lacks the processor's columns, or carries no `nflverse_game_id` and no `schedule` (with `game_id` and `espn`) is given or the schedule lacks one of its games, or an id column is a float, or a split try's synthetic id is already a play's (`~sportsdataverse.nfl.split_pat_rows`). |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import NFLPlayProcess, espn_nfl_pbp_nflverse, load_nfl_schedule
+proc = NFLPlayProcess(gameId=401671740)
+proc.espn_nfl_pbp()
+proc.run_processing_pipeline()
+pbp = espn_nfl_pbp_nflverse(proc.plays_frame, load_nfl_schedule([2024]))
 ```

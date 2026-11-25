@@ -23628,7 +23628,7 @@ load_nfl_model_pbp:
 - name: return_yards
   type: Int64
 - name: lateral_rushing_yards
-  type: 'Null'
+  type: Int64
 - name: lateral_receiving_yards
   type: Int64
 - name: passer_player_id
@@ -23680,9 +23680,9 @@ load_nfl_model_pbp:
 - name: sack_player_name
   type: String
 - name: safety_player_id
-  type: 'Null'
+  type: String
 - name: safety_player_name
-  type: 'Null'
+  type: String
 - name: blocked_player_id
   type: String
 - name: blocked_player_name
@@ -23716,17 +23716,17 @@ load_nfl_model_pbp:
 - name: assist_tackle_2_team
   type: String
 - name: assist_tackle_3_player_id
-  type: 'Null'
+  type: String
 - name: assist_tackle_3_player_name
-  type: 'Null'
+  type: String
 - name: assist_tackle_3_team
-  type: 'Null'
+  type: String
 - name: assist_tackle_4_player_id
-  type: 'Null'
+  type: String
 - name: assist_tackle_4_player_name
-  type: 'Null'
+  type: String
 - name: assist_tackle_4_team
-  type: 'Null'
+  type: String
 - name: tackle_with_assist_1_player_id
   type: String
 - name: tackle_with_assist_1_player_name
@@ -23734,19 +23734,19 @@ load_nfl_model_pbp:
 - name: tackle_with_assist_1_team
   type: String
 - name: tackle_with_assist_2_player_id
-  type: 'Null'
+  type: String
 - name: tackle_with_assist_2_player_name
-  type: 'Null'
+  type: String
 - name: tackle_with_assist_2_team
-  type: 'Null'
+  type: String
 - name: tackle_for_loss_1_player_id
   type: String
 - name: tackle_for_loss_1_player_name
   type: String
 - name: tackle_for_loss_2_player_id
-  type: 'Null'
+  type: String
 - name: tackle_for_loss_2_player_name
-  type: 'Null'
+  type: String
 - name: half_sack_1_player_id
   type: String
 - name: half_sack_1_player_name
@@ -24077,6 +24077,10 @@ load_nfl_model_pbp:
   type: Float64
 - name: action_play
   type: Boolean
+- name: success
+  type: Float64
+- name: first_down
+  type: Float64
 - name: home_opening_kickoff
   type: Float64
 - name: go_wp

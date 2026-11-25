@@ -343,3 +343,30 @@ def test_a_pipeline_v1_cache_entry_is_not_served(monkeypatch: pytest.MonkeyPatch
 
     out = build_nfl_season([1])
     assert out.schema["passer_player_id"] == pl.Int64
+
+
+@pytest.mark.whole_game
+@pytest.mark.xdist_group("nfl_whole_game")
+def test_espn_game_keeps_the_processor_dtypes(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A real game through ``_build_game_espn``: every ``*_player_id`` is Int64, the all-null ones too.
+
+    The frame used to be rebuilt from ``run_processing_pipeline()``'s list of dicts, so an id column
+    that was all null in the game (no interception, no blocked punt) came back ``pl.Null`` and every
+    Int32 column came back Int64; the build now keeps ``plays_frame`` and its documented dtypes.
+    """
+    import re
+
+    import sportsdataverse.nfl.nfl_fourth_down as nfl_fourth_down
+    from sportsdataverse.nfl import NFLPlayProcess
+    from tests.nfl._whole_game import load_summary
+
+    summary = load_summary(401872922)
+    espn_nfl_pbp = NFLPlayProcess.espn_nfl_pbp
+    monkeypatch.setattr(NFLPlayProcess, "espn_nfl_pbp", lambda self: espn_nfl_pbp(self, summary=summary))
+    monkeypatch.setattr(nfl_fourth_down, "_try_load", lambda name: None)  # hermetic: no booster download
+
+    frame = nfl_build_mod._build_game_espn(401872922)
+    ids = [c for c in frame.columns if re.search(r"_player_id\d*$", c)]
+    all_null = [c for c in ids if frame[c].null_count() == frame.height]
+    assert all_null, "the capture must hold an all-null player id for this test to bite"
+    assert {c: frame.schema[c] for c in ids} == dict.fromkeys(ids, pl.Int64)

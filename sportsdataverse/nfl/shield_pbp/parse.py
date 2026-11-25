@@ -326,6 +326,27 @@ _BASE_INDICATORS = [
     "two_point_pass_reception_good",
     "two_point_pass_reception_failed",
     "two_point_return",
+    # --- nflverse play_by_play flags (stat ids 6-9, 2, 20/30, 41-43/102, 51-52/105-106, laterals, 403-406) ---
+    "third_down_converted",
+    "third_down_failed",
+    "fourth_down_converted",
+    "fourth_down_failed",
+    "punt_blocked",
+    "punt_inside_twenty",
+    "punt_in_endzone",
+    "kickoff_inside_twenty",
+    "kickoff_in_endzone",
+    "kickoff_downed",
+    "own_kickoff_recovery",
+    "own_kickoff_recovery_td",
+    "lateral_reception",
+    "lateral_rush",
+    "lateral_return",
+    "lateral_recovery",
+    "defensive_two_point_attempt",
+    "defensive_two_point_conv",
+    "defensive_extra_point_attempt",
+    "defensive_extra_point_conv",
 ]
 _BASE_NUMERICS = [
     "yards_gained",
@@ -450,6 +471,21 @@ _BASE_PLAYERS = [
     "fumble_recovery_2_player_name",
     "fumble_recovery_2_team",
     "fumble_recovery_2_yards",
+    # --- own-kickoff recovery + lateral player slots ---
+    "own_kickoff_recovery_player_id",
+    "own_kickoff_recovery_player_name",
+    "lateral_receiver_player_id",
+    "lateral_receiver_player_name",
+    "lateral_rusher_player_id",
+    "lateral_rusher_player_name",
+    "lateral_sack_player_id",
+    "lateral_sack_player_name",
+    "lateral_interception_player_id",
+    "lateral_interception_player_name",
+    "lateral_punt_returner_player_id",
+    "lateral_punt_returner_player_name",
+    "lateral_kickoff_returner_player_id",
+    "lateral_kickoff_returner_player_name",
 ]
 
 # Points scored ON a play by its scoringPlayType (attributed to scoringTeamId).
@@ -545,6 +581,9 @@ def _drive_record(seq: Any, drive_by_seq: Dict[Any, Dict[str, Any]], season: Opt
         "_sd_drive_end_yard_line": _drive_text(d.get("endedYardLine")),
         "_sd_drive_play_id_started": d.get("startedPlayId"),
         "_sd_drive_play_id_ended": d.get("endedPlayId"),
+        # nflfastR joins the provider's drive onto every play: ``ydsnet`` is its yards plus penalty yards
+        "ydsnet": d.get("yardsGainedNet"),
+        "drive_real_start_time": d.get("startedTime"),
     }
 
 
@@ -683,7 +722,7 @@ def parse_game(game: Dict[str, Any], game_id: Optional[str] = None) -> pl.DataFr
         score_team = team_by_id.get(p.get("scoringTeamId"))
         row["_points_home"] = pts if score_team == home_abbr else 0
         row["_points_away"] = pts if score_team == away_abbr else 0
-        row.update(_drive_record(p.get("driveSequence"), drive_by_seq, season))
+        row.update(_drive_record(p.get("driveSequence"), drive_by_seq, season) | _feed_play_fields(p, clock_str))
         rows.append(row)
 
     if not rows:
@@ -698,7 +737,52 @@ def parse_game(game: Dict[str, Any], game_id: Optional[str] = None) -> pl.DataFr
     # the final whole-branch review).
     df = df.sort("play_seq")
     df = _add_special_teams_derivations(df)
-    return df
+    return _add_feed_columns(df)
+
+
+# The feed play types nflverse's ``special_teams_play`` flags (2007 / 2014 / 2024: every KICK_OFF, PUNT and XP_KICK
+# play, and nothing else -- not FIELD_GOAL, not FREE_KICK).
+_SPECIAL_TEAMS_FEED_TYPES = ("KICK_OFF", "PUNT", "XP_KICK")
+
+
+def _feed_play_fields(p: Dict[str, Any], clock: Optional[str]) -> Dict[str, Any]:
+    """nflverse's raw-feed play columns, read off one Shield play (nflfastR ``get_pbp_nfl``)."""
+    return {
+        "time": clock,  # the display clock after the GAME / END QUARTER imputation, as nflfastR's ``time``
+        "quarter_end": int("END QUARTER" in (p.get("playDescription") or "")),
+        "order_sequence": p.get("playSequenceNumber"),
+        "time_of_day": p.get("playStartTime"),
+        "end_clock_time": p.get("playEndTime"),
+        "play_deleted": 0,  # the parser skips deleted plays
+        "special_teams_play": int(p.get("playType") in _SPECIAL_TEAMS_FEED_TYPES),
+        "_yrdln": _drive_text(p.get("yardLine")),
+    }
+
+
+def _add_feed_columns(df: pl.DataFrame) -> pl.DataFrame:
+    """``yrdln`` / ``side_of_field`` from the feed's yard line, plus the feed columns nflverse publishes empty.
+
+    nflfastR splits the side off the raw yard line, then fills an empty yard line (a timeout, a quarter end)
+    from the next play, so ``side_of_field`` stays null there while ``yrdln`` does not. Midfield is ``MID 50``.
+    ``play_clock`` is ``"0"`` and ``st_play_type`` / ``end_yard_line`` are null on every nflverse play of
+    2007, 2014 and 2024; the Shield feed carries none of the three, so they are published as nflverse has them.
+    """
+    yard_line = pl.col("_yrdln").cast(pl.Utf8)
+    raw = yard_line.replace("50", "MID 50")
+    # cast even when a game has no value (a pregame payload has no drive record, most games no lateral)
+    text = ("time", "time_of_day", "end_clock_time", "drive_real_start_time")
+    text += tuple(c for c in _BASE_PLAYERS if c.endswith(("_player_id", "_player_name")))
+    return df.with_columns(
+        [pl.col(c).cast(pl.Utf8) for c in text],
+        side_of_field=yard_line.str.split(" ").list.first(),
+        yrdln=pl.when(yard_line.is_null()).then(raw.shift(-1)).otherwise(raw),
+        ydsnet=pl.col("ydsnet").cast(pl.Int64),
+        order_sequence=pl.col("order_sequence").cast(pl.Float64),
+        # ponytail: constants matching nflverse's feed; read the real field if Shield ever carries one
+        play_clock=pl.lit("0"),
+        st_play_type=pl.lit(None, pl.Utf8),
+        end_yard_line=pl.lit(None, pl.Utf8),
+    ).drop("_yrdln")
 
 
 # nflverse play_types that count as special teams (helper_additional_functions.R).

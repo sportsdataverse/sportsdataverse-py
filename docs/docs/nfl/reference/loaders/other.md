@@ -107,7 +107,7 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `penalty_yards` | Int64 | Yards gained (or lost) by the posteam from the penalty. |
 | `kick_distance` | Int64 | Numeric distance in yards for kickoffs, field goals, and punts. |
 | `return_yards` | Int64 | Yards gained by the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
-| `lateral_rushing_yards` | Null | Numeric yards by the `lateral_rusher_player_name` in run plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
+| `lateral_rushing_yards` | Int64 | Numeric yards by the `lateral_rusher_player_name` in run plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
 | `lateral_receiving_yards` | Int64 | Numeric yards by the `lateral_receiver_player_name` in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
 | `passer_player_id` | String | Unique identifier for the player that attempted the pass. |
 | `passer_player_name` | String | String name for the player that attempted the pass. |
@@ -133,8 +133,8 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `interception_player_name` | String | String name for the player that intercepted the pass. |
 | `sack_player_id` | String | Unique identifier of the player who recorded a solo sack. |
 | `sack_player_name` | String | String name of the player who recorded a solo sack. |
-| `safety_player_id` | Null | Unique identifier for the player who scored a safety. |
-| `safety_player_name` | Null | String name for the player who scored a safety. |
+| `safety_player_id` | String | Unique identifier for the player who scored a safety. |
+| `safety_player_name` | String | String name for the player who scored a safety. |
 | `blocked_player_id` | String | Unique identifier for the player that blocked the punt or FG. |
 | `blocked_player_name` | String | String name for the player that blocked the punt or FG. |
 | `penalty_player_id` | String | Unique identifier for the player with the penalty. |
@@ -151,22 +151,22 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `assist_tackle_2_player_id` | String | Unique identifier of one of the players with a tackle assist. |
 | `assist_tackle_2_player_name` | String | String name of one of the players with a tackle assist. |
 | `assist_tackle_2_team` | String | Team of one of the players with a tackle assist. |
-| `assist_tackle_3_player_id` | Null | Unique identifier of one of the players with a tackle assist. |
-| `assist_tackle_3_player_name` | Null | String name of one of the players with a tackle assist. |
-| `assist_tackle_3_team` | Null | Team of one of the players with a tackle assist. |
-| `assist_tackle_4_player_id` | Null | Unique identifier of one of the players with a tackle assist. |
-| `assist_tackle_4_player_name` | Null | String name of one of the players with a tackle assist. |
-| `assist_tackle_4_team` | Null | Team of one of the players with a tackle assist. |
+| `assist_tackle_3_player_id` | String | Unique identifier of one of the players with a tackle assist. |
+| `assist_tackle_3_player_name` | String | String name of one of the players with a tackle assist. |
+| `assist_tackle_3_team` | String | Team of one of the players with a tackle assist. |
+| `assist_tackle_4_player_id` | String | Unique identifier of one of the players with a tackle assist. |
+| `assist_tackle_4_player_name` | String | String name of one of the players with a tackle assist. |
+| `assist_tackle_4_team` | String | Team of one of the players with a tackle assist. |
 | `tackle_with_assist_1_player_id` | String | Unique identifier of one of the players with a tackle with assist. |
 | `tackle_with_assist_1_player_name` | String | String name of one of the players with a tackle with assist. |
 | `tackle_with_assist_1_team` | String | Team of one of the players with a tackle with assist. |
-| `tackle_with_assist_2_player_id` | Null | Unique identifier of one of the players with a tackle with assist. |
-| `tackle_with_assist_2_player_name` | Null | String name of one of the players with a tackle with assist. |
-| `tackle_with_assist_2_team` | Null | Team of one of the players with a tackle with assist. |
+| `tackle_with_assist_2_player_id` | String | Unique identifier of one of the players with a tackle with assist. |
+| `tackle_with_assist_2_player_name` | String | String name of one of the players with a tackle with assist. |
+| `tackle_with_assist_2_team` | String | Team of one of the players with a tackle with assist. |
 | `tackle_for_loss_1_player_id` | String | Unique identifier for one of the potential players with the tackle for loss. |
 | `tackle_for_loss_1_player_name` | String | String name for one of the potential players with the tackle for loss. |
-| `tackle_for_loss_2_player_id` | Null | Unique identifier for one of the potential players with the tackle for loss. |
-| `tackle_for_loss_2_player_name` | Null | String name for one of the potential players with the tackle for loss. |
+| `tackle_for_loss_2_player_id` | String | Unique identifier for one of the potential players with the tackle for loss. |
+| `tackle_for_loss_2_player_name` | String | String name for one of the potential players with the tackle for loss. |
 | `half_sack_1_player_id` | String | Unique identifier of the first player who recorded half a sack. |
 | `half_sack_1_player_name` | String | String name of the first player who recorded half a sack. |
 | `half_sack_2_player_id` | String | Unique identifier of the second player who recorded half a sack. |
@@ -332,6 +332,8 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `rush_weight` | Float64 | Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0). |
 | `pen_weight` | Float64 | Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0). |
 | `action_play` | Boolean | Whether the row is an action play -- a live-ball play rather than a timeout, penalty-only or administrative row. |
+| `success` | Float64 | Binary indicator whether epa > 0 in the given play. |
+| `first_down` | Float64 | Binary indicator if the play ended in a first down. |
 | `home_opening_kickoff` | Float64 | 1 if the home team received the opening kickoff, 0 otherwise. |
 | `go_wp` | Float64 | Probability-weighted win probability of going for it on fourth down, first_down_prob * wp_succeed + (1 - first_down_prob) * wp_fail. |
 | `first_down_prob` | Float32 | Modeled probability of converting the fourth down if the offense goes for it. |

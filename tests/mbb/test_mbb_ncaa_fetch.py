@@ -441,7 +441,7 @@ def test_akamai_denial_rotates_but_does_not_retire_the_proxy(tmp_path: Path, mon
     fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
 
     assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
-    assert calls == [_POOL[0], _POOL[1]]  # rotated off the denied session
+    assert calls[0] == _POOL[0] and calls[1] in _POOL[1:]  # rotated off the denied session (a random jump)
     assert page.gotos == 1  # one solve on the denied session, not solve_attempts
     assert fetcher._dead == set()  # ...without retiring the proxy
 
@@ -486,6 +486,79 @@ def test_unsolvable_proxy_is_rotated_away_from_not_returned(tmp_path: Path) -> N
     assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
     assert calls == [_POOL[0], _POOL[1]]  # rotated off the unsolvable proxy
     assert fetcher._dead == set()  # unsolved != banned -- the IP is not retired
+
+
+def _denying_transport(calls: "list[str]", errors: "list[Exception]") -> Callable[..., "tuple[int, str]"]:
+    def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
+        calls.append(proxies["http"])
+        if errors:
+            raise errors.pop(0)
+        return (200, _CLEAN)
+
+    return transport
+
+
+_DENIED = "Akamai denied this browser session (HTTP 403 Access Denied): u"
+
+
+@pytest.mark.parametrize("seed", [7, 11])
+def test_session_denial_jumps_a_random_distance_other_errors_step_one(tmp_path: Path, seed: int) -> None:
+    """A session denial moves a random distance round the pool, so shards that bunch on a sticky-IP ring split
+    up instead of following each other onto the IP that was just denied. Any other transport error still
+    steps +1. Two seeds with different jumps, so no fixed step can pass both."""
+    import random
+
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _SessionDeniedError
+
+    pool = [f"http://u:p@10.0.1.{i}:1" for i in range(50)]
+    calls: "list[str]" = []
+    errors: "list[Exception]" = [_SessionDeniedError(_DENIED), RuntimeError("net::ERR_TUNNEL_CONNECTION_FAILED")]
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=_denying_transport(calls, errors), rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=pool)
+    fetcher._rng.seed(seed)
+    step = random.Random(seed).randrange(1, len(pool))
+
+    assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
+    assert {random.Random(s).randrange(1, 50) for s in (7, 11)} == {21, 29}  # distinct, both real jumps
+    assert calls == [pool[0], pool[step], pool[step + 1]]  # denial: jump; tunnel error: +1
+    assert fetcher._dead == set()  # a denial still does not retire the proxy
+
+
+@pytest.mark.parametrize("seed", range(10))
+def test_denial_jumps_never_revisit_a_proxy_within_one_fetch(tmp_path: Path, seed: int) -> None:
+    """Denials on all but one proxy: the jumps try each proxy once, so the healthy one is reached before the
+    fetch runs out of attempts (len(pool) + max_retries)."""
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _SessionDeniedError
+
+    pool = [f"http://u:p@10.0.2.{i}:1" for i in range(12)]
+    calls: "list[str]" = []
+    errors: "list[Exception]" = [_SessionDeniedError(_DENIED) for _ in range(len(pool) - 1)]
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=_denying_transport(calls, errors), rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=pool)
+    fetcher._rng.seed(seed)
+
+    assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
+    assert sorted(calls) == sorted(pool)  # every proxy exactly once, the last one answered
+
+
+@pytest.mark.parametrize("seed", range(5))
+@pytest.mark.parametrize("pattern", ["DDDDDT", "DTDTDT", "TDTDTD", "DDTTDD"])
+def test_mixed_denials_and_errors_try_every_proxy_before_a_repeat(tmp_path: Path, seed: int, pattern: str) -> None:
+    """Denial jumps mixed with ordinary +1 steps: a +1 step that lands on a proxy this fetch already tried
+    moves on to an untried one, so all 7 proxies are tried once before any repeats."""
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _SessionDeniedError
+
+    pool = [f"http://u:p@10.0.3.{i}:1" for i in range(7)]
+    calls: "list[str]" = []
+    errors: "list[Exception]" = [
+        _SessionDeniedError(_DENIED) if c == "D" else RuntimeError("net::ERR_TUNNEL_CONNECTION_FAILED") for c in pattern
+    ]
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=_denying_transport(calls, errors), rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=pool)
+    fetcher._rng.seed(seed)
+
+    assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
+    assert sorted(calls) == sorted(pool)  # 6 failures + the answer, each on a different proxy
 
 
 class _DroppingPage(_FakePage):

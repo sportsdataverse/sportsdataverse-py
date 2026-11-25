@@ -105,6 +105,7 @@ import json
 import logging
 import math
 import os
+import random
 import re
 import shutil
 import time
@@ -1137,6 +1138,10 @@ class NcaaFetcher:
         else:
             self._pool = []
         self._proxy_idx = 0
+        # Step size after an Akamai session denial (see _rotate). Its own instance so tests can seed it.
+        self._rng = random.Random()
+        # Proxies handed out during the current _get_with_rotation call; _pick_proxy prefers the others.
+        self._tried: "set[str]" = set()
         # Successful fetches on the CURRENT proxy (drives config.rotate_every).
         self._since_rotate = 0
         # Proxies that returned a ban this session. stats.ncaa.org's per-IP bans
@@ -1205,6 +1210,7 @@ class NcaaFetcher:
         attempts = len(pool) + self.config.max_retries
         last_err = "no proxies in pool"
         accept_failures = 0
+        self._tried.clear()
         for i in range(attempts):
             if i and self.config.rotation_backoff > 0:
                 time.sleep(self.config.rotation_backoff)
@@ -1244,7 +1250,7 @@ class NcaaFetcher:
                     accept_failures += 1
                     if accept_failures >= _ACCEPT_FAILURES_MAX:
                         raise _TermsGateError(f"{exc} (on {accept_failures} proxies)") from exc
-                self._rotate("transport error")
+                self._rotate("transport error", jump=isinstance(exc, _SessionDeniedError))
                 continue
             if _is_terms_gate(text):
                 # Only a browser transport can try the Terms gate (_raw_fetch).
@@ -1301,22 +1307,35 @@ class NcaaFetcher:
             # for a ban means the ban already happened -- and it's permanent.
             self._rotate(f"{self._since_rotate} fetches on this proxy")
 
-    def _rotate(self, why: str) -> None:
-        """Advance to the next proxy and reset the per-proxy fetch counter."""
-        self._proxy_idx += 1
+    def _rotate(self, why: str, *, jump: bool = False) -> None:
+        """Advance to the next proxy and reset the per-proxy fetch counter.
+
+        ``jump=True`` (an Akamai session denial) moves a random distance round the pool instead of one step.
+        A sticky residential port keeps its exit IP for minutes, and sharded runs give every shard the same
+        ring at an offset. Shards that keep getting denied step +1 while healthy ones stand still, so they
+        catch each other up and then move together. Each follower then lands on the IP the leader was just
+        denied on. Baseball 2013 on 2026-11-24 (8 shards, 50 ports) went from 0.7 to 14 denials per saved
+        contest that way. A random step breaks the bunch.
+        """
+        n = len(self._pool)
+        self._proxy_idx += self._rng.randrange(1, n) if jump and n > 2 else 1
         self._since_rotate = 0
-        logger.debug("rotating proxy: %s", why)
+        logger.debug("rotating proxy: %s%s", why, " (session denied: random jump)" if jump else "")
 
     def _pick_proxy(self, pool: "list[str]") -> Optional[str]:
-        """Next non-dead proxy, or ``None`` when every proxy is burned.
+        """Next non-dead proxy in ring order, or ``None`` when every proxy is burned.
 
+        Within one fetch, a proxy not tried yet comes first, so a mix of denial jumps and +1 steps cannot use
+        up the attempts while a live proxy goes untried. Once all are tried, any live proxy will do.
         The ``[""]`` sentinel (custom transport, no pool) is never marked dead.
         """
-        for _ in range(len(pool)):
-            proxy = pool[self._proxy_idx % len(pool)]
-            if proxy not in self._dead:
-                return proxy
-            self._proxy_idx += 1
+        for skip in (self._tried | self._dead, self._dead):
+            for k in range(len(pool)):
+                proxy = pool[(self._proxy_idx + k) % len(pool)]
+                if proxy not in skip:
+                    self._proxy_idx += k
+                    self._tried.add(proxy)
+                    return proxy
         return None
 
     def fetch_html(self, path: str, *, force: bool = False) -> str:

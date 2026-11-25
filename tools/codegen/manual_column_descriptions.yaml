@@ -3360,6 +3360,133 @@ espn_nfl_game_rosters:
   projections_href: ESPN API hyperlink reference URL for the player's statistical projection resource.
   statistics_href: ESPN API hyperlink reference URL for the player's career statistics resource.
   team_alternate_ids_sdr: SportsDataverse SDR alternate identifier for the team, used for cross-source joins.
+espn_nfl_pbp_nflverse:
+  aborted_play: '0/1 flag: aborted snap (the text contains Aborted, nflfastR''s rule).'
+  away_coach: Away head coach, from the schedule.
+  away_score: Final away score, from the schedule.
+  away_team: Away team, nflverse's current franchise abbreviation.
+  away_timeouts_remaining: Away timeouts left before the play (after it on a timeout row), from the ESPN processor's count.
+  complete_pass: '0/1 flag: completed pass.'
+  defteam: Team on defense; null on a timeout row.
+  defteam_score: defteam's score before the play.
+  defteam_score_post: defteam's score after the play.
+  defteam_timeouts_remaining: defteam's timeouts left before the play; null on a timeout row.
+  desc: ESPN's play text (close to, but not, the NFL feed's description nflverse carries).
+  div_game: 1 for a divisional game, from the schedule.
+  down: Down; null on kickoffs, tries and timeouts.
+  drive: ESPN's drive number within the game (the digits of ESPN's drive id after the game id).
+  drive_ended_with_score: '0/1 flag: the play''s drive ended in a score.'
+  drive_play_count: Offensive plays in the play's ESPN drive.
+  drive_quarter_end: Quarter the play's ESPN drive ended in.
+  drive_quarter_start: Quarter the play's ESPN drive started in.
+  drive_time_of_possession: Time of possession of the play's ESPN drive, M:SS.
+  espn_game_id: ESPN event id of the game.
+  espn_play_id: ESPN play id (participants and the ESPN frame are keyed on it); a split PAT row's is the touchdown's plus
+    1.
+  extra_point_attempt: '0/1 flag: extra point attempt.'
+  extra_point_result: good, failed or blocked.
+  field_goal_attempt: '0/1 flag: field goal attempt.'
+  field_goal_result: made, missed or blocked.
+  first_down: '0/1 flag: first down by yards, penalty or an offensive touchdown.'
+  first_down_pass: '0/1 flag: passing first down (a passing touchdown counts).'
+  first_down_penalty: '0/1 flag: first down awarded by penalty.'
+  first_down_rush: '0/1 flag: rushing first down (a rushing touchdown counts).'
+  fourth_down_converted: '0/1 flag: fourth down converted (first down or offensive touchdown).'
+  fourth_down_failed: '0/1 flag: fourth-down pass or run that did not convert.'
+  fumble: '0/1 flag: fumble (or muff) on the play.'
+  fumble_forced: '0/1 flag: forced fumble (the text names the forcer, FUMBLES (J.Doe)).'
+  fumble_lost: '0/1 flag: fumble recovered by the other team.'
+  fumble_not_forced: '0/1 flag: fumble with no forcer named.'
+  game_date: Game date (YYYY-MM-DD), the schedule's gameday.
+  game_half: Half1, Half2 or Overtime.
+  game_id: nflverse game id, YYYY_WW_AWAY_HOME (the old abbreviation, e.g. 2007_14_SD_TEN).
+  game_seconds_remaining: Seconds left in regulation at the snap (overtime counts only its own period).
+  game_stadium: Stadium name, from the schedule (nflverse's stadium column is the feed's own name).
+  goal_to_go: '0/1 flag: goal-to-go situation.'
+  half_seconds_remaining: Seconds left in the half at the snap (overtime counts only its own period).
+  home_coach: Home head coach, from the schedule.
+  home_score: Final home score, from the schedule.
+  home_team: Home team, nflverse's current franchise abbreviation (LA, LAC, LV for the Rams, Chargers, Raiders of every era).
+  home_timeouts_remaining: Home timeouts left before the play (after it on a timeout row), from the ESPN processor's count.
+  incomplete_pass: '0/1 flag: incomplete pass (not intercepted, not a sack).'
+  interception: '0/1 flag: intercepted pass.'
+  kickoff_attempt: '0/1 flag: kickoff.'
+  kickoff_downed: '0/1 flag: kickoff downed.'
+  kickoff_fair_catch: '0/1 flag: kickoff fair catch.'
+  kickoff_out_of_bounds: '0/1 flag: kickoff out of bounds.'
+  location: Home or Neutral, from the schedule.
+  old_game_id: NFL's old game id (YYYYMMDDGG), from the schedule.
+  pass_attempt: '0/1 flag: pass attempt, sacks included (nflverse''s convention).'
+  pass_length: short or deep, from the text.
+  pass_location: left, middle or right, from the text.
+  pass_touchdown: '0/1 flag: passing touchdown.'
+  passing_yards: Yards on a completed pass; null otherwise.
+  penalty: '0/1 flag: accepted penalty (a declined one is 0, as in nflverse).'
+  penalty_team: Team of an accepted penalty, from ESPN's penalized team id.
+  penalty_yards: Yards of an accepted penalty; null otherwise.
+  play_id: GSIS play id, the digits ESPN's play id carries after its game id (2006 on); a split PAT row is its touchdown's
+    play_id plus 1. Joins nflverse play_by_play with game_id.
+  play_type: 'nflverse''s play type: pass, run, punt, field_goal, kickoff, extra_point, qb_kneel, qb_spike, no_play, or null.'
+  play_type_nfl: nflverse's NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PUNT, FIELD_GOAL, XP_KICK, PAT2, PENALTY,
+    TIMEOUT, UNSPECIFIED).
+  posteam: Team with possession (a kickoff belongs to the receiving team); null on a timeout row.
+  posteam_score: posteam's score before the play.
+  posteam_score_post: posteam's score after the play (a touchdown row leaves out its split try's points).
+  posteam_timeouts_remaining: posteam's timeouts left before the play; null on a timeout row.
+  posteam_type: 'home or away: which side posteam is.'
+  punt_attempt: '0/1 flag: punt.'
+  punt_blocked: '0/1 flag: blocked punt.'
+  punt_downed: '0/1 flag: punt downed.'
+  punt_fair_catch: '0/1 flag: punt fair catch.'
+  punt_out_of_bounds: '0/1 flag: punt out of bounds.'
+  qb_dropback: '0/1 flag: dropback: pass attempt, sack, scramble or spike.'
+  qb_kneel: '0/1 flag: quarterback kneel.'
+  qb_scramble: '0/1 flag: quarterback scramble (the text says scrambles).'
+  qb_spike: '0/1 flag: spike (the text says spiked).'
+  qtr: Quarter (5 = overtime).
+  quarter_seconds_remaining: 'Seconds left in the quarter at the snap: the clock the NFL text opens with where it has one,
+    else ESPN''s clock.'
+  receiving_yards: Yards on a completed pass; null otherwise.
+  result: Final home score minus away score, from the schedule.
+  return_touchdown: '0/1 flag: touchdown that is neither a passing nor a rushing one (returns, recoveries).'
+  roof: outdoors, dome, closed or open, from the schedule.
+  run_location: left, middle or right, from the text.
+  rush_attempt: '0/1 flag: rushing attempt (scrambles and kneels included).'
+  rush_touchdown: '0/1 flag: rushing touchdown.'
+  rushing_yards: Yards on a run; null otherwise.
+  sack: '0/1 flag: sack.'
+  safety: '0/1 flag: safety.'
+  score_differential: posteam_score minus defteam_score.
+  score_differential_post: posteam_score_post minus defteam_score_post.
+  season: Season, from game_id.
+  season_type: REG, POST or PRE.
+  side_of_field: Abbreviation of the team whose half the ball is in, or 50 at midfield.
+  special: '0/1 flag: special-teams play (kickoff, punt, field goal, extra point).'
+  special_teams_play: '0/1 flag: special-teams play as nflverse flags it (a made field goal is left out).'
+  spread_line: 'Home team''s point spread (positive when the home team is favored): the schedule''s when given, else ESPN''s.'
+  stadium_id: nflverse stadium id, from the schedule.
+  surface: Playing surface, from the schedule.
+  tackled_for_loss: '0/1 flag: run tackled for a loss.'
+  td_team: Team that scored the touchdown.
+  temp: Temperature (F), from the schedule; null indoors.
+  third_down_converted: '0/1 flag: third down converted (first down or offensive touchdown).'
+  third_down_failed: '0/1 flag: third-down pass or run that did not convert.'
+  time: Game clock at the snap, MM:SS.
+  total: Final combined score, from the schedule.
+  total_away_score: Away score after the play (a touchdown row leaves out its split try's points).
+  total_home_score: Home score after the play (a touchdown row leaves out its split try's points).
+  total_line: 'Game total (over/under): the schedule''s when given, else ESPN''s.'
+  touchback: '0/1 flag: kickoff or punt touchback.'
+  touchdown: '0/1 flag: touchdown scored on the play.'
+  two_point_attempt: '0/1 flag: two-point conversion attempt.'
+  two_point_conv_result: success or failure.
+  week: nflverse week (playoff weeks continue the regular-season count), from game_id.
+  wind: Wind speed (mph), from the schedule; null indoors.
+  yardline_100: Yards from the opponent's end zone at the snap (a kickoff from the receiving team's side).
+  yards_gained: Yards gained on the play itself (an accepted penalty's yards excluded; 0 on kicks and no-play penalties).
+  ydsnet: Net yards of the play's ESPN drive.
+  ydstogo: Yards to go for a first down (0 on kickoffs and timeouts).
+  yrdln: Field position as nflverse writes it (e.g. KC 35, MID 50).
 espn_nfl_player_stats:
   defensive_assist_tackles: Number of assisted tackles credited to the player (helped bring down the ball carrier but was
     not the primary tackler).
@@ -81244,6 +81371,196 @@ yahoo_cfb_boxscore:
   stat_abbreviation: Short stat label.
   stat_variation: 'Stat scope of the row; always "Game" because the shangrila lineup carries single-game stats only.'
   value: Stat value as Yahoo sends it ("188").
+# The ESPN NFL processor's own columns (NFLPlayProcess in sportsdataverse/nfl/nfl_pbp.py), described once here:
+# calculate_epa, calculate_wpa and split_pat_rows pass build_nfl_season's frame through and inherit this block
+# (generate._DESC_INHERITS), and build_nfl_season in turn inherits load_cfb_pbp's.
+build_nfl_season:
+  EPA: Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules -- 0 on a clock
+    stoppage; -EP_start on an unscored play that ends a half (this rule wins); otherwise plus EP_between (the gap from
+    the previous play's end EP, sign-adjusted for a possession change) on a play whose text carries a penalty and that
+    is neither a kickoff nor typed "Penalty".
+  aborted_play: Binary indicator (1/0) that the play text contains "Aborted" (a botched snap or exchange), nflfastR's
+    clean_pbp rule.
+  athlete_name: The play's passer, else its rusher (passer_player_name, then rusher_player_name); null when neither.
+  awayScore: Away team's running score after the play -- ESPN's awayScore with feed errors repaired (a score rises
+    only on or right after a scoring play).
+  away_wp_after: Away team's win probability after the play (0-1).
+  away_wp_before: Away team's win probability before the play (0-1).
+  change_of_pos_team: True when the next row's possession team differs from this one's, and on the game's last row.
+  change_of_poss: True when ESPN's end-of-play team differs from the start-of-play possession team.
+  defense_score_play: True when ESPN's play type is a defensive score (return touchdown, safety, defensive two-point
+    return, ...).
+  completion: True on a completed pass; False when a penalty wiped the play out.
+  def_EPA: EPA for the defensive team on the play (-1 * EPA).
+  def_pos_team: ESPN team id of the team on defense at the start of the play (the kicking team on a kickoff).
+  def_pos_team_score: Defensive team's score after the play.
+  def_pos_unit: Defensive unit on the play -- "Punt Return", "Kickoff Defense", "Field Goal Defense" or "Defense".
+  def_wp_after: Defensive team's win probability after the play (1 - wp_after).
+  def_wp_before: Defensive team's win probability before the play (1 - wp_before).
+  distance: Yards to go for a first down at the start of the play (10 on a kickoff).
+  downs_turnover: True on a 4th-down rush, pass or sack whose ESPN statYardage fell short of the distance and drew no
+    penalty first down.
+  end_of_half: True on the play that ends a half -- the first half's last play, regulation's last play before
+    overtime, and a completed game's last play (clock stoppages excluded).
+  fg_block_player_name: Name of the player who blocked the field goal, parsed from the play text; null when none.
+  fg_kicker_player_name: Name of the field-goal kicker -- ESPN's per-play participant name, else parsed from the
+    play text; null on other plays.
+  fg_made: True when ESPN types the play "Field Goal Good".
+  fg_make_prob: Fourth downs only. Probability a field-goal attempt from this spot is good, from the bundled nfl4th
+    fg_model; null on every other row.
+  fg_return_player_name: Name of the player returning a blocked or missed field goal, parsed from the play text.
+  firstD_by_kickoff: Series-start flag (cfbfastR's rule) set on every kickoff; not an earned first down.
+  firstD_by_penalty: Series-start flag (cfbfastR's rule), True on the play after a first down earned by penalty with
+    no change of possession (a timeout or end-of-period row in between is skipped).
+  firstD_by_poss: Series-start flag (cfbfastR's rule), True on a possession's first play -- after a kickoff, punt,
+    turnover, turnover on downs or scoring play, or a drive's first play that is not a kickoff; not an earned first
+    down.
+  firstD_by_yards: Series-start flag (cfbfastR's rule), True on the play after a first down earned by yards with no
+    change of possession (a timeout or end-of-period row in between is skipped).
+  fumble_forced_player_name: Name of the player who forced the fumble -- ESPN's per-play participant name, else
+    parsed from the play text.
+  fumble_forced_player_id: ESPN athlete id of the player who forced the fumble (the play's participants, else matched
+    by name in the game's box score).
+  fumble_player_id: ESPN athlete id of the player who fumbled, matched by name and team in the game's box score.
+  fumble_player_name: Name of the player who fumbled or muffed, parsed from the play text; null on non-fumble plays.
+  fumble_recovered_player_id: ESPN athlete id of the player who recovered the fumble (the play's participants, else
+    matched by name in the game's box score).
+  fumble_recovered_player_name: Name of the player who recovered the fumble -- ESPN's per-play participant name,
+    else parsed from the play text.
+  fumble_vec: True when the play text mentions a fumble.
+  game_play_number: 1-based order of the row in the game, numbered after duplicate plays are dropped (it skips the
+    coin-toss and end-of-period / half / game rows removed later).
+  half: Half of the game -- 1 for periods 1-2, 2 for period 3 onward (overtime included).
+  homeScore: Home team's running score after the play -- ESPN's homeScore with feed errors repaired (a score rises
+    only on or right after a scoring play).
+  home_wp_after: Home team's win probability after the play (0-1).
+  home_wp_before: Home team's win probability before the play (0-1).
+  int: True when ESPN types the play "Interception Return" or "Interception Return Touchdown".
+  int_td: True when ESPN types the play "Interception Return Touchdown".
+  is_home: True when the possession team (pos_team) is the home team.
+  kick_play: True when the play text mentions a kick (kickoffs, and any text naming a kick).
+  kickoff_oob: True on a kickoff whose text says it went out of bounds.
+  kickoff_onside: True on a kickoff whose text calls it onside.
+  kickoff_play: True when ESPN's play type is a kickoff type (kickoff, kickoff return or touchdown, kicking-team
+    recovery, kickoff safety, kickoff penalty).
+  kickoff_player_name: Name of the kicker on a kickoff, parsed from the play text ("C.Little kicks 65 yards ...").
+  kickoff_safety: True on a safety whose text mentions a kickoff (a blocked punt or penalty excluded).
+  kickoff_tb: True on a kickoff whose text says touchback (or ends in "kickoff").
+  lag_change_of_pos_team: Previous row's change_of_pos_team within the game; False on the first row.
+  lag_pos_score_diff: Previous row's pos_score_diff (from that row's possession team's side); 0 on the first row.
+  lag_pos_team: Previous row's possession team id; this row's own on the first row.
+  lateral_player_name: After a completed pass, the player the ball was lateraled to ("Lateral to ..."); null
+    otherwise.
+  lead_play_type: Play type (type.text, as the processor has re-typed it) of the next row; null on the last row.
+  lead_pos_team: Next row's possession team id; null on the last row.
+  middle_8: True in the middle eight minutes -- the last four of the first half and the first four of the second
+    (34:00 to 26:00 of game time remaining).
+  modified: ESPN's modified timestamp for the play record (ISO 8601, UTC).
+  new_series: True on the first play of a series of downs -- a half's first row, a new drive, or the play after a
+    first down earned by yards or penalty (cfbfastR's rule).
+  offense_score_play: True when ESPN's play type is an offensive score (passing, rushing or kick-return touchdown,
+    made field goal, ...).
+  opportunity_run: True on a rush that gained 4 or more yards.
+  orig_play_type: ESPN's play type (type.text) as the feed sent it, before the processor re-classifies plays (only a
+    mistyped two-minute warning is relabelled first).
+  pass_breakup_player_id: ESPN athlete id of the defender credited with defending the pass (the play's participants,
+    else matched by name in the game's box score).
+  pass_breakup_player_name: Name of the defender credited with defending the pass (not an interceptor) -- ESPN's
+    per-play participant name, else parsed from the play text.
+  pass_middle: 1 when the pass location parsed from the text is "middle", else 0.
+  pass_td: True on the offense's passing touchdown; False on a return touchdown and on a touchdown that did not
+    stand.
+  penalty_1st_conv: True when an accepted foul by the defense gave the offense a first down -- an automatic first-down
+    foul, or one whose yardage reached the line to gain (never on a kickoff, touchdown, try, possession change or
+    offsetting fouls).
+  penalty_declined: True when the play text mentions a penalty that was declined.
+  penalty_detail: Name of the foul -- ESPN's penalty.type.text when the feed has it, else matched from the text;
+    "Offsetting" / "Declined" / "Missing" when no foul name is found, null on plays with no penalty.
+  penalty_flag: True when ESPN types the play "Penalty" or the text reads "PENALTY on".
+  penalty_no_play: True when the penalty wiped the play out ("No Play" / "nullified by penalty").
+  penalty_offset: True when the play text mentions offsetting penalties.
+  penalty_safety: True on a safety that ESPN types "Penalty".
+  penalty_text: The play text after "Penalty" (" on NE-M.Onwenu, False Start, 5 yards, ..."); null when no penalty
+    is flagged.
+  period: Quarter of the game from ESPN's period.number (5 and up in overtime), with out-of-place periods repaired.
+  play_type_nfl: nflverse NFL play type (PASS, RUSH, SACK, PENALTY, KICK_OFF, XP_KICK, ...) mapped from ESPN's
+    type.text -- PENALTY on a no-play penalty and then SACK on a sack, whatever ESPN typed (a nullified sack is
+    PENALTY), PASS / RUSH from the play flags on a fumble or safety type, UNSPECIFIED for an ESPN type with no mapping.
+  pos_score_diff: Possession team's score minus the defense's, after the play.
+  pos_score_diff_start: Possession team's score differential before the play -- the previous row's pos_score_diff,
+    sign-flipped when that row's possession team was the other team.
+  pos_score_pts: Points the play put on the board, from the possession team's side (negative when the defense
+    scored).
+  pos_team: ESPN team id of the team in possession at the start of the play (the receiving team on a kickoff).
+  pos_team_score: Possession team's score after the play.
+  pos_unit: Possession team's unit on the play -- "Punt Offense", "Kickoff Return", "Field Goal Offense" or
+    "Offense".
+  priority: ESPN's priority flag for the play, passed through as sent.
+  prob_2pt: Touchdowns with a try only. Two-point conversion probability for the scoring team, from the bundled
+    nfl4th two-point model; null on every other row.
+  punt: True when ESPN's play type is a punt type (punt, punt return or touchdown, blocked punt, punt safety, ...).
+  punt_block_player_name: Name of the player who blocked the punt, parsed from the play text; null when none.
+  punt_block_return_player_name: Name of the player returning a blocked punt, parsed from the play text.
+  punt_oob: True on a punt whose text says it went out of bounds.
+  punt_play: True when the play text mentions a punt (including the "(Punt formation)" annotation).
+  punt_safety: True on a safety whose text mentions a punt.
+  punt_tb: True on a punt whose text says touchback.
+  rush_td: True on the offense's rushing touchdown; False on a return touchdown and on a touchdown that did not
+    stand.
+  rz_play: True when the play starts 20 or fewer yards from the end zone.
+  sack_player_name2: Second defender on a split sack ("sack split by A and B") -- ESPN's second sackedBy
+    participant, else parsed from the play text.
+  sack_players: The play text after "sacked by" on a sack or fumbled pass (the college phrasing); null when the text
+    has none.
+  sack_vec: True when ESPN types the play a sack, or a fumble recovery on a pass whose text says "sacked".
+  scoring_opp: True when the play starts 40 or fewer yards from the end zone.
+  scoring_play: True when ESPN's play type is in the processor's scoring list (touchdowns other than kickoff
+    returns, a made field goal, safeties, a defensive two-point return); a try is not one.
+  sequenceNumber: ESPN's sequenceNumber, the feed's ordering number for the play within the game.
+  status_type_completed: True when ESPN's game header marks the game completed (one value per game).
+  stuffed_run: True on a play ESPN types "Rush" that gained zero or fewer yards.
+  target: True on a pass attempt that targeted a receiver (any pass that is not a sack); False when a penalty wiped
+    the play out.
+  td_play: True when the play text or type names a touchdown that stood ("touchdown", "for a TD").
+  text: ESPN's play description, with the HTML entities `&apos;`, `&quot;` and `&amp;` unescaped.
+  turnover_vec: True when ESPN's play type is a turnover type (interception, opponent fumble recovery, blocked or
+    missed field goal, blocked punt, punt-return touchdown, ...).
+  two_point_pass: True on a two-point try whose text describes a pass.
+  two_point_rush: True on a two-point try whose text describes no pass.
+  wallclock: ESPN's wallclock -- the real-world time of the play (ISO 8601, UTC).
+  wp_after: Win probability after the play for the team that had the ball at the snap (0-1), from the bundled
+    wp_spread model; 1 or 0 on a completed game's last play.
+  wp_before: Win probability before the play for the possession team (0-1), from the bundled spread-adjusted
+    wp_spread model; a kickoff takes the touchback state's value.
+  xp_kicker_player_id: ESPN athlete id of the extra-point kicker, matched by name and team in the game's box score.
+  xp_wp: Touchdowns with a try only. Win probability of kicking the extra point for the scoring team (the make
+    probability at the PAT spot weighs the 1- and 0-point outcomes, nfl4th's method); null on every other row.
+  yds_fg: Distance of the field-goal attempt in yards, parsed from the play text; null on other plays.
+  yds_fumble_return: Yards the recovering player returned the fumble (0 when the text gives none); null when there
+    was no fumble.
+  yds_int_return: Yards the interception was returned (0 when the text gives none); null on other plays.
+  yds_kickoff: Distance of the kickoff in yards ("kicks 65 yards"); null on other plays.
+  yds_kickoff_return: Kickoff return yards (0 on a fair catch or no gain); on a touchback, the season's touchback yard
+    line (the 30 in 2024); null on other plays.
+  yds_lateral: After a completed pass, the yards gained by the player the ball was lateraled to; null otherwise.
+  yds_penalty: Penalty yards as a signed whole number in text form -- from the penalty clause ("5 yards") or ESPN's
+    penalty.yards, else ESPN's statYardage less the play's own gain; null when no penalty or an implausible number.
+  yds_punt_gained: ESPN's statYardage on a punt play; null on other plays.
+  yds_punt_return: Punt return yards (0 on a fair catch, touchback, downed or out-of-bounds punt); null on other
+    plays.
+  yds_punted: Distance of the punt in yards ("punts 46 yards"), 0 on a blocked punt; null on other plays.
+  yds_receiving: Receiving yards credited on a pass play (0 on an incompletion, sack or interception, the gain to the
+    spot of an offensive foul); null on non-pass plays.
+  yds_rushed: Rushing yards credited on a rush (ESPN's statYardage on a plain run, the gain to the spot of an
+    offensive foul, 0 when a penalty wiped it out); null on non-rush plays.
+  yds_sacked: Yards lost on the sack, as a negative number; null on other plays.
+# calculate_epa adds nflverse-style lowercase aliases of the EP pair.
+calculate_epa:
+  ep_end: Alias of EP_end -- expected points for the start-of-play offense at the end of the play; on a score, the
+    scoring value for that offense (negative when the defense scored). A touchdown whose try is not recognised gets
+    6.92 (-6.92 for the defense's), which includes an expected 0.92 for the try rather than realised points.
+  ep_start: Alias of EP_start -- expected points for the offense at the start of the play (0.92 on a try, the
+    touchback state on a kickoff).
 # play_type_nfl / aborted_play (#1255). nfl_model_pbp passes the Shield build's columns through, so these
 # two belong under load_nfl_model_pbp too once nfl-data bumps SCHEMA_REV and rebuilds the release (its
 # 2026-11-24 assets were built at sdv-py 2974302a, before #1255, and lack them).
@@ -81253,10 +81570,14 @@ shield_nfl_pbp:
   play_type_nfl: nflverse NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PENALTY, TIMEOUT, ...) -- the Shield
     feed's playType with an intercepted pass labelled INTERCEPTION, as nflverse labels it.
 split_pat_rows:
-  aborted_play: Binary indicator (1/0) that the play text contains "Aborted" (a botched snap or exchange), nflfastR's
-    clean_pbp rule.
   id: ESPN play id; on a split try row, the touchdown's id + 1 (ESPN gives the try no id of its own).
   play_type_nfl: nflverse NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PENALTY, ...) mapped from ESPN's
     type.text and the play flags; XP_KICK / PAT2 on a split try row, UNSPECIFIED for an ESPN type with no mapping.
+  game_play_number: 1-based order of the row in the game, numbered after duplicate plays are dropped; a split try row
+    repeats its touchdown's.
+  two_point_pass: True on a two-point try whose text describes a pass; null on a split try row (its type.text /
+    play_type_nfl carry the try).
+  two_point_rush: True on a two-point try whose text describes no pass; null on a split try row (its type.text /
+    play_type_nfl carry the try).
   pat_of_id: On a split PAT / two-point try row, the id of the touchdown it was folded into (the row's own id is that
     id + 1); null on every other row.
