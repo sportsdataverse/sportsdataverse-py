@@ -12134,3 +12134,24 @@
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_defensive_touchdowns_try_takes_the_scorers_timeouts
   expected: kill
   note: A split try's timeouts read from the wrong side, e.g. the old offense's after a defensive touchdown.
+
+# --- ESPN league `endpoints:` allowlist (lacrosse) ------------------------------------------------
+- id: espn-league-endpoints-allowlist-applied
+  group: espn-league-allowlist
+  finding: espn-lacrosse-allowlist
+  file: tools/codegen/spec.py
+  snippet: '        return not self.endpoints or ep.short in self.endpoints'
+  mutant: '        return True'
+  test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_filters_in_scope_endpoints
+  expected: kill
+  note: An ignored allowlist would emit every in-scope ESPN wrapper for lacrosse, most of them 404.
+
+- id: espn-league-endpoints-unknown-short-rejected
+  group: espn-league-allowlist
+  finding: espn-lacrosse-allowlist
+  file: tools/codegen/spec.py
+  snippet: '        if set(lg.endpoints) - shorts:'
+  mutant: '        if False:'
+  test: tests/test_espn_lacrosse.py::test_league_endpoints_allowlist_rejects_unknown_short
+  expected: kill
+  note: A typo in a league allowlist would silently drop that wrapper instead of failing the build.
