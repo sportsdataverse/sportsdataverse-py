@@ -12082,3 +12082,55 @@
   note: >-
     Free throws at a period's opening tick belong to the previous period's last foul, which is the
     lineup stats.nba.com credits them to; letting the look-ahead take them misses its on/off.
+
+
+- id: nfl-espn-view-split-try-spot
+  group: nfl-espn-view
+  finding: nfl-espn-view-wpa
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '    view = _timeout_rows(_pat_field(_pat_scores(view)) if "pat_of_id" in view.columns else view)'
+  mutant: '    view = _timeout_rows(_pat_scores(view) if "pat_of_id" in view.columns else view)'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_split_try_is_spotted_with_its_touchdowns_timeouts
+  expected: kill
+  note: A split try with no yard line gets a make probability off a null spot and drags vegas_wpa to r 0.17.
+
+- id: nfl-espn-view-split-try-15-yard-kick
+  group: nfl-espn-view
+  finding: nfl-espn-view-wpa
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '        pl.when(~two & (pl.col("season") >= PAT_FIRST_SEASON_FROM_15))'
+  mutant: '        pl.when(~two & (pl.col("season") >= 3000))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_split_try_is_spotted_with_its_touchdowns_timeouts
+  expected: kill
+  note: A 2015+ kick try spotted at the 2 instead of the 15.
+
+- id: nfl-espn-view-penalized-kickoff-receiver
+  group: nfl-espn-view
+  finding: nfl-espn-view-wpa
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '    is_home = pl.when(pen_kick).then(away_ball).otherwise(home_ball)'
+  mutant: '    is_home = home_ball'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_penalized_kickoff_is_the_receivers_kickoff
+  expected: kill
+  note: A penalized kickoff would stay with the kicking team, flipping that row's WP.
+
+- id: nfl-espn-view-penalized-kickoff-relative-columns
+  group: nfl-espn-view
+  finding: nfl-espn-view-wpa
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '        return pl.when(flip).then(pl.col(other)).otherwise(pl.col(own))'
+  mutant: '        return pl.col(own)'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_penalized_kickoff_is_the_receivers_kickoff
+  expected: kill
+  note: A penalized kickoff given to the receiver would keep the kicker's score differential and timeouts.
+
+
+- id: nfl-espn-view-split-try-timeouts-oriented
+  group: nfl-espn-view
+  finding: nfl-espn-view-wpa
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '        .then(pl.when(home).then(home_to).otherwise(away_to))'
+  mutant: '        .then(pl.when(home).then(away_to).otherwise(home_to))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_defensive_touchdowns_try_takes_the_scorers_timeouts
+  expected: kill
+  note: A split try's timeouts read from the wrong side, e.g. the old offense's after a defensive touchdown.

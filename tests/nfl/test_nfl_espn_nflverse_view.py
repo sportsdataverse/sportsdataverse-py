@@ -26,7 +26,13 @@ GAMES = {401671740: "2024_04_PHI_TB", 400554340: "2014_11_MIN_CHI", 271209010: "
 #: Captures for single rules, kept out of the whole-game capture set (``fixtures/espn_nflverse_view/``):
 #: 2019_13_OAK_KC has a defensive two-point return its touchdown row counts; 2024_01_NYJ_SF has a split
 #: two-point pass and run (and a whole game ESPN clocks after the snap, so it is not in the floor set).
-EXTRA = {401128067: "2019_13_OAK_KC", 401671696: "2024_01_NYJ_SF", 401671886: "2024_20_BAL_BUF"}
+EXTRA = {
+    401128067: "2019_13_OAK_KC",
+    401671696: "2024_01_NYJ_SF",
+    401671886: "2024_20_BAL_BUF",
+    401128090: "2019_09_GB_LAC",
+    401671712: "2024_01_MIN_NYG",
+}
 
 #: Every view column nflverse also has must agree on >= 97% of each game's joined plays, except these
 #: (floor = the lowest observed game rate, rounded down; the whole-season rates are in the PR body):
@@ -462,3 +468,47 @@ def test_a_drive_that_ends_the_half_is_end_of_half():
     assert (
         j.filter(pl.col("fixed_drive_result__nv") == "Touchdown")["fixed_drive_result"] == "Touchdown"
     ).mean() >= 0.97
+
+
+def test_a_split_try_is_spotted_with_its_touchdowns_timeouts():
+    """nflverse spots a kick try at the 2 (before 2015) or the 15, a two-point try at the 2, with the TD's timeouts."""
+    view = _view()
+    for gid, kick_spot in (("2024_04_PHI_TB", 15.0), ("2014_11_MIN_CHI", 2.0)):
+        g = view.filter(pl.col("game_id") == gid)
+        prev = g.with_columns(pl.col("posteam_timeouts_remaining").shift(1).alias("_td_to"))
+        tries = prev.filter((pl.col("extra_point_attempt") == 1) | (pl.col("two_point_attempt") == 1))
+        assert tries.height >= 4, gid
+        spot = pl.when(pl.col("two_point_attempt") == 1).then(2.0).otherwise(kick_spot)
+        assert tries.select((pl.col("yardline_100") == spot).all()).item(), gid
+        assert (tries["ydstogo"] == 0).all() and (tries["side_of_field"] == tries["defteam"]).all()
+        assert tries["posteam_timeouts_remaining"].null_count() == 0
+        assert (tries["posteam_timeouts_remaining"] == tries["_td_to"]).all(), gid
+    # the FG model scores the kick from the spot: nflverse's make probability, not one off a null yard line
+    kicks = _enriched().filter((pl.col("game_id") == "2024_04_PHI_TB") & (pl.col("extra_point_attempt") == 1))
+    assert kicks["ep"].is_between(0.9, 1.0).all(), kicks["ep"].to_list()
+
+
+def test_a_penalized_kickoff_is_the_receivers_kickoff():
+    """ESPN files an offside-on-the-kick replay as a penalty with the kicking team's ball; nflverse's is a kickoff."""
+    view = espn_nfl_pbp_nflverse(_plays(401128090), _schedule())
+    nv = _nflverse("2019_09_GB_LAC")
+    j = view.join(nv, on=["game_id", "play_id"], suffix="__nv")
+    row = j.filter(pl.col("play_id") == 3203)
+    assert row.select("play_type", "posteam", "yardline_100").row(0) == ("kickoff", "LAC", 35.0)
+    assert row["yardline_100"].item() == row["yardline_100__nv"].item()
+    # its posteam-relative score and timeouts are the receiver's too
+    for c in ("score_differential", "posteam_score", "posteam_timeouts_remaining"):
+        assert row[c].item() == row[f"{c}__nv"].item(), c
+    ko = j.filter(pl.col("play_type__nv") == "kickoff")
+    assert (ko["posteam"] == ko["posteam__nv"]).all() and (ko["play_type"] == "kickoff").all()
+
+
+def test_a_defensive_touchdowns_try_takes_the_scorers_timeouts():
+    """After a defensive touchdown the try is the scoring defense's: its own timeouts, not the old offense's."""
+    view = espn_nfl_pbp_nflverse(_plays(401671712), _schedule())
+    prev = view.with_columns(pl.col("posteam").shift(1).alias("_td_posteam"))
+    tries = prev.filter((pl.col("extra_point_attempt") == 1) & (pl.col("posteam") != pl.col("_td_posteam")))
+    assert tries.height == 1
+    nv = _nflverse("2024_01_MIN_NYG").filter(pl.col("play_id") == 2831)
+    cols = ("posteam", "posteam_timeouts_remaining", "defteam_timeouts_remaining")
+    assert tries.select(cols).row(0) == nv.select(cols).row(0) == ("MIN", 1.0, 3.0)

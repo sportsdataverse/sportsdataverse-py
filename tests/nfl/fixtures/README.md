@@ -131,6 +131,16 @@ rushing touchdown whose text still folds a passing two-point try. Trimmed the sa
 `nfl/espn/raw/2024/401671886.json.gz` (commit f5b5269e, 2026-09-14); its nflverse rows (the same `pbp` release asset)
 were appended to `espn_nflverse_view.parquet` and its schedule row to `espn_nflverse_view_schedule.parquet`.
 
+`espn_nflverse_view/summary_401128090_trimmed.json.gz` (2019_09_GB_LAC, added 2026-11-25) is a single-rule capture: an
+offside-on-the-kick replay ESPN files as a penalty with the kicking team's ball (play 3203). Trimmed the same way from
+nfl-raw `nfl/espn/raw/2019/401128090.json.gz` (commit 96b91e56); its nflverse rows (the same `pbp` release asset) were
+appended to `espn_nflverse_view.parquet` and its schedule row to `espn_nflverse_view_schedule.parquet`.
+
+`espn_nflverse_view/summary_401671712_trimmed.json.gz` (2024_01_MIN_NYG, added 2026-11-25) is a single-rule capture: a
+defensive touchdown whose split try belongs to the scoring defense (nflverse play 2831). Trimmed the same way from
+nfl-raw `nfl/espn/raw/2024/401671712.json.gz` (commit f5b5269e); its nflverse rows were appended to
+`espn_nflverse_view.parquet` and its schedule row to `espn_nflverse_view_schedule.parquet`.
+
 `play_type_nfl_2024.parquet` is the oracle for `play_type_nfl` / `aborted_play` (Shield and ESPN) and for the PAT rows `split_pat_rows` builds:
 `game_id, play_id, play_type_nfl, aborted_play, desc, extra_point_result, two_point_conv_result`, cut on 2026-11-24 from the nflverse-data `pbp`
 release asset `play_by_play_2024.parquet`:
