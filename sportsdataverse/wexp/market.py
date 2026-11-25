@@ -2,7 +2,7 @@
 
 Conversions from prices to implied probabilities, vig removal
 (multiplicative default, Shin as the sensitivity check), the spread->WP
-normal-CDF mapping, and the nfelo-style 70/30 logit-space spread/moneyline
+normal-CDF mapping, and the 70/30 logit-space spread/moneyline
 blend. Conventions:
 
 - ``spread`` is the expected HOME margin: positive = home favored

@@ -7,7 +7,7 @@ emits pre-game ratings + P(home). Every constant is a tunable
 refuted in RESEARCH; seeds here are starting points for the harness sweep
 (nfelo: k~9.1, z~402, carryover~0.53).
 
-MOV multiplier (538 form): ``ln(|pd|+1) * 2.2 / ((elo_w - elo_l)*0.001 + 2.2)``
+MOV multiplier: ``ln(|pd|+1) * 2.2 / ((elo_w - elo_l)*0.001 + 2.2)``
 — log-diminishing returns plus the autocorrelation correction that shrinks
 credit when big favorites win big.
 """

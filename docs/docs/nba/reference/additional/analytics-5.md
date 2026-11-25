@@ -16,7 +16,7 @@ Each rating is anchored to the team (its players' possession-weighted mean ratin
 season is the team's net rating / 5; it is a season constraint, not an estimate for each
 five-man lineup) and centred on the league, so 0 is a league-average player. `vorp` is points per
 100 team possessions above a replacement player over one team's season of possessions
-(Basketball-Reference's VORP scale); `war` is wins above replacement. A replacement-level
+(a full season of possessions at `R + 1` per 100 is a VORP of 1); `war` is wins above replacement. A replacement-level
 player has 0, and a season's `war` adds up to the league's wins minus those of a team of
 replacement players. `rating` / `war` are the mean of the three sources; `rating_<s>`
 / `war_<s>` are each one. The replacement level and points per win are fitted per league

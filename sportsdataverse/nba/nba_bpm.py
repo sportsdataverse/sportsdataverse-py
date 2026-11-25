@@ -309,7 +309,7 @@ def _team_shares(player_logs: pl.DataFrame, team_logs: pl.DataFrame) -> pl.DataF
 def _team_adjust(raw: pl.DataFrame, team_margin: pl.DataFrame, ptm: pl.DataFrame) -> pl.DataFrame:
     """BPM 2.0 team adjustment: one constant for BPM, a separate one for OBPM (Myers 2020).
 
-    Basketball-Reference's "About Box Plus/Minus (BPM)" (Daniel Myers, BPM 2.0) sets each team
+    BPM 2.0 sets each team
     adjustment so the players' ratings, weighted by %Min (minutes / (team minutes / 5), five
     slots that sum to 5), add up to the team's rating: ``(team rating - sum(raw * %Min)) / 5``.
     That is a minute-weighted team MEAN of ``rating / 5``. BPM is fit to the team's net rating

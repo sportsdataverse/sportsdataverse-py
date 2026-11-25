@@ -14,7 +14,7 @@ leagues; one row per game):
   ``total_close`` Float64, ``ml_home_close`` / ``ml_away_close`` Float64
   (American), ``spread_open`` Float64 (null where the source holds no open)
 - ``p_close_spread`` / ``p_close_ml`` / ``p_close`` Float64 — vig-removed
-  home probabilities; ``p_close`` is the nfelo-style 70/30 logit blend
+  home probabilities; ``p_close`` is the 70/30 logit-space blend
   where both exist, else whichever side exists.
 
 NFL source: nflverse schedules (closing PFR lines, 1999+; no opens).
