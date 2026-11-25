@@ -262,8 +262,8 @@ description of that pattern anywhere, it predates 0.1.x.
 
 Total cross-league surface: **127 short names** (from the five ESPN
 endpoint YAMLs in `generate.ESPN_APIS`) emitted across 42 league modules
-= **4,626 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
-lacrosse emits 32, golf 28). The `espn_cdn` family (`cdn.espn.com/core`, shorts
+= **4,632 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
+lacrosse emits 35, golf 31). The `espn_cdn` family (`cdn.espn.com/core`, shorts
 `cdn_playbyplay` / `cdn_boxscore` / `cdn_schedule` / `cdn_scoreboard` /
 `cdn_rankings`) is the one family whose per-league reach was live-probed:
 each endpoint carries an `include_prefixes` allowlist (league prefixes, so

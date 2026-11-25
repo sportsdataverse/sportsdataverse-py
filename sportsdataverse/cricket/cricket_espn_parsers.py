@@ -146,7 +146,7 @@ def parse_cricket_standings(payload: Any, *, return_as_pandas: bool = False):
             rows.append(row)
     if not rows:
         return _out(pl.DataFrame(), return_as_pandas)
-    return _out(pl.DataFrame(_stringify_lists(rows)), return_as_pandas)
+    return _out(pl.DataFrame(_stringify_lists(rows), infer_schema_length=None), return_as_pandas)
 
 
 # ---------------------------------------------------------------------------
@@ -396,7 +396,7 @@ def _build_cricket_standings_summary(payload: dict) -> pl.DataFrame:
                 rows.append(row)
         if not rows:
             return pl.DataFrame()
-        return pl.DataFrame(_stringify_lists(rows))
+        return pl.DataFrame(_stringify_lists(rows), infer_schema_length=None)
     except Exception:
         return pl.DataFrame()
 

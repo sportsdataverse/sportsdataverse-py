@@ -19,6 +19,9 @@ columns:
 - name: stat_fg3m_exp
   type: double
   description: ''
+- name: minutes_exp
+  type: double
+  description: ''
 - name: pace_proj
   type: double
   description: ''

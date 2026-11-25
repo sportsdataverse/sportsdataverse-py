@@ -317,6 +317,11 @@ def ncaa_mbb_possessions(
         ]
         schema = POSSESSION_SEG_SCHEMA
 
+    # Event-level pbp lineups change at a dead-ball sub inside a possession (#1271); bigballR froze
+    # them per possession. A possession keeps the five on its first row, so it stays one row.
+    poss_keys = [k for k in keys if k not in _LINEUP_COLS]
+    df = df.with_columns(pl.col(c).first().over(poss_keys) for c in _LINEUP_COLS)
+
     out = (
         df.group_by(keys)
         .agg(aggs)

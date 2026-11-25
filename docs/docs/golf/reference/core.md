@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # Golf — ESPN core API (v2)
 
-`sportsdataverse.golf` — 22 endpoints.
+`sportsdataverse.golf` — 25 endpoints.
 
 ## espn_golf_league_root
 
@@ -900,6 +900,137 @@ ESPN endpoint.
 
 ```python
 espn_golf_game_teams(league='pga', event_id='401584793')
+```
+
+## espn_golf_game_team
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/events/{event_id}/competitions/{cid}/competitors/{team_id}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/events/401584793/competitions/401584793/competitors/4](https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/events/401584793/competitions/401584793/competitors/4)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
+
+### Returns {#espn_golf_game_team-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | String |  |
+| `home_away` | String |  |
+| `id` | Int64 |  |
+| `order` | Int64 |  |
+| `type` | String |  |
+| `uid` | String |  |
+| `winner` | Boolean |  |
+| `leaders_$ref` | String |  |
+| `linescores_$ref` | String |  |
+| `record_$ref` | String |  |
+| `roster_$ref` | String |  |
+| `score_$ref` | String |  |
+| `statistics_$ref` | String |  |
+| `team_$ref` | String |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_golf_game_team-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_golf_game_team-example}
+
+```python
+espn_golf_game_team(league='pga', event_id='401584793', team_id='4')
+```
+
+## espn_golf_game_team_linescores
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/events/401584793/competitions/401584793/competitors/4/linescores](https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/events/401584793/competitions/401584793/competitors/4/linescores)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
+
+### Returns {#espn_golf_game_team_linescores-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_event_competitor_linescores`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: the page holds zero items (count 0) in nba with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_golf_game_team_linescores-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_golf_game_team_linescores-example}
+
+```python
+espn_golf_game_team_linescores(league='pga', event_id='401584793', team_id='4')
+```
+
+## espn_golf_game_team_statistics
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/events/401584793/competitions/401584793/competitors/4/statistics](https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/events/401584793/competitions/401584793/competitors/4/statistics)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `cid` | `cid` |  |  | `Y` | cid path parameter. |
+
+### Returns {#espn_golf_game_team_statistics-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `split_name` | String | Name of the stat split (Core v2 answers one, "All Splits"). |
+| `category_name` | String | ESPN stat category of the row (e.g., "defensive", "general", "offensive"). |
+| `stat_name` | String | ESPN stat key in camelCase (e.g., "blocks", "defensiveRebounds"). |
+| `stat_abbreviation` | String | Short label of the stat (e.g., "BLK"). |
+| `stat_value` | Float64 | Numeric value of the team's stat in this game. |
+| `stat_display_value` | String | The value as ESPN displays it (a string, e.g., "7"). |
+| `stat_description` | String | ESPN's one-sentence definition of the stat. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_golf_game_team_statistics-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_golf_game_team_statistics-example}
+
+```python
+espn_golf_game_team_statistics(league='pga', event_id='401584793', team_id='4')
 ```
 
 ## espn_golf_game_status

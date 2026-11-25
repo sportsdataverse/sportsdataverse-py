@@ -500,7 +500,7 @@ EuroLeague, the international families and the ESPN side leagues (`nbl/ fiba/ ol
 
 Each `<league>/<prefix>_espn_ext.py` is **codegen output** (~5,700 lines) written by
 `build_live()` from the five ESPN endpoint YAMLs — 127 short names across 42
-league modules, 4,626 wrappers. Never hand-edit one; edit the YAML and regenerate.
+league modules, 4,632 wrappers. Never hand-edit one; edit the YAML and regenerate.
 
 ## Parser Layer
 

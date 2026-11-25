@@ -9,14 +9,14 @@ description: "sdv-py Lacrosse: endpoint references, dataset loaders and parsers 
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [ESPN](#espn) | `site.api.espn.com`, `sports.core.api.espn.com` | 32 | none |
+| [ESPN](#espn) | `site.api.espn.com`, `sports.core.api.espn.com` | 35 | none |
 
 ## ESPN {#espn}
 
 | Reference | Functions |
 |---|---:|
 | [ESPN site API (v2)](reference/site) | 10 |
-| [ESPN core API (v2)](reference/core) | 22 |
+| [ESPN core API (v2)](reference/core) | 25 |
 
 ## Examples
 
