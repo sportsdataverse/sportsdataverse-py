@@ -128,7 +128,7 @@ def ncaa_stint_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: str
     """Map the stats.ncaa.org pbp and possessions onto the stint-row frame.
 
     One row per event in game order, on the event's lineup: its clock, its points (a free throw's
-    on the row of the game's last foul) and the possessions that start at it. A possession starts
+    on the row of its own foul (the latest, or the one logged after it at the same clock reading; not an earlier period's once clock has run)) and the possessions that start at it. A possession starts
     at the first event of its ``poss_num``; one whose ``poss_team`` is neither side is dropped.
 
     Args:
@@ -161,7 +161,11 @@ def ncaa_stint_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: str
         _events(pbp, league),
         is_free_throw=pl.col("event_type") == "Free Throw",
         is_foul=pl.col("foul_class").is_not_null(),
-    )
+        order="order",
+        period="period",
+        clock_ran=pl.col("_clock_ran"),
+        clock="_reading",
+    ).drop("_reading", "_clock_ran")
     starts = pl.DataFrame(
         schema={"game_id": pl.Utf8(), "order": pl.Int64(), "home_poss": pl.Int64(), "away_poss": pl.Int64()}
     )
@@ -301,7 +305,7 @@ def mbb_game_units(
             units = mbb_game_units(2025)
     """
     pbp, possessions = _load_releases(seasons, league)
-    counts = ncaa_lineup_count_rows(pbp)
+    counts = ncaa_lineup_count_rows(pbp, league=league)
     rows = ncaa_impact_rows(pbp, possessions, league=league)
     del pbp, possessions  # the pbp read is most of the peak memory; free it before the roll-up
     out = game_units(rows, counts, player_dtype=_PLAYER)

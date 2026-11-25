@@ -4,7 +4,7 @@ Builds :func:`sportsdataverse._common.lineup_seasons.lineup_seasons` from the tw
 releases the college game impact box reads (:mod:`sportsdataverse.mbb.mbb_game_impact`):
 possessions, minutes and points are the season sum of ``mbb_game_lineups_used``, and the
 four-factor and shot-zone counts come from the ``ncaa_{mbb,wbb}_pbp`` events, each on the lineup
-on the floor at the event (a free throw on the lineup at the last foul, as its points).
+on the floor at the event (a free throw on the lineup at its foul, as its points).
 
 The counts follow the bigballR ``get_lineups`` rules (:mod:`sportsdataverse.mbb.mbb_ncaa_lineups`),
 the rules behind ``ncaa_{mbb,wbb}_team_box``: a rim attempt is a dunk, layup, hook or tip-in
@@ -27,7 +27,14 @@ import polars as pl
 from sportsdataverse._common.rate_gates import NCAA_LEVEL
 from sportsdataverse._common.game_impact import credit_free_throws_to_foul_lineup
 from sportsdataverse._common.lineup_seasons import COUNTS, ZONE_COUNTS, lineup_count_schema, lineup_seasons
-from sportsdataverse.mbb.mbb_game_impact import _check_league, _load_releases, _slots, _teams, ncaa_impact_rows
+from sportsdataverse.mbb.mbb_game_impact import (
+    _check_league,
+    _load_releases,
+    _period_bounds,
+    _slots,
+    _teams,
+    ncaa_impact_rows,
+)
 from sportsdataverse.mbb.mbb_ncaa_lineups import RIM_TYPES_FIXED
 
 __all__ = ["mbb_lineup_seasons", "ncaa_lineup_count_rows"]
@@ -61,16 +68,19 @@ def _event_counts() -> dict[str, pl.Expr]:
     return {c: flags[c].fill_null(False).cast(pl.Int64) for c in (*COUNTS, *ZONE_COUNTS)}
 
 
-def ncaa_lineup_count_rows(pbp: pl.DataFrame) -> pl.DataFrame:
+def ncaa_lineup_count_rows(pbp: pl.DataFrame, *, league: str = "mens") -> pl.DataFrame:
     """Map the stats.ncaa.org pbp onto the lineup-seasons count frame.
 
     Each shot, free throw, rebound and turnover counts for the side whose ``event_team`` it is,
     on the lineup at the event; a free throw on the lineup at the most recent foul
-    (:func:`sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`). Events with
-    no count are dropped.
+    (:func:`sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`), unless that
+    foul is from an earlier period and clock has run in the free throw's. Events with no count are
+    dropped.
 
     Args:
         pbp: ``load_ncaa_mbb_pbp`` / ``load_ncaa_wbb_pbp`` rows, in release (game) order.
+        league: ``"mens"`` or ``"womens"``: halves, or the women's quarters from 2016, set where
+            each period's clock starts.
 
     Returns:
         One row per counted event in
@@ -84,9 +94,11 @@ def ncaa_lineup_count_rows(pbp: pl.DataFrame) -> pl.DataFrame:
             from sportsdataverse.mbb.mbb_lineup_seasons import ncaa_lineup_count_rows
             rows = ncaa_lineup_count_rows(load_ncaa_mbb_pbp(2025))
     """
+    _check_league(league)
     if pbp.height == 0:
         return pl.DataFrame(schema=_COUNT_ROWS)
     counts = _event_counts()
+    start, _ = _period_bounds(league)
     side = {s: pl.col("event_team") == pl.col(s) for s in ("home", "away")}
     # No sort: the release is in game order, and the foul fill runs ``over`` the game, which keeps
     # each game's rows in that order.
@@ -96,6 +108,10 @@ def ncaa_lineup_count_rows(pbp: pl.DataFrame) -> pl.DataFrame:
         *[pl.when(side[s]).then(e).otherwise(0).alias(f"{s}_{c}") for s in side for c, e in counts.items()],
         "event_type",
         "foul_class",
+        "period",
+        pl.col("game_seconds").alias("_clock"),
+        # once clock has run in a period it has run: a later clock correction does not undo it
+        (pl.col("game_seconds").cast(pl.Float64) > start).cum_max().over("contest_id", "period").alias("_clock_ran"),
         # The foul-lineup helper moves points and splits clocked rows; with neither, it only moves
         # the slots of each free throw.
         pl.lit(0.0).alias("seconds"),
@@ -103,7 +119,12 @@ def ncaa_lineup_count_rows(pbp: pl.DataFrame) -> pl.DataFrame:
         pl.lit(0).alias("away_pts"),
     )
     events = credit_free_throws_to_foul_lineup(
-        events, is_free_throw=pl.col("event_type") == "Free Throw", is_foul=pl.col("foul_class").is_not_null()
+        events,
+        is_free_throw=pl.col("event_type") == "Free Throw",
+        is_foul=pl.col("foul_class").is_not_null(),
+        period="period",
+        clock_ran=pl.col("_clock_ran"),
+        clock="_clock",
     )
     counted = pl.any_horizontal([pl.col(f"{s}_{c}") > 0 for s in side for c in counts])
     return events.filter(counted).select(list(_COUNT_ROWS)).cast(_COUNT_ROWS)
@@ -150,7 +171,7 @@ def mbb_lineup_seasons(
     """
     _check_league(league)
     pbp, possessions = _load_releases(seasons, league)
-    counts = ncaa_lineup_count_rows(pbp)
+    counts = ncaa_lineup_count_rows(pbp, league=league)
     rows = ncaa_impact_rows(pbp, possessions, league=league)
     del pbp, possessions  # the pbp read is most of the peak memory; free it before the roll-up
     out = lineup_seasons(rows, counts, player_dtype=_PLAYER, min_poss=min_poss, zones=True, level=NCAA_LEVEL[league])

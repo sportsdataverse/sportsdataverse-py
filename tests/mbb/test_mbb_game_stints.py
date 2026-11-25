@@ -51,7 +51,7 @@ def _rows(lg: str) -> pl.DataFrame:
 
 
 def _units(lg: str) -> pl.DataFrame:
-    return game_units(_rows(lg), ncaa_lineup_count_rows(_read(lg, "pbp")), player_dtype=PLAYER)
+    return game_units(_rows(lg), ncaa_lineup_count_rows(_read(lg, "pbp"), league=LEAGUE[lg]), player_dtype=PLAYER)
 
 
 def _team_box(lg: str, folder: str) -> pl.DataFrame:

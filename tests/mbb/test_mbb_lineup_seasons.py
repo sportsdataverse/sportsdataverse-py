@@ -50,13 +50,13 @@ def _read(lg: str, name: str) -> pl.DataFrame:
 def _built(lg: str, level: str | None = None) -> pl.DataFrame:
     pbp = _read(lg, "pbp")
     rows = ncaa_impact_rows(pbp, _read(lg, "possessions"), league=LEAGUES[lg])
-    counts = ncaa_lineup_count_rows(pbp)
+    counts = ncaa_lineup_count_rows(pbp, league=LEAGUES[lg])
     return lineup_seasons(rows, counts, player_dtype=pl.Utf8(), min_poss=20, zones=True, level=level)
 
 
 @pytest.mark.parametrize("lg", list(LEAGUES))
 def test_counts_equal_the_team_box(lg: str) -> None:
-    counts = ncaa_lineup_count_rows(_read(lg, "pbp"))
+    counts = ncaa_lineup_count_rows(_read(lg, "pbp"), league=LEAGUES[lg])
     per_side = [
         counts.group_by("game_id", pl.col(f"{s}_team_id").alias("team_id")).agg(
             pl.col(f"{s}_{c}").sum().alias(c) for c in BOX
@@ -78,21 +78,44 @@ def test_counts_equal_the_team_box(lg: str) -> None:
 
 @pytest.mark.parametrize("lg", list(LEAGUES))
 def test_free_throws_count_on_the_foul_lineup(lg: str) -> None:
+    """A free throw counts on the lineup at the game's latest foul, unless that foul is from an
+    earlier period and clock has run in the free throw's (then its own foul went unlogged)."""
     pbp = _read(lg, "pbp")
     slots = [f"{c}_player_id" for c in _SLOTS]
-    want, moved, foul = [], 0, {}
-    for row in pbp.select("contest_id", "event_type", "foul_class", *slots).iter_rows(named=True):
+    # each period's opening clock, in game seconds: halves, or the women's quarters (2025 fixture)
+    n_reg, reg_len = (2, 1200.0) if lg == "mbb" else (4, 600.0)
+    start = lambda p: (p - 1) * reg_len if p <= n_reg else 2400.0 + 300.0 * (p - n_reg - 1)  # noqa: E731
+    cols = ("contest_id", "period", "game_seconds", "event_type", "foul_class", *slots)
+    rows = list(pbp.select(cols).iter_rows(named=True))
+    # a foul at the free throw's own clock reading logged after it, by (contest, period, seconds)
+    later: dict[tuple, list[int]] = {}
+    for i, row in enumerate(rows):
+        if row["foul_class"] is not None:
+            later.setdefault((row["contest_id"], row["period"], row["game_seconds"]), []).append(i)
+    want, moved, kept, ahead, foul = [], 0, 0, 0, {}
+    for i, row in enumerate(rows):
         lineup = tuple(row[c] for c in slots)
         if row["foul_class"] is not None:
-            foul[row["contest_id"]] = lineup
+            foul[row["contest_id"]] = (row["period"], row["game_seconds"], lineup)
         elif row["event_type"] == "Free Throw":
-            at_foul = foul.get(row["contest_id"], lineup)
+            f_period, f_secs, at_foul = foul.get(row["contest_id"], (row["period"], row["game_seconds"], lineup))
+            ran = float(row["game_seconds"]) > start(row["period"])
+            nxt = [k for k in later.get((row["contest_id"], row["period"], row["game_seconds"]), []) if k > i]
+            if ran and nxt and (f_period, f_secs) != (row["period"], row["game_seconds"]):
+                ahead += 1
+                at_foul = tuple(rows[nxt[0]][c] for c in slots)
+            elif f_period != row["period"] and ran:
+                kept += at_foul != lineup
+                at_foul = lineup
             moved += at_foul != lineup
             want.append(at_foul)
-    counts = ncaa_lineup_count_rows(pbp).filter((pl.col("home_fta") + pl.col("away_fta")) > 0)
+    counts = ncaa_lineup_count_rows(pbp, league=LEAGUES[lg]).filter((pl.col("home_fta") + pl.col("away_fta")) > 0)
     got = list(counts.select(_SLOTS).iter_rows())
     assert got == want
-    assert moved == {"mbb": 49, "wbb": 32}[lg]  # observed: free throws whose lineup changed after the foul
+    # observed: free throws on their foul's (changed) lineup; ones keeping their own because the
+    # latest foul is from an earlier period with clock run; and ones whose own foul is printed after
+    # them at the same second (a missed free throw listed first), which take that foul
+    assert (moved, kept, ahead) == {"mbb": (15, 0, 46), "wbb": (9, 0, 26)}[lg]
 
 
 @pytest.mark.parametrize("lg", list(LEAGUES))
