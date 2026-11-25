@@ -11632,6 +11632,26 @@
   expected: kill
   note: 5028 (suspended 2000-04-12, resumed the 13th) would be collected twice for the RE24 matrix.
 
+- id: mlb-we-table-results-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_win_expectancy.py
+  snippet: '    results = results.unique(subset=["game_id", "home_score", "away_score"], keep="first", maintain_order=True)'
+  mutant: '    results = results'
+  test: tests/mlb/test_mlb_win_expectancy_oracle.py::test_a_game_listed_twice_in_the_results_counts_once
+  expected: kill
+  note: results_corpus lists 5028 and 6146 twice, so their 155 PAs would count twice in the WE table.
+
+- id: mlb-run-value-missing-state-zero
+  group: mlb-dedupe-game-pks
+  finding: mlb-markov-run-expectancy
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    re_after = 0.0 if after_outs >= 3 else lut.get((after_state, after_outs))'
+  mutant: '    re_after = 0.0 if after_outs >= 3 else lut.get((after_state, after_outs), 0.0)'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_run_value_on_an_empirical_matrix_missing_a_state
+  expected: kill
+  note: A state missing from an empirical matrix would score as 0 RE instead of NaN.
+
 - id: mlb-base-out-states-not-deduped
   group: mlb-dedupe-game-pks
   finding: mlb-dedupe-game-pks
