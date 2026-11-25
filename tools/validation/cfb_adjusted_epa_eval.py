@@ -47,8 +47,6 @@ import polars as pl
 
 from sportsdataverse.cfb import cfb_adjusted_epa
 from sportsdataverse.cfb.cfb_adjusted_epa import (
-    _ADJ_REQUIRED,
-    _FIT_WP,
     _RIDGE_LAMBDA,
     _REQUIRED_COLUMNS,
     _TEAM_SEASON_PLAYS,
@@ -57,6 +55,11 @@ from sportsdataverse.cfb.cfb_adjusted_epa import (
     _fit_team_strengths,
     _prepare,
 )
+
+# The #598 fit this tool evaluates: the naive-WP band. cfb_adjusted_epa moved to the
+# score-margin garbage-time rule on 2026-11-25; kept here so the #598 numbers reproduce.
+_FIT_WP = ("wp_before_naive", 0.05, 0.95)
+_ADJ_REQUIRED = (*_REQUIRED_COLUMNS[:-1], _FIT_WP[0])
 
 TRAIN, EVAL = (2019, 2021, 2022), (2023, 2024, 2025)
 GRID = [round(0.005 * i, 3) for i in range(1, 16)] + [0.1, 0.15, 0.2, 0.3]

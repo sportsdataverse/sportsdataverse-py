@@ -6,14 +6,63 @@ description: "College football — additional Python functions — Models and ca
 ---
 # College football — additional Python functions — Models and calculators: cfb_adjusted–fit_field
 
+### cfb_adjusted_epa {#cfb_adjusted_epa}
+
+`cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Season opponent-adjusted per-team EPA from a season's play-by-play.
+
+Fits one ridge of per-play `EPA` on offense-team, defense-team, and
+home-field indicators (every team shrunk toward the league average by its own
+play count) over the pass and rush plays that are not garbage time (the
+score-margin rule, see the module docstring), nets each team's per-game raw
+EPA on those same plays against the opponent's fitted strength, and averages
+to a season figure. In-sample/descriptive (the
+fit uses the whole season); for leak-free per-game values use
+`cfb_adjusted_epa_by_game`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
+| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
+| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (`0.1 <= wp_before <= 0.9` band, standardized ridge with the first team id as the reference level, lambda 0.035, own EPA on every play). pre598 reads `wp_before` instead of `period` / `pos_score_diff_start`. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per team (>= 2 valid games): `team_id`, `pos_team`, `valid_games`, `adj_off_epa`, `adj_def_epa`, `off_strength_faced`, `def_strength_faced`, `net_adj_epa` and their `*_rank` columns.
+
+No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or every play is garbage time. |
+
+**Example**
+
+```python
+import sportsdataverse.cfb as cfb
+pbp = cfb.load_cfb_pbp(seasons=[2023])
+cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
+
+# NFL team summaries (the pre-#598 method; reads wp_before)
+
+cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
+```
+
 ### cfb_adjusted_epa_by_game {#cfb_adjusted_epa_by_game}
 
 `cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
 
-For each week `w` the opponent-strength ridge is fit on `_FIT_WP`-band plays
-from **weeks before `w` only**, then that week's games are adjusted with
+For each week `w` the opponent-strength ridge is fit on non-garbage-time
+plays from **weeks before `w` only**, then that week's games are adjusted with
 those as-of strengths -- so the value uses no future information and is valid
 as an in-season power-rating / model feature. Week 1 (no prior) yields null
 adjustments; not-yet-seen opponents fall back to the league baseline (an
@@ -24,7 +73,7 @@ average team), and teams seen on few plays are shrunk most of the way there.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
-| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
+| `ridge_lambda` | `float \| None` | `None` | Ridge penalty, as in `cfb_adjusted_epa` (`None` means 0.075 for `"current"`, 0.035 for `"pre598"`). |
 | `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (see `cfb_adjusted_epa`). pre598 also keeps the old week order: it sorts by `week` alone and does not read `seasonType`, so postseason games that restart at week 1 are fit with (and leak into) the regular season, exactly as before. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
@@ -39,7 +88,7 @@ No returns table is published for this function: no capture: it needs play-by-pl
 | Exception | Description |
 |---|---|
 | `KeyError` | If `plays` is missing a required column (incl. `week`, and `seasonType` unless `method="pre598"`). |
-| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or no play falls in the `wp_before_naive` fit band. |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or every play is garbage time. |
 
 **Example**
 
