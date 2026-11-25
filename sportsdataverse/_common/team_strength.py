@@ -89,12 +89,13 @@ COLLEGE_RIDGE_LAMBDA: dict[str, float] = {"mens": 200.0, "womens": 50.0}
 #: ``tools/fit_college_ridge_prior.py`` (2026-11-25) on an as-of walk of the 2022-2023 seasons only
 #: (weekly cutoffs, possessions strictly before each; ``r`` the no-intercept regression of season-end
 #: net on the previous season-end net at each penalty; the penalty with the lowest train as-of margin
-#: MAE), then scored once on 2024-2026. Men's: lambda 200 (the no-prior value; train MAE 8.899 vs
+#: MAE), then scored on 2024-2026 (seasons the earlier method comparisons scored too). Men's: lambda 200 (the no-prior value; train MAE 8.899 vs
 #: 8.924 at 100 and 8.899 at 400), r 0.7762; holdout MAE 9.152 vs 9.399 for the no-prior ridge,
-#: -0.247 +/- 0.051 (SE clustered by week, 15,725 games), -0.76 in weeks 1-4, -0.03 from week 9.
+#: -0.247 +/- 0.051 (SE clustered by week, which treats weeks as independent; 15,725 games), -0.76 in weeks 1-4, -0.03 from week 9.
 #: Women's: lambda 200 (the grid's top; train 9.578 vs 9.580 at 100 and 9.625 at the no-prior 50),
 #: r 0.8858; holdout 9.704 vs 10.044, -0.340 +/- 0.092 (14,645 games), and -0.084 +/- 0.021 against
-#: the prior at 50. Fading the prior out over a team's first games was tested and is worse.
+#: the prior at 50. Both leagues gain in each held-out season (tests/fixtures/bb_team_strength/ridge_prior_*.json).
+#: Fading the prior over a team's first games, tested on the same seasons and protocol, is worse.
 COLLEGE_RIDGE_PRIOR_REGRESSION: dict[str, float] = {"mens": 0.7762, "womens": 0.8858}
 #: league -> the ridge penalty when the last-season prior is on (fit with it; see above).
 COLLEGE_RIDGE_PRIOR_LAMBDA: dict[str, float] = {"mens": 200.0, "womens": 200.0}

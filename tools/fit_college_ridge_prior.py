@@ -150,9 +150,16 @@ def paired(frame: pl.DataFrame, d: np.ndarray) -> dict[str, float]:
 
 
 def holdout_report(ho: pl.DataFrame, maps: dict[tuple[str, str], tuple[float, float]], chosen: str, ref: str) -> dict:
-    """Holdout MAE of every variant and the three comparisons, overall and per phase."""
+    """Holdout MAE of every variant and the three comparisons, overall, per phase and per season.
+
+    The week-clustered SE treats the weeks of a season as independent; they are not (a week's fit
+    holds the previous weeks' possessions and the same prior), so the per-season differences are
+    reported too: the sign holding in each held-out season is the check that does not lean on it.
+    """
     out: dict[str, object] = {"games": ho.height, "weeks": ho.select("season", "week").n_unique()}
-    for label, sub in [("all", ho), *[(p, ho.filter(pl.col("phase") == p)) for p in sorted(ho["phase"].unique())]]:
+    phases = [(p, ho.filter(pl.col("phase") == p)) for p in sorted(ho["phase"].unique())]
+    seasons = [(f"season_{s}", ho.filter(pl.col("season") == s)) for s in sorted(ho["season"].unique())]
+    for label, sub in [("all", ho), *phases, *seasons]:
         err = {v: abs_errors(sub, maps, v) for v in {chosen, ref, "shipped"}}
         out[label] = {
             "n": sub.height,

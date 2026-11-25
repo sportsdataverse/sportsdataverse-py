@@ -120,7 +120,9 @@ def _ridge(rows: pl.DataFrame, league: str, prior: str | None) -> pl.DataFrame:
         if prev.height == 0 and prev_season >= _FIRST_POSSESSION_SEASON:
             prev = ncaa_possession_rate_rows(load_possessions(prev_season), load_schedule(prev_season), league=league)
         seed = last_season_prior(prev, lam=lam, regression=COLLEGE_RIDGE_PRIOR_REGRESSION[league])
-        fits.append(possession_ridge_ratings(sub, lam=lam, prior=seed))
+        # no previous season (before the releases start, or none published): the no-prior fit and its penalty
+        fit_lam = lam if seed.height else COLLEGE_RIDGE_LAMBDA[league]
+        fits.append(possession_ridge_ratings(sub, lam=fit_lam, prior=seed))
     return pl.concat(fits).sort("season", "team_id")
 
 

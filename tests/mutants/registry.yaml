@@ -12212,8 +12212,8 @@
   group: college-ridge-prior
   finding: college-ridge-prior
   file: sportsdataverse/mbb/mbb_team_strength.py
-  snippet: '        fits.append(possession_ridge_ratings(sub, lam=lam, prior=seed))'
-  mutant: '        fits.append(possession_ridge_ratings(sub, lam=lam, prior=None))'
+  snippet: '        fits.append(possession_ridge_ratings(sub, lam=fit_lam, prior=seed))'
+  mutant: '        fits.append(possession_ridge_ratings(sub, lam=fit_lam, prior=None))'
   test: tests/mbb/test_mbb_team_strength.py -k "ridge_ratings_are_the_possession_ridge or prior_seeds"
   expected: kill
   note: The default ridge would build the prior and then never use it.
@@ -12234,7 +12234,7 @@
   file: sportsdataverse/_common/team_strength.py
   snippet: '        (regression * (pl.col("adj_off_rtg") - pl.col("adj_off_rtg").mean())).alias("off_dev"),'
   mutant: '        (pl.col("adj_off_rtg") - pl.col("adj_off_rtg").mean()).alias("off_dev"),'
-  test: tests/mbb/test_mbb_team_strength.py -k prior_reads_only_the_season_before
+  test: tests/mbb/test_mbb_team_strength.py -k last_season_prior_is_the_regressed_previous_fit
   expected: kill
   note: Last season's offensive rating would seed this season unregressed.
 
@@ -12378,3 +12378,13 @@
   test: tests/mlb/test_mlb_markov_run_expectancy.py::test_by_event_prob_and_event_classes
   expected: kill
   note: field_out / force_out (unmapped) would be classed as reaching base instead of outs in play.
+
+- id: college-ridge-prior-no-seed-penalty
+  group: college-ridge-prior
+  finding: college-ridge-prior
+  file: sportsdataverse/mbb/mbb_team_strength.py
+  snippet: '        fit_lam = lam if seed.height else COLLEGE_RIDGE_LAMBDA[league]'
+  mutant: '        fit_lam = lam'
+  test: tests/mbb/test_mbb_team_strength.py -k no_previous_season
+  expected: kill
+  note: A season with no previous season would be fit at the prior's penalty with no prior.

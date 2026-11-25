@@ -17,6 +17,7 @@ possession rows, so they too match it exactly.
 from __future__ import annotations
 
 import importlib
+import json
 from collections import defaultdict
 from pathlib import Path
 
@@ -231,18 +232,40 @@ def test_bad_league_raises() -> None:
 @pytest.mark.parametrize("lg", ["mbb", "wbb"])
 def test_the_prior_seeds_from_last_season(lg: str) -> None:
     """The default ridge shrinks toward r x last season's rating; prior=None is the plain ridge."""
-    lam = COLLEGE_RIDGE_LAMBDA[LEAGUE[lg]]
     plain = _strength(lg, prior=None).drop_nulls("adj_net_rtg_ridge").sort("team_id")
     seeded = _strength(lg).drop_nulls("adj_net_rtg_ridge").sort("team_id")
-    want = possession_ridge_ratings(_rows(lg), lam=lam).sort("team_id")
+    want = possession_ridge_ratings(_rows(lg), lam=COLLEGE_RIDGE_LAMBDA[LEAGUE[lg]]).sort("team_id")
     assert (plain["adj_net_rtg_ridge"] - want["adj_net_rtg"]).abs().max() == 0.0
-    # the prior moves the ratings (silent-no-op guard); test_ridge_ratings_are_the_possession_ridge pins the values
-    assert (seeded["adj_net_rtg_ridge"] - plain["adj_net_rtg_ridge"]).abs().max() > 0.5
+    # the prior alone moves the ratings: against the same penalty without it (silent-no-op guard)
+    same_lam = possession_ridge_ratings(_rows(lg), lam=COLLEGE_RIDGE_PRIOR_LAMBDA[LEAGUE[lg]]).sort("team_id")
+    assert (seeded["adj_net_rtg_ridge"] - same_lam["adj_net_rtg"]).abs().max() > 0.5
 
 
 @pytest.mark.parametrize("lg", ["mbb", "wbb"])
-def test_the_prior_reads_only_the_season_before(lg: str) -> None:
-    """As of any date the prior is built from last season alone: this season's possessions never enter it."""
+def test_a_season_with_no_previous_season_is_the_no_prior_fit(lg: str) -> None:
+    """Before the releases start there is no prior, so the season gets the no-prior penalty too."""
+    rows = _rows(lg).with_columns(pl.lit(2010, dtype=pl.Int64).alias("season"))
+    got = mod._ridge(rows, LEAGUE[lg], "last_season")
+    want = possession_ridge_ratings(rows, lam=COLLEGE_RIDGE_LAMBDA[LEAGUE[lg]])
+    assert got.equals(want)
+
+
+@pytest.mark.parametrize("lg", ["mbb", "wbb"])
+def test_the_prior_constants_are_the_committed_fit(lg: str) -> None:
+    """COLLEGE_RIDGE_PRIOR_* are tools/fit_college_ridge_prior.py's chosen values (its --out JSON)."""
+    fit = json.loads((STRENGTH / f"ridge_prior_{lg}.json").read_text(encoding="utf-8"))
+    assert not set(fit["train"]) & set(fit["holdout"])
+    assert COLLEGE_RIDGE_PRIOR_LAMBDA[LEAGUE[lg]] == fit["chosen_lam"]
+    assert COLLEGE_RIDGE_PRIOR_REGRESSION[LEAGUE[lg]] == fit["chosen_regression"]
+    # the change ships only because it beats the no-prior ridge out of sample, in every held-out season
+    ho = fit["holdout_scored_once"]
+    assert ho["all"]["chosen_vs_shipped"]["diff"] < 0
+    assert all(ho[f"season_{s}"]["chosen_vs_shipped"]["diff"] < 0 for s in fit["holdout"])
+
+
+@pytest.mark.parametrize("lg", ["mbb", "wbb"])
+def test_last_season_prior_is_the_regressed_previous_fit(lg: str) -> None:
+    """The prior is last season's ridge deviations times r, from one season only."""
     lam, r = COLLEGE_RIDGE_PRIOR_LAMBDA[LEAGUE[lg]], COLLEGE_RIDGE_PRIOR_REGRESSION[LEAGUE[lg]]
     prev = _rows(lg, 2024)
     assert prev["season"].unique().to_list() == [2024]
