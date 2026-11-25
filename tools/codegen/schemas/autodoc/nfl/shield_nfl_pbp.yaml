@@ -677,10 +677,10 @@ columns:
   type: character
   description: ''
 - name: drive_start_yard_line
-  type: integer
+  type: character
   description: ''
 - name: drive_end_yard_line
-  type: integer
+  type: character
   description: ''
 - name: drive_play_id_started
   type: integer
@@ -987,4 +987,19 @@ columns:
   description: ''
 - name: fourth_down_recommendation
   type: character
+  description: ''
+- name: play_type_nfl
+  type: character
+  description: ''
+- name: drive
+  type: integer
+  description: ''
+- name: aborted_play
+  type: integer
+  description: ''
+- name: success
+  type: double
+  description: ''
+- name: first_down
+  type: double
   description: ''

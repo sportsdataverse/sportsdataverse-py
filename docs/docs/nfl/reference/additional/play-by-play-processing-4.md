@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Play-by-play processing: shield_nfl–team_name"
-sidebar_label: "Play-by-play processing: shield_nfl–team_name"
+title: "NFL — additional Python functions — Play-by-play processing: shield_nfl–shield_to"
+sidebar_label: "Play-by-play processing: shield_nfl–shield_to"
 sidebar_position: 14
-description: "NFL — additional Python functions — Play-by-play processing: shield_nfl–team_name — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Play-by-play processing: shield_nfl–shield_to — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Play-by-play processing: shield_nfl–team_name
+# NFL — additional Python functions — Play-by-play processing: shield_nfl–shield_to
 
 ### shield_nfl_pbp {#shield_nfl_pbp}
 
@@ -260,8 +260,8 @@ A polars DataFrame, one row per play (plus, while `summary.phase` is `INGAME`, o
 | `drive_end_transition` | String | String indicating how the offense lost the ball. |
 | `drive_game_clock_start` | String | Game time at the beginning of a given drive. |
 | `drive_game_clock_end` | String | Game time at the end of a given drive. |
-| `drive_start_yard_line` | Int64 | String indicating where a given drive started consisting of team half and yard line number. |
-| `drive_end_yard_line` | Int64 | String indicating where a given drive ended consisting of team half and yard line number. |
+| `drive_start_yard_line` | String | String indicating where a given drive started consisting of team half and yard line number. |
+| `drive_end_yard_line` | String | String indicating where a given drive ended consisting of team half and yard line number. |
 | `drive_play_id_started` | Int64 | Play_id of the first play in the given drive. |
 | `drive_play_id_ended` | Int64 | Play_id of the last play in the given drive. |
 | `drive_time_of_possession` | String | Time of possession in a given drive. |
@@ -364,6 +364,11 @@ A polars DataFrame, one row per play (plus, while `summary.phase` is `INGAME`, o
 | `punt_wp_diff` | Float64 |  |
 | `fg_wp_diff` | Float64 |  |
 | `fourth_down_recommendation` | String |  |
+| `play_type_nfl` | String | nflverse NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PENALTY, TIMEOUT, ...) -- the Shield feed's playType with an intercepted pass labelled INTERCEPTION, as nflverse labels it. |
+| `drive` | Int64 | Numeric drive number in the game. |
+| `aborted_play` | Int64 | Binary indicator (1/0) that the play description contains "Aborted" (a botched snap or exchange), nflfastR's clean_pbp rule. |
+| `success` | Float64 | Binary indicator whether epa > 0 in the given play. |
+| `first_down` | Float64 | Binary indicator if the play ended in a first down. |
 
 **Raises**
 
@@ -426,76 +431,3 @@ proc = NFLPlayProcess(gameId=401772635, join_participants=False)
 proc.espn_nfl_pbp(summary=summary)
 result = proc.run_processing_pipeline()
 ```
-
-### split_pat_rows {#split_pat_rows}
-
-`split_pat_rows(plays: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-Give every PAT that ESPN folded into its touchdown row a row of its own, as nflverse does.
-
-From about 2014 ESPN reports the extra point or two-point try inside the touchdown play
-(`xp_attempt` / `two_point_attempt` on the touchdown row); nflverse keeps it as its own
-`XP_KICK` / `PAT2` row. This is opt-in: `NFLPlayProcess` output keeps ESPN's rows, and this
-function returns a new frame with one extra row after each such touchdown. Older seasons, where ESPN
-already emits the try as its own row, are returned as they are, and so is a try a penalty wiped out
-(a `Penalty` / no-play row that carries the PAT flags; ESPN lists the re-try as its own row).
-
-The split row copies the touchdown row's game / clock / possession context, takes the try's part of
-the play text, and carries the try: `xp_attempt` / `two_point_attempt`, `extra_point_result`
-(`good` / `failed` / `blocked`; ESPN leaves a blocked PAT null), `two_point_conv_result`
-(`success` / `failure`), `play_type_nfl` (`XP_KICK` / `PAT2`) and `type.text`. The results come
-from ESPN's columns where the feed has them, else from the text. The touchdown row hands the try over
-(its PAT flags become `False` and its PAT results null). Every other column of a split row is null.
-
-ESPN gives the try no id, so the split row's `id` is the touchdown's `id + 1` and `pat_of_id` names
-the touchdown (null on every other row). Its `game_play_number` is the touchdown's.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `plays` | `DataFrame` |  | `NFLPlayProcess(...).plays_frame` (one game or many). |
-
-**Returns**
-
-The rows of `plays` in their original order, each folded try right after its touchdown, plus `pat_of_id` (Int64).
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If a synthetic id (touchdown `id + 1`) is already a play's id. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import NFLPlayProcess, split_pat_rows
-proc = NFLPlayProcess(gameId=401671740)
-proc.espn_nfl_pbp()
-proc.run_processing_pipeline()
-plays = split_pat_rows(proc.plays_frame)
-```
-
-### team_name_fn {#team_name_fn}
-
-`team_name_fn(expr: 'pl.Expr') -> 'pl.Expr'`
-
-Fold historical/relocated team codes onto their current abbreviation.
-
-Verbatim port of nflfastR's `team_name_fn` (a plain
-`stringr::str_replace_all` over a 10-entry named vector). Operates as a
-**substring** replace (not a full-value lookup) so it also fixes
-embedded codes like `"SD 49" -> "LAC 49"` on yard-line columns. The
-10 from-codes are disjoint from all of their to-values, so the order of
-the 10 sequential replacements does not matter (verified in
-`tests.nfl.test_nfl_clean`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `expr` | `Expr` |  | A `polars.Expr` over a Utf8 column (e.g. `pl.col("posteam")`). |
-
-**Returns**
-
-The same expression with every occurrence of the 10 historical codes replaced by their current-franchise code.

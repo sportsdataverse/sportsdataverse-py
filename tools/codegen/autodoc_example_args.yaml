@@ -132,6 +132,7 @@ nfl:
   build_nfl_team_stats: {seasons: [2023]}  # 544 rows x 102 cols
   calculate_epa: {df: {$call: nfl.build_nfl_season, args: {game_ids: [401671801]}}}  # 165 rows x 532 cols
   calculate_wpa: {df: {$call: nfl.build_nfl_season, args: {game_ids: [401671801]}}}  # 165 rows x 528 cols
+  split_pat_rows: {plays: {$call: nfl.build_nfl_season, args: {game_ids: [401671801]}}}  # 171 rows x 531 cols
   calculate_completion_probability: {pbp_data: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 49492 rows x 372 cols
   calculate_expected_points: {pbp_data: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 49492 rows x 385 cols
   calculate_win_probability: {pbp_data: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 49492 rows x 390 cols
