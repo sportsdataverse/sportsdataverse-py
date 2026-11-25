@@ -87,10 +87,12 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [event_run_value](additional/models-and-calculators.md#event_run_value) | Empirical run value of an event set, from mean `delta_run_exp`. |
 | [leverage_index](additional/models-and-calculators.md#leverage_index) | Empirical (Tango) leverage index per base-out-score-inning state bucket. |
 | [mae](additional/models-and-calculators.md#mae) | Mean absolute error between two arrays. |
+| [mlb_base_out_transitions](additional/models-and-calculators.md#mlb_base_out_transitions) | Base-out transition counts between consecutive plate appearances. |
 | [mlb_batter_projection](additional/models-and-calculators.md#mlb_batter_projection) | Next-season xwOBA projection (Marcel + delta-method aging) for every batter. |
 | [mlb_command_plus](additional/models-and-calculators.md#mlb_command_plus) | Score pitches with the bundled Command+/Location+ (②) run-value model. |
 | [mlb_expected_home_runs](additional/models-and-calculators.md#mlb_expected_home_runs) | Per player-season park-neutral xHR, park-adjusted xHR, and HR-above-expected. |
 | [mlb_expected_stats](additional/models-and-calculators.md#mlb_expected_stats) | Per player-season xwOBA/xBA/xSLG from an on-the-fly EV x LA empirical grid. |
+| [mlb_markov_run_expectancy](additional/models-and-calculators.md#mlb_markov_run_expectancy) | Markov-chain RE24: expected runs to the end of the half-inning by base-out state. |
 | [mlb_pitch_classify](additional/models-and-calculators.md#mlb_pitch_classify) | Per-pitcher Gaussian-mixture pitch reclassification. |
 | [mlb_prop_strikeouts](additional/models-and-calculators.md#mlb_prop_strikeouts) | Expected pitcher/team strikeouts via a K/9-and-opponent-K-rate blend. |
 | [mlb_prop_team_runs](additional/models-and-calculators.md#mlb_prop_team_runs) | Expected team runs via a log5-style rate blend. |
