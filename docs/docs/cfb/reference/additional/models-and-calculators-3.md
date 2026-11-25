@@ -62,7 +62,7 @@ A pandas copy of `pbp_df` plus: * `two_pt_wp` -- `prob_2pt * wp(pts=2) + (1 - pr
 | `rz_play` | Boolean | Binary flag for a red-zone play (yards_to_goal <= 20). |
 | `scoring_opp` | Boolean | Binary flag for a scoring opportunity (yards_to_goal <= 40). |
 | `middle_8` | Boolean | TRUE for plays in the middle-8 window (final 4 min of 1H, first 4 min of 2H). |
-| `stuffed_run` | Boolean | Binary flag for a stuffed run (zero or negative yards gained). |
+| `stuffed_run` | Boolean | True on a rush (any play type the processor counts as a rush, not a kneel) that gained zero or fewer yards; its mean over rushes is the stuff rate. |
 | `change_of_pos_team` | Boolean | Binary flag for change of possession-team on the play. |
 | `downs_turnover` | Boolean | Binary flag for a turnover on downs. |
 | `pos_score_diff_start` | Int64 | Score differential for the possession team at the start of the play. |
@@ -376,7 +376,7 @@ A pandas copy of `pbp_df` plus: * `two_pt_wp` -- `prob_2pt * wp(pts=2) + (1 - pr
 | `new_distance` | Int64 | Distance to go after the play, including any penalty enforcement. |
 | `under_2` | Boolean | Whether the play began with two minutes or less remaining in the half. |
 | `goal_to_go` | Boolean |  |
-| `stopped_run` | Boolean | True when the rush was stopped at or behind the line of scrimmage. |
+| `stopped_run` | Boolean | True on a rush (any play type the processor counts as a rush, not a kneel) that gained two or fewer yards. |
 | `opportunity_run` | Boolean | True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag. |
 | `highlight_run` | Boolean | True when the rush gained 8 or more yards. |
 | `adj_rush_yardage` | Float64 | Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the 2026-10 line-yards fix cap at 8. |

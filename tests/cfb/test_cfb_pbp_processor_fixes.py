@@ -73,6 +73,8 @@ pytestmark = [
 ]
 
 FIX = Path(__file__).parent / "fixtures"
+#: Auburn @ Mississippi State, 2026-11-14 (not a ``summary_*`` capture, so outside the whole-game oracle)
+STUFF_END_STATES = FIX / "stuff_end_states" / "401856886_trimmed.json.gz"
 
 
 def _summary(game_id: int) -> dict:
@@ -659,8 +661,8 @@ def test_timeout_after_a_score_does_not_inherit_the_realized_ep():
 # --- C29 follow-up: a repaired row anchors the next; points the feed takes back are not kept ------
 
 
-def _trimmed_plays(game_id: int) -> pl.DataFrame:
-    with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+def _trimmed_plays(game_id: int, path: Path | None = None) -> pl.DataFrame:
+    with gzip.open(path or FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
         summary = json.load(fh)
     proc = CFBPlayProcess(gameId=game_id)
     proc.espn_cfb_pbp(summary=summary)
@@ -831,6 +833,27 @@ def test_kneels_are_not_stuffed_or_stopped_runs():
     assert kneels.height == 2
     assert kneels["stuffed_run"].to_list() == [False, False]
     assert kneels["stopped_run"].to_list() == [False, False]
+
+
+def test_a_loss_on_a_rush_typed_fumble_or_safety_is_a_stuff():
+    # Auburn @ Mississippi State, 2026-11-14: three carries behind the line that ESPN types as a fumble
+    # recovery or a safety are rushes in the stuff-rate denominator, so they must be stuffs too.
+    plays = _trimmed_plays(401856886, STUFF_END_STATES)
+    for needle, yards in (
+        ("B.Brown rush middle for 2 yards loss", -2),  # Fumble Recovery (Own)
+        ("K.Wilson rush middle for 6 yards loss", -6),  # Fumble Recovery (Opponent)
+        ("O.Mabson II rush middle for 2 yards loss", -2),  # Safety
+    ):
+        row = _row(plays, needle)
+        assert row["type.text"] != "Rush" and row["rush"] is True and row["yds_rushed"] == yards
+        assert row["stuffed_run"] is True and row["stopped_run"] is True
+    rate = (
+        plays.filter((pl.col("rush") == True) & (pl.col("scrimmage_play") == True))
+        .group_by("pos_team")
+        .agg(pl.col("stuffed_run").mean())
+        .sort("pos_team")
+    )
+    assert rate["stuffed_run"].to_list() == pytest.approx([5 / 40, 11 / 39])  # Auburn (2), Mississippi State (344)
 
 
 def test_yardless_rush_naming_a_foul_does_not_take_stat_yardage():

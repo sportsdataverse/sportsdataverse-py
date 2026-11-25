@@ -12206,3 +12206,32 @@
   test: tests/test_espn_soccer_parsers.py::test_parse_soccer_standings_keeps_a_stat_first_seen_after_row_100
   expected: kill
   note: A stat first seen after row 100 is dropped on polars 2.0 and raises on 2.2 unless every row is inferred.
+
+# --- cfb-stuff-any-rush: the stuff / stopped flags gate on rush, as their denominator does ---------
+- id: cfb-stuff-gate-on-rush
+  group: cfb-stuff-any-rush
+  finding: cfb-stuff-any-rush
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    (pl.col("rush") == True)
+                        .and_(pl.col("yds_rushed") <= 0)
+  mutant: |-
+    (pl.col("type.text") == "Rush")
+                        .and_(pl.col("yds_rushed") <= 0)
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py::test_a_loss_on_a_rush_typed_fumble_or_safety_is_a_stuff
+  expected: kill
+  note: A loss on a carry the feed types as a fumble recovery or a safety would never be a stuff.
+
+- id: cfb-stopped-gate-on-rush
+  group: cfb-stuff-any-rush
+  finding: cfb-stuff-any-rush
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    (pl.col("rush") == True)
+                        .and_(pl.col("yds_rushed") <= 2)
+  mutant: |-
+    (pl.col("type.text") == "Rush")
+                        .and_(pl.col("yds_rushed") <= 2)
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py::test_a_loss_on_a_rush_typed_fumble_or_safety_is_a_stuff
+  expected: kill
+  note: The same carries would never be stopped runs.
