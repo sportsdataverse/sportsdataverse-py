@@ -110,10 +110,11 @@ def ncaa_impact_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: st
     if pbp.height == 0:
         return pl.DataFrame(schema=_ROWS)
     events = credit_free_throws_to_foul_lineup(
-        _events(pbp, league).drop("period", "clock", "order"),
+        _events(pbp, league),
         is_free_throw=pl.col("event_type") == "Free Throw",
         is_foul=pl.col("foul_class").is_not_null(),
-    )
+        period="period",
+    ).drop("period", "clock", "order")
     parts = [events.select(list(_ROWS))]
     if possessions.height:
         parts.append(_possession_rows(possessions, events["game_id"].unique()))

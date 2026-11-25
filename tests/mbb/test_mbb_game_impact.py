@@ -18,7 +18,7 @@ import pytest
 
 from sportsdataverse._common.game_impact import game_lineups_used, game_player_impact, game_player_impact_schema
 from sportsdataverse.mbb import mbb_loaders
-from sportsdataverse.mbb.mbb_game_impact import mbb_game_player_impact, ncaa_impact_rows
+from sportsdataverse.mbb.mbb_game_impact import _events, mbb_game_player_impact, ncaa_impact_rows
 from sportsdataverse.wbb import wbb_loaders
 from sportsdataverse.wbb.wbb_game_impact import wbb_game_player_impact
 
@@ -123,18 +123,32 @@ def test_free_throws_take_the_whole_lineup_at_the_foul() -> None:
     keys = ["game_id", "team_id", "player_id"]
     clock = with_rule.join(without, on=keys, how="full", suffix="_raw", coalesce=True)
     assert ((clock["seconds"].fill_null(0) - clock["seconds_raw"].fill_null(0)).abs() < 1e-9).all()
-    # Every free throw carries its foul row's ten slots exactly, nulls included.
+    # Every free throw carries its foul row's ten slots exactly, nulls included, when that foul is
+    # its own: one of its period, or any earlier one while no clock has run in its period. A foul
+    # from an earlier period once clock has run is not (its own went unlogged): it keeps its lineup.
     # The event rows come first, in the builder's (contest, release order) order.
     in_order = pbp.with_row_index("_o").sort("contest_id", "_o")
-    ev = rows.head(pbp.height).with_columns(in_order.select("event_type", "foul_class"))
-    foul_row = pl.when(pl.col("foul_class").is_not_null()).then(pl.col("_i")).forward_fill().over("game_id")
-    ev = ev.with_row_index("_i").with_columns(foul_row.alias("_f"))
+    timing = _events(pbp, "mens").select("period", pl.col("seconds").alias("_ran"))  # before crediting
+    ev = rows.head(pbp.height).with_columns(in_order.select("event_type", "foul_class")).hstack(timing)
+    own_lineup = raw.head(pbp.height).select(*[pl.col(c).alias(f"o_{c}") for c in _SLOTS])
+    is_foul = pl.col("foul_class").is_not_null()
+    foul_row = pl.when(is_foul).then(pl.col("_i")).forward_fill().over("game_id")
+    foul_period = pl.when(is_foul).then(pl.col("period")).forward_fill().over("game_id")
+    no_clock_run = pl.col("_ran").fill_null(0).cum_sum().over("game_id", "period") == 0
+    ev = (
+        ev.with_row_index("_i")
+        .hstack(own_lineup)
+        .with_columns(foul_row.alias("_f"), ((foul_period == pl.col("period")) | no_clock_run).alias("_own"))
+    )
     fts = ev.filter((pl.col("event_type") == "Free Throw") & pl.col("_f").is_not_null())
     at = ev.select(pl.col("_i").alias("_f"), *[pl.col(c).alias(f"f_{c}") for c in _SLOTS])
     pair = fts.join(at, on="_f")
     assert pair.height == fts.height > 0
+    credited, kept = pair.filter(pl.col("_own")), pair.filter(~pl.col("_own"))
+    assert credited.height > 0 and kept.height > 0  # both branches occur on this corpus
     for c in _SLOTS:
-        assert pair[c].eq_missing(pair[f"f_{c}"]).all(), c
+        assert credited[c].eq_missing(credited[f"f_{c}"]).all(), c
+        assert kept[c].eq_missing(kept[f"o_{c}"]).all(), c
 
 
 def test_possessions_need_events_and_a_side() -> None:

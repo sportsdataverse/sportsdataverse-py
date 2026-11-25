@@ -117,6 +117,7 @@ def _action_rows(pbp: pl.DataFrame, lineups: pl.DataFrame, games: pl.DataFrame, 
         _actions(pbp, lineups, games, quarter),
         is_free_throw=pl.col("is_free_throw").eq(True),
         is_foul=pl.col("is_foul").eq(True),
+        period="period",
     )
     return actions.with_columns(pl.lit(0).alias("home_poss"), pl.lit(0).alias("away_poss"))
 

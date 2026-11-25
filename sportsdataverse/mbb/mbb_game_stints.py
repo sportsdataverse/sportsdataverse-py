@@ -161,6 +161,8 @@ def ncaa_stint_rows(pbp: pl.DataFrame, possessions: pl.DataFrame, *, league: str
         _events(pbp, league),
         is_free_throw=pl.col("event_type") == "Free Throw",
         is_foul=pl.col("foul_class").is_not_null(),
+        order="order",
+        period="period",
     )
     starts = pl.DataFrame(
         schema={"game_id": pl.Utf8(), "order": pl.Int64(), "home_poss": pl.Int64(), "away_poss": pl.Int64()}

@@ -47,7 +47,7 @@ from itertools import combinations
 
 import polars as pl
 
-from sportsdataverse._common.game_impact import AWAY_SLOTS, HOME_SLOTS, _sides, impact_row_schema
+from sportsdataverse._common.game_impact import AWAY_SLOTS, HOME_SLOTS, _at_last_foul, _sides, impact_row_schema
 from sportsdataverse._common.league_context import attach_sample_sizes
 from sportsdataverse._common.lineup_seasons import _RATED, _ZONE_RATED, COUNTS, ZONE_COUNTS, _rates
 from sportsdataverse._common.player_on_off import _RATINGS, _SIDE_COLS, _n_expr, _side_rates
@@ -96,6 +96,10 @@ def stint_row_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
     ``period``; ``clock``, the period clock left after the action (seconds); ``order``, the action's
     position in the game (unique within it); ``is_garbage_time``, the action's garbage-time flag
     (null when the source has none). The action ran from ``clock + seconds`` down to ``clock``.
+    ``ft_foul_order``, on a free throw, the ``order`` of the foul row its points were credited to
+    (:func:`credit_free_throws_to_foul_row`), null on every other row: :func:`game_stints` puts
+    the shooter's own box counts on that row's lineup too, so a substitution recorded between the
+    foul and the free throw (mid- or post-free-throw) cannot take them off his stint.
     """
     return {
         **impact_row_schema(player_dtype),
@@ -103,6 +107,7 @@ def stint_row_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
         "clock": pl.Float64(),
         "order": pl.Int64(),
         "is_garbage_time": pl.Boolean(),
+        "ft_foul_order": pl.Int64(),
     }
 
 
@@ -186,28 +191,47 @@ def game_on_off_schema(player_dtype: pl.DataType) -> dict[str, pl.DataType]:
 
 
 def credit_free_throws_to_foul_row(
-    actions: pl.DataFrame, *, is_free_throw: pl.Expr, is_foul: pl.Expr, game: str = "game_id"
+    actions: pl.DataFrame,
+    *,
+    is_free_throw: pl.Expr,
+    is_foul: pl.Expr,
+    game: str = "game_id",
+    order: str | None = None,
+    period: str | None = None,
 ) -> pl.DataFrame:
     """Move each free throw's points onto the game's most recent foul row.
 
     The time-axis twin of :func:`~sportsdataverse._common.game_impact.credit_free_throws_to_foul_lineup`:
     the points land on the same lineup (the one at the foul), but every row keeps its own lineup and
     clock, so the on-floor sequence is the source's. A free throw with no earlier foul in the game
-    keeps its points.
+    (with ``period``: no foul of its own, see the twin) keeps its points.
 
     Args:
         actions: Action rows with ``home_pts`` / ``away_pts``, sorted in game order.
         is_free_throw: True on a free-throw action.
         is_foul: True on a foul action.
         game: The game key column.
+        order: The action-order column. When given, the output also has ``ft_foul_order``: on a free
+            throw whose points moved, the foul row's ``order`` (null on every other row), so the
+            shooter's own box counts can follow the points onto the lineup at the foul.
+        period: The period column: a foul from an earlier period is not the free throw's once clock
+            has run in its period (the twin's rule). None keeps the game-wide rule.
 
     Returns:
-        ``actions`` with the same rows in the same order and the free-throw points moved.
+        ``actions`` with the same rows in the same order and the free-throw points moved
+        (plus ``ft_foul_order`` when ``order`` is given).
     """
     marked = actions.with_columns(pl.int_range(pl.len()).over(game).alias("_i")).with_columns(
-        pl.when(is_foul.fill_null(False)).then(pl.col("_i")).forward_fill().over(game).alias("_f")
+        _at_last_foul(pl.col("_i"), is_foul, game=game, period=period).alias("_f")
     )
     moving = is_free_throw.fill_null(False) & pl.col("_f").is_not_null()
+    if order is not None:
+        marked = marked.with_columns(
+            pl.when(moving)
+            .then(_at_last_foul(pl.col(order), is_foul, game=game, period=period))
+            .cast(pl.Int64)
+            .alias("ft_foul_order")
+        )
     moved = (
         marked.filter(moving)
         .group_by(game, "_f")
@@ -237,8 +261,14 @@ def game_stints(rows: pl.DataFrame, *, player_dtype: pl.DataType, events: pl.Dat
         :func:`game_stints_schema`, ``stint_number`` counting from 1 in game order. ``clock_in`` /
         ``clock_out`` are the period clock (seconds left) when the stint began and ended. The
         :data:`BOX_COUNTS` are the player's own events on the stint's actions (0 when he has none;
-        null on every row when ``events`` is None). A player whose side has no team id (a non-D1
-        college opponent) gets no row. Sorted by game, team, player and stint.
+        null on every row when ``events`` is None). A free throw's counts follow its points onto
+        the lineup at the foul (the row's ``ft_foul_order``) when the
+        shooter is on it, so a
+        substitution between the foul and the free throw does not drop them; otherwise (a
+        replacement or technical shooter who came on after the foul) they stay on the free throw's
+        own lineup. An event whose player neither lineup lists is not in any stint. A player whose
+        side has no team id (a non-D1 college opponent) gets no row. Sorted by game, team, player
+        and stint.
 
     Raises:
         KeyError: If ``events`` is missing a :func:`box_event_schema` column.
@@ -250,9 +280,11 @@ def game_stints(rows: pl.DataFrame, *, player_dtype: pl.DataType, events: pl.Dat
         return pl.DataFrame(schema=schema)
     # Collapse each run of consecutive actions with the same ten players (within a period) to one
     # row first: a stint is a run of runs, and a game has ~10x fewer runs than actions.
+    if "ft_foul_order" not in rows.columns:  # rows built before the column existed: own lineup only
+        rows = rows.with_columns(pl.lit(None, dtype=pl.Int64).alias("ft_foul_order"))
     ordered = rows.select(
         "season", "game_id", "home_team_id", "away_team_id", *_SLOTS, "period", "order",
-        "clock", "seconds", "home_pts", "away_pts", "home_poss", "away_poss",
+        "clock", "seconds", "home_pts", "away_pts", "home_poss", "away_poss", "ft_foul_order",
     ).sort("game_id", "order")  # fmt: skip
     changed = pl.any_horizontal([pl.col(c).ne_missing(pl.col(c).shift(1)) for c in (*_SLOTS, "period")]) | pl.col(
         "game_id"
@@ -307,11 +339,30 @@ def game_stints(rows: pl.DataFrame, *, player_dtype: pl.DataType, events: pl.Dat
         )
     )
     if events is not None:
-        # an event sits on its action's run; it is in the stint of his that holds that run
+        # An event sits on its action's run and is in the stint of his that holds that run. A free
+        # throw sits on its foul's run first (where its points are, ``ft_foul_order``: already null
+        # when the foul is not the free throw's own), when the shooter is on it.
         stint_of = on.select(*player, "_seq", "stint_number")
+        seq = ordered.select("game_id", "order", "_seq")
         box = (
-            events.join(ordered.select("game_id", "order", "_seq"), on=["game_id", "order"], how="inner")
-            .join(stint_of, on=[*player, "_seq"], how="inner", validate="m:1")
+            events.join(
+                ordered.select("game_id", "order", "_seq", "ft_foul_order"), on=["game_id", "order"], how="inner"
+            )
+            .join(
+                seq.rename({"order": "ft_foul_order", "_seq": "_foul_seq"}),
+                on=["game_id", "ft_foul_order"],
+                how="left",
+                validate="m:1",
+            )
+            .join(
+                stint_of.rename({"_seq": "_foul_seq", "stint_number": "_at_foul"}),
+                on=[*player, "_foul_seq"],
+                how="left",
+                validate="m:1",
+            )
+            .join(stint_of, on=[*player, "_seq"], how="left", validate="m:1")
+            .with_columns(pl.coalesce("_at_foul", "stint_number").alias("stint_number"))
+            .drop_nulls("stint_number")
             .group_by([*player, "stint_number"])
             .agg(pl.col(_EVENT_COUNTS).sum())
         )

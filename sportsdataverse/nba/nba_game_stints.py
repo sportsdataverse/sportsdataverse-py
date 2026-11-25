@@ -244,6 +244,8 @@ def nba_stint_rows(
         _actions(pbp, game_lineups, games, _QUARTER[league_id]),
         is_free_throw=pl.col("is_free_throw").eq(True),
         is_foul=pl.col("is_foul").eq(True),
+        order="order_index",
+        period="period",
     )
     starts = pl.DataFrame(
         schema={"game_id": pl.Utf8(), "order_index": pl.Int64(), "home_poss": pl.Int64(), "away_poss": pl.Int64()}
