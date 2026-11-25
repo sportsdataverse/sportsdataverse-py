@@ -1,0 +1,25 @@
+schema: mlb_base_out_transitions
+kind: dataframe
+hand_authored: true
+columns:
+- name: from_base_state
+  type: character
+  description: ''
+- name: from_outs
+  type: integer
+  description: ''
+- name: to_base_state
+  type: character
+  description: ''
+- name: to_outs
+  type: integer
+  description: ''
+- name: runs
+  type: integer
+  description: ''
+- name: n
+  type: integer
+  description: ''
+- name: prob
+  type: double
+  description: ''
