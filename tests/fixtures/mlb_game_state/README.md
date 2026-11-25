@@ -79,7 +79,8 @@ narrative.
   dates, so the collector fetched it twice: 155 exact duplicate PA rows in
   `pbp_corpus`, two rows each in `results_corpus`. `pbp_base_out_states` keeps one copy per
   `(game_id, about_at_bat_index)`, which RE24, win expectancy and the Markov RE24 consistency gate
-  (`tests/mlb/test_mlb_markov_run_expectancy.py`) all rely on.
+  (`tests/mlb/test_mlb_markov_run_expectancy.py`) all rely on; `build_we_table` and
+  `mlb_win_expectancy` keep one `results_corpus` row per game.
 - **The umpire-zone calibration floor is 0.08, not the plan's draft 0.03.**
   A 1-week Savant sample (12,920 pitches) showed a 0.177 max per-decile
   calibration gap, concentrated in sparse borderline-probability deciles

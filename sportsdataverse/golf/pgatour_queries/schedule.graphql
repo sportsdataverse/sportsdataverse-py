@@ -1,0 +1,33 @@
+query Schedule($tourCode: String!, $year: String) {
+  schedule(tourCode: $tourCode, year: $year) {
+    tour
+    seasonYear
+    completed { ...ScheduleMonthFields }
+    upcoming { ...ScheduleMonthFields }
+  }
+}
+
+fragment ScheduleMonthFields on ScheduleMonth {
+  month
+  year
+  tournaments {
+    id
+    tournamentName
+    date
+    startDate
+    sequenceNumber
+    tournamentStatus
+    courseName
+    city
+    state
+    stateCode
+    country
+    countryCode
+    purse
+    champion
+    championId
+    championEarnings
+    tourStandingHeading
+    tourStandingValue
+  }
+}

@@ -8,7 +8,8 @@ worked (ESPN's ``gameInfo.officials`` release, ``load_{lg}_officials``):
   from ESPN's team box (``fouls`` and ``free_throws_attempted``);
 * ``pace`` -- possessions per regulation length (48 minutes NBA, 40 the other three):
   ``regulation * sum(possessions) / sum(game minutes)``, possessions being Dean Oliver's box
-  estimate FGA - ORB + TOV + 0.44 FTA averaged over the two teams (the turnover repairs of
+  estimate FGA - ORB + TOV + w FTA averaged over the two teams (w = 0.44 NBA / WNBA, 0.475 MBB /
+  WBB; :func:`sportsdataverse._common.possessions.ft_possession_weight`; the turnover repairs of
   :func:`sportsdataverse.nba.nba_game_page.team_game_rates`), the minutes the schedule's last
   period (regulation plus five per overtime);
 * ``home_win_pct`` and ``home_minus_away_fouls`` (the home team's fouls less the away team's,
@@ -124,7 +125,8 @@ def official_game_rows(
         :data:`GAME_ROWS_SCHEMA` rows. A game without a box of one home and one away team keeps
         null box columns; ``game_minutes`` is null when the last period is below regulation.
     """
-    from sportsdataverse.nba.nba_game_page import _REGULATION_MINUTES, FT_WEIGHT, game_regulation_periods
+    from sportsdataverse._common.possessions import ft_possession_weight
+    from sportsdataverse.nba.nba_game_page import _REGULATION_MINUTES, game_regulation_periods
 
     if schedule.is_empty():
         return _empty(GAME_ROWS_SCHEMA)
@@ -160,7 +162,7 @@ def official_game_rows(
         pl.col("field_goals_attempted")
         - pl.col("offensive_rebounds")
         + _box_turnovers(box, league)
-        + FT_WEIGHT * pl.col("free_throws_attempted")
+        + ft_possession_weight(league) * pl.col("free_throws_attempted")
     ).cast(pl.Float64)
     games = (
         box.with_columns(poss.alias("_poss"))

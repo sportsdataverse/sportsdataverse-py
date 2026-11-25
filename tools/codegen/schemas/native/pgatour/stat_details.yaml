@@ -1,0 +1,45 @@
+schema: pgatour_stat_details
+kind: dataframe
+columns:
+- name: tour_code
+  type: character
+  description: ''
+- name: year
+  type: integer
+  description: ''
+- name: stat_id
+  type: character
+  description: ''
+- name: stat_title
+  type: character
+  description: ''
+- name: stat_type
+  type: character
+  description: ''
+- name: tour_average
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: country
+  type: character
+  description: ''
+- name: country_code
+  type: character
+  description: ''
+- name: rank
+  type: integer
+  description: ''
+- name: rank_change
+  type: character
+  description: ''
+- name: stat_name
+  type: character
+  description: ''
+- name: stat_value
+  type: character
+  description: ''

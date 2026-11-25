@@ -1,0 +1,27 @@
+query Player($id: ID!) {
+  player(id: $id) {
+    id
+    firstName
+    lastName
+    displayName
+    country
+    countryFlag
+    bioLink
+    owgr
+    playerBio {
+      heightImperial
+      heightMeters
+      weightImperial
+      weightKilograms
+      age
+      born
+      birthplace { city state country }
+      turnedPro
+      school
+      degree
+      graduationYear
+      residence { city state country }
+      family
+    }
+  }
+}
