@@ -39,14 +39,11 @@ whole 2024 games) with the clock after the snap; before 2009 many plays carry a 
 there; the timeouts are the processor's own count; a split PAT row's `play_id` is the touchdown's
 plus one (ESPN gives the try no id), so it does not join nflverse's PAT row.
 
-Players: each ESPN participant role goes to nflverse's slot by rules measured on whole seasons (a tackle
-with an ESPN assist is `tackle_with_assist_1`, two sackers are `half_sack_1/2`, the interceptor is the
-first pass defender on an interception, a no-play keeps only the penalized player, a split try takes its
-touchdown row's PAT kicker / passer / rusher / scorer), and ESPN athlete ids go to GSIS through the players
-table's `espn_id`, never by name. `fixed_drive` is ESPN's own drive number (nflfastR's `new_drive`
-cascade on this frame agrees less often) and `fixed_drive_result` / `series` are nflfastR's result
-cascades on it. `air_yards` / `yards_after_catch` are ESPN's, which are empty, so `cp` / `cpoe` /
-xYAC / the air-yards splits stay null; `qb_hit` and jersey numbers are not built.
+Players: ESPN participant roles go to nflverse's slots by rules measured on whole seasons (two sackers are
+`half_sack_1/2`, a no-play keeps only the penalized player, a split try takes its touchdown's PAT players),
+and ESPN athlete ids go to GSIS through the players table's `espn_id`, never by name. `fixed_drive` is
+ESPN's own drive number, `fixed_drive_result` / `series` nflfastR's cascades on it. ESPN's air yards are
+empty, so `cp` / `cpoe` / xYAC / the air-yards splits stay null; `qb_hit` and jersey numbers are not built.
 
 **Parameters**
 
