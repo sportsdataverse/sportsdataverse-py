@@ -8,7 +8,8 @@ description: "Install sportsdataverse-py with pip or uv, choose the optional ext
 # Install and the command line
 
 sportsdataverse-py supports Python 3.10 through 3.14 and runs on polars 2
-(`polars>=2.0,<3`). polars 1.x is no longer supported. Every loader and wrapper
+(`polars>=2.0,<3`; Python 3.10 gets polars 2.0, because polars 2.1 and later need 3.11). polars 1.x
+is no longer supported. Every loader and wrapper
 returns a polars DataFrame by default, and most accept `return_as_pandas=True`
 if you want pandas instead.
 

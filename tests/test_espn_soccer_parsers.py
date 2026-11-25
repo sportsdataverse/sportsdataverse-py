@@ -57,6 +57,23 @@ def test_parse_soccer_standings_multi_group_mls_has_two_groups():
     assert df["group"].n_unique() >= 2  # Eastern + Western conferences
 
 
+def test_parse_soccer_standings_keeps_a_stat_first_seen_after_row_100():
+    # polars infers a list-of-dicts schema from the first 100 rows: 2.0 dropped a later key, 2.2 raises.
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_standings
+
+    payload = _load("eng.1", "site-v2", "standings")
+    child = payload["children"][0]
+    entries = child["standings"]["entries"]
+    late = json.loads(json.dumps(entries[0]))
+    late["stats"].append({"name": "lateStat", "value": 7})
+    child["standings"]["entries"] = [entries[0]] * 100 + [late]
+    payload["children"] = [child]
+
+    df = parse_soccer_standings(payload)
+    assert df.height == 101
+    assert df["late_stat"].to_list() == [None] * 100 + [7]
+
+
 def test_parse_soccer_standings_empty_zero_rows():
     from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_standings
 
