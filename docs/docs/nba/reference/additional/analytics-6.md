@@ -73,7 +73,7 @@ game.filter(family="score").select("team_id", "split", "poss", "pts", "opp_pts")
 Map the stats.nba.com releases onto the stint-row frame.
 
 One row per play-by-play action in game order, on the lineup at that action: its clock, its
-points (a free throw's on the row of the game's last foul) and the possessions that start at
+points (a free throw's on the row of its own foul (the latest, or the one logged after it at the same clock reading; not an earlier period's once clock has run)) and the possessions that start at
 it. Games not in `schedule` are dropped, and so are possessions whose offense is neither team.
 
 **Parameters**
@@ -107,14 +107,15 @@ Rows in `sportsdataverse._common.game_stints.stint_row_schema` with Int64 player
 | `away_4` | Int64 | Away player 4 on the floor. |
 | `away_5` | Int64 | Away player 5 on the floor. |
 | `seconds` | Float64 | Game clock that ran into this action (from the previous action of the period). |
-| `home_pts` | Int64 | Points the home team scored on this action; a free throw's points sit on the row of the game's last foul. |
-| `away_pts` | Int64 | Points the away team scored on this action; a free throw's points sit on the row of the game's last foul. |
+| `home_pts` | Int64 | Points the home team scored on this action; a free throw's points sit on the row of its foul (`ft_foul_order`). |
+| `away_pts` | Int64 | Points the away team scored on this action; a free throw's points sit on the row of its foul (`ft_foul_order`). |
 | `home_poss` | Int64 | Possessions of the home team that start at this action. |
 | `away_poss` | Int64 | Possessions of the away team that start at this action. |
 | `period` | Int64 | Period of the action. |
 | `clock` | Float64 | Period clock (seconds left) after the action. |
 | `order` | Int64 | The action's order_index (its place in the game). |
 | `is_garbage_time` | Boolean | Whether the action is in garbage time: its possession's BB-D7 flag, which stays on from the possession that triggers it to the game's end. Null in a game with no possessions. |
+| `ft_foul_order` | Int64 | On a free throw whose points moved, the order of its foul's row: the game's latest foul, or the one logged after it at the same clock reading; an earlier period's foul only while no clock has run in the free throw's period. Null on every other row. game_stints puts the free throw's box counts on that row's stint when the shooter is on it. |
 
 **Raises**
 

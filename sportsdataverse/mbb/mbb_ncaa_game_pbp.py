@@ -49,6 +49,8 @@ from typing import Any, Callable, Literal, Optional, overload, Protocol, Sequenc
 
 import polars as pl
 
+from sportsdataverse.mbb.mbb_ncaa_event_lineups import _event_walk
+
 from sportsdataverse.errors import AssetFetchError, NoDataError, UnsupportedPageFormatWarning
 from sportsdataverse.scrape.ncaa.identity import _utf8_id
 
@@ -591,6 +593,11 @@ def _infer_starters(
     return starters
 
 
+def _real(starters: "list[Optional[str]]") -> "list[str]":
+    """The starters bigballR's inference named, without its no-player sentinel."""
+    return [x for x in starters if x is not None and x != _SENTINEL]
+
+
 def _assemble(
     rows: "list[dict[str, Any]]",
     game_id: str,
@@ -667,6 +674,7 @@ def parse_ncaa_bb_game_pbp(
     *,
     period_model: "tuple[int, int, int]" = _MBB_PERIOD_MODEL,
     fix_technicals: bool = True,
+    event_lineups: bool = True,
 ) -> pl.DataFrame:
     """Parse one stats.ncaa.org play-by-play page (bigballR ``scrape_game``).
 
@@ -692,6 +700,16 @@ def parse_ncaa_bb_game_pbp(
             ``poss_switch`` and flips ``poss_team``, inventing a possession
             change that never happened). Parity tests pass False. Same
             spirit as ``mbb_ncaa_lineups.fix_tip_in``.
+        event_lineups: When True (default, and the CORRECT behavior), each row carries the five
+            on the floor at that row: every substitution applies at its own dead ball, a
+            player's own sub moves past his own acts within one clock reading, each team is
+            balanced to five after it, a player who acts while off the floor goes on at the
+            latest dead ball before the act, and a placeholder sub (``UNKNOWN.TEAM``) is skipped
+            (:func:`~sportsdataverse.mbb.mbb_ncaa_event_lineups._event_walk`). When False, reproduce bigballR: its queue-paired walk, every
+            row frozen on its possession's first lineup (``all_functions.R:1037-1049``, bigballR
+            issue #48), and a game with a placeholder sub shipped with no lineups at all. That
+            freeze dropped 1.4% of points from their scorer's lineup (2026 MBB). Parity tests
+            pass False.
 
     Page format: the layout bigballR reads, i.e. 2019-era and current
     stats.ncaa.org markup, where the line score is the page's second table and
@@ -921,11 +939,16 @@ def parse_ncaa_bb_game_pbp(
     player_subs = [r["player_1"] for r in rows if r["event_type"] in ("Enters Game", "Exits Game")]
     # Team names interpolated unescaped, matching R's paste0-into-regex (:481).
     team_pattern = re.compile(rf"^\.?({home_team.upper()}|{away_team.upper()})$")
-    invalid_sub = any(
-        _SUB_NUMBER_RE.search(s) is not None or _SUB_TEAM_RE.search(s) is not None or team_pattern.search(s) is not None
-        for s in player_subs
-        if s is not None
-    )
+
+    def placeholder(name: Optional[str]) -> bool:
+        return name is not None and (
+            _SUB_NUMBER_RE.search(name) is not None
+            or _SUB_TEAM_RE.search(name) is not None
+            or team_pattern.search(name) is not None
+        )
+
+    # event_lineups skips a placeholder sub row instead of shipping the game without lineups
+    invalid_sub = not event_lineups and any(placeholder(s) for s in player_subs)
     if len({r["player_1"] for r in rows}) == 1 or invalid_sub or not player_subs:
         return _assemble(
             rows,
@@ -1018,6 +1041,18 @@ def parse_ncaa_bb_game_pbp(
         )
         home_prev, away_prev = home_starters, away_starters
 
+        if event_lineups:
+            skip = lambda r: placeholder(r["player_1"])  # noqa: E731
+            home_real = [x for x in _real(home_starters) if not placeholder(x)]
+            away_real = [x for x in _real(away_starters) if not placeholder(x)]
+            home_fives, home_end = _event_walk(prs, home_team, home_real, skip)
+            away_fives, away_end = _event_walk(prs, away_team, away_real, skip)
+            for r, h, a in zip(prs, home_fives, away_fives, strict=True):
+                r["home_lineup"], r["away_lineup"] = h, a
+            # the next period's starter inference falls back to this period's last five
+            home_prev, away_prev = list(home_end), list(away_end)
+            continue
+
         # walk-forward (R :874-965)
         home_exit = list(home_leaving) if home_leaving else [_SENTINEL]
         home_enter = list(home_entering) if home_entering else [_SENTINEL]
@@ -1099,7 +1134,7 @@ def parse_ncaa_bb_game_pbp(
 
     # -- possession-lineup freeze (R :1037-1049) ---------------------------------
     poss_lineups: "dict[int, tuple[list[Optional[str]], list[Optional[str]]]]" = {}
-    for r in rows:
+    for r in [] if event_lineups else rows:
         p = r["poss_num"]
         if p not in poss_lineups:
             poss_lineups[p] = (r["home_lineup"], r["away_lineup"])

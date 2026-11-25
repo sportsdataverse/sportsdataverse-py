@@ -204,7 +204,7 @@ def nba_stint_rows(
     """Map the stats.nba.com releases onto the stint-row frame.
 
     One row per play-by-play action in game order, on the lineup at that action: its clock, its
-    points (a free throw's on the row of the game's last foul) and the possessions that start at
+    points (a free throw's on the row of its own foul (the latest, or the one logged after it at the same clock reading; not an earlier period's once clock has run)) and the possessions that start at
     it. Games not in ``schedule`` are dropped, and so are possessions whose offense is neither team.
 
     Args:
@@ -244,6 +244,9 @@ def nba_stint_rows(
         _actions(pbp, game_lineups, games, _QUARTER[league_id]),
         is_free_throw=pl.col("is_free_throw").eq(True),
         is_foul=pl.col("is_foul").eq(True),
+        order="order_index",
+        period="period",
+        clock="seconds_remaining",
     )
     starts = pl.DataFrame(
         schema={"game_id": pl.Utf8(), "order_index": pl.Int64(), "home_poss": pl.Int64(), "away_poss": pl.Int64()}
