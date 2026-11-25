@@ -12123,3 +12123,14 @@
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_penalized_kickoff_is_the_receivers_kickoff
   expected: kill
   note: A penalized kickoff given to the receiver would keep the kicker's score differential and timeouts.
+
+
+- id: nfl-espn-view-split-try-timeouts-oriented
+  group: nfl-espn-view
+  finding: nfl-espn-view-wpa
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '        .then(pl.when(home).then(home_to).otherwise(away_to))'
+  mutant: '        .then(pl.when(home).then(away_to).otherwise(home_to))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_defensive_touchdowns_try_takes_the_scorers_timeouts
+  expected: kill
+  note: A split try's timeouts read from the wrong side, e.g. the old offense's after a defensive touchdown.

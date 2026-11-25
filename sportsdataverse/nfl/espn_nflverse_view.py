@@ -478,13 +478,9 @@ def _pat_possession(df: pl.DataFrame) -> pl.DataFrame:
 
 #: A try's snap spot before 2015, and every two-point try's: the 2 (nflverse ``yardline_100`` on its tries).
 _TRY_SNAP_YARDLINE = 2
-#: The situation columns a split try copies from its touchdown row (no timeout is called between the two).
-_PAT_TIMEOUTS = (
-    "home_timeouts_remaining",
-    "away_timeouts_remaining",
-    "posteam_timeouts_remaining",
-    "defteam_timeouts_remaining",
-)
+#: The timeouts a split try copies from its touchdown row (no timeout is called between the two): the home / away
+#: counts, since after a defensive touchdown the try's ``posteam`` is the touchdown row's defense.
+_PAT_TIMEOUTS = ("home_timeouts_remaining", "away_timeouts_remaining")
 
 
 def _pat_field(view: pl.DataFrame) -> pl.DataFrame:
@@ -508,7 +504,7 @@ def _pat_field(view: pl.DataFrame) -> pl.DataFrame:
     assert view.schema["pat_of_id"] == td.schema["pat_of_id"] == pl.Int64
     v = view.join(td, on="pat_of_id", how="left", maintain_order="left")
     yl = pl.when(pat).then(spot).otherwise(pl.col("yardline_100"))
-    return v.with_columns(
+    v = v.with_columns(
         yl.alias("yardline_100"),
         pl.when(pat).then(pl.col("defteam")).otherwise(pl.col("side_of_field")).alias("side_of_field"),
         pl.when(pat)
@@ -518,6 +514,18 @@ def _pat_field(view: pl.DataFrame) -> pl.DataFrame:
         pl.when(pat).then(0.0).otherwise(pl.col("ydstogo")).alias("ydstogo"),
         *[pl.when(pat).then(pl.col(f"_td_{c}")).otherwise(pl.col(c)).alias(c) for c in _PAT_TIMEOUTS],
     ).drop([f"_td_{c}" for c in _PAT_TIMEOUTS])
+    home = pl.col("posteam_type") == "home"
+    home_to, away_to = pl.col("home_timeouts_remaining"), pl.col("away_timeouts_remaining")
+    return v.with_columns(
+        pl.when(pat)
+        .then(pl.when(home).then(home_to).otherwise(away_to))
+        .otherwise(pl.col("posteam_timeouts_remaining"))
+        .alias("posteam_timeouts_remaining"),
+        pl.when(pat)
+        .then(pl.when(home).then(away_to).otherwise(home_to))
+        .otherwise(pl.col("defteam_timeouts_remaining"))
+        .alias("defteam_timeouts_remaining"),
+    )
 
 
 def _pat_scores(view: pl.DataFrame) -> pl.DataFrame:

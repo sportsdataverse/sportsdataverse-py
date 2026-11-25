@@ -31,6 +31,7 @@ EXTRA = {
     401671696: "2024_01_NYJ_SF",
     401671886: "2024_20_BAL_BUF",
     401128090: "2019_09_GB_LAC",
+    401671712: "2024_01_MIN_NYG",
 }
 
 #: Every view column nflverse also has must agree on >= 97% of each game's joined plays, except these
@@ -500,3 +501,14 @@ def test_a_penalized_kickoff_is_the_receivers_kickoff():
         assert row[c].item() == row[f"{c}__nv"].item(), c
     ko = j.filter(pl.col("play_type__nv") == "kickoff")
     assert (ko["posteam"] == ko["posteam__nv"]).all() and (ko["play_type"] == "kickoff").all()
+
+
+def test_a_defensive_touchdowns_try_takes_the_scorers_timeouts():
+    """After a defensive touchdown the try is the scoring defense's: its own timeouts, not the old offense's."""
+    view = espn_nfl_pbp_nflverse(_plays(401671712), _schedule())
+    prev = view.with_columns(pl.col("posteam").shift(1).alias("_td_posteam"))
+    tries = prev.filter((pl.col("extra_point_attempt") == 1) & (pl.col("posteam") != pl.col("_td_posteam")))
+    assert tries.height == 1
+    nv = _nflverse("2024_01_MIN_NYG").filter(pl.col("play_id") == 2831)
+    cols = ("posteam", "posteam_timeouts_remaining", "defteam_timeouts_remaining")
+    assert tries.select(cols).row(0) == nv.select(cols).row(0) == ("MIN", 1.0, 3.0)
