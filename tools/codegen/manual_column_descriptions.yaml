@@ -81434,6 +81434,8 @@ build_nfl_season:
     stoppage; -EP_start on an unscored play that ends a half (this rule wins); otherwise plus EP_between (the gap from
     the previous play's end EP, sign-adjusted for a possession change) on a play whose text carries a penalty and that
     is neither a kickoff nor typed "Penalty".
+  aborted_play: Binary indicator (1/0) that the play text contains "Aborted" (a botched snap or exchange), nflfastR's
+    clean_pbp rule.
   athlete_name: The play's passer, else its rusher (passer_player_name, then rusher_player_name); null when neither.
   awayScore: Away team's running score after the play -- ESPN's awayScore with feed errors repaired (a score rises
     only on or right after a scoring play).
@@ -81536,6 +81538,9 @@ build_nfl_season:
   penalty_text: The play text after "Penalty" (" on NE-M.Onwenu, False Start, 5 yards, ..."); null when no penalty
     is flagged.
   period: Quarter of the game from ESPN's period.number (5 and up in overtime), with out-of-place periods repaired.
+  play_type_nfl: nflverse NFL play type (PASS, RUSH, SACK, PENALTY, KICK_OFF, XP_KICK, ...) mapped from ESPN's
+    type.text -- PENALTY on a no-play penalty and then SACK on a sack, whatever ESPN typed (a nullified sack is
+    PENALTY), PASS / RUSH from the play flags on a fumble or safety type, UNSPECIFIED for an ESPN type with no mapping.
   pos_score_diff: Possession team's score minus the defense's, after the play.
   pos_score_diff_start: Possession team's score differential before the play -- the previous row's pos_score_diff,
     sign-flipped when that row's possession team was the other team.
@@ -81620,8 +81625,6 @@ shield_nfl_pbp:
   play_type_nfl: nflverse NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PENALTY, TIMEOUT, ...) -- the Shield
     feed's playType with an intercepted pass labelled INTERCEPTION, as nflverse labels it.
 split_pat_rows:
-  aborted_play: Binary indicator (1/0) that the play text contains "Aborted" (a botched snap or exchange), nflfastR's
-    clean_pbp rule.
   id: ESPN play id; on a split try row, the touchdown's id + 1 (ESPN gives the try no id of its own).
   play_type_nfl: nflverse NFL play type (PASS, RUSH, SACK, INTERCEPTION, KICK_OFF, PENALTY, ...) mapped from ESPN's
     type.text and the play flags; XP_KICK / PAT2 on a split try row, UNSPECIFIED for an ESPN type with no mapping.
