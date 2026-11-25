@@ -148,6 +148,19 @@ One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), 
 | `pts_per75_n` | Int64 | Sample size of pts_per75: off_rtg_n, copied. |
 | `opp_pts_per75_n` | Int64 | Sample size of opp_pts_per75: def_rtg_n, copied. |
 | `plus_minus_per75_n` | Int64 | Sample size of plus_minus_per75: net_rtg_n, copied. |
+| `lg_rtg` | Float64 | Points per 100 possessions of the season's league-average offense (pooled over every five-man unit), the zero the factor points are measured from. |
+| `off_efg_pts` | Float64 | Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. |
+| `off_tov_pts` | Float64 | Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. |
+| `off_orb_pts` | Float64 | Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. |
+| `off_ft_pts` | Float64 | Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used). |
+| `def_efg_pts` | Float64 | Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive when the opponents' shooting (eFG%) factor was worse than the league's: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. |
+| `def_tov_pts` | Float64 | Defensive turnovers points per 100 defensive possessions against the league average, positive when the opponents' turnovers factor was worse than the league's: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. |
+| `def_orb_pts` | Float64 | Defensive offensive rebounding points per 100 defensive possessions against the league average, positive when the opponents' offensive rebounding factor was worse than the league's: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. |
+| `def_ft_pts` | Float64 | Defensive free throws points per 100 defensive possessions against the league average, positive when the opponents' free throws factor was worse than the league's: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used). |
+| `efg_pts` | Float64 | Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. |
+| `tov_pts` | Float64 | Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. |
+| `orb_pts` | Float64 | Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. |
+| `ft_pts` | Float64 | Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. |
 
 **Raises**
 
@@ -556,78 +569,4 @@ One row per `(season, team_id, player_id)` (ESPN team id Int64, stats.ncaa.org p
 from sportsdataverse.mbb.mbb_shot_zone_profiles import mbb_player_shot_zones
 zones = mbb_player_shot_zones(2025)
 zones.sort("rim_fga", descending=True).select("player_name", "rim_fga", "rim_fg_pct").head()
-```
-
-### mbb_player_war {#mbb_player_war}
-
-`mbb_player_war(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WAR and VORP per player-season, from our box BPM.
-
-Box BPM is anchored to the team and centred on Division I, so 0 is an average D1 player.
-`vorp` is points per 100 team possessions above a replacement player over one team's
-season of possessions (Basketball-Reference's VORP scale); `war` is wins above replacement
-against an average D1 schedule. A replacement-level player has 0, and a season's `war`
-adds up to the D1 teams' wins minus those of a team of replacement players. The replacement
-level and points per win are fitted per league
-(`~sportsdataverse._common.player_war.REPLACEMENT_LEVEL`,
-`~sportsdataverse._common.player_war.PTS_PER_WIN`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_player_war.wbb_player_war`). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10 or more games in `~sportsdataverse.mbb.mbb_team_ratings.mbb_team_ratings`, box BPM's own centring set, so a season is empty until its teams reach 10 games: `player_name`, `team_id` (the team he played most possessions for), `teams`, `min`, `poss` (minutes / 40 * the team's adjusted tempo), `rating` (anchored box BPM, per 100), `vorp` and `war` with `war_lo` / `war_hi` (a nominal 90% interval from a bootstrap over each team-season's games: the sampling uncertainty of the team side and the playing time, not of box BPM itself), with `_rank` (1 = most), `_pct` and `_n` (possessions) for `vorp` and `war` among every player of the season. Sorted by season and `war`. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
-| `player_id` | String | The player's ESPN athlete id, as text (the box-score id the college player-value models key on). |
-| `player_name` | String | Player name, from the box score. |
-| `team_id` | String | ESPN team id of the Division I team he played the most possessions for. |
-| `teams` | Int64 | How many Division I teams he played for. |
-| `min` | Float64 | Minutes in the season's box scores. |
-| `poss` | Float64 | Possessions: minutes / 40 * the team's adjusted tempo (mbb_team_ratings adj_tempo, possessions per 40 minutes). College has no published on-court possessions for every game. The minutes basis of vorp and war. |
-| `rating` | Float64 | Points per 100 possessions above an average Division I player: box BPM (mbb_box_bpm, model 1 of the player-value spine), re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted mean is 0. |
-| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per D1 team, R the league's replacement level (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference's VORP scale. |
-| `war` | Float64 | Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91, WBB 47.10). 0 at replacement level; a replacement team wins about .35. |
-| `war_lo` | Float64 | Low end of the nominal 90% interval for war (5th percentile of 1000 bootstrap replicates, each team-season seeded on its own): each team-season's games resampled with replacement (a game's player possessions, team possessions and margin move together), then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level are held fixed, so this is the sampling uncertainty of the team side and the playing time (in college the replicate's adjusted net rating is the adjusted rating plus the change in the raw one); box BPM's own sampling error is in no column. |
-| `war_hi` | Float64 | High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo). |
-| `vorp_rank` | Float64 | Rank of vorp within the season among every player (1 = most; ties average); null under 10 players. |
-| `war_rank` | Float64 | Rank of war within the season among every player (1 = most; ties average); null under 10 players. |
-| `vorp_pct` | Float64 | Percentile of vorp within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
-| `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
-| `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
-| `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
-| `pts_pg` | Float64 | Points per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
-| `reb_pg` | Float64 | Rebounds per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
-| `ast_pg` | Float64 | Assists per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
-| `pts_pg_rank` | Float64 | Rank of pts_pg among the season's players with at least the games gate (1 game); 1 = most, ties averaged. Null under ten ranked players. |
-| `reb_pg_rank` | Float64 | Rank of reb_pg among the season's players with at least the games gate (2 games); 1 = most, ties averaged. Null under ten ranked players. |
-| `ast_pg_rank` | Float64 | Rank of ast_pg among the season's players with at least the games gate (2 games); 1 = most, ties averaged. Null under ten ranked players. |
-| `pts_pg_pct` | Float64 | Percentile of pts_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
-| `reb_pg_pct` | Float64 | Percentile of reb_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
-| `ast_pg_pct` | Float64 | Percentile of ast_pg_rank: 100 * (n + 1 - rank) / (n + 1), n the ranked players. |
-| `pts_pg_n` | Int64 | Games behind pts_pg: the games he played (0 with no box line). |
-| `reb_pg_n` | Int64 | Games behind reb_pg: the games he played (0 with no box line). |
-| `ast_pg_n` | Int64 | Games behind ast_pg: the games he played (0 with no box line). |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league` is not `"mens"` or `"womens"` (checked before any data is loaded). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_player_war import mbb_player_war
-war = mbb_player_war(2025)
-war.select("player_name", "poss", "rating", "vorp", "war").head(10)
 ```
