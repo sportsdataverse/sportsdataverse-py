@@ -144,9 +144,10 @@ def parse_nhl_web_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.
     long-form frame.
 
     The feed writes some players' names with no space after the initial
-    (``"J.Kulich"``); every ``name_*`` value with no space at all is rewritten
-    to the ``"J. Kulich"`` form the rest of the feed uses. A name that already
-    holds a space (``"J.T. Compher"``) is never touched.
+    (``"J.Kulich"``); a ``name_*`` value with no space anywhere and a period
+    before its last part is rewritten to the ``"J. Kulich"`` form the rest of
+    the feed uses. A name that already holds a space (``"J.T. Compher"``) is
+    never touched.
     """
     if not isinstance(payload, dict):
         return _empty_frame(return_as_pandas)
