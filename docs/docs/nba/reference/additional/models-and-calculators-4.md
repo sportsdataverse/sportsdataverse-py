@@ -64,8 +64,9 @@ ot_adjusted_seconds(one, regulation_periods=2)
 
 True-shooting and usage for every boxed player of one game.
 
-TS% = PTS / (2 (FGA + 0.44 FTA)); USG% = 100 ((FGA + 0.44 FTA + TOV) (team minutes / 5)) /
-(MIN (team FGA + 0.44 team FTA + team TOV)) with team TOV as in `team_game_rates`
+TS% = PTS / (2 (FGA + 0.44 FTA)) in every league; USG% = 100 ((FGA + w FTA + TOV) (team minutes / 5)) /
+(MIN (team FGA + w team FTA + team TOV)), with the possession weight w of `team_game_rates`
+(0.44 NBA / WNBA, 0.475 MBB / WBB) and team TOV as in `team_game_rates`
 (`total_turnovers`, repaired where ESPN doubled or omitted it) and team
 minutes = 5 x game minutes (regulation 48 NBA / 40 WNBA, MBB and WBB, 5 per overtime). For MBB and
 WBB team TOV follows the college rule of `team_game_rates` (null in WBB before 2009 and in a
@@ -525,8 +526,9 @@ shots.select("text", "x_legacy", "y_legacy").head()
 Four factors, possessions, ratings and pace for both teams of one game.
 
 Dean Oliver's estimates on the `load_nba_team_boxscore` columns: possessions =
-FGA - ORB + TOV + 0.44 FTA, averaged over the two teams; eFG% = (FGM + 0.5 3PM) / FGA;
-TOV% = TOV / (FGA + 0.44 FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
+FGA - ORB + TOV + w FTA, averaged over the two teams, with w = 0.44 for NBA and WNBA and 0.475
+for MBB and WBB (`sportsdataverse._common.possessions.ft_possession_weight`); eFG% =
+(FGM + 0.5 3PM) / FGA; TOV% = TOV / (FGA + w FTA + TOV); ORB% = ORB / (ORB + opponent DRB); FT rate = FTA / FGA;
 ORtg / DRtg per 100 possessions; pace per regulation length (48 minutes NBA; 40 WNBA, MBB and WBB). `TOV` is the team's player plus team turnovers:
 `total_turnovers`, except that when it is null it is `turnovers + team_turnovers`, and when ESPN
 has duplicated the team turnover (`team_turnovers == turnovers` and `total_turnovers == 2 *

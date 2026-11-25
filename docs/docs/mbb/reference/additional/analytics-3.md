@@ -171,8 +171,8 @@ Men's college official season profiles: games, fouls and FTA per game, pace and 
 
 One row per official and season over the completed games of `season_type` the official
 worked. `fouls_per_game` and `fta_per_game` are both teams' totals from ESPN's team box;
-`pace` is possessions (FGA - ORB + TOV + 0.44 FTA, averaged over the two teams) per 40
-minutes, over the games' minutes including overtime; `home_win_pct` and
+`pace` is possessions (FGA - ORB + TOV + 0.475 FTA, the college free-throw weight, averaged over the
+two teams) per 40 minutes, over the games' minutes including overtime; `home_win_pct` and
 `home_minus_away_fouls` (home fouls less away fouls, per game) leave out neutral-site
 games. Every rate has `<m>_n`, the games it is computed over. The release keys officials by
 names only, so `official_id` is null.
