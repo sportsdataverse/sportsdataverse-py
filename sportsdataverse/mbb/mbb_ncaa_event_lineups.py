@@ -211,7 +211,7 @@ def _event_walk(
     each possession on its first row's lineup, so a substitution in a mid-possession dead ball
     (after a foul, at a timeout, between free throws) is lost until the next possession, and one
     unmatched sub shifts every later pairing. This walk applies each sub as a set change instead,
-    on the NCAA rules (Rule 3-6.2; ``ClaudeCowork notes/2026-11-25-ncaa-bb-lineup-attribution``):
+    on the NCAA men's basketball playing rules (Rule 3-6.2, substitutions):
 
     * Within one clock reading the page prints rows out of order, and a free thrower cannot be
       replaced: a player's own ``Leaves Game`` counts after his last act of that second, his own
