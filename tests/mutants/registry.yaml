@@ -11641,3 +11641,154 @@
   test: tests/wnba/test_wnba_player_props_constants.py::test_wnba_helpers_bind_league_10
   expected: kill
   note: The WNBA re-export of prob_over would default to league_id "00" (NBA spread).
+
+# --- nflverse play_by_play columns on the Shield path (shield_pbp + enrich_nfl_pbp) ----------------
+- id: shield-stat-flag-kept
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/shield_pbp/parse.py
+  snippet: '    "third_down_converted",'
+  mutant: '    "third_down_converted_unkept",'
+  test: tests/nfl/shield_pbp/test_nflverse_columns.py::test_stat_id_flags_match_nflverse
+  expected: kill
+  note: A stat-id flag left off the kept list never reaches the frame.
+
+- id: shield-home-timeouts
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/shield_pbp/features.py
+  snippet: 'home_timeouts_remaining=(per_half - pl.col("_home_used")),'
+  mutant: 'home_timeouts_remaining=(per_half - pl.col("_away_used")),'
+  test: tests/nfl/shield_pbp/test_nflverse_columns.py::test_game_state_columns_match_nflverse
+  expected: kill
+  note: The home side's timeouts would count the visitors' timeouts.
+
+- id: shield-score-post-side
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/shield_pbp/features.py
+  snippet: 'posteam_score_post=pl.when(no_ball)'
+  mutant: 'posteam_score_post=pl.when(~no_ball)'
+  test: tests/nfl/shield_pbp/test_nflverse_columns.py::test_post_play_score_matches_where_the_possession_team_does
+  expected: kill
+  note: The possession team's post-play score would be null on every play that has one.
+
+- id: shield-touchback-case
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/shield_pbp/description.py
+  snippet: 'touchback=lower.str.contains("touchback", literal=True)'
+  mutant: 'touchback=d.str.contains("touchback", literal=True)'
+  test: tests/nfl/shield_pbp/test_nflverse_columns.py::test_description_flags_match_nflverse
+  expected: kill
+  note: nflfastR matches the lower-cased text; the feed writes "Touchback".
+
+- id: shield-time-of-day-start
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/shield_pbp/parse.py
+  snippet: '"time_of_day": p.get("playStartTime"),'
+  mutant: '"time_of_day": p.get("playEndTime"),'
+  test: tests/nfl/shield_pbp/test_nflverse_columns.py::test_feed_columns_match_nflverse
+  expected: kill
+  note: nflverse's time_of_day is the snap time, not the play's end.
+
+- id: ep-try-value
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '.then(pl.coalesce(pl.col("extra_point_prob") + 2 * pl.col("two_point_conversion_prob"), pl.col("ep")))'
+  mutant: '.then(pl.col("ep"))'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_try_ep_is_nflfastr_try_value
+  expected: kill
+  note: A try would keep the EP model's 1st-and-10 proxy (about 0.45 where nflfastR has about 0.98).
+
+- id: ep-wp-post-sign
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'post = _r_ifelse(pl.col("posteam") == team, wp + pl.col("wpa"), wp - pl.col("wpa"))'
+  mutant: 'post = _r_ifelse(pl.col("posteam") == team, wp - pl.col("wpa"), wp + pl.col("wpa"))'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_wp_post_matches_nflverse
+  expected: kill
+  note: wpa is the possession team's; the other side's post-play WP moves the other way.
+
+- id: ep-vegas-home-wp-kept
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'df = df.drop([c for c in ("_tmp_posteam", "_end_game", "_home_wpa") if c in df.columns])'
+  mutant: 'df = df.drop([c for c in ("_tmp_posteam", "_end_game", "_home_wpa", "vegas_home_wp") if c in df.columns])'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_vegas_home_wp_is_published
+  expected: kill
+  note: vegas_home_wp used to be computed and dropped.
+
+- id: ep-play-flag-no-play
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'pl.col("play_type").is_in(["no_play", "pass", "run"]).fill_null(False)'
+  mutant: 'pl.col("play_type").is_in(["pass", "run"]).fill_null(False)'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_play_flag_and_player_aliases_match_nflverse
+  expected: kill
+  note: nflfastR counts a penalty no_play as a play.
+
+- id: clean-fantasy-rusher-first
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/nfl_clean.py
+  snippet: '"fantasy": pl.coalesce("rusher", "receiver", pl.when(scramble).then(pl.col("passer"))),'
+  mutant: '"fantasy": pl.coalesce("rusher", "receiver", pl.when(scramble).then(pl.col("rusher"))),'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_play_flag_and_player_aliases_match_nflverse
+  expected: kill
+  note: On a scramble nflfastR's fantasy player is the passer (clean_pbp moves the QB out of rusher).
+
+- id: ep-real-play-unflagged-try
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'expr = expr | (pl.col("play_type") == "extra_point").fill_null(False)'
+  mutant: 'expr = expr'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_a_kick_try_without_its_flag_keeps_its_try_value
+  expected: kill
+  note: An extra_point try without its attempt flag would be a marker row whose ep the next play overwrites.
+
+- id: ep-try-strict-fg-model
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'raise FileNotFoundError("fg_model.ubj: the field-goal model a try''s extra_point_prob needs")'
+  mutant: 'pass'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_try_values_without_the_fg_model
+  expected: kill
+  note: strict enrichment would publish null make probabilities when the fg model is missing.
+
+- id: ep-try-ep-never-null
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'pl.coalesce(pl.col("extra_point_prob") + 2 * pl.col("two_point_conversion_prob"), pl.col("ep"))'
+  mutant: '(pl.col("extra_point_prob") + 2 * pl.col("two_point_conversion_prob"))'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_try_values_without_the_fg_model
+  expected: kill
+  note: Without the fg model a kick try's ep would be null, and the fill would give it the next play's.
+
+- id: ep-try-missing-fg-model-warns
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'if "fg_model.ubj" not in _WARNED_MISSING:'
+  mutant: 'if False:'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_try_values_without_the_fg_model
+  expected: kill
+  note: Non-strict enrichment without the fg model would drop the try values silently.
+
+- id: ep-ot-answering-try
+  group: nflverse-pbp-columns
+  finding: nfl-model-pbp-columns
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '.then(two_pt + xp * OT_ANSWERED_TD_WIN_SHARE)'
+  mutant: '.then(sudden_death)'
+  test: tests/nfl/test_ep_wp_nflverse_columns.py::test_overtime_answering_try_reads_its_make_probability
+  expected: kill
+  note: The answering overtime try's score classes are zeroed, so the sudden-death form gives it wp 0.
