@@ -48,6 +48,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse._common.play_style import ASSIGN_SCHEMA, assign_play_style
+from sportsdataverse._common.possessions import PRO_FT_POSSESSION_WEIGHT
 
 __all__ = [
     "NBA_PLAY_STYLE_FEATURES",
@@ -449,7 +450,7 @@ def defense_team_features(
         every candidate defense-team feature (:data:`NBA_TEAM_FEATURE_CANDIDATES` ``long``).
     """
     key = ["team_id", "season"]
-    opp_poss = pl.col("opp_fga") + 0.44 * pl.col("opp_fta") + pl.col("opp_tov") - pl.col("opp_oreb")
+    opp_poss = pl.col("opp_fga") + PRO_FT_POSSESSION_WEIGHT * pl.col("opp_fta") + pl.col("opp_tov") - pl.col("opp_oreb")
     op = _regular(team_opponent).select(
         *key,
         "team_name",
@@ -459,9 +460,9 @@ def defense_team_features(
         _ratio(pl.col("opp_fg3_a"), pl.col("opp_fga")).alias("opp_fg3a_rate"),
         _ratio(pl.col("opp_fta"), pl.col("opp_fga")).alias("opp_fta_rate"),
         _ratio(pl.col("opp_ast"), pl.col("opp_fgm")).alias("opp_ast_share"),
-        _ratio(pl.col("opp_tov"), pl.col("opp_fga") + 0.44 * pl.col("opp_fta") + pl.col("opp_tov")).alias(
-            "opp_tov_rate"
-        ),
+        _ratio(
+            pl.col("opp_tov"), pl.col("opp_fga") + PRO_FT_POSSESSION_WEIGHT * pl.col("opp_fta") + pl.col("opp_tov")
+        ).alias("opp_tov_rate"),
         pl.col("opp_pts"),
     )
     de = _regular(team_defense).select(*key, "dreb", "opp_pts_paint", "opp_pts_fb", "opp_pts_2_nd_chance")

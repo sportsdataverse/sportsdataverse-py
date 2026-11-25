@@ -15,8 +15,8 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse._common.possessions import ft_possession_weight
 from sportsdataverse._common.team_season_rates import (
-    FT_POSSESSION_WEIGHT,
     RATE_ROWS_SCHEMA,
     TEAM_GAME_FOUR_FACTORS_SCHEMA,
     season_counts,
@@ -122,7 +122,7 @@ def test_the_residual_is_the_possession_gap_exactly(league: tuple[str, pl.DataFr
     o = {k: pl.col(f"o_{k}") for k in ("fga", "fgm", "fg3m", "fta", "ftm", "oreb", "tov")}
     gaps = games.with_columns(
         (pl.col("pts") - (2 * o["fgm"] + o["fg3m"] + o["ftm"])).alias("pts_gap"),
-        (o["fga"] - o["oreb"] + o["tov"] + FT_POSSESSION_WEIGHT * o["fta"] - pl.col("poss")).alias("poss_gap"),
+        (o["fga"] - o["oreb"] + o["tov"] + ft_possession_weight(lg) * o["fta"] - pl.col("poss")).alias("poss_gap"),
         o["fga"].alias("fga"),
     )
     lg_gap = gaps.select(

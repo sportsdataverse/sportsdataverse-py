@@ -29,6 +29,7 @@ import polars as pl
 from sportsdataverse._temporal import as_date
 
 from sportsdataverse._common.league_context import MIN_COHORT_TEAMS, attach_ranks, attach_sample_sizes
+from sportsdataverse._common.possessions import PRO_FT_POSSESSION_WEIGHT
 from sportsdataverse._common.ratings import drop_unusable_possession_rows, id_text, iterative_opponent_adjust
 from sportsdataverse.nba.nba_loaders import load_nba_schedule, load_nba_team_boxscore
 from sportsdataverse.nba.nba_prediction_constants import as_of_ratings_split, get_constants
@@ -101,7 +102,9 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
         pl.col("turnovers").cast(pl.Float64).alias("tov"),
         pl.col("free_throws_attempted").cast(pl.Float64).alias("fta"),
         pl.col("team_score").cast(pl.Float64).alias("pts"),
-    ).with_columns((pl.col("fga") - pl.col("orb") + pl.col("tov") + 0.44 * pl.col("fta")).alias("team_poss"))
+    ).with_columns(
+        (pl.col("fga") - pl.col("orb") + pl.col("tov") + PRO_FT_POSSESSION_WEIGHT * pl.col("fta")).alias("team_poss")
+    )
 
     opp = box.select(
         "game_id",

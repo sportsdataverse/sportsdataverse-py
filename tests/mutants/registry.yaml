@@ -12197,6 +12197,87 @@
   expected: kill
   note: ESPN boxscore stats zipped one key off would put assists under goals and so on.
 
+# --- college-possession-ft-weight: college box possessions weigh a free throw 0.475, the pros 0.44 ----
+- id: college-poss-ft-weight-constant
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: sportsdataverse/_common/possessions.py
+  snippet: 'COLLEGE_FT_POSSESSION_WEIGHT: float = 0.475'
+  mutant: 'COLLEGE_FT_POSSESSION_WEIGHT: float = 0.44'
+  test: tests/nba/test_nba_game_page_leagues.py -k weigh_free_throws_by_league
+  expected: kill
+  note: College possessions, pace, TOV% and usage would fall back to the pros' 0.44 free-throw weight.
+
+- id: college-poss-ft-weight-game-page
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: sportsdataverse/nba/nba_game_page.py
+  snippet: '(fga - pl.col("offensive_rebounds") + tov + w * fta)'
+  mutant: '(fga - pl.col("offensive_rebounds") + tov + FT_WEIGHT * fta)'
+  test: tests/nba/test_nba_game_page_leagues.py -k weigh_free_throws_by_league
+  expected: kill
+  note: The game page's college possessions would use 0.44.
+
+- id: college-poss-ft-weight-official-pace
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: sportsdataverse/_common/official_seasons.py
+  snippet: '        + ft_possession_weight(league) * pl.col("free_throws_attempted")'
+  mutant: '        + 0.44 * pl.col("free_throws_attempted")'
+  test: tests/nba/test_nba_official_seasons.py -k college_possessions_weigh
+  expected: kill
+  note: College official pace would count possessions with the pros' free-throw weight.
+
+- id: college-poss-ft-weight-four-factors
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: sportsdataverse/_common/team_season_rates.py
+  snippet: '    w = ft_possession_weight(league)'
+  mutant: '    w = FT_POSSESSION_WEIGHT'
+  test: tests/common/test_team_game_four_factors.py -k residual_is_the_possession_gap
+  expected: kill
+  note: College four-factor points would price a free throw at 0.44 of a chance and misstate the residual.
+
+- id: college-poss-ft-weight-wrapper-league
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: sportsdataverse/mbb/mbb_team_season_rates.py
+  snippet: 'counts=ncaa_team_box_count_rows(load_team_box(seasons)), league=league)'
+  mutant: 'counts=ncaa_team_box_count_rows(load_team_box(seasons)))'
+  test: tests/common/test_team_game_four_factors.py -k residual_is_the_possession_gap
+  expected: kill
+  note: The college four-factors wrapper would not pass its league, so it would price with the NBA weight.
+
+- id: phantom-possessions-limit
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: tools/validation/checks/phantom_possessions.py
+  snippet: '    flagged = phantom_counts(frame).filter(pl.col("phantoms") > PHANTOM_TEAM_GAME_LIMIT)'
+  mutant: '    flagged = phantom_counts(frame).filter(pl.col("phantoms") > 99)'
+  test: tests/contracts/test_phantom_possessions.py::test_only_the_tail_team_game_is_flagged
+  expected: kill
+  note: A team-game with seven phantom possessions would pass the harness silently.
+
+- id: phantom-possessions-turnover-exempt
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: tools/validation/checks/phantom_possessions.py
+  snippet: '        & (pl.col("last_event_type").is_in(_REAL_QUICK_ENDS).fill_null(False) == False)  # noqa: E712'
+  mutant: '        & pl.lit(True)'
+  test: tests/contracts/test_phantom_possessions.py::test_a_quick_turnover_is_not_a_phantom
+  expected: kill
+  note: A real quick turnover would count as a phantom possession.
+
+- id: phantom-possessions-period-last-over-frame
+  group: college-poss-ft-weight
+  finding: college-possession-ft-weight
+  file: tools/validation/checks/phantom_possessions.py
+  snippet: '    last = pl.col("_period_last")'
+  mutant: '    last = pl.col("poss_num").max().over("contest_id", "period")'
+  test: tests/contracts/test_phantom_possessions.py::test_a_teams_last_possession_of_a_period_can_be_a_phantom
+  expected: kill
+  note: Inside the team group the window gives the team's last possession of the period, so its phantom is dropped.
+
 # --- wnba-props-minutes-coldstart: team minutes invariant + expansion-team cold start ------------
 - id: props-minutes-share-normalised
   group: props-minutes-coldstart
