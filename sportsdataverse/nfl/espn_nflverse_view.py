@@ -14,6 +14,7 @@ from typing import Optional
 import polars as pl
 
 from sportsdataverse.nfl.datasets import team_abbr_mapping
+from sportsdataverse.nfl.model_vars import PAT_FIRST_SEASON_FROM_15, PAT_YARDLINE_POST_2015
 from sportsdataverse.nfl.nfl_pbp import _espn_play_type_nfl, split_pat_rows
 from sportsdataverse.nfl.shield_pbp.description import add_description_features, add_pass_rush
 from sportsdataverse.nfl.shield_pbp.drives import drive_level_tmp_result, last_or_first_result, swapped_posteam
@@ -188,6 +189,16 @@ def _attach_nflverse_game_id(plays: pl.DataFrame, schedule: Optional[pl.DataFram
     return out.drop("_espn")
 
 
+#: A free kick ESPN types as a penalty (offside on the kick, delay of kickoff): nflverse's ``kickoff`` row.
+_PENALIZED_KICK = r"(?i)(?:\bkicks (?:onside )?-?\d+ yards? from\b)|(?:delay of kickoff)"
+
+
+def _penalized_kick() -> pl.Expr:
+    """A kickoff ESPN files as a penalty: free-kick text on a row the processor does not flag as a kickoff."""
+    kickoff = (pl.col("kickoff_play") == True).fill_null(False)  # noqa: E712
+    return pl.col("text").fill_null("").str.contains(_PENALIZED_KICK) & ~kickoff
+
+
 def _keys_and_teams(df: pl.DataFrame) -> list[pl.Expr]:
     """Keys, teams and field position: nflverse ``game_id`` / ``play_id``, abbreviations, ``yardline_100``.
 
@@ -203,11 +214,15 @@ def _keys_and_teams(df: pl.DataFrame) -> list[pl.Expr]:
 
     home, away = abbr(3), abbr(2)
     pos = pl.col("start.pos_team.id").cast(pl.Int64)
-    is_home = pos == pl.col("homeTeamId").cast(pl.Int64)
-    is_away = pos == pl.col("awayTeamId").cast(pl.Int64)
+    home_ball = pos == pl.col("homeTeamId").cast(pl.Int64)
+    away_ball = pos == pl.col("awayTeamId").cast(pl.Int64)
+    # a penalized kickoff keeps ESPN's kicking team; nflverse gives it to the receiver, as on a kickoff row
+    pen_kick = _penalized_kick()
+    is_home = pl.when(pen_kick).then(away_ball).otherwise(home_ball)
+    is_away = pl.when(pen_kick).then(home_ball).otherwise(away_ball)
     posteam = pl.when(is_home).then(home).when(is_away).then(away)
     defteam = pl.when(is_home).then(away).when(is_away).then(home)
-    kickoff = (pl.col("kickoff_play") == True).fill_null(False)  # noqa: E712
+    kickoff = (pl.col("kickoff_play") == True).fill_null(False) | pen_kick  # noqa: E712
     # ESPN measures a kickoff from the kicking team's side; nflverse gives it to the receiving team
     yl = pl.when(kickoff).then(100 - pl.col("start.yardsToEndzone")).otherwise(pl.col("start.yardsToEndzone"))
     side = pl.when(yl == 50).then(pl.lit("50")).when(yl > 50).then(posteam).otherwise(defteam)
@@ -365,6 +380,8 @@ def _yards_and_types(df: pl.DataFrame) -> list[pl.Expr]:
             .then(pl.lit("pass"))
             .otherwise(pl.lit("run"))
         )
+        .when(_penalized_kick())
+        .then(pl.lit("kickoff"))
         .when(ptn.is_in(["PENALTY", "TIMEOUT"]))
         .then(pl.lit("no_play"))
         .otherwise(ptn.replace_strict(_PLAY_TYPE, default=None, return_dtype=pl.Utf8))
@@ -447,6 +464,50 @@ def _pat_possession(df: pl.DataFrame) -> pl.DataFrame:
     return df.with_columns(
         pl.when(pat).then(pl.col(ids[0])).otherwise(pl.col("start.pos_team.id")).cast(target).alias("start.pos_team.id")
     )
+
+
+#: A try's snap spot before 2015, and every two-point try's: the 2 (nflverse ``yardline_100`` on its tries).
+_TRY_SNAP_YARDLINE = 2
+#: The situation columns a split try copies from its touchdown row (no timeout is called between the two).
+_PAT_TIMEOUTS = (
+    "home_timeouts_remaining",
+    "away_timeouts_remaining",
+    "posteam_timeouts_remaining",
+    "defteam_timeouts_remaining",
+)
+
+
+def _pat_field(view: pl.DataFrame) -> pl.DataFrame:
+    """A split try's field position and timeouts, which :func:`split_pat_rows` leaves null.
+
+    nflverse spots a kick try at the 2 before 2015 and the 15 from 2015 on, every two-point try at the 2, on the
+    defense's side with ``ydstogo`` 0; the timeouts are the touchdown row's. Without a spot the FG model scores
+    the try's make probability (its ``ep``) off a null yard line and the WP models see no field position.
+    """
+    pat = pl.col("pat_of_id").is_not_null()
+    two = (pl.col("two_point_attempt") == 1).fill_null(False)
+    spot = (
+        pl.when(~two & (pl.col("season") >= PAT_FIRST_SEASON_FROM_15))
+        .then(PAT_YARDLINE_POST_2015)
+        .otherwise(_TRY_SNAP_YARDLINE)
+        .cast(pl.Float64)
+    )
+    td = view.filter(pat.not_()).select(
+        pl.col("espn_play_id").alias("pat_of_id"), *[pl.col(c).alias(f"_td_{c}") for c in _PAT_TIMEOUTS]
+    )
+    assert view.schema["pat_of_id"] == td.schema["pat_of_id"] == pl.Int64
+    v = view.join(td, on="pat_of_id", how="left", maintain_order="left")
+    yl = pl.when(pat).then(spot).otherwise(pl.col("yardline_100"))
+    return v.with_columns(
+        yl.alias("yardline_100"),
+        pl.when(pat).then(pl.col("defteam")).otherwise(pl.col("side_of_field")).alias("side_of_field"),
+        pl.when(pat)
+        .then(pl.format("{} {}", pl.col("defteam"), spot.cast(pl.Int64)))
+        .otherwise(pl.col("yrdln"))
+        .alias("yrdln"),
+        pl.when(pat).then(0.0).otherwise(pl.col("ydstogo")).alias("ydstogo"),
+        *[pl.when(pat).then(pl.col(f"_td_{c}")).otherwise(pl.col(c)).alias(c) for c in _PAT_TIMEOUTS],
+    ).drop([f"_td_{c}" for c in _PAT_TIMEOUTS])
 
 
 def _pat_scores(view: pl.DataFrame) -> pl.DataFrame:
@@ -664,6 +725,7 @@ def _drive_detail(view: pl.DataFrame) -> pl.DataFrame:
     v = last_or_first_result(v, g, "_tmp", "fixed_drive_result")
     v = add_series_data(v.drop("_swap", "_tmp"))
     real = pl.col("play_type").is_not_null() & (pl.col("play_type_nfl") != "TIMEOUT").fill_null(True)
+    is_try = ((pl.col("extra_point_attempt") == 1) | (pl.col("two_point_attempt") == 1)).fill_null(False)
     first_down = (
         (pl.col("first_down_rush") == 1) | (pl.col("first_down_pass") == 1) | (pl.col("first_down_penalty") == 1)
     )
@@ -672,7 +734,8 @@ def _drive_detail(view: pl.DataFrame) -> pl.DataFrame:
         .group_by(g)
         .agg(
             drive_first_downs=first_down.sum().cast(pl.Float64),
-            drive_inside20=(pl.col("yardline_100").min() <= 20).cast(pl.Float64),
+            # a try is spotted at the 2 / the 15 on every touchdown drive: only the drive's own plays count
+            drive_inside20=(pl.col("yardline_100").filter(~is_try).min() <= 20).cast(pl.Float64),
             drive_play_id_started=pl.col("play_id").min().cast(pl.Float64),
         )
     )
@@ -980,7 +1043,7 @@ def _build_view(
     last = _yards_and_types(df)
     names = [e.meta.output_name() for e in (*keys, *mid, *last)]
     view = df.with_columns(last).select([*names, *(["pat_of_id"] if "pat_of_id" in df.columns else [])])
-    view = _timeout_rows(_pat_scores(view) if "pat_of_id" in view.columns else view)
+    view = _timeout_rows(_pat_field(_pat_scores(view)) if "pat_of_id" in view.columns else view)
     if players is not None:
         view = _add_players(view, _merged_roles(df, participants), players)
     view = _drive_detail(_text_features(view.drop("pat_of_id", strict=False)))

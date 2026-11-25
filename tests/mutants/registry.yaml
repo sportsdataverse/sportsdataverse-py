@@ -12047,3 +12047,34 @@
   test: tests/mbb/test_mbb_ncaa_fetch.py -k "never_revisit or try_every_proxy"
   expected: kill
   note: Without the untried-first pass, a jump or a +1 step can revisit a proxy within one fetch and leave a healthy one untried.
+
+
+- id: nfl-espn-view-split-try-spot
+  group: nfl-espn-view
+  finding: nfl-espn-view-wpa
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '    view = _timeout_rows(_pat_field(_pat_scores(view)) if "pat_of_id" in view.columns else view)'
+  mutant: '    view = _timeout_rows(_pat_scores(view) if "pat_of_id" in view.columns else view)'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_split_try_is_spotted_with_its_touchdowns_timeouts
+  expected: kill
+  note: A split try with no yard line gets a make probability off a null spot and drags vegas_wpa to r 0.17.
+
+- id: nfl-espn-view-split-try-15-yard-kick
+  group: nfl-espn-view
+  finding: nfl-espn-view-wpa
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '        pl.when(~two & (pl.col("season") >= PAT_FIRST_SEASON_FROM_15))'
+  mutant: '        pl.when(~two & (pl.col("season") >= 3000))'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_split_try_is_spotted_with_its_touchdowns_timeouts
+  expected: kill
+  note: A 2015+ kick try spotted at the 2 instead of the 15.
+
+- id: nfl-espn-view-penalized-kickoff-receiver
+  group: nfl-espn-view
+  finding: nfl-espn-view-wpa
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '    is_home = pl.when(pen_kick).then(away_ball).otherwise(home_ball)'
+  mutant: '    is_home = home_ball'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_penalized_kickoff_is_the_receivers_kickoff
+  expected: kill
+  note: A penalized kickoff would stay with the kicking team, flipping that row's WP.
