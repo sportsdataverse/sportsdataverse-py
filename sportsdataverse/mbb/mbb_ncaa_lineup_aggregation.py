@@ -12,6 +12,8 @@ from dataclasses import replace
 from functools import reduce
 from typing import Any, Optional
 
+from sportsdataverse._common.possessions import COLLEGE_FT_POSSESSION_WEIGHT
+
 from .mbb_lineup_stats import LineupStatSet
 from .mbb_ncaa_lineup_enrich import sum_event_stats
 from .mbb_ncaa_models import LineupEvent, LineupEventStats, ShotClockStats
@@ -258,7 +260,9 @@ def _play_type_pts_poss(
             fta = t.get(f"total_{dst}_{prefix}fta", 0.0)
             to = t.get(f"total_{dst}_{prefix}to", 0.0)
             fg_missed = fga - fgm  # ts:371 `def fgM = params.fga - params.fgm;`
-            out[f"total_{dst}_{prefix}poss"] = fgm + (1.0 - rebound_pct) * fg_missed + 0.475 * fta + to
+            out[f"total_{dst}_{prefix}poss"] = (
+                fgm + (1.0 - rebound_pct) * fg_missed + COLLEGE_FT_POSSESSION_WEIGHT * fta + to
+            )
     return out
 
 

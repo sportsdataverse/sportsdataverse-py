@@ -58,7 +58,7 @@
 to play-by-play, box score, schedule, roster, and other sports data across
 multiple leagues (NBA + G-League, WNBA, NFL, MLB, NHL, MBB, WBB, CFB, PWHL +
 19 HockeyTech minor/junior leagues, college hockey M/W, college baseball +
-softball, soccer, cricket, lacrosse, UFL/XFL/CFL, plus odds), plus international
+softball, soccer, cricket, lacrosse, golf, UFL/XFL/CFL, plus odds), plus international
 basketball (EuroLeague and 24 provider families), European hockey (SIHF and 12
 leagues), Formula 1, the Kalshi and Polymarket prediction markets, and the
 cross-sport providers (CBS, Fox, Yahoo, ESPN content, TheSportsDB).
@@ -206,6 +206,8 @@ sportsdataverse/
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
   lacrosse/   # ESPN lacrosse (league-parameterized: PLL, men's and women's college; probed endpoint allowlist)
+  golf/       # ESPN golf (league-parameterized: pga, lpga, liv, eur, champions-tour) + golf_espn_parsers (field-of-players leaderboard)
+              #   + the PGA TOUR GraphQL family pgatour_* (runtime only; pgatour_runtime posts pgatour_queries/*.graphql)
   football/   # UFL / XFL / CFL ESPN families
   nbagl/      # NBA G League: ESPN wrappers, nbagl_stats (stats.nba.com, LeagueID=20) and engine helpers
   providers/  # cross-sport sources: cbs/ (CBS NAPI), fox/ (Fox Sports API), yahoo/ (Yahoo Shangrila),
@@ -259,10 +261,10 @@ last remnants (`_common_espn.py`, the `extract*.py` bootstraps and the committed
 `tools/codegen/_generated/` staging copies) are deleted on main and ship in 0.2.0. If you find a
 description of that pattern anywhere, it predates 0.1.x.
 
-Total cross-league surface: **126 short names** (from the five ESPN
-endpoint YAMLs in `generate.ESPN_APIS`) emitted across 41 league modules
-= **4,601 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
-lacrosse emits 35). The `espn_cdn` family (`cdn.espn.com/core`, shorts
+Total cross-league surface: **127 short names** (from the five ESPN
+endpoint YAMLs in `generate.ESPN_APIS`) emitted across 42 league modules
+= **4,632 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
+lacrosse emits 35, golf 31). The `espn_cdn` family (`cdn.espn.com/core`, shorts
 `cdn_playbyplay` / `cdn_boxscore` / `cdn_schedule` / `cdn_scoreboard` /
 `cdn_rankings`) is the one family whose per-league reach was live-probed:
 each endpoint carries an `include_prefixes` allowlist (league prefixes, so
@@ -294,7 +296,7 @@ The rest follow the same contract, one per provider family, among them `provider
 `hockeytech/_parsers.py`, `odds/the_odds_api_parsers.py`,
 `mlb/mlb_statcast_parsers.py`, `soccer/` (`soccer_espn`, `asa`, `fotmob`, `uefa`,
 `fifa`, `mls/mls_api`, `nwsl/nwsl_api`), `basketball/euroleague/euroleague_parsers.py`,
-`cricket/cricket_espn_parsers.py`, and the NCAA HTML parsers
+`cricket/cricket_espn_parsers.py`, `golf/golf_espn_parsers.py` + `golf/pgatour_parsers.py`, and the NCAA HTML parsers
 `mbb/mbb_ncaa_team_parsers.py` + `wbb/wbb_ncaa_team_parsers.py`, plus the international
 basketball and European hockey families under `basketball/` and `hockey/`.
 
@@ -344,7 +346,7 @@ cover the long tail:
   per game).
 
 Three regression tests in `tests/test_espn_universal_parsers.py`
-lock in the 126/126 coverage invariant + the shim invariant. Any
+lock in the 127/127 coverage invariant + the shim invariant. Any
 new wrapper short name added without a matching `ENDPOINT_PARSERS`
 entry fails CI.
 
@@ -976,8 +978,7 @@ warns once per artifact and nulls its columns; `SDV_PY_MODELS_STRICT=1` (or
 
 ### Polars version
 
-Constrained to `polars>=2.0,<3`; the lock resolves **2.2** on Python 3.11+ and **2.0** on 3.10
-(polars 2.1 dropped Python 3.10), so code must run on both. The 3.10 CI job is the 2.0 check. polars 1.x
+Constrained to `polars>=2.0,<3`; the lock resolves **2.0** on every supported Python. polars 1.x
 is no longer supported, so code may use 2.x-only API. All seven `*_pbp.py` modules were migrated
 from the 0.18 surface to 1.x in May 2026 (about 165 call sites) and made 2.0-safe in #719. A
 0.18-style API in this codebase is a bug, not a style preference.
@@ -1006,18 +1007,6 @@ polars 2.0 behaviour rules:
 - polars 2.0 loads an Arrow extension type it does not know as an `Extension` column, which `.str`, `==`
   and `cast` all reject. R writes `glue` and other classed vectors as `arrow.r.vctrs`; `sportsdataverse/__init__.py`
   registers that one as storage. Register any other foreign extension the same way, never per call site.
-
-polars 2.1 / 2.2 behaviour rules:
-
-- A frame built from a list of dicts whose keys vary by row (stat names, flattened JSON) passes
-  `infer_schema_length=None`, or a full `schema=`. From 2.2, a key first seen after row 100 raises
-  `ComputeError`. 2.0 dropped the column without a word.
-- Never do arithmetic between a number and a string. 2.1 raises where 2.0 concatenated. Use
-  `pl.concat_str` / `pl.format`.
-- `str.find` returns character offsets from 2.2 (byte offsets on 2.0); they differ on non-ASCII text.
-- Pass a scalar argument (`head(n)`, `top_k(k)`, `quantile(q)`, `get(i)`, ...) as a Python value or
-  `.first()`, never `pl.col("n").head(1)`. 2.2 raises `ShapeError` at plan time.
-- Round a Decimal before casting it to an int: 2.1 truncates where 2.0 rounded.
 
 Use the modern API surface:
 

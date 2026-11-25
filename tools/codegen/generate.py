@@ -139,7 +139,7 @@ def _example_request(
     if any(p.required and p.default_from is None and p.python_name not in ep.example_args for p in params):
         return ""
     vals = {p.python_name: ep.example_args.get(p.python_name, p.default) for p in params}
-    qs = {**ep.url_fixed}
+    qs = {**ep.url_fixed, **({ep.league_query: league} if ep.league_query else {})}
     for p in ep.query_params:
         if p.in_body:
             continue
@@ -1041,6 +1041,8 @@ _DESC_INHERITS: dict[str, tuple[str, frozenset[str]]] = {
     # The NFL processor's own columns are described once, under build_nfl_season; the frames that pass
     # its output through reach them (and, through it, load_cfb_pbp's) by the chain.
     **{f"nfl/{s}": ("build_nfl_season", frozenset()) for s in ("calculate_epa", "calculate_wpa", "split_pat_rows")},
+    # The golf scoreboard is the leaderboard's field with fewer columns (parse_golf_scoreboard).
+    "golf/scoreboard": ("leaderboard", frozenset()),
     # A Polymarket US single-market lookup answers one /v1/markets row.
     # Their own `id` line: the listing's mentions its unfiltered page.
     **{f"odds/{s}": ("us_markets", frozenset({"id"})) for s in ("us_market_by_id", "us_market_by_slug")},
@@ -1400,6 +1402,9 @@ class _EndpointView:
         self.summary = _normalize_rst(_ep_summary(ep))
         self.query_params = ep.query_params
         self.fixed_params = ep.fixed_params
+        # ``league_query``: the league slug travels as a query param (the path has no ``{league}``).
+        self.league_query = ep.league_query or ""
+        self.league_query_value = "league" if league.league_param else repr(league.league)
         self.path_params = ep.path_params
         self.parser = ep.parser
         # Filled by _flat_views for a ``parser_columns`` family: the documented column names.
@@ -1451,7 +1456,7 @@ class _EndpointView:
             self.path_build_expr = ""
             # f-string whenever a runtime token is present: an endpoint path param OR
             # (param mode) the {league} token.
-            needs_fstring = bool(ep.path_params) or league.league_param
+            needs_fstring = bool(ep.path_params) or (league.league_param and "{league}" in url)
             literal = _quote_path_tokens(url) if quote_path else url
             self.url_literal = ('f"' + literal + '"') if needs_fstring else ('"' + url + '"')
 
@@ -1687,6 +1692,10 @@ _SPORT_PARSER_OVERRIDES: dict[str, dict[str, str]] = {
         "standings": "parse_cricket_standings",
         "summary": "parse_cricket_summary",
     },
+    "golf": {
+        "scoreboard": "parse_golf_scoreboard",
+        "leaderboard": "parse_golf_leaderboard",
+    },
 }
 
 # Maps sport slug -> dotted import path for that sport's parser module.
@@ -1694,6 +1703,7 @@ _SPORT_PARSER_OVERRIDES: dict[str, dict[str, str]] = {
 _SPORT_PARSER_MODULE: dict[str, str] = {
     "soccer": "sportsdataverse.soccer.soccer_espn_parsers",
     "cricket": "sportsdataverse.cricket.cricket_espn_parsers",
+    "golf": "sportsdataverse.golf.golf_espn_parsers",
 }
 
 
@@ -3099,6 +3109,7 @@ FLAT_APIS = [
     ("fifa", "soccer"),
     ("sleeper", "nfl"),
     ("f1", "f1"),  # Jolpica F1 (Ergast-compatible)
+    ("pgatour", "golf"),  # PGA TOUR GraphQL (orchestrator.pgatour.com), runtime only
     # wave-2 intake families (espn-content, thesportsdb, football-data.co.uk, openligadb,
     # polymarket, kalshi)
     ("espn_content", "espn_content"),
@@ -3823,6 +3834,7 @@ _FLAT_API_DOC = {
     "fifa": "FIFA public API v3 (api.fifa.com)",
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
     "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
+    "pgatour": "PGA TOUR GraphQL API (orchestrator.pgatour.com; runtime only, public frontend key or $PGA_API_KEY)",
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
     "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",
@@ -5891,6 +5903,7 @@ _LEAGUE_GROUPS: dict[str, str] = {
     ),
     "cricket": "Cricket",
     "lacrosse": "Lacrosse",
+    "golf": "Golf",
     "f1": "Motorsport",
     "odds": "Betting & prediction markets",
     **dict.fromkeys(("cbs", "fox", "yahoo", "espn_content", "thesportsdb"), "Cross-sport providers"),
@@ -5919,6 +5932,7 @@ _LEAGUE_LABELS = {
     "college_baseball": "College baseball",
     "college_softball": "College softball",
     "cricket": "Cricket",
+    "golf": "Golf",
     "lacrosse": "Lacrosse",
     "fox": "Fox Sports",
     "laliga": "LaLiga",

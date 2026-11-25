@@ -199,6 +199,48 @@ from sportsdataverse.nhl.nhl_player_props import nhl_game_total
 nhl_game_total(games, ratings)
 ```
 
+### nhl_goalie_saves {#nhl_goalie_saves}
+
+`nhl_goalie_saves(seasons: 'int | list[int]', *, starters: 'pl.DataFrame | None' = None, coverage: 'float' = 0.8, load_goalie_boxscores: 'Callable[[Any], pl.DataFrame] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Starting goalie saves projection with a central interval, per goalie-game.
+
+Expected shots against blend the goalie's team's shots-against rate with the opponent's shots-for rate
+(strictly prior games of the season, shrunk toward the league's in-season mean by `shrink_k` games),
+move by `shots_hfa / 2` for home ice and scale by `starter_shot_share`. The save percentage is the
+goalie's own record over every earlier game in `seasons`, shrunk toward `save_pct_prior` by
+`save_pct_kappa` shots. Saves then follow a negative binomial (size `shots_nb_size`, mean
+`exp_shots_against * exp_save_pct`), and `saves_lo` / `saves_hi` are its `(1 - coverage) / 2` and
+`(1 + coverage) / 2` quantiles. Every row uses only games before its date.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | the seasons whose goalie boxscores make the history (`load_nhl_goalie_boxscores` publishes 2024 onward). Without `starters`, every starter-game in them is projected. |
+| `starters` | `DataFrame \| None` | `None` | games still to play, one row per projected starter: `game_id`, `game_date` (`Date` or `"YYYY-MM-DD"`), `team`, `is_home`, `player_id`. Both teams of a game must be listed. A game already in the boxscores is projected without its own result. When given, only these rows are returned. |
+| `coverage` | `float` | `0.8` | central probability of the interval, in (0, 1). |
+| `load_goalie_boxscores` | `Callable[[Any], DataFrame] \| None` | `None` | the goalie-box loader, called as `f(seasons)`; `None` reads `~sportsdataverse.nhl.nhl_loaders.load_nhl_goalie_boxscores`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per projected goalie-game. Because saves are whole numbers, the interval holds at least `coverage` of the predicted distribution. Empty input returns a zero-row frame with this schema. |col_name |type | |:-----------------|:------| |season |Int64 | |game_id |Int64 | |game_date |Date | |player_id |Int64 | |team |String | |opp_team |String | |is_home |Boolean| |exp_shots_against |Float64| |exp_save_pct |Float64| |exp_saves |Float64| |saves_lo |Int64 | |saves_hi |Int64 | |coverage |Float64|
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `coverage` is not strictly between 0 and 1, or a `starters` game lacks a team. |
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_player_props import nhl_goalie_saves
+saves = nhl_goalie_saves(2026)
+saves.select("game_id", "player_id", "exp_saves", "saves_lo", "saves_hi").head()
+```
+
 ### nhl_in_game_win_prob {#nhl_in_game_win_prob}
 
 `nhl_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
@@ -363,7 +405,7 @@ Vectorized pregame margin/win-prob/total (+ market edge) over a schedule.
 
 **Returns**
 
-A polars (or pandas) DataFrame, one row per game. |col_name |type | |:-------------|:------| |game_id |Int64 | |home_team |String | |away_team |String | |neutral_site |Boolean| |exp_margin |Float64| |home_win_prob |Float64| |exp_total |Float64| |market_edge |Float64|
+A polars (or pandas) DataFrame, one row per game. The five regulation columns come from `regulation_goal_means`: the 60-minute score model whose final-score win probability and expected total equal `home_win_prob` and `exp_total`. |col_name |type | |:------------------|:------| |game_id |Int64 | |home_team |String | |away_team |String | |neutral_site |Boolean| |exp_margin |Float64| |home_win_prob |Float64| |exp_total |Float64| |market_edge |Float64| |home_reg_win_prob |Float64| |reg_tie_prob |Float64| |away_reg_win_prob |Float64| |exp_home_reg_goals |Float64| |exp_away_reg_goals |Float64|
 
 No returns table is published for this function: no capture: it needs games with home_team / away_team / neutral_site columns that no loader returns.
 
@@ -373,6 +415,44 @@ No returns table is published for this function: no capture: it needs games with
 from sportsdataverse.nhl.nhl_market import nhl_predict_games
 preds = nhl_predict_games(games, ratings)
 print(preds.sort("home_win_prob", descending=True).head())
+```
+
+### nhl_score_distribution {#nhl_score_distribution}
+
+`nhl_score_distribution(preds: 'pl.DataFrame', *, top_n: 'int' = 10, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Most likely final scores per game, from the regulation score model behind `nhl_predict_games`.
+
+A final score counts overtime and shootout wins as one goal, as the NHL scores them. Summed over every
+scoreline, the home-win probability equals the row's `home_win_prob` and the mean total equals its
+`exp_total` (see `regulation_goal_means`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `preds` | `DataFrame` |  | a frame with `game_id`, `home_win_prob` and `exp_total`, e.g. `nhl_predict_games`. Rows where either value is missing are skipped. |
+| `top_n` | `int` | `10` | how many scorelines to keep per game, most likely first (at least 1). |
+| `league` | `str` | `'nhl'` | resolves `reg_draw_inflation` via `get_constants`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, `top_n` rows per game. `prob_beyond_regulation` is the part of `prob` from games tied after 60 minutes (a one-goal score only). `game_id` keeps the input's dtype (Int64 from `nhl_predict_games`). |col_name |type | |:----------------------|:------| |game_id |Int64 | |rank |Int64 | |home_goals |Int64 | |away_goals |Int64 | |prob |Float64| |prob_beyond_regulation |Float64|
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `top_n` is below 1 or `league` has no constants row. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_market import nhl_score_distribution
+preds = pl.DataFrame({"game_id": [2025020001], "home_win_prob": [0.55], "exp_total": [6.2]})
+nhl_score_distribution(preds, top_n=5)
 ```
 
 ### nhl_special_teams_value {#nhl_special_teams_value}
@@ -414,6 +494,40 @@ pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
 shifts = pl.read_parquet("tests/fixtures/nhl_player_impact/shifts_sample.parquet")
 st = nhl_special_teams_value(pbp, shifts, model_dir="tests/fixtures/nhl_player_impact/xg_models")
 print(st.sort("pp_value", descending=True).head(10))
+```
+
+### nhl_total_goals_distribution {#nhl_total_goals_distribution}
+
+`nhl_total_goals_distribution(preds: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Distribution of the final-score total goals per game, from the same model as `nhl_score_distribution`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `preds` | `DataFrame` |  | a frame with `game_id`, `home_win_prob` and `exp_total`, e.g. `nhl_predict_games`. Rows where either value is missing are skipped. |
+| `league` | `str` | `'nhl'` | resolves `reg_draw_inflation` via `get_constants`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per game and total from 0 to 32 goals. `prob_over` is `P(total > total_goals)`, the over probability for a line of `total_goals + 0.5`. Per game the probabilities sum to 1 and their mean is the row's `exp_total`. `game_id` keeps the input's dtype. |col_name |type | |:-----------|:------| |game_id |Int64 | |total_goals |Int64 | |prob |Float64| |prob_over |Float64|
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` has no constants row. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_market import nhl_total_goals_distribution
+preds = pl.DataFrame({"game_id": [2025020001], "home_win_prob": [0.55], "exp_total": [6.2]})
+totals = nhl_total_goals_distribution(preds)
+totals.filter(pl.col("total_goals") == 5)  # prob_over == P(over 5.5)
 ```
 
 ### nhl_zone_transitions {#nhl_zone_transitions}
@@ -525,6 +639,47 @@ The variance-corrected expected combined goal total for the game.
 ```python
 from sportsdataverse.nhl.nhl_market import predict_total
 predict_total(2.8, 2.2, 2.5, 2.4, False)
+```
+
+### regulation_goal_means {#regulation_goal_means}
+
+`regulation_goal_means(home_win_prob: 'np.ndarray', exp_total: 'np.ndarray', *, league: 'str' = 'nhl') -> 'tuple[np.ndarray, np.ndarray]'`
+
+Per-team regulation goal means consistent with a game's win probability and expected total.
+
+The 60-minute score is a draw-inflated pair of Poissons (see `reg_draw_inflation`). A game level
+after regulation is decided by one more goal (overtime or the shootout winner, both of which add
+exactly one goal to the final score), won by the home side with probability
+`P(home ahead) / (P(home ahead) + P(away ahead))`. The two means are solved by bisection so that
+the model's final-score home win probability equals `home_win_prob` and its expected final total
+equals `exp_total`. `exp_total` is used as given, so the regulation means inherit its centring
+(`avg_total_goals` / `total_scale`). A pair the grid cannot reach (an `exp_total` below about 1,
+say) gets `NaN` means rather than the nearest bracket.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_win_prob` | `ndarray` |  | final-score home win probabilities in (0, 1), e.g. `nhl_predict_games`'s column. |
+| `exp_total` | `ndarray` |  | expected final-score total goals, same length. |
+| `league` | `str` | `'nhl'` | resolves `reg_draw_inflation` via `get_constants`. |
+
+**Returns**
+
+A `(home_means, away_means)` tuple of float arrays.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` has no constants row. |
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_market import regulation_goal_means
+regulation_goal_means(np.array([0.55]), np.array([6.1]))
 ```
 
 ### special_teams_split {#special_teams_split}

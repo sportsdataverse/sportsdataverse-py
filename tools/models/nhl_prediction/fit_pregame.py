@@ -1,6 +1,11 @@
-"""Fit HFA / margin_sd / total_scale / avg_xgf for LEAGUE_CONSTANTS["nhl"] by walking the 2023 backtest
-with strict as-of-date ratings (Task 2.3). It also prints the realized mean total; avg_total_goals
-stays a seeded published reference.
+"""Fit HFA / margin_sd / total_scale / avg_xgf / avg_total_goals for LEAGUE_CONSTANTS["nhl"] by walking the
+2023 backtest with strict as-of-date ratings (Task 2.3).
+
+Labels are settled scores (``_settled_scores``): the pbp logs every scoring shootout attempt as a GOAL, but a
+shootout settles as one goal to its winner. avg_total_goals is the mean settled total of the three most
+recent complete regular seasons before the season being predicted (SEED_SEASONS); refit it once a season,
+after the regular season closes, never from an in-progress season. The run also rewrites
+``tests/fixtures/nhl_prediction/settled_totals_2024_2026.parquet``, which pins that value.
 
 Run once (downloads the 2022-23 .. 2025-26 pbp + schedules; no live-API gate needed):
 
@@ -12,6 +17,8 @@ Prints the fitted values -- paste them into
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import polars as pl
 from scipy.optimize import minimize
@@ -19,12 +26,23 @@ from scipy.stats import norm
 
 from sportsdataverse.nhl.nhl_loaders import load_nhl_pbp_full, load_nhl_schedules
 from sportsdataverse.nhl.nhl_market import expected_goals
-from sportsdataverse.nhl.nhl_prediction_constants import as_of_ratings_split, brier_score, get_constants
+from sportsdataverse.nhl.nhl_prediction_constants import (
+    _settled_scores,
+    as_of_ratings_split,
+    brier_score,
+    get_constants,
+)
 from sportsdataverse.nhl.nhl_team_ratings import adjust_rate_opponent, team_game_xg_rates
 
 SEASON = 2023
 # avg_xgf is the mean of each season's EV xG-for per team-game, 2022-23 .. 2025-26.
 AVG_XGF_SEASONS = (2023, 2024, 2025, 2026)
+# avg_total_goals is the mean settled total of the last three complete regular seasons before the one being
+# predicted (2026-27 here): 2023-24 .. 2025-26.
+SEED_SEASONS = (2024, 2025, 2026)
+SEED_FIXTURE = (
+    Path(__file__).resolve().parents[3] / "tests" / "fixtures" / "nhl_prediction" / "settled_totals_2024_2026.parquet"
+)
 
 
 def build_game_rates(season: int = SEASON) -> tuple[pl.DataFrame, pl.DataFrame]:
@@ -33,6 +51,8 @@ def build_game_rates(season: int = SEASON) -> tuple[pl.DataFrame, pl.DataFrame]:
     sched = schedule.filter(pl.col("game_type") == "R").select(
         pl.col("game_id"),
         pl.col("season"),
+        pl.col("home_score").cast(pl.Int64, strict=False),
+        pl.col("away_score").cast(pl.Int64, strict=False),
         pl.col("game_date").str.strptime(pl.Date, "%Y-%m-%d", strict=False).alias("date"),
         pl.col("home_team_abbr").alias("home_abbr"),
         pl.col("away_team_abbr").alias("away_abbr"),
@@ -40,24 +60,15 @@ def build_game_rates(season: int = SEASON) -> tuple[pl.DataFrame, pl.DataFrame]:
     )
     rates = team_game_xg_rates(pbp, sched)
 
-    # Realized goals for the fitting *labels* -- derived from the pbp's own
-    # GOAL events, never from load_nhl_schedules' home_score/away_score.
-    # Those columns were found at grounding to be a placeholder constant for
-    # every season <= 2023 (e.g. every single 2022-23 game reporting "2-3");
-    # see the fixtures README + nhl_team_ratings.team_game_xg_rates note.
-    goals = (
-        pbp.filter((pl.col("event_type") == "GOAL") & pl.col("game_id").is_not_null())
-        .group_by(["game_id", "event_team_abbr"])
-        .agg(pl.len().alias("goals"))
-        .with_columns(pl.col("game_id").cast(pl.Int64).cast(pl.Utf8))
-    )
+    # Realized goals for the fitting *labels* -- settled scores from the pbp's own GOAL events, never
+    # load_nhl_schedules' home_score/away_score: those are a placeholder constant for every season <= 2023
+    # (e.g. every single 2022-23 game reporting "2-3"); see the fixtures README +
+    # nhl_team_ratings.team_game_xg_rates note. _settled_scores counts a shootout as one goal to its
+    # winner; counting every shootout GOAL event added 0.06-0.11 goals a game to the total.
+    settled = _settled_scores(pbp).with_columns(pl.col("game_id").cast(pl.Utf8))
     sched = sched.with_columns(pl.col("game_id").cast(pl.Int64).cast(pl.Utf8))
-    home_goals = goals.rename({"event_team_abbr": "home_abbr", "goals": "home_goals"})
-    away_goals = goals.rename({"event_team_abbr": "away_abbr", "goals": "away_goals"})
-    sched = sched.join(home_goals, on=["game_id", "home_abbr"], how="left").join(
-        away_goals, on=["game_id", "away_abbr"], how="left"
-    )
-    sched = sched.with_columns(
+    sched = sched.join(settled, on="game_id", how="left").with_columns(
+        pl.col("home_goals").is_not_null().alias("has_pbp"),
         pl.col("home_goals").fill_null(0).cast(pl.Int64),
         pl.col("away_goals").fill_null(0).cast(pl.Int64),
     )
@@ -133,21 +144,41 @@ def main() -> None:
         f" / {float(y_win.mean()):.4f}"
     )
     print(f"diagnostic: real-goal home margin residual = {hfa_residual:.4f}, residual std = {resid_sd:.4f}")
-    xgf = [float((rates if s == SEASON else build_game_rates(s)[0])["xgf"].mean()) for s in AVG_XGF_SEASONS]
+    built = {SEASON: (rates, sched)} | {s: build_game_rates(s) for s in set(AVG_XGF_SEASONS + SEED_SEASONS) - {SEASON}}
+    xgf = [float(built[s][0]["xgf"].mean()) for s in AVG_XGF_SEASONS]
     # avg_xgf ships at 2 dp, so that is the value to copy; the 4 dp mean is a diagnostic.
     print(f"avg_xgf (mean EV xG-for per team-game) = {np.mean(xgf):.2f}  <- write this into LEAGUE_CONSTANTS")
     print(f"  mean {np.mean(xgf):.4f}; per season {AVG_XGF_SEASONS}: " + " / ".join(f"{v:.3f}" for v in xgf))
     print(f"total_scale (OLS slope)         = {slope:.4f}  <- write this into LEAGUE_CONSTANTS")
     # predict_total stretches the raw total around 2 * avg_xgf (its own mean) and adds back
-    # avg_total_goals, so that pair is the OLS intercept. The mean realized total below is that
-    # intercept's fitted value, printed for comparison only: avg_total_goals stays the seeded
-    # published reference. The mean raw total should sit on 2 * avg_xgf.
-    print(f"avg_total_goals (mean realized) = {float(y.mean()):.4f}  (reference; the constant stays seeded)")
+    # avg_total_goals, so that pair is the OLS intercept. The mean raw total should sit on 2 * avg_xgf.
+    print(f"mean settled total, walked {SEASON} games = {float(y.mean()):.4f}  (reference)")
+    seed = _seed_total(built)
+    print(f"avg_total_goals (mean settled total {SEED_SEASONS}) = {seed:.2f}  <- write this into LEAGUE_CONSTANTS")
     print(
         f"mean raw total                  = {float(x.mean()):.4f}  (should be ~2 * avg_xgf = {2 * const.avg_xgf:.2f})"
     )
     print(f"naive baseline Brier (p=0.5)    = {brier_score(df['home_win'].to_numpy(), np.full(df.height, 0.5)):.4f}")
     print(f"fitted-model Brier              = {brier_for(result.x):.4f}")
+
+
+def _seed_total(built: dict[int, tuple[pl.DataFrame, pl.DataFrame]]) -> float:
+    """Mean settled total over SEED_SEASONS' regular-season games that have pbp; writes the pin fixture."""
+    games = pl.concat(
+        [
+            built[s][1].filter(pl.col("has_pbp")).with_columns(pl.lit(s, dtype=pl.Int64).alias("season"))
+            for s in SEED_SEASONS
+        ]
+    ).select(pl.col("game_id").cast(pl.Int64), "season", "home_goals", "away_goals", "home_score", "away_score")
+    for (season,), g in games.group_by("season", maintain_order=True):
+        total = g["home_goals"] + g["away_goals"]
+        agree = ((g["home_goals"] == g["home_score"]) & (g["away_goals"] == g["away_score"])).mean()
+        print(
+            f"  {season}: {g.height} games, mean settled total {total.mean():.3f}; matches the schedule score {agree:.4f}"
+        )
+    games.sort("game_id").write_parquet(SEED_FIXTURE)
+    by_season = games.group_by("season").agg((pl.col("home_goals") + pl.col("away_goals")).mean().alias("t"))
+    return float(by_season["t"].mean())
 
 
 if __name__ == "__main__":

@@ -1,0 +1,284 @@
+api: pgatour
+docstring:
+  example_import: true
+  notes:
+  - 'Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``.
+    sdv-py publishes no release assets from this API and ships no bulk or backfill tooling
+    for it.'
+  - 'The request body is ``{operationName, query, variables}``; the query document ships in
+    ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key``
+    header (left out of the example request): the public key pgatour.com''s own frontend
+    sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable
+    to supply a key yourself.'
+  - 'Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament
+    ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters):
+    read them from ``pgatour_schedule``.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the API answered null for the request (an unknown
+    tournament, player or stat id).'
+  - 'ValueError: the API rejected the query variables.'
+  - 'sportsdataverse.errors.AssetFetchError: any other GraphQL error, or a compressed payload
+    that does not decode.'
+  see_also:
+  - name: PGA TOUR
+    note: the site whose own GraphQL API these wrappers read
+    url: https://www.pgatour.com/
+  - name: espn_golf_leaderboard
+    note: ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+    url: https://py.sportsdataverse.org/docs/golf/
+endpoints:
+- body: json
+  example_args:
+    tour_code: R
+    year: 2026
+  extra_params:
+  - description: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
+    name: tour_code
+    query_key: tourCode
+    type: str
+    default: R
+  - description: Season year, e.g. 2026; omitted, the current season.
+    name: year
+    query_key: year
+    type: int|str
+  method: post
+  parser: parse_pgatour_schedule
+  path: /graphql
+  fixed_params:
+    operation: schedule
+  body_builder: graphql_body
+  returns_schema: native/pgatour/schedule
+  short: schedule
+  summary: 'A tour''s season schedule: one row per tournament (id, dates, course, purse,
+    champion, points on offer), completed events first.'
+- body: json
+  example_args:
+    tournament_id: R2026014
+  extra_params:
+  - description: Tournament id (tournament_id in pgatour_schedule), e.g. R2026014.
+    name: tournament_id
+    query_key: id
+    required: true
+    type: str
+  method: post
+  parser: parse_pgatour_leaderboard
+  path: /graphql
+  fixed_params:
+    operation: leaderboardCompressedV3
+  body_builder: graphql_body
+  returns_schema: native/pgatour/leaderboard
+  short: leaderboard
+  summary: 'One tournament''s leaderboard: position, total to par, strokes, holes completed,
+    today''s score, round scores and projected FedExCup rank per player.'
+- body: json
+  example_args:
+    player_id: '28237'
+    tournament_id: R2026014
+  extra_params:
+  - description: Tournament id, e.g. R2026014.
+    name: tournament_id
+    query_key: tournamentId
+    required: true
+    type: str
+  - description: PGA TOUR player id (player_id in pgatour_leaderboard), e.g. 28237.
+    name: player_id
+    query_key: playerId
+    required: true
+    type: str
+  method: post
+  parser: parse_pgatour_scorecard
+  path: /graphql
+  fixed_params:
+    operation: scorecardCompressedV3
+  body_builder: graphql_body
+  returns_schema: native/pgatour/scorecard
+  short: scorecard
+  summary: 'One player''s scorecard for a tournament: one row per hole per round (par, yardage,
+    strokes, birdie / bogey status, running score to par).'
+- body: json
+  example_args:
+    tournament_id: R2026014
+  extra_params:
+  - description: Tournament id, e.g. R2026014.
+    name: tournament_id
+    query_key: id
+    required: true
+    type: str
+  method: post
+  parser: parse_pgatour_tee_times
+  path: /graphql
+  fixed_params:
+    operation: teeTimesCompressedV2
+  body_builder: graphql_body
+  returns_schema: native/pgatour/tee_times
+  short: tee_times
+  summary: 'A tournament''s tee times: one row per player per group per round (tee time in
+    UTC, starting tee, course).'
+- body: json
+  example_args:
+    player_id: '28237'
+  extra_params:
+  - description: PGA TOUR player id, e.g. 28237.
+    name: player_id
+    query_key: id
+    required: true
+    type: str
+  method: post
+  parser: parse_pgatour_player
+  path: /graphql
+  fixed_params:
+    operation: player
+  body_builder: graphql_body
+  returns_schema: native/pgatour/player
+  short: player
+  summary: 'One player''s profile: name, country, world ranking, height, weight, birth date
+    and place, year turned pro, school, residence.'
+- body: json
+  example_args:
+    tour_code: R
+  extra_params:
+  - description: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
+    name: tour_code
+    query_key: tourCode
+    type: str
+    default: R
+  - description: True for active players only; omitted, every player in the directory.
+    name: active
+    query_key: active
+    type: bool
+  method: post
+  parser: parse_pgatour_player_directory
+  path: /graphql
+  fixed_params:
+    operation: playerDirectory
+  body_builder: graphql_body
+  returns_schema: native/pgatour/player_directory
+  short: player_directory
+  summary: 'A tour''s player directory: one row per player (id, name, country, age, college,
+    year turned pro).'
+- body: json
+  example_args:
+    tour_code: R
+    year: 2026
+  extra_params:
+  - description: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
+    name: tour_code
+    query_key: tourCode
+    type: str
+    default: R
+  - description: Season year; omitted, the current season.
+    name: year
+    query_key: year
+    type: int
+  method: post
+  parser: parse_pgatour_stat_catalog
+  path: /graphql
+  fixed_params:
+    operation: statOverview
+  body_builder: graphql_body
+  returns_schema: native/pgatour/stat_catalog
+  short: stat_catalog
+  summary: 'Every stat a tour publishes: category, sub-category, stat id and title. The stat
+    ids are what pgatour_stat_details takes.'
+- body: json
+  example_args:
+    stat_id: '120'
+    tour_code: R
+    year: 2026
+  extra_params:
+  - description: Stat id (stat_id in pgatour_stat_catalog), as a string (leading zeros matter),
+      e.g. '120' (scoring average) or '02675' (SG Total).
+    name: stat_id
+    query_key: statId
+    required: true
+    type: str
+  - description: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
+    name: tour_code
+    query_key: tourCode
+    type: str
+    default: R
+  - description: Season year; omitted, the current season.
+    name: year
+    query_key: year
+    type: int
+  method: post
+  parser: parse_pgatour_stat_details
+  path: /graphql
+  fixed_params:
+    operation: statDetails
+  body_builder: graphql_body
+  returns_schema: native/pgatour/stat_details
+  short: stat_details
+  summary: 'One stat''s season table, long form: one row per player per stat column (rank,
+    column name, value as displayed).'
+- body: json
+  example_args:
+    tour_code: R
+    year: 2025
+  extra_params:
+  - description: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
+    name: tour_code
+    query_key: tourCode
+    type: str
+    default: R
+  - description: Points race id, as a string (leading zeros matter); 02671 (the default) is
+      the FedExCup, 02698 the FedExCup Fall.
+    name: cup_id
+    query_key: id
+    type: str
+    default: '02671'
+  - description: Season year; omitted, the current season.
+    name: year
+    query_key: year
+    type: int
+  method: post
+  parser: parse_pgatour_tour_cup
+  path: /graphql
+  fixed_params:
+    operation: tourCupCombined
+  body_builder: graphql_body
+  returns_schema: native/pgatour/tour_cup
+  short: tour_cup
+  summary: 'A season-long points race (the FedExCup by default): one row per player with
+    official and projected rank and points.'
+- body: json
+  example_args:
+    player_id: '59095'
+    round: 4
+    tournament_id: R2026006
+  extra_params:
+  - description: Tournament id, e.g. R2026006.
+    name: tournament_id
+    query_key: tournamentId
+    required: true
+    type: str
+  - description: PGA TOUR player id, e.g. 59095.
+    name: player_id
+    query_key: playerId
+    required: true
+    type: str
+  - description: Round number (1-4).
+    name: round
+    query_key: round
+    required: true
+    type: int
+  method: post
+  parser: parse_pgatour_shot_details
+  path: /graphql
+  fixed_params:
+    operation: shotDetailsV4Compressed
+  body_builder: graphql_body
+  returns_schema: native/pgatour/shot_details
+  short: shot_details
+  summary: 'ShotLink shot tracking for one player''s round: one row per stroke with
+    description, distance, lie and start / end coordinates.'
+getter_module: sportsdataverse.golf.pgatour_runtime
+host: https://orchestrator.pgatour.com
+module: pgatour
+name_pattern: pgatour_{short}
+parser_module: golf.pgatour_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: pgatour_

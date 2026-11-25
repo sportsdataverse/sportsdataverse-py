@@ -171,6 +171,36 @@ def test_nba_prior_is_unchanged() -> None:
     assert gp.home_prior(3.0, True) == (win_prob_from_margin(3.0, league_id="00"), "spread")
 
 
+@pytest.mark.parametrize(
+    ("lg", "name", "w"),
+    [
+        ("mbb", "mbb_401812161.json.gz", 0.475),
+        ("wbb", "summary_wbb.json", 0.475),
+        ("wnba", "summary_wnba.json", 0.44),
+    ],
+)
+def test_possessions_weigh_free_throws_by_league(monkeypatch: pytest.MonkeyPatch, lg: str, name: str, w: float) -> None:
+    """College counts a free-throw attempt as 0.475 of a possession, the pros 0.44; true shooting is 0.44 in all."""
+    _, _, team_box, player_box = _frames(monkeypatch, lg, name)
+    box = team_box.sort("team_id")
+    out = gp.team_game_rates(box, league=lg).sort("team_id")
+    assert box["free_throws_attempted"].min() > 0  # the weight moves the count
+    tov, fga, fta = out["total_turnovers"], box["field_goals_attempted"], box["free_throws_attempted"]
+    own = fga - box["offensive_rebounds"] + tov + w * fta
+    assert out["possessions"].to_list() == pytest.approx([own.mean()] * 2)
+    assert out["tov_pct"].to_list() == pytest.approx((tov / (fga + w * fta + tov)).to_list())
+
+    rates = gp.player_game_rates(player_box, team_box, league=lg)
+    p = player_box.filter((pl.col("minutes") > 20) & (pl.col("free_throws_attempted") > 0)).row(0, named=True)
+    i = box["team_id"].to_list().index(p["team_id"])
+    team_uses = fga[i] + w * fta[i] + tov[i]
+    usg = 100.0 * (p["field_goals_attempted"] + w * p["free_throws_attempted"] + p["turnovers"])
+    usg *= out["game_minutes"][i] / (p["minutes"] * team_uses)
+    ts = p["points"] / (2 * (p["field_goals_attempted"] + 0.44 * p["free_throws_attempted"]))
+    got = rates.filter(pl.col("athlete_id") == p["athlete_id"]).row(0, named=True)
+    assert got["usg_pct"] == pytest.approx(usg) and got["ts_pct"] == pytest.approx(ts)
+
+
 def _filled(pbp: pl.DataFrame) -> pl.DataFrame:
     return pbp.with_columns(pl.col("home_score", "away_score").forward_fill().fill_null(0))
 

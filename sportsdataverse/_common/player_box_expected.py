@@ -49,6 +49,7 @@ from __future__ import annotations
 
 import polars as pl
 
+from sportsdataverse._common.possessions import PRO_FT_POSSESSION_WEIGHT
 from sportsdataverse._common.league_context import MIN_COHORT_PLAYERS, attach_ranks, attach_sample_sizes
 
 __all__ = [
@@ -69,7 +70,9 @@ __all__ = [
 
 #: The box stats the tables carry: output prefix -> ESPN player box column.
 STATS: dict[str, str] = {"pts": "points", "reb": "rebounds", "ast": "assists"}
-FT_WEIGHT = 0.44
+# ponytail: the pro weight in every league, college too: EXPECTED_COEFS were fit on usage with it;
+# the college 0.475 needs a refit of tools/fit_player_box_expected.py first.
+FT_WEIGHT = PRO_FT_POSSESSION_WEIGHT
 #: A game usage below this (percent) is read as this in the model's log: a player who used nothing
 #: still rebounds and passes.
 USG_FLOOR = 1.0
