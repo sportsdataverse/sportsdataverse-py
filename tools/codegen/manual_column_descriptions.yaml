@@ -81054,6 +81054,24 @@ player_props:
   over_price: Median closing over price at the line, American odds.
   under_price: Median closing under price at the line, American odds.
   over_prob: No-vig probability of the over at the line, median over books.
+nba_player_props:
+  player_id: ESPN athlete id (Utf8).
+  team_id: ESPN team id (Utf8) of the player's team in his latest game before the as-of cut, so a traded player projects for his new team.
+  stat_pts_exp: Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor.
+  stat_reb_exp: Expected rebounds if he plays, on the same basis.
+  stat_ast_exp: Expected assists if he plays, on the same basis.
+  stat_fg3m_exp: Expected made threes if he plays, on the same basis.
+  minutes_exp: Expected minutes, his share of the team's logged minutes (a game sat counts zero) x 240; sums to 240 per team.
+  pace_proj: Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet.
+wnba_player_props:
+  player_id: ESPN athlete id (Utf8).
+  team_id: ESPN team id (Utf8) of the player's team in his latest game before the as-of cut, so a traded player projects for his new team.
+  stat_pts_exp: Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor.
+  stat_reb_exp: Expected rebounds if he plays, on the same basis.
+  stat_ast_exp: Expected assists if he plays, on the same basis.
+  stat_fg3m_exp: Expected made threes if he plays, on the same basis.
+  minutes_exp: Expected minutes, his share of the team's logged minutes (a game sat counts zero) x 200; sums to 200 per team.
+  pace_proj: Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet.
 wp_variants:
   game_id: ESPN game id, the join key to the play-by-play and the play_wp table (the dtype the pbp carries).
   game_play_number: Play order within the game, as in the play-by-play (the dtype the pbp carries).

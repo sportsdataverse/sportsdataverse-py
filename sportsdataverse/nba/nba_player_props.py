@@ -382,6 +382,8 @@ def nba_player_props(
     Returns:
         One row per player on either team: ``player_id, team_id, stat_pts_exp,
         stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj``.
+        ``team_id`` is the player's team in his latest game before the cut, so
+        a traded player projects for his new team.
         The ``stat_*_exp`` lines assume the player plays (per-minute rate x
         mean minutes when playing x pace factor). ``minutes_exp`` is the
         player's share of the team's minutes, counting a game sat as zero, so
@@ -424,6 +426,9 @@ def nba_player_props(
         # Strict `<`: the target game's own line (and every later one) never feeds its projection.
         logs = logs.filter(pl.col("game_date") < as_of_date)
     ratings = _load_ratings(season, league_id, as_of_date=as_of_date)
+    # Date order, so player_rates' `team_id.last()` is a traded player's latest team (the release
+    # logs come newest first, which would hand him to his first team).
+    logs = logs.sort("game_date", "game_id")
     rates = player_rates(logs)
     if rates.height == 0 or ratings.height == 0:
         out = pl.DataFrame(schema=_PROPS_SCHEMA)

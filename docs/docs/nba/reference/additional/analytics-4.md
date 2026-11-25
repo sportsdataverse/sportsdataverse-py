@@ -438,18 +438,18 @@ two teams in the matchup are returned.
 
 **Returns**
 
-One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj`. The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the team's minutes, counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
+One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj`. `team_id` is the player's team in his latest game before the cut, so a traded player projects for his new team. The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the team's minutes, counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | String | Unique player identifier. |
-| `team_id` | String | Unique team identifier. |
-| `stat_pts_exp` | Float64 |  |
-| `stat_reb_exp` | Float64 |  |
-| `stat_ast_exp` | Float64 |  |
-| `stat_fg3m_exp` | Float64 |  |
-| `minutes_exp` | Float64 |  |
-| `pace_proj` | Float64 |  |
+| `player_id` | String | ESPN athlete id (Utf8). |
+| `team_id` | String | ESPN team id (Utf8) of the player's team in his latest game before the as-of cut, so a traded player projects for his new team. |
+| `stat_pts_exp` | Float64 | Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor. |
+| `stat_reb_exp` | Float64 | Expected rebounds if he plays, on the same basis. |
+| `stat_ast_exp` | Float64 | Expected assists if he plays, on the same basis. |
+| `stat_fg3m_exp` | Float64 | Expected made threes if he plays, on the same basis. |
+| `minutes_exp` | Float64 | Expected minutes, his share of the team's logged minutes (a game sat counts zero) x 240; sums to 240 per team. |
+| `pace_proj` | Float64 | Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet. |
 
 **Raises**
 

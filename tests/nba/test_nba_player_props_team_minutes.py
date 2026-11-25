@@ -52,3 +52,33 @@ def test_projected_minutes_sum_to_five_times_game_minutes_per_team(monkeypatch, 
         )
         mean_minutes = mean_minutes.filter(pl.col("team_id").is_in(totals["team_id"].to_list()))
         assert mean_minutes.group_by("team_id").agg(pl.col("minutes_pg").sum())["minutes_pg"].min() > team_minutes
+
+
+# A deadline trade in each league's 2024 logs: (player, old team, new team), read off the fixture.
+TRADED = pytest.mark.parametrize(
+    ("league_id", "prefix", "player_id", "old_team", "new_team"),
+    [("00", "", "4278078", "30", "6"), ("10", "wnba_", "3142055", "16", "8")],
+)
+
+
+@TRADED
+def test_a_traded_player_projects_for_his_latest_team(monkeypatch, league_id, prefix, player_id, old_team, new_team):
+    results = _stub_league(monkeypatch, league_id, prefix)
+    logs = props._load_player_logs(2024, league_id)
+    stint = logs.filter((pl.col("player_id") == player_id) & (pl.col("minutes") > 0)).sort("game_date")
+    assert stint["team_id"].first() == old_team and stint["team_id"].last() == new_team
+    # the new team's first game after he has logged a few for it
+    since = stint.filter(pl.col("team_id") == new_team)["game_date"][3]
+    g = results.filter(
+        (pl.col("date") > since) & ((pl.col("home_team_id") == new_team) | (pl.col("away_team_id") == new_team))
+    ).row(0, named=True)
+    out = props.nba_player_props(2024, g["game_id"], g["home_team_id"], g["away_team_id"], league_id=league_id)
+    row = out.filter(pl.col("player_id") == player_id)
+    assert row["team_id"].to_list() == [new_team], g["game_id"]
+    # his share is the minutes he logged for the new team over the team's logged minutes
+    before = logs.filter((pl.col("game_date") < g["date"]) & (pl.col("team_id") == new_team) & (pl.col("minutes") > 0))
+    on_team = out.filter(pl.col("team_id") == new_team)["player_id"].to_list()
+    team_total = before.filter(pl.col("player_id").is_in(on_team))["minutes"].sum()
+    own = before.filter(pl.col("player_id") == player_id)["minutes"].sum()
+    team_minutes = 5.0 * (40 if league_id == "10" else 48)
+    assert row["minutes_exp"].item() == pytest.approx(own / team_total * team_minutes)
