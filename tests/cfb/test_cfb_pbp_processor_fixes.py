@@ -854,6 +854,9 @@ def test_a_loss_on_a_rush_typed_fumble_or_safety_is_a_stuff():
         .sort("pos_team")
     )
     assert rate["stuffed_run"].to_list() == pytest.approx([5 / 40, 11 / 39])  # Auburn (2), Mississippi State (344)
+    # the gate is the play being a rush: a 1-yard rushing touchdown is a stopped run (2 or fewer yards)
+    td = _row(plays, "B.Brown rush middle for 1 yard gain to the State00 TOUCHDOWN")
+    assert td["type.text"] == "Rushing Touchdown" and td["stopped_run"] is True and td["stuffed_run"] is False
 
 
 def test_yardless_rush_naming_a_foul_does_not_take_stat_yardage():

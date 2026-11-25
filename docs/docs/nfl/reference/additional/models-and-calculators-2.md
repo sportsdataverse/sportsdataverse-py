@@ -377,7 +377,7 @@ The input frame with the EPA derivation applied. `EP_start` is rewritten to `0.9
 | `under_2` | Boolean | Whether the play began with two minutes or less remaining in the half. |
 | `goal_to_go` | Boolean | Binary indicator for whether or not the posteam is in a goal down situation. |
 | `scoring_opp` | Boolean | True when the play starts 40 or fewer yards from the end zone. |
-| `stuffed_run` | Boolean | True on a play ESPN types "Rush" that gained zero or fewer yards. |
+| `stuffed_run` | Boolean | True on a play whose processed type.text is "Rush" that gained zero or fewer yards. |
 | `stopped_run` | Boolean | True on a play whose processed type.text is "Rush" that gained two or fewer yards. |
 | `opportunity_run` | Boolean | True on a rush that gained 4 or more yards. |
 | `highlight_run` | Boolean | True when the rush gained 8 or more yards. |

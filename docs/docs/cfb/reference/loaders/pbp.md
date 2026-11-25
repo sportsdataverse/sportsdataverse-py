@@ -360,7 +360,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `new_distance` | Int64 | Distance to go after the play, including any penalty enforcement. |
 | `under_2` | Boolean | Whether the play began with two minutes or less remaining in the half. |
 | `goal_to_go` | Boolean |  |
-| `stopped_run` | Boolean | True on a rush (any play type the processor counts as a rush, not a kneel) that gained two or fewer yards. |
+| `stopped_run` | Boolean | True on a rush (any play type the processor counts as a rush, not a kneel) that gained two or fewer yards; a rushing touchdown of one or two yards counts. |
 | `opportunity_run` | Boolean | True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag. |
 | `highlight_run` | Boolean | True when the rush gained 8 or more yards. |
 | `adj_rush_yardage` | Int64 | Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the 2026-10 line-yards fix cap at 8. |
