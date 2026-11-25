@@ -1,0 +1,27 @@
+schema: pgatour_past_champions
+kind: dataframe
+columns:
+- name: format_type
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: display_season
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: country_code
+  type: character
+  description: ''
+- name: total
+  type: integer
+  description: ''
+- name: to_par
+  type: character
+  description: ''

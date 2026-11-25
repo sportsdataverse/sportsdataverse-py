@@ -13,16 +13,27 @@ import polars as pl  # noqa: F401
 
 from sportsdataverse.golf.pgatour_runtime import _get, graphql_body
 from sportsdataverse.golf.pgatour_parsers import (
+    parse_pgatour_course_stats,
+    parse_pgatour_field,
+    parse_pgatour_hole_by_hole,
+    parse_pgatour_hole_details,
     parse_pgatour_leaderboard,
+    parse_pgatour_leaderboard_stats,
+    parse_pgatour_past_champions,
+    parse_pgatour_past_results,
     parse_pgatour_player,
     parse_pgatour_player_directory,
+    parse_pgatour_player_results,
     parse_pgatour_schedule,
+    parse_pgatour_schedule_years,
     parse_pgatour_scorecard,
+    parse_pgatour_scorecard_stats,
     parse_pgatour_shot_details,
     parse_pgatour_stat_catalog,
     parse_pgatour_stat_details,
     parse_pgatour_tee_times,
     parse_pgatour_tour_cup,
+    parse_pgatour_tournaments,
 )
 
 __all__ = [
@@ -36,6 +47,17 @@ __all__ = [
     "pgatour_stat_details",
     "pgatour_tour_cup",
     "pgatour_shot_details",
+    "pgatour_schedule_years",
+    "pgatour_tournaments",
+    "pgatour_past_champions",
+    "pgatour_hole_by_hole",
+    "pgatour_leaderboard_stats",
+    "pgatour_field",
+    "pgatour_past_results",
+    "pgatour_course_stats",
+    "pgatour_hole_details",
+    "pgatour_scorecard_stats",
+    "pgatour_player_results",
 ]
 
 
@@ -64,7 +86,7 @@ def pgatour_schedule(
 
     Raises:
         sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
@@ -130,7 +152,7 @@ def pgatour_leaderboard(
 
     Raises:
         sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
@@ -197,7 +219,7 @@ def pgatour_scorecard(
 
     Raises:
         sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
@@ -263,7 +285,7 @@ def pgatour_tee_times(
 
     Raises:
         sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
@@ -328,7 +350,7 @@ def pgatour_player(
 
     Raises:
         sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
@@ -395,7 +417,7 @@ def pgatour_player_directory(
 
     Raises:
         sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
@@ -463,7 +485,7 @@ def pgatour_stat_catalog(
 
     Raises:
         sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
@@ -533,7 +555,7 @@ def pgatour_stat_details(
 
     Raises:
         sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
@@ -604,7 +626,7 @@ def pgatour_tour_cup(
 
     Raises:
         sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
@@ -675,7 +697,7 @@ def pgatour_shot_details(
 
     Raises:
         sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
@@ -716,4 +738,743 @@ def pgatour_shot_details(
     )
     if return_parsed:
         return parse_pgatour_shot_details(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_schedule_years(
+    tour_code: Optional[str] = "R",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """The seasons a tour has a published schedule for: one row per season, the current one flagged. The seasons are what pgatour_schedule(year=) takes.
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "ScheduleYears", "query": "query ScheduleYears($tourCode: TourCode!) {\\n  scheduleYears(tourCode: $tourCode) {\\n    years {\\n      default\\n      displayValue\\n      queryValue\\n    }\\n  }\\n}\\n", "variables": {"tourCode": "R"}}'``
+
+    Args:
+        tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
+        return_parsed: parse the payload through parse_pgatour_schedule_years -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_schedule_years
+            pgatour_schedule_years(tour_code='R')
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "scheduleYears",
+        "tourCode": tour_code,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_schedule_years(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_tournaments(
+    tournament_ids: Union[str, list],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Tournament headers: one row per tournament id (name, dates, status, current round, format, city, time zone).
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "Tournaments", "query": "query Tournaments($ids: [ID!]) {\\n  tournaments(ids: $ids) {\\n    id\\n    tournamentName\\n    seasonYear\\n    displayDate\\n    tournamentStatus\\n    roundStatus\\n    roundDisplay\\n    currentRound\\n    formatType\\n    scoredLevel\\n    city\\n    state\\n    country\\n    timezone\\n    tournamentLocation\\n  }\\n}\\n", "variables": {"ids": ["R2026014"]}}'``
+
+    Args:
+        tournament_ids: Tournament id, or a list of them (tournament_id in pgatour_schedule), e.g. R2026014.
+        return_parsed: parse the payload through parse_pgatour_tournaments -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_tournaments
+            pgatour_tournaments(tournament_ids='R2026014')
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "tournaments",
+        "ids": tournament_ids,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_tournaments(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_past_champions(
+    tournament_id: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Every past champion of a tournament: one row per edition (season, winner, total and score to par).
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "TournamentOverview", "query": "query TournamentOverview($tournamentId: ID!) {\\n  tournamentOverview(tournamentId: $tournamentId) {\\n    formatType\\n    pastChampions {\\n      year\\n      displaySeason\\n      playerId\\n      displayName\\n      countryCode\\n      total\\n      score\\n    }\\n  }\\n}\\n", "variables": {"tournamentId": "R2026014"}}'``
+
+    Args:
+        tournament_id: Tournament id, e.g. R2026014.
+        return_parsed: parse the payload through parse_pgatour_past_champions -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_past_champions
+            pgatour_past_champions(tournament_id='R2026014')
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "tournamentOverview",
+        "tournamentId": tournament_id,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_past_champions(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_hole_by_hole(
+    tournament_id: str,
+    round: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Hole-by-hole scores of one round for the whole field: one row per player per hole (par, yardage, strokes, birdie / bogey status).
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "LeaderboardHoleByHole", "query": "query LeaderboardHoleByHole($tournamentId: ID!, $round: Int) {\\n  leaderboardHoleByHole(tournamentId: $tournamentId, round: $round) {\\n    tournamentId\\n    currentRound\\n    playerData {\\n      playerId\\n      courseId\\n      courseCode\\n      out\\n      in\\n      total\\n      totalToPar\\n      scores {\\n        holeNumber\\n        sequenceNumber\\n        par\\n        yardage\\n        score\\n        roundScore\\n        status\\n      }\\n    }\\n  }\\n}\\n", "variables": {"tournamentId": "R2026014", "round": 4}}'``
+
+    Args:
+        tournament_id: Tournament id, e.g. R2026014.
+        round: Round number (1-4); omitted, the current round.
+        return_parsed: parse the payload through parse_pgatour_hole_by_hole -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_hole_by_hole
+            pgatour_hole_by_hole(round=4, tournament_id='R2026014')
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "leaderboardHoleByHole",
+        "tournamentId": tournament_id,
+        "round": round,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_hole_by_hole(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_leaderboard_stats(
+    tournament_id: str,
+    stats_type: Optional[str] = "PROBABILITY",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """A tournament's leaderboard stat table, long form: one row per player per stat (win / top 10 / make-cut chances by default).
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "LeaderboardStats", "query": "query LeaderboardStats($id: ID!, $statsType: LeaderboardStatsType) {\\n  leaderboardStats(id: $id, statsType: $statsType) {\\n    id\\n    type\\n    statIds\\n    titles\\n    players {\\n      playerId\\n      stats {\\n        statId\\n        value\\n        rank\\n        sortValue\\n        color\\n      }\\n    }\\n  }\\n}\\n", "variables": {"id": "R2026014", "statsType": "PROBABILITY"}}'``
+
+    Args:
+        tournament_id: Tournament id, e.g. R2026014.
+        stats_type: PROBABILITY (win, top 10 and make-cut chances), STROKES_GAINED or ODDS. An event without that table answers no rows.
+        return_parsed: parse the payload through parse_pgatour_leaderboard_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_leaderboard_stats
+            pgatour_leaderboard_stats(stats_type='PROBABILITY', tournament_id='R2026014')
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "leaderboardStats",
+        "id": tournament_id,
+        "statsType": stats_type,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_leaderboard_stats(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_field(
+    tournament_id: str,
+    include_withdrawn: Optional[bool] = True,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """A tournament's field: one row per entered player, then the alternates (status, world ranking, how they qualified).
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "Field", "query": "query Field($id: ID!, $includeWithdrawn: Boolean) {\\n  field(id: $id, includeWithdrawn: $includeWithdrawn) {\\n    id\\n    players { ...FieldPlayer }\\n    alternates { ...FieldPlayer }\\n  }\\n}\\n\\nfragment FieldPlayer on PlayerField {\\n  id\\n  firstName\\n  lastName\\n  displayName\\n  shortName\\n  country\\n  countryFlag\\n  amateur\\n  alternate\\n  withdrawn\\n  status\\n  owgr\\n  qualifier\\n  rankingPoints\\n}\\n", "variables": {"id": "R2026014", "includeWithdrawn": true}}'``
+
+    Args:
+        tournament_id: Tournament id, e.g. R2026014.
+        include_withdrawn: True to keep players who withdrew.
+        return_parsed: parse the payload through parse_pgatour_field -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_field
+            pgatour_field(tournament_id='R2026014')
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "field",
+        "id": tournament_id,
+        "includeWithdrawn": include_withdrawn,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_field(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_past_results(
+    tournament_id: str,
+    year: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """One edition's final leaderboard: one row per player (position, total, score to par, round scores).
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "TournamentPastResults", "query": "query TournamentPastResults($id: ID!, $year: Int) {\\n  tournamentPastResults(id: $id, year: $year) {\\n    id\\n    players {\\n      position\\n      total\\n      parRelativeScore\\n      player {\\n        id\\n        firstName\\n        lastName\\n        displayName\\n        shortName\\n        country\\n        countryFlag\\n        amateur\\n      }\\n      rounds {\\n        score\\n        parRelativeScore\\n      }\\n    }\\n  }\\n}\\n", "variables": {"id": "R2026014", "year": 20250}}'``
+
+    Args:
+        tournament_id: Tournament id of any edition, e.g. R2026014.
+        year: Edition season, e.g. 2025 (sent as the API's five-digit 20250; a five-digit value is sent as given). Omitted, the edition in tournament_id.
+        return_parsed: parse the payload through parse_pgatour_past_results -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_past_results
+            pgatour_past_results(tournament_id='R2026014', year=2025)
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "tournamentPastResults",
+        "id": tournament_id,
+        "year": year,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_past_results(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_course_stats(
+    tournament_id: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Hole difficulty for every course of a tournament: one row per hole per round (scoring average, rank, eagles to double bogeys).
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "CourseStats", "query": "query CourseStats($tournamentId: ID!) {\\n  courseStats(tournamentId: $tournamentId) {\\n    tournamentId\\n    courses {\\n      courseId\\n      courseName\\n      courseCode\\n      par\\n      yardage\\n      hostCourse\\n      roundHoleStats {\\n        roundHeader\\n        roundNum\\n        holeStats {\\n          __typename\\n          ... on CourseHoleStats {\\n            courseHoleNum\\n            parValue\\n            yards\\n            scoringAverage\\n            scoringAverageDiff\\n            rank\\n            eagles\\n            birdies\\n            pars\\n            bogeys\\n            doubleBogey\\n          }\\n        }\\n      }\\n    }\\n  }\\n}\\n", "variables": {"tournamentId": "R2026014"}}'``
+
+    Args:
+        tournament_id: Tournament id, e.g. R2026014.
+        return_parsed: parse the payload through parse_pgatour_course_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_course_stats
+            pgatour_course_stats(tournament_id='R2026014')
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "courseStats",
+        "tournamentId": tournament_id,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_course_stats(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_hole_details(
+    tournament_id: str,
+    course_id: str,
+    hole: int,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """One hole of one course over a tournament: one row (par, yardage, difficulty rank, counts and shares of eagles to double bogeys).
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "HoleDetails", "query": "query HoleDetails($tournamentId: ID!, $courseId: ID!, $hole: Int!) {\\n  holeDetails(tournamentId: $tournamentId, courseId: $courseId, hole: $hole) {\\n    tournamentId\\n    courseId\\n    holeNum\\n    holeInfo {\\n      par\\n      yards\\n      rank\\n      rounds\\n      scoringAverageDiff\\n    }\\n    statsSummary {\\n      scoringAverage\\n      eagles\\n      eaglesPercent\\n      birdies\\n      birdiesPercent\\n      pars\\n      parsPercent\\n      bogeys\\n      bogeysPercent\\n      doubleBogeys\\n      doubleBogeysPercent\\n    }\\n  }\\n}\\n", "variables": {"tournamentId": "R2026014", "courseId": "014", "hole": 12}}'``
+
+    Args:
+        tournament_id: Tournament id, e.g. R2026014.
+        course_id: Course id as a string (course_id in pgatour_course_stats; leading zeros matter), e.g. '014'.
+        hole: Hole number (1-18).
+        return_parsed: parse the payload through parse_pgatour_hole_details -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_hole_details
+            pgatour_hole_details(course_id='014', hole=12, tournament_id='R2026014')
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "holeDetails",
+        "tournamentId": tournament_id,
+        "courseId": course_id,
+        "hole": hole,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_hole_details(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_scorecard_stats(
+    tournament_id: str,
+    player_id: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """One player's stat lines for a tournament: one row per stat per round (performance, scoring and strokes gained, with the season-to-date value).
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "ScorecardStatsV3Compressed", "query": "query ScorecardStatsV3Compressed($id: ID!, $playerId: ID!) {\\n  scorecardStatsV3Compressed(id: $id, playerId: $playerId) {\\n    id\\n    payload\\n  }\\n}\\n", "variables": {"id": "R2026014", "playerId": "28237"}}'``
+
+    Args:
+        tournament_id: Tournament id, e.g. R2026014.
+        player_id: PGA TOUR player id, e.g. 28237.
+        return_parsed: parse the payload through parse_pgatour_scorecard_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_scorecard_stats
+            pgatour_scorecard_stats(player_id='28237', tournament_id='R2026014')
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "scorecardStatsV3Compressed",
+        "id": tournament_id,
+        "playerId": player_id,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_scorecard_stats(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def pgatour_player_results(
+    player_id: str,
+    tour_code: Optional[str] = "R",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """A player's career results on a tour: one row per tournament edition played (finish, score to par, total, points, money, round scores).
+
+    Endpoint: ``POST https://orchestrator.pgatour.com/graphql``
+    Example request: ``curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "PlayerProfileTournamentResults", "query": "query PlayerProfileTournamentResults($playerId: ID!, $tourCode: TourCode) {\\n  playerProfileTournamentResults(playerId: $playerId, tourCode: $tourCode) {\\n    playerId\\n    tournaments {\\n      tournamentNum\\n      tournaments {\\n        tournamentId\\n        tournamentName\\n        year\\n        startDate\\n        courseName\\n        position\\n        toPar\\n        total\\n        points\\n        pointsRank\\n        winnings\\n        roundScores {\\n          roundNum\\n          roundScore\\n        }\\n      }\\n    }\\n  }\\n}\\n", "variables": {"playerId": "28237", "tourCode": "R"}}'``
+
+    Args:
+        player_id: PGA TOUR player id, e.g. 28237.
+        tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
+        return_parsed: parse the payload through parse_pgatour_player_results -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The API rejected the query variables, or a variable is not of its type (a year that is not a season).
+        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.golf import pgatour_player_results
+            pgatour_player_results(player_id='28237', tour_code='R')
+
+        See Also:
+            * `PGA TOUR`_ - the site whose own GraphQL API these wrappers read
+            * `espn_golf_leaderboard`_ - ESPN's leaderboard for the PGA TOUR, LPGA, LIV, DP World Tour and Champions
+
+        .. _PGA TOUR: https://www.pgatour.com/
+        .. _espn_golf_leaderboard: https://py.sportsdataverse.org/docs/golf/
+
+    Notes:
+        * Runtime only: each call sends one GraphQL query to ``orchestrator.pgatour.com/graphql``. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
+        * The request body is ``{operationName, query, variables}``; the query document ships in ``sportsdataverse/golf/pgatour_queries/``. Every request also carries an ``x-api-key`` header (left out of the example request): the public key pgatour.com's own frontend sends, read from the site on first use. Set the ``PGA_API_KEY`` environment variable to supply a key yourself.
+        * Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters): read them from ``pgatour_schedule``.
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
+        "operation": "playerProfileTournamentResults",
+        "playerId": player_id,
+        "tourCode": tour_code,
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+    _body = graphql_body(_body)
+    raw = _get(
+        "https://orchestrator.pgatour.com/graphql",
+        params=_params,
+        json=_body,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_pgatour_player_results(raw, return_as_pandas=return_as_pandas)
     return raw

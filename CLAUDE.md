@@ -205,8 +205,9 @@ sportsdataverse/
   baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
-  lacrosse/   # ESPN lacrosse (league-parameterized: PLL, men's and women's college; probed endpoint allowlist)
-  golf/       # ESPN golf (league-parameterized: pga, lpga, liv, eur, champions-tour) + golf_espn_parsers (field-of-players leaderboard)
+  lacrosse/   # ESPN lacrosse (league-parameterized: PLL, NLL, men's and women's college; probed endpoint allowlist)
+  golf/       # ESPN golf (league-parameterized: pga, lpga, liv, eur, champions-tour, ntw, tgl, wtgl, men's / women's olympics)
+              #   + golf_espn_parsers (field-of-players leaderboard)
               #   + the PGA TOUR GraphQL family pgatour_* (runtime only; pgatour_runtime posts pgatour_queries/*.graphql)
   football/   # UFL / XFL / CFL ESPN families
   nbagl/      # NBA G League: ESPN wrappers, nbagl_stats (stats.nba.com, LeagueID=20) and engine helpers
@@ -263,8 +264,8 @@ description of that pattern anywhere, it predates 0.1.x.
 
 Total cross-league surface: **127 short names** (from the five ESPN
 endpoint YAMLs in `generate.ESPN_APIS`) emitted across 42 league modules
-= **4,632 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
-lacrosse emits 35, golf 31). The `espn_cdn` family (`cdn.espn.com/core`, shorts
+= **4,647 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
+lacrosse emits 35, golf 46). The `espn_cdn` family (`cdn.espn.com/core`, shorts
 `cdn_playbyplay` / `cdn_boxscore` / `cdn_schedule` / `cdn_scoreboard` /
 `cdn_rankings`) is the one family whose per-league reach was live-probed:
 each endpoint carries an `include_prefixes` allowlist (league prefixes, so
@@ -1378,7 +1379,7 @@ NHL APIs (`nhl_api_web`, `nhl_edge`, `nhl_stats_rest`, `nhl_records`), `nba_stat
 RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
 `sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
 event data, Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
-TheSportsDB (`thesportsdb`), `euroleague`, SIHF (`sihf`), Jolpica (`f1`), `cbs_napi`,
+TheSportsDB (`thesportsdb`), `euroleague`, SIHF (`sihf`), Jolpica (`f1`), the PGA TOUR GraphQL API (`pgatour`), `cbs_napi`,
 `yahoo_shangrila`, `fox_api`, HockeyTech, the European hockey leagues (the eSports
 hokejovyzapis S3 feeds `del_esports` / `icehl_esports` / `eihl_esports` / `metal_esports`,
 hokej.cz (`elh`), Liiga (`liiga`), SHL (`shl`), HockeyAllsvenskan (`ha`), National League
@@ -1423,7 +1424,7 @@ The parts worth repeating here:
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.
-- **`FLAT_APIS` has 79 families**, not three.
+- **`FLAT_APIS` has 80 families**, not three.
 - **The documented leagues come from `docs/src/data/leagues.json`**, written by
   `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
 - **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in

@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # Golf — PGA TOUR GraphQL API (orchestrator.pgatour.com; runtime only, public frontend key or $PGA_API_KEY)
 
-`sportsdataverse.golf` — 10 endpoints.
+`sportsdataverse.golf` — 21 endpoints.
 
 > **Note:** Runtime only: each call sends one GraphQL query to `orchestrator.pgatour.com/graphql`. sdv-py publishes no release assets from this API and ships no bulk or backfill tooling for it.
 
@@ -34,19 +34,19 @@ A tour's season schedule: one row per tournament (id, dates, course, purse, cham
 
 | col_name | type | description |
 |---|---|---|
-| `season` | String | Season year the schedule belongs to (e.g. 2026). |
+| `season` | Int64 | Season year the schedule belongs to (e.g. 2026). |
 | `schedule_status` | String | "completed" for an event already played, "upcoming" for one still to come. |
 | `tournament_id` | String | PGA TOUR tournament id (tour code + season + event number, e.g. "R2026014"); the id the leaderboard, scorecard, tee-times and shot-details wrappers take. |
-| `tournament_name` | String | Tournament name. |
+| `tournament_name` | String | Tournament name (sponsor title as listed). |
 | `date` | String | Tournament dates as the site displays them (e.g. "Apr 9 - 12"). |
 | `start_date` | String | Tournament start (UTC). |
 | `sequence_number` | Int64 | Event's order in the season. |
 | `tournament_status` | String | Tournament status (e.g. "COMPLETED", "IN_PROGRESS", "NOT_STARTED"). |
-| `course_name` | String | Host course. |
-| `city` | String | Host city. |
+| `course_name` | String | Name of the host course. |
+| `city` | String | City of the host course. |
 | `state` | String | Host state or province. |
 | `state_code` | String | Host state or province abbreviation. |
-| `country` | String | Host country. |
+| `country` | String | Country of the host course. |
 | `country_code` | String | Host country code (e.g. "USA"). |
 | `purse` | String | Total purse as displayed (e.g. "$9,100,000"). |
 | `champion` | String | Winner's name; null before the event finishes. |
@@ -62,7 +62,7 @@ A tour's season schedule: one row per tournament (id, dates, course, purse, cham
 | Exception | Description |
 |---|---|
 | `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_schedule-example}
@@ -121,7 +121,7 @@ One tournament's leaderboard: position, total to par, strokes, holes completed, 
 | Exception | Description |
 |---|---|
 | `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_leaderboard-example}
@@ -151,11 +151,11 @@ One player's scorecard for a tournament: one row per hole per round (par, yardag
 |---|---|---|
 | `tournament_id` | String | PGA TOUR tournament id (the answer's own id carries the player id too; it is stripped). |
 | `player_id` | String | PGA TOUR player id. |
-| `round_number` | Int64 | Round number. |
+| `round_number` | Int64 | Round number (1-4). |
 | `course_id` | String | Course id (an event played on more than one course carries one per round). |
-| `course_name` | String | Course name. |
+| `course_name` | String | Course the round was played on. |
 | `hole_number` | Int64 | Hole number (1-18). |
-| `par` | Int64 | Hole par. |
+| `par` | Int64 | Par of the hole. |
 | `yardage` | Int64 | Hole length in yards that round. |
 | `score` | Int64 | Strokes on the hole; null when the hole is not yet played. |
 | `score_status` | String | Result on the hole (e.g. "BIRDIE", "PAR", "BOGEY", "EAGLE", "DOUBLE_BOGEY"). |
@@ -168,7 +168,7 @@ One player's scorecard for a tournament: one row per hole per round (par, yardag
 | Exception | Description |
 |---|---|
 | `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_scorecard-example}
@@ -196,14 +196,14 @@ A tournament's tee times: one row per player per group per round (tee time in UT
 | col_name | type | description |
 |---|---|---|
 | `tournament_id` | String | PGA TOUR tournament id. |
-| `round_number` | Int64 | Round number. |
+| `round_number` | Int64 | Round number (1-4). |
 | `round_status` | String | Round status (e.g. "COMPLETE", "IN_PROGRESS", "UPCOMING"). |
 | `group_number` | Int64 | Tee-time group number within the round. |
 | `tee_time` | String | Group's tee time (UTC). |
 | `start_tee` | Int64 | Starting hole (1, or 10 for a two-tee start). |
 | `back_nine` | Boolean | True when the group starts on the back nine. |
-| `course_id` | String | Course id. |
-| `course_name` | String | Course name. |
+| `course_id` | String | Course id of the group's course. |
+| `course_name` | String | Course the group starts on. |
 | `player_id` | String | PGA TOUR player id. |
 | `display_name` | String | Player's full name. |
 | `country` | String | Player's country code. |
@@ -216,7 +216,7 @@ A tournament's tee times: one row per player per group per round (tee time in UT
 | Exception | Description |
 |---|---|
 | `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_tee_times-example}
@@ -244,9 +244,9 @@ One player's profile: name, country, world ranking, height, weight, birth date a
 | col_name | type | description |
 |---|---|---|
 | `player_id` | String | PGA TOUR player id. |
-| `first_name` | String | First name. |
-| `last_name` | String | Last name. |
-| `display_name` | String | Full name. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `display_name` | String | Player's full name. |
 | `country` | String | Country the player represents. |
 | `country_code` | String | Country code (e.g. "NIR"). |
 | `owgr` | String | Official World Golf Ranking position as displayed. |
@@ -254,7 +254,7 @@ One player's profile: name, country, world ranking, height, weight, birth date a
 | `height_meters` | String | Height in meters. |
 | `weight` | String | Weight in pounds. |
 | `weight_kilograms` | String | Weight in kilograms. |
-| `age` | String | Age in years. |
+| `age` | String | Player's age in years as displayed. |
 | `born` | String | Birth date as displayed (e.g. "May 4, 1989"). |
 | `birthplace_city` | String | Birthplace city. |
 | `birthplace_state` | String | Birthplace state or province. |
@@ -274,7 +274,7 @@ One player's profile: name, country, world ranking, height, weight, birth date a
 | Exception | Description |
 |---|---|
 | `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_player-example}
@@ -305,13 +305,13 @@ A tour's player directory: one row per player (id, name, country, age, college, 
 | `tour_code` | String | Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour). |
 | `player_id` | String | PGA TOUR player id. |
 | `is_active` | Boolean | True for a player active on the tour. |
-| `first_name` | String | First name. |
-| `last_name` | String | Last name. |
-| `short_name` | String | Short name. |
-| `display_name` | String | Full name. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `short_name` | String | Short name (e.g. "R. McIlroy"). |
+| `display_name` | String | Player's full name. |
 | `country` | String | Country the player represents. |
-| `country_code` | String | Country code. |
-| `age` | String | Age in years. |
+| `country_code` | String | Country code (e.g. "NIR"). |
+| `age` | String | Player's age in years as displayed. |
 | `education` | String | College or university. |
 | `turned_pro` | String | Year the player turned professional. |
 
@@ -322,7 +322,7 @@ A tour's player directory: one row per player (id, name, country, age, college, 
 | Exception | Description |
 |---|---|
 | `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_player_directory-example}
@@ -350,13 +350,13 @@ Every stat a tour publishes: category, sub-category, stat id and title. The stat
 
 | col_name | type | description |
 |---|---|---|
-| `tour_code` | String | Tour code. |
-| `year` | Int64 | Season year. |
+| `tour_code` | String | Tour code (R PGA TOUR, S Champions, H Korn Ferry). |
+| `year` | Int64 | Season year of the catalog. |
 | `category` | String | Stat category key (e.g. "STROKES_GAINED", "SCORING"). |
 | `category_name` | String | Stat category name (e.g. "Strokes Gained"). |
 | `sub_category` | String | Sub-category the stat is listed under. |
 | `stat_id` | String | PGA TOUR stat id (e.g. "02675" for SG Total); the id pgatour_stat_details takes. |
-| `stat_title` | String | Stat name. |
+| `stat_title` | String | Stat name as the site titles it. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -365,7 +365,7 @@ Every stat a tour publishes: category, sub-category, stat id and title. The stat
 | Exception | Description |
 |---|---|
 | `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_stat_catalog-example}
@@ -394,8 +394,8 @@ One stat's season table, long form: one row per player per stat column (rank, co
 
 | col_name | type | description |
 |---|---|---|
-| `tour_code` | String | Tour code. |
-| `year` | Int64 | Season year. |
+| `tour_code` | String | Tour code (R PGA TOUR, S Champions, H Korn Ferry). |
+| `year` | Int64 | Season year of the stat table. |
 | `stat_id` | String | PGA TOUR stat id. |
 | `stat_title` | String | Stat name (e.g. "Scoring Average"). |
 | `stat_type` | String | Stat window (e.g. "YTD"). |
@@ -416,7 +416,7 @@ One stat's season table, long form: one row per player per stat column (rank, co
 | Exception | Description |
 |---|---|
 | `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_stat_details-example}
@@ -447,13 +447,13 @@ A season-long points race (the FedExCup by default): one row per player with off
 |---|---|---|
 | `cup_id` | String | Points race id with season (e.g. "R-02671-2025" for the 2025 FedExCup). |
 | `title` | String | Points race name (e.g. "FedExCup Standings"). |
-| `season` | String | Season year (read from the race's title, e.g. "2025 Standings"). |
+| `season` | Int64 | Season year (read from the race's title, e.g. "2025 Standings"). |
 | `player_id` | String | PGA TOUR player id. |
-| `first_name` | String | First name. |
-| `last_name` | String | Last name. |
-| `display_name` | String | Full name. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `display_name` | String | Player's full name. |
 | `country` | String | Country the player represents. |
-| `country_code` | String | Country code. |
+| `country_code` | String | Country code (e.g. "NIR"). |
 | `rank_official` | String | Official rank as displayed ("-" for none). |
 | `rank_projected` | String | Rank projected from live results, as displayed. |
 | `rank_movement` | String | Direction of the projected rank change (e.g. "UP", "DOWN", "CONSTANT"). |
@@ -468,7 +468,7 @@ A season-long points race (the FedExCup by default): one row per player with off
 | Exception | Description |
 |---|---|
 | `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_tour_cup-example}
@@ -499,9 +499,9 @@ ShotLink shot tracking for one player's round: one row per stroke with descripti
 |---|---|---|
 | `tournament_id` | String | PGA TOUR tournament id. |
 | `player_id` | String | PGA TOUR player id. |
-| `round_number` | Int64 | Round number. |
-| `hole_number` | Int64 | Hole number. |
-| `par` | Int64 | Hole par. |
+| `round_number` | Int64 | Round number (1-4). |
+| `hole_number` | Int64 | Hole number (1-18). |
+| `par` | Int64 | Par of the hole. |
 | `yardage` | Int64 | Hole length in yards. |
 | `hole_score` | Int64 | Strokes on the hole. |
 | `hole_status` | String | Result on the hole (e.g. "BIRDIE", "PAR"). |
@@ -529,11 +529,550 @@ ShotLink shot tracking for one player's round: one row per stroke with descripti
 | Exception | Description |
 |---|---|
 | `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_shot_details-example}
 
 ```python
 pgatour_shot_details(player_id='59095', round=4, tournament_id='R2026006')
+```
+
+## pgatour_schedule_years
+
+The seasons a tour has a published schedule for: one row per season, the current one flagged. The seasons are what pgatour_schedule(year=) takes.
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "ScheduleYears", "query": "query ScheduleYears($tourCode: TourCode!) {\n  scheduleYears(tourCode: $tourCode) {\n    years {\n      default\n      displayValue\n      queryValue\n    }\n  }\n}\n", "variables": {"tourCode": "R"}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `tourCode` | `tour_code` | body |  |  | `Y` | Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour). |
+
+### Returns {#pgatour_schedule_years-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season year with a published schedule, as pgatour_schedule(year=) takes it (e.g. 2023 for the 2022-2023 season). |
+| `display_season` | String | Season as the site labels it (e.g. "2026", "2022-2023"). |
+| `is_default` | Boolean | True for the season the site shows by default (the current one). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_schedule_years-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_schedule_years-example}
+
+```python
+pgatour_schedule_years(tour_code='R')
+```
+
+## pgatour_tournaments
+
+Tournament headers: one row per tournament id (name, dates, status, current round, format, city, time zone).
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "Tournaments", "query": "query Tournaments($ids: [ID!]) {\n  tournaments(ids: $ids) {\n    id\n    tournamentName\n    seasonYear\n    displayDate\n    tournamentStatus\n    roundStatus\n    roundDisplay\n    currentRound\n    formatType\n    scoredLevel\n    city\n    state\n    country\n    timezone\n    tournamentLocation\n  }\n}\n", "variables": {"ids": ["R2026014"]}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `ids` | `tournament_ids` | body |  | `Y` |  | Tournament id, or a list of them (tournament_id in pgatour_schedule), e.g. R2026014. |
+
+### Returns {#pgatour_tournaments-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `tournament_id` | String | PGA TOUR tournament id (tour code + season + event number, e.g. "R2026014"). |
+| `tournament_name` | String | Tournament name (sponsor title as listed). |
+| `season` | Int64 | Season year the tournament belongs to. |
+| `display_date` | String | Tournament dates as the site displays them (e.g. "Apr 9 - 12, 2026"). |
+| `tournament_status` | String | Tournament status (e.g. "COMPLETED", "IN_PROGRESS", "NOT_STARTED"). |
+| `round_status` | String | Status of the current round (e.g. "OFFICIAL", "IN_PROGRESS"). |
+| `round_display` | String | Current round as displayed (e.g. "R4"). |
+| `current_round` | Int64 | Current (or last) round number. |
+| `format_type` | String | Scoring format (e.g. "STROKE_PLAY"). |
+| `scored_level` | String | Depth of scoring the site publishes (e.g. "BASIC", "TOURCAST" for ShotLink events). |
+| `city` | String | City of the host course. |
+| `state` | String | Host state or province. |
+| `country` | String | Country of the host course. |
+| `timezone` | String | Host time zone (IANA name, e.g. "America/New_York"). |
+| `location` | String | Location as displayed. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_tournaments-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_tournaments-example}
+
+```python
+pgatour_tournaments(tournament_ids='R2026014')
+```
+
+## pgatour_past_champions
+
+Every past champion of a tournament: one row per edition (season, winner, total and score to par).
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "TournamentOverview", "query": "query TournamentOverview($tournamentId: ID!) {\n  tournamentOverview(tournamentId: $tournamentId) {\n    formatType\n    pastChampions {\n      year\n      displaySeason\n      playerId\n      displayName\n      countryCode\n      total\n      score\n    }\n  }\n}\n", "variables": {"tournamentId": "R2026014"}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `tournamentId` | `tournament_id` | body |  | `Y` |  | Tournament id, e.g. R2026014. |
+
+### Returns {#pgatour_past_champions-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `format_type` | String | Tournament scoring format (e.g. "STROKE_PLAY"). |
+| `season` | Int64 | Season of the edition the champion won. |
+| `display_season` | String | Season as displayed. |
+| `player_id` | String | Champion's PGA TOUR player id. |
+| `display_name` | String | Champion's full name. |
+| `country_code` | String | Champion's country code (e.g. "NIR"). |
+| `total` | Int64 | Champion's total strokes. |
+| `to_par` | String | Champion's score to par as displayed (e.g. "-12"). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_past_champions-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_past_champions-example}
+
+```python
+pgatour_past_champions(tournament_id='R2026014')
+```
+
+## pgatour_hole_by_hole
+
+Hole-by-hole scores of one round for the whole field: one row per player per hole (par, yardage, strokes, birdie / bogey status).
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "LeaderboardHoleByHole", "query": "query LeaderboardHoleByHole($tournamentId: ID!, $round: Int) {\n  leaderboardHoleByHole(tournamentId: $tournamentId, round: $round) {\n    tournamentId\n    currentRound\n    playerData {\n      playerId\n      courseId\n      courseCode\n      out\n      in\n      total\n      totalToPar\n      scores {\n        holeNumber\n        sequenceNumber\n        par\n        yardage\n        score\n        roundScore\n        status\n      }\n    }\n  }\n}\n", "variables": {"tournamentId": "R2026014", "round": 4}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `tournamentId` | `tournament_id` | body |  | `Y` |  | Tournament id, e.g. R2026014. |
+| `round` | `round` | body |  |  | `Y` | Round number (1-4); omitted, the current round. |
+
+### Returns {#pgatour_hole_by_hole-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `tournament_id` | String | PGA TOUR tournament id. |
+| `player_id` | String | PGA TOUR player id. |
+| `course_id` | String | Course id the player played the round on. |
+| `course_code` | String | Course code (e.g. "AN"). |
+| `hole_number` | Int64 | Hole number (1-18). |
+| `sequence_number` | Int64 | Order the player played the hole in (0-based; differs from hole_number on a two-tee start). |
+| `par` | Int64 | Par of the hole. |
+| `yardage` | Int64 | Hole yardage for the round. |
+| `score` | Int64 | Strokes on the hole; null on a hole not yet played. |
+| `score_status` | String | Score relative to par ("EAGLE", "BIRDIE", "PAR", "BOGEY", "DOUBLE_BOGEY", ...). |
+| `round_to_par` | String | Player's running score to par for the round after the hole, as displayed (e.g. "-1", "E"). |
+| `front_nine` | Int64 | Player's strokes on holes 1-9 for the round. |
+| `back_nine` | Int64 | Player's strokes on holes 10-18 for the round. |
+| `round_total` | Int64 | Player's strokes for the round. |
+| `round_total_to_par` | String | Player's round score to par as displayed. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_hole_by_hole-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_hole_by_hole-example}
+
+```python
+pgatour_hole_by_hole(round=4, tournament_id='R2026014')
+```
+
+## pgatour_leaderboard_stats
+
+A tournament's leaderboard stat table, long form: one row per player per stat (win / top 10 / make-cut chances by default).
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "LeaderboardStats", "query": "query LeaderboardStats($id: ID!, $statsType: LeaderboardStatsType) {\n  leaderboardStats(id: $id, statsType: $statsType) {\n    id\n    type\n    statIds\n    titles\n    players {\n      playerId\n      stats {\n        statId\n        value\n        rank\n        sortValue\n        color\n      }\n    }\n  }\n}\n", "variables": {"id": "R2026014", "statsType": "PROBABILITY"}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `id` | `tournament_id` | body |  | `Y` |  | Tournament id, e.g. R2026014. |
+| `statsType` | `stats_type` | body |  |  | `Y` | PROBABILITY (win, top 10 and make-cut chances), STROKES_GAINED or ODDS. An event without that table answers no rows. |
+
+### Returns {#pgatour_leaderboard_stats-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `tournament_id` | String | PGA TOUR tournament id. |
+| `stats_type` | String | Stat table (PROBABILITY, STROKES_GAINED or ODDS). |
+| `player_id` | String | PGA TOUR player id. |
+| `stat_id` | String | Stat column id (e.g. "win", "top10", "makeCut"). |
+| `stat_title` | String | Stat column heading the site shows (e.g. "Win %"). |
+| `stat_value` | String | Stat value as displayed (e.g. "12.3%"). |
+| `rank` | String | Player's rank on the stat as displayed ("1", "T5"). |
+| `sort_value` | Float64 | Stat value as a number (a probability is a fraction, 0-1). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_leaderboard_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_leaderboard_stats-example}
+
+```python
+pgatour_leaderboard_stats(stats_type='PROBABILITY', tournament_id='R2026014')
+```
+
+## pgatour_field
+
+A tournament's field: one row per entered player, then the alternates (status, world ranking, how they qualified).
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "Field", "query": "query Field($id: ID!, $includeWithdrawn: Boolean) {\n  field(id: $id, includeWithdrawn: $includeWithdrawn) {\n    id\n    players { ...FieldPlayer }\n    alternates { ...FieldPlayer }\n  }\n}\n\nfragment FieldPlayer on PlayerField {\n  id\n  firstName\n  lastName\n  displayName\n  shortName\n  country\n  countryFlag\n  amateur\n  alternate\n  withdrawn\n  status\n  owgr\n  qualifier\n  rankingPoints\n}\n", "variables": {"id": "R2026014", "includeWithdrawn": true}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `id` | `tournament_id` | body |  | `Y` |  | Tournament id, e.g. R2026014. |
+| `includeWithdrawn` | `include_withdrawn` | body |  |  | `Y` | True to keep players who withdrew. |
+
+### Returns {#pgatour_field-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `tournament_id` | String | PGA TOUR tournament id. |
+| `player_id` | String | PGA TOUR player id. |
+| `first_name` | String | Player's first name. |
+| `last_name` | String | Player's last name. |
+| `display_name` | String | Name as the field list shows it (e.g. "McIlroy, Rory"). |
+| `short_name` | String | Short name (e.g. "R. McIlroy"). |
+| `country` | String | Country the player represents. |
+| `country_code` | String | Country code (e.g. "NIR"). |
+| `amateur` | Boolean | True for an amateur. |
+| `alternate` | Boolean | True for an alternate (not yet in the field). |
+| `withdrawn` | Boolean | True for a player who withdrew. |
+| `status` | String | Field status (e.g. "IN"). |
+| `owgr` | String | Official World Golf Ranking position as displayed. |
+| `qualifier` | String | Exemption category the player got in under. |
+| `ranking_points` | String | Ranking points as displayed. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_field-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_field-example}
+
+```python
+pgatour_field(tournament_id='R2026014')
+```
+
+## pgatour_past_results
+
+One edition's final leaderboard: one row per player (position, total, score to par, round scores).
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "TournamentPastResults", "query": "query TournamentPastResults($id: ID!, $year: Int) {\n  tournamentPastResults(id: $id, year: $year) {\n    id\n    players {\n      position\n      total\n      parRelativeScore\n      player {\n        id\n        firstName\n        lastName\n        displayName\n        shortName\n        country\n        countryFlag\n        amateur\n      }\n      rounds {\n        score\n        parRelativeScore\n      }\n    }\n  }\n}\n", "variables": {"id": "R2026014", "year": 20250}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `id` | `tournament_id` | body |  | `Y` |  | Tournament id of any edition, e.g. R2026014. |
+| `year` | `year` | body |  |  | `Y` | Edition season, e.g. 2025 (sent as the API's five-digit 20250; a five-digit value is sent as given). Omitted, the edition in tournament_id. |
+
+### Returns {#pgatour_past_results-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `tournament_id` | String | Tournament id of the edition the API answered with (e.g. "R2025014" for the 2025 Masters). |
+| `season` | Int64 | Season of that edition (read from tournament_id). |
+| `position` | String | Finishing position as displayed ("1", "T5", "CUT", "WD"). |
+| `player_id` | String | PGA TOUR player id. |
+| `first_name` | String | First name (the API can send it empty). |
+| `last_name` | String | Last name (the API can send it empty). |
+| `display_name` | String | Player's full name. |
+| `short_name` | String | Short name (e.g. "R. McIlroy"). |
+| `country` | String | Country the player represents. |
+| `country_code` | String | Country code (e.g. "NIR"). |
+| `amateur` | Boolean | True for an amateur. |
+| `total` | Int64 | Total strokes over the event. |
+| `to_par` | String | Score to par as displayed (e.g. "-11"). |
+| `round_1` | Int64 | Strokes in round 1. |
+| `round_2` | Int64 | Strokes in round 2. |
+| `round_3` | Int64 | Strokes in round 3; null when the player missed the cut. |
+| `round_4` | Int64 | Strokes in round 4; null when the player missed the cut. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_past_results-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_past_results-example}
+
+```python
+pgatour_past_results(tournament_id='R2026014', year=2025)
+```
+
+## pgatour_course_stats
+
+Hole difficulty for every course of a tournament: one row per hole per round (scoring average, rank, eagles to double bogeys).
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "CourseStats", "query": "query CourseStats($tournamentId: ID!) {\n  courseStats(tournamentId: $tournamentId) {\n    tournamentId\n    courses {\n      courseId\n      courseName\n      courseCode\n      par\n      yardage\n      hostCourse\n      roundHoleStats {\n        roundHeader\n        roundNum\n        holeStats {\n          __typename\n          ... on CourseHoleStats {\n            courseHoleNum\n            parValue\n            yards\n            scoringAverage\n            scoringAverageDiff\n            rank\n            eagles\n            birdies\n            pars\n            bogeys\n            doubleBogey\n          }\n        }\n      }\n    }\n  }\n}\n", "variables": {"tournamentId": "R2026014"}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `tournamentId` | `tournament_id` | body |  | `Y` |  | Tournament id, e.g. R2026014. |
+
+### Returns {#pgatour_course_stats-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `tournament_id` | String | PGA TOUR tournament id. |
+| `course_id` | String | Course id (the course_id pgatour_hole_details takes; leading zeros matter, e.g. "014"). |
+| `course_name` | String | Course name as listed. |
+| `course_code` | String | Course code (e.g. "AN"). |
+| `course_par` | Int64 | Par of the whole course. |
+| `course_yardage` | Int64 | Course yardage. |
+| `host_course` | Boolean | True for the host course of a multi-course event. |
+| `round_number` | Int64 | Round number; null on the all-rounds rows. |
+| `round_header` | String | Round label ("All Rounds", "Round 1", ...). |
+| `hole_number` | Int64 | Hole number (1-18). |
+| `par` | Int64 | Par of the hole. |
+| `yards` | Int64 | Hole yardage for the tournament. |
+| `scoring_average` | Float64 | Field's scoring average on the hole. |
+| `scoring_average_diff` | Float64 | Scoring average minus par (positive plays over par). |
+| `difficulty_rank` | Int64 | Hole's difficulty rank on the course (1 = hardest). |
+| `eagles` | Int64 | Eagles (or better) made on the hole. |
+| `birdies` | Int64 | Birdies made on the hole. |
+| `pars` | Int64 | Pars made on the hole. |
+| `bogeys` | Int64 | Bogeys made on the hole. |
+| `double_bogeys` | Int64 | Double bogeys (or worse) made on the hole. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_course_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_course_stats-example}
+
+```python
+pgatour_course_stats(tournament_id='R2026014')
+```
+
+## pgatour_hole_details
+
+One hole of one course over a tournament: one row (par, yardage, difficulty rank, counts and shares of eagles to double bogeys).
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "HoleDetails", "query": "query HoleDetails($tournamentId: ID!, $courseId: ID!, $hole: Int!) {\n  holeDetails(tournamentId: $tournamentId, courseId: $courseId, hole: $hole) {\n    tournamentId\n    courseId\n    holeNum\n    holeInfo {\n      par\n      yards\n      rank\n      rounds\n      scoringAverageDiff\n    }\n    statsSummary {\n      scoringAverage\n      eagles\n      eaglesPercent\n      birdies\n      birdiesPercent\n      pars\n      parsPercent\n      bogeys\n      bogeysPercent\n      doubleBogeys\n      doubleBogeysPercent\n    }\n  }\n}\n", "variables": {"tournamentId": "R2026014", "courseId": "014", "hole": 12}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `tournamentId` | `tournament_id` | body |  | `Y` |  | Tournament id, e.g. R2026014. |
+| `courseId` | `course_id` | body |  | `Y` |  | Course id as a string (course_id in pgatour_course_stats; leading zeros matter), e.g. '014'. |
+| `hole` | `hole` | body |  | `Y` |  | Hole number (1-18). |
+
+### Returns {#pgatour_hole_details-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `tournament_id` | String | PGA TOUR tournament id. |
+| `course_id` | String | Course id (leading zeros matter, e.g. "014"). |
+| `hole_number` | Int64 | Hole number (1-18). |
+| `par` | Int64 | Par of the hole. |
+| `yards` | Int64 | Hole yardage for the tournament. |
+| `difficulty_rank` | Int64 | Hole's difficulty rank on the course (1 = hardest). |
+| `rounds_played` | Int64 | Rounds played on the hole over the tournament. |
+| `scoring_average_diff` | Float64 | Scoring average minus par (positive plays over par). |
+| `eagles` | Int64 | Eagles (or better) made on the hole. |
+| `eagles_pct` | String | Share of rounds with an eagle, as displayed (e.g. "1%"). |
+| `birdies` | Int64 | Birdies made on the hole. |
+| `birdies_pct` | String | Share of rounds with a birdie, as displayed. |
+| `pars` | Int64 | Pars made on the hole. |
+| `pars_pct` | String | Share of rounds with a par, as displayed. |
+| `bogeys` | Int64 | Bogeys made on the hole. |
+| `bogeys_pct` | String | Share of rounds with a bogey, as displayed. |
+| `double_bogeys` | Int64 | Double bogeys (or worse) made on the hole. |
+| `double_bogeys_pct` | String | Share of rounds with a double bogey or worse, as displayed. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_hole_details-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_hole_details-example}
+
+```python
+pgatour_hole_details(course_id='014', hole=12, tournament_id='R2026014')
+```
+
+## pgatour_scorecard_stats
+
+One player's stat lines for a tournament: one row per stat per round (performance, scoring and strokes gained, with the season-to-date value).
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "ScorecardStatsV3Compressed", "query": "query ScorecardStatsV3Compressed($id: ID!, $playerId: ID!) {\n  scorecardStatsV3Compressed(id: $id, playerId: $playerId) {\n    id\n    payload\n  }\n}\n", "variables": {"id": "R2026014", "playerId": "28237"}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `id` | `tournament_id` | body |  | `Y` |  | Tournament id, e.g. R2026014. |
+| `playerId` | `player_id` | body |  | `Y` |  | PGA TOUR player id, e.g. 28237. |
+
+### Returns {#pgatour_scorecard_stats-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `tournament_id` | String | PGA TOUR tournament id. |
+| `round` | String | Round number as a string ("1" .. "4"; "-1" is the whole tournament). |
+| `round_name` | String | Round label ("Round 1", ..., "All"). |
+| `round_status` | String | Round status (e.g. "OFFICIAL"). |
+| `stat_group` | String | Stat group ("performance", "scoring" or "strokes_gained"). |
+| `stat_id` | String | PGA TOUR stat id of the line, where it has one. |
+| `stat_name` | String | Stat label (e.g. "Birdies", "SG: Total"). |
+| `stat_value` | String | Player's value for the round as displayed. |
+| `rank` | String | Player's rank in the field on the stat for the round, as displayed ("1", "T7"). |
+| `year_to_date` | String | Player's season-to-date value of the stat as displayed ("-" when none). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_scorecard_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_scorecard_stats-example}
+
+```python
+pgatour_scorecard_stats(player_id='28237', tournament_id='R2026014')
+```
+
+## pgatour_player_results
+
+A player's career results on a tour: one row per tournament edition played (finish, score to par, total, points, money, round scores).
+
+**Endpoint URL:** `POST https://orchestrator.pgatour.com/graphql`
+
+**Example request:** `curl -X POST 'https://orchestrator.pgatour.com/graphql' -H 'Content-Type: application/json' -d '{"operationName": "PlayerProfileTournamentResults", "query": "query PlayerProfileTournamentResults($playerId: ID!, $tourCode: TourCode) {\n  playerProfileTournamentResults(playerId: $playerId, tourCode: $tourCode) {\n    playerId\n    tournaments {\n      tournamentNum\n      tournaments {\n        tournamentId\n        tournamentName\n        year\n        startDate\n        courseName\n        position\n        toPar\n        total\n        points\n        pointsRank\n        winnings\n        roundScores {\n          roundNum\n          roundScore\n        }\n      }\n    }\n  }\n}\n", "variables": {"playerId": "28237", "tourCode": "R"}}'`
+
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `playerId` | `player_id` | body |  | `Y` |  | PGA TOUR player id, e.g. 28237. |
+| `tourCode` | `tour_code` | body |  |  | `Y` | Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour). |
+
+### Returns {#pgatour_player_results-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | PGA TOUR player id. |
+| `tournament_num` | String | Tournament's permanent number (usually the last three digits of its tournament ids, e.g. "014"). |
+| `tournament_id` | String | Tournament id of the edition (e.g. "R2015009"). |
+| `tournament_name` | String | Tournament name in that edition's season. |
+| `season` | Int64 | Season of the edition. |
+| `start_date` | String | Edition start date as displayed (e.g. "3.19.2015"). |
+| `course_name` | String | Course the edition was played on. |
+| `position` | String | Finishing position as displayed ("1", "T11", "CUT", "DNS"). |
+| `to_par` | String | Score to par as displayed (e.g. "-11"). |
+| `total` | Int64 | Total strokes; null for a match-play event. |
+| `points` | String | Season points race (FedExCup) points earned, as displayed. |
+| `points_rank` | String | Points race rank after the event, as displayed. |
+| `winnings` | String | Prize money as displayed (e.g. "$151,200.00"). |
+| `round_1` | Int64 | Strokes in round 1. |
+| `round_2` | Int64 | Strokes in round 2. |
+| `round_3` | Int64 | Strokes in round 3; null for a round not played. |
+| `round_4` | Int64 | Strokes in round 4; null for a round not played. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#pgatour_player_results-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
+| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+
+### Example {#pgatour_player_results-example}
+
+```python
+pgatour_player_results(player_id='28237', tour_code='R')
 ```

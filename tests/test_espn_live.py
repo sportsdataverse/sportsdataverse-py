@@ -1072,6 +1072,7 @@ def test_espn_intl_basketball_teams_site_parse(prefix, min_teams):
         ("pll", "20260801", "401867221"),
         ("mens-college-lacrosse", "20260525", "401870925"),
         ("womens-college-lacrosse", "20260524", "401870993"),
+        ("nll", "20260419", "401831713"),
     ],
 )
 def test_espn_lacrosse_scoreboard_and_summary(league, date, event_id):
@@ -1083,11 +1084,21 @@ def test_espn_lacrosse_scoreboard_and_summary(league, date, event_id):
     assert summary["header"]["id"] == event_id
 
 
-def test_espn_lacrosse_pll_teams_and_standings():
+@pytest.mark.parametrize("league", ["pll", "nll"])
+def test_espn_lacrosse_pro_teams_and_standings(league):
     from sportsdataverse.lacrosse import espn_lacrosse_standings, espn_lacrosse_teams_site
 
-    assert espn_lacrosse_teams_site(league="pll").height >= 8
-    assert espn_lacrosse_standings(league="pll").height >= 8
+    assert espn_lacrosse_teams_site(league=league).height >= 8
+    assert espn_lacrosse_standings(league=league).height >= 8
+
+
+@pytest.mark.parametrize("league, week", [("mens-college-lacrosse", 17), ("womens-college-lacrosse", 16)])
+def test_espn_lacrosse_college_poll_week(league, week):
+    # Core v2 lists no college lacrosse weeks; the 2026 poll weeks come from the league rankings.
+    from sportsdataverse.lacrosse import espn_lacrosse_season_week_rankings
+
+    page = espn_lacrosse_season_week_rankings(league=league, season=2026, season_type=2, week=week, return_parsed=False)
+    assert f"/weeks/{week}/rankings/" in page["items"][0]["$ref"]
 
 
 @pytest.mark.parametrize("league", ["mens-college-lacrosse", "womens-college-lacrosse"])
@@ -1118,9 +1129,32 @@ def test_espn_golf_leaderboard_field(league, event_id, min_players):
     assert df["position"].null_count() < df.height
 
 
-@pytest.mark.parametrize("league", ["pga", "lpga", "liv", "eur", "champions-tour"])
+@pytest.mark.parametrize(
+    "league",
+    [
+        "pga",
+        "lpga",
+        "liv",
+        "eur",
+        "champions-tour",
+        "ntw",
+        "tgl",
+        "wtgl",
+        "mens-olympics-golf",
+        "womens-olympics-golf",
+    ],
+)
 def test_espn_golf_scoreboard_answers(league):
     from sportsdataverse.golf import espn_golf_scoreboard
 
     payload = espn_golf_scoreboard(league=league, return_parsed=False)
     assert payload["events"], f"{league}: no events on the default scoreboard"
+
+
+@pytest.mark.parametrize("league, min_teams", [("tgl", 6), ("wtgl", 5)])
+def test_espn_golf_team_format_teams_and_standings(league, min_teams):
+    # TGL / WTGL are team match play: the team surface answers only for them.
+    from sportsdataverse.golf import espn_golf_standings, espn_golf_teams_site
+
+    assert espn_golf_teams_site(league=league).height >= min_teams
+    assert espn_golf_standings(league=league).height >= min_teams

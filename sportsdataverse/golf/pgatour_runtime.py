@@ -132,10 +132,15 @@ def decode_payload(value: Any) -> Any:
 
 
 #: Variables the API types as ``Int``. ``schedule(year:)`` is the one ``String`` year.
-_INT_VARS = frozenset({"year", "round"})
+_INT_VARS = frozenset({"year", "round", "hole"})
 _STRING_VARS = {"schedule": frozenset({"year"})}
 #: ``ID`` / ``String`` variables: a caller's ``120`` or ``28237`` is sent as text.
-_TEXT_VARS = frozenset({"id", "tournamentId", "playerId", "statId", "tourCode"})
+_TEXT_VARS = frozenset({"id", "tournamentId", "playerId", "statId", "tourCode", "courseId"})
+#: ``[ID!]`` variables: one id or a list of them, each sent as text.
+_LIST_VARS = frozenset({"ids"})
+#: ``tournamentPastResults(year:)`` names an edition by its five-digit season (``20250`` is 2025): a
+#: four-digit year is not an error to the API, it silently answers the current edition instead.
+_EDITION_YEAR_OPS = frozenset({"tournamentPastResults"})
 
 
 def _whole(value: Any) -> int | None:
@@ -146,20 +151,38 @@ def _whole(value: Any) -> int | None:
     return _integral(value)
 
 
+def _edition_year(operation: str, year: int) -> int:
+    """A season as the five-digit edition value (``2025`` -> ``20250``); a five-digit one as given.
+
+    Raises:
+        ValueError: ``year`` is neither four nor five digits.
+    """
+    if 1000 <= year <= 9999:
+        return year * 10
+    if 10000 <= year <= 99999:
+        return year
+    raise ValueError(f"PGA Tour {operation}: year must be a season such as 2025 (or 20250), got {year!r}")
+
+
 def _variables(operation: str, body: dict | None) -> dict[str, Any]:
     """The non-None variables of ``body``, each sent as the type the API declares.
 
     Raises:
-        ValueError: an ``Int`` variable is not a whole number.
+        ValueError: an ``Int`` variable is not a whole number, or an edition year is not a season.
     """
     out: dict[str, Any] = {k: v for k, v in (body or {}).items() if v is not None}
     for key, value in list(out.items()):
-        if key in _TEXT_VARS or key in _STRING_VARS.get(operation, frozenset()):
+        if key in _LIST_VARS:
+            many = value if isinstance(value, (list, tuple)) else [value]
+            out[key] = [_wire_text(v) for v in many if v is not None]
+        elif key in _TEXT_VARS or key in _STRING_VARS.get(operation, frozenset()):
             out[key] = _wire_text(value)
         elif key in _INT_VARS:
             whole = _whole(value)
             if whole is None:
                 raise ValueError(f"PGA Tour {operation}: {key} must be a whole number, got {value!r}")
+            if key == "year" and operation in _EDITION_YEAR_OPS:
+                whole = _edition_year(operation, whole)
             out[key] = whole
     return out
 

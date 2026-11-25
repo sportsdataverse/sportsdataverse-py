@@ -1,0 +1,9 @@
+query ScheduleYears($tourCode: TourCode!) {
+  scheduleYears(tourCode: $tourCode) {
+    years {
+      default
+      displayValue
+      queryValue
+    }
+  }
+}

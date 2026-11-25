@@ -1,0 +1,12 @@
+schema: pgatour_schedule_years
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: display_season
+  type: character
+  description: ''
+- name: is_default
+  type: logical
+  description: ''

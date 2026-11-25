@@ -1,0 +1,33 @@
+schema: pgatour_scorecard_stats
+kind: dataframe
+columns:
+- name: tournament_id
+  type: character
+  description: ''
+- name: round
+  type: character
+  description: ''
+- name: round_name
+  type: character
+  description: ''
+- name: round_status
+  type: character
+  description: ''
+- name: stat_group
+  type: character
+  description: ''
+- name: stat_id
+  type: character
+  description: ''
+- name: stat_name
+  type: character
+  description: ''
+- name: stat_value
+  type: character
+  description: ''
+- name: rank
+  type: character
+  description: ''
+- name: year_to_date
+  type: character
+  description: ''

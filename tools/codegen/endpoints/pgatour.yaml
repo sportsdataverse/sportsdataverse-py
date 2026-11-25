@@ -16,7 +16,8 @@ docstring:
   raises:
   - 'sportsdataverse.errors.NoDataError: the API answered null for the request (an unknown
     tournament, player or stat id).'
-  - 'ValueError: the API rejected the query variables.'
+  - 'ValueError: the API rejected the query variables, or a variable is not of its type (a year that is
+    not a season).'
   - 'sportsdataverse.errors.AssetFetchError: any other GraphQL error, or a compressed payload
     that does not decode.'
   see_also:
@@ -272,6 +273,263 @@ endpoints:
   short: shot_details
   summary: 'ShotLink shot tracking for one player''s round: one row per stroke with
     description, distance, lie and start / end coordinates.'
+- body: json
+  example_args:
+    tour_code: R
+  extra_params:
+  - description: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
+    name: tour_code
+    query_key: tourCode
+    type: str
+    default: R
+  method: post
+  parser: parse_pgatour_schedule_years
+  path: /graphql
+  fixed_params:
+    operation: scheduleYears
+  body_builder: graphql_body
+  returns_schema: native/pgatour/schedule_years
+  short: schedule_years
+  summary: 'The seasons a tour has a published schedule for: one row per season, the
+    current one flagged. The seasons are what pgatour_schedule(year=) takes.'
+- body: json
+  example_args:
+    tournament_ids: R2026014
+  extra_params:
+  - description: Tournament id, or a list of them (tournament_id in pgatour_schedule), e.g.
+      R2026014.
+    name: tournament_ids
+    query_key: ids
+    required: true
+    type: str|list
+  method: post
+  parser: parse_pgatour_tournaments
+  path: /graphql
+  fixed_params:
+    operation: tournaments
+  body_builder: graphql_body
+  returns_schema: native/pgatour/tournaments
+  short: tournaments
+  summary: 'Tournament headers: one row per tournament id (name, dates, status, current
+    round, format, city, time zone).'
+- body: json
+  example_args:
+    tournament_id: R2026014
+  extra_params:
+  - description: Tournament id, e.g. R2026014.
+    name: tournament_id
+    query_key: tournamentId
+    required: true
+    type: str
+  method: post
+  parser: parse_pgatour_past_champions
+  path: /graphql
+  fixed_params:
+    operation: tournamentOverview
+  body_builder: graphql_body
+  returns_schema: native/pgatour/past_champions
+  short: past_champions
+  summary: 'Every past champion of a tournament: one row per edition (season, winner, total
+    and score to par).'
+- body: json
+  example_args:
+    round: 4
+    tournament_id: R2026014
+  extra_params:
+  - description: Tournament id, e.g. R2026014.
+    name: tournament_id
+    query_key: tournamentId
+    required: true
+    type: str
+  - description: Round number (1-4); omitted, the current round.
+    name: round
+    query_key: round
+    type: int
+  method: post
+  parser: parse_pgatour_hole_by_hole
+  path: /graphql
+  fixed_params:
+    operation: leaderboardHoleByHole
+  body_builder: graphql_body
+  returns_schema: native/pgatour/hole_by_hole
+  short: hole_by_hole
+  summary: 'Hole-by-hole scores of one round for the whole field: one row per player per
+    hole (par, yardage, strokes, birdie / bogey status).'
+- body: json
+  example_args:
+    stats_type: PROBABILITY
+    tournament_id: R2026014
+  extra_params:
+  - description: Tournament id, e.g. R2026014.
+    name: tournament_id
+    query_key: id
+    required: true
+    type: str
+  - description: PROBABILITY (win, top 10 and make-cut chances), STROKES_GAINED or ODDS. An
+      event without that table answers no rows.
+    name: stats_type
+    query_key: statsType
+    type: str
+    default: PROBABILITY
+  method: post
+  parser: parse_pgatour_leaderboard_stats
+  path: /graphql
+  fixed_params:
+    operation: leaderboardStats
+  body_builder: graphql_body
+  returns_schema: native/pgatour/leaderboard_stats
+  short: leaderboard_stats
+  summary: 'A tournament''s leaderboard stat table, long form: one row per player per stat
+    (win / top 10 / make-cut chances by default).'
+- body: json
+  example_args:
+    tournament_id: R2026014
+  extra_params:
+  - description: Tournament id, e.g. R2026014.
+    name: tournament_id
+    query_key: id
+    required: true
+    type: str
+  - description: True to keep players who withdrew.
+    name: include_withdrawn
+    query_key: includeWithdrawn
+    type: bool
+    default: true
+  method: post
+  parser: parse_pgatour_field
+  path: /graphql
+  fixed_params:
+    operation: field
+  body_builder: graphql_body
+  returns_schema: native/pgatour/field
+  short: field
+  summary: 'A tournament''s field: one row per entered player, then the alternates (status,
+    world ranking, how they qualified).'
+- body: json
+  example_args:
+    tournament_id: R2026014
+    year: 2025
+  extra_params:
+  - description: Tournament id of any edition, e.g. R2026014.
+    name: tournament_id
+    query_key: id
+    required: true
+    type: str
+  - description: Edition season, e.g. 2025 (sent as the API's five-digit 20250; a five-digit
+      value is sent as given). Omitted, the edition in tournament_id.
+    name: year
+    query_key: year
+    type: int
+  method: post
+  parser: parse_pgatour_past_results
+  path: /graphql
+  fixed_params:
+    operation: tournamentPastResults
+  body_builder: graphql_body
+  returns_schema: native/pgatour/past_results
+  short: past_results
+  summary: 'One edition''s final leaderboard: one row per player (position, total, score to
+    par, round scores).'
+- body: json
+  example_args:
+    tournament_id: R2026014
+  extra_params:
+  - description: Tournament id, e.g. R2026014.
+    name: tournament_id
+    query_key: tournamentId
+    required: true
+    type: str
+  method: post
+  parser: parse_pgatour_course_stats
+  path: /graphql
+  fixed_params:
+    operation: courseStats
+  body_builder: graphql_body
+  returns_schema: native/pgatour/course_stats
+  short: course_stats
+  summary: 'Hole difficulty for every course of a tournament: one row per hole per round
+    (scoring average, rank, eagles to double bogeys).'
+- body: json
+  example_args:
+    course_id: '014'
+    hole: 12
+    tournament_id: R2026014
+  extra_params:
+  - description: Tournament id, e.g. R2026014.
+    name: tournament_id
+    query_key: tournamentId
+    required: true
+    type: str
+  - description: Course id as a string (course_id in pgatour_course_stats; leading zeros matter), e.g. '014'.
+    name: course_id
+    query_key: courseId
+    required: true
+    type: str
+  - description: Hole number (1-18).
+    name: hole
+    query_key: hole
+    required: true
+    type: int
+  method: post
+  parser: parse_pgatour_hole_details
+  path: /graphql
+  fixed_params:
+    operation: holeDetails
+  body_builder: graphql_body
+  returns_schema: native/pgatour/hole_details
+  short: hole_details
+  summary: 'One hole of one course over a tournament: one row (par, yardage, difficulty
+    rank, counts and shares of eagles to double bogeys).'
+- body: json
+  example_args:
+    player_id: '28237'
+    tournament_id: R2026014
+  extra_params:
+  - description: Tournament id, e.g. R2026014.
+    name: tournament_id
+    query_key: id
+    required: true
+    type: str
+  - description: PGA TOUR player id, e.g. 28237.
+    name: player_id
+    query_key: playerId
+    required: true
+    type: str
+  method: post
+  parser: parse_pgatour_scorecard_stats
+  path: /graphql
+  fixed_params:
+    operation: scorecardStatsV3Compressed
+  body_builder: graphql_body
+  returns_schema: native/pgatour/scorecard_stats
+  short: scorecard_stats
+  summary: 'One player''s stat lines for a tournament: one row per stat per round
+    (performance, scoring and strokes gained, with the season-to-date value).'
+- body: json
+  example_args:
+    player_id: '28237'
+    tour_code: R
+  extra_params:
+  - description: PGA TOUR player id, e.g. 28237.
+    name: player_id
+    query_key: playerId
+    required: true
+    type: str
+  - description: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
+    name: tour_code
+    query_key: tourCode
+    type: str
+    default: R
+  method: post
+  parser: parse_pgatour_player_results
+  path: /graphql
+  fixed_params:
+    operation: playerProfileTournamentResults
+  body_builder: graphql_body
+  returns_schema: native/pgatour/player_results
+  short: player_results
+  summary: 'A player''s career results on a tour: one row per tournament edition played
+    (finish, score to par, total, points, money, round scores).'
 getter_module: sportsdataverse.golf.pgatour_runtime
 host: https://orchestrator.pgatour.com
 module: pgatour

@@ -16,10 +16,14 @@ from sportsdataverse._common_espn_parsers import (
     parse_athlete_overview,
     parse_event_competitor_linescores,
     parse_event_competitor_statistics,
+    parse_groups,
     parse_items,
     parse_leaders,
     parse_news,
     parse_single_entity,
+    parse_standings,
+    parse_team_schedule,
+    parse_teams,
 )
 from sportsdataverse.golf.golf_espn_parsers import parse_golf_leaderboard, parse_golf_scoreboard
 
@@ -27,7 +31,12 @@ __all__ = [
     "espn_golf_scoreboard",
     "espn_golf_leaderboard",
     "espn_golf_news",
+    "espn_golf_conferences",
     "espn_golf_statistics_league",
+    "espn_golf_teams_site",
+    "espn_golf_team",
+    "espn_golf_team_schedule",
+    "espn_golf_standings",
     "espn_golf_player_overview",
     "espn_golf_leaders",
     "espn_golf_league_root",
@@ -36,7 +45,15 @@ __all__ = [
     "espn_golf_season_info",
     "espn_golf_season_types",
     "espn_golf_season_type",
+    "espn_golf_season_group",
+    "espn_golf_season_groups",
+    "espn_golf_season_group_children",
     "espn_golf_season_type_leaders",
+    "espn_golf_season_weeks",
+    "espn_golf_season_week",
+    "espn_golf_season_week_games",
+    "espn_golf_season_teams",
+    "espn_golf_season_team",
     "espn_golf_season_players",
     "espn_golf_players_index",
     "espn_golf_player_core",
@@ -52,6 +69,8 @@ __all__ = [
     "espn_golf_game_status",
     "espn_golf_game_broadcasts",
     "espn_golf_game_leaders",
+    "espn_golf_teams_core",
+    "espn_golf_team_core",
     "espn_golf_venues",
     "espn_golf_venue",
     "espn_golf_tournaments",
@@ -221,6 +240,52 @@ def espn_golf_news(
     return raw
 
 
+def espn_golf_conferences(
+    league: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/groups``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/golf/pga/groups
+
+    Args:
+        return_parsed: parse the payload through parse_groups -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_conferences(league='pga')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_conferences", kwargs)
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/golf/{_path_seg(league)}/groups",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_groups(raw, return_as_pandas=return_as_pandas, documented_table="conferences")
+    return raw
+
+
 def espn_golf_statistics_league(
     league: str,
     *,
@@ -264,6 +329,212 @@ def espn_golf_statistics_league(
     )
     if return_parsed:
         return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_golf_teams_site(
+    league: str,
+    limit: Optional[int] = 1000,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams?limit=1000
+
+    Args:
+        limit: Maximum number of items to return.
+        return_parsed: parse the payload through parse_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_teams_site(league='pga')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_teams_site", kwargs)
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/golf/{_path_seg(league)}/teams",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_teams(raw, return_as_pandas=return_as_pandas, documented_table="teams")
+    return raw
+
+
+def espn_golf_team(
+    league: str,
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/4
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_team(league='pga', team_id='4')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_team", kwargs)
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/golf/{_path_seg(league)}/teams/{_path_seg(team_id)}",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_golf_team_schedule(
+    league: str,
+    team_id: Union[int, str],
+    season: Optional[Union[int, str]] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/schedule``
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/4/schedule
+
+    Args:
+        team_id: team_id path parameter.
+        season: Season year (e.g. 2024).
+        return_parsed: parse the payload through parse_team_schedule -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_team_schedule(league='pga', team_id='4')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_team_schedule", kwargs)
+    _params = {
+        "season": season,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://site.api.espn.com/apis/site/v2/sports/golf/{_path_seg(league)}/teams/{_path_seg(team_id)}/schedule",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_team_schedule(raw, return_as_pandas=return_as_pandas, documented_table="team_schedule")
+    return raw
+
+
+def espn_golf_standings(
+    league: str,
+    season: Optional[Union[int, str]] = None,
+    group: Optional[Union[int, str]] = None,
+    standings_type: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://site.api.espn.com/apis/v2/sports/{sport}/{league}/standings``
+    Example URL: https://site.api.espn.com/apis/v2/sports/golf/pga/standings
+
+    Args:
+        season: Season year (e.g. 2024).
+        group: Conference or group id filter (e.g. an ESPN conference id).
+        standings_type: Standings variant (e.g. 'by-division' or 'by-conference').
+        return_parsed: parse the payload through parse_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_standings(league='pga')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_standings", kwargs)
+    _params = {
+        "season": season,
+        "group": group,
+        "type": standings_type,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://site.api.espn.com/apis/v2/sports/golf/{_path_seg(league)}/standings",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_standings(raw, return_as_pandas=return_as_pandas, documented_table="standings")
     return raw
 
 
@@ -668,6 +939,164 @@ def espn_golf_season_type(
     return raw
 
 
+def espn_golf_season_group(
+    league: str,
+    season: Union[int, str],
+    season_type: Union[int, str],
+    group_id: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/seasons/2024/types/2/groups/80
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        group_id: group_id path parameter.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_season_group(league='pga', season=2024, season_type=2, group_id=80)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_season_group", kwargs)
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/golf/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_golf_season_groups(
+    league: str,
+    season: Union[int, str],
+    season_type: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups``
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/seasons/2024/types/2/groups
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_season_groups(league='pga', season=2024, season_type=2)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_season_groups", kwargs)
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/golf/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_golf_season_group_children(
+    league: str,
+    season: Union[int, str],
+    season_type: Union[int, str],
+    group_id: Union[int, str],
+    limit: Optional[int] = 500,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children``
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/seasons/2024/types/2/groups/80/children?limit=500
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        group_id: group_id path parameter.
+        limit: Maximum number of items to return.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_season_group_children(league='pga', season=2024, season_type=2, group_id=80)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_season_group_children", kwargs)
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/golf/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/children",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def espn_golf_season_type_leaders(
     league: str,
     season: Union[int, str],
@@ -719,6 +1148,269 @@ def espn_golf_season_type_leaders(
     )
     if return_parsed:
         return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_golf_season_weeks(
+    league: str,
+    season: Union[int, str],
+    season_type: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks``
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/seasons/2024/types/2/weeks
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_season_weeks(league='pga', season=2024, season_type=2)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_season_weeks", kwargs)
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/golf/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_golf_season_week(
+    league: str,
+    season: Union[int, str],
+    season_type: Union[int, str],
+    week: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/seasons/2024/types/2/weeks/1
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        week: week path parameter.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_season_week(league='pga', season=2024, season_type=2, week=1)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_season_week", kwargs)
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/golf/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_golf_season_week_games(
+    league: str,
+    season: Union[int, str],
+    season_type: Union[int, str],
+    week: Union[int, str],
+    limit: Optional[int] = 500,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/events``
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/seasons/2024/types/2/weeks/1/events?limit=500
+
+    Args:
+        season: season path parameter.
+        season_type: season_type path parameter.
+        week: week path parameter.
+        limit: Maximum number of items to return.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_season_week_games(league='pga', season=2024, season_type=2, week=1)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_season_week_games", kwargs)
+    _params = {
+        "limit": limit,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/golf/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/events",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_golf_season_teams(
+    league: str,
+    season: Union[int, str],
+    limit: Optional[int] = 1000,
+    page: Optional[int] = 1,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/teams``
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/seasons/2024/teams?limit=1000&page=1
+
+    Args:
+        season: season path parameter.
+        limit: Maximum number of items to return.
+        page: page query parameter.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_season_teams(league='pga', season=2024)
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_season_teams", kwargs)
+    _params = {
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/golf/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/teams",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_golf_season_team(
+    league: str,
+    season: Union[int, str],
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/teams/{team_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/seasons/2024/teams/4
+
+    Args:
+        season: season path parameter.
+        team_id: team_id path parameter.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_season_team(league='pga', season=2024, team_id='4')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_season_team", kwargs)
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/golf/leagues/{_path_seg(league)}/seasons/{_path_seg(season)}/teams/{_path_seg(team_id)}",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -1499,6 +2191,107 @@ def espn_golf_game_leaders(
     )
     if return_parsed:
         return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_golf_teams_core(
+    league: str,
+    limit: Optional[int] = 1000,
+    page: Optional[int] = 1,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/teams``
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/teams?limit=1000&page=1
+
+    Args:
+        limit: Maximum number of items to return.
+        page: page query parameter.
+        return_parsed: parse the payload through parse_teams -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_teams_core(league='pga')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_teams_core", kwargs)
+    _params = {
+        "limit": limit,
+        "page": page,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/golf/leagues/{_path_seg(league)}/teams",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_teams(raw, return_as_pandas=return_as_pandas, documented_table="teams")
+    return raw
+
+
+def espn_golf_team_core(
+    league: str,
+    team_id: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """
+
+    Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/teams/{team_id}``
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/teams/4
+
+    Args:
+        team_id: team_id path parameter.
+        return_parsed: parse the payload through parse_single_entity -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
+
+    Example:
+        Quick start::
+
+            espn_golf_team_core(league='pga', team_id='4')
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_golf_team_core", kwargs)
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/golf/leagues/{_path_seg(league)}/teams/{_path_seg(team_id)}",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_single_entity(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
