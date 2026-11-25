@@ -12237,3 +12237,144 @@
   test: tests/mbb/test_mbb_team_strength.py -k prior_reads_only_the_season_before
   expected: kill
   note: Last season's offensive rating would seed this season unregressed.
+
+# --- Markov-chain RE24: base-out transition counting + the absorbing-chain solve -----------------
+- id: mlb-markov-next-outs-crosses-half
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: 'pl.col("outs_start").shift(-1).over(half_grp).fill_null(3).alias("to_outs"),'
+  mutant: 'pl.col("outs_start").shift(-1).fill_null(3).alias("to_outs"),'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_transition_counts_conserve_plate_appearances
+  expected: kill
+  note: A half's last PA would transition into the next half's first state instead of the 3-out state.
+
+- id: mlb-markov-absorbing-bases-cross-half
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: 'pl.col("base_state").shift(-1).over(half_grp).fill_null("___").alias("to_base_state"),'
+  mutant: 'pl.col("base_state").shift(-1).fill_null("___").alias("to_base_state"),'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_extra_inning_halves_open_with_the_automatic_runner
+  expected: kill
+  note: The 3-out rows would carry the next half's opening bases (e.g. the extra-inning runner).
+
+- id: mlb-markov-keeps-incomplete-halves
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '.filter((pl.col("outs_end").last().over(half_grp) == 3) & (pl.col("outs_start").max().over(half_grp) < 3))'
+  mutant: '.filter(pl.col("outs_start").max().over(half_grp) < 3)'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_truncated_half_drops_out_whole
+  expected: kill
+  note: A half that never reaches 3 outs would count as a short, cheap inning and bias RE down.
+
+- id: mlb-markov-keeps-late-bottom-halves
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '.filter(~((pl.col("half") == "bottom") & (pl.col("inning") >= 9)))'
+  mutant: '.filter(pl.lit(True))'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_walk_offs_and_incomplete_halves_are_excluded
+  expected: kill
+  note: The transitions would no longer cover the same halves as the empirical RE24 they are compared with.
+
+- id: mlb-markov-no-dedupe
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    pbp = pbp.unique(subset=["game_id", "about_at_bat_index"], keep="first", maintain_order=True)'
+  mutant: '    pbp = pbp'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_transition_counts_conserve_plate_appearances
+  expected: kill
+  note: A game collected twice (two in the corpus) would interleave its PAs and corrupt the states.
+
+- id: mlb-markov-prob-not-per-state
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '(pl.col("n") / pl.col("n").sum().over(state)).alias("prob")'
+  mutant: '(pl.col("n") / pl.col("n").sum()).alias("prob")'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_transition_counts_conserve_plate_appearances
+  expected: kill
+  note: prob would be a share of all PAs, not of the from-state's departures.
+
+- id: mlb-markov-reward-unweighted
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '        run_sum[i] += runs * n'
+  mutant: '        run_sum[i] += runs'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_markov_re24_matches_empirical_re24
+  expected: kill
+  note: Runs per departure would ignore how often each scoring transition happens.
+
+- id: mlb-markov-no-fundamental-matrix
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    re[seen] = np.linalg.solve(np.eye(int(seen.sum())) - q, r)'
+  mutant: '    re[seen] = r'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_markov_re24_matches_empirical_re24
+  expected: kill
+  note: RE would be the runs on the next transition only, not to the end of the half-inning.
+
+- id: mlb-markov-fundamental-matrix-sign
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    re[seen] = np.linalg.solve(np.eye(int(seen.sum())) - q, r)'
+  mutant: '    re[seen] = np.linalg.solve(np.eye(int(seen.sum())) + q, r)'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_markov_re24_matches_empirical_re24
+  expected: kill
+  note: (I + Q)^-1 r alternates the sign of every multi-step path's contribution.
+
+- id: mlb-markov-unobserved-state-zeroed
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    re = np.full(m, np.nan)'
+  mutant: '    re = np.zeros(m)'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_sparse_rows_kept_and_unobserved_states_null
+  expected: kill
+  note: A state never observed would silently read 0 runs instead of null.
+
+- id: mlb-markov-unobserved-target-unchecked
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    if (counts[np.ix_(seen, ~np.append(seen, True))] > 0).any():'
+  mutant: '    if False:'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_transition_into_unobserved_state_raises
+  expected: kill
+  note: Leading into a state with no departures would be solved as if that state scored 0 runs.
+
+- id: mlb-markov-run-value-null-re
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    if re_before is None or re_after is None:'
+  mutant: '    if False:'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_run_value_on_a_markov_matrix_with_an_unobserved_state
+  expected: kill
+  note: run_value on a Markov matrix with an unobserved state would raise TypeError instead of returning NaN.
+
+- id: mlb-markov-by-event-prob-ignores-event
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '(pl.col("n") / pl.col("n").sum().over(state)).alias("prob")'
+  mutant: '(pl.col("n") / pl.col("n").sum().over(state[:2])).alias("prob")'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_by_event_prob_and_event_classes
+  expected: kill
+  note: by_event prob would be a share of the from-state's departures, not of that (state, event) cell's.
+
+- id: mlb-markov-by-event-fallback-swapped
+  group: mlb-markov-re24
+  finding: mlb-markov-re24
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: 'pl.when(made_out).then(pl.lit("out_inplay")).otherwise(pl.lit("reach_other"))'
+  mutant: 'pl.when(made_out).then(pl.lit("reach_other")).otherwise(pl.lit("out_inplay"))'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_by_event_prob_and_event_classes
+  expected: kill
+  note: field_out / force_out (unmapped) would be classed as reaching base instead of outs in play.
