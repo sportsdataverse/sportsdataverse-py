@@ -102,7 +102,9 @@ def test_goals_assists_shots_and_plus_minus_agree_on_every_skater(sources):
     nhl, espn = sources
     joined = nhl.join(espn, on=KEY, how="inner", suffix="_espn")
     for stat in STATS:
-        diff = joined.filter(pl.col(stat) != pl.col(f"{stat}_espn"))
+        # a null on either side would drop out of a `!=` filter, so it has to fail on its own
+        assert joined[stat].null_count() == joined[f"{stat}_espn"].null_count() == 0, stat
+        diff = joined.filter(pl.col(stat).ne_missing(pl.col(f"{stat}_espn")))
         assert diff.is_empty(), (stat, diff.select("team", "name", stat, f"{stat}_espn").rows())
     assert joined["goals"].sum() > 0 and joined["assists"].sum() > 0  # the games carry real scoring
 
