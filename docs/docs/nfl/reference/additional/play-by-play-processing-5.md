@@ -426,7 +426,7 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `lag_EP_end` | Float64 | Value of EP_end on the previous play, used for sequence-aware derivations. |
 | `lag_change_of_pos_team` | Boolean | Previous row's change_of_pos_team within the game; False on the first row. |
 | `EP_between` | Float64 | Change in expected points across the play, before penalty adjustment. |
-| `EPA` | Float64 | Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules -- 0 on a clock stoppage, -EP_start on an unscored play that ends a half, and plus EP_between (the gap from the previous play's end EP) on a non-kickoff play whose text carries a penalty. |
+| `EPA` | Float64 | Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules -- 0 on a clock stoppage; -EP_start on an unscored play that ends a half (this rule wins); otherwise plus EP_between (the gap from the previous play's end EP, sign-adjusted for a possession change) on a play whose text carries a penalty and that is neither a kickoff nor typed "Penalty". |
 | `def_EPA` | Float64 | EPA for the defensive team on the play (-1 * EPA). |
 | `EPA_scrimmage` | Float64 | EPA credited to the play on plays from scrimmage. |
 | `EPA_rush` | Float64 | EPA credited to the play on rush plays. |

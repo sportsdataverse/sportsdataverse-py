@@ -81374,8 +81374,9 @@ yahoo_cfb_boxscore:
 # (generate._DESC_INHERITS), and build_nfl_season in turn inherits load_cfb_pbp's.
 build_nfl_season:
   EPA: Expected points added, EP_end - EP_start from the bundled ESPN EP model with nflfastR's rules -- 0 on a clock
-    stoppage, -EP_start on an unscored play that ends a half, and plus EP_between (the gap from the previous play's
-    end EP) on a non-kickoff play whose text carries a penalty.
+    stoppage; -EP_start on an unscored play that ends a half (this rule wins); otherwise plus EP_between (the gap from
+    the previous play's end EP, sign-adjusted for a possession change) on a play whose text carries a penalty and that
+    is neither a kickoff nor typed "Penalty".
   athlete_name: The play's passer, else its rusher (passer_player_name, then rusher_player_name); null when neither.
   awayScore: Away team's running score after the play -- ESPN's awayScore with feed errors repaired (a score rises
     only on or right after a scoring play).
@@ -81549,8 +81550,8 @@ build_nfl_season:
 # calculate_epa adds nflverse-style lowercase aliases of the EP pair.
 calculate_epa:
   ep_end: Alias of EP_end -- expected points for the start-of-play offense at the end of the play; on a score, the
-    points it put on the board for that offense (negative for a defensive score; 6.92 for a touchdown whose try is not
-    recognised).
+    scoring value for that offense (negative when the defense scored). A touchdown whose try is not recognised gets
+    6.92 (-6.92 for the defense's), which includes an expected 0.92 for the try rather than realised points.
   ep_start: Alias of EP_start -- expected points for the offense at the start of the play (0.92 on a try, the
     touchback state on a kickoff).
 # play_type_nfl / aborted_play (#1255). nfl_model_pbp passes the Shield build's columns through, so these
