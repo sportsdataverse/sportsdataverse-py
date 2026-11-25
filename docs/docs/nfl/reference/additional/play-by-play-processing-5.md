@@ -295,11 +295,11 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `two_point_rush` | Boolean | True on a two-point try whose text describes no pass; null on a split try row (its type.text / play_type_nfl carry the try). |
 | `yds_rushed` | Int64 | Rushing yards credited on a rush (ESPN's statYardage on a plain run, the gain to the spot of an offensive foul, 0 when a penalty wiped it out); null on non-rush plays. |
 | `yds_receiving` | Int64 | Receiving yards credited on a pass play (0 on an incompletion, sack or interception, the gain to the spot of an offensive foul); null on non-pass plays. |
-| `yds_int_return` | String | Yards the interception was returned (0 when the text gives none); null on other plays. |
+| `yds_int_return` | Int64 | Yards the interception was returned (0 when the text gives none); null on other plays. |
 | `yds_kickoff` | Int64 | Distance of the kickoff in yards ("kicks 65 yards"); null on other plays. |
 | `yds_kickoff_return` | Int64 | Kickoff return yards (0 on a fair catch or no gain); on a touchback, the season's touchback yard line (the 30 in 2024); null on other plays. |
 | `yds_punt_return` | Int64 | Punt return yards (0 on a fair catch, touchback, downed or out-of-bounds punt); null on other plays. |
-| `yds_fumble_return` | String | Yards the recovering player returned the fumble (0 when the text gives none); null when there was no fumble. |
+| `yds_fumble_return` | Int64 | Yards the recovering player returned the fumble (0 when the text gives none); null when there was no fumble. |
 | `yds_sacked` | Int64 | Yards lost on the sack, as a negative number; null on other plays. |
 | `sack_players` | String | The play text after "sacked by" on a sack or fumbled pass (the college phrasing); null when the text has none. |
 | `xp_kicker_player_name` | String | Name of the kicker attempting the extra point. |
@@ -325,19 +325,19 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `kicking_team` | Int64 | Team id of the kicking team on kickoff, punt, and field-goal plays. |
 | `return_team` | Int64 | Team id of the returning side; set on interception, fumble, kickoff, punt, and blocked-kick returns. |
 | `fumble_or_muff` | Boolean | Whether the play includes a fumble or a muffed kick or punt (widened beyond ESPN's fumble play types). |
-| `recovery_team` | String | Team id parsed from the play text as recovering the fumble or muff. |
-| `recovery_team_2` | String | Team id of the second recovery in a multi-recovery scramble, parsed from the play text. |
+| `recovery_team` | Int64 | Team id parsed from the play text as recovering the fumble or muff. |
+| `recovery_team_2` | Int64 | Team id of the second recovery in a multi-recovery scramble, parsed from the play text. |
 | `penalty_spot_yardline` | Int64 | Yard line (0-50) at which the penalty was spotted. |
 | `penalty_spot_side` | String | Side of the field the penalty was spotted on: 'home', 'away' or 'mid' (midfield). |
 | `penalty_spot_yardsToEndzone` | Int64 | Yards from the penalty spot to the end zone (0-100). |
-| `fumbling_team` | String | Team id of the side that fumbled or muffed the ball, parsed from the play text. |
+| `fumbling_team` | Int64 | Team id of the side that fumbled or muffed the ball, parsed from the play text. |
 | `int_turnover` | Boolean | Whether the play is an interception giveaway. |
 | `pos_fumble_lost` | Boolean | Whether the possession team fumbled and lost the ball. |
 | `def_fumble_lost` | Boolean | Whether the defending team (e.g. a returner after a takeaway) fumbled and lost the ball back. |
 | `is_pos_team_turnover` | Boolean | Whether the possession team committed a giveaway (interception or fumble lost). |
 | `is_def_pos_team_turnover` | Boolean | Whether the defending team gave the ball back via a lost fumble. |
 | `is_turnover` | Boolean | True when the play is a giveaway-based turnover (interception thrown or fumble lost); blocked kicks recovered by the defense are carried by the blocked-kick fields instead. |
-| `turnover_team` | String | Team id charged with the giveaway on the play. |
+| `turnover_team` | Int64 | Team id charged with the giveaway on the play. |
 | `is_st_turnover` | Boolean | Whether the giveaway happened on a special-teams play (kick or punt snap, or a return). |
 | `is_blocked_punt_turnover` | Boolean | Blocked-punt possession loss (blocked-punt TD, or the defense recovered); kept out of is_turnover to match ESPN's giveaway-only box. |
 | `is_blocked_fg_turnover` | Boolean | Blocked-field-goal possession loss (blocked-FG TD, or the defense recovered); kept out of is_turnover to match ESPN's giveaway-only box. |
@@ -345,7 +345,7 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `interception_team` | Int64 | Team id credited with the interception (the defense). |
 | `pass_breakup_team` | Int64 | Team id credited with the pass breakup (the defense). |
 | `forced_fumble_team` | Int64 | Team id credited with forcing the fumble -- the side opposite the fumbling player (the covering team on returns). |
-| `fumble_recovery_team` | String | Team id that recovered the fumble or muff, from parsed text with a giveaway / own-recovery fallback. |
+| `fumble_recovery_team` | Int64 | Team id that recovered the fumble or muff, from parsed text with a giveaway / own-recovery fallback. |
 | `punt_return_team` | Int64 | Team id of the punt-returning side. |
 | `kick_return_team` | Int64 | Team id of the kick-returning side. |
 | `fg_team` | Int64 | Team id attempting the field goal (the kicking team). |
@@ -356,10 +356,10 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `penalty_yards_net` | Int64 | Net yardage assessed for the penalty, signed relative to the possession team (observed -25 to 25). |
 | `penalty_team_id` | Int64 | Team id of the side that committed the penalty. |
 | `lateral_player_name` | String | After a completed pass, the player the ball was lateraled to ("Lateral to ..."); null otherwise. |
-| `yds_lateral` | String | After a completed pass, the yards gained by the player the ball was lateraled to; null otherwise. |
-| `yards_after_catch` | String | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
-| `air_yards` | String | Numeric value for distance in yards perpendicular to the line of scrimmage at where the targeted receiver either caught or didn't catch the ball. |
-| `air_yardsToEndzone` | String | Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025 or when unresolvable. |
+| `yds_lateral` | Int64 | After a completed pass, the yards gained by the player the ball was lateraled to; null otherwise. |
+| `yards_after_catch` | Int64 | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
+| `air_yards` | Int64 | Numeric value for distance in yards perpendicular to the line of scrimmage at where the targeted receiver either caught or didn't catch the ball. |
+| `air_yardsToEndzone` | Int64 | Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025 or when unresolvable. |
 | `new_down` | Int64 | Down after the play, including any penalty enforcement. |
 | `new_distance` | Int64 | Distance to go after the play, including any penalty enforcement. |
 | `middle_8` | Boolean | True in the middle eight minutes -- the last four of the first half and the first four of the second (34:00 to 26:00 of game time remaining). |
@@ -421,8 +421,8 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `EP_start_touchback` | Float64 | Expected points the offense would have had from a touchback on this play. |
 | `EP_start` | Float64 | Expected points for the offense at the start of the play. |
 | `EP_end` | Float64 | Expected points for the offense at the end of the play. |
-| `EP_penalty_cf` | String | Counterfactual expected points for the penalty branch -- the EP had the alternative penalty outcome been taken (null unless a penalty decision existed). |
-| `penalty_cf_yardsToEndzone` | String | Yards to the end zone in the counterfactual penalty branch. |
+| `EP_penalty_cf` | Float64 | Counterfactual expected points for the penalty branch -- the EP had the alternative penalty outcome been taken (null unless a penalty decision existed). |
+| `penalty_cf_yardsToEndzone` | Int64 | Yards to the end zone in the counterfactual penalty branch. |
 | `lag_EP_end` | Float64 | Value of EP_end on the previous play, used for sequence-aware derivations. |
 | `lag_change_of_pos_team` | Boolean | Previous row's change_of_pos_team within the game; False on the first row. |
 | `EP_between` | Float64 | Change in expected points across the play, before penalty adjustment. |
@@ -497,15 +497,15 @@ The rows of `plays` in their original order, each folded try right after its tou
 | `wp_touchback_naive` | Float64 | Naive-model win probability for the kickoff-touchback substitute state, used as the pre-snap WP on kickoffs. |
 | `away_wp_before_naive` | Float64 | Pre-snap naive win probability mapped to the away team. |
 | `away_wp_after_naive` | Float64 | End-of-play naive win probability mapped to the away team. |
-| `cp` | String | Numeric value indicating the probability for a complete pass based on comparable game situations. |
-| `cpoe` | String | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
+| `cp` | Float64 | Numeric value indicating the probability for a complete pass based on comparable game situations. |
+| `cpoe` | Float64 | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
 | `xpass` | Float64 | Probability of dropback scaled from 0 to 1. |
 | `pass_oe` | Float64 | Dropback percent over expected on a given play scaled from 0 to 100. |
-| `xyac_epa` | String | Expected value of EPA gained after the catch, starting from where the catch was made. Zero yards after the catch would be listed as zero EPA. |
-| `xyac_mean_yardage` | String | Average expected yards after the catch based on where the ball was caught. |
-| `xyac_median_yardage` | String | Median expected yards after the catch based on where the ball was caught. |
-| `xyac_success` | String | Probability play earns positive EPA (relative to where play started) based on where ball was caught. |
-| `xyac_fd` | String | Probability play earns a first down based on where the ball was caught. |
+| `xyac_epa` | Float64 | Expected value of EPA gained after the catch, starting from where the catch was made. Zero yards after the catch would be listed as zero EPA. |
+| `xyac_mean_yardage` | Float64 | Average expected yards after the catch based on where the ball was caught. |
+| `xyac_median_yardage` | Float64 | Median expected yards after the catch based on where the ball was caught. |
+| `xyac_success` | Float64 | Probability play earns positive EPA (relative to where play started) based on where ball was caught. |
+| `xyac_fd` | Float64 | Probability play earns a first down based on where the ball was caught. |
 | `drive_start` | Float64 | Yard line at which the drive began. |
 | `drive_stopped` | Boolean | True when the play ended the drive. |
 | `drive_play_index` | Int64 | Sequence number of the play within its drive. |
