@@ -38,14 +38,18 @@ def _rates(league: str, seasons: list[int]) -> pl.DataFrame:
 def compare(rates: pl.DataFrame) -> dict[str, float]:
     """The fixed parts against an OLS on the factor-rate gaps, over the ``all`` split's rows."""
     full = rates.filter(pl.col("split") == "all").drop_nulls([*_RATES, *_PARTS])
-    gaps = full.select(  # each rate's gap from its season's possession-weighted league value
-        (pl.col(r) - (pl.col(r) * pl.col("poss")).sum().over("season") / pl.col("poss").sum().over("season")).alias(r)
-        for r in _RATES
-    ).to_numpy()
+    # each rate's gap from its season's pooled league value (summed numerators over summed denominators, the
+    # rate's own sample size ``<r>_n``), the baseline league_prices prices against
+    pooled = {
+        r: (pl.col(r) * pl.col(f"{r}_n")).sum().over("season") / pl.col(f"{r}_n").sum().over("season") for r in _RATES
+    }
+    gaps = full.select((pl.col(r) - pooled[r]).alias(r) for r in _RATES).to_numpy()
     y = (full["off_rtg"] - full["lg_rtg"]).to_numpy()
     beta, *_ = np.linalg.lstsq(gaps, y, rcond=None)
     fit = gaps @ beta
-    out = {"rows": float(full.height), "ols_r2": 1 - float(np.var(y - fit) / np.var(y))}
+    sst = float(((y - y.mean()) ** 2).sum())
+    r2 = 1 - float(((y - fit) ** 2).sum()) / sst if sst > 0 else float("nan")  # no intercept: from squared errors
+    out = {"rows": float(full.height), "ols_r2": r2}
     for i, (rate, part) in enumerate(zip(_RATES, _PARTS)):
         out[f"beta_{rate}"] = float(beta[i])
         out[f"corr_{part}"] = float(np.corrcoef(full[part].to_numpy(), gaps[:, i] * beta[i])[0, 1])

@@ -185,18 +185,18 @@ One row per `(season, team_id, n_players, lineup_id)`: `n_players` (2, 3 or 5), 
 | `opp_pts_per75_n` | Int64 | Sample size of opp_pts_per75: def_rtg_n, copied. |
 | `plus_minus_per75_n` | Int64 | Sample size of plus_minus_per75: net_rtg_n, copied. |
 | `lg_rtg` | Float64 | Points per 100 possessions of the season's league-average offense (pooled over every five-man unit), the zero the factor points are measured from. |
-| `off_efg_pts` | Float64 | Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. |
-| `off_tov_pts` | Float64 | Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. |
-| `off_orb_pts` | Float64 | Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. |
-| `off_ft_pts` | Float64 | Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used). |
-| `def_efg_pts` | Float64 | Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive when the opponents' shooting (eFG%) factor was worse than the league's: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. |
-| `def_tov_pts` | Float64 | Defensive turnovers points per 100 defensive possessions against the league average, positive when the opponents' turnovers factor was worse than the league's: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. |
-| `def_orb_pts` | Float64 | Defensive offensive rebounding points per 100 defensive possessions against the league average, positive when the opponents' offensive rebounding factor was worse than the league's: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. |
-| `def_ft_pts` | Float64 | Defensive free throws points per 100 defensive possessions against the league average, positive when the opponents' free throws factor was worse than the league's: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used). |
-| `efg_pts` | Float64 | Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. |
-| `tov_pts` | Float64 | Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. |
-| `orb_pts` | Float64 | Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. |
-| `ft_pts` | Float64 | Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. |
+| `off_efg_pts` | Float64 | Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `off_tov_pts` | Float64 | Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `off_orb_pts` | Float64 | Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `off_ft_pts` | Float64 | Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor's. |
+| `def_efg_pts` | Float64 | Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `def_tov_pts` | Float64 | Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `def_orb_pts` | Float64 | Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `def_ft_pts` | Float64 | Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor's. |
+| `efg_pts` | Float64 | Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `tov_pts` | Float64 | Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `orb_pts` | Float64 | Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `ft_pts` | Float64 | Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
 
 ### wnba_matchup_drapm {#wnba_matchup_drapm}
 
@@ -532,59 +532,3 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 | `stat_fg3m_exp` | Float64 |  |
 | `minutes_exp` | Float64 |  |
 | `pace_proj` | Float64 |  |
-
-### wnba_player_season_box_rates {#wnba_player_season_box_rates}
-
-`wnba_player_season_box_rates(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA per-36 points, rebounds and assists per player-season, ranked, with the season usage.
-
-Over the regular season (a playoff or play-in game is measured against it), from ESPN's player box. `pts_per36` / `reb_per36` /
-`ast_per36` are 36 x the total / minutes, each with `_n` (the minutes) and
-`_rank` / `_pct` among the season's players whose minutes reach the rate's gate (the
-minutes at which it is half signal on odd / even games). `usg_pct` is the season usage
-(FGA + 0.44 FTA + TOV over the team's while on the floor), not ranked.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (2025 is the 2025 season). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, athlete_id)` (the ESPN id): `team_id` (his last game's team), `games`, `minutes`, `pts` / `reb` / `ast`, `usg_pct` with `usg_pct_n`, and the three per-36 rates with `_n` / `_rank` / `_pct`. A season without a release returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `athlete_id` | Int64 | ESPN athlete id of the player, the join key to the player box score. |
-| `team_id` | Int64 | ESPN team id of the player's last game of the season (a traded player has one row). |
-| `games` | Int64 | Games played (the pros' regular season, every college game). |
-| `minutes` | Float64 | Minutes played in those games. |
-| `pts` | Int64 | Points in those games. |
-| `reb` | Int64 | Rebounds in those games. |
-| `ast` | Int64 | Assists in those games. |
-| `usg_pct` | Float64 | Season usage: 100 x sum(uses) / sum(minutes x team uses / (team minutes / 5)), uses = FGA + 0.44 FTA + TOV; not ranked. |
-| `usg_pct_n` | Int64 | Minutes of the games with a usage behind usg_pct. |
-| `pts_per36` | Float64 | Points per 36 minutes: 36 x pts / minutes. |
-| `pts_per36_n` | Int64 | Minutes behind pts_per36. |
-| `reb_per36` | Float64 | Rebounds per 36 minutes: 36 x reb / minutes. |
-| `reb_per36_n` | Int64 | Minutes behind reb_per36. |
-| `ast_per36` | Float64 | Assists per 36 minutes: 36 x ast / minutes. |
-| `ast_per36_n` | Int64 | Minutes behind ast_per36. |
-| `pts_per36_rank` | Float64 | Rank of pts_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
-| `pts_per36_pct` | Float64 | Percentile of pts_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
-| `reb_per36_rank` | Float64 | Rank of reb_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
-| `reb_per36_pct` | Float64 | Percentile of reb_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
-| `ast_per36_rank` | Float64 | Rank of ast_per36 in the league-season (1 best, average ties) among players whose minutes reach its gate (split-half r = 0.5); null under the gate or with fewer than 10 qualifiers. |
-| `ast_per36_pct` | Float64 | Percentile of ast_per36 among the same qualifiers, 100 (n + 1 - rank) / (n + 1). |
-
-**Example**
-
-```python
-from sportsdataverse.wnba.wnba_player_box_expected import wnba_player_season_box_rates
-rates = wnba_player_season_box_rates(2025)
-rates.sort("pts_per36_rank").select("athlete_id", "minutes", "pts_per36", "pts_per36_pct").head()
-```

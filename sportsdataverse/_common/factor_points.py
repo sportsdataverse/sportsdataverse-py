@@ -102,7 +102,7 @@ def league_prices(rows: pl.DataFrame, *, convention: str) -> pl.DataFrame:
             ratio(lg["oreb"], lg["rc"]).alias("lg_orb_pct"),
             ratio(lg["rc"], lg["fga"]).alias("lg_rc_per_fga"),
         )
-        .with_columns((pl.col("lg_ppp") / (1 - pl.col("lg_tov_pct"))).alias("chance_pts"))
+        .with_columns(ratio(pl.col("lg_ppp"), 1 - pl.col("lg_tov_pct")).alias("chance_pts"))
     )
 
 
