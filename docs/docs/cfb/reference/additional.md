@@ -119,6 +119,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [cfb_kickoff_out_of_bounds_spot_expr](additional/models-and-calculators-2.md#cfb_kickoff_out_of_bounds_spot_expr) | The receiving team's yardline after a kickoff out of bounds: the 40 through 2011, the 35 from 2012. |
 | [cfb_predict_games](additional/models-and-calculators-2.md#cfb_predict_games) | Predict a whole schedule of games from a ratings frame (vectorized). |
 | [cfb_ratings](additional/models-and-calculators-2.md#cfb_ratings) | One row per team: the full CFB ratings spine (off/def/ST EPA + FEI). |
+| [cfb_ratings_compute_results](additional/models-and-calculators-2.md#cfb_ratings_compute_results) | Results generator driven by fixed team ratings (points, adjusted EPA or raw EPA). |
 | [cfb_recruiting_projection](additional/models-and-calculators-2.md#cfb_recruiting_projection) | Project team wins / scoring margin for a season from preseason roster features. |
 | [cfb_roster_talent](additional/models-and-calculators-2.md#cfb_roster_talent) | Team-talent composite per team-season (247 Team Talent Composite style). |
 | [cfb_simulations](additional/models-and-calculators-2.md#cfb_simulations) | Simulate college football seasons (nflseedR-style week loop). |

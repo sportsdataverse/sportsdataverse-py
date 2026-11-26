@@ -1743,6 +1743,16 @@ cfb_predict_games:
   home_team_id: Home team ESPN id (character; the ratings `team_id` join key).
   home_win_prob: Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model.
   neutral_site: Whether the game is at a neutral site (home-field advantage is dropped when true).
+cfb_ratings_compute_results:
+  away_team: Team name of the away team in the simulated game (returned games frame).
+  game_type: Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship) or
+    POST (postseason/CFP).
+  home_team: Team name of the home team in the simulated game (returned games frame).
+  neutral: Neutral-site flag (1 = neutral site, 0 = true home game; only non-neutral games receive home_field).
+  result: Home-team margin of victory (home score minus away score) - real results are preserved and the target week's unplayed
+    games are filled from the fixed team ratings.
+  sim: Simulation identifier the game row belongs to (1..n simulated seasons).
+  week: Week of the season the game is played in; only games matching the requested week_num are filled.
 cfb_recruiting_projection:
   pred_margin: Ridge-projected average scoring margin per game.
   pred_net_epa: Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s).
