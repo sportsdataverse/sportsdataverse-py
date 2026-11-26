@@ -14,6 +14,7 @@ from pathlib import Path
 import numpy as np
 import polars as pl
 import pytest
+from polars.testing import assert_frame_equal
 
 from sportsdataverse.cfb import cfb_adjusted_epa, cfb_adjusted_epa_by_game
 
@@ -62,6 +63,8 @@ def _synthetic_pbp() -> pl.DataFrame:
                             "rush": 0,
                             "wp_before": 0.5,
                             "wp_before_naive": 0.5,
+                            "period": 1,
+                            "pos_score_diff_start": 0.0,
                             "seasonType": 2,
                         }
                     )
@@ -213,13 +216,47 @@ def test_real_2026_result_does_not_depend_on_which_team_id_sorts_first() -> None
     assert (j["net_adj_epa"] - j["net_relabelled"]).abs().max() < 1e-9
 
 
-def test_strength_fit_reads_naive_wp_not_the_spread_aware_one() -> None:
+def test_fit_reads_the_score_margin_not_any_win_probability() -> None:
     # The spread-aware wp_before started 171 of 807 2025 FBS games outside a 10-90%
-    # band at 0-0 and gave 72 of them zero fit plays; the fit uses wp_before_naive.
+    # band at 0-0; the naive band still dropped 24% of plays, many within three
+    # scores. The fit now keys on the margin at the snap, so neither WP is read.
     plays = _plays_2026()
-    assert cfb_adjusted_epa(plays.drop("wp_before")).height > 100
-    with pytest.raises(KeyError, match="wp_before_naive"):
-        cfb_adjusted_epa(plays.drop("wp_before_naive"))
+    base = cfb_adjusted_epa(plays).sort("team_id")
+    assert_frame_equal(cfb_adjusted_epa(plays.drop("wp_before", "wp_before_naive")).sort("team_id"), base)
+    with pytest.raises(KeyError, match="pos_score_diff_start"):
+        cfb_adjusted_epa(plays.drop("pos_score_diff_start"))
+
+
+def _garbage_rows() -> pl.Expr:
+    """The plays flag_garbage_time calls garbage on the margin at the snap (43/37/27/21)."""
+    m, q = pl.col("pos_score_diff_start").abs(), pl.col("period")
+    garbage = ((q == 1) & (m > 43)) | ((q == 2) & (m > 37)) | ((q == 3) & (m > 27)) | ((q >= 4) & (m > 21))
+    return garbage.fill_null(False)  # null margin = not garbage, as flag_garbage_time
+
+
+@pytest.mark.parametrize("fn", [cfb_adjusted_epa, cfb_adjusted_epa_by_game])
+def test_garbage_time_reaches_neither_the_fit_nor_a_teams_own_epa(fn) -> None:
+    # Owner decision 2026-11-25: a team's own EPA is filtered on the same plays as
+    # the opponent-strength fit. Until then the fit dropped garbage time but the
+    # netting counted it, so blowing out a weak team LOWERED the rating. With both
+    # on the same plays, no garbage-time EPA can move any output.
+    plays = _plays_2026().with_columns(seasonType=pl.lit(2, dtype=pl.Int64))  # weeks 1-4: regular season
+    garbage = _garbage_rows()
+    assert plays.filter(garbage).height > 500  # the fixture really has garbage time
+    shifted = plays.with_columns(EPA=pl.when(garbage).then(pl.col("EPA") + 3.0).otherwise(pl.col("EPA")))
+    key = ["team_id"] if fn is cfb_adjusted_epa else ["game_id", "team_id"]
+    assert_frame_equal(fn(shifted).sort(key), fn(plays).sort(key))
+
+
+def test_own_epa_is_the_mean_over_the_kept_plays() -> None:
+    plays = _plays_2026().with_columns(seasonType=pl.lit(2, dtype=pl.Int64))
+    kept = plays.filter(_garbage_rows() == False)  # noqa: E712
+    by_game = cfb_adjusted_epa_by_game(plays)
+    g = plays.filter(_garbage_rows()).sort("game_id").row(0, named=True)
+    team, gid = str(g["pos_team_id"]), g["game_id"]
+    want = kept.filter((pl.col("game_id") == gid) & (pl.col("pos_team_id") == team))["EPA"].mean()
+    got = by_game.filter((pl.col("game_id") == gid) & (pl.col("team_id") == team))["raw_off_epa"].item()
+    assert got == pytest.approx(want, abs=1e-12)
 
 
 def test_real_2026_golden_net_values() -> None:
@@ -227,24 +264,26 @@ def test_real_2026_golden_net_values() -> None:
     # level): each of those reverted alone moves these values (see #598).
     out = cfb_adjusted_epa(_plays_2026()).filter(pl.col("team_id").is_in(["103", "254", "328"])).sort("team_id")
     assert out["team_id"].to_list() == ["103", "254", "328"]  # Boston College, Utah, Utah State
+    # Margin rule for the fit and own EPA (2026-11-25); the naive-WP-band fit gave
+    # -0.0081 / 0.4917 / -0.1806.
     assert out["net_adj_epa"].to_list() == pytest.approx(
-        [-0.008144991395416745, 0.4916917971781684, -0.18059490002011247], abs=1e-6
+        [-0.03785754374304334, 0.7001746895242886, -0.20214225907970906], abs=1e-6
     )
 
 
-def test_fit_band_keeps_at_least_70_percent_of_plays() -> None:
-    # Owner rule for the fit band. It is a FULL-SEASON property (70-74% in 2014-2026);
-    # this 2026 weeks 1-4 fixture sits at 70.04%, and through-week snapshots can dip
-    # to ~64% (2026 week 1), which is why it is not a runtime error.
-    from sportsdataverse.cfb.cfb_adjusted_epa import _ADJ_REQUIRED, _FIT_WP, _prepare
+def test_fit_keeps_at_least_85_percent_of_plays() -> None:
+    # The margin rule keeps 90-92% of FBS-vs-FBS pass/rush plays in every full season
+    # 2014-2026; this 2026 weeks 1-4 fixture keeps 89.1% (the naive WP band it
+    # replaced kept 70.0%).
+    from sportsdataverse.cfb.cfb_adjusted_epa import _ADJ_REQUIRED, _prepare
 
-    base, clean = _prepare(_plays_2026(), _ADJ_REQUIRED, _FIT_WP)
-    assert clean.height / base.height >= 0.70
+    base, clean = _prepare(_plays_2026(), _ADJ_REQUIRED, None)
+    assert clean.height / base.height >= 0.85
 
 
 def test_empty_fit_band_raises_instead_of_returning_no_rows() -> None:
-    plays = _plays_2026().with_columns(wp_before_naive=pl.lit(None, dtype=pl.Float64))
-    with pytest.raises(ValueError, match="no plays"):
+    plays = _plays_2026().with_columns(period=pl.lit(4, dtype=pl.Int64), pos_score_diff_start=pl.lit(30.0))
+    with pytest.raises(ValueError, match="no non-garbage-time plays"):
         cfb_adjusted_epa(plays)
 
 
@@ -356,11 +395,11 @@ def test_pre598_by_game_orders_by_week_alone_like_the_pre_598_code() -> None:
     assert a.equals(b)
 
 
-def test_default_method_still_requires_naive_wp() -> None:
+def test_default_method_still_requires_the_score_margin() -> None:
     nfl = _nfl_shaped_pbp()
-    with pytest.raises(KeyError, match="wp_before_naive"):
+    with pytest.raises(KeyError, match="pos_score_diff_start"):
         cfb_adjusted_epa(nfl)
-    with pytest.raises(KeyError, match="wp_before_naive"):
+    with pytest.raises(KeyError, match="pos_score_diff_start"):
         cfb_adjusted_epa_by_game(nfl)
 
 
