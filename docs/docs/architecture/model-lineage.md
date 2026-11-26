@@ -187,9 +187,11 @@ an owner decision:
 - **Retire rule** (`tools/models/lifecycle/retire.py`). After each completed season
   past the holdout, score the model once against its baseline (same metric,
   paired, same clustering, no refit). Two consecutive seasons whose upper 97.5%
-  bound of `model - baseline` is at or above 0, or one season worse than the
-  baseline by more than the adoption margin at 1.96 SE (its lower 97.5% bound
-  above the margin), make it a RETIRE-candidate. The latest
+  bound of `model - baseline` is at or above 0 (consecutive scored seasons: a
+  season with no record between two failures does not break the run), or one season worse than the
+  baseline by more than the adoption margin's magnitude (`abs(adoption_margin)`;
+  the ledger stores a gain as negative) at 1.96 SE (its lower 97.5% bound above
+  it), make it a RETIRE-candidate. The latest
   season failing alone is WATCH; before any season is scored it is UNSCORED. The rule
   runs only on a row with both a `baseline` and `holdout_seasons`. Retiring is the owner's call: `status: retired`
   with `retired_reason`, one release of warning through
