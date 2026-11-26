@@ -15,6 +15,10 @@ pages, captured via the browser transport in
 `sportsdataverse/mbb/mbb_ncaa_fetch.py` (patchright + `--headless=new` + US
 residential IP) from `https://stats.ncaa.org/contests/{id}/play_by_play`.
 
+The 2012 and 2020 pages carry the older runner-clause formats: clauses run on with no separator (2012) or after a
+colon (2020), where the 2025-26 pages use `;`. Their `csrf-token` / `authenticity_token` values are replaced with
+`REDACTED`.
+
 Consumed by `tests/baseball/test_college_baseball_ncaa_pbp.py` and (as a
 structural stand-in) `tests/baseball/test_college_softball_ncaa_pbp.py`.
 
@@ -23,6 +27,8 @@ structural stand-in) `tests/baseball/test_college_softball_ncaa_pbp.py`.
 | `mba_pbp_6357953.html` | 6357953 | 8-5 | 2026-07-17 |
 | `mba_pbp_6356679.html` | 6356679 | 12-1 | 2026-07-17 |
 | `mba_pbp_6356680.html` | 6356680 | 8-0 | 2026-07-17 |
+| `mba_pbp_755683.html` | 755683 (2012, Morehead St. at Mercer, game 1 of a doubleheader) | 6-22 | 2026-11-25 |
+| `mba_pbp_1829869.html` | 1829869 (2020) | 4-5 | 2026-11-14 |
 
 Source URLs follow `<https://stats.ncaa.org/contests/{contest_id}/play_by_play>`.
 
