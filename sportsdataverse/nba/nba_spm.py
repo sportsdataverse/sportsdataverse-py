@@ -15,12 +15,12 @@ from sportsdataverse.nba.nba_model_validation import RatingsFit
 
 SPM_FEATURES: List[str] = list(_STATS)
 #: :func:`train_spm`'s default ridge penalty (raw per-100 features, minute weights at mean 1). Fitted
-#: by ``tools/fit_adj_rapm_penalty.py spm`` (run 2026-11-25): the grid point minimizing the
+#: by ``tools/fit_adj_rapm_penalty.py spm`` (run 2026-11-26): the grid point minimizing the
 #: player-grouped 5-fold CV error of the minute-weighted fit on each season's own plain RAPM, summed
 #: over the complete regular seasons from 1997 (NBA through 2025-26, WNBA through 2026; 30 each).
-#: NBA picks 30; WNBA picks 100, and its error at 30 is 0.08% above that minimum, so both leagues
-#: share 30. The curve is flat below it (alpha 0 is 0.3% worse in the NBA, 2.6% in the WNBA) and
-#: rises past it (300: +4.4% / +2.3%). The equal-weight fit this replaced used 100. The G League
+#: NBA picks 30; WNBA picks 100, and its error at 30 is 0.21% above that minimum, so both leagues
+#: share 30. The curve is flat below it (alpha 0 is 0.3% worse in the NBA, 2.8% in the WNBA) and
+#: rises past it (300: +4.4% / +2.2%). The equal-weight fit this replaced used 100. The G League
 #: (``train_spm`` takes no league) is seeded with the shared value, not fitted.
 SPM_ALPHA: float = 30.0
 

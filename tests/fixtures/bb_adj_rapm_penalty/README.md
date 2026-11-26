@@ -30,7 +30,9 @@ equal-weight SPM prior at its #1150 scale 2; that OUT's curves reproduce the 202
 
 Nothing is synthetic or edited. Rezipped at zstd level 19.
 
-The SPM prior's own fit (`tools/fit_adj_rapm_penalty.py spm`, run 2026-11-25 on the same inputs):
+The SPM prior's own fit (`tools/fit_adj_rapm_penalty.py spm`, run 2026-11-25 on the same inputs; its CV rerun 2026-11-26 on
+the same rows after `spm_cv` began sorting them by `player_id`, so the seeded folds hold the same players however the
+rows arrive):
 
 - `spm_cv.parquet`: one row per league, regular season 1997-2026, and `train_spm` penalty (`alpha`, the
   9 points of `SPM_ALPHAS`): `sse` is the player-grouped 5-fold CV error of the minute-weighted

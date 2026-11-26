@@ -95,3 +95,8 @@ def test_curves_refuses_an_out_fit_under_another_prior_rule(tmp_path) -> None:
     (unstamped / "nba_1997_rs.npz").write_bytes(b"")
     with pytest.raises(SystemExit, match="no recorded prior rule"):
         fit.curves(unstamped, {}, "weighted")
+
+
+def test_spm_cv_folds_do_not_depend_on_row_order() -> None:
+    rows = _rows("wnba", 2025)
+    np.testing.assert_allclose(fit.spm_cv(rows.reverse()), fit.spm_cv(rows), rtol=1e-12)

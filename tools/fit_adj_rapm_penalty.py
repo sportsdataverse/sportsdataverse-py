@@ -280,6 +280,7 @@ def spm_cv(rows: pl.DataFrame, alphas=SPM_ALPHAS) -> np.ndarray:
     """
     if not rows["player_id"].is_unique().all():
         raise ValueError("spm_cv needs one row per player (the KFold over rows is the player grouping)")
+    rows = rows.sort("player_id")  # the seeded folds are row positions: fix the order so they are the same players
     sse = np.zeros(len(alphas))
     for tr, te in KFold(SPM_FOLDS, shuffle=True, random_state=0).split(np.arange(rows.height)):
         train, test = rows[tr], rows[te]
