@@ -20,6 +20,7 @@ from sportsdataverse.nfl.nfl_projection_constants import (
     SCORING_PPR,
     SCORING_STANDARD,
     PositionConstants,
+    _season_rosters,
     as_of_season_split,
     get_position_constants,
 )
@@ -90,8 +91,9 @@ def season_player_rates(weekly: pl.DataFrame, rosters: pl.DataFrame) -> pl.DataF
         weekly (pl.DataFrame): nflverse weekly offense stats (at minimum
             ``player_id, season, week, position_group`` + counting stats +
             ``fantasy_points_ppr``).
-        rosters (pl.DataFrame): Season rosters carrying ``player_id, season,
-            age``.
+        rosters (pl.DataFrame): Season rosters: :func:`sportsdataverse.nfl.load_nfl_rosters`
+            (``gsis_id``, ``season``, ``birth_date``; age is computed as of about October 1),
+            or a frame already carrying ``player_id, season, age``.
 
     Returns:
         pl.DataFrame: One row per (player_id, season) with ``player_id:Utf8,
@@ -155,12 +157,9 @@ def season_player_rates(weekly: pl.DataFrame, rosters: pl.DataFrame) -> pl.DataF
         *[(pl.col(c) / pl.col("games")).cast(pl.Float64).alias(f"{c}_rate") for c in stats],
     ).drop("_fp_ppr", *stats)
 
-    if {"player_id", "season", "age"}.issubset(rosters.columns) and rosters.height > 0:
-        ros = rosters.select(
-            pl.col("player_id").cast(pl.Utf8),
-            pl.col("season").cast(pl.Int64),
-            pl.col("age").cast(pl.Float64),
-        ).unique(subset=["player_id", "season"], keep="first")
+    ros = _season_rosters(rosters)
+    if ros is not None:
+        ros = ros.select("player_id", "season", "age")
         assert agg.schema["player_id"] == ros.schema["player_id"]
         assert agg.schema["season"] == ros.schema["season"]
         agg = agg.join(ros, on=["player_id", "season"], how="left")
@@ -202,7 +201,9 @@ def aging_curve(season_rates: pl.DataFrame, *, position_group: str, rate_col: st
     # (birth-date-derived) floats, and per-unique-float transitions chained by
     # cum_prod compound noise into a degenerate curve.
     df = season_rates.filter(
-        (pl.col("position_group") == position_group) & (pl.col("volume") >= consts.min_volume)
+        (pl.col("position_group") == position_group)
+        & (pl.col("volume") >= consts.min_volume)
+        & pl.col("age").is_not_null()  # an unknown age is no transition (a null group broke the chain anchor)
     ).select("player_id", "season", pl.col("age").floor().alias("age"), "volume", pl.col(rate_col).alias("rate"))
     # match season s (age a) to the same player's season s+1 (age a+1)
     nxt = df.select(
