@@ -484,6 +484,8 @@ providers:
     home: https://kalshi.com
     auth: none (keyless Trade API v2 market-data routes)
     flat_apis: [kalshi]
+    modules:
+      - sportsdataverse.odds.kalshi_book
 
   mlb_stats_api:
     label: MLB Stats API
