@@ -393,7 +393,7 @@ Polars dataframe of the MLB teams, one row per team, with the columns in the ret
 | `team_is_active` | Boolean | Team is active. |
 | `team_is_all_star` | Boolean | Team is all star. |
 | `team_location` | String | Team city / location. |
-| `team_logos` | Int64 |  |
+| `team_logos` | List |  |
 | `team_name` | String | Team name. |
 | `team_nickname` | String |  |
 | `team_short_display_name` | String | Short team display name. |

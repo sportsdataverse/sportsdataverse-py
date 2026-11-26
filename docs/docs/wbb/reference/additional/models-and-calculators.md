@@ -1062,8 +1062,8 @@ A `polars.DataFrame` containing only rows with `date < cutoff_date`.
 | `groups_is_conference` | Boolean | Groups is conference. |
 | `game_json` | Boolean |  |
 | `game_json_url` | String |  |
-| `game_date_time` | String | Game start date/time (ISO 8601). |
-| `date` | String | Date in YYYY-MM-DD format. |
+| `game_date_time` | Datetime | Game start date/time (ISO 8601). |
+| `date` | Date | Date in YYYY-MM-DD format. |
 | `PBP` | Boolean |  |
 | `team_box` | Boolean | Team box. |
 | `player_box` | Boolean | Player box. |

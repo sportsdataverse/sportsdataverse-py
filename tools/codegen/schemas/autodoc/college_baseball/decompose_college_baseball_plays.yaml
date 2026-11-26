@@ -77,10 +77,10 @@ columns:
   type: integer
   description: ''
 - name: scoring_runners
-  type: character
+  type: list
   description: ''
 - name: runners_advanced
-  type: character
+  type: list
   description: ''
 - name: outs_on_play
   type: integer

@@ -31,7 +31,7 @@ Games of a league season: date, teams, score, per-period score, decision, status
 | `season` | Int64 | Season by its END year (2026 = 2025-26), from the body's echo of the Season filter. |
 | `phase_id` | Int64 | SIHF phase id (regular season, a playoff round, ...); null unless a phase filter is passed. |
 | `day` | String | Weekday abbreviation, German (e.g., "Di"). |
-| `date` | String | Game date (local). |
+| `date` | Date | Game date (local). |
 | `time` | String | Scheduled local start time, "hh:mm". |
 | `home_team_id` | Int64 | SIHF team id of the home team. |
 | `home_team_name` | String | Home team display name. |
@@ -41,8 +41,8 @@ Games of a league season: date, teams, score, per-period score, decision, status
 | `away_team_acronym` | String | Away team abbreviation. |
 | `score_home` | Int64 | Final home score. |
 | `score_away` | Int64 | Final away score. |
-| `score_per_period_home` | Int64 | Home goals per period (overtime included as its own period). |
-| `score_per_period_away` | Int64 | Away goals per period (overtime included as its own period). |
+| `score_per_period_home` | List | Home goals per period (overtime included as its own period). |
+| `score_per_period_away` | List | Away goals per period (overtime included as its own period). |
 | `decision` | String | How the game was decided beyond regulation: "OT" or "SO"; null in regulation. |
 | `status_id` | Int64 | SIHF game-status id (12 = finished). |
 | `status_name` | String | Game-status name; German whatever the language (e.g., "Ende"). |
@@ -213,8 +213,8 @@ Event timeline of one game: goals, penalties, goaltender changes, revoked goals 
 | `goal_tags` | String | Every goal tag, comma-joined as SIHF prints them (e.g., "PP1,GWG"). |
 | `score_home` | Int64 | Home score after the goal. |
 | `score_away` | Int64 | Away score after the goal. |
-| `plus_player_ids` | Int64 | Licence numbers credited +1 on the goal (listed only where plus-minus applies). |
-| `minus_player_ids` | Int64 | Licence numbers charged -1 on the goal (listed only where plus-minus applies). |
+| `plus_player_ids` | List | Licence numbers credited +1 on the goal (listed only where plus-minus applies). |
+| `minus_player_ids` | List | Licence numbers charged -1 on the goal (listed only where plus-minus applies). |
 | `penalty_id` | Int64 | SIHF penalty-type id. |
 | `penalty_name` | String | Penalty name, German whatever the language (e.g., "Haken"). |
 | `penalty_minutes` | Int64 | Penalty length in minutes. |

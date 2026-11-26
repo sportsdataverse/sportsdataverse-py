@@ -278,7 +278,7 @@ def test_a_passthrough_transformer_inherits_its_inputs_descriptions_per_league(m
 
 @pytest.mark.parametrize("schema", ["aggregate_stints", "stack_seasons"])
 def test_a_list_column_is_documented_as_list_not_its_inner_type(schema: str) -> None:
-    """``_pl_to_doc_type`` folds ``List(Utf8)`` to ``character``; the committed table must say ``list``."""
+    """A ``List(Utf8)`` column is documented as ``list``, not its inner ``character``."""
     from sportsdataverse.mbb.mbb_ncaa_rapm_league import STINT_SCHEMA
 
     cols = {c["name"]: c["type"] for c in yaml.safe_load((SCHEMAS / "mbb" / f"{schema}.yaml").read_text())["columns"]}

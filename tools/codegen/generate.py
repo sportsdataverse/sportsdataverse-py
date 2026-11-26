@@ -2668,7 +2668,21 @@ def _desc_lookup(schema_name: str) -> dict:
 
 
 def _pl_to_doc_type(pl_type: str) -> str:
+    """The house doc type (``integer``, ``date``, ``list``...) for a polars dtype string.
+
+    Containers first: ``List(Int64)`` is a ``list``, not its inner ``integer``. ``Datetime``
+    before ``Date`` (one contains the other)."""
     s = pl_type.lower()
+    if s.startswith(("list", "array")):
+        return "list"
+    if s.startswith("datetime"):
+        return "datetime"
+    if s.startswith("date"):
+        return "date"
+    if s.startswith(("struct", "enum", "categorical", "category")):
+        return "character"  # before the substring tests: "points" / "print" contain "int"
+    if s.startswith("decimal"):
+        return "double"
     if "int" in s:
         return "integer"
     if "float" in s:
@@ -5214,9 +5228,8 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
     (``home_team_score``, ``tournament_id``) and ships all-null placeholders, so a
     single frame is never the whole schema. Committed columns keep their order
     and genuinely new ones append. A committed type survives when the fresh
-    column is entirely null (a dtype inferred from no values is noise) or when
-    committed says ``list`` -- :func:`_pl_to_doc_type` folds ``List(Int64)`` to
-    ``integer``, so that "change" is the mapper, not the data. A committed polars
+    column is entirely null (a dtype inferred from no values is noise) or when it
+    says ``list`` and a pandas capture reads the column as ``object``. A committed polars
     dtype (``Int32``) survives a capture the mapper folds to the same family
     (``integer``), so a pinned width is not widened back to ``Int64`` on render.
     Any other dtype change is real and wins.
@@ -5241,7 +5254,8 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
             # The committed type in its polars form (``double`` -> ``Float64``, ``Int32`` as is), then folded the way
             # the fresh capture was: ``Int32`` matches ``integer``, but ``double`` never matches ``character``.
             f["type"] in (c["type"], _pl_to_doc_type(_doc_dtype(c["type"])))
-            or c["type"] == "list"
+            # a pandas list column is dtype ``object``, which maps to ``character``
+            or (c["type"] == "list" and f["type"] == "character")
             or all_null(c["name"])
         )
         if keep and f["type"] != c["type"]:
@@ -5444,7 +5458,7 @@ def refresh_autodoc_schemas() -> int:
         + (f", {pruned} pruned" if pruned else "")
         + (f", {kept_stale} kept (in scope, capture failed)" if kept_stale else "")
         + (f", {cols_retained} columns retained (absent from capture)" if cols_retained else "")
-        + (f", {types_preserved} types preserved (all-null or list)" if types_preserved else "")
+        + (f", {types_preserved} types preserved (all-null or same family)" if types_preserved else "")
         + (f", {hand_kept} hand_authored kept" if hand_kept else "")
     )
     if skip_reasons:

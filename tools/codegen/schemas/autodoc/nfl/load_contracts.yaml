@@ -77,8 +77,8 @@ columns:
   type: double
   description: ''
 - name: season_history
-  type: double
+  type: list
   description: ''
 - name: contract_history
-  type: integer
+  type: list
   description: ''

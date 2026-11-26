@@ -370,7 +370,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `recent` | Boolean | Whether the game is recent. |
 | `start_date` | String | Season start date. |
 | `broadcast` | String | Broadcast network(s). |
-| `highlights` | Int64 |  |
+| `highlights` | List |  |
 | `notes_type` | String |  |
 | `notes_headline` | String |  |
 | `broadcast_market` | String |  |
@@ -408,7 +408,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `home_logo` | String | Home team logo URL. |
 | `home_score` | String | Home team final score. |
 | `home_linescores` | List | Period-by-period goal totals for the home team, stored as an array of integer scores indexed by period. |
-| `home_records` | String | Serialized win-loss-overtime record string for the home team at the time of the scheduled game. |
+| `home_records` | List | Serialized win-loss-overtime record string for the home team at the time of the scheduled game. |
 | `away_id` | Int64 | Away team ESPN identifier. |
 | `away_uid` | String |  |
 | `away_location` | String | Away team city. |
@@ -423,11 +423,11 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `away_logo` | String | Away team logo URL. |
 | `away_score` | String | Away team final score. |
 | `away_linescores` | List | Period-by-period goal totals for the away team, stored as an array of integer scores indexed by period. |
-| `away_records` | String | Serialized win-loss-overtime record string for the away team at the time of the scheduled game. |
+| `away_records` | List | Serialized win-loss-overtime record string for the away team at the time of the scheduled game. |
 | `game_id` | Int64 | Unique game identifier. |
 | `season` | Int64 | Season year (echoed from arg). |
 | `season_type` | Int64 | Season type code (echoed from arg). |
-| `status_featured_athletes` | Int64 |  |
+| `status_featured_athletes` | List |  |
 | `home_logo_dark` | String |  |
 | `home_winner` | Boolean | Whether the home team won. |
 | `away_logo_dark` | String |  |
@@ -478,7 +478,7 @@ Polars dataframe of the NHL teams, one row per team, with the columns in the ret
 | `team_is_active` | Boolean |  |
 | `team_is_all_star` | Boolean |  |
 | `team_location` | String | Team city/location. |
-| `team_logos` | Int64 | Team logo metadata. |
+| `team_logos` | List | Team logo metadata. |
 | `team_name` | String | Team name. |
 | `team_nickname` | String | Team nickname. |
 | `team_short_display_name` | String | Team short display name. |

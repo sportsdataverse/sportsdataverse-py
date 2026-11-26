@@ -1047,8 +1047,8 @@ A `polars.DataFrame` containing only rows with `date < cutoff_date`.
 | `groups_is_conference` | Boolean | Groups is conference. |
 | `game_json` | Boolean |  |
 | `game_json_url` | String |  |
-| `game_date_time` | String | Game start date/time (ISO 8601). |
-| `date` | String | Date in YYYY-MM-DD format. |
+| `game_date_time` | Datetime | Game start date/time (ISO 8601). |
+| `date` | Date | Date in YYYY-MM-DD format. |
 | `PBP` | Boolean |  |
 | `team_box` | Boolean | Team box. |
 | `player_box` | Boolean | Player box. |
@@ -1278,8 +1278,8 @@ The season's `load_mbb_pbp` frame (every column preserved) with the two `_WP_COL
 | `start_game_seconds_remaining` | Int64 | Seconds remaining in the game at the start of the play. |
 | `end_period_seconds_remaining` | Int64 |  |
 | `end_game_seconds_remaining` | Int64 | Seconds remaining in the game at the end of the play. |
-| `game_date` | String | Game date (YYYY-MM-DD). |
-| `game_date_time` | String | Game start date/time (ISO 8601). |
+| `game_date` | Date | Game date (YYYY-MM-DD). |
+| `game_date_time` | Datetime | Game start date/time (ISO 8601). |
 | `coordinate_x` | Float64 | X coordinate on the court (half-court layout). |
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
