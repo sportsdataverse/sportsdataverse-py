@@ -168,7 +168,7 @@ def spread_to_prob(spread: float, sigma: float) -> float:
 
 
 def logit_blend(p_a: float, p_b: float, weight_a: float = 0.7) -> float:
-    """Blend two probabilities in logit space (nfelo's 70/30 practice).
+    """Blend two probabilities in logit space (70/30 by default).
 
     Args:
         p_a: First probability in (0, 1).
@@ -179,7 +179,7 @@ def logit_blend(p_a: float, p_b: float, weight_a: float = 0.7) -> float:
         The logit-space weighted blend, back on the probability scale.
 
     Example:
-        Spread/moneyline blend at nfelo weights::
+        Spread/moneyline blend at 70/30::
 
             from sportsdataverse.wexp.market import logit_blend
             logit_blend(0.61, 0.64, weight_a=0.7)

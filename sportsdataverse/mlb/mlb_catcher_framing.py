@@ -3,8 +3,8 @@ called-strike probability model + per-catcher framing runs.
 
 Owns :func:`called_strike_prob_grid` (a standalone empirical grid utility)
 and :func:`mlb_catcher_framing` (the public entry point). The framing entry
-point is a **smooth logistic** P(called strike | zone
-location) is fit on takes (reusing the T6.4 zone logistic in
+point fits a **smooth logistic** P(called strike | zone
+location) on takes (reusing the T6.4 zone logistic in
 :mod:`sportsdataverse.mlb.mlb_umpire_zone`), then framing runs sum
 ``(called_strike - P_strike) * count_run_value`` over **shadow-zone** takes
 only (``shadow_lo <= P_strike <= shadow_hi``) -- the near-edge pitches where

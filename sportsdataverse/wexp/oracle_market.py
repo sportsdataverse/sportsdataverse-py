@@ -46,7 +46,7 @@ __all__ = [
 # (Axis E2). NFL ~13.45 is the standard margin SD; CFB is wider.
 NFL_MARGIN_SIGMA: float = 13.45
 CFB_MARGIN_SIGMA: float = 15.5
-SPREAD_ML_BLEND_WEIGHT: float = 0.7  # nfelo: spread 70 / moneyline 30, logit space
+SPREAD_ML_BLEND_WEIGHT: float = 0.7  # spread 70 / moneyline 30, logit space
 SPREAD_CLIP: float = 60.0  # cfb_line_odds outlier guard (ported)
 
 # Canonical oracle column order (both leagues).
