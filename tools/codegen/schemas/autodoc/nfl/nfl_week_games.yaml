@@ -38,16 +38,16 @@ columns:
   type: character
   description: ''
 - name: externalIds
-  type: character
+  type: list
   description: ''
 - name: ticketUrl
   type: character
   description: ''
 - name: ticketVendors
-  type: character
+  type: list
   description: ''
 - name: extensions
-  type: character
+  type: list
   description: ''
 - name: version
   type: integer
@@ -71,22 +71,22 @@ columns:
   type: character
   description: ''
 - name: broadcastInfo_homeNetworkChannels
-  type: character
+  type: list
   description: ''
 - name: broadcastInfo_awayNetworkChannels
-  type: character
+  type: list
   description: ''
 - name: broadcastInfo_internationalWatchOptions
-  type: character
+  type: list
   description: ''
 - name: broadcastInfo_streamingNetworks
-  type: character
+  type: list
   description: ''
 - name: broadcastInfo_territory
   type: character
   description: ''
 - name: broadcastInfo_audioNetworks
-  type: character
+  type: list
   description: ''
 - name: venue_id
   type: character

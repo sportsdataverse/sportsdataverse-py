@@ -26,7 +26,7 @@ columns:
   type: character
   description: ''
 - name: event_date
-  type: character
+  type: date
   description: ''
 - name: seq
   type: integer

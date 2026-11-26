@@ -378,8 +378,8 @@ one row per (entity, unit, metric, window size), `OUTPUT_SCHEMA`. Null / NaN eve
 | `delta_prev_rank` | Int64 |  |
 | `n` | Int64 |  |
 | `qualified` | Boolean |  |
-| `last_event_date` | String |  |
-| `as_of_date` | String |  |
+| `last_event_date` | Date |  |
+| `as_of_date` | Date |  |
 
 **Example**
 
@@ -504,7 +504,7 @@ one row per attempt x unit, `EVENT_SCHEMA`. `entity_id` is the stats.nba / stats
 | `window_unit` | String |  |
 | `metric` | String |  |
 | `game_id` | String |  |
-| `event_date` | String |  |
+| `event_date` | Date |  |
 | `seq` | Int64 |  |
 | `value` | Float64 |  |
 

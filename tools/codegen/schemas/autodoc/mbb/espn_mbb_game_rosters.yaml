@@ -89,7 +89,7 @@ columns:
   type: character
   description: ''
 - name: flag_rel
-  type: character
+  type: list
   description: ''
 - name: experience_years
   type: integer

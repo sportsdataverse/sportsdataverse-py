@@ -3918,9 +3918,11 @@ espn_nhl_player_stats:
     season type.
 espn_nhl_schedule:
   away_linescores: Period-by-period goal totals for the away team, stored as an array of integer scores indexed by period.
-  away_records: Serialized win-loss-overtime record string for the away team at the time of the scheduled game.
+  away_records: The away team's records at the time of the game, a list with one struct per record type (name,
+    abbreviation, type, and the summary such as "30-10-5").
   home_linescores: Period-by-period goal totals for the home team, stored as an array of integer scores indexed by period.
-  home_records: Serialized win-loss-overtime record string for the home team at the time of the scheduled game.
+  home_records: The home team's records at the time of the game, a list with one struct per record type (name,
+    abbreviation, type, and the summary such as "30-10-5").
   status_type_alt_detail: ESPN's short extra-time label on a final ("OT", "SO"); null when the game ended in regulation.
   venue_address_country: Country name or code for the country in which the game venue is located, as provided by ESPN's schedule
     endpoint.
@@ -9791,7 +9793,8 @@ load_cfb_pbp:
   stuffed_run: True on a rush (any play type the processor counts as a rush, not a kneel) that gained zero or
     fewer yards; its mean over scrimmage rushes (rush and scrimmage_play) is the stuff rate.
   td_check: Internal flag used while reconciling whether the play produced a touchdown.
-  teamParticipants: Raw ESPN team-level participants payload carried through from the plays feed (stringified).
+  teamParticipants: Raw ESPN team-level participants payload carried through from the plays feed, a list as the live
+    feed sends it, stringified in the release files.
   text_dupe: Always False in the emitted frame -- the duplicate-row filter it gates runs before the column is
     returned, so it marks nothing and is retained only for schema stability.
   turnover_team: Team id charged with the giveaway on the play.
@@ -51703,7 +51706,7 @@ nfl_week_games:
   broadcastInfo_streamingNetworks: Serialized list of streaming platforms (e.g., Peacock, Amazon Prime Video) carrying the
     game.
   broadcastInfo_territory: Geographic territory or market designation for which this broadcast record applies.
-  extensions: Serialized JSON or string of additional extension metadata attached to the game record by the NFL Shield API.
+  extensions: Additional extension metadata the NFL Shield API attaches to the game record, as the list the API sends.
   externalIds: Serialized list of external system identifiers (e.g., partner IDs, league IDs) mapped to this game.
   homeTeam_currentLogo: URL for the home team's current primary logo image as served by the NFL Shield API.
   homeTeam_fullName: Full name of the home team (e.g., 'Dallas Cowboys').

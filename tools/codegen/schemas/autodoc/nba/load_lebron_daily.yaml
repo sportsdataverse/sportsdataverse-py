@@ -5,7 +5,7 @@ columns:
   type: integer
   description: ''
 - name: through_date
-  type: character
+  type: date
   description: ''
 - name: season
   type: character

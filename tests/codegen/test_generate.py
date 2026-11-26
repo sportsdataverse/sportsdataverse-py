@@ -170,13 +170,11 @@ def test_autodoc_capture_retains_committed_columns_absent_from_fresh_frame(tmp_p
 
 
 def test_autodoc_capture_keeps_committed_type_for_all_null_and_list_columns(tmp_path, monkeypatch):
-    """An all-null fresh column carries no type evidence; a committed ``list`` beats
-    the mapper's ``List(Int64)`` -> ``integer`` fold.
+    """An all-null fresh column carries no type evidence, and a list column stays ``list``.
 
     ``rank_delta`` is null before the season and ``highlights`` is empty on most
     days; inferring from those rows wrote ``character`` over ``integer`` on 20
-    columns. ``_pl_to_doc_type`` cannot express a list, so a fresh ``integer``
-    for a committed ``list`` is the mapper, not a change.
+    columns. ``_pl_to_doc_type`` maps ``List(Int64)`` to ``list``, not its inner type.
     """
     import polars as pl
 
@@ -184,6 +182,27 @@ def test_autodoc_capture_keeps_committed_type_for_all_null_and_list_columns(tmp_
     frame = pl.DataFrame({"x": pl.Series([None, None], dtype=pl.Null), "y": [[1, 2], [3]]})
     out = _capture(tmp_path, monkeypatch, committed, frame)
     assert {c["name"]: c["type"] for c in out["columns"]} == {"x": "integer", "y": "list"}
+
+
+def test_autodoc_capture_keeps_list_and_date_against_a_pandas_object_column(tmp_path, monkeypatch):
+    """A pandas list or ``datetime.date`` column is ``object``; that is no evidence against ``list`` / ``date``."""
+    import datetime
+
+    import pandas as pd
+
+    committed = {"schema": "f", "kind": "dataframe", "columns": _cols(("y", "list"), ("d", "date"))}
+    frame = pd.DataFrame({"y": [[1, 2], [3]], "d": [datetime.date(2026, 1, 1), datetime.date(2026, 1, 2)]})
+    out = _capture(tmp_path, monkeypatch, committed, frame)
+    assert {c["name"]: c["type"] for c in out["columns"]} == {"y": "list", "d": "date"}
+
+
+def test_autodoc_capture_overwrites_a_list_with_a_populated_scalar(tmp_path, monkeypatch):
+    """A committed ``list`` is not sticky: a populated polars ``Int64`` capture wins."""
+    import polars as pl
+
+    committed = {"schema": "f", "kind": "dataframe", "columns": _cols(("y", "list"))}
+    out = _capture(tmp_path, monkeypatch, committed, pl.DataFrame({"y": [1, 2]}))
+    assert out["columns"] == _cols(("y", "integer"))
 
 
 def test_autodoc_capture_keeps_real_dtype_change(tmp_path, monkeypatch):
@@ -219,8 +238,9 @@ def test_autodoc_capture_summary_reports_thin_capture(tmp_path, monkeypatch, cap
     out = capsys.readouterr().out
     assert "1 captured" in out
     assert "1 columns retained (absent from capture)" in out
-    assert "2 types preserved (all-null or list)" in out
-    assert "autodoc merge nfl.f: 1 new, 1 retained, 2 types preserved" in out
+    # ``c`` is a list on both sides (no longer a preserved type); only all-null ``a`` is
+    assert "1 types preserved (no type evidence)" in out
+    assert "autodoc merge nfl.f: 1 new, 1 retained, 1 types preserved" in out
 
 
 def test_loader_schema_refresh_captures_the_richest_season(tmp_path, monkeypatch):
@@ -446,3 +466,58 @@ def test_native_schema_parser_crash_is_a_failure_not_a_skip():
     written, failed = generate._write_native_schemas({"mlb_api": {"no_such_capture.json": "team_roster"}})
     assert written == 0
     assert len(failed) == 1 and failed[0].startswith("mlb_api/team_roster (no_such_capture.json): FileNotFoundError")
+
+
+def test_pl_to_doc_type_reads_pandas_dtypes() -> None:
+    """Pandas spellings map like their polars twins."""
+    import pandas as pd
+
+    frame = pd.DataFrame(
+        {
+            "ts": pd.to_datetime(["2026-01-01"]).tz_localize("UTC"),
+            "i": pd.array([1], dtype="Int64"),
+            "f": pd.array([1.5], dtype="Float64"),
+            "b": pd.array([True], dtype="boolean"),
+            "c": pd.Categorical(["a"]),
+            "o": ["a"],
+        }
+    )
+    got = {n: generate._pl_to_doc_type(str(t)) for n, t in frame.dtypes.items()}
+    assert got == {"ts": "datetime", "i": "integer", "f": "double", "b": "logical", "c": "character", "o": "character"}
+
+
+def test_pl_to_doc_type_keeps_dates_and_lists() -> None:
+    """Dates, datetimes and lists keep their own doc types; only scalars fold by family."""
+    import polars as pl
+
+    got = {
+        str(t): generate._pl_to_doc_type(str(t))
+        for t in (
+            pl.Date,
+            pl.Datetime("us", "UTC"),
+            pl.List(pl.Int64),
+            pl.List(pl.Utf8),
+            pl.Array(pl.Int64, 2),
+            pl.Int32,
+            pl.UInt32,
+            pl.Float64,
+            pl.Boolean,
+            pl.Utf8,
+            pl.Struct({"points": pl.Utf8}),
+            pl.Decimal(10, 2),
+        )
+    }
+    assert list(got.values()) == [
+        "date",
+        "datetime",
+        "list",
+        "list",
+        "list",
+        "integer",
+        "integer",
+        "double",
+        "logical",
+        "character",
+        "character",
+        "double",
+    ]

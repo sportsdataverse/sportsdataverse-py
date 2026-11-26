@@ -150,7 +150,7 @@ Frame with schema `LEBRON_DAILY_ORACLE_SCHEMA`. Zero rows (with that schema) whe
 | col_name | type | description |
 |---|---|---|
 | `player_id` | Int64 | Unique player identifier. |
-| `through_date` | String |  |
+| `through_date` | Date |  |
 | `season` | String | Season year. |
 | `player_name` | String | Player name. |
 | `mins` | Float64 |  |

@@ -92,19 +92,19 @@ columns:
   type: integer
   description: ''
 - name: home_score_by_period
-  type: integer
+  type: list
   description: ''
 - name: away_score_by_period
-  type: integer
+  type: list
   description: ''
 - name: home_shots_by_period
-  type: integer
+  type: list
   description: ''
 - name: away_shots_by_period
-  type: integer
+  type: list
   description: ''
 - name: period_indicators
-  type: character
+  type: list
   description: ''
 - name: venue_name
   type: character

@@ -56,8 +56,8 @@ columns:
   type: logical
   description: ''
 - name: last_event_date
-  type: character
+  type: date
   description: ''
 - name: as_of_date
-  type: character
+  type: date
   description: ''
