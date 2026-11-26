@@ -69,3 +69,23 @@ def test_lacrosse_teams_and_standings_parse():
     assert standings.height >= 8
     pdf = parse_standings(_load("pll", "standings"), return_as_pandas=True)
     assert len(pdf) == standings.height
+
+
+def test_lacrosse_examples_carry_no_shared_placeholder_ids():
+    # Offline guard for the live example test: a lacrosse Quick start that falls back to the shared
+    # placeholder ids (an NBA event, group 80) would run but come back empty against ESPN.
+    import ast
+    import inspect
+    import re
+
+    from sportsdataverse.lacrosse import lacrosse_espn_ext as ext
+
+    calls = [
+        re.search(r"Quick start::\s+(espn_lacrosse_\w+\(.*\))", fn.__doc__ or "")
+        for name, fn in inspect.getmembers(ext, inspect.isfunction)
+        if name.startswith("espn_lacrosse_")
+    ]
+    assert calls and all(calls)
+    for call in calls:
+        values = {str(ast.literal_eval(k.value)) for k in ast.parse(call.group(1), mode="eval").body.keywords}
+        assert not values & {"401584793", "80"}, call.group(1)

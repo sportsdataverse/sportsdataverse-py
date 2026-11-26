@@ -1,5 +1,5 @@
 {
-  "total": 82,
+  "total": 83,
   "sports": [
     {
       "label": "Football",
@@ -519,6 +519,11 @@
           "key": "pgatour",
           "label": "PGA TOUR GraphQL API",
           "href": "https://www.pgatour.com"
+        },
+        {
+          "key": "pll",
+          "label": "Premier Lacrosse League stats API",
+          "href": "https://stats.premierlacrosseleague.com"
         },
         {
           "key": "cbs",

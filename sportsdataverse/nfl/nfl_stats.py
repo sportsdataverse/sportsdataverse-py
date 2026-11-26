@@ -676,7 +676,7 @@ def _collapse_to_season(player_df: pl.DataFrame, *, season_type: str) -> pl.Data
     )
 
     # target_share / air_yards_share at season level recomputed against team
-    # totals reconstructed from the per-week shares (nflfastR's approach):
+    # totals reconstructed from the per-week shares:
     #   season_share = sum(player_x) / sum(player_x / week_share)
     team_denoms = (
         pre.with_columns(

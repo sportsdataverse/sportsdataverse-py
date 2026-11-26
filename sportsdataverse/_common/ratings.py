@@ -16,7 +16,7 @@ hosts one copy instead of N divergent ones:
   as its own function rather than forced into one solver, per the T7.2
   no-force-unification discipline.
 * :func:`iterative_opponent_adjust` -- the MBB/NBA (and, via those modules,
-  WBB/WNBA) KenPom-style fixed point: alternately re-estimates each team's
+  WBB/WNBA) iterative opponent-adjustment fixed point: alternately re-estimates each team's
   offense/defense from its opponents' *current* adjusted ratings and a
   home-court term until convergence. Byte-identical across MBB and NBA
   today; the only difference is whether the baseline (``avg``) is the
@@ -327,7 +327,7 @@ def iterative_opponent_adjust(
     prior: dict[str, tuple[float, float]] | None = None,
     prior_weight: float = 0.0,
 ) -> pl.DataFrame:
-    """KenPom-style opponent-adjustment fixed point for one group of game rows.
+    """Iterative opponent-adjustment fixed point for one group of game rows.
 
     Initialises ``adj_off = raw_off`` / ``adj_def = raw_def``, then
     repeatedly recomputes each team's rating from its games with the

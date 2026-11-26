@@ -2,7 +2,7 @@
 
 Synergy publishes season-aggregate per-team PPP by play type (11 canonical
 types) for both the offensive and defensive grouping, but not per-game splits.
-This module runs a KenPom/RAPM-style iterative opponent adjustment at the
+This module runs an iterative opponent adjustment at the
 season-aggregate level, using each team's actual schedule (from the league
 game log) as the opponent-strength weight -- see
 :mod:`sportsdataverse.nba.nba_playtype_constants` for the shared metrics and
