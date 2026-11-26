@@ -28,3 +28,6 @@ columns:
 - name: seconds
   type: double
   description: ''
+- name: season_type
+  type: character
+  description: ''

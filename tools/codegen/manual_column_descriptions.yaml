@@ -1743,6 +1743,16 @@ cfb_predict_games:
   home_team_id: Home team ESPN id (character; the ratings `team_id` join key).
   home_win_prob: Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model.
   neutral_site: Whether the game is at a neutral site (home-field advantage is dropped when true).
+cfb_ratings_compute_results:
+  away_team: Team name of the away team in the simulated game (returned games frame).
+  game_type: Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship) or
+    POST (postseason/CFP).
+  home_team: Team name of the home team in the simulated game (returned games frame).
+  neutral: Neutral-site flag (1 = neutral site, 0 = true home game; only non-neutral games receive home_field).
+  result: Home-team margin of victory (home score minus away score) - real results are preserved and the target week's unplayed
+    games are filled from the fixed team ratings.
+  sim: Simulation identifier the game row belongs to (1..n simulated seasons).
+  week: Week of the season the game is played in; only games matching the requested week_num are filled.
 cfb_recruiting_projection:
   pred_margin: Ridge-projected average scoring margin per game.
   pred_net_epa: Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s).
@@ -38214,6 +38224,8 @@ nba_team_game_four_factors:
   team_id: stats.nba.com team id (the 10-digit franchise id).
   turnover_pts: 'Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance.'
 nba_team_game_possessions:
+  season_type: The game's stats.nba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call
+    asked for. Asked for a list, each type's rows add up to that type's season rates.
   game_id: stats.nba.com game id. The game this row's possessions are from.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
@@ -38643,6 +38655,8 @@ wnba_team_game_four_factors:
   team_id: stats.wnba.com team id.
   turnover_pts: 'Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance.'
 wnba_team_game_possessions:
+  season_type: The game's stats.wnba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call
+    asked for. Asked for a list, each type's rows add up to that type's season rates.
   game_id: stats.wnba.com game id. The game this row's possessions are from.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
@@ -40654,8 +40668,10 @@ nba_rated_priors:
 nba_season_sim:
   adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
     opponent on a neutral court.'
-  adj_net_rtg_sd: Posterior sd of adj_net_rtg (points per 100) from the ridge, capped so two teams' shift carries at most
-    3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws.
+  adj_net_rtg_sd: 'Error sd of adj_net_rtg (points per 100), capped so two teams'' shift carries at most 3/4 of a game''s
+    variance; the sd of the per-season rating shift each simulated season draws. With a preseason prior it is the prior''s
+    miss at the weight the ridge leaves it plus the sampling noise of the possessions played (PRIOR_MISS_POSS: fitted for
+    the WNBA; the NBA keeps the ridge posterior); with none, the ridge posterior.'
   as_of_date: 'The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with
     a score counts as played.'
   conference: NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table).
@@ -40719,8 +40735,10 @@ nba_season_sim:
 wnba_season_sim:
   adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
     opponent on a neutral court.'
-  adj_net_rtg_sd: Posterior sd of adj_net_rtg (points per 100) from the ridge, capped so two teams' shift carries at most
-    3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws.
+  adj_net_rtg_sd: 'Error sd of adj_net_rtg (points per 100), capped so two teams'' shift carries at most 3/4 of a game''s
+    variance; the sd of the per-season rating shift each simulated season draws. With a preseason prior it is the prior''s
+    miss at the weight the ridge leaves it plus the sampling noise of the possessions played (PRIOR_MISS_POSS: fitted for
+    the WNBA; the NBA keeps the ridge posterior); with none, the ridge posterior.'
   as_of_date: 'The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with
     a score counts as played.'
   conference: NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table).
@@ -81147,6 +81165,16 @@ nba_player_props:
   stat_ftm_exp: Expected made free throws if he plays, on the same basis; null when the box logs carry none.
   minutes_exp: 'Expected minutes: the player''s minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 240; a team''s rows sum to 240. The stat_*_exp lines assume the player plays; this does not.'
   pace_proj: Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet.
+  stat_pts_recent_exp: Expected points if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_reb_recent_exp: Expected rebounds if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_ast_recent_exp: Expected assists if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_fg3m_recent_exp: Expected made threes if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_stl_recent_exp: Expected steals if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_blk_recent_exp: Expected blocks if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_tov_recent_exp: Expected turnovers if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_fgm_recent_exp: Expected field goals made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_ftm_recent_exp: Expected free throws made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  recent_weight: Weight on the recent line in the prop mixture, logistic(a + b x |last-10 minus season mean minutes| / his season minutes SD); 0 with 10 or fewer earlier games, where the two windows coincide.
 wnba_player_props:
   player_id: ESPN athlete id (Utf8).
   team_id: ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team.
@@ -81161,6 +81189,16 @@ wnba_player_props:
   stat_ftm_exp: Expected made free throws if he plays, on the same basis; null when the box logs carry none.
   minutes_exp: 'Expected minutes: the player''s minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 200; a team''s rows sum to 200. The stat_*_exp lines assume the player plays; this does not.'
   pace_proj: Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet.
+  stat_pts_recent_exp: Expected points if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_reb_recent_exp: Expected rebounds if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_ast_recent_exp: Expected assists if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_fg3m_recent_exp: Expected made threes if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_stl_recent_exp: Expected steals if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_blk_recent_exp: Expected blocks if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_tov_recent_exp: Expected turnovers if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_fgm_recent_exp: Expected field goals made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_ftm_recent_exp: Expected free throws made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  recent_weight: Weight on the recent line in the prop mixture, logistic(a + b x |last-10 minus season mean minutes| / his season minutes SD); 0 with 10 or fewer earlier games, where the two windows coincide. Null in the WNBA (no fitted mixture).
 wp_variants:
   game_id: ESPN game id, the join key to the play-by-play and the play_wp table (the dtype the pbp carries).
   game_play_number: Play order within the game, as in the play-by-play (the dtype the pbp carries).

@@ -8,7 +8,10 @@ seasons outside the sim's fit, at two cutoffs per season:
 * **preseason** -- the season's first game date (nothing played; the ratings are the preseason prior);
 * **in-season** -- the first game day on or after Dec 1 (NBA) or June 15 (WNBA).
 
-At each cutoff the sim runs twice: ``rating_uncertainty=True`` (shipped) and ``False``. Inputs come
+At each cutoff the sim runs three times: ``rating_uncertainty=True`` (``shift``, shipped),
+``False`` (``fixed``), and ``True`` with the rating sd at the ridge posterior
+(``shift_penalty_sd``: ``prior_poss`` at the SIM_CONSTANTS penalty, the form shipped before
+:data:`~sportsdataverse.nba.nba_season_sim.PRIOR_MISS_POSS`; reported, never read). Inputs come
 from the shipped path (``_load_inputs``: the as-of ridge, the preseason prior, rest and travel),
 with the shipped constants and no refit. The Cup is left out (``cup="never"``): a finished season's
 release lists every game, so each team already has its full schedule. From 2024-25 that includes the
@@ -82,12 +85,12 @@ _IN_SEASON = {"nba": (12, 1), "wnba": (6, 15)}
 #: A scored season must be outside all of them (``tests/tools/test_model_lifecycle.py``).
 PATH_FITS: dict[str, dict[str, list[int]]] = {
     "nba": {
-        "SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS train": [2018, 2019, 2022, 2023],
+        "SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS / PRIOR_MISS_POSS train": [2018, 2019, 2022, 2023],
         "REST_TRAVEL_CONSTANTS fit": [2018, 2019, 2022, 2023, 2024, 2025, 2026],
         "team_strength.RIDGE_LAMBDA CV": [2022, 2023, 2024, 2025, 2026],
     },
     "wnba": {
-        "SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS train": [2018, 2019, 2021],
+        "SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS / PRIOR_MISS_POSS train": [2018, 2019, 2021],
         "team_strength.RIDGE_LAMBDA CV": [2021, 2022, 2023, 2024, 2025],
     },
 }
@@ -267,14 +270,16 @@ def run_season(league: str, season: int, *, n_sims: int, seed: int) -> pl.DataFr
     _, load_schedule, offset = sim._league_loaders(league_id)
     schedule = load_schedule([season - offset])
     final = final_wins(schedule, league_id)
+    lam = sim.SIM_CONSTANTS[league_id][0]
     frames = []
     for name, cut in cutoffs(schedule, league, season).items():
         games, model, records, season_games, _ = sim._load_inputs(season, cut, league_id, cup="never")
+        penalty_sd = sim._load_inputs(season, cut, league_id, cup="never", prior_poss=lam)[1]
         cols = games.select(*sim._SIM_COLS).with_columns(pl.lit(season, dtype=pl.Int64).alias("season"))
-        for arm, unc in (("shift", True), ("fixed", False)):
+        for arm, unc, m in (("shift", True, model), ("fixed", False, model), ("shift_penalty_sd", True, penalty_sd)):
             _, _, (teams, total_wins) = sim._simulate_season_draws(
                 cols,
-                model,
+                m,
                 league_id=league_id,
                 n_sims=n_sims,
                 seed=seed,
@@ -302,7 +307,7 @@ def report(rows: pl.DataFrame, league: str) -> dict[str, Any]:
             out["cutoffs"][cut] = {"reading": "TOO_FEW_SEASONS", "tolerance": None, "reason": f"no {cut} cutoff"}
             continue
         entry: dict[str, Any] = {}
-        for arm in ("shift", "fixed"):
+        for arm in ("shift", "fixed", "shift_penalty_sd"):
             sub = rows.filter((pl.col("cutoff") == cut) & (pl.col("arm") == arm))
             entry[arm] = {f"{round(lv * 100)}": summarize(sub, lv) for lv in LEVELS}
         entry["reading"] = reading(entry["shift"][f"{round(GATE_LEVEL * 100)}"])
