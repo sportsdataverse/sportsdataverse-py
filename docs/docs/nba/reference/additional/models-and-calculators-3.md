@@ -500,6 +500,7 @@ One row per pick (1-60) of each class. |col_name |type | |:-----------------|:--
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba import nba_rookie_projection
 board = nba_rookie_projection(2019)
 print(board.sort("proj_rookie_value", descending=True).head())

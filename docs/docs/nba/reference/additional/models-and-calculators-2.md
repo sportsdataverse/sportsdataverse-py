@@ -803,17 +803,12 @@ df = nba_decay_rapm(season_poss)  # asof=None
 
 Project each draft pick's NBA career value from where he was picked.
 
-Reads the class from the `nba_stats_draft` release (no stats.nba.com
-call) and applies the bundled pick curve
-`proj_career_value = intercept + b1*log(pick) + b2*(pick/60)`. The curve
-was fit on draft classes 2003-2015 against realized career box value
-(`tools/models/nba_draft/fit_pick_curve.py`).
-
-The curve ranks a class exactly as the pick does. It ties the pick baseline
-by construction (2016-2019 holdout, all 240 picks: Spearman 0.571 for both) and only adds
-a value scale. No pre-draft measurement beat the pick in the rebuild that
-replaced the combine model: combine drills, college BPM / RAPM / seasons,
-and EuroLeague production were all tried.
+Reads the class from the `nba_stats_draft` release (no stats.nba.com call) and applies the
+bundled pick curve `proj_career_value = intercept + b1*log(pick) + b2*(pick/60)`, fit on
+classes 2003-2015 against realized career box value (`tools/models/nba_draft/fit_pick_curve.py`).
+It ranks a class exactly as the pick does, so it ties the pick baseline by construction (2016-2019
+holdout, 240 picks: Spearman 0.571 for both) and only adds a value scale. No pre-draft measurement
+(combine drills, college BPM / RAPM / seasons, EuroLeague production) beat the pick.
 
 **Parameters**
 
@@ -821,7 +816,7 @@ and EuroLeague production were all tried.
 |---|---|---|---|
 | `draft_year` | `Union[int, list[int]]` |  | A draft year (e.g. `2019`) or a list of years. |
 | `league` | `str` | `'nba'` | `"nba"` only. The WNBA has `sportsdataverse.wnba.wnba_draft_model.wnba_draft_model`; any other value raises `ValueError`. |
-| `pre_draft_features` | `bool` | `False` | When `True`, attach the pre-draft college and EuroLeague columns (`college_espn_id` ... `euro_top`, see Returns). They are read from the college player-value spine, the ESPN college bios, college RAPM and the EuroLeague API, and are information only: the curve never reads them. For a board before the draft, see `sportsdataverse.mbb.mbb_draft_projection.mbb_draft_projection`. |
+| `pre_draft_features` | `bool` | `False` | When `True`, attach the pre-draft college and EuroLeague columns (`college_espn_id` ... `euro_top`, see Returns) from the college player-value spine, the ESPN college bios, college RAPM and the EuroLeague API. Information only: the curve never reads them. Before the draft, see `sportsdataverse.mbb.mbb_draft_projection.mbb_draft_projection`. |
 | `college_prior` | `Optional[DataFrame]` | `None` | Optional frame keyed on `player_id:Utf8`, left-joined as extra columns. It does not change `proj_career_value`. |
 | `gleague_bridge` | `bool` | `False` | When `True`, left-join G-League (`league_id="20"`) `gleague_pts` / `gleague_gp` / `gleague_min` for the draft year's season (live stats.nba.com, best-effort, never raises). It does not change `proj_career_value`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
@@ -851,6 +846,7 @@ One row per pick (1-60) of each class. |col_name |type | |:-----------------|:--
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba import nba_draft_model
 board = nba_draft_model(2019)
 print(board.select("overall_pick", "player_name", "proj_career_value").head())
