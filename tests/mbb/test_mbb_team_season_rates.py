@@ -16,7 +16,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse._common.rate_gates import TEAM_MIN_N
-from sportsdataverse._common.team_season_rates import SPLITS, TEAM_SEASON_RATES_SCHEMA
+from sportsdataverse._common.team_season_rates import SPLITS, TEAM_GAME_POSSESSIONS_SCHEMA, TEAM_SEASON_RATES_SCHEMA
 
 RATES = Path(__file__).resolve().parents[1] / "fixtures" / "bb_team_season_rates"
 # The package re-exports the function under the module's name, so import the module itself.
@@ -206,7 +206,8 @@ def test_games_add_up_to_the_season(lg: str) -> None:
             mp.setattr(wbb_loaders, "load_ncaa_wbb_possessions", _loader("ncaa_wbb_possessions_2025.parquet"))
             mp.setattr(wbb_loaders, "load_wbb_schedule", _loader("wbb_schedule_2025.parquet"))
             games = wbb_team_game_possessions(2025)
-    assert_games_add_up(games, _rates(lg), 40)
+    # college games carry no season_type column (only the NBA / WNBA frame reads both season types)
+    assert_games_add_up(games, _rates(lg), 40, TEAM_GAME_POSSESSIONS_SCHEMA)
     # a Big Ten team's every game is in the fixture: its all rows are its season games
     team = _big_ten(lg)[0]
     assert (
