@@ -422,7 +422,9 @@ Loads the season's player box logs + team ratings, keeps only games played
 strictly before `as_of_date` (both inputs), computes per-minute
 `player_rates`, and projects each player's line onto their mean
 minutes and the matchup's pace factor (`exp_poss / avg_pace`). Only the
-two teams in the matchup are returned.
+two teams in the matchup are returned. In the NBA the rates are shrunk toward
+each player's minutes-and-role tier, pooled over this season's earlier games
+and the previous regular season (one more box-log read).
 
 **Parameters**
 
@@ -438,7 +440,7 @@ two teams in the matchup are returned.
 
 **Returns**
 
-One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj`. The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the team's minutes, counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
+One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, stat_stl_exp, stat_blk_exp, stat_tov_exp, stat_fgm_exp, stat_ftm_exp, minutes_exp, pace_proj` (a stat the box logs lack comes back null). The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the team's minutes, counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -450,12 +452,17 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 | `stat_fg3m_exp` | Float64 |  |
 | `minutes_exp` | Float64 |  |
 | `pace_proj` | Float64 |  |
+| `stat_stl_exp` | Float64 |  |
+| `stat_blk_exp` | Float64 |  |
+| `stat_tov_exp` | Float64 |  |
+| `stat_fgm_exp` | Float64 |  |
+| `stat_ftm_exp` | Float64 |  |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | The box logs carry no `game_date` (the as-of cut cannot be applied). |
+| `ValueError` | The box logs carry no `game_date` (the as-of cut cannot be applied); or, in the NBA, the previous season has no regular-season box logs or no `starter` values for the rate prior. |
 
 **Example**
 

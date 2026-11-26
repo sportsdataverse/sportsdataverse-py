@@ -174,7 +174,7 @@ Probability a stat finishes strictly above `line`.
 |---|---|---|---|
 | `exp_value` | `float` |  | Projected mean of the stat. |
 | `line` | `float` |  | The prop line. |
-| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `stat` | `str` |  | A `prop_distribution` stat (`"pts"` ... `"ftm"`). |
 | `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League (passed to `prop_distribution`). |
 
 **Returns**
@@ -207,7 +207,7 @@ scale with both projected minutes and pace.
 
 **Returns**
 
-`{"exp_pts", "exp_reb", "exp_ast", "exp_fg3m"}`.
+`{"exp_<stat>": value}` for each `<stat>_per_min` in `rate_row` that is not null: `exp_pts, exp_reb, exp_ast, exp_fg3m`, plus `exp_stl` ... `exp_ftm` from a `player_rates` row whose input carried those stats.
 
 **Example**
 
@@ -224,20 +224,27 @@ line = project_player_line(r, exp_minutes=32.0, pace_factor=1.02)
 Distribution family + parameters for a projected stat mean.
 
 Points -> Normal `(mu, sd)` with `sd = a + b*sqrt(mu)`; counts
-(reb/ast/fg3m) -> Negative-Binomial `(r, p)` matching mean `mu` and
-variance `dispersion*mu` (Poisson if dispersion <= 1).
+(reb/ast/fg3m, and stl/blk/tov/fgm/ftm where the league has their fit) ->
+Negative-Binomial `(r, p)` matching mean `mu` and variance
+`dispersion*mu` (Poisson if dispersion <= 1).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `exp_value` | `float` |  | Projected mean of the stat. |
-| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`, `"stl"`, `"blk"`, `"tov"`, `"fgm"`, `"ftm"`. |
 | `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League; selects that league's fitted SD law and dispersion. |
 
 **Returns**
 
 `(family, params)` where family is `"normal"`, `"nbinom"` or `"poisson"`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `stat` is one of stl/blk/tov/fgm/ftm and the league has no fitted dispersion for it (only the NBA has one). |
 
 **Example**
 

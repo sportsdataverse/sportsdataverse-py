@@ -23,9 +23,11 @@ LEAGUES = pytest.mark.parametrize(("league_id", "prefix", "team_minutes"), [("00
 def _stub_league(monkeypatch, league_id: str, prefix: str) -> pl.DataFrame:
     results = pl.read_parquet(FIXTURES / f"{prefix}results_2024.parquet")
     team_box = pl.read_parquet(FIXTURES / f"{prefix}team_box_2024.parquet")
-    logs = pl.read_parquet(FIXTURES / f"{prefix}player_box_logs_2024.parquet").join(
-        results.select("game_id", pl.col("date").alias("game_date")), on="game_id", how="inner"
-    )
+    logs = (
+        pl.read_parquet(FIXTURES / f"{prefix}player_box_logs_2024.parquet")
+        .join(results.select("game_id", pl.col("date").alias("game_date")), on="game_id", how="inner")
+        .with_columns(pl.lit(False).alias("starter"), pl.lit(2).alias("season_type"))
+    )  # what NBA shrinkage reads
     monkeypatch.setattr(props, "_load_player_logs", lambda season, lg: logs)
     monkeypatch.setattr(ratings_mod, "_league_loaders", lambda lg: (lambda s: results, lambda s: team_box))
     return results.sort("date", "game_id")
