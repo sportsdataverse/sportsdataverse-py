@@ -245,7 +245,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_raw_store_season_frame`](reference/additional/analytics-5#nba_raw_store_season_frame)
 - [`nba_referee_assignments`](reference/additional/analytics-5#nba_referee_assignments)
 - [`nba_score_rows`](reference/additional/analytics-5#nba_score_rows)
-- [`nba_season_sim`](reference/additional/analytics-5#nba_season_sim)
+- [`nba_season_sim`](reference/additional/analytics-6#nba_season_sim)
 - [`nba_season_standings`](reference/additional/analytics-6#nba_season_standings)
 - [`nba_shot_value`](reference/additional/analytics-6#nba_shot_value)
 - [`nba_shot_value_lineups`](reference/additional/analytics-6#nba_shot_value_lineups)

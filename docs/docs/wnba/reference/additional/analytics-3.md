@@ -286,7 +286,7 @@ WNBA postseason games keyed to their series (league_id='10'). See sportsdatavers
 
 **Returns**
 
-One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `round` (1 = first round .. 4 = Finals, from ESPN's `type_abbreviation`; null where ESPN gives none), `round_code`, `round_name` (the game headline without "Game N"), `game_number` (the headline's "Game N"; tip-off order where it has none), `game_id`, `game_date`, `completed`, the home and away `team_id` / `abbreviation` / `display_name` / `score`, `winner_team_id` (null until final), `team_a_id`, `team_b_id`, `team_a_wins` / `team_b_wins` (the series score after this game), and on every row of the series `series_games`, `decided` and `series_winner_team_id` (null until decided): the series' outcome as of the release, not as of that game, so they leak the result into an earlier game's row. Empty input returns that schema with zero rows.
+One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `round` (1 = first round .. 4 = Finals, from ESPN's `type_abbreviation`; null where ESPN gives none), `round_code`, `round_name` (the game headline without "Game N"), `game_number` (the headline's "Game N"; tip-off order in a series with a headline lacking one), `game_id`, `game_date`, `completed`, the home and away `team_id` / `abbreviation` / `display_name` / `score`, `winner_team_id` (null until final), `team_a_id`, `team_b_id`, `team_a_wins` / `team_b_wins` (the series score after this game), and on every row of the series `series_games`, `decided` and `series_winner_team_id` (null until decided): the series' outcome as of the release, not as of that game, so they leak the result into an earlier game's row. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -295,7 +295,7 @@ One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `roun
 | `round` | Int64 | Round number from ESPN's type_abbreviation: 1 first round, 2 second round (NBA conference semifinals), 3 semifinals (NBA conference finals), 4 Finals; null where ESPN gives no round (older seasons). |
 | `round_code` | String | ESPN's type_abbreviation for the round (RD16, QTR, SEMI, FINAL); null where it carries none. |
 | `round_name` | String | The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series). |
-| `game_number` | Int64 | Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves a gap; tip-off order where the headline has no number. |
+| `game_number` | Int64 | Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves a gap; tip-off order for the whole series when one of its headlines has no number. |
 | `game_id` | Int64 | ESPN game id. |
 | `game_date` | String | Game date (US). |
 | `completed` | Boolean | True when the game is final. |

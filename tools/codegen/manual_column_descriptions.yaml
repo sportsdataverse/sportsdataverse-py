@@ -82768,7 +82768,7 @@ nba_playoff_series:
   round_code: ESPN's type_abbreviation for the round (RD16, QTR, SEMI, FINAL); null where it carries none.
   round_name: The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series).
   game_number: 'Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves
-    a gap; tip-off order where the headline has no number.'
+    a gap; tip-off order for the whole series when one of its headlines has no number.'
   game_id: ESPN game id.
   game_date: Game date (US).
   completed: True when the game is final.
@@ -82880,7 +82880,7 @@ wnba_playoff_series:
   round_code: ESPN's type_abbreviation for the round (RD16, QTR, SEMI, FINAL); null where it carries none.
   round_name: The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series).
   game_number: 'Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves
-    a gap; tip-off order where the headline has no number.'
+    a gap; tip-off order for the whole series when one of its headlines has no number.'
   game_id: ESPN game id.
   game_date: Game date (US).
   completed: True when the game is final.

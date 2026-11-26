@@ -316,7 +316,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_raw_store_season_frame](additional/analytics-5.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
 | [nba_referee_assignments](additional/analytics-5.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
 | [nba_score_rows](additional/analytics-5.md#nba_score_rows) | Map the stats.nba.com play-by-play onto the game-flow score rows. |
-| [nba_season_sim](additional/analytics-5.md#nba_season_sim) | Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds. |
+| [nba_season_sim](additional/analytics-6.md#nba_season_sim) | Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds. |
 | [nba_season_standings](additional/analytics-6.md#nba_season_standings) | Standings with the league's tiebreakers from completed regular-season games. |
 | [nba_shot_value](additional/analytics-6.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |
 | [nba_shot_value_lineups](additional/analytics-6.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |

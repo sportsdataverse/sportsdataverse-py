@@ -69,7 +69,7 @@ def nba_playoff_series(
         One row per postseason game (ESPN ``season_type`` 3): ``season``, ``series_id``,
         ``round`` (1 = first round .. 4 = Finals, from ESPN's ``type_abbreviation``; null where
         ESPN gives none), ``round_code``, ``round_name`` (the game headline without "Game N"),
-        ``game_number`` (the headline's "Game N"; tip-off order where it has none), ``game_id``, ``game_date``, ``completed``, the home and away
+        ``game_number`` (the headline's "Game N"; tip-off order in a series with a headline lacking one), ``game_id``, ``game_date``, ``completed``, the home and away
         ``team_id`` / ``abbreviation`` / ``display_name`` / ``score``, ``winner_team_id`` (null
         until final), ``team_a_id``, ``team_b_id``, ``team_a_wins`` / ``team_b_wins`` (the
         series score after this game), and on every row of the series ``series_games``,

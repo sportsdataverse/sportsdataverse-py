@@ -255,7 +255,7 @@ def test_a_box_row_listed_twice_counts_once(lg: str) -> None:
 
 def test_a_game_missing_from_the_release_keeps_the_others_numbers() -> None:
     """``game_number`` is the headline's "Game N", so dropping game 3 of the NBA Finals leaves 1, 2, 4..7
-    (tip-off order would renumber 4..7 as 3..6); a blank headline falls back to tip-off order."""
+    (tip-off order would renumber 4..7 as 3..6); a series with a blank headline is numbered by tip-off."""
     sched = _read("nba", "schedule")
     finals = _games("nba").filter(pl.col("round") == 4).sort("game_number")
     assert finals["game_number"].to_list() == list(range(1, 8))
@@ -266,8 +266,15 @@ def test_a_game_missing_from_the_release_keeps_the_others_numbers() -> None:
     blank = sched.with_columns(
         pl.when(pl.col("game_id") == game1).then(pl.lit("")).otherwise(pl.col("notes_headline")).alias("notes_headline")
     )
-    numbered = playoff_series_games(blank, league="nba").filter(pl.col("game_id") == game1)
-    assert numbered["game_number"].to_list() == [1]
+    numbered = playoff_series_games(blank, league="nba").filter(pl.col("round") == 4).sort("game_date")
+    assert numbered["game_number"].to_list() == list(range(1, 8))
+    # game 1 missing and game 2's headline blank: tip-off order for the series, never a repeated number
+    game2 = finals.filter(pl.col("game_number") == 2)["game_id"].item()
+    both = blank.filter(pl.col("game_id") != game1).with_columns(
+        pl.when(pl.col("game_id") == game2).then(pl.lit("")).otherwise(pl.col("notes_headline")).alias("notes_headline")
+    )
+    mixed = playoff_series_games(both, league="nba").filter(pl.col("round") == 4).sort("game_date")
+    assert mixed["game_number"].to_list() == list(range(1, 7))
 
 
 def test_string_team_ids_order_as_numbers_in_the_series_id() -> None:
