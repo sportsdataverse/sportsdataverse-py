@@ -34,6 +34,7 @@ def corpus():
         pl.read_parquet(FIX / "player_box_logs_2024.parquet")
         .drop_nulls("minutes")
         .join(results.select("game_id", pl.col("date").alias("game_date")), on="game_id", how="left")
+        .with_columns(pl.lit(False).alias("starter"), pl.lit(2).alias("season_type"))  # what NBA shrinkage reads
     )
     assert logs["game_date"].null_count() == 0
     ratings = pl.read_parquet(FIX / "team_ratings_oracle_2024.parquet").select(

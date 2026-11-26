@@ -12364,8 +12364,8 @@
   group: props-minutes-coldstart
   finding: props-team-minutes
   file: sportsdataverse/nba/nba_player_props.py
-  snippet: 'rates = player_rates(logs.sort("game_date", "game_id"))'
-  mutant: 'rates = player_rates(logs)'
+  snippet: '        logs.sort("game_date", "game_id"),'
+  mutant: '        logs,'
   test: tests/nba/test_nba_player_props_team_minutes.py -k traded
   expected: kill
   note: The release logs come newest first, so a traded player would project for his first team.
@@ -12936,6 +12936,54 @@
   expected: kill
   note: A season with no edition answers the current one; it would come back as that season's results.
 
+# --- NBA props rate prior: per-minute rates shrunk toward a minutes-and-role tier ---------------------
+# Killers: tests/nba/test_nba_player_props_rate_prior.py on the committed real Boston / New York 2024-25 and
+# early 2025-26 release rows, against a plain-Python oracle of the tiers and pooled rates.
+- id: nba-props-rate-prior-k-zero
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        ks = float(k.get(s, 0.0))'
+  mutant: '        ks = 0.0'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k "formula or short_samples or previous_regular"
+  expected: kill
+  note: The shrinkage off -- every rate is the raw rate again, including a two-game player's.
+- id: nba-props-rate-prior-no-starter-split
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '(starter_share >= 0.5)'
+  mutant: '(starter_share >= 2.0)'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k formula
+  expected: kill
+  note: Starters and bench players of the same minutes would pool into one tier.
+- id: nba-props-rate-prior-ignores-last-season
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: 'frames = {"box_logs": df} if prior_logs is None else {"box_logs": df, "prior_logs": _played(prior_logs)}'
+  mutant: 'frames = {"box_logs": df}'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k formula
+  expected: kill
+  note: The tier prior would pool only this season's few games, so opening night has no prior.
+- id: nba-props-rate-prior-pools-playoffs
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '_load_player_logs(season - 1, league_id).filter(pl.col("season_type") == 2)'
+  mutant: '_load_player_logs(season - 1, league_id)'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k previous_regular
+  expected: kill
+  note: Last season's playoff games would enter the tier prior; the fit and the 2021-22 test used the regular season.
+- id: nba-props-rate-prior-prior-uncut
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        prior = prior.filter(pl.col("game_date") < as_of_date)'
+  mutant: '        prior = prior'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: The prior frame is cut at the as-of date too; the as-of corpus serves the same season as "last season", so uncut, the target game's own line reaches the tier prior (own-line probe red).
 - id: bb-war-tier-counts-zero-teams
   group: bb-war-tier
   finding: bb-g61-depth-ladder
