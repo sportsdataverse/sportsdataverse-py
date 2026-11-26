@@ -982,6 +982,7 @@ categories:
       - sportsdataverse.mbb.mbb_ncaa_possessions
       - sportsdataverse.nba.nba_possessions
       - sportsdataverse.nfl.nfl_market
+      - sportsdataverse.nfl.nfl_qb_layer
       - sportsdataverse.nhl.nhl_market
       - sportsdataverse.pwhl.pwhl_market
       - sportsdataverse.nba.nba_player_props

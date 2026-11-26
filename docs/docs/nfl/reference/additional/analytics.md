@@ -149,6 +149,55 @@ avail = nfl_availability_projection([2021, 2022, 2023], 2024)
 avail.sort("proj_games").head()
 ```
 
+### nfl_expected_starters {#nfl_expected_starters}
+
+`nfl_expected_starters(schedule: 'pl.DataFrame', *, depth_charts: 'pl.DataFrame | None' = None, injuries: 'pl.DataFrame | None' = None, config: 'QBLayerConfig | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Pregame expected starting QB, backup, report status and start probability per team-game.
+
+1. A timestamped depth chart (nflverse's `dt` format, 2025 on): QB1 and QB2 of the
+   team's last snapshot strictly before kickoff (`gameday` + `gametime`,
+   US Eastern).
+2. Otherwise the team's realized starter in its previous game of the season, with no
+   known backup. A team's first game with no snapshot has no expected starter.
+
+`status` is the expected starter's `report_status` on that week's injury report
+(Out / Doubtful / Questionable; null, Probable or absent is `none`), and `p_start`
+the fitted chance he starts at that status. The realized starter columns of the
+schedule (`home_qb_id` / `away_qb_id`) are read only for rule 2's previous game.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `schedule` | `DataFrame` |  | `sportsdataverse.nfl.load_nfl_schedule` rows (`game_id`, `season`, `week`, `gameday`, `gametime`, `home_team`, `away_team`, `home_qb_id`, `away_qb_id`). |
+| `depth_charts` | `DataFrame \| None` | `None` | `sportsdataverse.nfl.load_nfl_depth_charts` rows in the timestamped (`dt`) format. `None` uses rule 2 only. |
+| `injuries` | `DataFrame \| None` | `None` | `sportsdataverse.nfl.load_nfl_injuries` rows (`season`, `week`, `team`, `gsis_id`, `report_status`). `None` gives every starter status `none`. |
+| `config` | `QBLayerConfig \| None` | `None` | Layer constants; defaults to `QB_LAYER_CONSTANTS["modern"]`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+
+**Returns**
+
+One row per team-game: `game_id` / `team` / `expected_qb_id` / `backup_qb_id` / `starter_source` (`depth_chart` / `previous_start` / null) / `status` (Utf8), `kickoff` / `chart_dt` (UTC Datetime; `chart_dt` is the snapshot used, null under rule 2), `p_start` (Float64). Zero-row on an empty schedule. `team` is the franchise's current code (`OAK` -> `LV`, `SD` -> `LAC`, `STL` -> `LA`), as in the play-by-play.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | On a game with no `gametime`, depth charts without `dt`, an injury or depth-chart team code the schedule does not have, or a `p_start` missing a status. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_depth_charts, load_nfl_injuries, load_nfl_schedule
+from sportsdataverse.nfl.nfl_qb_layer import nfl_expected_starters
+starters = nfl_expected_starters(
+    load_nfl_schedule([2025]),
+    depth_charts=load_nfl_depth_charts([2025]),
+    injuries=load_nfl_injuries([2025]),
+)
+```
+
 ### nfl_game_script {#nfl_game_script}
 
 `nfl_game_script(seasons: 'Union[int, List[int]]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
@@ -442,6 +491,142 @@ Per `(season, punter_player_id)`: `punts`, `gross_avg`, `net_avg`, `exp_net_avg`
 from sportsdataverse.nfl.nfl_special_teams import nfl_punter_value
 pv = nfl_punter_value([2023])
 print(pv.head())
+```
+
+### nfl_qb_dropbacks {#nfl_qb_dropbacks}
+
+`nfl_qb_dropbacks(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+One row per offensive pass or run play, with the QB on dropbacks.
+
+The shared input of the layer: QB values read the dropback rows, and each
+team's dropback share reads all of them.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | nflverse-schema play-by-play (`sportsdataverse.nfl.load_nfl_pbp`) with `game_id`, `season`, `game_date`, `posteam`, `play_type`, `qb_dropback`, `qb_epa`, `passer_player_id` and `rusher_player_id`. |
+
+**Returns**
+
+`game_id` / `team` / `qb_id` (Utf8; `qb_id` null off dropbacks), `season` (Int64), `game_date` (Date), `qb_epa` (Float64), `is_dropback` (Boolean). Plays with `play_type` other than `pass` / `run` are dropped; a dropback with no QB id or no `qb_epa` is kept as a play but not as a dropback.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.nfl_qb_layer import nfl_qb_dropbacks
+db = nfl_qb_dropbacks(load_nfl_pbp([2024]))
+```
+
+### nfl_qb_margin_mixture {#nfl_qb_margin_mixture}
+
+`nfl_qb_margin_mixture(margins: 'Sequence[float]', weights: 'Sequence[float]', *, sigma: 'float') -> 'dict[str, float]'`
+
+Mean, win probability and 80% interval of a Normal mixture of home margins.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `margins` | `Sequence[float]` |  | Component means (points, home minus away). |
+| `weights` | `Sequence[float]` |  | Component weights (non-negative; renormalised to sum to 1). |
+| `sigma` | `float` |  | Common component standard deviation (the spine's `margin_sd`). |
+
+**Returns**
+
+`{"mean", "win_prob", "lo80", "hi80"}`: the mixture mean, `P(margin > 0)`, and its 0.10 / 0.90 quantiles (bisection to 1e-6 points). One component reduces to `m +/- 1.2816 * sigma`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | On empty or mismatched inputs, or weights that do not sum to a positive number. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_qb_layer import nfl_qb_margin_mixture
+nfl_qb_margin_mixture([3.0, -2.0], [0.7, 0.3], sigma=13.02)
+```
+
+### nfl_qb_predict_games {#nfl_qb_predict_games}
+
+`nfl_qb_predict_games(schedule: 'pl.DataFrame', pbp: 'pl.DataFrame', *, starters: 'pl.DataFrame | None' = None, starter: "Literal['expected', 'realized']" = 'expected', era: 'str' = 'modern', config: 'QBLayerConfig | None' = None, ratings_config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'`
+
+Base spine and QB-layer pregame margin, win probability and 80% interval per game.
+
+For each game date the spine's efficiency ratings are fitted on that season's plays
+from games strictly before the date (as `sportsdataverse.nfl.nfl_ratings`
+with `as_of_date`), QB values on career dropbacks before the date, and each
+team's dropback exposure on the same window. `base_*` is the shipped spine;
+`qb_*` adds the starter shift and the start-probability mixture.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `schedule` | `DataFrame` |  | The games to price (`sportsdataverse.nfl.load_nfl_schedule` rows; `location == "Neutral"` marks a neutral site). |
+| `pbp` | `DataFrame` |  | nflverse play-by-play covering the priced seasons and the QB history (from `config.history_start_season`). |
+| `starters` | `DataFrame \| None` | `None` | `nfl_expected_starters` output, required for `starter="expected"`. |
+| `starter` | `Literal['expected', 'realized']` | `'expected'` | `"expected"` (the pregame arm) or `"realized"` (the schedule's `home_qb_id` / `away_qb_id` with `p = 1`: an upper bound, never a pregame input). |
+| `era` | `str` | `'modern'` | Spine constants era (`hfa`, `points_per_net`, `margin_sd`). |
+| `config` | `QBLayerConfig \| None` | `None` | Layer constants; defaults to `QB_LAYER_CONSTANTS["modern"]`. |
+| `ratings_config` | `RatingsConfig \| None` | `None` | Ridge constants; defaults to `RatingsConfig`. |
+
+**Returns**
+
+One row per priced game with a rating for both teams (games before either team has a rated play are dropped): `game_id` / `home_team` / `away_team` (Utf8, team codes relocated as in `nfl_expected_starters`), `season` / `week` (Int64), `neutral_site` (Boolean); `base_margin` / `base_win_prob` / `base_lo80` / `base_hi80` (the shipped spine) and `qb_margin` / `qb_win_prob` / `qb_lo80` / `qb_hi80` (the layer's mixture mean, P(home wins) and 80% interval), all Float64; per side `*_qb_id` / `*_status` (Utf8), `*_p_start` and `*_shift` (Float64, the starter's shift to `adj_net` in EPA per play) and `*_layer_applied` (Boolean, False when the side had no starter or no rated dropbacks and the layer left it unchanged).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `starter="expected"` and `starters` is None. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp, load_nfl_schedule
+from sportsdataverse.nfl.nfl_qb_layer import nfl_expected_starters, nfl_qb_predict_games
+sched = load_nfl_schedule([2025]).filter(pl.col("game_type") == "REG")
+pbp = load_nfl_pbp(list(range(2006, 2026)))
+preds = nfl_qb_predict_games(sched, pbp, starters=nfl_expected_starters(sched))
+```
+
+### nfl_qb_values {#nfl_qb_values}
+
+`nfl_qb_values(dropbacks: 'pl.DataFrame', *, as_of_date: 'datetime.date', config: 'QBLayerConfig | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Shrunk career EPA per dropback for every QB, as of a date.
+
+`qb_value = (n * e + k * prior) / (n + k)` over the QB's dropbacks in games
+strictly before `as_of_date` (seasons from `config.history_start_season`),
+with `prior` the replacement level below `new_qb_dropbacks` career
+dropbacks and the league mean from there on.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dropbacks` | `DataFrame` |  | `nfl_qb_dropbacks` output. |
+| `as_of_date` | `date` |  | Exclusive cutoff (the game's date). |
+| `config` | `QBLayerConfig \| None` | `None` | Layer constants; defaults to `QB_LAYER_CONSTANTS["modern"]`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+
+**Returns**
+
+One row per QB: `qb_id` (Utf8), `dropbacks` (Int64), `epa_per_dropback` (Float64, raw), `qb_value` (Float64, shrunk). A QB absent from the frame has no row; callers value him at the replacement level.
+
+**Example**
+
+```python
+import datetime as dt
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.nfl_qb_layer import nfl_qb_values, nfl_qb_dropbacks
+db = nfl_qb_dropbacks(load_nfl_pbp(list(range(2006, 2025))))
+values = nfl_qb_values(db, as_of_date=dt.date(2024, 10, 1))
 ```
 
 ### nfl_season_standings {#nfl_season_standings}
