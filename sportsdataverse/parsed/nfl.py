@@ -325,6 +325,7 @@ from sportsdataverse.nfl import nfl_availability_projection as nfl_availability_
 from sportsdataverse.nfl import nfl_clear_token_cache as nfl_clear_token_cache  # noqa: F401
 from sportsdataverse.nfl import nfl_compute_results as nfl_compute_results  # noqa: F401
 from sportsdataverse.nfl import nfl_draft_projection as nfl_draft_projection  # noqa: F401
+from sportsdataverse.nfl import nfl_expected_starters as nfl_expected_starters  # noqa: F401
 from sportsdataverse.nfl import nfl_fantasy_projection as nfl_fantasy_projection  # noqa: F401
 from sportsdataverse.nfl import nfl_game_details as nfl_game_details  # noqa: F401
 from sportsdataverse.nfl import nfl_game_pbp as nfl_game_pbp  # noqa: F401
@@ -354,6 +355,10 @@ from sportsdataverse.nfl import nfl_player_props as nfl_player_props  # noqa: F4
 from sportsdataverse.nfl import nfl_players_crosswalk as nfl_players_crosswalk  # noqa: F401
 from sportsdataverse.nfl import nfl_predict_games as nfl_predict_games  # noqa: F401
 from sportsdataverse.nfl import nfl_punter_value as nfl_punter_value  # noqa: F401
+from sportsdataverse.nfl import nfl_qb_dropbacks as nfl_qb_dropbacks  # noqa: F401
+from sportsdataverse.nfl import nfl_qb_margin_mixture as nfl_qb_margin_mixture  # noqa: F401
+from sportsdataverse.nfl import nfl_qb_predict_games as nfl_qb_predict_games  # noqa: F401
+from sportsdataverse.nfl import nfl_qb_values as nfl_qb_values  # noqa: F401
 from sportsdataverse.nfl import nfl_ratings as nfl_ratings  # noqa: F401
 from sportsdataverse.nfl import nfl_season_standings as nfl_season_standings  # noqa: F401
 from sportsdataverse.nfl import nfl_simulations as nfl_simulations  # noqa: F401
@@ -661,6 +666,7 @@ __all__ = [
     "nfl_compute_results",
     "nfl_draft_picks",
     "nfl_draft_projection",
+    "nfl_expected_starters",
     "nfl_fantasy_projection",
     "nfl_game_details",
     "nfl_game_details_by_slug",
@@ -696,6 +702,10 @@ __all__ = [
     "nfl_players_crosswalk",
     "nfl_predict_games",
     "nfl_punter_value",
+    "nfl_qb_dropbacks",
+    "nfl_qb_margin_mixture",
+    "nfl_qb_predict_games",
+    "nfl_qb_values",
     "nfl_ratings",
     "nfl_rosters",
     "nfl_season_standings",

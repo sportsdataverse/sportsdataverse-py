@@ -18,7 +18,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [nflverse data releases](#nflverse-data-releases) | `github.com` | 48 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 23 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 174 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 179 | — |
 
 ## ESPN {#espn}
 
@@ -143,12 +143,17 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 - [`calculate_nfl_standings`](reference/additional/analytics#calculate_nfl_standings)
 - [`compose_counting_projection`](reference/additional/analytics#compose_counting_projection)
 - [`nfl_availability_projection`](reference/additional/analytics#nfl_availability_projection)
+- [`nfl_expected_starters`](reference/additional/analytics#nfl_expected_starters)
 - [`nfl_game_script`](reference/additional/analytics#nfl_game_script)
 - [`nfl_play_call_probabilities`](reference/additional/analytics#nfl_play_call_probabilities)
 - [`nfl_play_call_tendencies`](reference/additional/analytics#nfl_play_call_tendencies)
 - [`nfl_player_props`](reference/additional/analytics#nfl_player_props)
 - [`nfl_predict_games`](reference/additional/analytics#nfl_predict_games)
 - [`nfl_punter_value`](reference/additional/analytics#nfl_punter_value)
+- [`nfl_qb_dropbacks`](reference/additional/analytics#nfl_qb_dropbacks)
+- [`nfl_qb_margin_mixture`](reference/additional/analytics#nfl_qb_margin_mixture)
+- [`nfl_qb_predict_games`](reference/additional/analytics#nfl_qb_predict_games)
+- [`nfl_qb_values`](reference/additional/analytics#nfl_qb_values)
 - [`nfl_season_standings`](reference/additional/analytics#nfl_season_standings)
 - [`nfl_special_teams_epa`](reference/additional/analytics#nfl_special_teams_epa)
 - [`playcall_features`](reference/additional/analytics#playcall_features)

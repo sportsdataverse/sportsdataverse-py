@@ -79,6 +79,28 @@ class PropConfig:
     proj_sds: Dict[str, float] = field(default_factory=dict)
 
 
+@dataclass(frozen=True)
+class QBLayerConfig:
+    """Starting-QB layer constants (the opt-in layer on model 2), one row per era.
+
+    ``k`` is the shrinkage weight in dropbacks; ``league`` and ``replacement`` are
+    the two priors in EPA per dropback (``replacement`` for a QB with fewer than
+    ``new_qb_dropbacks`` career dropbacks); ``gamma`` scales the rating shift (1 =
+    full pass-through); ``p_start`` maps the expected starter's final injury-report
+    status (``none`` / ``Questionable`` / ``Doubtful`` / ``Out``) to the chance he
+    starts. All are fitted by ``tools/models/nfl_prediction/fit_qb_layer.py`` on
+    seasons 2015-2025 and mirrored in ``qb_layer_constants.json`` beside it.
+    """
+
+    k: float
+    gamma: float
+    league: float
+    replacement: float
+    p_start: Dict[str, float] = field(default_factory=dict)
+    new_qb_dropbacks: int = 100
+    history_start_season: int = 2006
+
+
 NFL_CONSTANTS: Dict[str, PredictConfig] = {
     # LOST SCRIPT: dev/nfl_prediction/fit_pregame.py was never committed to any branch and is not on disk,
     # so this value cannot be re-derived from the repository (docs/docs/architecture/model-lineage.md).
@@ -236,3 +258,44 @@ def as_of_ratings_split(
             past = as_of_ratings_split(results, dt.date(2023, 11, 1))
     """
     return results.filter(pl.col(date_col) < cutoff_date)
+
+
+# Fitted by tools/models/nfl_prediction/fit_qb_layer.py on regular seasons 2015-2025 (careers from 2006);
+# the same numbers, with the fit's counts and profiles, are in tools/models/nfl_prediction/qb_layer_constants.json.
+QB_LAYER_CONSTANTS: Dict[str, QBLayerConfig] = {
+    # k: grid argmin of the dropback-weighted next-game error (regular-season QB-games, 5+ dropbacks);
+    # gamma: no-intercept least squares of (result - base margin) on the realized-starter shift, weeks 5-18,
+    # 2,197 games, season-week clustered SE 0.30; p_start: share of team-games the previous-game starter
+    # started, by his final report status (n = 5102 / 179 / 27 / 130).
+    "modern": QBLayerConfig(
+        k=150.0,
+        gamma=2.2679,
+        league=0.05172,
+        replacement=-0.07467,
+        p_start={"Doubtful": 0.0741, "Out": 0.0231, "Questionable": 0.5978, "none": 0.9343},
+    ),
+}
+
+
+def get_qb_layer_constants(era: str = "modern") -> QBLayerConfig:
+    """Return the starting-QB layer constants for an era.
+
+    Args:
+        era: Era key in ``QB_LAYER_CONSTANTS`` (currently only ``"modern"``).
+
+    Returns:
+        The frozen :class:`QBLayerConfig` for that era.
+
+    Raises:
+        ValueError: If ``era`` is not a known key.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.nfl_prediction_constants import get_qb_layer_constants
+            cfg = get_qb_layer_constants("modern")
+            print(cfg.k, cfg.gamma)
+    """
+    if era not in QB_LAYER_CONSTANTS:
+        raise ValueError(f"Unknown era {era!r}; known: {sorted(QB_LAYER_CONSTANTS)}")
+    return QB_LAYER_CONSTANTS[era]
