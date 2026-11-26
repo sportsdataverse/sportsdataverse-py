@@ -140,7 +140,7 @@ def _add_columns(
     out: pl.DataFrame,
     years: list[int],
     pre_draft_features: bool,
-    college_prior: "Optional[pl.DataFrame]",
+    college_prior: pl.DataFrame | None,
     gleague_bridge: bool,
 ) -> pl.DataFrame:
     """The optional information columns of :func:`nba_draft_model`; none of them moves the value."""
