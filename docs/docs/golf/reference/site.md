@@ -195,7 +195,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/golf/pga/groups`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/golf/pga/groups](https://site.api.espn.com/apis/site/v2/sports/golf/pga/groups)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/golf/tgl/groups](https://site.api.espn.com/apis/site/v2/sports/golf/tgl/groups)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -228,7 +228,7 @@ ESPN endpoint.
 ### Example {#espn_golf_conferences-example}
 
 ```python
-espn_golf_conferences(league='pga')
+espn_golf_conferences(league='tgl')
 ```
 
 ## espn_golf_statistics_league
@@ -270,7 +270,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams?limit=1000](https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams?limit=1000)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/golf/tgl/teams?limit=1000](https://site.api.espn.com/apis/site/v2/sports/golf/tgl/teams?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -310,7 +310,7 @@ ESPN endpoint.
 ### Example {#espn_golf_teams_site-example}
 
 ```python
-espn_golf_teams_site(league='pga')
+espn_golf_teams_site(league='tgl')
 ```
 
 ## espn_golf_team
@@ -444,7 +444,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/v2/sports/golf/pga/standings`
 
-**Valid URL:** [https://site.api.espn.com/apis/v2/sports/golf/pga/standings](https://site.api.espn.com/apis/v2/sports/golf/pga/standings)
+**Valid URL:** [https://site.api.espn.com/apis/v2/sports/golf/tgl/standings](https://site.api.espn.com/apis/v2/sports/golf/tgl/standings)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -503,5 +503,5 @@ ESPN endpoint.
 ### Example {#espn_golf_standings-example}
 
 ```python
-espn_golf_standings(league='pga')
+espn_golf_standings(league='tgl')
 ```

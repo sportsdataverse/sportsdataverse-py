@@ -622,11 +622,12 @@ def _rounds(scores: Any, key: str, number: str | None = None) -> dict[str, int |
 
     With ``number``, each dict says its own round (``roundNum``); otherwise the list order is the round order.
     """
-    scores = _l(scores)
     if number is not None:
-        by = {_int(r.get(number)): r for r in scores}
+        by = {_int(r.get(number)): r for r in _l(scores)}
         return {f"round_{i}": _int(by[i].get(key)) if i in by else None for i in range(1, 5)}
-    return {f"round_{i}": _int(scores[i - 1].get(key)) if i <= len(scores) else None for i in range(1, 5)}
+    # positional: a null slot stays a slot, so later rounds keep their numbers
+    slots = [r if isinstance(r, dict) else {} for r in scores] if isinstance(scores, list) else []
+    return {f"round_{i}": _int(slots[i - 1].get(key)) if i <= len(slots) else None for i in range(1, 5)}
 
 
 def parse_pgatour_schedule_years(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:

@@ -252,7 +252,7 @@ def espn_golf_conferences(
     Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/groups``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/golf/pga/groups
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/golf/tgl/groups
 
     Args:
         return_parsed: parse the payload through parse_groups -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -270,7 +270,7 @@ def espn_golf_conferences(
     Example:
         Quick start::
 
-            espn_golf_conferences(league='pga')
+            espn_golf_conferences(league='tgl')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_golf_conferences", kwargs)
@@ -345,7 +345,7 @@ def espn_golf_teams_site(
     Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams?limit=1000
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/golf/tgl/teams?limit=1000
 
     Args:
         limit: Maximum number of items to return.
@@ -364,7 +364,7 @@ def espn_golf_teams_site(
     Example:
         Quick start::
 
-            espn_golf_teams_site(league='pga')
+            espn_golf_teams_site(league='tgl')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_golf_teams_site", kwargs)
@@ -497,7 +497,7 @@ def espn_golf_standings(
     Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
 
     Endpoint: ``GET https://site.api.espn.com/apis/v2/sports/{sport}/{league}/standings``
-    Example URL: https://site.api.espn.com/apis/v2/sports/golf/pga/standings
+    Example URL: https://site.api.espn.com/apis/v2/sports/golf/tgl/standings
 
     Args:
         season: Season year (e.g. 2024).
@@ -518,7 +518,7 @@ def espn_golf_standings(
     Example:
         Quick start::
 
-            espn_golf_standings(league='pga')
+            espn_golf_standings(league='tgl')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_golf_standings", kwargs)
@@ -2208,7 +2208,7 @@ def espn_golf_teams_core(
     Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/teams``
-    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/teams?limit=1000&page=1
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/tgl/teams?limit=1000&page=1
 
     Args:
         limit: Maximum number of items to return.
@@ -2228,7 +2228,7 @@ def espn_golf_teams_core(
     Example:
         Quick start::
 
-            espn_golf_teams_core(league='pga')
+            espn_golf_teams_core(league='tgl')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_golf_teams_core", kwargs)

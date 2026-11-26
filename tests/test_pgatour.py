@@ -444,3 +444,10 @@ def test_leaderboard_stats_unhashable_ids_never_raise():
     }
     df = P.parse_pgatour_leaderboard_stats(raw)
     assert df.height == 1 and df.schema == pl.Schema(P.LEADERBOARD_STATS_SCHEMA)
+
+
+def test_positional_rounds_keep_a_null_slot():
+    # a missing round in the list must not shift the later ones down a round
+    assert P._rounds([{"score": "70"}, None, {"score": "72"}], "score") == {
+        "round_1": 70, "round_2": None, "round_3": 72, "round_4": None,
+    }  # fmt: skip

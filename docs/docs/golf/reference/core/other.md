@@ -438,7 +438,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/teams?limit=1000&page=1)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/golf/leagues/tgl/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/golf/leagues/tgl/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -479,7 +479,7 @@ ESPN endpoint.
 ### Example {#espn_golf_teams_core-example}
 
 ```python
-espn_golf_teams_core(league='pga')
+espn_golf_teams_core(league='tgl')
 ```
 
 ## espn_golf_team_core

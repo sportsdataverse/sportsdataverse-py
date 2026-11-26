@@ -129,6 +129,9 @@ endpoints:
   scope: universal
   path: /{sport}/{league}/groups
   parser: parse_groups
+  league_example_args:
+    golf:  # the team shorts answer only for the team match-play leagues
+      league: tgl
 - short: statistics_league
   returns_schema: statistics_league
   scope: universal
@@ -149,6 +152,9 @@ endpoints:
     default: 1000
   parser: parse_teams
   returns_schema: teams
+  league_example_args:
+    golf:  # the team shorts answer only for the team match-play leagues
+      league: tgl
 - short: team
   returns_schema: team
   scope: universal
@@ -366,6 +372,9 @@ endpoints:
     type: str
   parser: parse_standings
   returns_schema: standings
+  league_example_args:
+    golf:  # the team shorts answer only for the team match-play leagues
+      league: tgl
 - short: rankings
   returns_schema: rankings
   scope: ncaa
