@@ -73,7 +73,7 @@ the same recipe from the same release; the other 15 columns came back identical,
 
 `ratings_weekly_2024.parquet` (2026-11-25): the published 2024 `cfb_ratings_weekly` snapshots
 (2026-09-27 vintage, all 2,079 rows) with `adj_off_epa`, `adj_def_epa` and `adj_net` rebuilt by the
-current `efficiency_ratings` on the same as-of plays (regular-season weeks `<= through_week`,
-FBS-vs-FBS, kneels dropped). Under the previous engine that rebuild reproduces the published
-values to 6e-14; that old-engine `adj_net` is kept as `adj_net_pre` so the backtest scores the
-replaced system live (the tool writes it). Rebuild: `python -m tools.validation.cfb_ratings_weekly_rebuild --out <f> 2024`.
+current `efficiency_ratings` (score-margin garbage-time rule on the fit and own EPA) on the same
+as-of plays (regular-season weeks `<= through_week`, FBS-vs-FBS, kneels dropped). Under the
+previous engine that rebuild reproduces the published values to 6e-14; the published `adj_net` is
+kept as `adj_net_pre` so the backtest scores the replaced system live (the tool writes it). Rebuild: `python -m tools.validation.cfb_ratings_weekly_rebuild --out <f> 2024`.

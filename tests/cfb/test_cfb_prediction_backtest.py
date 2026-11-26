@@ -61,22 +61,23 @@ _BURN_IN_WEEK = 5  # weeks 1-4 rest on too few games to rate
 # Floors: MEASURED on this fixture, then given headroom. The measured value is
 # recorded beside each so a future change can see exactly what moved.
 _MIN_GAMES = 500  # measured 557
-_MARGIN_MAE_FLOOR = 14.65  # measured 12.90 (replaced system 13.30, see _REPLACED_CONSTANTS)
-_BRIER_FLOOR = 0.2298  # measured 0.1945 (replaced system 0.2077)
-_ACCURACY_FLOOR = 0.6089  # measured 0.6984 (replaced system 0.6768)
-_SPREAD_AGREEMENT_FLOOR = 6.41  # measured 5.03 (replaced system 5.93) -- AGREEMENT, not accuracy
-#: Calibration slope of actual ~ predicted margin. MEASURED 0.862 on this
-#: fixture, game-bootstrap 95% CI [0.756, 0.975] (2,000 resamples, seed 0);
+_MARGIN_MAE_FLOOR = 14.65  # measured 12.74 (replaced system 13.30, see _REPLACED_CONSTANTS)
+_BRIER_FLOOR = 0.2298  # measured 0.1946 (replaced system 0.2077)
+_ACCURACY_FLOOR = 0.6089  # measured 0.7092 (replaced system 0.6768)
+_SPREAD_AGREEMENT_FLOOR = 6.41  # measured 4.86 (replaced system 5.93) -- AGREEMENT, not accuracy
+#: Calibration slope of actual ~ predicted margin. MEASURED 0.870 on this
+#: fixture, game-bootstrap 95% CI [0.757, 0.981] (2,000 resamples, seed 0);
 #: the band is that CI with 0.05 headroom each side. The slope FELL from 0.926
-#: (pre-2026-11-25 ratings and constants): 2024 margins now run ~14% wide.
-#: Pooled over the 2024-2025 holdout the refit's slope is 0.91. A scale error is what the
-#: MAE floor cannot see: predictions 1.7x too wide score slope 0.507 and still
+#: (pre-2026-11-25 ratings and constants; 0.862 under the naive-WP band): 2024
+#: margins run ~13% wide. Pooled over the 2024-2025 holdout the refit's slope is
+#: 0.93. A scale error is what the
+#: MAE floor cannot see: predictions 1.7x too wide score slope 0.512 and still
 #: clear MAE 14.65.
 _CAL_SLOPE_BAND = (0.70, 1.03)
 #: The system these constants replaced: the 2026-09-27 constants on the published
 #: snapshots' `adj_net` (`adj_net_pre`, the pre-2026-11-25 engine: spread-aware
 #: 0.1-0.9 band, lambda 0.035). Scored live on the same games below; it measures
-#: MAE 13.30, Brier 0.2077, logloss 0.6013 against the current 12.90 / 0.1945 / 0.5703.
+#: MAE 13.30, Brier 0.2077, logloss 0.6013 against the current 12.74 / 0.1946 / 0.5688.
 _REPLACED_CONSTANTS = replace(
     get_constants("modern"),
     hfa_points=2.7936,
@@ -207,7 +208,7 @@ def test_beats_the_superseded_constants_on_the_same_games() -> None:
     """Regression guard: no worse than the system it replaced, scored live on the same games.
 
     The replaced system is the 2026-09-27 constants on the pre-2026-11-25 ratings
-    (``adj_net_pre``): MAE 13.30 against the current 12.90. A comparison, not a
+    (``adj_net_pre``): MAE 13.30 against the current 12.74. A comparison, not a
     threshold, so it survives any future refit.
     """
     assert _REPLACED["game_id"].to_list() == _PREDS["game_id"].to_list()  # same games, same order
@@ -228,8 +229,8 @@ def test_beats_superseded_constants_on_proper_scoring_rules() -> None:
     y = _PREDS["y"].to_numpy()
     new_b = float(brier_score(y, _PREDS["home_win_prob"].to_numpy()))
     old_b = float(brier_score(y, _REPLACED["home_win_prob"].to_numpy()))
-    assert new_b < old_b  # measured 0.1945 vs 0.2077
-    assert _logloss(_PREDS) < _logloss(_REPLACED)  # measured 0.5703 vs 0.6013
+    assert new_b < old_b  # measured 0.1946 vs 0.2077
+    assert _logloss(_PREDS) < _logloss(_REPLACED)  # measured 0.5688 vs 0.6013
 
 
 def test_win_prob_discriminates_favorites_from_dogs() -> None:
@@ -265,13 +266,14 @@ def test_win_prob_discriminates_favorites_from_dogs() -> None:
     dog_rate = float(dogs["y"].mean())
     fav_rate = float(favs["y"].mean())
     assert dog_rate < 0.5 < fav_rate, (dog_rate, fav_rate)
-    assert fav_rate - dog_rate >= 0.22, (dog_rate, fav_rate)  # measured 0.379 (was 0.271)
+    # measured 0.401 (0.379 under the naive-WP band, 0.271 before)
+    assert fav_rate - dog_rate >= 0.22, (dog_rate, fav_rate)
 
 
 _PRIOR_PACE = pl.read_parquet(_FIX / "prior_pace_2023.parquet")
 
-#: Measured on this fixture with the pace blend live: 12.9771. Floor carries
-#: headroom. Raw (no prior) measures 13.1355, so the floor sits BELOW that --
+#: Measured on this fixture with the pace blend live: 12.9606. Floor carries
+#: headroom. Raw (no prior) measures 13.1038, so the floor sits BELOW that --
 #: a regression that silently disables the blend cannot pass this.
 _TOTAL_MAE_FLOOR = 13.10
 
