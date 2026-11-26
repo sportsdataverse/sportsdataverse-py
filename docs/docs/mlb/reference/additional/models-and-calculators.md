@@ -1,7 +1,7 @@
 ---
 title: "MLB — additional Python functions — Models and calculators"
 sidebar_label: "Models and calculators"
-sidebar_position: 5
+sidebar_position: 6
 description: "MLB — additional Python functions — Models and calculators — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MLB — additional Python functions — Models and calculators

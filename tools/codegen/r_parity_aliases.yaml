@@ -3,7 +3,8 @@
 # the target package's r_exports.yaml. Shape: {league: {python_fn: r_fn}}.
 # - NFL: sdv's canonical `load_nfl_*` loaders map to nflreadr's bare `load_*` (nflreadpy-style).
 # MLB wrappers were renamed from `mlb_api_*` to `mlb_*` in 0.0.65+ and now match
-# baseballr's names exactly — generate.py handles identity automatically; no mlb: section needed.
+# baseballr's names exactly — generate.py handles identity automatically; the mlb: section
+# lists only the hand-written loaders whose names diverge.
 mbb:
   # hoopR names diverging from sdv-py's (hoopR-cran-parity-audit 06, 2026-10-30). KenPom: hoopR
   # splits a page into one function per table, so a Python function that returns the whole page
@@ -46,6 +47,8 @@ mbb:
   load_mbb_player_season_stats: load_mbb_player_stats
   load_mbb_team_boxscore: load_mbb_team_box
   load_mbb_team_season_stats: load_mbb_team_stats
+mlb:
+  load_mlb_chadwick_register: chadwick_player_lu
 nba:
   # stats.nba.com wrappers carry an nba_stats_ prefix where hoopR uses nba_; the ESPN loaders say
   # boxscore / season_stats where hoopR says box / stats.
