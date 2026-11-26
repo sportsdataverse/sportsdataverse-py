@@ -1287,8 +1287,7 @@ def _seed_field(
         st = st.with_columns(pl.lit(None, dtype=pl.Float64).alias("rank"))
     n = pl.lit(playoff_seeds, dtype=pl.Int64)
     is_champ = pl.col("conf_champ") == True  # noqa: E712
-    # fill_null: a null conference must not reach the _g6_cum cum_sum as null
-    g6_team = pl.col("conference").is_in(_G6_CONFS).fill_null(False)
+    g6_team = pl.col("conference").is_in(_G6_CONFS).fill_null(False)  # null conf -> not G6
     ordered = (
         st.with_columns(pl.col("rank").fill_null(float("inf")))
         .sort(
@@ -1375,8 +1374,7 @@ def cfb_playoff_seeds(
     ``cfb_simulations()`` takes an explicit ``autobid`` (default ``"2026"``)
     where :func:`sportsdataverse.cfb.cfb_simulations` follows the season.
 
-    Neither engine reads ``postseason_eligible`` when seeding, so an
-    ineligible team can still take the G6, Notre Dame or an at-large bid.
+    Neither engine reads ``postseason_eligible`` when seeding: an ineligible team can still take a bid.
 
     Called on its own, this function cannot see a season: pass ``season=``
     for standings of a pre-2026 season (``cfb_standings(...,

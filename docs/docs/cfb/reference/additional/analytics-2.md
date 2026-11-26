@@ -43,8 +43,7 @@ cfbseedR tests Notre Dame's committee `rank` only (no bid without
 `cfb_simulations()` takes an explicit `autobid` (default `"2026"`)
 where `sportsdataverse.cfb.cfb_simulations` follows the season.
 
-Neither engine reads `postseason_eligible` when seeding, so an
-ineligible team can still take the G6, Notre Dame or an at-large bid.
+Neither engine reads `postseason_eligible` when seeding: an ineligible team can still take a bid.
 
 Called on its own, this function cannot see a season: pass `season=`
 for standings of a pre-2026 season (`cfb_standings(...,
