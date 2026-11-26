@@ -87,8 +87,9 @@ def corpus() -> pl.DataFrame:
     want = list(range(FIRST_CLASS, 2026))  # through the 2025-26 season
     sv = season_values(want)
     assert picks.schema["player_id"] == sv.schema["player_id"] == pl.Utf8
-    # a skipped season asset would shift every later season into "rookie" / "soph" and shrink careers
-    missing = sorted(set(want) - set(sv["season"].unique().to_list()))
+    # a skipped season asset would shift every later season into "rookie" / "soph" and shrink careers;
+    # the loader takes START years and stamps each row with the season's END year
+    missing = sorted({y + 1 for y in want} - set(sv["season"].unique().to_list()))
     assert not missing, f"season assets missing from the capture: {missing}"
     post = (
         sv.join(picks.select("player_id", "draft_year"), on="player_id")
