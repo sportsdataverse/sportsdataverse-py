@@ -137,3 +137,26 @@ def test_col_bpm_career_weights_only_seasons_with_a_bpm(draft_2019, replay_sourc
     want = float((rest["box_bpm"] * rest["min"]).sum() / rest["min"].sum())
     assert got["col_bpm_career"].item() == pytest.approx(want)
     assert got["col_min_career"].item() == pytest.approx(float(mine["min"].sum()))  # minutes still count in total
+
+
+def test_pre_draft_columns_ignore_seasons_after_the_draft(draft_2019, replay_sources, monkeypatch) -> None:
+    """Real 2019 college slices plus a copy of every row moved past the draft: no pre-draft column changes.
+
+    The captured loaders never return a post-draft season, so without this the college season filter could
+    be dropped unnoticed. The copies carry shifted BPM values, so a leak moves a column.
+    """
+    from sportsdataverse.nba._nba_draft_features import FEATURE_SCHEMA
+
+    feats = importlib.import_module("sportsdataverse.nba._nba_draft_features")
+    mod, _ = draft_2019
+    cols = list(FEATURE_SCHEMA)
+    base = mod.nba_draft_model(2019, pre_draft_features=True).select("player_id", *cols).sort("player_id")
+    value = pl.read_parquet(f"{FX}/value.parquet")
+    later = value.with_columns(
+        (pl.col("season") + 5).cast(value.schema["season"]),
+        *((pl.col(c) + 50.0).cast(value.schema[c]) for c in ("box_bpm", "box_obpm", "box_dbpm")),
+    )
+    loaders = feats._default_loaders() | {"value": lambda seasons: pl.concat([value, later])}
+    monkeypatch.setattr(feats, "_default_loaders", lambda: loaders)
+    got = mod.nba_draft_model(2019, pre_draft_features=True).select("player_id", *cols).sort("player_id")
+    assert got.equals(base, null_equal=True)

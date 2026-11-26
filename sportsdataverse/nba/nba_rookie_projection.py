@@ -95,10 +95,12 @@ def nba_rookie_projection(
     draft classes 2003-2015) score the class
     :func:`sportsdataverse.nba.nba_draft_model.nba_draft_model` returns:
 
-    - ``proj_rookie_value``: box value of the first NBA season after the
-      draft.
-    - ``proj_soph_value``: box value of the second season.
-    - ``proj_rookie_min``: rookie-season minutes.
+    - ``proj_rookie_value``: box value of the first NBA season the pick
+      played (the corpus labels the first and second seasons played, so a
+      pick stashed or injured in year one is labelled from his first season
+      on the floor; ``proj_avail_pct`` is still for ``draft_year + 1``).
+    - ``proj_soph_value``: box value of the second season played.
+    - ``proj_rookie_min``: minutes in the first season played.
 
     Each curve ranks a class exactly as the pick does, so it ties the pick
     baseline by construction. On the 2016-2019 holdout Spearman is 0.477 for

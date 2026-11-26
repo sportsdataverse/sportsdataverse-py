@@ -157,9 +157,10 @@ def _college(picks: pl.DataFrame, loaders: dict) -> pl.DataFrame:
         pl.col("box_dbpm").last().alias("col_dbpm_last"),
         pl.col("min").last().cast(pl.Float64).alias("col_min_last"),
         # minutes-weighted over the seasons that have a BPM (a null-BPM season's minutes are not in the denominator)
-        ((pl.col("box_bpm") * pl.col("min")).sum() / pl.col("min").filter(pl.col("box_bpm").is_not_null()).sum()).alias(
-            "col_bpm_career"
-        ),
+        pl.when(pl.col("min").filter(pl.col("box_bpm").is_not_null()).sum() > 0)
+        .then((pl.col("box_bpm") * pl.col("min")).sum() / pl.col("min").filter(pl.col("box_bpm").is_not_null()).sum())
+        .otherwise(None)
+        .alias("col_bpm_career"),
         pl.col("min").sum().cast(pl.Float64).alias("col_min_career"),
         pl.len().cast(pl.Int64).alias("col_seasons"),
         pl.col("team_id").last().alias("_team"),

@@ -436,8 +436,8 @@ def build_combine_features(
     ``draft_year`` when present), asserts ``player_id`` is ``Utf8`` on every
     input, casts every measurement to ``Float64`` (some seasons send numbers as
     text) and derives ``bmi`` and ``wingspan_diff``. A missing measurement stays
-    null: ``nba_draft_model`` imputes it with the bundled artifact's
-    training-class ``feature_median``, the same imputation the model was fit on.
+    null. Retained for the WNBA shims and research; ``nba_draft_model`` no
+    longer reads combine data (it scores pick curves).
 
     Args:
         anthro: ``nba_stats_draftcombineplayeranthro``-shaped frame.

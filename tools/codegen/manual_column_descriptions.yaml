@@ -16845,9 +16845,9 @@ nba_rookie_projection:
   draft_year: "Draft year (the June the class was picked)."
   overall_pick: "Overall pick number, 1-60."
   player_name: "Name of the pick as the draft history publishes it."
-  proj_rookie_value: "Projected box value of the first NBA season after the draft, from a pick curve fit on draft classes 2003-2015."
-  proj_soph_value: "Projected box value of the second NBA season after the draft, from a pick curve."
-  proj_rookie_min: "Projected rookie-season minutes from a pick curve (floored at 0)."
+  proj_rookie_value: "Projected box value of the first NBA season the pick plays (not necessarily the season after the draft), from a pick curve fit on draft classes 2003-2015."
+  proj_soph_value: "Projected box value of the second NBA season the pick plays, from a pick curve."
+  proj_rookie_min: "Projected minutes in the first NBA season the pick plays, from a pick curve (floored at 0)."
   proj_avail_pct: "Projected share of games available in the debut season, from nba_availability; 0.75 when it has no row for the pick. Never folded into the value columns."
   pro_tier: "Pick band: lottery (1-14), first_round (15-30) or second_round (31-60)."
 nojhl_season_id:
