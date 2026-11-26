@@ -1668,9 +1668,9 @@ cfb_playoff_seeds:
   losses: Losses across all played games.
   pd: Point differential (points for minus points against, via game margins) summed over all played games.
   seed: College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From
-    2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 champion and a Notre Dame ranked within
-    the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions.
-    Automatic qualifiers are capped at the field size.
+    2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 team (champion or not) and a Notre
+    Dame ranked within the field size are selected before at-large teams; before 2026, the five highest-ranked
+    conference champions. Automatic qualifiers are capped at the field size.
   sim: Season or simulation identifier the standings row belongs to.
   sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall version) - conference opponents' summed conference
     wins (ties half) over their summed conference games, one term per conference game played (pooled, as cfbseedR); 0.0 for
@@ -83039,7 +83039,7 @@ nba_playoff_series:
   round_name: The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series).
   game_number: 'Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves
     a gap; tip-off order for the whole series when one of its headlines has no number.'
-  game_id: ESPN game id.
+  game_id: ESPN game id of the series game (joins the ESPN schedule, summary and box score).
   game_date: Game date (US).
   completed: True when the game is final.
   home_team_id: Home team's ESPN team id.
@@ -83068,7 +83068,7 @@ nba_playoff_series_players:
   series_id: 'Series key: ''{season}-{lower ESPN team id}-{higher ESPN team id}''. A pair of teams meets at most once per
     postseason, so the pair is the series.'
   team_id: ESPN team id of the player's team in the series.
-  athlete_id: ESPN athlete id.
+  athlete_id: ESPN athlete id (joins the ESPN rosters and player box scores).
   athlete_display_name: The player's name.
   games: Series games played (not marked did-not-play, with minutes or any box count).
   min: Total minutes in the series.
@@ -83119,12 +83119,12 @@ nba_playoff_series_teams:
   season: Season, named by the year it ends (2025 is 2024-25; the WNBA season is its calendar year).
   series_id: 'Series key: ''{season}-{lower ESPN team id}-{higher ESPN team id}''. A pair of teams meets at most once per
     postseason, so the pair is the series.'
-  team_id: ESPN team id.
+  team_id: ESPN team id of the row's team (joins the ESPN schedule and team box scores).
   opponent_team_id: The opponent's ESPN team id.
   team_abbreviation: Team abbreviation.
   games: Final games in the series.
-  wins: Series wins.
-  losses: Series losses.
+  wins: Games the team won in the series, counting its final games only.
+  losses: Games the team lost in the series, counting its final games only.
   opp_pts: Opponent points over the series' final games.
   pts: 'Total points over the series'' final games: the sum of the team''s ESPN game boxes.'
   fgm: 'Total field goals made over the series'' final games: the sum of the team''s ESPN game boxes.'
@@ -83151,7 +83151,7 @@ wnba_playoff_series:
   round_name: The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series).
   game_number: 'Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves
     a gap; tip-off order for the whole series when one of its headlines has no number.'
-  game_id: ESPN game id.
+  game_id: ESPN game id of the series game (joins the ESPN schedule, summary and box score).
   game_date: Game date (US).
   completed: True when the game is final.
   home_team_id: Home team's ESPN team id.
@@ -83180,7 +83180,7 @@ wnba_playoff_series_players:
   series_id: 'Series key: ''{season}-{lower ESPN team id}-{higher ESPN team id}''. A pair of teams meets at most once per
     postseason, so the pair is the series.'
   team_id: ESPN team id of the player's team in the series.
-  athlete_id: ESPN athlete id.
+  athlete_id: ESPN athlete id (joins the ESPN rosters and player box scores).
   athlete_display_name: The player's name.
   games: Series games played (not marked did-not-play, with minutes or any box count).
   min: Total minutes in the series.
@@ -83231,12 +83231,12 @@ wnba_playoff_series_teams:
   season: Season, named by the year it ends (2025 is 2024-25; the WNBA season is its calendar year).
   series_id: 'Series key: ''{season}-{lower ESPN team id}-{higher ESPN team id}''. A pair of teams meets at most once per
     postseason, so the pair is the series.'
-  team_id: ESPN team id.
+  team_id: ESPN team id of the row's team (joins the ESPN schedule and team box scores).
   opponent_team_id: The opponent's ESPN team id.
   team_abbreviation: Team abbreviation.
   games: Final games in the series.
-  wins: Series wins.
-  losses: Series losses.
+  wins: Games the team won in the series, counting its final games only.
+  losses: Games the team lost in the series, counting its final games only.
   opp_pts: Opponent points over the series' final games.
   pts: 'Total points over the series'' final games: the sum of the team''s ESPN game boxes.'
   fgm: 'Total field goals made over the series'' final games: the sum of the team''s ESPN game boxes.'
@@ -83256,7 +83256,7 @@ wnba_playoff_series_teams:
 mbb_tournament_run_players:
   season: Season, named by the year it ends (2025 is 2024-25).
   team_id: ESPN team id of the player's team in the run.
-  athlete_id: ESPN athlete id.
+  athlete_id: ESPN athlete id (joins the ESPN rosters and player box scores).
   athlete_display_name: The player's name.
   games: Run games played (not marked did-not-play, with minutes or any box count).
   min: Total minutes in the run.
@@ -83307,11 +83307,14 @@ mbb_tournament_run_players:
   run_id: 'Run key: ''{season}-{tournament_key}-{ESPN team id}'', one team''s games in one tournament.'
 mbb_tournament_run_teams:
   season: Season, named by the year it ends (2025 is 2024-25).
-  team_id: ESPN team id.
+  tournament_name: The run's tournament name, as on its tournament_runs rows.
+  tournament_kind: 'The run''s tournament kind, as on its tournament_runs rows: ncaa (the NCAA tournament), conference (a
+    conference tournament) or postseason (the NIT, WNIT, CBI, Crown, WBIT and other postseason events).'
+  team_id: ESPN team id of the row's team (joins the ESPN schedule and team box scores).
   team_abbreviation: Team abbreviation.
   games: Final games in the run.
-  wins: Run wins.
-  losses: Run losses.
+  wins: Games the team won in the tournament run, counting its final games only.
+  losses: Games the team lost in the tournament run, counting its final games only.
   opp_pts: Opponent points over the run's final games.
   pts: 'Total points over the run''s final games: the sum of the team''s ESPN game boxes.'
   fgm: 'Total field goals made over the run''s final games: the sum of the team''s ESPN game boxes.'
@@ -83344,7 +83347,7 @@ mbb_tournament_runs:
   round_name: The rest of the game headline after the event name (for example 'East Region - 1st Round', 'Final'), without
     a trailing site.
   game_number: Game number within the run, by tip-off.
-  game_id: ESPN game id.
+  game_id: ESPN game id of the tournament game (joins the ESPN schedule, summary and box score).
   game_date: Game date (US).
   completed: True when the game is final.
   home_away: home or away, or neutral at a neutral site.
@@ -83367,7 +83370,7 @@ mbb_tournament_runs:
 wbb_tournament_run_players:
   season: Season, named by the year it ends (2025 is 2024-25).
   team_id: ESPN team id of the player's team in the run.
-  athlete_id: ESPN athlete id.
+  athlete_id: ESPN athlete id (joins the ESPN rosters and player box scores).
   athlete_display_name: The player's name.
   games: Run games played (not marked did-not-play, with minutes or any box count).
   min: Total minutes in the run.
@@ -83418,11 +83421,14 @@ wbb_tournament_run_players:
   run_id: 'Run key: ''{season}-{tournament_key}-{ESPN team id}'', one team''s games in one tournament.'
 wbb_tournament_run_teams:
   season: Season, named by the year it ends (2025 is 2024-25).
-  team_id: ESPN team id.
+  tournament_name: The run's tournament name, as on its tournament_runs rows.
+  tournament_kind: 'The run''s tournament kind, as on its tournament_runs rows: ncaa (the NCAA tournament), conference (a
+    conference tournament) or postseason (the NIT, WNIT, CBI, Crown, WBIT and other postseason events).'
+  team_id: ESPN team id of the row's team (joins the ESPN schedule and team box scores).
   team_abbreviation: Team abbreviation.
   games: Final games in the run.
-  wins: Run wins.
-  losses: Run losses.
+  wins: Games the team won in the tournament run, counting its final games only.
+  losses: Games the team lost in the tournament run, counting its final games only.
   opp_pts: Opponent points over the run's final games.
   pts: 'Total points over the run''s final games: the sum of the team''s ESPN game boxes.'
   fgm: 'Total field goals made over the run''s final games: the sum of the team''s ESPN game boxes.'
@@ -83455,7 +83461,7 @@ wbb_tournament_runs:
   round_name: The rest of the game headline after the event name (for example 'East Region - 1st Round', 'Final'), without
     a trailing site.
   game_number: Game number within the run, by tip-off.
-  game_id: ESPN game id.
+  game_id: ESPN game id of the tournament game (joins the ESPN schedule, summary and box score).
   game_date: Game date (US).
   completed: True when the game is final.
   home_away: home or away, or neutral at a neutral site.
@@ -83475,3 +83481,49 @@ wbb_tournament_runs:
   run_result: 'champion (won the tournament''s last listed game, by tip-off, once final, when it is the only game on the
     tournament''s last date), eliminated (lost its last listed game) or alive. The outcome as of the release, repeated on
     every row of the run, not as of that game: never use it as a feature for an earlier game.'
+add_shot_make_prob:
+  order_index: Stable within-game ordering index for events, after the feed's events are put in play order.
+  is_made_shot: Whether the event is a made field goal.
+  is_missed_shot: Whether the event is a missed field goal.
+  is_free_throw: Whether the event is a free throw attempt.
+  is_rebound: Whether the event is a rebound.
+  is_turnover: Whether the event is a turnover.
+  is_foul: Whether the event is a foul.
+  is_substitution: Whether the event is a substitution.
+  is_jump_ball: Whether the event is a jump ball.
+  is_timeout: Whether the event is a timeout.
+  is_period: Whether the event is a period start or end marker.
+  off_player_1: NBA Stats player id of offensive on-court player 1 of 5 during the event.
+  off_player_2: NBA Stats player id of offensive on-court player 2 of 5 during the event.
+  off_player_3: NBA Stats player id of offensive on-court player 3 of 5 during the event.
+  off_player_4: NBA Stats player id of offensive on-court player 4 of 5 during the event.
+  off_player_5: NBA Stats player id of offensive on-court player 5 of 5 during the event.
+  def_player_1: NBA Stats player id of defensive on-court player 1 of 5 during the event.
+  def_player_2: NBA Stats player id of defensive on-court player 2 of 5 during the event.
+  def_player_3: NBA Stats player id of defensive on-court player 3 of 5 during the event.
+  def_player_4: NBA Stats player id of defensive on-court player 4 of 5 during the event.
+  def_player_5: NBA Stats player id of defensive on-court player 5 of 5 during the event.
+  xfg: Make chance of a located two- or three-point attempt from the bundled location model; null on every other row (free
+    throws, non-shots, an attempt without a location).
+kalshi_book_quotes:
+  side: 'Contract side: yes (pays $1 if the event happens) or no.'
+  quote: 'bid (the side''s own resting bids) or ask (the opposite side''s bids at 1 - price: a NO bid at p is a YES offer
+    at 1 - p).'
+  level: Rank within the side's bid or ask ladder, 1 = best (highest bid, lowest ask).
+  price: Price per contract in dollars from 0 to 1, rounded to the book's four decimals.
+  size: Contracts resting at this price (Kalshi fixed-point counts, so fractions occur).
+  cum_size: Contracts available at this level and every better one on the same ladder.
+kalshi_fill_price:
+  side: Contract side filled, yes or no.
+  action: buy (walks the side's asks from the cheapest up) or sell (walks its bids from the highest down).
+  size_requested: Contracts asked for.
+  size_filled: Contracts the book can fill; below size_requested when the ladder runs out.
+  filled: True when the whole size_requested fills.
+  avg_price: Volume-weighted price per contract in dollars over the filled contracts, before Kalshi's trading fee; null
+    when nothing fills.
+  best_price: Price of the ladder's best level (the touch); null when the ladder is empty.
+  worst_price: Price of the last level the fill reaches; null when nothing fills.
+  slippage: How much worse avg_price is than best_price, in dollars per contract (paid above the best ask, or received
+    below the best bid); 0 when the touch fills it all.
+  cost: Dollars paid (buy) or received (sell) for the filled contracts, before fees; null when nothing fills.
+  levels_used: Price levels the fill touches.

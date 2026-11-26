@@ -521,6 +521,117 @@ _ = toa_sports()
 toa_usage()
 ```
 
+## Kalshi
+
+### kalshi_book_quotes {#kalshi_book_quotes}
+
+`kalshi_book_quotes(book: 'dict | pl.DataFrame | pd.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Bid and ask ladders for both sides of a Kalshi market, asks derived from the opposite bids.
+
+Kalshi's book holds bids only. A NO bid at `p` is a YES offer at `1 - p`, so the
+YES asks are the NO bids flipped (and the NO asks the YES bids flipped), with the
+same sizes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `book` | `dict \| DataFrame \| DataFrame` |  | one market's order book: the raw `kalshi_orderbook(ticker, return_parsed=False)` dict, or the parsed frame `kalshi_orderbook(ticker)` returns (`side` / `price` / `size`). |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per price level per side and quote, best level first (bids high to low, asks low to high): `side`, `quote`, `level`, `price`, `size`, `cum_size`. An empty book gives a zero-row frame with these columns.
+
+| col_name | type | description |
+|---|---|---|
+| `side` | String | Contract side: yes (pays $1 if the event happens) or no. |
+| `quote` | String | bid (the side's own resting bids) or ask (the opposite side's bids at 1 - price: a NO bid at p is a YES offer at 1 - p). |
+| `level` | Int64 | Rank within the side's bid or ask ladder, 1 = best (highest bid, lowest ask). |
+| `price` | Float64 | Price per contract in dollars from 0 to 1, rounded to the book's four decimals. |
+| `size` | Float64 | Contracts resting at this price (Kalshi fixed-point counts, so fractions occur). |
+| `cum_size` | Float64 | Contracts available at this level and every better one on the same ladder. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | `book` is neither a dict nor a DataFrame. |
+| `ValueError` | A DataFrame `book` lacks `side` / `price` / `size`, or a price falls outside 0 to 1 (a book in cents). |
+
+**Example**
+
+```python
+from sportsdataverse.odds import kalshi_book_quotes, kalshi_orderbook
+
+book = kalshi_orderbook(ticker="KXNFLGAME-26DEC07DALSEA-SEA")
+quotes = kalshi_book_quotes(book)
+
+# Pipeline next step (one line)
+
+quotes.filter(level=1)
+```
+
+### kalshi_fill_price {#kalshi_fill_price}
+
+`kalshi_fill_price(book: 'dict | pl.DataFrame | pd.DataFrame', size: 'float', *, side: 'str' = 'yes', action: 'str' = 'buy', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Average price to buy or sell `size` contracts against a Kalshi order book.
+
+Buying walks that side's asks from the cheapest up; selling walks its bids from the
+highest down. Each level fills up to its size before the next is touched. When the
+book runs out first, the row reports the part that fills and `filled` is False.
+Kalshi's trading fee is not included.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `book` | `dict \| DataFrame \| DataFrame` |  | one market's order book, raw dict or parsed frame, as for `kalshi_book_quotes`. |
+| `size` | `float` |  | contracts to fill; must be positive. Kalshi sizes are fixed-point, so a fraction is allowed. |
+| `side` | `str` | `'yes'` | `yes` or `no`. |
+| `action` | `str` | `'buy'` | `buy` (lift the asks) or `sell` (hit the bids). |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row: `side`, `action`, `size_requested`, `size_filled`, `filled`, `avg_price`, `best_price`, `worst_price`, `slippage`, `cost` and `levels_used`. Prices are null when nothing fills.
+
+| col_name | type | description |
+|---|---|---|
+| `side` | String | Contract side filled, yes or no. |
+| `action` | String | buy (walks the side's asks from the cheapest up) or sell (walks its bids from the highest down). |
+| `size_requested` | Float64 | Contracts asked for. |
+| `size_filled` | Float64 | Contracts the book can fill; below size_requested when the ladder runs out. |
+| `filled` | Boolean | True when the whole size_requested fills. |
+| `avg_price` | Float64 | Volume-weighted price per contract in dollars over the filled contracts, before Kalshi's trading fee; null when nothing fills. |
+| `best_price` | Float64 | Price of the ladder's best level (the touch); null when the ladder is empty. |
+| `worst_price` | Float64 | Price of the last level the fill reaches; null when nothing fills. |
+| `slippage` | Float64 | How much worse avg_price is than best_price, in dollars per contract (paid above the best ask, or received below the best bid); 0 when the touch fills it all. |
+| `cost` | Float64 | Dollars paid (buy) or received (sell) for the filled contracts, before fees; null when nothing fills. |
+| `levels_used` | Int64 | Price levels the fill touches. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `size` is not a positive finite number, `side` / `action` is not one of the values above, or `book` fails as in `kalshi_book_quotes`. |
+| `TypeError` | `book` is neither a dict nor a DataFrame. |
+
+**Example**
+
+```python
+from sportsdataverse.odds import kalshi_fill_price, kalshi_orderbook
+
+book = kalshi_orderbook(ticker="KXNFLGAME-26DEC07DALSEA-SEA")
+fill = kalshi_fill_price(book, 500, side="yes", action="buy")
+
+# Pipeline next step (one line)
+
+fill.select("avg_price", "slippage", "filled")
+```
+
 ## IDs and crosswalks
 
 ### MarketLeague {#MarketLeague}

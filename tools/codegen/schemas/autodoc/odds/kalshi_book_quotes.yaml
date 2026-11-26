@@ -1,0 +1,22 @@
+schema: kalshi_book_quotes
+kind: dataframe
+hand_authored: true
+columns:
+- name: side
+  type: character
+  description: ''
+- name: quote
+  type: character
+  description: ''
+- name: level
+  type: integer
+  description: ''
+- name: price
+  type: numeric
+  description: ''
+- name: size
+  type: numeric
+  description: ''
+- name: cum_size
+  type: numeric
+  description: ''

@@ -204,7 +204,7 @@ One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `roun
 | `round_code` | String | ESPN's type_abbreviation for the round (RD16, QTR, SEMI, FINAL); null where it carries none. |
 | `round_name` | String | The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series). |
 | `game_number` | Int64 | Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves a gap; tip-off order for the whole series when one of its headlines has no number. |
-| `game_id` | Int64 | ESPN game id. |
+| `game_id` | Int64 | ESPN game id of the series game (joins the ESPN schedule, summary and box score). |
 | `game_date` | String | Game date (US). |
 | `completed` | Boolean | True when the game is final. |
 | `home_team_id` | Int64 | Home team's ESPN team id. |
@@ -261,7 +261,7 @@ One row per player who played (minutes above zero) in a final game of the series
 | `season` | Int64 | Season, named by the year it ends (2025 is 2024-25; the WNBA season is its calendar year). |
 | `series_id` | String | Series key: '{season}-{lower ESPN team id}-{higher ESPN team id}'. A pair of teams meets at most once per postseason, so the pair is the series. |
 | `team_id` | Int64 | ESPN team id of the player's team in the series. |
-| `athlete_id` | Int64 | ESPN athlete id. |
+| `athlete_id` | Int64 | ESPN athlete id (joins the ESPN rosters and player box scores). |
 | `athlete_display_name` | String | The player's name. |
 | `games` | Int64 | Series games played (not marked did-not-play, with minutes or any box count). |
 | `min` | Float64 | Total minutes in the series. |
@@ -345,12 +345,12 @@ Two rows per series with a final game, keyed `(season, series_id, team_id)` with
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (2025 is 2024-25; the WNBA season is its calendar year). |
 | `series_id` | String | Series key: '{season}-{lower ESPN team id}-{higher ESPN team id}'. A pair of teams meets at most once per postseason, so the pair is the series. |
-| `team_id` | Int64 | ESPN team id. |
+| `team_id` | Int64 | ESPN team id of the row's team (joins the ESPN schedule and team box scores). |
 | `opponent_team_id` | Int64 | The opponent's ESPN team id. |
 | `team_abbreviation` | String | Team abbreviation. |
 | `games` | Int64 | Final games in the series. |
-| `wins` | Int64 | Series wins. |
-| `losses` | Int64 | Series losses. |
+| `wins` | Int64 | Games the team won in the series, counting its final games only. |
+| `losses` | Int64 | Games the team lost in the series, counting its final games only. |
 | `opp_pts` | Int64 | Opponent points over the series' final games. |
 | `pts` | Int64 | Total points over the series' final games: the sum of the team's ESPN game boxes. |
 | `fgm` | Int64 | Total field goals made over the series' final games: the sum of the team's ESPN game boxes. |
