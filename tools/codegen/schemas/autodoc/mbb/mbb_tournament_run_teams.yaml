@@ -7,6 +7,12 @@ columns:
 - name: run_id
   type: character
   description: ''
+- name: tournament_name
+  type: character
+  description: ''
+- name: tournament_kind
+  type: character
+  description: ''
 - name: team_id
   type: integer
   description: ''

@@ -158,12 +158,14 @@ Each run's record and box totals: the sum of the team's game boxes in the tourna
 
 **Returns**
 
-One row per run with a final game, keyed `(season, run_id, team_id)` with `team_abbreviation`: `games`, `wins`, `losses`, `pts`, `opp_pts` and the summed counts `fgm`, `fga`, `fg3m`, `fg3a`, `ftm`, `fta`, `oreb`, `dreb`, `reb`, `ast`, `stl`, `blk`, `tov`, `pf`.
+One row per run with a final game, keyed `(season, run_id, team_id)` with the run's `tournament_name` and `tournament_kind` (`ncaa`, `conference` or `postseason`, as on `mbb_tournament_runs`) and `team_abbreviation`: `games`, `wins`, `losses`, `pts`, `opp_pts` and the summed counts `fgm`, `fga`, `fg3m`, `fg3a`, `ftm`, `fta`, `oreb`, `dreb`, `reb`, `ast`, `stl`, `blk`, `tov`, `pf`.
 
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
 | `run_id` | String | Run key: '{season}-{tournament_key}-{ESPN team id}', one team's games in one tournament. |
+| `tournament_name` | String | The run's tournament name, as on its tournament_runs rows. |
+| `tournament_kind` | String | The run's tournament kind, as on its tournament_runs rows: ncaa (the NCAA tournament), conference (a conference tournament) or postseason (the NIT, WNIT, CBI, Crown, WBIT and other postseason events). |
 | `team_id` | Int64 | ESPN team id. |
 | `team_abbreviation` | String | Team abbreviation. |
 | `games` | Int64 | Final games in the run. |

@@ -51,7 +51,8 @@ def wbb_tournament_run_teams(
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
-        One row per run with a final game: the W-L, points for and against and the summed counts.
+        One row per run with a final game: the run's tournament name and kind, the W-L, points for
+        and against and the summed counts.
 
     Example:
         Quick start::

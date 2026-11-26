@@ -98,12 +98,14 @@ Each women's run's record and box totals. Delegates to `mbb_tournament_run_teams
 
 **Returns**
 
-One row per run with a final game: the W-L, points for and against and the summed counts.
+One row per run with a final game: the run's tournament name and kind, the W-L, points for and against and the summed counts.
 
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
 | `run_id` | String | Run key: '{season}-{tournament_key}-{ESPN team id}', one team's games in one tournament. |
+| `tournament_name` | String | The run's tournament name, as on its tournament_runs rows. |
+| `tournament_kind` | String | The run's tournament kind, as on its tournament_runs rows: ncaa (the NCAA tournament), conference (a conference tournament) or postseason (the NIT, WNIT, CBI, Crown, WBIT and other postseason events). |
 | `team_id` | Int64 | ESPN team id. |
 | `team_abbreviation` | String | Team abbreviation. |
 | `games` | Int64 | Final games in the run. |
