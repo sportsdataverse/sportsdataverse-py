@@ -96,7 +96,7 @@ class QBLayerConfig:
     gamma: float
     league: float
     replacement: float
-    p_start: Dict[str, float] = field(default_factory=dict)
+    p_start: dict[str, float] = field(default_factory=dict)
     new_qb_dropbacks: int = 100
     history_start_season: int = 2006
 
@@ -262,7 +262,7 @@ def as_of_ratings_split(
 
 # Fitted by tools/models/nfl_prediction/fit_qb_layer.py on regular seasons 2015-2025 (careers from 2006);
 # the same numbers, with the fit's counts and profiles, are in tools/models/nfl_prediction/qb_layer_constants.json.
-QB_LAYER_CONSTANTS: Dict[str, QBLayerConfig] = {
+QB_LAYER_CONSTANTS: dict[str, QBLayerConfig] = {
     # k: grid argmin of the dropback-weighted next-game error (regular-season QB-games, 5+ dropbacks);
     # gamma: no-intercept least squares of (result - base margin) on the realized-starter shift, weeks 5-18,
     # 2,197 games, season-week clustered SE 0.30; p_start: share of team-games the previous-game starter

@@ -31,7 +31,8 @@ ever wired into :func:`sportsdataverse.nfl.nfl_market.nfl_predict_games`.
 from __future__ import annotations
 
 import datetime
-from typing import Literal, Sequence, overload
+from collections.abc import Sequence
+from typing import Literal, overload
 
 import numpy as np
 import pandas as pd
@@ -40,6 +41,7 @@ from scipy.stats import norm
 
 from sportsdataverse.nfl.datasets import team_abbr_mapping
 from sportsdataverse.nfl.nfl_prediction_constants import (
+    PredictConfig,
     QBLayerConfig,
     RatingsConfig,
     get_constants,
@@ -460,6 +462,26 @@ def nfl_expected_starters(
         .when(pl.col("prev_qb_id").is_not_null())
         .then(pl.lit("previous_start")),
     )
+    out = _with_report_status(out, injuries)
+    missing = [s for s in STATUSES if s not in cfg.p_start]
+    if missing:
+        raise ValueError(f"QBLayerConfig.p_start has no value for {missing}")
+    p_map = {s: float(cfg.p_start[s]) for s in STATUSES}
+    out = out.with_columns(
+        status=pl.when(pl.col("_status").is_in(["Questionable", "Doubtful", "Out"]))
+        .then(pl.col("_status"))
+        .otherwise(pl.lit("none"))
+    ).with_columns(
+        p_start=pl.when(pl.col("expected_qb_id").is_null())
+        .then(pl.lit(1.0))
+        .otherwise(pl.col("status").replace_strict(p_map, return_dtype=pl.Float64))
+    )
+    out = out.select(*_STARTER_SCHEMA.keys())
+    return out.to_pandas() if return_as_pandas else out
+
+
+def _with_report_status(out: pl.DataFrame, injuries: pl.DataFrame | None) -> pl.DataFrame:
+    """Join the expected starter's report status (``_status``) for that season, week and team."""
     if injuries is not None and injuries.height > 0:
         rep = (
             injuries.select(
@@ -480,21 +502,7 @@ def nfl_expected_starters(
         out = out.join(rep, on=["season", "week", "team", "expected_qb_id"], how="left")
     else:
         out = out.with_columns(_status=pl.lit(None, dtype=pl.Utf8))
-    missing = [s for s in STATUSES if s not in cfg.p_start]
-    if missing:
-        raise ValueError(f"QBLayerConfig.p_start has no value for {missing}")
-    p_map = {s: float(cfg.p_start[s]) for s in STATUSES}
-    out = out.with_columns(
-        status=pl.when(pl.col("_status").is_in(["Questionable", "Doubtful", "Out"]))
-        .then(pl.col("_status"))
-        .otherwise(pl.lit("none"))
-    ).with_columns(
-        p_start=pl.when(pl.col("expected_qb_id").is_null())
-        .then(pl.lit(1.0))
-        .otherwise(pl.col("status").replace_strict(p_map, return_dtype=pl.Float64))
-    )
-    out = out.select(*_STARTER_SCHEMA.keys())
-    return out.to_pandas() if return_as_pandas else out
+    return out
 
 
 def nfl_qb_margin_mixture(margins: Sequence[float], weights: Sequence[float], *, sigma: float) -> dict[str, float]:
@@ -619,19 +627,8 @@ def nfl_qb_predict_games(
     rcfg = ratings_config or RatingsConfig()
     if schedule.height == 0:
         return pl.DataFrame(schema=_PREDICT_SCHEMA)
-    sched = schedule.with_columns(
-        pl.col("game_id").cast(pl.Utf8),
-        pl.col("season").cast(pl.Int64),
-        pl.col("week").cast(pl.Int64),
-        _to_date("gameday").alias("_date"),
-        (pl.col("location").cast(pl.Utf8) == "Neutral").fill_null(False).alias("neutral_site"),
-        _team("home_team"),
-        _team("away_team"),
-    )
+    sched, plays = _prep_games_and_plays(schedule, pbp)
     db = nfl_qb_dropbacks(pbp)
-    plays = pbp.select(
-        *_RIDGE_COLS, pl.col("season").cast(pl.Int64), _to_date("game_date").alias("gameday")
-    ).with_columns(pl.col("game_id").cast(pl.Utf8), *(_team(c) for c in ("posteam", "defteam", "home_team")))
     # (game_id, team) -> (expected QB, backup, status, p)
     picks: dict[tuple[str, str], tuple[str | None, str | None, str, float]] = {}
     if starter == "expected" and starters is not None:
@@ -645,64 +642,100 @@ def nfl_qb_predict_games(
         if window.height == 0:
             continue
         eff = efficiency_ratings(window, config=rcfg)
-        net: dict[str, float] = dict(zip(eff["team_id"].to_list(), eff["adj_net"].to_list()))
+        net = dict(zip(eff["team_id"].to_list(), eff["adj_net"].to_list(), strict=True))
         values = nfl_qb_values(db, as_of_date=as_of, config=cfg)
-        vmap: dict[str, float] = dict(zip(values["qb_id"].to_list(), values["qb_value"].to_list()))
+        vmap = dict(zip(values["qb_id"].to_list(), values["qb_value"].to_list(), strict=True))
         expo = _exposure(db, values, season, as_of)
         emap = {r["team"]: (r["s_db"], r["v_rated"]) for r in expo.iter_rows(named=True)}
         for g in games.iter_rows(named=True):
-            h, a = g["home_team"], g["away_team"]
-            if h not in net or a not in net:
+            if g["home_team"] not in net or g["away_team"] not in net:
                 continue
-            base = spine.points_per_net * (net[h] - net[a]) + (0.0 if g["neutral_site"] else spine.hfa)
-            side: dict[str, tuple[str | None, str, float, float, float, bool]] = {}
-            for name, team in (("home", h), ("away", a)):
-                if starter == "realized":
-                    qb, bk, status, p = g[f"{name}_qb_id"], None, "none", 1.0
-                else:
-                    qb, bk, status, p = picks.get((g["game_id"], team), (None, None, "none", 1.0))
-                s_db, v_rated = emap.get(team, (None, None))
-                if qb is None or s_db is None or v_rated is None:
-                    side[name] = (qb, status, 1.0, 0.0, 0.0, False)  # nothing to price: the layer is a no-op
-                    continue
-                shift_s = cfg.gamma * s_db * (vmap.get(qb, cfg.replacement) - v_rated)
-                shift_b = cfg.gamma * s_db * ((vmap.get(bk, cfg.replacement) if bk else cfg.replacement) - v_rated)
-                side[name] = (qb, status, p, shift_s, shift_b, True)
-            hq, hst, hp, hs, hb, happ = side["home"]
-            aq, ast, ap, as_, ab, aapp = side["away"]
-            margins, weights = [], []
-            for h_shift, hw in ((hs, hp), (hb, 1.0 - hp)):
-                for a_shift, aw in ((as_, ap), (ab, 1.0 - ap)):
-                    if hw * aw > 0:
-                        margins.append(base + spine.points_per_net * (h_shift - a_shift))
-                        weights.append(hw * aw)
-            mix = nfl_qb_margin_mixture(margins, weights, sigma=spine.margin_sd)
-            rows.append(
-                {
-                    "game_id": g["game_id"],
-                    "season": season,
-                    "week": g["week"],
-                    "home_team": h,
-                    "away_team": a,
-                    "neutral_site": g["neutral_site"],
-                    "base_margin": base,
-                    "base_win_prob": float(norm.sf(0.0, loc=base, scale=spine.margin_sd)),
-                    "base_lo80": base - _Z80 * spine.margin_sd,
-                    "base_hi80": base + _Z80 * spine.margin_sd,
-                    "qb_margin": mix["mean"],
-                    "qb_win_prob": mix["win_prob"],
-                    "qb_lo80": mix["lo80"],
-                    "qb_hi80": mix["hi80"],
-                    "home_qb_id": hq,
-                    "away_qb_id": aq,
-                    "home_status": hst,
-                    "away_status": ast,
-                    "home_p_start": hp,
-                    "away_p_start": ap,
-                    "home_shift": hs,
-                    "away_shift": as_,
-                    "home_layer_applied": happ,
-                    "away_layer_applied": aapp,
-                }
-            )
+            sides = []
+            for name in ("home", "away"):
+                team = g[f"{name}_team"]
+                pick = (
+                    (g[f"{name}_qb_id"], None, "none", 1.0)
+                    if starter == "realized"
+                    else picks.get((g["game_id"], team), (None, None, "none", 1.0))
+                )
+                sides.append(_price_side(pick, emap.get(team, (None, None)), vmap, cfg))
+            rows.append(_price_game(g, season, net, sides[0], sides[1], spine))
     return pl.DataFrame(rows, schema=_PREDICT_SCHEMA) if rows else pl.DataFrame(schema=_PREDICT_SCHEMA)
+
+
+def _prep_games_and_plays(schedule: pl.DataFrame, pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Typed schedule (relocated codes, game date, neutral flag) and the ridge plays dated by game."""
+    sched = schedule.with_columns(
+        pl.col("game_id").cast(pl.Utf8),
+        pl.col("season").cast(pl.Int64),
+        pl.col("week").cast(pl.Int64),
+        _to_date("gameday").alias("_date"),
+        (pl.col("location").cast(pl.Utf8) == "Neutral").fill_null(False).alias("neutral_site"),
+        _team("home_team"),
+        _team("away_team"),
+    )
+    plays = pbp.select(
+        *_RIDGE_COLS, pl.col("season").cast(pl.Int64), _to_date("game_date").alias("gameday")
+    ).with_columns(pl.col("game_id").cast(pl.Utf8), *(_team(c) for c in ("posteam", "defteam", "home_team")))
+    return sched, plays
+
+
+_Side = tuple[str | None, str, float, float, float, bool]
+
+
+def _price_side(
+    pick: tuple[str | None, str | None, str, float],
+    exposure: tuple[float | None, float | None],
+    vmap: dict[str, float],
+    cfg: QBLayerConfig,
+) -> _Side:
+    """(qb, status, p, starter shift, backup shift, applied) for one team: shifts in EPA per play."""
+    qb, bk, status, p = pick
+    s_db, v_rated = exposure
+    if qb is None or s_db is None or v_rated is None:
+        return (qb, status, 1.0, 0.0, 0.0, False)  # nothing to price: the layer is a no-op
+    shift_s = cfg.gamma * s_db * (vmap.get(qb, cfg.replacement) - v_rated)
+    shift_b = cfg.gamma * s_db * ((vmap.get(bk, cfg.replacement) if bk else cfg.replacement) - v_rated)
+    return (qb, status, p, shift_s, shift_b, True)
+
+
+def _price_game(g: dict, season: int, net: dict[str, float], home: _Side, away: _Side, spine: PredictConfig) -> dict:
+    """One output row: the base spine and the start-probability mixture over both teams' starters."""
+    base = spine.points_per_net * (net[g["home_team"]] - net[g["away_team"]]) + (
+        0.0 if g["neutral_site"] else spine.hfa
+    )
+    hq, hst, hp, hs, hb, happ = home
+    aq, ast, ap, as_, ab, aapp = away
+    margins, weights = [], []
+    for h_shift, hw in ((hs, hp), (hb, 1.0 - hp)):
+        for a_shift, aw in ((as_, ap), (ab, 1.0 - ap)):
+            if hw * aw > 0:
+                margins.append(base + spine.points_per_net * (h_shift - a_shift))
+                weights.append(hw * aw)
+    mix = nfl_qb_margin_mixture(margins, weights, sigma=spine.margin_sd)
+    return {
+        "game_id": g["game_id"],
+        "season": season,
+        "week": g["week"],
+        "home_team": g["home_team"],
+        "away_team": g["away_team"],
+        "neutral_site": g["neutral_site"],
+        "base_margin": base,
+        "base_win_prob": float(norm.sf(0.0, loc=base, scale=spine.margin_sd)),
+        "base_lo80": base - _Z80 * spine.margin_sd,
+        "base_hi80": base + _Z80 * spine.margin_sd,
+        "qb_margin": mix["mean"],
+        "qb_win_prob": mix["win_prob"],
+        "qb_lo80": mix["lo80"],
+        "qb_hi80": mix["hi80"],
+        "home_qb_id": hq,
+        "away_qb_id": aq,
+        "home_status": hst,
+        "away_status": ast,
+        "home_p_start": hp,
+        "away_p_start": ap,
+        "home_shift": hs,
+        "away_shift": as_,
+        "home_layer_applied": happ,
+        "away_layer_applied": aapp,
+    }
