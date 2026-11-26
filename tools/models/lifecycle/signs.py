@@ -49,6 +49,9 @@ Z = 2.0
 def classify(by_fold: Mapping[int, tuple[float, float | None]]) -> dict[str, Any]:
     """One coefficient's ``{fold: (estimate, se)}`` -> its class and the folds of any real flip."""
     folds = sorted(by_fold)
+    bad = {f: by_fold[f][0] for f in folds if not math.isfinite(by_fold[f][0])}
+    if bad:  # a NaN would read as sign 0 (stable), an inf as a real flip
+        raise ValueError(f"non-finite estimate in fold(s) {bad}")
     signs = {f: (by_fold[f][0] > 0) - (by_fold[f][0] < 0) for f in folds}
     if len({s for s in signs.values() if s}) <= 1:
         return {"class": "stable", "real_flip_folds": []}
