@@ -972,6 +972,21 @@ def game_noise_sd(tau_home: np.ndarray, tau_away: np.ndarray, league: str) -> np
     return np.sqrt(np.maximum(var, 0.25 * c.margin_sd**2))
 
 
+def _selection_score(base: np.ndarray, t: dict[str, np.ndarray], seen: np.ndarray | None) -> np.ndarray:
+    """Each sim's selection score: ``project_bracket``'s résumé score on the simulated WAB and Quad-1 wins.
+
+    ``seen`` is the AdjEM the committee sees once the rating shift has moved it (None: no shift);
+    the AdjEM term moves by its change in z, so with nothing left to play it is the résumé's own.
+    """
+    from sportsdataverse.mbb.mbb_bracketology import _RESUME_WEIGHTS as w
+
+    pop = t["pop"]
+    score = base[None, :] + w["wab"] * _zscore(t["wab"], pop) + w["quad1_w"] * _zscore(t["q1"], pop)
+    if seen is not None:  # the AdjEM the committee sees has moved toward the shifted rating
+        score = score + w["adj_em_z"] * (_zscore(seen, pop) - _zscore(t["em"], pop)[None, :])
+    return score
+
+
 def _sim_state(
     res: pl.DataFrame, sched: dict[str, np.ndarray], em: np.ndarray, net_rank: np.ndarray, league: str
 ) -> tuple[np.ndarray, dict[str, np.ndarray]]:
@@ -983,8 +998,12 @@ def _sim_state(
     g0 = col("rpi_games")
     # SoS over every scheduled Division I game, not only the played ones
     sos = (col("sos") * g0 + sched["opp_em_left"]) / np.maximum(g0 + sched["d1_left"], 1)
-    base = w["adj_em_z"] * col("adj_em_z") + w["sos"] * _zscore(sos)
+    # standardised on the teams season_bracketology scores, so a sim with nothing left to play
+    # reproduces its resume_score exactly
+    pop = _selection_population(res)
+    base = w["adj_em_z"] * col("adj_em_z") + w["sos"] * _zscore(sos, pop)
     return base, {
+        "pop": pop,
         "em": em,
         "eligible": res.get_column("eligible").to_numpy(),
         "pb_neutral": norm.cdf((c.em_scale * (c.bubble_adj_em - em)) / c.margin_sd),
@@ -1185,9 +1204,21 @@ def _select_field(score: np.ndarray, auto: np.ndarray, eligible: np.ndarray) -> 
     return at_large, auto | at_large
 
 
-def _zscore(x: np.ndarray) -> np.ndarray:
-    sd = x.std(axis=-1, ddof=1, keepdims=True)
-    return (x - x.mean(axis=-1, keepdims=True)) / (sd + 1e-9)
+def _zscore(x: np.ndarray, pop: np.ndarray) -> np.ndarray:
+    """``x`` standardised on the population ``pop`` (a team mask), the way ``project_bracket`` scores résumés.
+
+    Before anyone has a résumé (preseason) the population is every team.
+    """
+    if pop.sum() < 2:
+        pop = np.ones(x.shape[-1], dtype=bool)
+    sd = x[..., pop].std(axis=-1, ddof=1, keepdims=True)
+    return (x - x[..., pop].mean(axis=-1, keepdims=True)) / (sd + 1e-9)
+
+
+def _selection_population(res: pl.DataFrame) -> np.ndarray:
+    """The teams :func:`season_bracketology` scores: eligible, with every résumé input known."""
+    known = pl.all_horizontal(pl.col(c).is_not_null() for c in ("adj_em_z", "sos", "wab", "quad1_w"))
+    return res.select((pl.col("eligible") == True) & known).to_series().to_numpy()  # noqa: E712
 
 
 def _sim_table(res: pl.DataFrame, acc: dict[str, np.ndarray], seed_counts: np.ndarray, n_sims: int) -> pl.DataFrame:
@@ -1285,8 +1316,6 @@ def simulate_season(
             from sportsdataverse.mbb.mbb_college_season import simulate_season
             sim = simulate_season(played, remaining, teams, resume, n_sims=2000, seed=7)
     """
-    from sportsdataverse.mbb.mbb_bracketology import _RESUME_WEIGHTS as w
-
     res = resume.sort("team_id")
     n = res.height
     idx = {t: i for i, t in enumerate(res.get_column("team_id").to_list())}
@@ -1316,10 +1345,7 @@ def simulate_season(
         acc["wins"] += got[:, :n].sum(axis=0)
         acc["cwins"] += got[:, n : 2 * n].sum(axis=0)
         auto = _conference_bids(rng, cpct, status, idx, t, acc, league)
-        score = base[None, :] + w["wab"] * _zscore(t["wab"]) + w["quad1_w"] * _zscore(t["q1"])
-        if rating_noise:  # the AdjEM the committee sees has moved toward the shifted rating
-            seen = em[None, :] + shift * noise["moved"][None, :]
-            score = score + w["adj_em_z"] * (_zscore(seen) - col("adj_em_z")[None, :])
+        score = _selection_score(base, t, em + shift * noise["moved"][None, :] if rating_noise else None)
         at_large, bid = _select_field(score, auto, t["eligible"])
         for s in range(b):
             seed_counts[np.arange(n), _seed_field(score[s], bid[s], auto[s])] += 1

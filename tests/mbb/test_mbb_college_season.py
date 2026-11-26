@@ -390,6 +390,40 @@ def test_season_sim_after_selection_sunday_is_the_bracket(corpus):
     assert j.filter(pl.col("bid") == True).select((pl.col("seed_mean") == pl.col("projected_seed")).all()).item()  # noqa: E712
 
 
+def test_sim_selection_score_is_the_bracketology_resume_score(corpus):
+    """With nothing left to play, every sim scores each résumé exactly as season_bracketology does.
+
+    Both standardise on the same teams (eligible, every input known). Scored on different populations
+    they differed by up to 0.019, enough to swap two men's teams 0.0008 apart (ESPN 2579 and 2628) between
+    seed lines 8 and 9 once the ratings moved.
+    """
+    import importlib
+
+    cs = importlib.import_module("sportsdataverse.mbb.mbb_college_season")
+    sel, league = corpus["selection"], corpus["league"]
+    res = sel.resume.sort("team_id")
+    em = res.get_column("adj_em").fill_null(res.get_column("adj_em").min()).to_numpy().astype(np.float64)
+    net_rank = res.get_column("net_estimate_rank").fill_null(float(res.height)).to_numpy()
+    sched = cs._remaining_games(sel.remaining.head(0), sel.teams, res, em, net_rank, league)
+    base, t = cs._sim_state(res, sched, em, net_rank, league)
+    col = lambda c: res.get_column(c).fill_null(0).to_numpy().astype(np.float64)  # noqa: E731
+    t["wab"] = (col("wab") - sched["pb_left"])[None, :]
+    t["q1"] = col("quad1_w")[None, :]
+    score = cs._selection_score(base, t, em[None, :])[0]
+    br = season_bracketology(sel.resume, sel.auto_bids, league=league)
+    j = (
+        res.select("team_id")
+        .with_columns(pl.Series("sim", score))
+        .join(br.select("team_id", "resume_score").drop_nulls(), on="team_id")
+    )
+    assert j.height == int(t["pop"].sum()) > 300
+    assert (j["sim"] - j["resume_score"]).abs().max() < 1e-9
+    if corpus["lg"] == "mbb":
+        pair = j.filter(pl.col("team_id").is_in(["2579", "2628"])).sort("team_id")
+        assert pair.height == 2
+        assert (pair["sim"].arg_max(), pair["resume_score"].arg_max()) == (pair["resume_score"].arg_max(),) * 2
+
+
 def test_auto_bids_mid_conference_tournaments(corpus):
     """As of 2024-03-13 some finals are played (11 men's, 14 women's) and the rest are under way."""
     inp = season_inputs(
