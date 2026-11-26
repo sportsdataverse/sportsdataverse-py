@@ -8,7 +8,7 @@ columns:
   type: character
   description: ''
 - name: season
-  type: character
+  type: integer
   description: ''
 - name: player_id
   type: character
