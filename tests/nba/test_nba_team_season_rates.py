@@ -378,9 +378,14 @@ def test_bad_league_id_raises() -> None:
 _GAME_SUMS = ("poss", "opp_poss", "pts", "opp_pts")
 
 
+#: nba_team_game_possessions' frame: the core's columns and the game's schedule type.
+GAMES_SCHEMA = {**TEAM_GAME_POSSESSIONS_SCHEMA, "season_type": pl.Utf8()}
+
+
 def assert_games_add_up(games: pl.DataFrame, rates: pl.DataFrame, minutes_per_game: int) -> None:
     """Per-game rows summed over a team-season's split reproduce the season row exactly."""
-    assert dict(games.schema) == TEAM_GAME_POSSESSIONS_SCHEMA
+    assert dict(games.schema) == GAMES_SCHEMA
+    games = games.drop("season_type")
     assert games.select("season", "team_id", "game_id", "split").is_duplicated().sum() == 0
     summed = games.group_by("season", "team_id", "split").agg(
         pl.len().cast(pl.Int64).alias("games"), *[pl.col(c).sum() for c in (*_GAME_SUMS, "seconds")]
@@ -414,7 +419,7 @@ def test_nba_2026_games_add_up_to_the_season(monkeypatch: pytest.MonkeyPatch, nb
     pair = played.join(played, on="game_id", suffix="_o").filter(pl.col("team_id") != pl.col("team_id_o"))
     assert (pair["poss"] == pair["opp_poss_o"]).all() and (pair["pts"] == pair["opp_pts_o"]).all()
     playoffs = _nba_games(monkeypatch, 2026, season_type="playoffs")
-    assert dict(playoffs.schema) == TEAM_GAME_POSSESSIONS_SCHEMA
+    assert dict(playoffs.schema) == GAMES_SCHEMA
 
 
 def test_wnba_2025_games_add_up_to_the_season(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -428,6 +433,45 @@ def test_wnba_2025_games_add_up_to_the_season(monkeypatch: pytest.MonkeyPatch) -
         wnba_loaders, "load_wnba_stats_schedules", _fixture_loader("wnba_schedule_2025.parquet", [2025])
     )
     assert_games_add_up(wnba_team_game_possessions(2025), wnba_team_season_rates(2025), 40)
+
+
+def test_wnba_2025_regular_season_and_playoffs_in_one_read(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The Playoffs set's rows: asked for both, each type's rows add up to that type's season rows, every 2025
+    WNBA playoff game in the schedule is there once per team, and the regular season is unchanged."""
+    from sportsdataverse.wnba import wnba_loaders
+    from sportsdataverse.wnba.wnba_team_season_rates import wnba_team_game_possessions, wnba_team_season_rates
+
+    loads: list[str] = []
+
+    def counted(name: str, loader):  # type: ignore[no-untyped-def]
+        def load(seasons):  # type: ignore[no-untyped-def]
+            loads.append(name)
+            return loader(seasons)
+
+        return load
+
+    monkeypatch.setattr(
+        wnba_loaders,
+        "load_wnba_stats_possessions",
+        counted("poss", _fixture_loader("wnba_possessions_2025.parquet", [2025])),
+    )
+    monkeypatch.setattr(
+        wnba_loaders,
+        "load_wnba_stats_schedules",
+        counted("sched", _fixture_loader("wnba_schedule_2025.parquet", [2025])),
+    )
+    both = wnba_team_game_possessions(2025, season_type=["regular-season", "playoffs"])
+    assert loads == ["poss", "sched"]  # one read of each release, whatever the types
+    assert sorted(both["season_type"].unique().to_list()) == ["playoffs", "regular-season"]
+    regular, playoffs = (both.filter(season_type=t) for t in ("regular-season", "playoffs"))
+    assert regular.equals(wnba_team_game_possessions(2025))
+    assert_games_add_up(playoffs, wnba_team_season_rates(2025, season_type="playoffs"), 40)
+    sched = pl.read_parquet(RATES / "wnba_schedule_2025.parquet").filter(season_type="playoffs")
+    played = playoffs.filter(split="all")
+    assert set(played["game_id"]) == set(sched["game_id"].cast(pl.Utf8))
+    assert played.height == 2 * sched.height
+    with pytest.raises(ValueError, match="season_type"):
+        wnba_team_game_possessions(2025, season_type=["regular-season", "postseason"])
 
 
 def test_team_game_possessions_empty_and_missing() -> None:
