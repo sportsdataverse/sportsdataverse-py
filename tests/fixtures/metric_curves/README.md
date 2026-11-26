@@ -10,7 +10,7 @@
 
 # metric_curves fixtures
 
-Real released data for `sportsdataverse/metric_curves.py`. The CFB fixture and
+Real released data for `sportsdataverse/analytics/metric_curves.py`. The CFB fixture and
 the Stephen Curry shots fixture live in `../rolling_windows/` (shared with the
 rolling-windows tests; provenance in that folder's README).
 

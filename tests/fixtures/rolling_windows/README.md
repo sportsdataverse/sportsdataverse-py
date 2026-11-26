@@ -27,9 +27,9 @@ threw a pass.
 ## Selection rule
 
 1. Read the four pbp season files, projected to `FOOTBALL_PBP_COLUMNS`
-   (see `sportsdataverse/rolling_windows.py`) plus the columns
+   (see `sportsdataverse/analytics/rolling_windows.py`) plus the columns
    `metric_curves.football_attempts` reads (`FOOTBALL_ATTEMPT_COLUMNS` in
-   `sportsdataverse/metric_curves.py`: `yds_fg, fg_attempt, fg_made,
+   `sportsdataverse/analytics/metric_curves.py`: `yds_fg, fg_attempt, fg_made,
    fg_kicker_player_id, fg_kicker_player_name, air_yards, completion,
    pass_attempt, distance, first_down_created, touchdown, penalty_no_play,
    scrimmage_play, defense_score_play`) and ESPN's raw `start.down, start.distance`
