@@ -51,7 +51,7 @@ def espn_mlb_pbp(game_id: int, raw: bool = False, **kwargs) -> Dict:
         againstTheSpread, odds, gameInfo, season`` plus an MLB-specific
         ``boxscore.batters`` / ``boxscore.pitchers`` split. Statcast-level
         detail (exit velocity, launch angle, spin rate) is NOT in ESPN's
-        payload — use :func:`mlb_api_pbp` (statsapi.mlb.com) for that.
+        payload — use :func:`mlb_pbp` (statsapi.mlb.com) for that.
     """
     url = f"http://site.api.espn.com/apis/site/v2/sports/baseball/mlb/summary?event={game_id}"
     payload = _download_json(download, url, **kwargs)

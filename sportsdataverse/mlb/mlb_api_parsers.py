@@ -27,16 +27,16 @@ DataFrames. Mirrors the design of
 Parser → endpoint mapping
 -------------------------
 
-* :func:`parse_mlb_api_schedule`     → :func:`mlb_api_schedule`
+* :func:`parse_mlb_api_schedule`     → :func:`mlb_schedule`
                                        (unrolls ``dates[].games[]``)
-* :func:`parse_mlb_api_teams`        → :func:`mlb_api_teams`
+* :func:`parse_mlb_api_teams`        → :func:`mlb_teams`
                                        (one row per team from ``teams[]``)
-* :func:`parse_mlb_api_team_roster`  → :func:`mlb_api_team_roster`
+* :func:`parse_mlb_api_team_roster`  → :func:`mlb_team_roster`
                                        (one row per player from ``roster[]``)
-* :func:`parse_mlb_api_standings`    → :func:`mlb_api_standings`
+* :func:`parse_mlb_api_standings`    → :func:`mlb_standings`
                                        (unrolls ``records[].teamRecords[]``)
-* :func:`parse_mlb_api_person_stats` → :func:`mlb_api_person_stats` and
-                                       :func:`mlb_api_team_stats`
+* :func:`parse_mlb_api_person_stats` → :func:`mlb_person_stats` and
+                                       :func:`mlb_team_stats`
                                        (unrolls ``stats[].splits[]``)
 * :func:`parse_mlb_api_list`         → generic fallback for any
                                        ``{copyright, <key>: [...]}`` payload
@@ -147,7 +147,7 @@ def parse_mlb_api_list(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     for endpoints that need extra unrolling logic.
 
     Args:
-        payload: Raw JSON dict from any ``mlb_api_*`` wrapper.
+        payload: Raw JSON dict from any ``mlb_*`` wrapper.
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -179,8 +179,8 @@ def parse_mlb_api_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.
     fields flattened.
 
     Args:
-        payload: Raw JSON dict from :func:`mlb_api_schedule` or
-            :func:`mlb_api_schedule_postseason`.
+        payload: Raw JSON dict from :func:`mlb_schedule` or
+            :func:`mlb_schedule_postseason`.
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -269,7 +269,7 @@ def parse_mlb_api_standings(payload: Dict, return_as_pandas: bool = False) -> pl
 
 
 # ---------------------------------------------------------------------------
-# Person stats (splits) — also matches mlb_api_team_stats
+# Person stats (splits) — also matches mlb_team_stats
 # ---------------------------------------------------------------------------
 
 
@@ -288,8 +288,8 @@ def parse_mlb_api_person_stats(payload: Dict, return_as_pandas: bool = False) ->
     batting/pitching/fielding metrics depending on the group).
 
     Args:
-        payload: Raw JSON dict from :func:`mlb_api_person_stats` or
-            :func:`mlb_api_team_stats`.
+        payload: Raw JSON dict from :func:`mlb_person_stats` or
+            :func:`mlb_team_stats`.
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -328,7 +328,7 @@ def parse_mlb_api_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.
     wide ``*_*`` column block.
 
     Args:
-        payload: Raw JSON dict from :func:`mlb_api_boxscore`.
+        payload: Raw JSON dict from :func:`mlb_boxscore`.
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -358,7 +358,7 @@ def parse_mlb_api_linescore(payload: Dict, return_as_pandas: bool = False) -> pl
     home/away sub-dicts become ``home_runs`` / ``away_hits`` columns.
 
     Args:
-        payload: Raw JSON dict from :func:`mlb_api_linescore`.
+        payload: Raw JSON dict from :func:`mlb_linescore`.
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -377,7 +377,7 @@ def parse_mlb_api_play_by_play(payload: Dict, return_as_pandas: bool = False) ->
     ``count.*`` / ``matchup.*`` dicts become columns, list fields are stringified.
 
     Args:
-        payload: Raw JSON dict from :func:`mlb_api_play_by_play`.
+        payload: Raw JSON dict from :func:`mlb_play_by_play`.
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -397,7 +397,7 @@ def parse_mlb_api_win_probability(payload, return_as_pandas: bool = False) -> pl
     ``homeTeamWinProbabilityAdded``, ``contextMetrics``). Flattened directly.
 
     Args:
-        payload: Raw JSON list from :func:`mlb_api_win_probability`.
+        payload: Raw JSON list from :func:`mlb_win_probability`.
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:

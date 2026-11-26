@@ -7,7 +7,7 @@ NHL game-feed API at ``api-web.nhle.com/v1/``.
 * Parsers overview: https://py.sportsdataverse.org/docs/parsers/
 * Reusable patterns: https://py.sportsdataverse.org/docs/architecture/building-blocks
 
-Each ``nhl_web_*`` wrapper in :mod:`sportsdataverse.nhl.nhl_api_web` ships
+Each ``nhl_*`` wrapper in :mod:`sportsdataverse.nhl.nhl_api_web` ships
 a different payload shape — game-center deep dives carry per-team player
 arrays, schedules nest day → games, leaderboards key by stat-category, and
 the right-rail endpoint exposes 8+ independent sub-frames. This module
@@ -510,7 +510,7 @@ def parse_nhl_web_playoff_series(payload: Dict, return_as_pandas: bool = False) 
 # ---------------------------------------------------------------------------
 
 
-# Maps an nhl_web_* wrapper name to its parser. Dispatchers
+# Maps an nhl_* wrapper name to its parser. Dispatchers
 # (``parse_nhl_web_right_rail``, ``parse_nhl_web_club_stats``) return a
 # dict by default — callers wanting a single frame pass section=.
 NHL_API_WEB_ENDPOINT_PARSERS = {
@@ -552,15 +552,14 @@ NHL_API_WEB_ENDPOINT_PARSERS = {
 
 
 def parser_for_nhl_api_web(fn_name: str):
-    """Return the registered parser for an ``nhl_web_*`` wrapper.
+    """Return the registered parser for an ``nhl_*`` wrapper.
 
-    Returns ``None`` for endpoints without a registered parser (e.g.
-    ``playoff_series``, ``player_spotlight``, ``draft_rankings``) since
+    Returns ``None`` for endpoints without a registered parser, since
     their payloads are too idiosyncratic for a useful generic fallback.
     Callers should null-check the result.
 
     Args:
-        fn_name: The ``__name__`` of any ``nhl_web_*`` wrapper.
+        fn_name: The ``__name__`` of any ``nhl_*`` wrapper.
 
     Returns:
         Parser callable, or ``None`` if unregistered.
