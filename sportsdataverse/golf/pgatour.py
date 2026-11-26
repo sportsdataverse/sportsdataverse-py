@@ -63,9 +63,9 @@ def pgatour_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
-        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
         Quick start::
@@ -129,9 +129,9 @@ def pgatour_leaderboard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
-        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
         Quick start::
@@ -196,9 +196,9 @@ def pgatour_scorecard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
-        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
         Quick start::
@@ -262,9 +262,9 @@ def pgatour_tee_times(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
-        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
         Quick start::
@@ -327,9 +327,9 @@ def pgatour_player(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
-        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
         Quick start::
@@ -394,9 +394,9 @@ def pgatour_player_directory(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
-        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
         Quick start::
@@ -462,9 +462,9 @@ def pgatour_stat_catalog(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
-        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
         Quick start::
@@ -532,9 +532,9 @@ def pgatour_stat_details(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
-        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
         Quick start::
@@ -603,9 +603,9 @@ def pgatour_tour_cup(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
-        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
         Quick start::
@@ -674,9 +674,9 @@ def pgatour_shot_details(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: The API answered null for the request (an unknown tournament, player or stat id).
-        ValueError: The API rejected the query variables.
-        sportsdataverse.errors.AssetFetchError: Any other GraphQL error, or a compressed payload that does not decode.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
     Example:
         Quick start::

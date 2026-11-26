@@ -209,7 +209,9 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     #   before the one predicted (2026-27): 6.226 / 6.081 / 6.254 for 2023-24 / 2024-25 / 2025-26, printed by
     #   fit_pregame.py (SEED_SEASONS) and pinned by tests/nhl/test_nhl_settled_totals.py. It was a 6.05
     #   published-reference seed. Refit once a season, after the regular season closes, never from an
-    #   in-progress season. As-of holdout 2023-24 .. 2025-26 (3538 games) against settled totals:
+    #   in-progress season. As-of run over 2023-24 .. 2025-26 (3538 games) against settled totals -- the
+    #   seasons 6.19 is the mean of, so the pooled bias is in-sample, near zero by construction; the
+    #   out-of-sample level check is 2022-23 (TOTAL_BIAS_FLOOR in tests/nhl/test_nhl_prediction_backtest.py):
     #   bias -0.125 +/- 0.037 (SE clustered by date) -> +0.015 +/- 0.037; per season -0.175 / +0.000 /
     #   -0.203 -> -0.035 / +0.140 / -0.063; MAE 1.842 -> 1.846, Brier over 5.5 0.2449 -> 0.2454, over 6.5
     #   0.2484 -> 0.2468 (Poisson around exp_total). A level fix, not an accuracy gain: the season-to-season
