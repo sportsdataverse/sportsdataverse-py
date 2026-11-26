@@ -137,6 +137,10 @@ def test_retire_rule_on_real_season_records(rated_prior_diffs: pl.DataFrame) -> 
     # two fails that are not consecutive: WATCH, not RETIRE
     gap = [failing(recs[0], 0.001), recs[1], failing(recs[2], 0.001)]
     assert retire.retire_status(gap, None, holdout_end=2023)["status"] == "WATCH"
+    # two fails with no record between them (2024, 2026): consecutive SCORED seasons, so RETIRE, as documented
+    skip = [failing(recs[0], 0.001), failing(recs[2], 0.001)]
+    assert [r["season"] for r in skip] == [2024, 2026]
+    assert retire.retire_status(skip, None, holdout_end=2023)["status"] == "RETIRE-candidate"
     assert retire.retire_status([], -0.07942, holdout_end=2023)["status"] == "UNSCORED"
     with pytest.raises(ValueError, match="fit's window"):
         retire.retire_status(recs, -0.07942, holdout_end=2026)
@@ -337,3 +341,40 @@ def test_scored_seasons_are_outside_every_fit_on_the_path() -> None:
         assert set(cov.NEAR_HOLDOUT[lg]) <= fitted, lg  # near-holdout means inside some fit
         assert not set(cov.SEASONS[lg]) & set(cov.EXCLUDED[lg]), lg
         assert len(cov.SEASONS[lg]) >= cov.MIN_CLUSTERS, lg
+
+
+def test_noop_check_with_zero_width_fixed_intervals_is_not_a_pass() -> None:
+    """One sim: both arms' intervals have zero width; the ratio is undefined (None, valid JSON), not inf."""
+    flat = {"width": 0.0, "coverage": 0.5}
+    out = cov.noop_check(flat, flat)
+    assert out["width_ratio"] is None and out["status"] == "BUG"
+    json.dumps(out, allow_nan=False)
+
+
+def test_report_without_an_in_season_cutoff() -> None:
+    """A season scored at the preseason only (NBA 2011-12 opened Dec 25) still reports."""
+    with pytest.MonkeyPatch.context() as mp:
+        _fixture_loaders(mp)
+        rows = cov.run_season("nba", 2026, n_sims=200, seed=1)
+    rep = cov.report(rows.filter(pl.col("cutoff") == "preseason"), "nba")
+    assert rep["cutoffs"]["in_season"] == {
+        "reading": "TOO_FEW_SEASONS",
+        "tolerance": None,
+        "reason": "no in_season cutoff",
+    }
+    assert rep["noop_check"]["in_season_reported_only"] is None
+    assert rep["noop_check"]["status"] == "PASS"  # the preseason check still runs
+
+
+def test_sign_classify_rejects_non_finite_estimates() -> None:
+    for bad in (float("nan"), float("inf")):
+        with pytest.raises(ValueError, match="non-finite"):
+            signs.classify({2022: (bad, 0.1), 2023: (-0.4, 0.1)})
+
+
+def test_cfb_qbr_row_names_its_2026_holdout() -> None:
+    """The row's holdout is the gate record's frozen season, after every train season."""
+    row = retire.ledger_row(_ledger(), "cfb", "qbr_model")
+    gate = json.loads((ROOT / "sportsdataverse/cfb/models/qbr_model.gate.json").read_text(encoding="utf-8"))
+    assert row["holdout_seasons"] == [gate["holdout"]["season"]] * 2
+    assert min(row["holdout_seasons"]) > max(row["trained_seasons"])
