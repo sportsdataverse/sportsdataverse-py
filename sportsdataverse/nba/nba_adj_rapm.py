@@ -35,7 +35,8 @@ from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, _possessions_leagu
 #: equal-weight prior at scale 2, ``report --baseline``, same held-out games): held-out error NBA
 #: +0.22 bp (SE 0.17; lower in 14 of 30 seasons), WNBA -0.41 (SE 0.22; 20 of 30); next-season
 #: Spearman NBA +0.004 (SE 0.003), WNBA -0.010 (SE 0.004); R^2 +0.001 (0.003) / -0.003 (0.004). So
-#: adjusted RAPM is about where it was, the WNBA's next-season rank slightly lower; the gain is in
+#: adjusted RAPM is about where it was, the WNBA's next-season rank slightly lower (accepted by the
+#: owner, 2026-11-25); the gain is in
 #: the SPM prior itself. (Year-over-year Spearman of adjusted RAPM rises, 0.530 -> 0.581 NBA, 0.519 ->
 #: 0.549 WNBA, but a wider prior raises that by itself; it is stability, not accuracy.) The G League
 #: (``"20"``) is seeded with the NBA value.
