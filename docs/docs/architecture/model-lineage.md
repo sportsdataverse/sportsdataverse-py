@@ -168,3 +168,43 @@ Cite the fitting script by a path that is tracked: put a new fitter under
 `tools/fit_<what>.py` (the `tools/fit_cfb_wp_overtime.py` pattern) rather than in
 the gitignored `dev/`, add the artifact's row above, and label any value that is a
 seed rather than a fit as seeded where it is defined.
+Then give the model its `tools/models/model_ledger.json` row, with the lifecycle
+fields below.
+
+## Lifecycle: baseline, retire rule, coverage, sign stability
+
+Each `model_ledger.json` row (schema 1.1) carries `baseline` (the model it was
+shown to beat or tie on held-out data), `primary_metric` (that comparison's metric
+and SE clustering), `adoption_margin` (its paired `model - baseline` difference,
+negative = better), `status` (`active` or `retired`) and `lifecycle_note` (the
+evidence, or why a field is null). Fill them from committed evidence only; a field
+the evidence does not hold stays null with the reason in the note.
+`uv run python tools/models/lifecycle/retire.py --check-ledger` checks them, and
+`tests/tools/test_model_lifecycle.py` runs that check.
+
+Three checks run on shipped models, each reported first; one becomes a gate only by
+an owner decision:
+
+- **Retire rule** (`tools/models/lifecycle/retire.py`). After each completed season
+  past the holdout, score the model once against its baseline (same metric,
+  paired, same clustering, no refit). Two consecutive seasons whose upper 97.5%
+  bound of `model - baseline` is at or above 0, or one season worse than the
+  baseline by more than the adoption margin at 1.96 SE (its lower 97.5% bound
+  above the margin), make it a RETIRE-candidate. The latest
+  season failing alone is WATCH; before any season is scored it is UNSCORED. The rule
+  runs only on a row with both a `baseline` and `holdout_seasons`. Retiring is the owner's call: `status: retired`
+  with `retired_reason`, one release of warning through
+  `sportsdataverse/_deprecation.py`, then the function returns the baseline. A
+  retired model is re-adopted only on a new fit with its own holdout.
+- **Win-total coverage** (`tools/models/lifecycle/coverage.py`) for the NBA / WNBA
+  season sim: realized wins against the sim's 50 / 80 / 95% intervals at the
+  preseason and an in-season cutoff, on seasons outside the fit, clustered by
+  season. Only seasons outside every fit on the sim's path count (NBA and WNBA
+  2010-2017); NBA 2024-2026 and WNBA 2024-2025 sit inside the rest-and-travel fit or
+  the ridge penalty's cross-validation, so they are scored only with `--near-holdout`
+  and labelled. It also checks that the rating draw widens the
+  preseason 80% intervals at least 1.5 times; if it doesn't, that is a bug.
+- **Sign stability** (`tools/models/lifecycle/signs.py`) for a model refit per
+  season: a coefficient whose sign flips between folds with both estimates more
+  than 2 SE from zero is a finding, and it puts the model on WATCH at its next
+  season.
