@@ -17,6 +17,7 @@ possession rows, so they too match it exactly.
 from __future__ import annotations
 
 import importlib
+import json
 from collections import defaultdict
 from pathlib import Path
 
@@ -26,8 +27,11 @@ import pytest
 
 from sportsdataverse._common.team_strength import (
     COLLEGE_RIDGE_LAMBDA,
+    COLLEGE_RIDGE_PRIOR_LAMBDA,
+    COLLEGE_RIDGE_PRIOR_REGRESSION,
     COLLEGE_TEAM_STRENGTH_SCHEMA,
     TEAM_STRENGTH_SCHEMA,
+    last_season_prior,
     possession_ridge_ratings,
 )
 from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
@@ -41,32 +45,35 @@ mod = importlib.import_module("sportsdataverse.mbb.mbb_team_strength")
 LEAGUE = {"mbb": "mens", "wbb": "womens"}
 
 
-def _loader(path: Path):  # type: ignore[no-untyped-def]
-    frame = pl.read_parquet(path)
+def _loader(path: Path, prev: Path | None = None):  # type: ignore[no-untyped-def]
+    """A loader serving ``path`` for 2025 and, when given, ``prev`` for 2024 (the prior's season)."""
+    frames = {2025: pl.read_parquet(path)} | ({2024: pl.read_parquet(prev)} if prev else {})
 
     def load(seasons: object) -> pl.DataFrame:
-        assert seasons == 2025, seasons
-        return frame
+        assert seasons in frames, seasons
+        return frames[seasons]  # type: ignore[index]
 
     return load
 
 
-def _strength(lg: str) -> pl.DataFrame:
+def _strength(lg: str, prior: str | None = "last_season") -> pl.DataFrame:
+    poss = _loader(RATES / f"ncaa_{lg}_possessions_2025.parquet", RATES / f"ncaa_{lg}_possessions_2024.parquet")
+    sched = _loader(STRENGTH / f"{lg}_schedule_2025.parquet", RATES / f"{lg}_schedule_2024.parquet")
     with pytest.MonkeyPatch.context() as mp:
         if lg == "mbb":
-            mp.setattr(tsr, "load_ncaa_mbb_possessions", _loader(RATES / "ncaa_mbb_possessions_2025.parquet"))
+            mp.setattr(tsr, "load_ncaa_mbb_possessions", poss)
             mp.setattr(tsr, "load_ncaa_mbb_team_box", _loader(RATES / "ncaa_mbb_team_box_2025.parquet"))
-            mp.setattr(tsr, "load_mbb_schedule", _loader(STRENGTH / "mbb_schedule_2025.parquet"))
+            mp.setattr(tsr, "load_mbb_schedule", sched)
             mp.setattr(mod, "load_mbb_ratings", _loader(STRENGTH / "mbb_ratings_2025.parquet"))
-            return mod.mbb_team_strength(2025)
+            return mod.mbb_team_strength(2025, prior=prior)
         from sportsdataverse.wbb import wbb_loaders
         from sportsdataverse.wbb.wbb_team_strength import wbb_team_strength
 
-        mp.setattr(wbb_loaders, "load_ncaa_wbb_possessions", _loader(RATES / "ncaa_wbb_possessions_2025.parquet"))
+        mp.setattr(wbb_loaders, "load_ncaa_wbb_possessions", poss)
         mp.setattr(wbb_loaders, "load_ncaa_wbb_team_box", _loader(RATES / "ncaa_wbb_team_box_2025.parquet"))
-        mp.setattr(wbb_loaders, "load_wbb_schedule", _loader(STRENGTH / "wbb_schedule_2025.parquet"))
+        mp.setattr(wbb_loaders, "load_wbb_schedule", sched)
         mp.setattr(wbb_loaders, "load_wbb_ratings", _loader(STRENGTH / "wbb_ratings_2025.parquet"))
-        return wbb_team_strength(2025)
+        return wbb_team_strength(2025, prior=prior)
 
 
 @pytest.fixture(scope="module", params=["mbb", "wbb"])
@@ -153,18 +160,22 @@ def test_sov_and_record_by_hand(college: tuple[str, pl.DataFrame]) -> None:
         assert sov < sos
 
 
-def _rows(lg: str) -> pl.DataFrame:
+def _rows(lg: str, season: int = 2025) -> pl.DataFrame:
+    sched = STRENGTH / f"{lg}_schedule_2025.parquet" if season == 2025 else RATES / f"{lg}_schedule_{season}.parquet"
     return tsr.ncaa_possession_rate_rows(
-        pl.read_parquet(RATES / f"ncaa_{lg}_possessions_2025.parquet"),
-        pl.read_parquet(STRENGTH / f"{lg}_schedule_2025.parquet"),
-        league=LEAGUE[lg],
+        pl.read_parquet(RATES / f"ncaa_{lg}_possessions_{season}.parquet"), pl.read_parquet(sched), league=LEAGUE[lg]
     )
+
+
+def _prior(lg: str) -> pl.DataFrame:
+    lam, r = COLLEGE_RIDGE_PRIOR_LAMBDA[LEAGUE[lg]], COLLEGE_RIDGE_PRIOR_REGRESSION[LEAGUE[lg]]
+    return last_season_prior(_rows(lg, 2024), lam=lam, regression=r)
 
 
 def test_ridge_ratings_are_the_possession_ridge(college: tuple[str, pl.DataFrame]) -> None:
     lg, s = college
     rows = _rows(lg)
-    want = possession_ridge_ratings(rows, lam=COLLEGE_RIDGE_LAMBDA[LEAGUE[lg]])
+    want = possession_ridge_ratings(rows, lam=COLLEGE_RIDGE_PRIOR_LAMBDA[LEAGUE[lg]], prior=_prior(lg))
     assert s.schema["team_id"] == want.schema["team_id"]
     j = s.join(want, on=["season", "team_id"], how="inner", validate="1:1", suffix="_want")
     # every team with a possession against a Division I opponent is rated by the ridge
@@ -192,14 +203,15 @@ def test_ridge_ranks_and_sample_sizes(college: tuple[str, pl.DataFrame]) -> None
     assert (ranked["adj_net_rtg_ridge_n"] == ranked["poss"] + ranked["opp_poss"]).all()
 
 
-def test_ridge_is_centred_and_consistent(college: tuple[str, pl.DataFrame]) -> None:
-    """Each side's ridge coefficients sum to zero, so over the rated teams the mean net is 0.
+@pytest.mark.parametrize("lg", ["mbb", "wbb"])
+def test_ridge_is_centred_and_consistent(lg: str) -> None:
+    """Without the prior each side's ridge coefficients sum to zero, so over the rated teams the mean net is 0.
 
     The intercept is the neutral-court average against an average opponent of the fit, below the
     fixture's raw points per 100 (103.27 vs 106.66 men's, 90.17 vs 95.39 women's): the Big Ten
     teams, above average, take most of its possessions.
     """
-    lg, s = college
+    s = _strength(lg, prior=None)
     rated = s.filter(pl.col("adj_net_rtg_ridge").is_not_null())
     assert abs(rated["adj_net_rtg_ridge"].mean()) < 1e-9  # type: ignore[arg-type]
     off, de = rated["adj_off_rtg_ridge"].mean(), rated["adj_def_rtg_ridge"].mean()
@@ -213,6 +225,63 @@ def test_ridge_is_centred_and_consistent(college: tuple[str, pl.DataFrame]) -> N
 def test_bad_league_raises() -> None:
     with pytest.raises(ValueError, match="league"):
         mod.mbb_team_strength(2025, league="coed")
+    with pytest.raises(ValueError, match="prior"):
+        mod.mbb_team_strength(2025, prior="fade")
+
+
+@pytest.mark.parametrize("lg", ["mbb", "wbb"])
+def test_the_prior_seeds_from_last_season(lg: str) -> None:
+    """The default ridge shrinks toward r x last season's rating; prior=None is the plain ridge."""
+    plain = _strength(lg, prior=None).drop_nulls("adj_net_rtg_ridge").sort("team_id")
+    seeded = _strength(lg).drop_nulls("adj_net_rtg_ridge").sort("team_id")
+    want = possession_ridge_ratings(_rows(lg), lam=COLLEGE_RIDGE_LAMBDA[LEAGUE[lg]]).sort("team_id")
+    assert (plain["adj_net_rtg_ridge"] - want["adj_net_rtg"]).abs().max() == 0.0
+    # the prior alone moves the ratings: against the same penalty without it (silent-no-op guard)
+    same_lam = possession_ridge_ratings(_rows(lg), lam=COLLEGE_RIDGE_PRIOR_LAMBDA[LEAGUE[lg]]).sort("team_id")
+    assert (seeded["adj_net_rtg_ridge"] - same_lam["adj_net_rtg"]).abs().max() > 0.5
+
+
+@pytest.mark.parametrize("lg", ["mbb", "wbb"])
+def test_a_season_with_no_previous_season_is_the_no_prior_fit(lg: str) -> None:
+    """Before the releases start there is no prior, so the season gets the no-prior penalty too."""
+    rows = _rows(lg).with_columns(pl.lit(2010, dtype=pl.Int64).alias("season"))
+    got = mod._ridge(rows, LEAGUE[lg], "last_season")
+    want = possession_ridge_ratings(rows, lam=COLLEGE_RIDGE_LAMBDA[LEAGUE[lg]])
+    assert got.equals(want)
+
+
+@pytest.mark.parametrize("lg", ["mbb", "wbb"])
+def test_the_prior_constants_are_the_committed_fit(lg: str) -> None:
+    """COLLEGE_RIDGE_PRIOR_* are tools/fit_college_ridge_prior.py's chosen values (its --out JSON)."""
+    fit = json.loads((STRENGTH / f"ridge_prior_{lg}.json").read_text(encoding="utf-8"))
+    assert not set(fit["train"]) & set(fit["holdout"])
+    assert COLLEGE_RIDGE_PRIOR_LAMBDA[LEAGUE[lg]] == fit["chosen_lam"]
+    assert COLLEGE_RIDGE_PRIOR_REGRESSION[LEAGUE[lg]] == fit["chosen_regression"]
+    # the change ships only because it beats the no-prior ridge out of sample, in every held-out season
+    ho = fit["holdout_scored_once"]
+    assert ho["all"]["chosen_vs_shipped"]["diff"] < 0
+    assert all(ho[f"season_{s}"]["chosen_vs_shipped"]["diff"] < 0 for s in fit["holdout"])
+
+
+@pytest.mark.parametrize("lg", ["mbb", "wbb"])
+def test_last_season_prior_is_the_regressed_previous_fit(lg: str) -> None:
+    """The prior is last season's ridge deviations times r, from one season only."""
+    lam, r = COLLEGE_RIDGE_PRIOR_LAMBDA[LEAGUE[lg]], COLLEGE_RIDGE_PRIOR_REGRESSION[LEAGUE[lg]]
+    prev = _rows(lg, 2024)
+    assert prev["season"].unique().to_list() == [2024]
+    final = possession_ridge_ratings(prev, lam=lam)
+    want = final.select(
+        "team_id",
+        (r * (pl.col("adj_off_rtg") - pl.col("adj_off_rtg").mean())).alias("off_dev"),
+        (r * (pl.col("adj_def_rtg") - pl.col("adj_def_rtg").mean())).alias("def_dev"),
+    )
+    got = last_season_prior(prev, lam=lam, regression=r)
+    assert got.schema["team_id"] == want.schema["team_id"] == pl.Int64
+    assert got.height == want.height > 0
+    for c in ("off_dev", "def_dev"):
+        assert (got[c] - want[c]).abs().max() < 1e-12
+    with pytest.raises(ValueError, match="one season"):
+        last_season_prior(pl.concat([prev, _rows(lg)]), lam=lam, regression=r)
 
 
 def test_adapters_pass_their_level(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -48566,6 +48566,22 @@ load_nhl_groups:
   league: League code of the table ("nhl"); the prefix of every group_id in it.
   level: 'Hierarchy level of the group: "league", "subdivision", "conference" or "division".'
   notes: 'Builder notes on the group: the lineage decisions behind its group_id and any source caveats.'
+load_nhl_pregame_snapshots:
+  season: "NHL season, the ENDING year (2027 = 2026-27)."
+  game_date: "ET game date (YYYY-MM-DD) of the game the state belongs to."
+  game_id: "NHL game id, bridged from the ESPN event by ET date and both team abbreviations; null when the bridge fails."
+  espn_event_id: "ESPN event id of the game."
+  start_time_utc: "Scheduled puck drop (UTC) as ESPN lists it; subtract a lead (e.g. 3 hours) to get a decision time."
+  team_id: "NHL team id of the team the state belongs to."
+  team_abbr: "NHL team abbreviation (NJD, TBL, SJS, LAK where ESPN writes NJ, TB, SJ, LA)."
+  kind: "'probable_goalie' (the listed starting goalie) or 'injury' (a player on the ESPN injury list)."
+  player_id: "NHL player id, matched by folded name against the season roster, then any season's when the name is unique league-wide; null when ambiguous or unknown."
+  espn_athlete_id: "ESPN athlete id; always present, also where player_id is null."
+  player_name: "Player name as ESPN lists it."
+  status: "For a goalie, ESPN's 'Expected' or 'Confirmed'; for an injury, ESPN's status ('Out', 'Day-To-Day', 'Injured Reserve', 'Suspension', ...)."
+  valid_from: "First capture (UTC) that showed this state; the state was not known before it."
+  valid_to: "First capture (UTC) that no longer showed this state; null while it is still current. The interval is half-open: valid_from <= t < valid_to."
+  source: "'espn_scoreboard' (probable goalies) or 'espn_injuries' (the league injury list)."
 load_nhl_penalties:
   committedByPlayer.firstName.cs: Alternate given name for the penalized player under the NHL feed's Czech key. Verified against
     the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei),
@@ -81800,16 +81816,16 @@ pgatour_schedule:
   schedule_status: '"completed" for an event already played, "upcoming" for one still to come.'
   tournament_id: PGA TOUR tournament id (tour code + season + event number, e.g. "R2026014"); the id the
     leaderboard, scorecard, tee-times and shot-details wrappers take.
-  tournament_name: Tournament name.
+  tournament_name: 'Tournament''s full name, sponsor included (e.g. "Travelers Championship").'
   date: Tournament dates as the site displays them (e.g. "Apr 9 - 12").
   start_date: Tournament start (UTC).
   sequence_number: Event's order in the season.
   tournament_status: Tournament status (e.g. "COMPLETED", "IN_PROGRESS", "NOT_STARTED").
-  course_name: Host course.
-  city: Host city.
+  course_name: 'Course hosting the event (e.g. "TPC River Highlands").'
+  city: 'City the host course is in (e.g. "Cromwell").'
   state: Host state or province.
   state_code: Host state or province abbreviation.
-  country: Host country.
+  country: 'Country the host course is in, spelled out (e.g. "United States of America").'
   country_code: Host country code (e.g. "USA").
   purse: Total purse as displayed (e.g. "$9,100,000").
   champion: Winner's name; null before the event finishes.
@@ -81845,34 +81861,34 @@ pgatour_leaderboard:
 pgatour_scorecard:
   tournament_id: PGA TOUR tournament id (the answer's own id carries the player id too; it is stripped).
   player_id: PGA TOUR player id.
-  round_number: Round number.
+  round_number: 'Tournament round the hole was played in (1-4).'
   course_id: Course id (an event played on more than one course carries one per round).
-  course_name: Course name.
+  course_name: 'Course the round was played on (e.g. "Augusta National Golf Club").'
   hole_number: Hole number (1-18).
-  par: Hole par.
+  par: 'Par of the hole (3, 4 or 5).'
   yardage: Hole length in yards that round.
   score: Strokes on the hole; null when the hole is not yet played.
   score_status: Result on the hole (e.g. "BIRDIE", "PAR", "BOGEY", "EAGLE", "DOUBLE_BOGEY").
   round_to_par: Running score to par for the round after this hole, as displayed.
 pgatour_tee_times:
   tournament_id: PGA TOUR tournament id.
-  round_number: Round number.
+  round_number: 'Tournament round the tee times are for (1-4).'
   round_status: Round status (e.g. "COMPLETE", "IN_PROGRESS", "UPCOMING").
   group_number: Tee-time group number within the round.
   tee_time: Group's tee time (UTC).
   start_tee: Starting hole (1, or 10 for a two-tee start).
   back_nine: True when the group starts on the back nine.
-  course_id: Course id.
-  course_name: Course name.
+  course_id: 'PGA TOUR course id of the course the group tees off on (e.g. "014").'
+  course_name: 'Course the group tees off on (e.g. "Augusta National Golf Club").'
   player_id: PGA TOUR player id.
   display_name: Player's full name.
   country: Player's country code.
   amateur: True for an amateur.
 pgatour_player:
   player_id: PGA TOUR player id.
-  first_name: First name.
-  last_name: Last name.
-  display_name: Full name.
+  first_name: 'Player''s first (given) name.'
+  last_name: 'Player''s last (family) name.'
+  display_name: 'Player''s full name as the site displays it (e.g. "Rory McIlroy").'
   country: Country the player represents.
   country_code: Country code (e.g. "NIR").
   owgr: Official World Golf Ranking position as displayed.
@@ -81880,7 +81896,7 @@ pgatour_player:
   height_meters: Height in meters.
   weight: Weight in pounds.
   weight_kilograms: Weight in kilograms.
-  age: Age in years.
+  age: 'Player''s age in years, as text (e.g. "37").'
   born: Birth date as displayed (e.g. "May 4, 1989").
   birthplace_city: Birthplace city.
   birthplace_state: Birthplace state or province.
@@ -81896,26 +81912,26 @@ pgatour_player_directory:
   tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
   player_id: PGA TOUR player id.
   is_active: True for a player active on the tour.
-  first_name: First name.
-  last_name: Last name.
-  short_name: Short name.
-  display_name: Full name.
+  first_name: 'Player''s first (given) name.'
+  last_name: 'Player''s last (family) name.'
+  short_name: 'Player''s first initial and last name (e.g. "L Åberg").'
+  display_name: 'Player''s full name as the site displays it (e.g. "Ludvig Åberg").'
   country: Country the player represents.
-  country_code: Country code.
-  age: Age in years.
+  country_code: 'Three-letter code of the country the player represents (e.g. "SWE").'
+  age: 'Player''s age in years, as text (e.g. "27"); null when the profile gives none.'
   education: College or university.
   turned_pro: Year the player turned professional.
 pgatour_stat_catalog:
-  tour_code: Tour code.
-  year: Season year.
+  tour_code: 'Tour the catalog lists stats for (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).'
+  year: 'Season the catalog lists stats for (e.g. 2026).'
   category: Stat category key (e.g. "STROKES_GAINED", "SCORING").
   category_name: Stat category name (e.g. "Strokes Gained").
   sub_category: Sub-category the stat is listed under.
   stat_id: PGA TOUR stat id (e.g. "02675" for SG Total); the id pgatour_stat_details takes.
-  stat_title: Stat name.
+  stat_title: 'Stat''s display name (e.g. "Approaches from 50-125 yards").'
 pgatour_stat_details:
-  tour_code: Tour code.
-  year: Season year.
+  tour_code: 'Tour the stat table is for (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).'
+  year: 'Season the stat table covers (e.g. 2026).'
   stat_id: PGA TOUR stat id.
   stat_title: Stat name (e.g. "Scoring Average").
   stat_type: Stat window (e.g. "YTD").
@@ -81933,11 +81949,11 @@ pgatour_tour_cup:
   title: Points race name (e.g. "FedExCup Standings").
   season: Season year (read from the race's title, e.g. "2025 Standings").
   player_id: PGA TOUR player id.
-  first_name: First name.
-  last_name: Last name.
-  display_name: Full name.
+  first_name: 'Player''s first (given) name.'
+  last_name: 'Player''s last (family) name.'
+  display_name: 'Player''s full name as the site displays it (e.g. "Wyndham Clark").'
   country: Country the player represents.
-  country_code: Country code.
+  country_code: 'Three-letter code of the country the player represents (e.g. "IRL").'
   rank_official: Official rank as displayed ("-" for none).
   rank_projected: Rank projected from live results, as displayed.
   rank_movement: Direction of the projected rank change (e.g. "UP", "DOWN", "CONSTANT").
@@ -81947,9 +81963,9 @@ pgatour_tour_cup:
 pgatour_shot_details:
   tournament_id: PGA TOUR tournament id.
   player_id: PGA TOUR player id.
-  round_number: Round number.
-  hole_number: Hole number.
-  par: Hole par.
+  round_number: 'Tournament round the shots were played in (1-4).'
+  hole_number: 'Hole the shots were played on (1-18).'
+  par: 'Par of the hole (3, 4 or 5).'
   yardage: Hole length in yards.
   hole_score: Strokes on the hole.
   hole_status: Result on the hole (e.g. "BIRDIE", "PAR").
@@ -81969,3 +81985,47 @@ pgatour_shot_details:
   to_x: ShotLink tourcast x coordinate where the shot finished.
   to_y: ShotLink tourcast y coordinate where the shot finished.
   to_z: ShotLink tourcast z (elevation) coordinate where the shot finished.
+nba_player_props:
+  minutes_exp: 'Expected minutes: the player''s minutes for the current team over the summed minutes for that team
+    of every player returned on it (minutes logged for the team by a player since traded away are left out), all
+    before the as-of cut (every logged game when no cut applies; a game sat counts as zero), times 5 x the league''s
+    game minutes, so a team''s rows sum to 240 in the NBA and 200 in the WNBA. The stat_*_exp lines assume the player
+    plays; this does not.'
+wnba_player_props:
+  minutes_exp: 'Expected minutes: the player''s minutes for the current team over the summed minutes for that team
+    of every player returned on it (minutes logged for the team by a player since traded away are left out), all
+    before the as-of cut (every logged game when no cut applies; a game sat counts as zero), times 5 x the league''s
+    game minutes, so a team''s rows sum to 240 in the NBA and 200 in the WNBA. The stat_*_exp lines assume the player
+    plays; this does not.'
+nhl_goalie_saves:
+  season: NHL season id of the game, both years run together (e.g. 20242025 for 2024-25).
+  game_id: NHL game id (e.g. 2024020001).
+  game_date: Date of the game.
+  player_id: NHL player id of the projected starting goalie.
+  team: Abbreviation of the goalie's team (e.g. "NJD").
+  opp_team: Abbreviation of the opponent whose shots the goalie faces (e.g. "BUF").
+  is_home: True when the goalie's team is the home team.
+  exp_shots_against: 'Expected shots on goal the starter faces: the mean of the team''s shots-against rate and the opponent''s
+    shots-for rate over earlier games that season (shrunk toward the league mean), less half the home-ice shot edge for a
+    home goalie and plus half for a visitor, times the starter''s share of a game''s shots.'
+  exp_save_pct: The goalie's save percentage over every earlier game in the seasons loaded, shrunk toward the league's
+    save_pct_prior (the prior alone for a goalie with no earlier game).
+  exp_saves: Expected saves, exp_shots_against x exp_save_pct (the negative-binomial mean).
+  saves_lo: Lower end of the central interval, the (1 - coverage) / 2 quantile of the predicted saves.
+  saves_hi: Upper end of the central interval, the (1 + coverage) / 2 quantile of the predicted saves.
+  coverage: Central probability the saves_lo-saves_hi interval was built for (the coverage argument, 0.8 by default).
+nhl_score_distribution:
+  game_id: Game id, the input predictions' game_id with its dtype kept.
+  rank: Scoreline's rank within the game, 1 for the most likely final score.
+  home_goals: Home team's goals in this final score (an overtime or shootout win counts as one goal).
+  away_goals: Away team's goals in this final score (an overtime or shootout win counts as one goal).
+  prob: Probability the game ends with exactly this score; over every scoreline the home-win share equals the row's
+    home_win_prob.
+  prob_beyond_regulation: Part of prob from games tied after 60 minutes and settled in overtime or a shootout; zero unless
+    the score is a one-goal margin.
+nhl_total_goals_distribution:
+  game_id: Game id, the input predictions' game_id with its dtype kept.
+  total_goals: Total goals in the final score, both teams (0 to 32; an overtime or shootout win adds one).
+  prob: Probability the final score totals exactly total_goals; a game's rows sum to 1, and their prob-weighted mean of
+    total_goals is the row's exp_total.
+  prob_over: Probability the total is above total_goals, the over price for a line of total_goals + 0.5.

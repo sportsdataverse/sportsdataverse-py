@@ -17,3 +17,7 @@ columns only dropped. The NBA/WNBA tests and the college possessions reuse BB-D3
 |---|---:|---|---|
 | `mbb_schedule_2025.parquet` / `wbb_schedule_2025.parquet` | 419 / 401 | `espn_{mens,womens}_college_basketball_schedules/{mbb,wbb}_schedule_2025` | Every ESPN game with one of the 18 Big Ten teams (plus the `game_id`s of `../bb_team_season_rates/{mbb,wbb}_schedule_2025.parquet`, all of which are such games), with the final score. The women's file has 4 games more than BB-D3's: Big Ten games ESPN carries that no NCAA possession row links to. Cols: `game_id, season, neutral_site, home_id, away_id, home_score, away_score, status_type_completed`. |
 | `mbb_ratings_2025.parquet` / `wbb_ratings_2025.parquet` | 183 / 188 | `mbb_ratings/mbb_ratings_2025`, `wbb_ratings/wbb_ratings_2025` | Every team in those schedule rows or in BB-D3's possession fixture. All columns. |
+
+`ridge_prior_mbb.json` / `ridge_prior_wbb.json` are not captures: they are the committed `--out` of
+`tools/fit_college_ridge_prior.py` (2026-11-25; train 2022-2023, holdout 2024-2026), which
+`test_the_prior_constants_are_the_committed_fit` pins `COLLEGE_RIDGE_PRIOR_*` to.

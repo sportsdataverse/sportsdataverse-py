@@ -2,7 +2,7 @@ schema: pgatour_schedule
 kind: dataframe
 columns:
 - name: season
-  type: character
+  type: integer
   description: ''
 - name: schedule_status
   type: character

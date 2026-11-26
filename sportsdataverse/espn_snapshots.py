@@ -23,6 +23,12 @@ character -- current state, no history -- but is priced per team rather than per
 league (NFL 32, NBA 30, MLB 30). ESPN publishes no depth chart at all for NHL,
 WNBA or college football: those answer 200 with the ``depthchart`` key absent.
 
+The third surface is the scoreboard's ``probables`` (NHL starting goalies, MLB starting
+pitchers), read by :func:`parse_probables_snapshot`. A pregame capture keeps these at
+sub-daily resolution, stamped by the caller with the capture time, and stores each state as a
+``valid_from`` / ``valid_to`` interval; :func:`pregame_state_as_of` reads such a table at a
+decision time without seeing anything published after it.
+
 Example:
     Snapshot one league::
 
@@ -66,10 +72,13 @@ __all__ = [
     "ESPN_DEPTHCHART_LEAGUES",
     "ESPN_INJURY_LEAGUES",
     "INJURY_SNAPSHOT_SCHEMA",
+    "PROBABLES_SNAPSHOT_SCHEMA",
     "espn_depthcharts_snapshot",
     "espn_injuries_snapshot",
     "parse_depthchart_snapshot",
     "parse_injuries_snapshot",
+    "parse_probables_snapshot",
+    "pregame_state_as_of",
 ]
 
 #: Leagues whose ESPN league-level ``injuries`` endpoint exists. Measured live on
@@ -620,3 +629,165 @@ def espn_depthcharts_snapshot(
     )
     df = pl.concat(frames, how="vertical") if frames else pl.DataFrame(schema=DEPTHCHART_SNAPSHOT_SCHEMA)
     return _pandas_ids(df) if return_as_pandas else df
+
+
+#: One row per probable starter a scoreboard event lists: NHL's ``probableStartingGoalie``,
+#: MLB's ``probableStartingPitcher``. ``role`` is ESPN's own key, kept as-is so one frame serves
+#: both. ``status`` is ESPN's ``Expected`` / ``Confirmed`` and is itself a pregame state: a goalie
+#: moves from Expected to Confirmed in the hours before puck drop. ``event_state`` is ``pre``,
+#: ``in`` or ``post`` at fetch time. The frame carries no capture stamp; the caller that stores
+#: it records when it was fetched.
+PROBABLES_SNAPSHOT_SCHEMA: dict[str, Any] = {
+    "league": pl.Utf8,
+    "event_id": pl.Int64,
+    "event_date": pl.Utf8,
+    "event_state": pl.Utf8,
+    "team_id": pl.Int64,
+    "team_abbreviation": pl.Utf8,
+    "home_away": pl.Utf8,
+    "role": pl.Utf8,
+    "athlete_id": pl.Int64,
+    "athlete_display_name": pl.Utf8,
+    "status": pl.Utf8,
+}
+
+
+def parse_probables_snapshot(
+    payload: Mapping[str, Any] | None,
+    *,
+    league: str,
+    return_as_pandas: bool = False,
+) -> Any:
+    """Flatten a scoreboard payload's ``probables`` to one row per listed starter.
+
+    :func:`sportsdataverse._common_espn_parsers.parse_scoreboard` returns one row per event
+    and drops ``competitions[].competitors[].probables[]``; this reads it. ESPN fills it
+    days before the game (on 2026-11-25 every NHL game through 2026-11-28 listed both
+    goalies) and keeps it after the final, so a stored capture is pregame only when it was
+    fetched before the event started, that is ``event_state == "pre"`` at fetch time.
+
+    Args:
+        payload: Raw JSON dict from ``espn_{league}_scoreboard(dates=..., return_parsed=False)``.
+            ``None`` or a malformed payload yields a zero-row frame.
+        league: League slug written into the ``league`` column.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`PROBABLES_SNAPSHOT_SCHEMA`'s columns; zero rows when no event
+        lists a probable, never a raise.
+
+    Example:
+        Tonight's probable goalies::
+
+            import polars as pl
+            from sportsdataverse.nhl import espn_nhl_scoreboard
+            from sportsdataverse.espn_snapshots import parse_probables_snapshot
+
+            raw = espn_nhl_scoreboard(dates=20261125, return_parsed=False)
+            df = parse_probables_snapshot(raw, league="nhl")
+
+        Confirmed starters for games not yet started::
+
+            df.filter((pl.col("event_state") == "pre") & (pl.col("status") == "Confirmed"))
+
+    See Also:
+        * `fastRhockey`_ -- the R hockey sister package
+        * `baseballr`_ -- the R baseball sister package
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+    .. _baseballr: https://baseballr.sportsdataverse.org
+    """
+    rows: list[dict[str, Any]] = []
+    for event in _list(_mapping(payload).get("events")):
+        if not isinstance(event, Mapping):
+            continue
+        event_id = _as_id(event.get("id"), "event.id")
+        state = _text(_mapping(_mapping(event.get("status")).get("type")), "state")
+        for comp in _list(event.get("competitions"))[:1]:
+            for side in _list(_mapping(comp).get("competitors")):
+                side_map = _mapping(side)
+                team = _mapping(side_map.get("team"))
+                for probable in _list(side_map.get("probables")):
+                    if not isinstance(probable, Mapping):
+                        continue
+                    athlete = _mapping(probable.get("athlete"))
+                    rows.append(
+                        {
+                            "league": league,
+                            "event_id": event_id,
+                            "event_date": _text(event, "date"),
+                            "event_state": state,
+                            "team_id": _as_id(team.get("id"), "team.id"),
+                            "team_abbreviation": _text(team, "abbreviation"),
+                            "home_away": _text(side_map, "homeAway"),
+                            "role": _text(probable, "name"),
+                            "athlete_id": _athlete_id(athlete),
+                            "athlete_display_name": _text(athlete, "displayName"),
+                            "status": _text(_mapping(probable.get("status")), "name"),
+                        }
+                    )
+    df = pl.DataFrame(rows, schema=PROBABLES_SNAPSHOT_SCHEMA)
+    return _pandas_ids(df) if return_as_pandas else df
+
+
+def pregame_state_as_of(snapshots: Any, t: datetime | pl.Expr) -> Any:
+    """Keep the snapshot rows that were known at decision time ``t``.
+
+    A snapshot table stores each observed state as an interval: ``valid_from`` is the first
+    capture that showed it, ``valid_to`` the first capture that no longer did (null while it
+    is still current). A state is known at ``t`` iff ``valid_from <= t < valid_to``, with a
+    null ``valid_to`` read as open-ended. A row whose ``valid_from`` is after ``t`` is never
+    returned, so a model that reads only this function's output cannot see a starter or an
+    injury published after its decision time. The intervals already carry their end, so this
+    is a filter, not an as-of join.
+
+    Args:
+        snapshots: A polars ``DataFrame`` or ``LazyFrame`` with timezone-aware ``valid_from``
+            and ``valid_to`` datetime columns (any zone; compared as UTC instants), such as the
+            ``nhl_pregame_snapshots`` release.
+        t: The decision time. A timezone-aware ``datetime`` applies one time to every row; a
+            ``pl.Expr`` gives each row its own, for example puck drop minus three hours after a
+            join to the schedule. The expression must also be timezone-aware.
+
+    Returns:
+        The rows of ``snapshots`` valid at ``t``, with the input's columns and frame type.
+
+    Raises:
+        ValueError: If ``valid_from`` or ``valid_to`` is missing, or ``t`` is a naive
+            ``datetime`` (a naive time compared with a UTC column is a silent offset bug). A
+            naive ``valid_from`` / ``valid_to`` column or ``pl.Expr`` raises polars' own error.
+
+    Example:
+        The state three hours before a fixed time::
+
+            from datetime import datetime, timedelta, timezone
+            import polars as pl
+            from sportsdataverse.espn_snapshots import pregame_state_as_of
+            from sportsdataverse.nhl import load_nhl_pregame_snapshots
+
+            snapshots = load_nhl_pregame_snapshots(seasons=2027)
+            t = datetime(2026, 11, 26, 0, 0, tzinfo=timezone.utc) - timedelta(hours=3)
+            known = pregame_state_as_of(snapshots, t)
+
+        Each game's own lead, puck drop minus three hours::
+
+            known = pregame_state_as_of(snapshots, pl.col("start_time_utc") - pl.duration(hours=3))
+
+    See Also:
+        * `fastRhockey`_ -- the R hockey sister package
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+    """
+    names = snapshots.collect_schema().names() if isinstance(snapshots, pl.LazyFrame) else snapshots.columns
+    missing = [c for c in ("valid_from", "valid_to") if c not in names]
+    if missing:
+        raise ValueError(f"pregame_state_as_of: snapshots lack {', '.join(missing)}")
+    if isinstance(t, datetime):
+        if t.tzinfo is None:
+            raise ValueError("pregame_state_as_of: t must be timezone-aware (the intervals are UTC)")
+        t = pl.lit(t.astimezone(timezone.utc))
+    else:
+        t = t.dt.convert_time_zone("UTC")
+    start = pl.col("valid_from").dt.convert_time_zone("UTC")
+    end = pl.col("valid_to").dt.convert_time_zone("UTC")
+    return snapshots.filter((start <= t) & (end.is_null() | (t < end)))
