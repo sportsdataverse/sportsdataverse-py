@@ -12099,6 +12099,37 @@
   expected: kill
   note: Without the untried-first pass, a jump or a +1 step can revisit a proxy within one fetch and leave a healthy one untried.
 
+# --- NCAA fetcher: a page the origin answers with HTTP 5xx fails fast (2026-11-26) -------------------
+- id: ncaa-5xx-read-as-unsolved-stub
+  group: ncaa-5xx-fails-fast
+  finding: ncaa-5xx-pool-sweep
+  file: sportsdataverse/mbb/mbb_ncaa_fetch.py
+  snippet: 'if not _browser_response_unsolved(text) or _is_server_error(status, text):'
+  mutant: 'if not _browser_response_unsolved(text):'
+  test: tests/mbb/test_mbb_ncaa_fetch.py::test_a_server_error_page_is_an_answer_not_a_challenge
+  expected: kill
+  note: The 643-byte HTTP 500 page is re-solved as "bm-verify not passed" again (baseball 2012, three shards stuck ~2.5 h).
+
+- id: ncaa-5xx-not-counted
+  group: ncaa-5xx-fails-fast
+  finding: ncaa-5xx-pool-sweep
+  file: sportsdataverse/mbb/mbb_ncaa_fetch.py
+  snippet: '    _ServerErrorAnswer: (_SERVER_ERRORS_MAX, _PageServerError),'
+  mutant: '    _ServerErrorAnswer: (10**9, _PageServerError),'
+  test: tests/mbb/test_mbb_ncaa_fetch.py::test_a_page_that_errors_on_three_proxies_fails_without_sweeping_the_pool
+  expected: kill
+  note: A 5xx just rotates, so one broken page sweeps len(pool) + max_retries proxies.
+
+- id: ncaa-5xx-capture-halts-as-ban
+  group: ncaa-5xx-fails-fast
+  finding: ncaa-5xx-pool-sweep
+  file: sportsdataverse/scrape/ncaa/capture.py
+  snippet: 'except (NoDataError, _PageServerError) as exc:'
+  mutant: 'except NoDataError as exc:'
+  test: tests/scrape/ncaa/test_capture_behaviour.py::test_a_contest_whose_page_errors_is_counted_failed_and_the_run_goes_on
+  expected: kill
+  note: A page the origin 500s on halts the nightly capture as BAN-SUSPECT instead of counting one failed contest.
+
 # --- PR #1268: free throws on the lineup at their foul -------------------------------------------
 - id: ft-box-follows-the-foul
   group: ft-foul
@@ -12905,6 +12936,55 @@
   expected: kill
   note: A season with no edition answers the current one; it would come back as that season's results.
 
+- id: bb-war-tier-counts-zero-teams
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '        .with_columns(pl.col("players").fill_null(0))'
+  mutant: '        .drop_nulls("players")'
+  test: tests/common/test_war_tiers.py::test_each_team_s_tiers_add_up_to_its_tiered_players
+  expected: kill
+  note: A team with nobody in a tier would drop out of that tier's median instead of counting 0, which lifts the Star median.
+
+- id: bb-war-tier-star-floor
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '"Star": 95.0'
+  mutant: '"Star": 90.0'
+  test: tests/common/test_war_tiers.py::test_tier_shares_are_the_cut_points
+  expected: kill
+  note: A Star floor of 90 makes the top tier a tenth of the league, twice the 5% cut.
+
+- id: bb-war-tier-no-possession-floor
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'TIER_MIN_POSS_SHARE = 0.10'
+  mutant: 'TIER_MIN_POSS_SHARE = 0.0'
+  test: tests/common/test_war_tiers.py::test_only_the_possession_cohort_is_tiered
+  expected: kill
+  note: Without the floor, call-ups with a few possessions and a WAR near 0 are tiered and land in the middle of the ladder.
+
+- id: bb-war-tier-traded-main-team-only
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '            pl.col("team_ids").str.split(",").alias("team_id"),'
+  mutant: '            pl.col("_main").cast(pl.Utf8).implode().alias("team_id"),'
+  test: tests/common/test_war_tiers.py::test_a_traded_player_is_on_every_team_he_played_for
+  expected: kill
+  note: A traded player would sit on his main team only, missing from the roster of every other team he played for.
+
+- id: bb-war-tier-conf-ranked-league-wide
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'by=("season", "conference_id"))'
+  mutant: 'by=("season",))'
+  test: tests/common/test_war_tiers.py::test_the_conference_tier_is_the_ladder_within_each_conference
+  expected: kill
+  note: The conference tier would be the Division I tier again, so a conference's shares would not hold.
 - id: bb-playoff-series-play-in-kept
   group: bb-playoff-series
   finding: bb-d43-playoff-series
@@ -13045,3 +13125,23 @@
   test: tests/test_pll.py::test_leaders_are_long_and_ranked
   expected: kill
   note: The documented rank is 1-based.
+
+- id: bb-tournament-runs-early-events-kept
+  group: bb-tournament-runs
+  finding: bb-d43-tournament-runs
+  file: sportsdataverse/_common/tournament_runs.py
+  snippet: '        pl.col("game_date") >= pl.date(pl.col("season").cast(pl.Int32), 2, CONFERENCE_TOURNAMENT_FROM)'
+  mutant: '        pl.col("game_date") >= pl.date(pl.col("season").cast(pl.Int32) - 1, 9, 1)'
+  test: tests/mbb/test_mbb_tournament_runs.py::test_early_season_events_are_not_runs
+  expected: kill
+  note: Early-season events that carry a conference group would become conference-tournament runs.
+
+- id: bb-tournament-runs-untagged-split
+  group: bb-tournament-runs
+  finding: bb-d43-tournament-runs
+  file: sportsdataverse/_common/tournament_runs.py
+  snippet: '            pl.coalesce(pl.col("tournament_id"), pl.col("tagged_id")).alias("tournament_id"),'
+  mutant: '            pl.col("tournament_id"),'
+  test: tests/mbb/test_mbb_tournament_runs.py::test_an_untagged_game_joins_its_tagged_tournament_or_keys_on_its_event_name
+  expected: kill
+  note: An untagged game of a tagged tournament (older seasons) would split its run in two.

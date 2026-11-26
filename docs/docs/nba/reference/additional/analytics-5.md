@@ -42,6 +42,7 @@ One row per `(season, player_id)` (stats.nba.com ids, Int64): `player_name`, `te
 | `player_name` | String | Player name, from the player impact release. |
 | `team_id` | Int64 | stats.nba.com team id of the team he played the most possessions for. |
 | `teams` | Int64 | How many teams he played for in the regular season. |
+| `team_ids` | String | Every team he played for that season, comma-separated, most possessions first (the first is team_id); roster_tiers puts him on each. |
 | `min` | Float64 | Regular-season minutes (the player impact release's). |
 | `poss` | Float64 | On-court possessions, offensive plus defensive over 2, counted from the stats.nba.com possessions (every possession row, BB-D3's convention). The minutes basis of vorp and war. |
 | `rating` | Float64 | Points per 100 possessions above a league-average player: the mean of rating_bpm, rating_rapm and rating_boban. |
@@ -61,6 +62,7 @@ One row per `(season, player_id)` (stats.nba.com ids, Int64): `player_name`, `te
 | `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
 | `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
 | `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
+| `war_tier` | String | Depth-ladder tier by WAR percentile within the season's tier cohort, the players with on-court possessions of at least a tenth of the season's possessions per team (TIER_MIN_POSS_SHARE): Star (95 or more), Starter (80 to under 95), Rotation (50 to under 80), Bench (20 to under 50), Fringe (under 20), about the top 5%, then 15%, 30%, 30% and 20%, to within a player at each floor. The percentile is 100 * (n + 1 - rank) / (n + 1) among the cohort, not war_pct. Null under the possession floor (a call-up who barely played) and in a season whose cohort is under ten players. |
 | `pts_pg` | Float64 | Points per game he played (minutes over 0), from the regular-season stats game logs. |
 | `reb_pg` | Float64 | Rebounds per game he played (minutes over 0), from the regular-season stats game logs. |
 | `ast_pg` | Float64 | Assists per game he played (minutes over 0), from the regular-season stats game logs. |

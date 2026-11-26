@@ -111,6 +111,15 @@ def test_vocabulary_a_404_contest_is_counted_failed_and_the_run_goes_on(tmp_path
     assert _written(tmp_path) == ["2.json.gz"]
 
 
+def test_a_contest_whose_page_errors_is_counted_failed_and_the_run_goes_on(tmp_path):
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _PageServerError
+
+    fetch = _Script([_PageServerError("stats.ncaa.org answered HTTP 500 on 3 proxies"), True])
+    counts = capture.capture_contests(["1", "2"], 2015, league="wbb", root=tmp_path, fetch_pages_fn=fetch)
+    assert counts == {"captured": 1, "skipped": 0, "failed": 1, "not_ready": 0}
+    assert _written(tmp_path) == ["2.json.gz"]
+
+
 def test_vocabulary_a_bug_is_not_reported_as_a_ban(tmp_path):
     fetch = _Script([RuntimeError("a parser bug")])
     with pytest.raises(RuntimeError, match="a parser bug"):
