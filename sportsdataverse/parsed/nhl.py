@@ -336,6 +336,7 @@ from sportsdataverse.nhl import load_nhl_penalties as load_nhl_penalties  # noqa
 from sportsdataverse.nhl import load_nhl_player_box as load_nhl_player_box  # noqa: F401
 from sportsdataverse.nhl import load_nhl_player_boxscore as load_nhl_player_boxscore  # noqa: F401
 from sportsdataverse.nhl import load_nhl_player_boxscores as load_nhl_player_boxscores  # noqa: F401
+from sportsdataverse.nhl import load_nhl_pregame_snapshots as load_nhl_pregame_snapshots  # noqa: F401
 from sportsdataverse.nhl import load_nhl_rosters as load_nhl_rosters  # noqa: F401
 from sportsdataverse.nhl import load_nhl_schedule as load_nhl_schedule  # noqa: F401
 from sportsdataverse.nhl import load_nhl_schedules as load_nhl_schedules  # noqa: F401
@@ -619,6 +620,7 @@ __all__ = [
     "load_nhl_player_box",
     "load_nhl_player_boxscore",
     "load_nhl_player_boxscores",
+    "load_nhl_pregame_snapshots",
     "load_nhl_rosters",
     "load_nhl_schedule",
     "load_nhl_schedules",
