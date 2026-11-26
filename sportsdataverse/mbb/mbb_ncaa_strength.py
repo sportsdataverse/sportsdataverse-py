@@ -1,4 +1,4 @@
-"""KenPom-style strength-of-schedule + home-court-advantage adjustment engine.
+"""Iterative strength-of-schedule + home-court-advantage adjustment engine.
 
 Faithful port of hoop-explorer's ``buildStrengthAdjustedStats``
 (`Alex-At-Home/cbb-on-off-analyzer <https://github.com/Alex-At-Home/cbb-on-off-analyzer>`_
@@ -13,7 +13,7 @@ oracle-less CLI script (no jest); this port's tests are hand-derived from the
 TS on paper, with the arithmetic documented inline for reviewer re-derivation.
 
 For each of four per-game shooting rates (``efg``/``3p``/``2pmid``/``2prim``)
-the engine iterates a KenPom-style per-game adjustment
+the engine iterates a multiplicative per-game opponent adjustment
 ``Adj_game = Raw_game * (league / (OppAdj +/- HCA))`` to convergence, then
 re-estimates a per-stat home-court advantage from home/away possession-
 imbalance residuals.
@@ -618,7 +618,7 @@ def run_iterative_adjustment_with_hca(
     max_iterations: int = MAX_ITERATIONS,
     tolerance: float = TOLERANCE,
 ) -> IterationResult:
-    """KenPom-style SoS + HCA fixed-point solver (``runIterativeAdjustmentWithHCA``, ``ts:306-527``).
+    """Iterative SoS + HCA fixed-point solver (``runIterativeAdjustmentWithHCA``, ``ts:306-527``).
 
     Each iteration (Jacobi -- all teams read the *previous* iteration's
     adjustments, then commit together):

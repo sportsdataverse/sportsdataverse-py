@@ -59,7 +59,9 @@ leagues:
   # from the league rankings, e.g. week 17 for the men in 2026; Core v2 lists no weeks). PLL-only: draft.
   # PLL and NLL: teams_site, standings, franchises, franchise. nll answers no other short the PLL does
   # not. season_group_teams answers for pll and the women, season_group_children for the men (checked
-  # with each league's own group id). ---
+  # with each league's own group id). The examples carry those
+  # probed ids (``league_example_args: lacrosse`` in espn_site_v2 / espn_core_v2; the college-only routes name
+  # a college league), and tests/test_espn_live.py runs every one. ---
   - prefix: lacrosse
     sport: lacrosse
     league: pll

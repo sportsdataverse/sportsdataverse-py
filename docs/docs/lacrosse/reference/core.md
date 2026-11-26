@@ -213,7 +213,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -272,7 +272,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_season_info-example}
 
 ```python
-espn_lacrosse_season_info(league='pll', season=2024)
+espn_lacrosse_season_info(league='pll', season=2026)
 ```
 
 ## espn_lacrosse_season_types
@@ -281,7 +281,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/types`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -310,7 +310,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_season_types-example}
 
 ```python
-espn_lacrosse_season_types(league='pll', season=2024)
+espn_lacrosse_season_types(league='pll', season=2026)
 ```
 
 ## espn_lacrosse_season_type
@@ -319,7 +319,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/types/{season_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -362,7 +362,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_season_type-example}
 
 ```python
-espn_lacrosse_season_type(league='pll', season=2024, season_type=2)
+espn_lacrosse_season_type(league='pll', season=2026, season_type=2)
 ```
 
 ## espn_lacrosse_season_group
@@ -371,7 +371,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/types/{season_type}/groups/{group_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2/groups/118](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2/groups/118)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -413,7 +413,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_season_group-example}
 
 ```python
-espn_lacrosse_season_group(league='pll', season=2024, season_type=2, group_id=80)
+espn_lacrosse_season_group(league='pll', season=2026, season_type=2, group_id=118)
 ```
 
 ## espn_lacrosse_season_groups
@@ -422,7 +422,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/types/{season_type}/groups`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2/groups](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2/groups)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -452,7 +452,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_season_groups-example}
 
 ```python
-espn_lacrosse_season_groups(league='pll', season=2024, season_type=2)
+espn_lacrosse_season_groups(league='pll', season=2026, season_type=2)
 ```
 
 ## espn_lacrosse_season_group_teams
@@ -461,7 +461,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/types/{season_type}/groups/{group_id}/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/teams?limit=500](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/teams?limit=500)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2/groups/118/teams?limit=500](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2/groups/118/teams?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -493,7 +493,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_season_group_teams-example}
 
 ```python
-espn_lacrosse_season_group_teams(league='pll', season=2024, season_type=2, group_id=80)
+espn_lacrosse_season_group_teams(league='pll', season=2026, season_type=2, group_id=118)
 ```
 
 ## espn_lacrosse_season_group_children
@@ -502,7 +502,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/types/{season_type}/groups/{group_id}/children`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/children?limit=500](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/children?limit=500)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/mens-college-lacrosse/seasons/2026/types/2/groups/90/children?limit=500](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/mens-college-lacrosse/seasons/2026/types/2/groups/90/children?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -534,7 +534,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_season_group_children-example}
 
 ```python
-espn_lacrosse_season_group_children(league='pll', season=2024, season_type=2, group_id=80)
+espn_lacrosse_season_group_children(league='mens-college-lacrosse', season=2026, season_type=2, group_id=90)
 ```
 
 ## espn_lacrosse_season_teams
@@ -543,7 +543,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/teams?limit=1000&page=1)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -574,7 +574,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_season_teams-example}
 
 ```python
-espn_lacrosse_season_teams(league='pll', season=2024)
+espn_lacrosse_season_teams(league='pll', season=2026)
 ```
 
 ## espn_lacrosse_season_team
@@ -583,7 +583,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/teams/{team_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/teams/4](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/teams/4)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/teams/122896](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/teams/122896)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -650,7 +650,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_season_team-example}
 
 ```python
-espn_lacrosse_season_team(league='pll', season=2024, team_id='4')
+espn_lacrosse_season_team(league='pll', season=2026, team_id='122896')
 ```
 
 ## espn_lacrosse_games
@@ -698,7 +698,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/{event_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -737,7 +737,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_game-example}
 
 ```python
-espn_lacrosse_game(league='pll', event_id='401584793')
+espn_lacrosse_game(league='pll', event_id='401867221')
 ```
 
 ## espn_lacrosse_game_competition
@@ -746,7 +746,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/{event_id}/competitions/{cid}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -854,7 +854,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_game_competition-example}
 
 ```python
-espn_lacrosse_game_competition(league='pll', event_id='401584793')
+espn_lacrosse_game_competition(league='pll', event_id='401867221')
 ```
 
 ## espn_lacrosse_game_teams
@@ -863,7 +863,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/{event_id}/competitions/{cid}/competitors`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/competitors](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/competitors)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/competitors](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/competitors)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -906,7 +906,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_game_teams-example}
 
 ```python
-espn_lacrosse_game_teams(league='pll', event_id='401584793')
+espn_lacrosse_game_teams(league='pll', event_id='401867221')
 ```
 
 ## espn_lacrosse_game_team
@@ -915,7 +915,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/{event_id}/competitions/{cid}/competitors/{team_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/competitors/4](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/competitors/4)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/competitors/122896](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/competitors/122896)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -957,7 +957,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_game_team-example}
 
 ```python
-espn_lacrosse_game_team(league='pll', event_id='401584793', team_id='4')
+espn_lacrosse_game_team(league='pll', event_id='401867221', team_id='122896')
 ```
 
 ## espn_lacrosse_game_team_linescores
@@ -966,7 +966,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/competitors/4/linescores](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/competitors/4/linescores)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/competitors/122896/linescores](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/competitors/122896/linescores)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -993,7 +993,7 @@ No returns table is published for this endpoint: no capture: the page holds zero
 ### Example {#espn_lacrosse_game_team_linescores-example}
 
 ```python
-espn_lacrosse_game_team_linescores(league='pll', event_id='401584793', team_id='4')
+espn_lacrosse_game_team_linescores(league='pll', event_id='401867221', team_id='122896')
 ```
 
 ## espn_lacrosse_game_status
@@ -1002,7 +1002,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/{event_id}/competitions/{cid}/status`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/status](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/status)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/status](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/status)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1040,7 +1040,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_game_status-example}
 
 ```python
-espn_lacrosse_game_status(league='pll', event_id='401584793')
+espn_lacrosse_game_status(league='pll', event_id='401867221')
 ```
 
 ## espn_lacrosse_game_broadcasts
@@ -1049,7 +1049,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/{event_id}/competitions/{cid}/broadcasts`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/broadcasts](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/broadcasts)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/broadcasts](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/broadcasts)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1099,7 +1099,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_game_broadcasts-example}
 
 ```python
-espn_lacrosse_game_broadcasts(league='pll', event_id='401584793')
+espn_lacrosse_game_broadcasts(league='pll', event_id='401867221')
 ```
 
 ## espn_lacrosse_teams_core
@@ -1158,7 +1158,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/teams/{team_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/teams/4](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/teams/4)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/teams/122896](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/teams/122896)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1224,7 +1224,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_team_core-example}
 
 ```python
-espn_lacrosse_team_core(league='pll', team_id='4')
+espn_lacrosse_team_core(league='pll', team_id='122896')
 ```
 
 ## espn_lacrosse_franchises
@@ -1271,7 +1271,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/franchises/{franchise_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/franchises/2](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/franchises/2)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/franchises/122896](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/franchises/122896)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1319,7 +1319,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_franchise-example}
 
 ```python
-espn_lacrosse_franchise(league='pll', franchise_id='2')
+espn_lacrosse_franchise(league='pll', franchise_id='122896')
 ```
 
 ## espn_lacrosse_season_week_rankings
@@ -1328,7 +1328,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/{season}/types/{season_type}/weeks/{week}/rankings`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/weeks/1/rankings](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/weeks/1/rankings)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/mens-college-lacrosse/seasons/2026/types/2/weeks/1/rankings](https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/mens-college-lacrosse/seasons/2026/types/2/weeks/1/rankings)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1359,5 +1359,5 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_season_week_rankings-example}
 
 ```python
-espn_lacrosse_season_week_rankings(league='pll', season=2024, season_type=2, week=1)
+espn_lacrosse_season_week_rankings(league='mens-college-lacrosse', season=2026, season_type=2, week=1)
 ```
