@@ -145,10 +145,13 @@ CFB_CONSTANTS: dict[str, PredictConfig] = {
     # Refit 2026-11-25 by `cfb_higher_models.fit_pregame` in cfbfastR-cfb-data:
     #     python -m cfb_model_build.cfb_higher_models fit-pregame \
     #         --seasons 2014 ... 2025 --holdout 2024 2025
-    # Fitted on 2014-2023 (5,674 as-of games); 2024-2025 are held out of the fit,
-    # but the engine switch itself was chosen on a 2024-2025 comparison, so the
-    # 2024 gate in tests/cfb/test_cfb_prediction_backtest.py is a near-holdout.
-    # The clean read is the 2016-2025 walk-forward below.
+    # Fitted on 2014-2023 (5,674 as-of games); 2024-2025 are held out of the fit.
+    # Neither read is fully clean, because each engine change was chosen on
+    # different seasons: #1296's engine on a 2024-2025 comparison (so the 2024
+    # gate in tests/cfb/test_cfb_prediction_backtest.py is a near-holdout for
+    # it), #1300's garbage-time rule on a 2014-2023 walk-forward (which overlaps
+    # the 2016-2023 test seasons of the walk-forward below). For #1300 the
+    # 2024-2025 holdout is the cleaner read; for #1296 the walk-forward is.
     #
     # WHY IT WAS REFIT (2026-11-25, twice). `efficiency_ratings` now runs the
     # `cfb_adjusted_epa` fit (#1296: per-team shrinkage, no pregame spread),

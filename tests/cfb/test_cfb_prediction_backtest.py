@@ -274,7 +274,9 @@ _PRIOR_PACE = pl.read_parquet(_FIX / "prior_pace_2023.parquet")
 
 #: Measured on this fixture with the pace blend live: 12.9606. Floor carries
 #: headroom. Raw (no prior) measures 13.1038, so the floor sits BELOW that --
-#: a regression that silently disables the blend cannot pass this.
+#: a regression that silently disables the blend cannot pass this (by 0.004
+#: since 2026-11-25; test_pace_blend_actually_changes_the_totals is the wide
+#: guard for an inert blend).
 _TOTAL_MAE_FLOOR = 13.10
 
 

@@ -172,6 +172,8 @@ def test_efficiency_ratings_plays_are_the_margin_rule() -> None:
     )
     moved = efficiency_ratings(blown_out).sort("team_id")
     assert (moved["adj_net"] - base["adj_net"]).abs().max() > 1e-3
+    # `games` and `off_pace` (the totals tempo input) still count every pass/rush play
+    assert_frame_equal(base.select("team_id", "games", "off_pace"), moved.select("team_id", "games", "off_pace"))
 
 
 def test_efficiency_ratings_empty_input_returns_documented_schema() -> None:

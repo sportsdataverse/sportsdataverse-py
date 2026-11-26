@@ -12744,6 +12744,16 @@
   expected: kill
   note: Nets a team's own EPA over garbage time the strength fit never saw.
 
+- id: cfb-efficiency-ratings-pace-every-play
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '        base.group_by("pos_team_id")'
+  mutant: '        clean.group_by("pos_team_id")'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_plays_are_the_margin_rule
+  expected: kill
+  note: Drops garbage time from games and off_pace too, shrinking the totals tempo input by ~8-10%.
+
 - id: cfb-efficiency-ratings-penalty
   group: cfb-adjustment
   finding: cfb-adjustment-a1

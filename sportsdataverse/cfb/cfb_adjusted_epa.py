@@ -32,8 +32,8 @@ score-margin rule CFB advanced stats use
 the snap is above 43 / 37 / 27 / 21 in Q1 / Q2 / Q3 / Q4 and overtime). The same
 plays fit the opponent strengths AND make up each team's own per-game EPA, so a
 blowout of a weak team is not scored on garbage the strength fit never saw. On a
-10-season walk-forward (2014-2023, ratings through week w-1 predicting week w
-margins) this beat the previous design (``0.05 <= wp_before_naive <= 0.95`` for
+10-season backtest (2014-2023; ratings walk-forward, through week w-1 predicting
+week w margins; the margin model's 2 coefficients fit leave-one-season-out) this beat the previous design (``0.05 <= wp_before_naive <= 0.95`` for
 the strengths, own EPA on every play) by 0.19 points of MAE, 95% CI
 [0.10, 0.29] over (season, week) clusters, and no season was significantly
 worse (``tools/validation/cfb_garbage_rule_walkforward.py``). The WP band
