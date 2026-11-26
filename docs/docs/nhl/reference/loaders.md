@@ -26,6 +26,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nhl_pbp_lite` | [nhl_pbp_lite](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pbp_lite) | — |
 | `load_nhl_penalties` | [nhl_penalties](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_penalties) | — |
 | `load_nhl_player_boxscores` | [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_player_boxscores) | — |
+| `load_nhl_pregame_snapshots` | [nhl_pregame_snapshots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pregame_snapshots) | — |
 | `load_nhl_rosters` | [nhl_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_rosters) | — |
 | `load_nhl_schedules` | [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_schedules) | — |
 | `load_nhl_scoring` | [nhl_scoring](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_scoring) | — |
@@ -64,6 +65,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_nhl_officials](loaders/other.md#load_nhl_officials) | Release: nhl_officials · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_officials/officials_{season}.parquet` |
 | [load_nhl_penalties](loaders/other.md#load_nhl_penalties) | Release: nhl_penalties · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_penalties/penalties_{season}.parquet` |
 | [load_nhl_player_boxscores](loaders/other.md#load_nhl_player_boxscores) | Release: nhl_player_boxscores · asset … |
+| [load_nhl_pregame_snapshots](loaders/other.md#load_nhl_pregame_snapshots) | Release: nhl_pregame_snapshots · asset … |
 | [load_nhl_rosters](loaders/other.md#load_nhl_rosters) | Release: nhl_rosters · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_rosters/rosters_{season}.parquet` |
 | [load_nhl_schedules](loaders/other.md#load_nhl_schedules) | Release: nhl_schedules · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_schedules/nhl_schedule_{season}.parquet` |
 | [load_nhl_scoring](loaders/other.md#load_nhl_scoring) | Release: nhl_scoring · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_scoring/scoring_{season}.parquet` |

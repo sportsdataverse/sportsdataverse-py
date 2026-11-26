@@ -1696,6 +1696,15 @@ loaders:
   min_season: 2010
   example_args:
     seasons: 2010
+- fn: load_nhl_pregame_snapshots
+  league: nhl
+  base: sdv_releases
+  url: nhl_pregame_snapshots/nhl_pregame_snapshots_{season}.parquet
+  tag: nhl_pregame_snapshots
+  min_season: 2027
+  notes: "Pregame state captured every 30 minutes on game days (probable goalies with ESPN's Expected / Confirmed status, and the ESPN injury list), one row per state interval. Read it as of a decision time t with pregame_state_as_of (valid_from <= t < valid_to, null valid_to = still current), never past it: a row whose valid_from is after t was not known at t. Capture began 2026-11-25 (season 2027) and cannot be backfilled."
+  example_args:
+    seasons: 2027
 - fn: load_nhl_rosters
   league: nhl
   base: sdv_releases
