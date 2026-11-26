@@ -327,6 +327,56 @@ def test_not_available_is_an_answer_not_a_challenge(body: str) -> None:
     assert page.gotos == 1  # the first solve only: no re-solve on the answer
 
 
+#: Real: stats.ncaa.org's HTTP 500 page for baseball 2012 contest 780704's play_by_play, served
+#: on every proxy on 2026-11-26 (tests/fixtures/ncaa/capture/README.md). 643 bytes, under the
+#: 1 KB stub rule, so it read as "bm-verify not passed" and swept the 200-proxy pool per URL.
+_SERVER_ERROR = (
+    Path(__file__).resolve().parents[1] / "fixtures" / "ncaa" / "capture" / "server_error_play_by_play_780704.html"
+).read_text(encoding="utf-8")
+
+
+class _StatusPage(_FakePage):
+    """A _FakePage whose in-page fetch answers with a fixed HTTP status."""
+
+    def __init__(self, bodies: "list[str]", status: int) -> None:
+        super().__init__(bodies)
+        self.status = status
+
+    def evaluate(self, js: str, url: str) -> dict:
+        return {"status": self.status, "text": self.bodies.pop(0)}
+
+
+def test_a_server_error_page_is_an_answer_not_a_challenge() -> None:
+    page = _StatusPage([_SERVER_ERROR], 500)
+    t = _transport_with(page)
+
+    status, text = t("https://stats.ncaa.org/contests/780704/play_by_play", {"http": _POOL[0]}, {})
+
+    assert (status, text) == (500, _SERVER_ERROR)
+    assert page.gotos == 1  # the first solve only: no re-solve on the origin's answer
+
+
+def test_a_page_that_errors_on_three_proxies_fails_without_sweeping_the_pool(tmp_path: Path) -> None:
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _PageServerError
+
+    pool = [f"http://u:p@10.0.1.{i}:1" for i in range(10)]
+    transport = FakeTransport([(500, _SERVER_ERROR)] * 3)
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    with pytest.raises(_PageServerError, match=r"HTTP 500: .*780704/play_by_play \(on 3 proxies\)"):
+        NcaaFetcher(cfg, proxy_pool=pool).fetch_html("contests/780704/play_by_play")
+    assert len(transport.calls) == 3  # not len(pool) + max_retries
+    assert len({c[1]["http"] for c in transport.calls}) == 3  # three different proxies
+    assert not cached_path("contests/780704/play_by_play", cache_dir=tmp_path).exists()
+
+
+def test_one_server_error_rotates_and_the_next_proxy_serves_the_page(tmp_path: Path) -> None:
+    transport = FakeTransport([(500, _SERVER_ERROR), (200, _CLEAN)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+    assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
+    assert fetcher._dead == set()  # a 5xx never retires the proxy
+
+
 @pytest.mark.parametrize("body", _NOT_AVAILABLE)
 def test_vocabulary_not_available_is_no_data_after_one_request(tmp_path: Path, body: str) -> None:
     transport = FakeTransport([(200, body)])
