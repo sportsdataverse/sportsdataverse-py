@@ -291,6 +291,9 @@ from sportsdataverse.wnba import wnba_player_season_box_rates as wnba_player_sea
 from sportsdataverse.wnba import wnba_player_shot_zones as wnba_player_shot_zones  # noqa: F401
 from sportsdataverse.wnba import wnba_player_war as wnba_player_war  # noqa: F401
 from sportsdataverse.wnba import wnba_player_wowy as wnba_player_wowy  # noqa: F401
+from sportsdataverse.wnba import wnba_playoff_series as wnba_playoff_series  # noqa: F401
+from sportsdataverse.wnba import wnba_playoff_series_players as wnba_playoff_series_players  # noqa: F401
+from sportsdataverse.wnba import wnba_playoff_series_teams as wnba_playoff_series_teams  # noqa: F401
 from sportsdataverse.wnba import wnba_playtype_ratings as wnba_playtype_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_predict_games as wnba_predict_games  # noqa: F401
@@ -595,6 +598,9 @@ __all__ = [
     "wnba_player_shot_zones",
     "wnba_player_war",
     "wnba_player_wowy",
+    "wnba_playoff_series",
+    "wnba_playoff_series_players",
+    "wnba_playoff_series_teams",
     "wnba_playtype_ratings",
     "wnba_possessions",
     "wnba_predict_games",

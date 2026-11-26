@@ -12783,3 +12783,33 @@
   test: tests/test_pgatour.py::test_tour_cup_season_is_read_from_the_title
   expected: kill
   note: The API sends season as "2025 Standings"; read as an int it is null on every row.
+
+- id: bb-playoff-series-play-in-kept
+  group: bb-playoff-series
+  finding: bb-d43-playoff-series
+  file: sportsdataverse/_common/playoff_series.py
+  snippet: '    po = schedule.filter(pl.col("season_type") == 3)'
+  mutant: '    po = schedule.filter(pl.col("season_type").is_in([3, 5]))'
+  test: tests/nba/test_nba_playoff_series.py::test_every_postseason_game_is_in_exactly_one_series_and_play_in_in_none
+  expected: kill
+  note: Play-in games (ESPN season_type 5) would become one-game series of their own.
+
+- id: bb-playoff-series-key-by-venue
+  group: bb-playoff-series
+  finding: bb-d43-playoff-series
+  file: sportsdataverse/_common/playoff_series.py
+  snippet: '    lo = pl.min_horizontal("home_id", "away_id").cast(pl.Int64)'
+  mutant: '    lo = pl.col("home_id").cast(pl.Int64)'
+  test: tests/nba/test_nba_playoff_series.py::test_nba_2025_bracket_and_finals
+  expected: kill
+  note: A key read off the home side splits each series in two by venue.
+
+- id: bb-playoff-series-clinch-early
+  group: bb-playoff-series
+  finding: bb-d43-playoff-series
+  file: sportsdataverse/_common/playoff_series.py
+  snippet: '                & (pl.col("plays_on").fill_null(False) | (pl.col("lead_wins") >= pl.col("clinch")).fill_null(False))'
+  mutant: '                & (pl.col("plays_on").fill_null(False) | (pl.col("lead_wins") >= pl.col("clinch") - 1).fill_null(False))'
+  test: tests/nba/test_nba_playoff_series.py::test_a_series_in_progress_is_not_decided
+  expected: kill
+  note: A Finals leader one win short would be called the winner mid-series.
