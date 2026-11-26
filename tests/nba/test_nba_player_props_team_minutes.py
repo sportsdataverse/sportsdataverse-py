@@ -82,3 +82,16 @@ def test_a_traded_player_projects_for_his_latest_team(monkeypatch, league_id, pr
     own = before.filter(pl.col("player_id") == player_id)["minutes"].sum()
     team_minutes = 5.0 * (40 if league_id == "10" else 48)
     assert row["minutes_exp"].item() == pytest.approx(own / team_total * team_minutes)
+
+
+def test_an_all_star_projects_for_his_own_team_after_the_break(monkeypatch):
+    # ESPN logs the 2024 All-Star game (2024-02-18) under exhibition teams 31/32 with real minutes;
+    # 401585422 (2024-02-22) is the first game after it, with Brunson (18) and Maxey (20) on the floor.
+    results = _stub_league(monkeypatch, "00", "")
+    g = results.filter(pl.col("game_id") == "401585422").row(0, named=True)
+    out = props.nba_player_props(2024, g["game_id"], g["home_team_id"], g["away_team_id"], league_id="00")
+    got = dict(out.select("player_id", "team_id").iter_rows())
+    assert got.get("3934672") == "18" and got.get("4431678") == "20"
+    assert out.group_by("team_id").agg(pl.col("minutes_exp").sum())["minutes_exp"].to_list() == pytest.approx(
+        [240.0, 240.0]
+    )
