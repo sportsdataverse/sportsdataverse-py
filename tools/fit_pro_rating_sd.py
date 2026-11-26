@@ -44,7 +44,8 @@ pre-registration. WNBA passed and ships ``k = 1060``; NBA failed at the preseaso
 too narrow) and keeps ``k = lam``. The numbers are in the constant's comment.
 
 The first gate's seasons had been seen before (the first coverage run found the wide preseason bands on
-them). Reports: ClaudeCowork ``data/2026-11-25-model-lifecycle/refit_candidate/``.
+them). The gate's thresholds are in the ``PRIOR_MISS_POSS`` comment of ``sportsdataverse/nba/nba_season_sim.py``;
+its result is in the ``pro_season_sim`` row of ``tools/models/model_ledger.json``.
 
 The train seasons are the sim's own (``SIM_CONSTANTS``). Inputs are the
 ``{nba,wnba}_stats_possessions`` / ``_schedules`` releases (network), cached by

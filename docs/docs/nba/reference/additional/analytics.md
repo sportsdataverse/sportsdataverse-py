@@ -289,6 +289,59 @@ goes in about 95% of the time).
 
 The input plus `xfg:Float64`: the make chance of every row with `shot_value` 2 or 3 and a location; null on every other row (free throws, non-shots, an unlocated attempt). Empty input returns the input with the null column.
 
+| col_name | type | description |
+|---|---|---|
+| `order_index` | Int64 |  |
+| `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
+| `clock` | String | Game clock value. |
+| `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
+| `team_id` | Int64 | Unique team identifier. |
+| `team_tricode` | String | Three-letter team code (e.g. 'LAS' / 'NYL'). |
+| `person_id` | Int64 | Unique player identifier (V3 endpoints). |
+| `player_name` | String | Player name. |
+| `player_name_i` | String | Player name i. |
+| `x_legacy` | Int64 | V2-format X coordinate (preserved for V3-to-V2 compatibility). |
+| `y_legacy` | Int64 | V2-format Y coordinate (preserved for V3-to-V2 compatibility). |
+| `shot_distance` | Int64 | Shot distance from the basket, in feet. |
+| `shot_result` | String | Shot result ('Made' / 'Missed'). |
+| `is_field_goal` | Int64 | 1 if the action was a field goal; 0 otherwise. |
+| `score_home` | String | Score home. |
+| `score_away` | String | Score away. |
+| `points_total` | Int64 | Running total of points scored. |
+| `location` | String | Location. |
+| `description` | String | Long-form description text. |
+| `action_type` | String | Action type label (e.g. 'Made Shot', 'Substitution'). |
+| `sub_type` | String | Action sub-type label. |
+| `video_available` | Int64 | Video available. |
+| `shot_value` | Int64 | Point value of the shot (2 or 3). |
+| `action_id` | Int64 | Unique action identifier within a game (V3 PBP). |
+| `game_id` | String | Unique game identifier. |
+| `seconds_remaining` | Float64 | Seconds remaining in the period. |
+| `event_type` | String | Event / play type code (V2 PBP). |
+| `is_made_shot` | Boolean |  |
+| `is_missed_shot` | Boolean |  |
+| `is_free_throw` | Boolean |  |
+| `is_rebound` | Boolean |  |
+| `is_turnover` | Boolean |  |
+| `is_foul` | Boolean |  |
+| `is_substitution` | Boolean |  |
+| `is_jump_ball` | Boolean |  |
+| `is_timeout` | Boolean |  |
+| `is_period` | Boolean |  |
+| `possession_number` | Int64 | Possession number. |
+| `off_player_1` | Int64 |  |
+| `off_player_2` | Int64 |  |
+| `off_player_3` | Int64 |  |
+| `off_player_4` | Int64 |  |
+| `off_player_5` | Int64 |  |
+| `def_player_1` | Int64 |  |
+| `def_player_2` | Int64 |  |
+| `def_player_3` | Int64 |  |
+| `def_player_4` | Int64 |  |
+| `def_player_5` | Int64 |  |
+| `season` | Int64 | Season year. |
+| `xfg` | Float64 | Make chance of a located two- or three-point attempt from the bundled location model; null on every other row (free throws, non-shots, an attempt without a location). |
+
 **Raises**
 
 | Exception | Description |
