@@ -48,3 +48,6 @@ checks the projection sums them, and that the sum reproduces the release's own `
 
 Re-capture: read the asset, keep `season_type == "REG"` rows whose `player_id` is one of the three ids above,
 sort by `player_id, week`; filter `load_nfl_rosters([2024])` on `gsis_id` for the same ids.
+
+Dtypes: the stats slice keeps the release's own (`player_id` String, `season` Int32); the rosters slice is the
+loader's shape (`gsis_id` String, `season` Int32, `birth_date` Date), which carries no `player_id` or `age` column.

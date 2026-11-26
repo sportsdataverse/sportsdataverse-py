@@ -96,3 +96,23 @@ def test_fantasy_projection_charges_fumbles(
     )
     assert j.height == 3
     assert j.filter(pl.col("charge") > 0).height == 3, j
+    # uncalibrated, the charge is exactly 2 points per projected fumble lost
+    proj = mod.nfl_player_projection([2024], 2025).select(
+        "player_id", (2.0 * pl.col("proj_fumbles_lost_rate") * pl.col("proj_games")).alias("expected")
+    )
+    exact = j.join(proj, on="player_id")
+    assert exact.height == 3
+    assert exact.filter((pl.col("charge") - pl.col("expected")).abs() > 1e-9).height == 0, exact
+
+
+def test_score_fantasy_charges_fumbles_on_loader_output(weekly: pl.DataFrame) -> None:
+    """``score_fantasy`` on raw loader rows derives ``fumbles_lost`` itself."""
+    zero = {**SCORING_PPR, "fumbles_lost": 0.0}
+    charged = score_fantasy(weekly, SCORING_PPR).sum()
+    uncharged = score_fantasy(weekly, zero).sum()
+    assert abs((uncharged - charged) - 2.0 * 11) < 1e-9  # 6 + 3 + 2 fumbles lost
+
+
+def test_all_null_fumbles_lost_column_is_derived(weekly: pl.DataFrame) -> None:
+    nulled = weekly.with_columns(pl.lit(None, dtype=pl.Float64).alias("fumbles_lost"))
+    assert _with_fumbles_lost(nulled)["fumbles_lost"].sum() == 11.0
