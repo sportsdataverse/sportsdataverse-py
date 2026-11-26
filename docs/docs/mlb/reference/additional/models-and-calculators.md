@@ -186,6 +186,12 @@ one row per observed state bucket. | Column | Type | Description | |---|---|---|
 | `home_win_exp` | Float64 | Laplace-smoothed empirical P(home team wins \| state bucket). |
 | `n` | Int64 | Plate appearances observed in this state bucket. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Two `results` rows for one game disagree on the score (a game listed twice with the same score counts once). |
+
 **Example**
 
 ```python
@@ -1094,6 +1100,12 @@ one row per plate appearance, **plus one terminal "game over" row per game** (`a
 | `half` | String | Half-inning ("top" or "bottom") -- which side is on offense. |
 | `home_win_exp` | Float64 | Empirical P(home team wins \| base-out-score-inning state before the play). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Two `results` rows for one game disagree on the score (a game listed twice with the same score counts once). |
+
 **Example**
 
 ```python
@@ -1250,7 +1262,7 @@ individual plays against this spine's RE24 matrix.
 
 **Returns**
 
-the run value of the event; NaN when the matrix has a row for either state with a null `re` (a state the Markov fit never observed).
+the run value of the event; NaN when either state has no `re` in the matrix, whether its row is missing (the empirical matrix emits only observed states) or null (the Markov fit never reached it).
 
 **Example**
 

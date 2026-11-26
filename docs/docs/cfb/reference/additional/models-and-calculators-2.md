@@ -596,26 +596,29 @@ print(df.select(cfb_touchback_yardline_expr(pl.col("season"))).to_series().to_li
 
 One row per team: opponent-adjusted offensive/defensive efficiency.
 
-Fits the offense/defense ridge from `cfb_adjusted_epa` on the
-competitive plays in `plays` (`min_competitive_wp <= wp_before <=
-max_competitive_wp`), then nets each team's raw per-game EPA (all
-pass/rush plays, garbage time included) against the opponent's fitted
-strength and averages across games -- the R `adjust_epa` /
-gameonpaper `team_agg.R` statistic and scale (a top team nets
-~0.30-0.40/play; the pre-2026-07-28 coefficient+intercept scale ran
-~1.8x hotter). The ridge's dropped reference team nets normally from
-its own games.
+The same fit as `sportsdataverse.cfb.cfb_adjusted_epa`: one ridge of
+per-play EPA on offense, defense and home-field indicators over the pass
+and rush plays with `0.05 <= wp_before_naive <= 0.95` (the spread-free
+win probability, so the pregame line never decides which plays count),
+every team shrunk toward the league average by its own play count
+(`_ADJ_EPA_LAMBDA`). Each team's raw per-game EPA (all pass/rush plays,
+garbage time included) is then netted against the opponent's fitted
+strength and averaged across games -- the R `adjust_epa` statistic and
+scale (a top team nets ~0.30-0.40/play). Through 0.2.0b1 this function fit
+a separate standardized ridge (lambda 0.035) on `0.1 <= wp_before <=
+0.9`, which priced the pregame spread into the fit and predicted next
+week's margins 0.67 points worse.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._REQUIRED_COLUMNS` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `wp_before`). Callers pass an already as-of-date-filtered frame; this function is pure. |
-| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs. Only `ridge_lambda` is consulted here; defaults to `RatingsConfig` when omitted. |
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._ADJ_REQUIRED` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `wp_before_naive`). Callers pass an already as-of-date-filtered frame; this function is pure. |
+| `config` | `RatingsConfig \| None` | `None` | Accepted for signature parity with `fei_ratings`; not read here (the penalty is `cfb_adjusted_epa`'s, so the two entry points cannot disagree). |
 
 **Returns**
 
-A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when `plays` has no competitive plays.
+A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when no play falls in the fit band.
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
 
@@ -624,7 +627,6 @@ No returns table is published for this function: no capture: it needs play-by-pl
 | Exception | Description |
 |---|---|
 | `KeyError` | If `plays` is missing a required column. |
-| `ImportError` | If `scikit-learn` is not installed. |
 
 **Example**
 
@@ -632,11 +634,6 @@ No returns table is published for this function: no capture: it needs play-by-pl
 from sportsdataverse.cfb.cfb_ratings import efficiency_ratings
 ratings = efficiency_ratings(pbp)
 ratings.sort("adj_net", descending=True).head()
-
-# Custom ridge penalty
-
-from sportsdataverse.cfb.cfb_prediction_constants import RatingsConfig
-ratings = efficiency_ratings(pbp, config=RatingsConfig(ridge_lambda=100.0))
 ```
 
 ### fei_ratings {#fei_ratings}

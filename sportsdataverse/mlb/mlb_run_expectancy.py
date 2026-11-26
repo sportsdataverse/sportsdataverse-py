@@ -350,8 +350,9 @@ def run_value(
             matching ``base_state``/``outs``/``re`` columns).
 
     Returns:
-        float: the run value of the event; NaN when the matrix has a row for
-        either state with a null ``re`` (a state the Markov fit never observed).
+        float: the run value of the event; NaN when either state has no
+        ``re`` in the matrix, whether its row is missing (the empirical matrix
+        emits only observed states) or null (the Markov fit never reached it).
 
     Example:
         Quick start::
@@ -361,8 +362,8 @@ def run_value(
             rv = run_value("___", 0, "1__", 0, 0, matrix)
     """
     lut = {(r["base_state"], r["outs"]): r["re"] for r in matrix.to_dicts()}
-    re_before = 0.0 if before_outs >= 3 else lut.get((before_state, before_outs), 0.0)
-    re_after = 0.0 if after_outs >= 3 else lut.get((after_state, after_outs), 0.0)
+    re_before = 0.0 if before_outs >= 3 else lut.get((before_state, before_outs))
+    re_after = 0.0 if after_outs >= 3 else lut.get((after_state, after_outs))
     if re_before is None or re_after is None:
         return float("nan")
     return float(re_after - re_before + runs_on_play)

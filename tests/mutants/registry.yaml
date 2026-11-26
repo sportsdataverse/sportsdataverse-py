@@ -11632,6 +11632,26 @@
   expected: kill
   note: 5028 (suspended 2000-04-12, resumed the 13th) would be collected twice for the RE24 matrix.
 
+- id: mlb-we-table-results-not-deduped
+  group: mlb-dedupe-game-pks
+  finding: mlb-dedupe-game-pks
+  file: sportsdataverse/mlb/mlb_win_expectancy.py
+  snippet: '    results = results.unique(subset=["game_id", "home_score", "away_score"], keep="first", maintain_order=True)'
+  mutant: '    results = results'
+  test: tests/mlb/test_mlb_win_expectancy_oracle.py::test_a_game_listed_twice_in_the_results_counts_once
+  expected: kill
+  note: results_corpus lists 5028 and 6146 twice, so their 155 PAs would count twice in the WE table.
+
+- id: mlb-run-value-missing-state-zero
+  group: mlb-dedupe-game-pks
+  finding: mlb-markov-run-expectancy
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    re_after = 0.0 if after_outs >= 3 else lut.get((after_state, after_outs))'
+  mutant: '    re_after = 0.0 if after_outs >= 3 else lut.get((after_state, after_outs), 0.0)'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_run_value_on_an_empirical_matrix_missing_a_state
+  expected: kill
+  note: A state missing from an empirical matrix would score as 0 RE instead of NaN.
+
 - id: mlb-base-out-states-not-deduped
   group: mlb-dedupe-game-pks
   finding: mlb-dedupe-game-pks
@@ -12419,6 +12439,58 @@
   expected: kill
   note: A stat first seen after row 100 is dropped on polars 2.0 and raises on 2.2 unless every row is inferred.
 
+# --- college-ridge-prior: the college possession ridge seeded from last season's rating ----------
+- id: college-ridge-prior-applied
+  group: college-ridge-prior
+  finding: college-ridge-prior
+  file: sportsdataverse/mbb/mbb_team_strength.py
+  snippet: '        fits.append(possession_ridge_ratings(sub, lam=fit_lam, prior=seed))'
+  mutant: '        fits.append(possession_ridge_ratings(sub, lam=fit_lam, prior=None))'
+  test: tests/mbb/test_mbb_team_strength.py -k "ridge_ratings_are_the_possession_ridge or prior_seeds"
+  expected: kill
+  note: The default ridge would build the prior and then never use it.
+
+- id: college-ridge-prior-previous-season
+  group: college-ridge-prior
+  finding: college-ridge-prior
+  file: sportsdataverse/mbb/mbb_team_strength.py
+  snippet: '        prev_season = int(season) - 1'
+  mutant: '        prev_season = int(season)'
+  test: tests/mbb/test_mbb_team_strength.py -k ridge_ratings_are_the_possession_ridge
+  expected: kill
+  note: The prior would be built from the season it rates, an as-of leak.
+
+- id: college-ridge-prior-regression
+  group: college-ridge-prior
+  finding: college-ridge-prior
+  file: sportsdataverse/_common/team_strength.py
+  snippet: '        (regression * (pl.col("adj_off_rtg") - pl.col("adj_off_rtg").mean())).alias("off_dev"),'
+  mutant: '        (pl.col("adj_off_rtg") - pl.col("adj_off_rtg").mean()).alias("off_dev"),'
+  test: tests/mbb/test_mbb_team_strength.py -k last_season_prior_is_the_regressed_previous_fit
+  expected: kill
+  note: Last season's offensive rating would seed this season unregressed.
+
+# --- cfb-end-state-parse: an off-field end yard line, a fumble return kept at the fumble spot ------
+- id: cfb-end-off-field-yard-line-degenerate
+  group: cfb-end-state-parse
+  finding: cfb-end-state-parse
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '                    .or_((pl.col("end.yardLine") < 0).or_(pl.col("end.yardLine") > 100))'
+  mutant: '                    .or_(pl.lit(False))'
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py::test_an_off_field_end_yard_line_takes_the_next_snaps_start
+  expected: kill
+  note: A snap whose feed end yard line is 101 would keep 99 to go (401856886 EPA -7.02).
+
+- id: cfb-end-fumble-return-next-snap
+  group: cfb-end-state-parse
+  finding: cfb-end-state-parse
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '            .with_columns(_fumble_return_ends_at_next_snap().alias("_fum_ret"))'
+  mutant: '            .with_columns(pl.lit(False).alias("_fum_ret"))'
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py::test_a_returned_fumble_ends_where_the_recoverer_snaps_next
+  expected: kill
+  note: A fumble returned 34 yards would keep the fumble spot as its end (401856886 EPA -1.47).
+
 # --- cfb-stuff-any-rush: the stuff / stopped flags gate on rush, as their denominator does ---------
 - id: cfb-stuff-gate-on-rush
   group: cfb-stuff-any-rush
@@ -12579,6 +12651,16 @@
   expected: kill
   note: field_out / force_out (unmapped) would be classed as reaching base instead of outs in play.
 
+- id: college-ridge-prior-no-seed-penalty
+  group: college-ridge-prior
+  finding: college-ridge-prior
+  file: sportsdataverse/mbb/mbb_team_strength.py
+  snippet: '        fit_lam = lam if seed.height else COLLEGE_RIDGE_LAMBDA[league]'
+  mutant: '        fit_lam = lam'
+  test: tests/mbb/test_mbb_team_strength.py -k no_previous_season
+  expected: kill
+  note: A season with no previous season would be fit at the prior's penalty with no prior.
+
 # --- ESPN league `endpoints:` allowlist (lacrosse) ------------------------------------------------
 - id: espn-league-endpoints-allowlist-applied
   group: espn-league-allowlist
@@ -12640,6 +12722,27 @@
   test: tests/test_espn_golf_parsers.py::test_leaderboard_one_row_per_player_with_string_ids
   expected: kill
   note: The leaderboard payload is not in leaderboard order; unsorted, row 0 is not the leader.
+
+# --- CFB efficiency ratings on the adjusted-EPA fit (A1/A2) ---------------------------------------
+- id: cfb-efficiency-ratings-fit-band
+  group: cfb-adjustment
+  finding: cfb-adjustment-a1
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '    base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)'
+  mutant: '    base, clean = _prepare(plays, _ADJ_REQUIRED)'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_band_is_the_spread_free_wp
+  expected: kill
+  note: Falls back to the spread-aware 0.1 <= wp_before <= 0.9 band, so the pregame line picks the plays.
+
+- id: cfb-efficiency-ratings-penalty
+  group: cfb-adjustment
+  finding: cfb-adjustment-a1
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '    offense, defense, _intercept = _fit_team_strengths(clean, _ADJ_EPA_LAMBDA)'
+  mutant: '    offense, defense, _intercept = _fit_team_strengths(clean, 0.035)'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_is_the_adjusted_epa_fit
+  expected: kill
+  note: A second penalty would let the ratings engine and cfb_adjusted_epa disagree again.
 
 # --- PGA TOUR GraphQL runtime + parsers (pgatour_*) ----------------------------------------------
 - id: pgatour-key-from-the-prod-block
