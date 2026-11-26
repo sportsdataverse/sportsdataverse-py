@@ -180,7 +180,7 @@ def retire_status(
     reasons = [
         f"{a['season']} and {b['season']} both fail to beat the baseline (upper bounds {a['upper']:.4g}, {b['upper']:.4g})"
         for a, b, fa, fb in zip(recs, recs[1:], fails, fails[1:], strict=False)
-        if fa and fb
+        if fa and fb and int(b["season"]) == int(a["season"]) + 1  # calendar-consecutive, not list neighbours
     ]
     if adoption_margin is not None:
         bar = abs(float(adoption_margin))
