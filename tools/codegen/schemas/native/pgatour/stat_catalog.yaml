@@ -1,0 +1,24 @@
+schema: pgatour_stat_catalog
+kind: dataframe
+columns:
+- name: tour_code
+  type: character
+  description: ''
+- name: year
+  type: integer
+  description: ''
+- name: category
+  type: character
+  description: ''
+- name: category_name
+  type: character
+  description: ''
+- name: sub_category
+  type: character
+  description: ''
+- name: stat_id
+  type: character
+  description: ''
+- name: stat_title
+  type: character
+  description: ''

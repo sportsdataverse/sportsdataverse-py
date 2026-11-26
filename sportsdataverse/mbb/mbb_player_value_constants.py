@@ -26,6 +26,7 @@ import polars as pl
 from scipy.optimize import minimize
 
 from sportsdataverse.errors import SeasonNotFoundError
+from sportsdataverse._common.possessions import PRO_FT_POSSESSION_WEIGHT, TS_FT_WEIGHT
 from sportsdataverse.mbb.mbb_prediction_constants import mae as mae  # noqa: PLC0414 - re-export by reference
 from sportsdataverse.mbb.mbb_prediction_constants import spearman_corr as spearman_corr  # noqa: PLC0414
 
@@ -199,7 +200,9 @@ def player_per100_features(season_stats: pl.DataFrame) -> pl.DataFrame:
         return pl.DataFrame(schema=_FEATURE_SCHEMA)
     fga = pl.col("field_goals_attempted")
     fta = pl.col("free_throws_attempted")
-    poss_used = fga + 0.44 * fta + pl.col("turnovers")
+    # ponytail: the pro weight, not the college 0.475: the player-value model was fit on these features;
+    # switch with a refit.
+    poss_used = fga + PRO_FT_POSSESSION_WEIGHT * fta + pl.col("turnovers")
     shots = pl.col("fga_rim") + pl.col("fga_mid") + pl.col("fga_three")
     reb = pl.col("offensive_rebounds") + pl.col("defensive_rebounds")
     # zero/null-minute rows would divide to inf/NaN; null the denominator instead.
@@ -212,7 +215,7 @@ def player_per100_features(season_stats: pl.DataFrame) -> pl.DataFrame:
     ).with_columns(
         pl.col("minutes").cast(pl.Float64).alias("min"),
         (100.0 * poss_used / min_pos).cast(pl.Float64).alias("usage"),
-        _share(pl.col("points"), 2 * (fga + 0.44 * fta)).alias("ts_pct"),
+        _share(pl.col("points"), 2 * (fga + TS_FT_WEIGHT * fta)).alias("ts_pct"),
         _share(pl.col("field_goals_made") + 0.5 * pl.col("three_point_field_goals_made"), fga).alias("efg_pct"),
         _share(pl.col("assists"), fga).alias("ast_pct"),
         _share(pl.col("turnovers"), poss_used).alias("tov_pct"),

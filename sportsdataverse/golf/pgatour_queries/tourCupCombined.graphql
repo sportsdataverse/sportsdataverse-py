@@ -1,0 +1,22 @@
+query TourCupCombined($tourCode: TourCode!, $id: String, $year: Int) {
+  tourCupCombined(tourCode: $tourCode, id: $id, year: $year) {
+    id
+    title
+    season
+    description
+    players {
+      __typename
+      ... on TourCupCombinedPlayer {
+        id
+        firstName
+        lastName
+        displayName
+        shortName
+        country
+        countryFlag
+        rankingData { projected official event movement movementAmount }
+        pointData { projected official event movement movementAmount }
+      }
+    }
+  }
+}

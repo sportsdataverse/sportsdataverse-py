@@ -181,6 +181,8 @@ pick them up.
 `box_convention/` holds 3 trimmed captures (the `trimmed` form above, fetched from the summary endpoint 2026-11-19,
 one request each) for the NCAA box-score rushing convention (`tests/cfb/test_cfb_box_rushing_convention.py`):
 401856864 (Utah @ Arizona), 401856884 (Florida @ Kentucky) and 401856889 (Alabama @ Vanderbilt), all 2026 week 12.
+`stuff_end_states/` holds one trimmed capture with its own README, 401856886 (Auburn @ Mississippi State, 2026-11-14),
+for the stuff flags and two broken end states (`tests/cfb/test_cfb_pbp_processor_fixes.py`); not a `summary_*` file either.
 
 ## Captures
 

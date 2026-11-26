@@ -1,0 +1,36 @@
+schema: pgatour_scorecard
+kind: dataframe
+columns:
+- name: tournament_id
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: round_number
+  type: integer
+  description: ''
+- name: course_id
+  type: character
+  description: ''
+- name: course_name
+  type: character
+  description: ''
+- name: hole_number
+  type: integer
+  description: ''
+- name: par
+  type: integer
+  description: ''
+- name: yardage
+  type: integer
+  description: ''
+- name: score
+  type: integer
+  description: ''
+- name: score_status
+  type: character
+  description: ''
+- name: round_to_par
+  type: character
+  description: ''

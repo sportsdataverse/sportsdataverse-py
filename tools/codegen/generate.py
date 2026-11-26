@@ -299,6 +299,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.nfl.nflpro_runtime",
         # 4.4
         "sportsdataverse.providers.cbs.cbs_napi_runtime",
+        "sportsdataverse.golf.pgatour_runtime",
     }
 )
 # (error name, aliases a YAML ``raises:`` line may already use for it, line to add)
@@ -3109,6 +3110,7 @@ FLAT_APIS = [
     ("fifa", "soccer"),
     ("sleeper", "nfl"),
     ("f1", "f1"),  # Jolpica F1 (Ergast-compatible)
+    ("pgatour", "golf"),  # PGA TOUR GraphQL (orchestrator.pgatour.com), runtime only
     # wave-2 intake families (espn-content, thesportsdb, football-data.co.uk, openligadb,
     # polymarket, kalshi)
     ("espn_content", "espn_content"),
@@ -3833,6 +3835,7 @@ _FLAT_API_DOC = {
     "fifa": "FIFA public API v3 (api.fifa.com)",
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
     "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
+    "pgatour": "PGA TOUR GraphQL API (orchestrator.pgatour.com; runtime only, public frontend key or $PGA_API_KEY)",
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
     "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",

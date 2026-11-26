@@ -46,6 +46,22 @@ def _bucket(states: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _one_result_per_game(results: pl.DataFrame) -> pl.DataFrame:
+    """One row per ``game_id``: a suspended game listed on two schedule dates repeats its result row.
+
+    A row without a final score (a postponed listing) is no result and is dropped.
+
+    Raises:
+        ValueError: Two rows for one game disagree on the score.
+    """
+    results = results.drop_nulls(["home_score", "away_score"])
+    results = results.unique(subset=["game_id", "home_score", "away_score"], keep="first", maintain_order=True)
+    clash = results.filter(pl.col("game_id").is_duplicated())["game_id"].unique().to_list()
+    if clash:
+        raise ValueError(f"results list conflicting final scores for game_id {clash[:5]}")
+    return results
+
+
 def build_we_table(states: pl.DataFrame, results: pl.DataFrame, *, laplace: float = 1.0) -> pl.DataFrame:
     """Empirical, Laplace-smoothed home win-expectancy table.
 
@@ -68,6 +84,10 @@ def build_we_table(states: pl.DataFrame, results: pl.DataFrame, *, laplace: floa
         | home_win_exp | Float64 | Laplace-smoothed P(home wins \\| state) |
         | n | Int64 | Plate appearances observed in this bucket |
 
+    Raises:
+        ValueError: Two ``results`` rows for one game disagree on the score
+            (a game listed twice with the same score counts once).
+
     Example:
         Quick start::
 
@@ -81,6 +101,7 @@ def build_we_table(states: pl.DataFrame, results: pl.DataFrame, *, laplace: floa
     assert states.schema["game_id"] == results.schema["game_id"], (
         f"game_id dtype mismatch: states={states.schema['game_id']} results={results.schema['game_id']}"
     )
+    results = _one_result_per_game(results)
     home_won = results.select("game_id", (pl.col("home_score") > pl.col("away_score")).cast(pl.Int64).alias("home_won"))
     joined = _bucket(states).join(home_won, on="game_id", how="inner")
     assert joined.height > 0, "no states matched a result row -- check game_id join key"
@@ -141,6 +162,10 @@ def mlb_win_expectancy(
         | half | Utf8 | ``"top"`` or ``"bottom"`` (offense side); the terminal row repeats the last real half |
         | home_win_exp | Float64 | P(home team wins \\| state before the play); 1.0/0.0 on the terminal row |
 
+    Raises:
+        ValueError: Two ``results`` rows for one game disagree on the score
+            (a game listed twice with the same score counts once).
+
     Example:
         Quick start::
 
@@ -155,6 +180,7 @@ def mlb_win_expectancy(
     if states.height == 0:
         out = pl.DataFrame(schema=_WE_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
+    results = _one_result_per_game(results)
     table = build_we_table(states, results)
     looked = _lookup_we(states, table)
     out = looked.select("game_id", "at_bat_index", "half", "home_win_exp")

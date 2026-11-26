@@ -1,0 +1,167 @@
+{
+ "league": "mbb",
+ "train": [
+  2022,
+  2023
+ ],
+ "holdout": [
+  2024,
+  2025,
+  2026
+ ],
+ "shipped_lam": 200.0,
+ "regression_by_lam": {
+  "50": 0.7753,
+  "100": 0.7774,
+  "200": 0.7762,
+  "400": 0.7669
+ },
+ "train_games": 10061,
+ "train_mae": {
+  "shipped": 9.0918,
+  "prior_lam50": 8.9571,
+  "prior_lam100": 8.9244,
+  "prior_lam200": 8.8989,
+  "prior_lam400": 8.8991
+ },
+ "chosen": "prior_lam200",
+ "chosen_lam": 200.0,
+ "chosen_regression": 0.7762,
+ "holdout_scored_once": {
+  "games": 15725,
+  "weeks": 54,
+  "all": {
+   "n": 15725,
+   "mae": {
+    "prior_lam200": 9.1523,
+    "shipped": 9.3987
+   },
+   "chosen_vs_shipped": {
+    "diff": -0.2465,
+    "se": 0.0512
+   },
+   "prior_at_shipped_lam_vs_shipped": {
+    "diff": -0.2465,
+    "se": 0.0512
+   },
+   "chosen_vs_prior_at_shipped_lam": {
+    "diff": 0.0,
+    "se": 0.0
+   }
+  },
+  "1-4": {
+   "n": 3622,
+   "mae": {
+    "prior_lam200": 9.8037,
+    "shipped": 10.567
+   },
+   "chosen_vs_shipped": {
+    "diff": -0.7633,
+    "se": 0.1227
+   },
+   "prior_at_shipped_lam_vs_shipped": {
+    "diff": -0.7633,
+    "se": 0.1227
+   },
+   "chosen_vs_prior_at_shipped_lam": {
+    "diff": 0.0,
+    "se": 0.0
+   }
+  },
+  "5-8": {
+   "n": 2630,
+   "mae": {
+    "prior_lam200": 9.2381,
+    "shipped": 9.5455
+   },
+   "chosen_vs_shipped": {
+    "diff": -0.3074,
+    "se": 0.0463
+   },
+   "prior_at_shipped_lam_vs_shipped": {
+    "diff": -0.3074,
+    "se": 0.0463
+   },
+   "chosen_vs_prior_at_shipped_lam": {
+    "diff": 0.0,
+    "se": 0.0
+   }
+  },
+  "9-": {
+   "n": 9473,
+   "mae": {
+    "prior_lam200": 8.8794,
+    "shipped": 8.9113
+   },
+   "chosen_vs_shipped": {
+    "diff": -0.0319,
+    "se": 0.0105
+   },
+   "prior_at_shipped_lam_vs_shipped": {
+    "diff": -0.0319,
+    "se": 0.0105
+   },
+   "chosen_vs_prior_at_shipped_lam": {
+    "diff": 0.0,
+    "se": 0.0
+   }
+  },
+  "season_2024": {
+   "n": 5165,
+   "mae": {
+    "prior_lam200": 9.1325,
+    "shipped": 9.3347
+   },
+   "chosen_vs_shipped": {
+    "diff": -0.2022,
+    "se": 0.0618
+   },
+   "prior_at_shipped_lam_vs_shipped": {
+    "diff": -0.2022,
+    "se": 0.0618
+   },
+   "chosen_vs_prior_at_shipped_lam": {
+    "diff": 0.0,
+    "se": 0.0
+   }
+  },
+  "season_2025": {
+   "n": 5243,
+   "mae": {
+    "prior_lam200": 9.1388,
+    "shipped": 9.3865
+   },
+   "chosen_vs_shipped": {
+    "diff": -0.2477,
+    "se": 0.085
+   },
+   "prior_at_shipped_lam_vs_shipped": {
+    "diff": -0.2477,
+    "se": 0.085
+   },
+   "chosen_vs_prior_at_shipped_lam": {
+    "diff": 0.0,
+    "se": 0.0
+   }
+  },
+  "season_2026": {
+   "n": 5317,
+   "mae": {
+    "prior_lam200": 9.1848,
+    "shipped": 9.473
+   },
+   "chosen_vs_shipped": {
+    "diff": -0.2882,
+    "se": 0.1102
+   },
+   "prior_at_shipped_lam_vs_shipped": {
+    "diff": -0.2882,
+    "se": 0.1102
+   },
+   "chosen_vs_prior_at_shipped_lam": {
+    "diff": 0.0,
+    "se": 0.0
+   }
+  }
+ }
+}

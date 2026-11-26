@@ -104,6 +104,29 @@ def test_possessions_match_the_game_page(lg: str) -> None:
         assert ref["game_minutes"][0] == row["game_minutes"]
 
 
+@pytest.mark.parametrize("lg", ["mbb", "wbb"])
+def test_college_possessions_weigh_a_free_throw_0475(lg: str) -> None:
+    """College pace counts FGA - ORB + TOV + 0.475 FTA, not the pros' 0.44."""
+    games = core.official_game_rows(_load(lg, "team_box"), _load(lg, "schedule"), league=lg)
+    want = (
+        _load(lg, "team_box")
+        .group_by(pl.col("game_id").cast(pl.Int64).cast(pl.Utf8))
+        .agg(
+            (
+                pl.col("field_goals_attempted")
+                - pl.col("offensive_rebounds")
+                + pl.col("turnovers")
+                + 0.475 * pl.col("free_throws_attempted")
+            )
+            .mean()
+            .alias("want")
+        )
+    )
+    got = games.join(want, on="game_id", how="inner").drop_nulls(["possessions", "want"])
+    assert got.height > 100
+    assert (got["possessions"] - got["want"]).abs().max() < 1e-9
+
+
 @pytest.mark.parametrize("lg", list(LEAGUES))
 def test_home_rates_skip_neutral_sites(lg: str) -> None:
     games = core.official_game_rows(_load(lg, "team_box"), _load(lg, "schedule"), league=lg)
