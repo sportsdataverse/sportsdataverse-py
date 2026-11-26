@@ -12,9 +12,11 @@ from __future__ import annotations
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.baseball.college_baseball.college_baseball_ncaa_pbp import (
     PBP_SCHEMA,
+    decompose_college_baseball_plays,
     parse_college_baseball_ncaa_pbp,
 )
 
@@ -76,8 +78,8 @@ def test_substitutions_have_no_batter() -> None:
     subs = df.filter(pl.col("play_type") == "substitution")
     assert subs.height > 0
     assert subs.get_column("batter").is_null().all()
-    # every non-substitution play resolves a batter
-    non_sub = df.filter(pl.col("play_type") != "substitution")
+    # every play but a substitution or a "No play." row (``other``) resolves a batter
+    non_sub = df.filter(pl.col("play_type").is_in(["substitution", "other"]) == False)  # noqa: E712
     assert non_sub.get_column("batter").is_not_null().all()
 
 
@@ -175,3 +177,74 @@ def test_count_columns_stay_integer_under_pandas() -> None:
     )
     assert pdf["count_balls"].isna().any() and pdf["count_balls"].notna().any()  # the capture has both
     assert {str(pdf[c].dtype) for c in ("count_balls", "count_strikes", "rbi", "inning")} == {"Int64"}
+
+
+# Real descriptions from captured stats.ncaa.org pages (baseballr-data ncaa/raw/<season>), one per runner-clause
+# format: run-on with no separator (2012-2021), colon (2016-2021), "3a"/";" (2022+), plus the clause shapes that
+# used to drop a run. (description, runs_scored, scoring_runners, outs_on_play)
+_RUNNER_CASES = [
+    # 2016 contest 292583: clauses run on after the count; two runs, no separator anywhere
+    (
+        "PARRISH, M. singled to left field, RBI (0-2) TAYLOR, B. advanced to second HALLUM, C. scored.",
+        1,
+        ["HALLUM, C."],
+        0,
+    ),
+    (
+        "Adams, K. walked, RBI Van Asch, J. advanced to second Blaustein, D advanced to third Hogan, M. scored.",
+        1,
+        ["Hogan, M."],
+        0,
+    ),
+    # 2016 / 2020: after a colon
+    ("Nichting singled through the right side, RBI (2-2 SBSB): Sherer scored, unearned.", 1, ["Sherer"], 0),
+    (
+        "BROOKS, D. singled through the left side, RBI (0-0): MILLER-GREEN advanced to second: NIELSEN, P. scored.",
+        1,
+        ["NIELSEN, P."],
+        0,
+    ),
+    # 2012 contest 755683: the second out of a double play
+    ("BEGEMAN grounded into double play 2b to ss to 1b (0-1) DEEDS out on the play.", 0, [], 2),
+    # a runner who moves up and then scores in one clause (2024)
+    (
+        "COZART doubled down the 1b line; HOGUE advanced to third, scored on a throwing error by 2b, unearned.",
+        1,
+        ["HOGUE"],
+        0,
+    ),
+    # the runner leads the row (2024)
+    ("Mihos, D. scored on a wild pitch.", 1, ["Mihos, D."], 0),
+    # the batter comes all the way round (2013)
+    ("Vitaletti tripled to center field, scored on a throwing error by cf, unearned.", 1, ["Vitaletti"], 0),
+    # a comma before "scored" (2013)
+    ("Gilbert, T. singled to right field, RBI (1-0 B) Dixon, B, scored.", 1, ["Dixon, B"], 0),
+    # a one-letter first initial on a home run (2024)
+    ("C Mcguire homered to left center, RBI (0-0).", 1, ["C Mcguire"], 0),
+]
+
+
+@pytest.mark.parametrize(("desc", "runs", "runners", "outs"), _RUNNER_CASES)
+def test_runner_clauses_in_every_page_format(desc: str, runs: int, runners: "list[str]", outs: int) -> None:
+    row = decompose_college_baseball_plays([{"description": desc}]).row(0, named=True)
+    assert (row["runs_scored"], row["scoring_runners"], row["outs_on_play"]) == (runs, runners, outs)
+
+
+def test_run_on_batter_clause_stops_before_the_runners() -> None:
+    """The batter clause used to swallow the runner text, so a fielder's choice read as the batter's out (2020)."""
+    row = decompose_college_baseball_plays(
+        [
+            {
+                "description": "Bicos reached on a fielders choice (0-0) Faria advanced to second Kanbara out at third p to 3b."
+            }
+        ]
+    ).row(0, named=True)
+    assert (row["play_type"], row["is_out"], row["outs_on_play"]) == ("fielders_choice", False, 1)
+    assert row["runners_advanced"] == ["Faria->second"]
+
+
+def test_bare_initial_names_and_no_play_rows_classify() -> None:
+    rows = decompose_college_baseball_plays(
+        [{"description": "BAINER L flied out to rf (2-1)."}, {"description": "No play."}]
+    ).to_dicts()
+    assert [(r["batter"], r["play_type"]) for r in rows] == [("BAINER L", "flyout"), (None, "other")]
