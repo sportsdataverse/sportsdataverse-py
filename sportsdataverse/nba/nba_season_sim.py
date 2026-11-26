@@ -159,6 +159,22 @@ PRIOR_CONSTANTS: dict[str, tuple[float, float]] = {"00": (0.8, 0.25), "10": (0.6
 #:   season's own result (WNBA 2021) and later seasons into earlier ones, and it was dropped.
 HFA_PSEUDO_POSS: dict[str, float] = {"00": 80000.0, "10": 10000.0}
 
+#: league_id -> pseudo-count, in possessions per side, of the preseason prior's miss in the season
+#: draw's rating sd (:func:`as_of_game_model`). The as-of net rating shrinks toward the prior at the
+#: :data:`SIM_CONSTANTS` penalty ``lam``, so its error variance per side after ``n`` possessions is
+#: ``(lam / (n + lam))**2 * s2 / k + n * s2 / (n + lam)**2``: the prior's own miss (variance
+#: ``s2 / k``) carried at the weight the ridge leaves it, plus the sampling noise of ``n``
+#: possessions. ``k = lam`` gives the posterior ``s2 / (n + lam)`` exactly, the form shipped before;
+#: a league whose ``k`` failed its gate keeps ``k = lam``.
+#:
+#: * Fit by ``tools/fit_pro_rating_sd.py`` on the SIM_CONSTANTS train seasons (NBA 2018 2019 2022
+#:   2023, WNBA 2018 2019 2021): per returning team the final rating minus the prior, its own
+#:   sampling variance taken out, the within-season centring undone. NBA 2,950 (preseason net sd
+#:   3.06 per 100 against 5.94 at ``k = lam``), WNBA 1,060 (4.95 against 11.4). Re-run 2026-11-26:
+#:   the same values.
+#: * Gate: GATE_PENDING.
+PRIOR_MISS_POSS: dict[str, float] = {"00": 2950.0, "10": 1060.0}
+
 _SEEDS = 15
 
 #: NBA regular-season games per team. Until December the release lists the NBA Cup knockout games
@@ -322,6 +338,7 @@ def as_of_game_model(
     league_id: str = "00",
     prior: PreseasonPrior | None = None,
     hfa_poss: float | None = None,
+    prior_poss: float | None = None,
 ) -> GameModel:
     """The season sim's game model from the possessions played so far.
 
@@ -334,10 +351,16 @@ def as_of_game_model(
             rated at its prior. None: every team starts average.
         hfa_poss: Override the fitted home-term pseudo-count (:data:`HFA_PSEUDO_POSS`; the fitting
             script scans it). 0 leaves the home term unshrunk.
+        prior_poss: Override :data:`PRIOR_MISS_POSS`, the pseudo-count of the prior's miss in
+            ``adj_net_rtg_sd``; the ``SIM_CONSTANTS`` penalty gives the posterior sd. Used only
+            with a ``prior``.
 
     Returns:
         A :class:`GameModel`. The home term is shrunk toward last season's (the prior's); with no
-        prior, or a prior season with no home games, it is free. With no rows and no prior, every
+        prior, or a prior season with no home games, it is free. ``adj_net_rtg_sd`` is the error sd
+        of the net rating: with a prior, the prior's miss (:data:`PRIOR_MISS_POSS`) at the weight
+        the ridge leaves it plus the possessions' sampling noise; with none, the ridge posterior
+        ``s2 / (n_off + lam) + s2 / (n_def + lam)``. With no rows and no prior, every
         team is average (no ratings) and the home term is 0; with a prior and no rows, the ratings
         are the prior and the home term, possessions and per-possession variance are last
         season's.
@@ -349,13 +372,15 @@ def as_of_game_model(
         raise ValueError(f"league_id must be one of {sorted(SIM_CONSTANTS)}, got {league_id!r}")
     lam, sd = SIM_CONSTANTS[league_id]
     k = HFA_PSEUDO_POSS[league_id] if hfa_poss is None else hfa_poss
+    # the prior's miss pseudo-count; with no prior the ratings shrink to average and k_miss = lam
+    k_miss = lam if prior is None else (PRIOR_MISS_POSS[league_id] if prior_poss is None else prior_poss)
     if prior is None or not prior.hfa_identified:  # no as-of target: the home term is free
         k = 0.0
     schema = {"team_id": pl.Int64(), "adj_net_rtg": pl.Float64(), "adj_net_rtg_sd": pl.Float64()}
     if rows.height == 0:
         if prior is None:
             return GameModel(pl.DataFrame(schema=schema), 0.0, 100.0, sd, float("nan"))
-        prior_sd = float(np.sqrt(2.0 * prior.s2 / lam))
+        prior_sd = float(np.sqrt(2.0 * prior.s2 / k_miss))
         ratings = prior.ratings.select(
             "team_id",
             (pl.col("off_dev") - pl.col("def_dev")).alias("adj_net_rtg"),
@@ -381,6 +406,11 @@ def as_of_game_model(
             ]
         )
     s2 = _ridge_s2(rows)
+
+    def side_var(n: pl.Expr) -> pl.Expr:  # k_miss = lam reduces this to s2 / (n + lam)
+        n = n.fill_null(0)
+        return (lam / (n + lam)) ** 2 * s2 / k_miss + n * s2 / (n + lam) ** 2
+
     n_off = rows.group_by(pl.col("offense_team_id").alias("team_id")).len("n_off")
     n_def = rows.group_by(pl.col("defense_team_id").alias("team_id")).len("n_def")
     for frame in (n_off, n_def):
@@ -391,14 +421,12 @@ def as_of_game_model(
         .select(
             "team_id",
             "adj_net_rtg",
-            (s2 / (pl.col("n_off").fill_null(0) + lam) + s2 / (pl.col("n_def").fill_null(0) + lam))
-            .sqrt()
-            .alias("adj_net_rtg_sd"),
+            (side_var(pl.col("n_off")) + side_var(pl.col("n_def"))).sqrt().alias("adj_net_rtg_sd"),
         )
         .cast(schema)
     )
     poss = rows.height / (2.0 * rows.get_column("game_id").n_unique())
-    return GameModel(ratings, float(rat.get_column("hfa")[0]), poss, sd, float(np.sqrt(2.0 * s2 / lam)))
+    return GameModel(ratings, float(rat.get_column("hfa")[0]), poss, sd, float(np.sqrt(2.0 * s2 / k_miss)))
 
 
 def _team_arrays(model: GameModel, teams: list[int]) -> tuple[np.ndarray, np.ndarray]:
@@ -971,6 +999,7 @@ def _load_inputs(
     *,
     cup_schedule: pl.DataFrame | None = None,
     cup: Literal["auto", "always", "never"] = "auto",
+    prior_poss: float | None = None,
 ) -> tuple[pl.DataFrame, GameModel, pl.DataFrame | None, int | None, CupInputs | None]:
     """(regular-season games, as-of game model, WNBA prior-season records, season games, Cup) from the releases.
 
@@ -1003,7 +1032,10 @@ def _load_inputs(
             prev_teams=sorted(set(last["home_team_id"].to_list()) | set(last["away_team_id"].to_list())),
         )
     model = as_of_game_model(
-        rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=prior
+        rows.join(done.select("game_id"), on="game_id", how="semi"),
+        league_id=league_id,
+        prior=prior,
+        prior_poss=prior_poss,
     )
     records = None
     if league_id == "10" and last_schedule.height:

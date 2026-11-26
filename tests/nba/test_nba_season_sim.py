@@ -700,3 +700,55 @@ def test_unscheduled_cup_games_fill_each_team_to_82() -> None:
     )
     assert 0.0 <= float(gain["gain"].min()) and float(gain["gain"].max()) <= 2.0 + 1e-9
     assert np.corrcoef(gain["adj_net_rtg"].to_numpy(), gain["gain"].to_numpy())[0, 1] > 0.5
+
+
+def test_rating_sd_carries_the_prior_miss_and_reduces_to_the_posterior_at_the_penalty() -> None:
+    """NBA 2025-26 as of Dec 1, prior from 2024-25: per side ``(lam/(n+lam))^2 s2/k + n s2/(n+lam)^2``.
+
+    ``k = lam`` must give the posterior ``s2 / (n + lam)`` exactly (the form shipped before
+    ``PRIOR_MISS_POSS``), and the shipped ``k`` must change the sd (the constant is applied).
+    """
+    lam = sim_mod.SIM_CONSTANTS["00"][0]
+    k = sim_mod.PRIOR_MISS_POSS["00"]
+    games = _regular("nba", 2026).filter(pl.col("game_date") < dt.date(2025, 12, 1)).select("game_id")
+    rows = _rows("nba", 2026).join(games, on="game_id", how="semi")
+    prior = _prior("nba", 2026)
+    s2 = sim_mod._ridge_s2(rows)
+    n_off = rows.group_by(pl.col("offense_team_id").alias("team_id")).len("n_off")
+    n_def = rows.group_by(pl.col("defense_team_id").alias("team_id")).len("n_def")
+    n = n_off.join(n_def, on="team_id", validate="1:1")
+
+    def expect(kk: float) -> pl.DataFrame:
+        side = [
+            (lam / (pl.col(c) + lam)) ** 2 * s2 / kk + pl.col(c) * s2 / (pl.col(c) + lam) ** 2
+            for c in ("n_off", "n_def")
+        ]
+        return n.select("team_id", (side[0] + side[1]).sqrt().alias("want"))
+
+    for kk, model in (
+        (k, sim_mod.as_of_game_model(rows, prior=prior)),
+        (lam, sim_mod.as_of_game_model(rows, prior=prior, prior_poss=lam)),
+    ):
+        got = model.ratings.join(expect(kk), on="team_id", validate="1:1")
+        assert got.height == 30
+        np.testing.assert_allclose(got["adj_net_rtg_sd"].to_numpy(), got["want"].to_numpy(), rtol=1e-12)
+        assert model.prior_sd == pytest.approx(np.sqrt(2 * s2 / kk))
+    post = sim_mod.as_of_game_model(rows, prior=prior, prior_poss=lam).ratings.join(n, on="team_id", validate="1:1")
+    np.testing.assert_allclose(
+        post["adj_net_rtg_sd"].to_numpy(),
+        np.sqrt(s2 / (post["n_off"].to_numpy() + lam) + s2 / (post["n_def"].to_numpy() + lam)),
+        rtol=1e-12,
+    )
+    shipped = sim_mod.as_of_game_model(rows, prior=prior).ratings["adj_net_rtg_sd"]
+    assert float((post["adj_net_rtg_sd"] - shipped).abs().min()) > 0.1  # k != lam moves every team
+    # preseason: the prior's miss alone, 2 s2 / k on the net
+    pre = sim_mod.as_of_game_model(rows.clear(), prior=prior)
+    assert pre.prior_sd == pytest.approx(np.sqrt(2 * prior.s2 / k))
+    assert np.allclose(pre.ratings["adj_net_rtg_sd"].to_numpy(), pre.prior_sd)
+    # with no prior the form is the posterior, whatever PRIOR_MISS_POSS says
+    free = sim_mod.as_of_game_model(rows).ratings.join(n, on="team_id", validate="1:1")
+    np.testing.assert_allclose(
+        free["adj_net_rtg_sd"].to_numpy(),
+        np.sqrt(s2 / (free["n_off"].to_numpy() + lam) + s2 / (free["n_def"].to_numpy() + lam)),
+        rtol=1e-12,
+    )

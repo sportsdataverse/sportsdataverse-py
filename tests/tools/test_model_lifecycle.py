@@ -245,7 +245,7 @@ def test_coverage_end_to_end_on_the_2025_26_fixture() -> None:
     with pytest.MonkeyPatch.context() as mp:
         _fixture_loaders(mp)
         rows = cov.run_season("nba", 2026, n_sims=400, seed=1)
-    assert rows.height == 30 * 2 * 2
+    assert rows.height == 30 * 2 * 3
     assert sorted(rows["as_of"].unique().to_list()) == ["2025-10-21", "2025-12-01"]
     one = rows.filter((pl.col("cutoff") == "preseason") & (pl.col("arm") == "shift"))
     assert one["final_wins"].sum() == 1230  # every regular-season game has one winner
@@ -253,7 +253,8 @@ def test_coverage_end_to_end_on_the_2025_26_fixture() -> None:
     assert (rows["mass_80"] >= 0.8).all()
     rep = cov.report(rows, "nba")
     assert rep["noop_check"]["status"] == "PASS"
-    assert rep["noop_check"]["width_ratio"] > 3  # observed 3.49
+    # observed 1.98 at PRIOR_MISS_POSS (3.49 at the penalty, the shipped-before form)
+    assert rep["noop_check"]["width_ratio"] > 1.8
     # one season is one cluster: no SE is quoted and no OK/WATCH is read
     assert rep["cutoffs"]["preseason"]["shift"]["80"]["diff_se_cr1_season"] is None
     assert rep["reading"] == "TOO_FEW_SEASONS"
