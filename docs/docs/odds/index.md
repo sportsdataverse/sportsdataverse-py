@@ -11,8 +11,8 @@ description: "sdv-py Betting odds: endpoint references, dataset loaders and pars
 |---|---|---:|---|
 | [The Odds API](#the-odds-api) | `the-odds-api.com` | 11 | API key (SDV_PY_ODDS_API_KEY) |
 | [Polymarket](#polymarket) | `clob.polymarket.com`, `gamma-api.polymarket.com`, `gateway.polymarket.us` | 14 | none (read-only Gamma metadata, CLOB order-book and Polymarket US gateway routes) |
-| [Kalshi](#kalshi) | `api.elections.kalshi.com` | 9 | none (keyless Trade API v2 market-data routes) |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 14 | — |
+| [Kalshi](#kalshi) | `api.elections.kalshi.com` | 11 | none (keyless Trade API v2 market-data routes) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 16 | — |
 
 ## The Odds API {#the-odds-api}
 
@@ -31,6 +31,7 @@ description: "sdv-py Betting odds: endpoint references, dataset loaders and pars
 | Reference | Functions |
 |---|---:|
 | [Kalshi Trade API v2 market data (api.elections.kalshi.com)](reference/kalshi) | 9 |
+| [Hand-written wrappers](reference/additional) | 2 |
 ## Tools and helpers
 
 ### IDs and crosswalks {#ids-and-crosswalks}

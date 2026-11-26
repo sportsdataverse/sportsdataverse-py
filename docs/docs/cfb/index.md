@@ -172,7 +172,7 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 
 ## Python ↔ R parity
 
-Each `sportsdataverse` function and its equivalent in the sister R package, [`cfbfastR`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
+Each `sportsdataverse` function and its equivalent in the sister R package, [`cfbfastR`](https://cfbfastR.sportsdataverse.org). Same-named where possible; the R column links the package's pkgdown reference.
 
 | `sportsdataverse.cfb` (Python) | `cfbfastR` (R) |
 |---|---|
@@ -251,6 +251,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`load_cfb_group_seasons`](reference/loaders/other-2#load_cfb_group_seasons) | [`load_cfb_group_seasons`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_group_seasons.html) |
 | [`load_cfb_groups`](reference/loaders/other-2#load_cfb_groups) | [`load_cfb_groups`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_groups.html) |
 | [`load_cfb_pbp`](reference/loaders/pbp#load_cfb_pbp) | [`load_cfb_pbp`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_pbp.html) |
+| [`load_cfb_player_aliases`](reference/loaders/other-2#load_cfb_player_aliases) | [`load_cfb_player_aliases`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_player_aliases.html) |
 | [`load_cfb_ratings`](reference/loaders/other#load_cfb_ratings) | [`load_cfb_ratings`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_ratings.html) |
 | [`load_cfb_ratings_weekly`](reference/loaders/other-2#load_cfb_ratings_weekly) | [`load_cfb_ratings_weekly`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_ratings_weekly.html) |
 | [`load_cfb_recruiting_proj`](reference/loaders/other#load_cfb_recruiting_proj) | [`load_cfb_recruiting_proj`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_recruiting_proj.html) |
@@ -259,6 +260,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`load_cfb_rosters`](reference/loaders/rosters#load_cfb_rosters) | [`load_cfb_rosters`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_rosters.html) |
 | [`load_cfb_rosters_crosswalk`](reference/additional/sportsdataverse-data-releases#load_cfb_rosters_crosswalk) | [`load_cfb_rosters_crosswalk`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_rosters_crosswalk.html) |
 | [`load_cfb_schedule_crosswalk`](reference/loaders/schedule#load_cfb_schedule_crosswalk) | [`load_cfb_schedule_crosswalk`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_schedule_crosswalk.html) |
+| [`load_cfb_team_aliases`](reference/loaders/team-5#load_cfb_team_aliases) | [`load_cfb_team_aliases`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_team_aliases.html) |
 | [`load_cfb_team_group_seasons`](reference/loaders/team-5#load_cfb_team_group_seasons) | [`load_cfb_team_group_seasons`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_team_group_seasons.html) |
 | [`load_cfb_team_summaries_weekly`](reference/loaders/team-3#load_cfb_team_summaries_weekly) | [`load_cfb_team_summaries_weekly`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_team_summaries_weekly.html) |
 | [`load_cfb_team_talent`](reference/loaders/team#load_cfb_team_talent) | [`load_cfb_team_talent`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_team_talent.html) |

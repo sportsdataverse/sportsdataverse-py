@@ -99,8 +99,10 @@ def mbb_tournament_run_teams(
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
-        One row per run with a final game, keyed ``(season, run_id, team_id)`` with
-        ``team_abbreviation``: ``games``, ``wins``, ``losses``, ``pts``, ``opp_pts`` and the
+        One row per run with a final game, keyed ``(season, run_id, team_id)`` with the run's
+        ``tournament_name`` and ``tournament_kind`` (``ncaa``, ``conference`` or ``postseason``,
+        as on :func:`mbb_tournament_runs`) and ``team_abbreviation``: ``games``, ``wins``,
+        ``losses``, ``pts``, ``opp_pts`` and the
         summed counts ``fgm``, ``fga``, ``fg3m``, ``fg3a``, ``ftm``, ``fta``, ``oreb``, ``dreb``,
         ``reb``, ``ast``, ``stl``, ``blk``, ``tov``, ``pf``.
 
