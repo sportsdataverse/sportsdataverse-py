@@ -144,8 +144,17 @@ def wins_to_clinch(league: str, season: int, *, final: bool) -> int | None:
     return 2 if season <= 2004 else 3 if season <= 2024 else 4
 
 
-#: The "Game N" ending an ESPN postseason headline ("NBA Finals - Game 7"); null without one.
-_HEADLINE_GAME = pl.col("notes_headline").str.extract(r"(?i)game\s+(\d+)\s*$", 1).cast(pl.Int64, strict=False)
+def _game_number() -> pl.Expr:
+    """``game_number`` over rows sorted by tip-off: the headline's "Game N" ("NBA Finals - Game 7"), so a game
+    missing from the release leaves a gap rather than renumbering the rest; tip-off order for the whole series
+    when one of its headlines has no number (mixing the two could repeat a number)."""
+    headline = pl.col("notes_headline").str.extract(r"(?i)game\s+(\d+)\s*$", 1).cast(pl.Int64, strict=False)
+    return (
+        pl.when(headline.null_count().over("series_id") == 0)
+        .then(headline)
+        .otherwise(pl.int_range(1, pl.len() + 1).over("series_id"))
+        .alias("game_number")
+    )
 
 
 def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame:
@@ -213,13 +222,7 @@ def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame
         )
         .sort("season", "series_id", "game_date_time", "game_id", nulls_last=True)
         .with_columns(
-            # the headline's "Game N", so a game missing from the release leaves a gap rather than
-            # renumbering the rest; tip-off order for the whole series when a headline has no number
-            # (mixing the two could repeat a number)
-            pl.when(_HEADLINE_GAME.null_count().over("series_id") == 0)
-            .then(_HEADLINE_GAME)
-            .otherwise(pl.int_range(1, pl.len() + 1).over("series_id"))
-            .alias("game_number"),
+            _game_number(),
             pl.col("home_id").first().over("series_id").cast(pl.Int64).alias("team_a_id"),
             pl.col("away_id").first().over("series_id").cast(pl.Int64).alias("team_b_id"),
             # the latest headline names the round best (game 1 is sometimes blank)
