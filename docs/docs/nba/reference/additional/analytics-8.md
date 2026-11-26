@@ -373,26 +373,35 @@ print(onoff.sort("diff_transition_freq", descending=True).head())
 
 ### player_rates {#player_rates}
 
-`player_rates(box_logs: 'pl.DataFrame') -> 'pl.DataFrame'`
+`player_rates(box_logs: 'pl.DataFrame', *, prior_logs: 'pl.DataFrame | None' = None, league_id: 'str | None' = None) -> 'pl.DataFrame'`
 
-Per-player per-minute rate stats from box logs.
+Per-player per-minute rate stats from box logs, shrunk toward a tier prior in the NBA.
 
 Rows with null, zero or negative minutes (DNPs) are dropped before anything
 is counted, so `games` counts only games the player logged minutes in.
-Rate = total stat / total minutes across those games; `minutes_pg` is the
+The raw rate is total stat / total minutes across those games; `minutes_pg` is the
 mean minutes. A traded player gets one row: the rates pool every team's
 games, and `team_id` is the team on the player's last kept input row
 (sort `box_logs` by date to make that the latest team).
+
+With a `league_id` that has fitted `rate_prior_minutes` (the NBA, `"00"`), each
+rate is `(stat_sum + k * tier_rate) / (min_sum + k)`: `k` pseudo-minutes of the
+pooled rate of the player's minutes-and-role tier (`minutes_pg` in [0,12), [12,20),
+[20,28), 28+, split by starter share >= .5). The tier rate pools `box_logs` and
+`prior_logs`, each player tiered by his own profile in each frame; pass the previous
+regular season as `prior_logs` so a player's first games have a prior.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `box_logs` | `DataFrame` |  | Per-player-per-game frame with `player_id, team_id, minutes, pts, reb, ast, fg3m`. |
+| `box_logs` | `DataFrame` |  | Per-player-per-game frame with `player_id, team_id, minutes` and the stats `pts, reb, ast, fg3m`; `stl, blk, tov, fgm, ftm` are optional (a stat missing from the frame, or null on every played row, gets a null rate). Shrinkage also needs `starter`. |
+| `prior_logs` | `DataFrame \| None` | `None` | Earlier games (same columns), pooled into the tier rates only; they never enter a player's own totals. |
+| `league_id` | `str \| None` | `None` | `None` (default) for raw rates; `"00"` / `"10"` / `"20"` for that league's fitted shrinkage. Only the NBA has one, so WNBA and G-League stay raw. |
 
 **Returns**
 
-One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per_min, ast_per_min, fg3m_per_min`; `games` is Int64. `player_id` and `team_id` keep the input's dtype (String from the `nba_player_props` loader; integer ids come back as integers); empty input returns the documented schema, with String ids, and zero rows.
+One row per player: `player_id, team_id, games, minutes_pg`, then `pts_per_min, reb_per_min, ast_per_min, fg3m_per_min, stl_per_min, blk_per_min, tov_per_min, fgm_per_min, ftm_per_min`; `games` is Int64. `player_id` and `team_id` keep the input's dtype (String from the `nba_player_props` loader; integer ids come back as integers); empty input returns the documented schema, with String ids, and zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -404,12 +413,27 @@ One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per
 | `reb_per_min` | Float64 |  |
 | `ast_per_min` | Float64 |  |
 | `fg3m_per_min` | Float64 |  |
+| `stl_per_min` | Float64 |  |
+| `blk_per_min` | Float64 |  |
+| `tov_per_min` | Float64 |  |
+| `fgm_per_min` | Float64 |  |
+| `ftm_per_min` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Shrinkage is on and `box_logs` or `prior_logs` has no `starter` value on any played row (the tiers split on it). |
 
 **Example**
 
 ```python
 from sportsdataverse.nba.nba_player_props import player_rates
 rates = player_rates(box_logs)
+
+# Shrunk toward the tier prior, with last season pooled in
+
+rates = player_rates(box_logs, prior_logs=last_season_logs, league_id="00")
 ```
 
 ### players_on_court_from_pbp {#players_on_court_from_pbp}
@@ -636,7 +660,7 @@ Probability a stat finishes strictly above `line`.
 |---|---|---|---|
 | `exp_value` | `float` |  | Projected mean of the stat. |
 | `line` | `float` |  | The prop line. |
-| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `stat` | `str` |  | A `prop_distribution` stat (`"pts"` ... `"ftm"`). |
 | `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League (passed to `prop_distribution`). |
 
 **Returns**
@@ -669,7 +693,7 @@ scale with both projected minutes and pace.
 
 **Returns**
 
-`{"exp_pts", "exp_reb", "exp_ast", "exp_fg3m"}`.
+`{"exp_<stat>": value}` for each `<stat>_per_min` in `rate_row` that is not null: `exp_pts, exp_reb, exp_ast, exp_fg3m`, plus `exp_stl` ... `exp_ftm` from a `player_rates` row whose input carried those stats.
 
 **Example**
 
@@ -686,20 +710,27 @@ line = project_player_line(r, exp_minutes=32.0, pace_factor=1.02)
 Distribution family + parameters for a projected stat mean.
 
 Points -> Normal `(mu, sd)` with `sd = a + b*sqrt(mu)`; counts
-(reb/ast/fg3m) -> Negative-Binomial `(r, p)` matching mean `mu` and
-variance `dispersion*mu` (Poisson if dispersion <= 1).
+(reb/ast/fg3m, and stl/blk/tov/fgm/ftm where the league has their fit) ->
+Negative-Binomial `(r, p)` matching mean `mu` and variance
+`dispersion*mu` (Poisson if dispersion <= 1).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `exp_value` | `float` |  | Projected mean of the stat. |
-| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`, `"stl"`, `"blk"`, `"tov"`, `"fgm"`, `"ftm"`. |
 | `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League; selects that league's fitted SD law and dispersion. |
 
 **Returns**
 
 `(family, params)` where family is `"normal"`, `"nbinom"` or `"poisson"`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `stat` is one of stl/blk/tov/fgm/ftm and the league has no fitted dispersion for it (only the NBA has one). |
 
 **Example**
 

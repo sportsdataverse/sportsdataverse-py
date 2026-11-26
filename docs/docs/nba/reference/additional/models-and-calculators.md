@@ -277,7 +277,7 @@ Forecast-accuracy metrics: predicted-vs-actual next-season rating over held-out 
 
 ### LeagueConstants {#LeagueConstants}
 
-`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', pts_sd_a: 'float', pts_sd_b: 'float', count_dispersion: 'float', in_game_wp_artifact: 'str' = 'nba_in_game_wp.ubj') -> None`
+`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', pts_sd_a: 'float', pts_sd_b: 'float', count_dispersion: 'float', in_game_wp_artifact: 'str' = 'nba_in_game_wp.ubj', stat_dispersion: 'Mapping[str, float]' = <factory>, rate_prior_minutes: 'Mapping[str, float]' = <factory>) -> None`
 
 Per-`league_id` fitted constants for the NBA prediction & market stack.
 
@@ -294,6 +294,8 @@ Per-`league_id` fitted constants for the NBA prediction & market stack.
 | `pts_sd_b` | `float` |  | Slope of that law. |
 | `count_dispersion` | `float` |  | Player-prop count over-dispersion `var/mean` for reb/ast/fg3m (Negative-Binomial when > 1). |
 | `in_game_wp_artifact` | `str` | `'nba_in_game_wp.ubj'` | Filename of the bundled in-game-WP coefficients under `sportsdataverse/nba/models` (committed in Phase 3). |
+| `stat_dispersion` | `Mapping[str, float]` | `<factory>` | `var/mean` per stat for the other prop counts (`stl, blk, tov, fgm, ftm`); a stat missing here has no fitted distribution in that league. |
+| `rate_prior_minutes` | `Mapping[str, float]` | `<factory>` | Pseudo-minutes `k` per stat that `~sportsdataverse.nba.nba_player_props.player_rates` shrinks a player's per-minute rate with, toward his minutes-and-role tier's pooled rate; empty means raw rates. |
 
 ### MeasureSpec {#MeasureSpec}
 
