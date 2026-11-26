@@ -21,9 +21,9 @@ side with possessions ``P`` and its counts (``RC`` = own OREB + the other side's
 * ``orb_pts`` = ``(OREB - lg ORB% * RC) * chance_pts``
 * ``ft_pts`` = ``(pts - lg_ppp * P)`` less the three above: the free throws' price plus the
   possessions and points the box estimate does not explain. On the pros that remainder is the
-  possession count's distance from the box estimate (which weights a free-throw attempt 0.44); in
-  college it also carries the play-by-play points' distance from the box's. Like every part, it
-  averages zero over the league.
+  possession count's distance from the box estimate (which weights a free-throw attempt 0.44), less
+  the league's average gap per FGA; in college it also carries the play-by-play points' distance
+  from the box's. Like every part, it averages zero over the league, weighted by possessions.
 
 each divided by ``P`` and times 100. ``tools/fit_factor_point_weights.py`` checks the choice of
 fixed weights against a league-season regression of ``off_rtg - lg_rtg`` on the factor gaps.
