@@ -250,8 +250,8 @@ Two rows per tournament game (one per side): `season`, `run_id`, `tournament_key
 | `winner_team_id` | Int64 | The game winner's ESPN team id; null until the game is final. |
 | `wins` | Int64 | The run's wins after this game. |
 | `losses` | Int64 | The run's losses after this game. |
-| `run_games` | Int64 | Games listed in the run (played and scheduled); the same on every row of the run. |
-| `run_result` | String | champion (won the tournament's last listed game, by tip-off, once final), eliminated (lost its last listed game) or alive; the same on every row of the run. |
+| `run_games` | Int64 | Games listed in the run (played and scheduled), as of the release, repeated on every row of the run: an earlier game's row already shows how far the run went, so never use it as a feature for that game. |
+| `run_result` | String | champion (won the tournament's last listed game, by tip-off, once final, when it is the only game on the tournament's last date), eliminated (lost its last listed game) or alive. The outcome as of the release, repeated on every row of the run, not as of that game: never use it as a feature for an earlier game. |
 
 **Raises**
 
