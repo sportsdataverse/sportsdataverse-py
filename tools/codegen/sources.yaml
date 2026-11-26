@@ -507,6 +507,13 @@ providers:
       - sportsdataverse.mlb.mlb_statcast_extra
       - sportsdataverse.mlb.mlb_statcast_runtime
 
+  chadwick_register:
+    label: Chadwick Baseball Bureau register
+    home: https://github.com/chadwickbureau/register
+    auth: none
+    modules:
+      - sportsdataverse.mlb.mlb_people_register
+
   nhl_api_web:
     label: NHL Web API
     featured: true

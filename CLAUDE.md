@@ -1383,7 +1383,8 @@ generated table in `docs/docs/intro.md`.
 
 Providers beyond ESPN and the release loaders: NFL.com Shield (`nfl_api`), NFL Pro
 (`nflpro`), Sleeper (`sleeper`), PFF Developer (`pff_api`) and PFF Premium
-(LEGACY), MLB Stats API (`mlb_api`) and Baseball Savant (`mlb_statcast`), the four
+(LEGACY), MLB Stats API (`mlb_api`), Baseball Savant (`mlb_statcast`) and the Chadwick
+Baseball Bureau register (`chadwick_register`, the baseball person-id crosswalk), the four
 NHL APIs (`nhl_api_web`, `nhl_edge`, `nhl_stats_rest`, `nhl_records`), `nba_stats` /
 `wnba_stats` / `nbagl_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop Stats, Basketball-Reference, the official NBA injury report (`nba_official`),
 RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,

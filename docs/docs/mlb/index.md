@@ -13,8 +13,9 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 35 | none |
 | [MLB Stats API](#mlb-stats-api) | `statsapi.mlb.com` | 79 | none |
 | [Baseball Savant (Statcast)](#baseball-savant-statcast) | `baseballsavant.mlb.com` | 43 | none |
+| [Chadwick Baseball Bureau register](#chadwick-baseball-bureau-register) | `github.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 23 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 106 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 107 | — |
 
 ## ESPN {#espn}
 
@@ -46,6 +47,12 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 |---|---:|
 | [MLB Statcast (Baseball Savant)](reference/mlb_statcast) | 39 |
 | [Hand-written wrappers](reference/additional/baseball-savant-statcast) | 4 |
+
+## Chadwick Baseball Bureau register {#chadwick-baseball-bureau-register}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional/chadwick-baseball-bureau-register) | 1 |
 
 ## Fox Sports API {#fox-sports-api}
 
@@ -216,6 +223,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ba
 | [`fox_mlb_team_stats`](reference/additional/fox-sports-api#fox_mlb_team_stats) | [`fox_mlb_team_stats`](https://billpetti.github.io/baseballr/reference/fox_mlb_team_stats.html) |
 | [`load_mlb_batter_projection`](reference/loaders/other#load_mlb_batter_projection) | [`load_mlb_batter_projection`](https://billpetti.github.io/baseballr/reference/load_mlb_batter_projection.html) |
 | [`load_mlb_catcher_framing`](reference/loaders/other#load_mlb_catcher_framing) | [`load_mlb_catcher_framing`](https://billpetti.github.io/baseballr/reference/load_mlb_catcher_framing.html) |
+| [`load_mlb_chadwick_register`](reference/additional/chadwick-baseball-bureau-register#load_mlb_chadwick_register) | [`chadwick_player_lu`](https://billpetti.github.io/baseballr/reference/chadwick_player_lu.html) |
 | [`load_mlb_command_plus`](reference/loaders/other#load_mlb_command_plus) | [`load_mlb_command_plus`](https://billpetti.github.io/baseballr/reference/load_mlb_command_plus.html) |
 | [`load_mlb_expected_hr`](reference/loaders/other#load_mlb_expected_hr) | [`load_mlb_expected_hr`](https://billpetti.github.io/baseballr/reference/load_mlb_expected_hr.html) |
 | [`load_mlb_expected_stats`](reference/loaders/other#load_mlb_expected_stats) | [`load_mlb_expected_stats`](https://billpetti.github.io/baseballr/reference/load_mlb_expected_stats.html) |

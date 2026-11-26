@@ -313,6 +313,7 @@ from sportsdataverse.mlb import fox_mlb_teamnav as fox_mlb_teamnav  # noqa: F401
 from sportsdataverse.mlb import leverage_index as leverage_index  # noqa: F401
 from sportsdataverse.mlb import load_mlb_batter_projection as load_mlb_batter_projection  # noqa: F401
 from sportsdataverse.mlb import load_mlb_catcher_framing as load_mlb_catcher_framing  # noqa: F401
+from sportsdataverse.mlb import load_mlb_chadwick_register as load_mlb_chadwick_register  # noqa: F401
 from sportsdataverse.mlb import load_mlb_command_plus as load_mlb_command_plus  # noqa: F401
 from sportsdataverse.mlb import load_mlb_expected_hr as load_mlb_expected_hr  # noqa: F401
 from sportsdataverse.mlb import load_mlb_expected_stats as load_mlb_expected_stats  # noqa: F401
@@ -588,6 +589,7 @@ __all__ = [
     "leverage_index",
     "load_mlb_batter_projection",
     "load_mlb_catcher_framing",
+    "load_mlb_chadwick_register",
     "load_mlb_command_plus",
     "load_mlb_expected_hr",
     "load_mlb_expected_stats",

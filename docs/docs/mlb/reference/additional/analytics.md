@@ -1,7 +1,7 @@
 ---
 title: "MLB — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 6
+sidebar_position: 7
 description: "MLB — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MLB — additional Python functions — Analytics

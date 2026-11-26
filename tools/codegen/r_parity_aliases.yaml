@@ -53,6 +53,8 @@ mbb:
 mlb:
   # baseballr names for the same statsapi.mlb.com endpoint (or Savant search route); each pair checked
   # against both sources' endpoint paths (2026-11-26). Pairs whose paths differ carry a note.
+  # The person register loader reads the same Chadwick register shards.
+  load_mlb_chadwick_register: chadwick_player_lu
   mlb_all_star_ballot: mlb_all_star_ballots
   mlb_award_recipients: mlb_awards_recipient
   mlb_datacasters: mlb_jobs_datacasters
