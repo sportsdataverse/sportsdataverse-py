@@ -55,3 +55,16 @@ def test_european_and_college_hockey_homes_link_fastrhockey():
     """fastRhockey 1.1 exports the SIHF, European-league and mch/wch wrappers under sdv-py's names."""
     for lg in ("sihf", *generate._EURO_HOCKEY_HOMES, "mch", "wch"):
         assert generate._R_PARITY_PACKAGE[lg] == "fastRhockey"
+
+
+def test_no_alias_shadows_a_same_name_r_export():
+    """An alias wins over identity, so aliasing a name the R package also exports would replace the correct link."""
+    aliases = yaml.safe_load((CODEGEN / "r_parity_aliases.yaml").read_text(encoding="utf-8"))
+    exports = yaml.safe_load((CODEGEN / "r_exports.yaml").read_text(encoding="utf-8"))
+    shadowed = sorted(
+        (league, py, r)
+        for league, pairs in aliases.items()
+        for py, r in pairs.items()
+        if py != r and py in set(exports.get(generate._R_PARITY_PACKAGE[league], []))
+    )
+    assert shadowed == []

@@ -418,9 +418,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wbb_team_group_seasons`](reference/loaders/team#load_wbb_team_group_seasons) | [`load_wbb_team_group_seasons`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_group_seasons.html) |
 | [`load_wbb_team_season_stats`](reference/loaders/team#load_wbb_team_season_stats) | [`load_wbb_team_stats`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_stats.html) |
 | [`most_recent_wbb_season`](reference/additional/dates-and-seasons#most_recent_wbb_season) | [`most_recent_wbb_season`](https://wehoop.sportsdataverse.org/reference/most_recent_wbb_season.html) |
-| [`ncaa_espn_school_seasons`](reference/additional/ids-and-crosswalks#ncaa_espn_school_seasons) | [`load_wbb_ncaa_espn_school_seasons`](https://wehoop.sportsdataverse.org/reference/load_wbb_ncaa_espn_school_seasons.html) |
-| [`ncaa_espn_schools`](reference/additional/ids-and-crosswalks#ncaa_espn_schools) | [`load_wbb_ncaa_espn_schools`](https://wehoop.sportsdataverse.org/reference/load_wbb_ncaa_espn_schools.html) |
-| [`ncaa_espn_team_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_team_crosswalk) | [`load_wbb_ncaa_espn_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_ncaa_espn_team_crosswalk.html) |
 | [`wbb_player_crosswalk`](reference/additional/ids-and-crosswalks#wbb_player_crosswalk) | [`wbb_player_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_player_crosswalk.html) |
 | [`wbb_schedule_crosswalk`](reference/additional/ids-and-crosswalks#wbb_schedule_crosswalk) | [`wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_schedule_crosswalk.html) |
 | [`wbb_team_crosswalk`](reference/additional/ids-and-crosswalks#wbb_team_crosswalk) | [`wbb_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_team_crosswalk.html) |

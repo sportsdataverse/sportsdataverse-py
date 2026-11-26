@@ -310,7 +310,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`nhl_club_stats_season`](reference/nhl_api_web/club#nhl_club_stats_season) | [`nhl_club_stats_season`](https://fastRhockey.sportsdataverse.org/reference/nhl_club_stats_season.html) |
 | [`nhl_draft_picks`](reference/nhl_api_web/draft#nhl_draft_picks) | [`nhl_draft_year`](https://fastRhockey.sportsdataverse.org/reference/nhl_draft_year.html) |
 | [`nhl_draft_picks_now`](reference/nhl_api_web/draft#nhl_draft_picks_now) | [`nhl_draft`](https://fastRhockey.sportsdataverse.org/reference/nhl_draft.html) |
-| [`nhl_draft_rankings`](reference/nhl_api_web/draft#nhl_draft_rankings) | [`nhl_draft_prospects_info`](https://fastRhockey.sportsdataverse.org/reference/nhl_draft_prospects_info.html) |
+| [`nhl_draft_rankings`](reference/nhl_api_web/draft#nhl_draft_rankings) | [`nhl_draft_rankings`](https://fastRhockey.sportsdataverse.org/reference/nhl_draft_rankings.html) |
 | [`nhl_draft_rankings_now`](reference/nhl_api_web/draft#nhl_draft_rankings_now) | [`nhl_draft_prospects`](https://fastRhockey.sportsdataverse.org/reference/nhl_draft_prospects.html) |
 | [`nhl_draft_tracker_picks_now`](reference/nhl_api_web/draft#nhl_draft_tracker_picks_now) | [`nhl_draft_tracker`](https://fastRhockey.sportsdataverse.org/reference/nhl_draft_tracker.html) |
 | [`nhl_edge_cat_goalie_detail`](reference/nhl_edge/cat#nhl_edge_cat_goalie_detail) | [`nhl_cat_edge_goalie_detail`](https://fastRhockey.sportsdataverse.org/reference/nhl_cat_edge_goalie_detail.html) |
