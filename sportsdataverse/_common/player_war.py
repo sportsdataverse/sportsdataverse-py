@@ -73,7 +73,8 @@ under the floor has no tier, as does every player of a season whose cohort is un
 :data:`MIN_COHORT_PLAYERS`. The percentile is the ``_pct`` formula, ``100 * (n + 1 - rank) / (n + 1)``
 among the cohort, not ``war_pct`` (which ranks every player). College rows also carry ``war_tier_conf``:
 the same ladder within the league-season's conference (the conference of the team he played most
-possessions for), over the same possession floor.
+possessions for), over the same possession floor; on another conference's team :func:`roster_tiers` places
+him in that conference.
 
 **Rosters.** ``team_ids`` lists every team a player played for, most possessions first.
 :func:`roster_tiers` puts him on each of them with his full-season tiers, and :func:`roster_tier_shape`
@@ -629,7 +630,10 @@ def roster_tiers(war: pl.DataFrame) -> pl.DataFrame:
         One row per ``(season, team_id, player_id)``: ``player_name``, ``main_team`` (Boolean: the team he
         played most possessions for), ``poss`` and ``war`` (his season's, not the team's share),
         ``war_tier`` and in college ``conference_id`` (that team's conference, from the players whose main
-        team it is) and ``war_tier_conf``. Sorted by season, team and ``war`` (most first).
+        team it is) and ``war_tier_conf``: his ladder step within that team's conference. On a team of
+        another conference than his main team's, his WAR is placed among that conference's tier cohort (its
+        tiered players, by main team, with him added); with no conference for the team it is null. Sorted
+        by season, team and ``war`` (most first).
 
     Raises:
         polars.exceptions.ColumnNotFoundError: If ``war`` lacks one of those columns.
@@ -649,6 +653,7 @@ def roster_tiers(war: pl.DataFrame) -> pl.DataFrame:
             "poss",
             "war",
             *tiers,
+            *([pl.col("conference_id").alias("_main_conf")] if conf else []),
         )
         .explode("team_id")
         .drop_nulls("team_id")
@@ -659,9 +664,51 @@ def roster_tiers(war: pl.DataFrame) -> pl.DataFrame:
     if conf:
         team_conf = war.select("season", "team_id", "conference_id").drop_nulls().unique(["season", "team_id"])
         rows = rows.join(team_conf, on=["season", "team_id"], how="left", validate="m:1")
+        rows = _conference_tier_elsewhere(rows, war)
     cols = ["season", "team_id", "player_id", "player_name", "main_team", "poss", "war", "war_tier"]
     cols += ["conference_id", "war_tier_conf"] if conf else []
     return rows.select(cols).sort(["season", "team_id", "war"], descending=[False, False, True], nulls_last=True)
+
+
+def _conference_tier_elsewhere(rows: pl.DataFrame, war: pl.DataFrame) -> pl.DataFrame:
+    """``war_tier_conf`` of a :func:`roster_tiers` row on a team outside his main team's conference.
+
+    His full-season WAR is ranked among that conference's tier cohort (its tiered players, by their main
+    team) with him added, ties averaged, and the percentile ``100 * (n + 1 - rank) / (n + 1)`` over those
+    ``n`` players picks the :data:`WAR_TIERS` step. Null when he has no ``war_tier`` (under the floor), the
+    team has no conference, or the conference's cohort without him is under :data:`MIN_COHORT_PLAYERS`.
+    Rows on a team of his own conference keep the :func:`war_tiers` value.
+    """
+    keys = ["season", "conference_id"]
+    away = (pl.col("conference_id") != pl.col("_main_conf")).fill_null(True) & (pl.col("main_team") == False)
+    moved = rows.filter(away & pl.col("conference_id").is_not_null() & pl.col("war_tier").is_not_null())
+    cohort = war.filter(pl.col("war_tier").is_not_null() & pl.col("conference_id").is_not_null()).select(
+        *keys, pl.col("war").alias("_cw")
+    )
+    placed = (
+        moved.select(*keys, "team_id", "player_id", "war")
+        .join(cohort, on=keys, how="left")
+        .group_by(*keys, "team_id", "player_id")
+        .agg(
+            pl.col("_cw").count().alias("_n"),
+            (pl.col("_cw") > pl.col("war")).sum().alias("_gt"),
+            (pl.col("_cw") == pl.col("war")).sum().alias("_eq"),
+        )
+        .with_columns((pl.col("_n") + 1).alias("_n1"), (pl.col("_gt") + 1 + pl.col("_eq") / 2).alias("_rank"))
+        .with_columns(
+            pl.when(pl.col("_n") >= MIN_COHORT_PLAYERS)
+            .then(100 * (pl.col("_n1") + 1 - pl.col("_rank")) / (pl.col("_n1") + 1))
+            .alias("_pct")
+        )
+        .select(*keys, "team_id", "player_id", _war_tier(pl.col("_pct")).alias("_conf_tier"))
+    )
+    return (
+        rows.join(placed, on=[*keys, "team_id", "player_id"], how="left", validate="1:1")
+        .with_columns(
+            pl.when(away).then(pl.col("_conf_tier")).otherwise(pl.col("war_tier_conf")).alias("war_tier_conf")
+        )
+        .drop("_conf_tier", "_main_conf")
+    )
 
 
 def _tier_frame() -> pl.DataFrame:

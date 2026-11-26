@@ -331,3 +331,30 @@ def test_college_per_game_gate_and_cohort(league: str) -> None:
     la = player_war_league_averages(out, league=league)
     for m in ("war", "pts_pg", "reb_pg", "ast_pg"):
         assert la.filter(metric=m)["n"].item() == out[f"{m}_rank"].drop_nulls().len()
+
+
+def test_the_production_conference_wiring_reaches_war_tier_conf(monkeypatch: pytest.MonkeyPatch) -> None:
+    """``mbb_player_war`` builds its conferences with the real ``_conferences`` from the raw ESPN schedule
+    release (only the loader is replaced, by a slice of it), so the join keys' dtypes are the production ones."""
+    stints, net = _bb("mbb_stints_2025.parquet"), _bb("mbb_net_2025.parquet")
+    games = (_bb("mbb_player_games_2025.parquet"), _bb("mbb_team_games_2025.parquet"))
+    raw = _bb("mbb_schedule_slice_2025.parquet")
+    loaded: list[list[int]] = []
+    monkeypatch.setattr(
+        "sportsdataverse.mbb.mbb_loaders.load_mbb_schedule", lambda seasons: loaded.append(seasons) or raw
+    )
+    conf = war_mod._conferences([2025], "mens")
+    assert loaded == [[2025]]
+    assert conf.schema == pl.Schema({"season": pl.Int64, "team_id": pl.Utf8, "conference_id": pl.Utf8})
+    assert conf.schema["team_id"] == stints.schema["team_id"]  # the join player_war asserts on
+    monkeypatch.setattr(war_mod, "mbb_box_bpm", lambda seasons, league="mens": stints)
+    monkeypatch.setattr(war_mod, "mbb_team_ratings", lambda seasons, league="mens": net)
+    monkeypatch.setattr(war_mod, "load_mbb_player_boxscore", lambda seasons: stints)
+    monkeypatch.setattr(war_mod, "_war_stints", lambda box, ratings: (stints, net))
+    monkeypatch.setattr(war_mod, "_game_rows", lambda box, ratings: games)
+    monkeypatch.setattr(war_mod, "_box", lambda box, ratings: None)
+    out = war_mod.mbb_player_war(2025)
+    # every one of the 40 teams is Division I with a conference in the release
+    assert out.height == 568 and out["conference_id"].null_count() == 0
+    assert out["war_tier_conf"].is_not_null().sum() > 0
+    assert (out["war_tier_conf"].is_not_null() <= out["war_tier"].is_not_null()).all()

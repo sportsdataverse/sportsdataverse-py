@@ -17,6 +17,7 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from sportsdataverse._common.league_context import MIN_COHORT_PLAYERS
 from sportsdataverse._common.player_war import (
     TIER_MIN_POSS_SHARE,
     WAR_TIERS,
@@ -130,13 +131,23 @@ def test_each_team_s_tiers_add_up_to_its_tiered_players(league: str) -> None:
 
 
 def _recount(out: pl.DataFrame, tier: str, by_conf: bool) -> dict[tuple, dict[str, int]]:
-    """Players per (season, [conference], team) and tier, from the player rows' team_ids, zeros included."""
+    """Players per (season, [conference], team) and tier, from the player rows' team_ids, zeros included.
+
+    By conference, a player on a team outside his main team's conference takes that conference's tier
+    (checked on its own by the traded-player conference test); everyone else keeps his own.
+    """
     conf = dict(out.select("team_id", "conference_id").drop_nulls().iter_rows()) if by_conf else {}
+    elsewhere: dict[tuple, str | None] = {}
+    if by_conf:
+        rows = roster_tiers(out).join(out.select("player_id", pl.col("conference_id").alias("_mc")), on="player_id")
+        moved = rows.filter((pl.col("main_team") == False) & pl.col("conference_id").ne_missing(pl.col("_mc")))
+        elsewhere = {(p, str(t)): v for p, t, v in moved.select("player_id", "team_id", tier).iter_rows()}
     teams: dict[tuple, dict[str, int]] = {}
-    for season, team_ids, t in out.filter(pl.col(tier).is_not_null()).select("season", "team_ids", tier).iter_rows():
+    for season, player, team_ids, own in out.select("season", "player_id", "team_ids", tier).iter_rows():
         for team in team_ids.split(","):
+            t = elsewhere.get((player, team), own) if by_conf else own
             key = (season, conf.get(team), team) if by_conf else (season, None, team)
-            if by_conf and key[1] is None:
+            if t is None or (by_conf and key[1] is None):
                 continue
             teams.setdefault(key, dict.fromkeys(WAR_TIERS, 0))[t] += 1
     return teams
@@ -219,3 +230,30 @@ def test_empty_input_keeps_the_schema() -> None:
         "players_mean": pl.Float64,
         "teams": pl.Int64,
     }
+
+
+@COLLEGE
+def test_a_traded_player_s_conference_tier_on_his_other_team_is_that_conference_s(league: str) -> None:
+    """On a team of another conference, war_tier_conf ranks his WAR among that conference's tier cohort
+    (its tiered players by main team, plus him; ties averaged), not his main conference's."""
+    out = _war(league)
+    rows = roster_tiers(out)
+    main_conf = dict(out.select("player_id", "conference_id").iter_rows())
+    away = rows.filter((pl.col("main_team") == False) & pl.col("war_tier").is_not_null()).filter(
+        pl.col("conference_id").ne_missing(pl.col("player_id").replace_strict(main_conf, default=None))
+    )
+    assert away.height > 0  # 2024-25: MBB 10, WBB 2 rows on a team of another conference
+    cohort = out.filter(pl.col("war_tier").is_not_null() & pl.col("conference_id").is_not_null())
+    for season, conf, war, tier in away.select("season", "conference_id", "war", "war_tier_conf").iter_rows():
+        others = cohort.filter((pl.col("season") == season) & (pl.col("conference_id") == conf))["war"].to_list()
+        n = len(others) + 1
+        rank = sum(w > war for w in others) + 1 + sum(w == war for w in others) / 2
+        expected = (
+            _war_tier(pl.lit(100 * (n + 1 - rank) / (n + 1)))
+            if len(others) >= MIN_COHORT_PLAYERS
+            else pl.lit(None, pl.Utf8)
+        )
+        assert pl.select(expected).item() == tier, (conf, war)
+    # his own conference's team keeps war_tiers' value
+    mains = rows.filter(pl.col("main_team")).join(out.select("player_id", "war_tier_conf"), on="player_id", suffix="_p")
+    assert (mains["war_tier_conf"].eq_missing(mains["war_tier_conf_p"])).all()
