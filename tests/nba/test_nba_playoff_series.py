@@ -251,3 +251,27 @@ def test_a_box_row_listed_twice_counts_once(lg: str) -> None:
     assert playoff_series_players(games, pl.concat([player, player.head(50)])).equals(
         playoff_series_players(games, player)
     )
+
+
+def test_a_game_missing_from_the_release_keeps_the_others_numbers() -> None:
+    """``game_number`` is the headline's "Game N", so dropping game 3 of the NBA Finals leaves 1, 2, 4..7
+    (tip-off order would renumber 4..7 as 3..6); a blank headline falls back to tip-off order."""
+    sched = _read("nba", "schedule")
+    finals = _games("nba").filter(pl.col("round") == 4).sort("game_number")
+    assert finals["game_number"].to_list() == list(range(1, 8))
+    game3 = finals.filter(pl.col("game_number") == 3)["game_id"].item()
+    gap = playoff_series_games(sched.filter(pl.col("game_id") != game3), league="nba").filter(pl.col("round") == 4)
+    assert gap.sort("game_date")["game_number"].to_list() == [1, 2, 4, 5, 6, 7]
+    game1 = finals.filter(pl.col("game_number") == 1)["game_id"].item()
+    blank = sched.with_columns(
+        pl.when(pl.col("game_id") == game1).then(pl.lit("")).otherwise(pl.col("notes_headline")).alias("notes_headline")
+    )
+    numbered = playoff_series_games(blank, league="nba").filter(pl.col("game_id") == game1)
+    assert numbered["game_number"].to_list() == [1]
+
+
+def test_string_team_ids_order_as_numbers_in_the_series_id() -> None:
+    """A release with String ids keys the series by the numeric order of the ids ("9" is below "11")."""
+    sched = _read("nba", "schedule")
+    as_str = sched.with_columns(pl.col("home_id", "away_id").cast(pl.Utf8))
+    assert set(playoff_series_games(as_str, league="nba")["series_id"]) == set(_games("nba")["series_id"])

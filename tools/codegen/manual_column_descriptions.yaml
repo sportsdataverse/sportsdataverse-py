@@ -82767,7 +82767,8 @@ nba_playoff_series:
     (NBA conference finals), 4 Finals; null where ESPN gives no round (older seasons).'
   round_code: ESPN's type_abbreviation for the round (RD16, QTR, SEMI, FINAL); null where it carries none.
   round_name: The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series).
-  game_number: Game number within the series, by tip-off.
+  game_number: 'Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves
+    a gap; tip-off order where the headline has no number.'
   game_id: ESPN game id.
   game_date: Game date (US).
   completed: True when the game is final.
@@ -82786,8 +82787,12 @@ nba_playoff_series:
   team_b_wins: team_b's series wins after this game.
   series_games: Games listed in the series so far (played and scheduled); the same on every row of the series.
   decided: 'True once the series leader has the wins to clinch (NBA: four, every round since 2003; WNBA: the Finals only,
-    two through 2004, three 2005-2024, four from 2025) or plays a later series that postseason.'
-  series_winner_team_id: The series winner's ESPN team id; null until decided.
+    two through 2004, three 2005-2024, four from 2025) or plays a later series that postseason. The final outcome as of the
+    release, repeated on every row of the series, not as of that game: an earlier game''s row already shows it, so never
+    use it as a feature for that game.'
+  series_winner_team_id: 'The series winner''s ESPN team id; null until decided. The final outcome as of the release, repeated
+    on every row of the series, not as of that game: an earlier game''s row already shows it, so never use it as a feature
+    for that game.'
 nba_playoff_series_players:
   season: Season, named by the year it ends (2025 is 2024-25; the WNBA season is its calendar year).
   series_id: 'Series key: ''{season}-{lower ESPN team id}-{higher ESPN team id}''. A pair of teams meets at most once per
@@ -82806,7 +82811,7 @@ nba_playoff_series_players:
   fta: 'Total free throws attempted in the series: the sum of the player''s ESPN game boxes.'
   oreb: 'Total offensive rebounds in the series: the sum of the player''s ESPN game boxes.'
   dreb: 'Total defensive rebounds in the series: the sum of the player''s ESPN game boxes.'
-  reb: 'Total total rebounds in the series: the sum of the player''s ESPN game boxes.'
+  reb: 'Total rebounds in the series: the sum of the player''s ESPN game boxes.'
   ast: 'Total assists in the series: the sum of the player''s ESPN game boxes.'
   stl: 'Total steals in the series: the sum of the player''s ESPN game boxes.'
   blk: 'Total blocks in the series: the sum of the player''s ESPN game boxes.'
@@ -82860,7 +82865,7 @@ nba_playoff_series_teams:
   fta: 'Total free throws attempted over the series'' final games: the sum of the team''s ESPN game boxes.'
   oreb: 'Total offensive rebounds over the series'' final games: the sum of the team''s ESPN game boxes.'
   dreb: 'Total defensive rebounds over the series'' final games: the sum of the team''s ESPN game boxes.'
-  reb: 'Total total rebounds over the series'' final games: the sum of the team''s ESPN game boxes.'
+  reb: 'Total rebounds over the series'' final games: the sum of the team''s ESPN game boxes.'
   ast: 'Total assists over the series'' final games: the sum of the team''s ESPN game boxes.'
   stl: 'Total steals over the series'' final games: the sum of the team''s ESPN game boxes.'
   blk: 'Total blocks over the series'' final games: the sum of the team''s ESPN game boxes.'
@@ -82874,7 +82879,8 @@ wnba_playoff_series:
     (NBA conference finals), 4 Finals; null where ESPN gives no round (older seasons).'
   round_code: ESPN's type_abbreviation for the round (RD16, QTR, SEMI, FINAL); null where it carries none.
   round_name: The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series).
-  game_number: Game number within the series, by tip-off.
+  game_number: 'Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves
+    a gap; tip-off order where the headline has no number.'
   game_id: ESPN game id.
   game_date: Game date (US).
   completed: True when the game is final.
@@ -82893,8 +82899,12 @@ wnba_playoff_series:
   team_b_wins: team_b's series wins after this game.
   series_games: Games listed in the series so far (played and scheduled); the same on every row of the series.
   decided: 'True once the series leader has the wins to clinch (NBA: four, every round since 2003; WNBA: the Finals only,
-    two through 2004, three 2005-2024, four from 2025) or plays a later series that postseason.'
-  series_winner_team_id: The series winner's ESPN team id; null until decided.
+    two through 2004, three 2005-2024, four from 2025) or plays a later series that postseason. The final outcome as of the
+    release, repeated on every row of the series, not as of that game: an earlier game''s row already shows it, so never
+    use it as a feature for that game.'
+  series_winner_team_id: 'The series winner''s ESPN team id; null until decided. The final outcome as of the release, repeated
+    on every row of the series, not as of that game: an earlier game''s row already shows it, so never use it as a feature
+    for that game.'
 wnba_playoff_series_players:
   season: Season, named by the year it ends (2025 is 2024-25; the WNBA season is its calendar year).
   series_id: 'Series key: ''{season}-{lower ESPN team id}-{higher ESPN team id}''. A pair of teams meets at most once per
@@ -82913,7 +82923,7 @@ wnba_playoff_series_players:
   fta: 'Total free throws attempted in the series: the sum of the player''s ESPN game boxes.'
   oreb: 'Total offensive rebounds in the series: the sum of the player''s ESPN game boxes.'
   dreb: 'Total defensive rebounds in the series: the sum of the player''s ESPN game boxes.'
-  reb: 'Total total rebounds in the series: the sum of the player''s ESPN game boxes.'
+  reb: 'Total rebounds in the series: the sum of the player''s ESPN game boxes.'
   ast: 'Total assists in the series: the sum of the player''s ESPN game boxes.'
   stl: 'Total steals in the series: the sum of the player''s ESPN game boxes.'
   blk: 'Total blocks in the series: the sum of the player''s ESPN game boxes.'
@@ -82967,7 +82977,7 @@ wnba_playoff_series_teams:
   fta: 'Total free throws attempted over the series'' final games: the sum of the team''s ESPN game boxes.'
   oreb: 'Total offensive rebounds over the series'' final games: the sum of the team''s ESPN game boxes.'
   dreb: 'Total defensive rebounds over the series'' final games: the sum of the team''s ESPN game boxes.'
-  reb: 'Total total rebounds over the series'' final games: the sum of the team''s ESPN game boxes.'
+  reb: 'Total rebounds over the series'' final games: the sum of the team''s ESPN game boxes.'
   ast: 'Total assists over the series'' final games: the sum of the team''s ESPN game boxes.'
   stl: 'Total steals over the series'' final games: the sum of the team''s ESPN game boxes.'
   blk: 'Total blocks over the series'' final games: the sum of the team''s ESPN game boxes.'
