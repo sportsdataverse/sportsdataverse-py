@@ -108,8 +108,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 |---|---|
 | [make_prob_by_context](additional/analytics.md#make_prob_by_context) | Marginal FG% tables by defender distance and by shot clock. |
 | [make_prob_joint](additional/analytics.md#make_prob_joint) | Independence-combined defender x shot-clock make probability. |
-| [score_shot_xpoints](additional/analytics.md#score_shot_xpoints) | Score each shot with expected points from the league-average baseline. |
-| [shooter_talent](additional/analytics.md#shooter_talent) | Regressed shooter true-talent: make%-above-expected, shrunk to the mean. |
+| [score_shot_xpoints](additional/analytics.md#score_shot_xpoints) | Score WNBA shots with expected points from the `LeagueAverages` zone table. |
+| [shooter_talent](additional/analytics.md#shooter_talent) | Regressed WNBA shooter talent: make%-above-expected, shrunk by the WNBA's `k`. |
 | [shot_selection_quality](additional/analytics.md#shot_selection_quality) | Player shot-selection quality: mean expected value vs the league mean. |
 | [wnba_availability](additional/analytics.md#wnba_availability) | WNBA availability -- the NBA core bound to `league="wnba"`. |
 | [wnba_coach_careers](additional/analytics.md#wnba_coach_careers) | WNBA head-coach careers over the given seasons (league_id='10'). See sportsdataverse.nba.nba_coach_seasons.nba_coach_careers. |

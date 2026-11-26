@@ -57,7 +57,7 @@ def test_baseline_empty_schema():
 
 
 def test_score_xpoints_math():
-    out = score_shot_xpoints(_shots(), _league_avgs())
+    out = score_shot_xpoints(_shots(), _league_avgs(), model="zone")
     three = out.filter(pl.col("shot_type") == "3PT Field Goal").row(0, named=True)
     two = out.filter(pl.col("shot_type") == "2PT Field Goal").row(0, named=True)
     assert three["shot_value"] == 3 and abs(three["xpoints"] - 0.360 * 3) < 1e-9

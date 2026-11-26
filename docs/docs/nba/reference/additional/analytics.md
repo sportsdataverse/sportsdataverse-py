@@ -259,6 +259,56 @@ poss = add_possession_flags(raw, load_nba_stats_pbp(2023))
 print(poss.group_by("is_transition").len())
 ```
 
+### add_shot_make_prob {#add_shot_make_prob}
+
+`add_shot_make_prob(shots: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Add each field-goal attempt's make chance from the bundled location model.
+
+The model reads only what the play-by-play records for a shot: its court location
+(`x_legacy` / `y_legacy`, and its distance from the hoop computed from them), its value
+and its shot type (`sub_type`, e.g. `"Driving Layup Shot"`). It was fitted on three
+regular-season play-by-play release seasons and gated against the zone table walk-forward by
+season (`tools/models/nba_shot_value/train_shot_make.py`; the fit report sits beside it).
+
+The make chance sits at the level of the booster's training seasons (2022-23 to 2024-25); the
+league's make rate moves from season to season, by more than a point in some (see
+`score_shot_xpoints`). The shot type is the scorer's label, written after the play, so a
+make chance that reads it already credits some of what the shooter did (a "Running Dunk Shot"
+goes in about 95% of the time).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shots` | `DataFrame` |  | Play-by-play rows (`nba_stats_pbp` release shape) with `x_legacy`, `y_legacy`, `shot_value` and `sub_type`. Other rows may be present. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (the only league with a booster). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The input plus `xfg:Float64`: the make chance of every row with `shot_value` 2 or 3 and a location; null on every other row (free throws, non-shots, an unlocated attempt). Empty input returns the input with the null column.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | No booster is bundled for `league_id`, or an input column is missing. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import load_nba_stats_pbp
+from sportsdataverse.nba.nba_shot_value import add_shot_make_prob
+pbp = add_shot_make_prob(load_nba_stats_pbp([2025]))
+pbp.filter(pl.col("xfg").is_not_null()).select("sub_type", "x_legacy", "y_legacy", "xfg").head()
+
+# Pipeline next step (one line)
+
+pbp.group_by("team_id").agg((pl.col("xfg") * pl.col("shot_value")).sum().alias("xfg_points"))
+```
+
 ### add_start_type_detail {#add_start_type_detail}
 
 `add_start_type_detail(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
@@ -880,6 +930,39 @@ One row per (team, lineup) with `LINEUP_PLAY_CONTEXT_SCHEMA`. Empty input return
 poss = attach_possession_lineups(add_play_context(enh), oncourt, enh, home_team_id=home)
 lu = lineup_play_context(poss, min_poss=25)
 print(lu.sort("pts_per_100", descending=True).head())
+```
+
+### load_shot_make_model {#load_shot_make_model}
+
+`load_shot_make_model(league_id: 'str' = '00') -> 'xgb.Booster'`
+
+Load the bundled shot-make booster for `league_id` (only `"00"`, the NBA, has one).
+
+Its attributes carry the shot-type levels it was fitted with (`shot_types`, a JSON list),
+the train / holdout seasons and the fitting script.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league_id` | `str` | `'00'` | `"00"` NBA. |
+
+**Returns**
+
+The `xgboost.Booster`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | No booster is bundled for `league_id`, or the booster's feature names are not `SHOT_MAKE_NUMERIC` plus its shot-type levels. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value import load_shot_make_model
+booster = load_shot_make_model("00")
+booster.attr("train_seasons")
 ```
 
 ### make_prob_by_context {#make_prob_by_context}

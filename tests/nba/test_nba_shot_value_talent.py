@@ -32,7 +32,7 @@ def test_talent_shrinks_toward_zero():
     )
     from sportsdataverse.nba.nba_shot_value_constants import get_shrinkage_k
 
-    scored = score_shot_xpoints(shots, _rim_la())
+    scored = score_shot_xpoints(shots, _rim_la(), model="zone")
     tal = shooter_talent(scored, league_id="00", min_attempts=50).row(0, named=True)
     assert abs(tal["raw_above_pct"] - 0.16) < 1e-9
     # talent = raw * n/(n+k) with the fitted k; shrunk toward 0, same sign, |talent| < |raw|
@@ -55,7 +55,7 @@ def test_talent_min_attempts_filters():
             "shot_made_flag": [1] * 10,
         }
     )
-    scored = score_shot_xpoints(shots, _rim_la())
+    scored = score_shot_xpoints(shots, _rim_la(), model="zone")
     assert shooter_talent(scored, min_attempts=50).height == 0
 
 
