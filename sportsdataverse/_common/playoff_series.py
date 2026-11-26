@@ -24,9 +24,11 @@ __all__ = [
     "ROUND_CODES",
     "SERIES_BOX_STATS",
     "SERIES_GAMES_SCHEMA",
+    "player_box_totals",
     "playoff_series_games",
     "playoff_series_players",
     "playoff_series_teams",
+    "team_box_totals",
     "wins_to_clinch",
 ]
 
@@ -342,15 +344,38 @@ def playoff_series_teams(games: pl.DataFrame, team_box: pl.DataFrame) -> pl.Data
     """
     finals = games.filter(pl.col("completed") == True)
     finals = finals.select("season", "series_id", "game_id", "winner_team_id")
+    return team_box_totals(finals, team_box, key="series_id", on=["game_id"], schema=SERIES_TEAMS_SCHEMA)
+
+
+def team_box_totals(
+    finals: pl.DataFrame, team_box: pl.DataFrame, *, key: str, on: list[str], schema: dict[str, pl.DataType]
+) -> pl.DataFrame:
+    """The team box rows of ``finals`` summed per ``(season, key, team_id)``: W-L, points for and against, counts.
+
+    Shared by the series (``key="series_id"``, joined on ``game_id``: both sides of a game are in
+    the series) and the college tournament runs (``key="run_id"``, joined on ``game_id`` and
+    ``team_id``: a game is in each side's own run).
+
+    Args:
+        finals: The final games, one row per ``on`` key: ``season``, ``key``, ``game_id``,
+            ``winner_team_id`` (and ``team_id`` when ``on`` names it).
+        team_box: ESPN team box rows; a row listed twice counts once (one per ``(game_id, team_id)``).
+        key: The grouping column.
+        on: The join columns between ``finals`` and the box.
+        schema: The output schema (its columns are selected in its order).
+
+    Returns:
+        One row per ``(season, key, team_id)`` in ``schema``; ``schema`` with zero rows for no finals.
+    """
     if finals.height == 0:
-        return pl.DataFrame(schema=SERIES_TEAMS_SCHEMA)
+        return pl.DataFrame(schema=schema)
     box = (
         team_box.unique(subset=["game_id", "team_id"], keep="first", maintain_order=True)
         .rename({"total_rebounds": "rebounds", "team_score": "points"})
         .with_columns(pl.col("game_id", "team_id", "opponent_team_id").cast(pl.Int64))
     )
-    rows = finals.join(box, on="game_id", how="inner")
-    out = rows.group_by("season", "series_id", "team_id").agg(
+    rows = finals.join(box, on=on, how="inner")
+    out = rows.group_by("season", key, "team_id").agg(
         pl.col("opponent_team_id").first(),
         pl.col("team_abbreviation").sort_by("game_id").last(),
         pl.len().alias("games"),
@@ -359,7 +384,7 @@ def playoff_series_teams(games: pl.DataFrame, team_box: pl.DataFrame) -> pl.Data
         pl.col("opponent_team_score").sum().alias("opp_pts"),
         *[pl.col(src).sum().alias(k) for k, src in SERIES_BOX_STATS.items()],
     )
-    return out.select(list(SERIES_TEAMS_SCHEMA)).cast(SERIES_TEAMS_SCHEMA).sort("season", "series_id", "team_id")
+    return out.select(list(schema)).cast(schema).sort("season", key, "team_id")
 
 
 def _played(box: pl.DataFrame) -> pl.DataFrame:
@@ -414,8 +439,28 @@ def playoff_series_players(games: pl.DataFrame, player_box: pl.DataFrame) -> pl.
     """
     finals = games.filter(pl.col("completed") == True)
     finals = finals.select("season", "series_id", "game_id")
+    return player_box_totals(finals, player_box, key="series_id", on=["game_id"], schema=SERIES_PLAYERS_SCHEMA)
+
+
+def player_box_totals(
+    finals: pl.DataFrame, player_box: pl.DataFrame, *, key: str, on: list[str], schema: dict[str, pl.DataType]
+) -> pl.DataFrame:
+    """The played box rows of ``finals`` summed per ``(season, key, team_id, athlete_id)``, with the per-game
+    lines and the shift from the player's regular season (the series' and the tournament runs' player table).
+
+    Args:
+        finals: The final games: ``season``, ``key``, ``game_id`` (and ``team_id`` when ``on`` names it).
+        player_box: ESPN player box rows for the season, regular season and the games in ``finals``.
+        key: The grouping column.
+        on: The join columns between ``finals`` and the box.
+        schema: The output schema (its columns are selected in its order).
+
+    Returns:
+        One row per ``(season, key, team_id, athlete_id)`` in ``schema``, most points first within a
+        team; ``schema`` with zero rows for no finals.
+    """
     if finals.height == 0:
-        return pl.DataFrame(schema=SERIES_PLAYERS_SCHEMA)
+        return pl.DataFrame(schema=schema)
     box = (
         _played(player_box)
         .rename({"minutes": "min_"})
@@ -423,8 +468,8 @@ def playoff_series_players(games: pl.DataFrame, player_box: pl.DataFrame) -> pl.
     )
     sums = [pl.col("min_").sum().alias("min"), *[pl.col(src).sum().alias(k) for k, src in SERIES_BOX_STATS.items()]]
     po = (
-        finals.join(box.drop("season"), on="game_id", how="inner")
-        .group_by("season", "series_id", "team_id", "athlete_id")
+        finals.join(box.drop("season"), on=on, how="inner")
+        .group_by("season", key, "team_id", "athlete_id")
         .agg(pl.col("athlete_display_name").sort_by("game_id").last(), pl.len().alias("games"), *sums)
     )
     reg = (
@@ -451,7 +496,7 @@ def playoff_series_players(games: pl.DataFrame, player_box: pl.DataFrame) -> pl.
         )
     )
     return (
-        out.select(list(SERIES_PLAYERS_SCHEMA))
-        .cast(SERIES_PLAYERS_SCHEMA)
-        .sort("season", "series_id", "team_id", "pts", "athlete_id", descending=[False, False, False, True, False])
+        out.select(list(schema))
+        .cast(schema)
+        .sort("season", key, "team_id", "pts", "athlete_id", descending=[False, False, False, True, False])
     )
