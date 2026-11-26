@@ -24,10 +24,10 @@ __all__ = [
     "ROUND_CODES",
     "SERIES_BOX_STATS",
     "SERIES_GAMES_SCHEMA",
+    "player_box_totals",
     "playoff_series_games",
     "playoff_series_players",
     "playoff_series_teams",
-    "player_box_totals",
     "team_box_totals",
     "wins_to_clinch",
 ]

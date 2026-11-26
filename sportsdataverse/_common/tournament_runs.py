@@ -117,10 +117,73 @@ def _event_slug(event: pl.Expr) -> pl.Expr:
     return (
         event.str.to_lowercase()
         .str.replace_all("'s", "s", literal=True)
-        .str.replace_all("’s", "s", literal=True)
+        .str.replace_all(chr(0x2019) + "s", "s", literal=True)  # a typographic apostrophe
         .str.replace_all(words, " ")
         .str.replace_all(r"[^a-z0-9]+", "-")
         .str.strip_chars("-")
+    )
+
+
+def _key_tournaments(games: pl.DataFrame) -> pl.DataFrame:
+    """``tournament_id`` filled from the season's tagged tournament of the same event name, ``tournament_key`` and
+    ``tournament_kind``; a game with neither an id nor an event name is dropped."""
+    # an untagged game (older seasons) joins the tagged tournament of its season with the same event name,
+    # else its event name is its key; a game with neither (a blank headline) is not in a run
+    tagged = (
+        games.filter(pl.col("tournament_id").is_not_null() & (pl.col("slug") != ""))
+        .group_by("season", "slug")
+        .agg(pl.col("tournament_id").mode().sort().first().alias("tagged_id"))
+    )
+    return (
+        games.join(tagged, on=["season", "slug"], how="left")
+        .with_columns(
+            pl.coalesce(pl.col("tournament_id"), pl.col("tagged_id")).alias("tournament_id"),
+        )
+        .with_columns(
+            pl.coalesce(pl.col("tournament_id").cast(pl.Utf8), pl.col("slug")).alias("tournament_key"),
+            pl.when(pl.col("tournament_id") == NCAA_TOURNAMENT_ID)
+            .then(pl.lit("ncaa"))
+            .when(pl.col("season_type") == 2)
+            .then(pl.lit("conference"))
+            .otherwise(pl.lit("postseason"))
+            .alias("tournament_kind"),
+        )
+        .filter(pl.col("tournament_key") != "")
+    )
+
+
+def _sides(games: pl.DataFrame) -> pl.DataFrame:
+    """Each tournament game twice, once from each side (``team_*`` / ``opponent_*``), with ``home_away``."""
+    return pl.concat(
+        [
+            games.select(
+                "season",
+                "tournament_key",
+                "tournament_id",
+                "tournament_name",
+                "tournament_kind",
+                "conference_id",
+                "round_name",
+                "game_id",
+                "game_date",
+                "game_date_time",
+                "completed",
+                pl.when(pl.col("neutral_site").fill_null(False) == True)
+                .then(pl.lit("neutral"))
+                .otherwise(pl.lit(us))
+                .alias("home_away"),
+                pl.col(f"{us}_id").cast(pl.Int64).alias("team_id"),
+                pl.col(f"{us}_abbreviation").alias("team_abbreviation"),
+                pl.col(f"{us}_display_name").alias("team_display_name"),
+                pl.col(f"{us}_score").cast(pl.Int64).alias("team_score"),
+                pl.col(f"{them}_id").cast(pl.Int64).alias("opponent_team_id"),
+                pl.col(f"{them}_abbreviation").alias("opponent_abbreviation"),
+                pl.col(f"{them}_display_name").alias("opponent_display_name"),
+                pl.col(f"{them}_score").cast(pl.Int64).alias("opponent_score"),
+                "winner_team_id",
+            )
+            for us, them in _SIDES
+        ]
     )
 
 
@@ -185,29 +248,7 @@ def tournament_run_games(schedule: pl.DataFrame) -> pl.DataFrame:
         pl.when(pl.col("season_type") == 2).then(pl.col("groups_id")).cast(pl.Int64).alias("conference_id"),
         pl.col("status_type_completed").fill_null(False).alias("completed"),
     )
-    # an untagged game (older seasons) joins the tagged tournament of its season with the same event name,
-    # else its event name is its key; a game with neither (a blank headline) is not in a run
-    tagged = (
-        games.filter(pl.col("tournament_id").is_not_null() & (pl.col("slug") != ""))
-        .group_by("season", "slug")
-        .agg(pl.col("tournament_id").mode().sort().first().alias("tagged_id"))
-    )
-    games = (
-        games.join(tagged, on=["season", "slug"], how="left")
-        .with_columns(
-            pl.coalesce(pl.col("tournament_id"), pl.col("tagged_id")).alias("tournament_id"),
-        )
-        .with_columns(
-            pl.coalesce(pl.col("tournament_id").cast(pl.Utf8), pl.col("slug")).alias("tournament_key"),
-            pl.when(pl.col("tournament_id") == NCAA_TOURNAMENT_ID)
-            .then(pl.lit("ncaa"))
-            .when(pl.col("season_type") == 2)
-            .then(pl.lit("conference"))
-            .otherwise(pl.lit("postseason"))
-            .alias("tournament_kind"),
-        )
-        .filter(pl.col("tournament_key") != "")
-    )
+    games = _key_tournaments(games)
     games = games.with_columns(
         pl.col("event")
         .filter(pl.col("event") != "")
@@ -226,37 +267,7 @@ def tournament_run_games(schedule: pl.DataFrame) -> pl.DataFrame:
         .cast(pl.Int64)
         .alias("winner_team_id"),
     )
-    rows = pl.concat(
-        [
-            games.select(
-                "season",
-                "tournament_key",
-                "tournament_id",
-                "tournament_name",
-                "tournament_kind",
-                "conference_id",
-                "round_name",
-                "game_id",
-                "game_date",
-                "game_date_time",
-                "completed",
-                pl.when(pl.col("neutral_site").fill_null(False) == True)
-                .then(pl.lit("neutral"))
-                .otherwise(pl.lit(us))
-                .alias("home_away"),
-                pl.col(f"{us}_id").cast(pl.Int64).alias("team_id"),
-                pl.col(f"{us}_abbreviation").alias("team_abbreviation"),
-                pl.col(f"{us}_display_name").alias("team_display_name"),
-                pl.col(f"{us}_score").cast(pl.Int64).alias("team_score"),
-                pl.col(f"{them}_id").cast(pl.Int64).alias("opponent_team_id"),
-                pl.col(f"{them}_abbreviation").alias("opponent_abbreviation"),
-                pl.col(f"{them}_display_name").alias("opponent_display_name"),
-                pl.col(f"{them}_score").cast(pl.Int64).alias("opponent_score"),
-                "winner_team_id",
-            )
-            for us, them in _SIDES
-        ]
-    )
+    rows = _sides(games)
     rows = (
         # a bracket slot whose team is not known yet is in no run (it would pool into one null run)
         rows.filter(pl.col("team_id").is_not_null())
