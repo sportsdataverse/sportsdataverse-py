@@ -26,7 +26,8 @@ _spec.loader.exec_module(fit)  # type: ignore[union-attr]
 _FX = _ROOT / "tests" / "fixtures" / "bb_adj_rapm_penalty"
 #: league -> (off_poss floor of the scored players, Spearman floor, spread-ratio floor), 2024 -> 2025.
 #: Observed 2026-11-25 (minute-weighted at SPM_ALPHA / the equal-weight alpha-100 rule it replaced): NBA Spearman
-#: 0.493 / 0.358, spread ratio 0.537 / 0.216; WNBA 0.706 / 0.603, 0.491 / 0.315. The floors sit just under the first.
+#: 0.493 / 0.358, spread ratio 0.537 / 0.216; WNBA 0.706 / 0.603, 0.491 / 0.315. The floors sit just under the first
+#: and are never lowered to let a change pass; a spread above the target's own (ratio 1) fails as too wide.
 _GATE = {"nba": (1000, 0.48, 0.52), "wnba": (500, 0.69, 0.47)}
 
 
@@ -73,9 +74,12 @@ def _next_season(league: str, **kw) -> tuple[float, float]:
 
 @pytest.mark.parametrize("league", ["nba", "wnba"])
 def test_minute_weighting_tracks_next_season_rapm(league) -> None:
-    """Trained on 2024, scored on 2025's box line against 2025's own plain RAPM (never trained on)."""
+    """Trained on 2024, scored on 2025's box line against 2025's own plain RAPM.
+
+    2025 is in no training row; its target is one of the 30 seasons pooled to choose ``SPM_ALPHA``.
+    """
     _, rho_floor, ratio_floor = _GATE[league]
     rho, ratio = _next_season(league)  # train_spm's defaults: minute weights at SPM_ALPHA
     old_rho, old_ratio = _next_season(league, weight=None, alpha=100.0)  # the rule it replaced
-    assert rho >= rho_floor and ratio >= ratio_floor, (rho, ratio)
+    assert rho >= rho_floor and ratio_floor <= ratio <= 1.0, (rho, ratio)
     assert rho - old_rho >= 0.08 and ratio >= 1.4 * old_ratio, (rho, old_rho, ratio, old_ratio)

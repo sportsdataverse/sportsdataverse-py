@@ -20,7 +20,8 @@ SPM_FEATURES: List[str] = list(_STATS)
 #: over the complete regular seasons from 1997 (NBA through 2025-26, WNBA through 2026; 30 each).
 #: NBA picks 30; WNBA picks 100, and its error at 30 is 0.08% above that minimum, so both leagues
 #: share 30. The curve is flat below it (alpha 0 is 0.3% worse in the NBA, 2.6% in the WNBA) and
-#: rises past it (300: +4.4% / +2.3%). The equal-weight fit this replaced used 100.
+#: rises past it (300: +4.4% / +2.3%). The equal-weight fit this replaced used 100. The G League
+#: (``train_spm`` takes no league) is seeded with the shared value, not fitted.
 SPM_ALPHA: float = 30.0
 
 

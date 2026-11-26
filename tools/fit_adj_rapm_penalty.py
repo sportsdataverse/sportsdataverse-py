@@ -37,6 +37,9 @@ Usage::
     uv run --frozen python tools/fit_adj_rapm_penalty.py spm OUT_DIR --nba-raw DIR --wnba-raw DIR
     uv run --frozen python tools/fit_adj_rapm_penalty.py curves OUT_DIR --nba-raw DIR --wnba-raw DIR
     uv run --frozen python tools/fit_adj_rapm_penalty.py report OUT_DIR
+    # the paired comparison against the equal-weight prior at its #1150 scale (a second, baseline OUT):
+    uv run --frozen python tools/fit_adj_rapm_penalty.py curves BASE_DIR --prior-rule equal --nba-raw DIR --wnba-raw DIR
+    uv run --frozen python tools/fit_adj_rapm_penalty.py report OUT_DIR --baseline BASE_DIR
 """
 
 from __future__ import annotations
@@ -74,6 +77,11 @@ LEAGUES = {
 #: ``train_spm`` penalties the ``spm`` stage scores (raw per-100 features, minute weights at mean 1).
 SPM_ALPHAS = (0.0, 0.1, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0)
 SPM_FOLDS = 5
+#: ``train_spm`` keywords of the prior ``curves`` chains: ``weighted`` is the shipped default; ``equal`` is the
+#: equal-weight alpha-100 fit before minute weighting, run into a second OUT for ``report --baseline``.
+PRIOR_RULES: dict[str, dict] = {"weighted": {}, "equal": {"weight": None, "alpha": 100.0}}
+#: The prior scale the ``equal`` rule shipped with (#1150), the baseline ``report --baseline`` pairs against.
+BASELINE_SCALE = 2.0
 _CHUNK = 20_000
 _RETRIES = 4
 
@@ -182,7 +190,7 @@ def season_curves(X: csr_matrix, Y: np.ndarray, games: np.ndarray, grid: np.ndar
     return {"cv_sse": cv_sse, "cv_n": cv_n, "coef": coef, "loo_mse": loo / n}
 
 
-def curves(out: Path, raw: dict[str, str]) -> None:
+def curves(out: Path, raw: dict[str, str], prior_rule: str = "weighted") -> None:
     """One ``.npz`` per league and regular season (skipping those written), carrying the prior forward."""
     out.mkdir(parents=True, exist_ok=True)
     for league, (seasons, _, lid, *_) in LEAGUES.items():
@@ -207,7 +215,7 @@ def curves(out: Path, raw: dict[str, str]) -> None:
             rapm = nba_rapm(part, league_id=lid)
             logs = _logs(league, season, "Regular Season", raw[league])
             bf = box_features(logs["player"], logs["team"])
-            coef_spm = train_spm(bf, rapm.select("player_id", "o_rapm", "d_rapm"))
+            coef_spm = train_spm(bf, rapm.select("player_id", "o_rapm", "d_rapm"), **PRIOR_RULES[prior_rule])
             spm = nba_spm(bf, coef_spm)
             # a season with playoff games must have its playoff capture (the next season's prior blends it
             # in): a miss raises, except in the last season, whose prior no fitted season reads
@@ -253,6 +261,8 @@ def spm_cv(rows: pl.DataFrame, alphas=SPM_ALPHAS) -> np.ndarray:
     ``KFold`` over rows is grouped by player. The error is the held-out squared error of the offense
     and defense predictions, each row weighted by its minutes over the training rows' mean minutes.
     """
+    if not rows["player_id"].is_unique().all():
+        raise ValueError("spm_cv needs one row per player (the KFold over rows is the player grouping)")
     sse = np.zeros(len(alphas))
     for tr, te in KFold(SPM_FOLDS, shuffle=True, random_state=0).split(np.arange(rows.height)):
         train, test = rows[tr], rows[te]
@@ -379,7 +389,31 @@ def _paired(a: dict[int, float], b: dict[int, float]) -> list[float]:
     return _summ({k: a[k] - b[k] for k in keys})
 
 
-def _league_report(out: Path, league: str) -> dict:
+def _vs_baseline(z: dict, zb: dict, train, frozen: float, frozen_b: float, plain: dict, floor: int) -> dict:
+    """This prior at (CHOSEN_SCALE, frozen) minus the baseline's at (BASELINE_SCALE, its frozen), paired by season.
+
+    Held-out MSE (basis points) is paired on the same games: both OUTs read the same possessions, which the
+    caller checks through the ``k = 0`` (no prior) curves. Next-season Spearman / R^2 are against the same
+    plain-RAPM targets.
+    """
+    kc, kb = PRIOR_SCALES.index(CHOSEN_SCALE), PRIOR_SCALES.index(BASELINE_SCALE)
+
+    def mse(zz, ki, alpha):
+        return {s: float(zz[s]["cv_sse"][ki][:, np.isclose(GRID, alpha)].sum() / zz[s]["cv_n"].sum()) for s in train}
+
+    m_new, m_old = mse(z, kc, frozen), mse(zb, kb, frozen_b)
+    f_new = _forecast({s: _adj(v, kc, frozen) for s, v in z.items()}, plain, floor)
+    f_old = _forecast({s: _adj(v, kb, frozen_b) for s, v in zb.items()}, plain, floor)
+    d = _paired(m_new, m_old)
+    return {
+        "heldout_mse_bp": [d[0] * 1e4, d[1] * 1e4, d[2]],
+        "seasons_lower_mse": int(sum(m_new[s] < m_old[s] for s in train)),
+        **{m: _paired(f_new[m], f_old[m]) for m in ("spearman", "r2")},
+        "baseline_forecast": {m: _summ(f_old[m]) for m in ("spearman", "r2")},
+    }
+
+
+def _league_report(out: Path, league: str, baseline: Path | None = None) -> dict:
     seasons, train, _, floor, sc_floor = LEAGUES[league]
     z = {s: dict(np.load(f)) for s in seasons if (f := out / f"{league}_{s}_rs.npz").exists()}
     missing = sorted(set(train) - set(z))
@@ -414,7 +448,19 @@ def _league_report(out: Path, league: str) -> dict:
         ki = PRIOR_SCALES.index(k)
         fc[f"adj_k{k}"] = _forecast({s: _adj(v, ki, picks[k]) for s, v in z.items()}, plain, floor)
     stab = {name: _forecast(fr, fr, floor)["spearman"] for name, fr in (("adj_before", before), ("adj_after", after))}
+    vs_base = None
+    if baseline is not None:
+        zb = {s: dict(np.load(f)) for s in seasons if (f := baseline / f"{league}_{s}_rs.npz").exists()}
+        if set(zb) != set(z):
+            raise SystemExit(f"{league}: the baseline has seasons {sorted(zb)}, this OUT {sorted(z)}")
+        k0 = PRIOR_SCALES.index(0.0)
+        for s in z:  # k = 0 fits no prior: identical curves prove both OUTs read the same possessions and folds
+            if not np.allclose(z[s]["cv_sse"][k0], zb[s]["cv_sse"][k0], rtol=1e-9):
+                raise SystemExit(f"{league} {s}: the k = 0 curves differ, so the two OUTs read different possessions")
+        frozen_b = _pick(sum(zb[s]["cv_sse"][PRIOR_SCALES.index(BASELINE_SCALE)].sum(axis=0) for s in train))
+        vs_base = {"baseline_frozen": frozen_b, **_vs_baseline(z, zb, train, frozen, frozen_b, plain, floor)}
     return {
+        "vs_baseline": vs_base,
         "frozen": frozen, "scale": CHOSEN_SCALE, "picks": {f"{k}": p for k, p in picks.items()}, "best_mse": best_mse, "mse_vs_k1_bp": vs_k1,
         "seasons": rows,
         "forecast": {n: {m: _summ(d) for m, d in f.items()} for n, f in fc.items()},
@@ -425,8 +471,8 @@ def _league_report(out: Path, league: str) -> dict:
     }  # fmt: skip
 
 
-def report(out: Path) -> None:
-    res = {lg: _league_report(out, lg) for lg in LEAGUES}
+def report(out: Path, baseline: Path | None = None) -> None:
+    res = {lg: _league_report(out, lg, baseline) for lg in LEAGUES}
     (out / "report.json").write_text(json.dumps(res, indent=1))
     sse = [
         {
@@ -452,6 +498,8 @@ def report(out: Path) -> None:
             print("forecast (mean, SE, pairs):", json.dumps(r["forecast"]))
             print("after - before:", r["after_minus_before"], "after - rapm:", r["after_minus_rapm"])
             print("rank stability:", r["rank_stability"], "after - before:", r["rank_stability_after_minus_before"])
+            if r["vs_baseline"]:
+                print("this prior minus the baseline (mean, SE, seasons):", json.dumps(r["vs_baseline"]))
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -466,6 +514,8 @@ def main(argv: list[str] | None = None) -> int:
         default="https://raw.githubusercontent.com/sportsdataverse/wehoop-wnba-stats-raw/main/wnba_stats/json",
     )
     ap.add_argument("--league", choices=list(LEAGUES), default=None, help="spm / curves for one league only")
+    ap.add_argument("--prior-rule", choices=list(PRIOR_RULES), default="weighted", help="curves: the SPM prior's fit")
+    ap.add_argument("--baseline", type=Path, default=None, help="report: an OUT of `curves --prior-rule equal`")
     a = ap.parse_args(argv)
     if a.league and a.stage != "report":
         for other in [lg for lg in LEAGUES if lg != a.league]:
@@ -473,9 +523,9 @@ def main(argv: list[str] | None = None) -> int:
     if a.stage == "spm":
         spm(a.out, {"nba": a.nba_raw, "wnba": a.wnba_raw})
     elif a.stage == "curves":
-        curves(a.out, {"nba": a.nba_raw, "wnba": a.wnba_raw})
+        curves(a.out, {"nba": a.nba_raw, "wnba": a.wnba_raw}, a.prior_rule)
     else:
-        report(a.out)
+        report(a.out, a.baseline)
     return 0
 
 
