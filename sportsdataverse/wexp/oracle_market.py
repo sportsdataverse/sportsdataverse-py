@@ -14,7 +14,7 @@ leagues; one row per game):
   ``total_close`` Float64, ``ml_home_close`` / ``ml_away_close`` Float64
   (American), ``spread_open`` Float64 (null where the source holds no open)
 - ``p_close_spread`` / ``p_close_ml`` / ``p_close`` Float64 — vig-removed
-  home probabilities; ``p_close`` is the nfelo-style 70/30 logit blend
+  home probabilities; ``p_close`` is the 70/30 logit-space blend
   where both exist, else whichever side exists.
 
 NFL source: nflverse schedules (closing PFR lines, 1999+; no opens).
@@ -46,7 +46,7 @@ __all__ = [
 # (Axis E2). NFL ~13.45 is the standard margin SD; CFB is wider.
 NFL_MARGIN_SIGMA: float = 13.45
 CFB_MARGIN_SIGMA: float = 15.5
-SPREAD_ML_BLEND_WEIGHT: float = 0.7  # nfelo: spread 70 / moneyline 30, logit space
+SPREAD_ML_BLEND_WEIGHT: float = 0.7  # spread 70 / moneyline 30, logit space
 SPREAD_CLIP: float = 60.0  # cfb_line_odds outlier guard (ported)
 
 # Canonical oracle column order (both leagues).

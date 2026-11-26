@@ -2,7 +2,7 @@
 
 Closed-form pythagenpat expected win% (Smyth-Patriot, run-environment
 adaptive exponent) plus an as-of-date iterative Elo run-differential
-rating (538 MLB-Elo-style seeds, refit against a real backtest -- see
+rating (seeded from a published MLB Elo's k and home-field advantage, refit against a real backtest -- see
 ``tools/models/mlb_game_state/fit_elo.py``).
 
 See Also:
@@ -51,7 +51,7 @@ _PROJECTION_SCHEMA = {
     "exp_margin": pl.Float64,
 }
 #: Elo-to-runs scale for exp_margin: a 400-point Elo gap ~ 10 runs of talent
-#: over a season is the common informal 538 heuristic; kept as a documented,
+#: over a season is a common informal rule of thumb; kept as a documented,
 #: freely revisitable constant (not fit against a run-differential target --
 #: no such oracle exists in this spine's fixtures).
 _ELO_RUNS_SCALE = 40.0

@@ -77969,7 +77969,7 @@ nba_player_war:
     the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset.'
   rating_boban: Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm.
   vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per team, R the league''s replacement level
-    (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference''s VORP scale: a season of possessions at R + 1 is 1.'
+    (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). On that scale a season of possessions at R + 1 is a VORP of 1.'
   war: 'Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement
     level; a season''s war adds up to the league''s wins minus a team of replacement players'' (.189 NBA 2024-25, .104 WNBA 2025).'
   war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
@@ -78018,7 +78018,7 @@ wnba_player_war:
     the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset.'
   rating_boban: Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm.
   vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per team, R the league''s replacement level
-    (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference''s VORP scale: a season of possessions at R + 1 is 1.'
+    (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). On that scale a season of possessions at R + 1 is a VORP of 1.'
   war: 'Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement
     level; a season''s war adds up to the league''s wins minus a team of replacement players'' (.189 NBA 2024-25, .104 WNBA 2025).'
   war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
@@ -78063,7 +78063,7 @@ mbb_player_war:
     re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted
     mean is 0.'
   vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per D1 team, R the league''s replacement level
-    (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference''s VORP scale.'
+    (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). A season of possessions at R + 1 is a VORP of 1.'
   war: 'Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91,
     WBB 47.10). 0 at replacement level; a replacement team wins about .35.'
   war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
@@ -78103,7 +78103,7 @@ wbb_player_war:
     re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted
     mean is 0.'
   vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per D1 team, R the league''s replacement level
-    (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference''s VORP scale.'
+    (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). A season of possessions at R + 1 is a VORP of 1.'
   war: 'Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91,
     WBB 47.10). 0 at replacement level; a replacement team wins about .35.'
   war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
@@ -81073,6 +81073,24 @@ player_props:
   over_price: Median closing over price at the line, American odds.
   under_price: Median closing under price at the line, American odds.
   over_prob: No-vig probability of the over at the line, median over books.
+nba_player_props:
+  player_id: ESPN athlete id (Utf8).
+  team_id: ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team.
+  stat_pts_exp: Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor.
+  stat_reb_exp: Expected rebounds if he plays, on the same basis.
+  stat_ast_exp: Expected assists if he plays, on the same basis.
+  stat_fg3m_exp: Expected made threes if he plays, on the same basis.
+  minutes_exp: 'Expected minutes: the player''s minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 240; a team''s rows sum to 240. The stat_*_exp lines assume the player plays; this does not.'
+  pace_proj: Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet.
+wnba_player_props:
+  player_id: ESPN athlete id (Utf8).
+  team_id: ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team.
+  stat_pts_exp: Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor.
+  stat_reb_exp: Expected rebounds if he plays, on the same basis.
+  stat_ast_exp: Expected assists if he plays, on the same basis.
+  stat_fg3m_exp: Expected made threes if he plays, on the same basis.
+  minutes_exp: 'Expected minutes: the player''s minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 200; a team''s rows sum to 200. The stat_*_exp lines assume the player plays; this does not.'
+  pace_proj: Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet.
 wp_variants:
   game_id: ESPN game id, the join key to the play-by-play and the play_wp table (the dtype the pbp carries).
   game_play_number: Play order within the game, as in the play-by-play (the dtype the pbp carries).
@@ -81985,6 +82003,38 @@ pgatour_shot_details:
   to_x: ShotLink tourcast x coordinate where the shot finished.
   to_y: ShotLink tourcast y coordinate where the shot finished.
   to_z: ShotLink tourcast z (elevation) coordinate where the shot finished.
+nhl_goalie_saves:
+  season: NHL season id of the game, both years run together (e.g. 20242025 for 2024-25).
+  game_id: NHL game id (e.g. 2024020001).
+  game_date: Date of the game.
+  player_id: NHL player id of the projected starting goalie.
+  team: Abbreviation of the goalie's team (e.g. "NJD").
+  opp_team: Abbreviation of the opponent whose shots the goalie faces (e.g. "BUF").
+  is_home: True when the goalie's team is the home team.
+  exp_shots_against: 'Expected shots on goal the starter faces: the mean of the team''s shots-against rate and the opponent''s
+    shots-for rate over earlier games that season (shrunk toward the league mean), less half the home-ice shot edge for a
+    home goalie and plus half for a visitor, times the starter''s share of a game''s shots.'
+  exp_save_pct: The goalie's save percentage over every earlier game in the seasons loaded, shrunk toward the league's
+    save_pct_prior (the prior alone for a goalie with no earlier game).
+  exp_saves: Expected saves, exp_shots_against x exp_save_pct (the negative-binomial mean).
+  saves_lo: Lower end of the central interval, the (1 - coverage) / 2 quantile of the predicted saves.
+  saves_hi: Upper end of the central interval, the (1 + coverage) / 2 quantile of the predicted saves.
+  coverage: Central probability the saves_lo-saves_hi interval was built for (the coverage argument, 0.8 by default).
+nhl_score_distribution:
+  game_id: Game id, the input predictions' game_id with its dtype kept.
+  rank: Scoreline's rank within the game, 1 for the most likely final score.
+  home_goals: Home team's goals in this final score (an overtime or shootout win counts as one goal).
+  away_goals: Away team's goals in this final score (an overtime or shootout win counts as one goal).
+  prob: Probability the game ends with exactly this score; over every scoreline the home-win share equals the row's
+    home_win_prob.
+  prob_beyond_regulation: Part of prob from games tied after 60 minutes and settled in overtime or a shootout; zero unless
+    the score is a one-goal margin.
+nhl_total_goals_distribution:
+  game_id: Game id, the input predictions' game_id with its dtype kept.
+  total_goals: Total goals in the final score, both teams (0 to 32; an overtime or shootout win adds one).
+  prob: Probability the final score totals exactly total_goals; a game's rows sum to 1, and their prob-weighted mean of
+    total_goals is the row's exp_total.
+  prob_over: Probability the total is above total_goals, the over price for a line of total_goals + 0.5.
 nba_playoff_series:
   season: Season, named by the year it ends (2025 is 2024-25; the WNBA season is its calendar year).
   series_id: 'Series key: ''{season}-{lower ESPN team id}-{higher ESPN team id}''. A pair of teams meets at most once per
@@ -82199,47 +82249,3 @@ wnba_playoff_series_teams:
   blk: 'Total blocks over the series'' final games: the sum of the team''s ESPN game boxes.'
   tov: 'Total turnovers over the series'' final games: the sum of the team''s ESPN game boxes.'
   pf: 'Total personal fouls over the series'' final games: the sum of the team''s ESPN game boxes.'
-nba_player_props:
-  minutes_exp: 'Expected minutes: the player''s minutes for the current team over the summed minutes for that team
-    of every player returned on it (minutes logged for the team by a player since traded away are left out), all
-    before the as-of cut (every logged game when no cut applies; a game sat counts as zero), times 5 x the league''s
-    game minutes, so a team''s rows sum to 240 in the NBA and 200 in the WNBA. The stat_*_exp lines assume the player
-    plays; this does not.'
-wnba_player_props:
-  minutes_exp: 'Expected minutes: the player''s minutes for the current team over the summed minutes for that team
-    of every player returned on it (minutes logged for the team by a player since traded away are left out), all
-    before the as-of cut (every logged game when no cut applies; a game sat counts as zero), times 5 x the league''s
-    game minutes, so a team''s rows sum to 240 in the NBA and 200 in the WNBA. The stat_*_exp lines assume the player
-    plays; this does not.'
-nhl_goalie_saves:
-  season: NHL season id of the game, both years run together (e.g. 20242025 for 2024-25).
-  game_id: NHL game id (e.g. 2024020001).
-  game_date: Date of the game.
-  player_id: NHL player id of the projected starting goalie.
-  team: Abbreviation of the goalie's team (e.g. "NJD").
-  opp_team: Abbreviation of the opponent whose shots the goalie faces (e.g. "BUF").
-  is_home: True when the goalie's team is the home team.
-  exp_shots_against: 'Expected shots on goal the starter faces: the mean of the team''s shots-against rate and the opponent''s
-    shots-for rate over earlier games that season (shrunk toward the league mean), less half the home-ice shot edge for a
-    home goalie and plus half for a visitor, times the starter''s share of a game''s shots.'
-  exp_save_pct: The goalie's save percentage over every earlier game in the seasons loaded, shrunk toward the league's
-    save_pct_prior (the prior alone for a goalie with no earlier game).
-  exp_saves: Expected saves, exp_shots_against x exp_save_pct (the negative-binomial mean).
-  saves_lo: Lower end of the central interval, the (1 - coverage) / 2 quantile of the predicted saves.
-  saves_hi: Upper end of the central interval, the (1 + coverage) / 2 quantile of the predicted saves.
-  coverage: Central probability the saves_lo-saves_hi interval was built for (the coverage argument, 0.8 by default).
-nhl_score_distribution:
-  game_id: Game id, the input predictions' game_id with its dtype kept.
-  rank: Scoreline's rank within the game, 1 for the most likely final score.
-  home_goals: Home team's goals in this final score (an overtime or shootout win counts as one goal).
-  away_goals: Away team's goals in this final score (an overtime or shootout win counts as one goal).
-  prob: Probability the game ends with exactly this score; over every scoreline the home-win share equals the row's
-    home_win_prob.
-  prob_beyond_regulation: Part of prob from games tied after 60 minutes and settled in overtime or a shootout; zero unless
-    the score is a one-goal margin.
-nhl_total_goals_distribution:
-  game_id: Game id, the input predictions' game_id with its dtype kept.
-  total_goals: Total goals in the final score, both teams (0 to 32; an overtime or shootout win adds one).
-  prob: Probability the final score totals exactly total_goals; a game's rows sum to 1, and their prob-weighted mean of
-    total_goals is the row's exp_total.
-  prob_over: Probability the total is above total_goals, the over price for a line of total_goals + 0.5.
