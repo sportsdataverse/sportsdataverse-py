@@ -16,7 +16,7 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
-from sportsdataverse.cfb import cfb_adjusted_epa, cfb_adjusted_epa_by_game
+from sportsdataverse.cfb import cfb_adjusted_epa, cfb_adjusted_epa_by_game, cfb_adjusted_epa_ledger
 
 _EXPECTED_COLUMNS = {
     "team_id",
@@ -407,3 +407,108 @@ def test_default_method_still_requires_the_score_margin() -> None:
 def test_unknown_method_raises(fn) -> None:
     with pytest.raises(ValueError, match="method"):
         fn(_synthetic_pbp(), method="pre-598")
+
+
+# --- cfb_adjusted_epa_ledger: the per-game decomposition and leave-one-game-out influence ---
+
+
+@pytest.fixture(scope="module")
+def ledger_2026() -> pl.DataFrame:
+    return cfb_adjusted_epa_ledger(_plays_2026().with_columns(seasonType=pl.lit(2, dtype=pl.Int64)))
+
+
+def test_ledger_contributions_sum_to_the_season_value(ledger_2026) -> None:
+    season = cfb_adjusted_epa(_plays_2026())
+    sums = ledger_2026.group_by("team_id").agg(total=pl.col("contribution").sum(), net=pl.col("net_adj_epa").first())
+    joined = season.select("team_id", "net_adj_epa").join(sums, on="team_id", how="full", coalesce=True)
+    assert joined.height == season.height  # the ledger rates exactly the teams the season fit rates
+    assert joined.null_count().sum_horizontal().item() == 0
+    assert (joined["total"] - joined["net_adj_epa"]).abs().max() < 1e-12
+    assert (joined["net"] - joined["net_adj_epa"]).abs().max() < 1e-12
+    parts = ledger_2026["raw_contribution"] + ledger_2026["schedule_contribution"] - ledger_2026["contribution"]
+    assert parts.abs().max() < 1e-12
+
+
+def test_ledger_rows_match_the_season_fit_game_by_game(ledger_2026) -> None:
+    # adjusted = raw + schedule term, and the weights are 1 / the games each mean is taken over
+    gap = ledger_2026["raw_net_epa"] + ledger_2026["schedule_adj"] - ledger_2026["adj_net_epa"]
+    assert gap.abs().max() < 1e-12
+    games = ledger_2026.group_by("team_id").agg(w=pl.col("off_weight").sum(), n=pl.len())
+    assert (games["w"] - 1.0).abs().max() < 1e-12
+    assert set(ledger_2026["site"].unique()) == {"home", "away", "neutral"}
+    assert ledger_2026["season_type"].unique().to_list() == [2]
+    assert (ledger_2026["off_plays"] > 0).all()
+
+
+@pytest.mark.parametrize("n_games", [3, 4])
+def test_ledger_influence_equals_refitting_without_the_game(ledger_2026, n_games) -> None:
+    # The leave-one-game-out value is checked against the public season fit run on the
+    # plays with that game removed: an independent, play-level refit.
+    plays = _plays_2026()
+    games_per_team = ledger_2026.group_by("team_id").agg(n=pl.len())
+    team = games_per_team.filter(pl.col("n") == n_games).sort("team_id")["team_id"][0]
+    for row in ledger_2026.filter(pl.col("team_id") == team).iter_rows(named=True):
+        refit = cfb_adjusted_epa(plays.filter(pl.col("game_id").cast(pl.Utf8) != row["game_id"]))
+        expected = refit.filter(pl.col("team_id") == team)["net_adj_epa"].item()
+        assert row["loo_net_adj_epa"] == pytest.approx(expected, abs=1e-12)
+        assert row["game_influence"] == pytest.approx(row["net_adj_epa"] - expected, abs=1e-12)
+
+
+def test_ledger_influence_is_null_when_a_team_would_keep_one_game(ledger_2026) -> None:
+    # A season value needs two valid games (both sides adjusted). Removing a valid game of a
+    # team with exactly two leaves one, so no value; with three or more there always is one.
+    # (Team 57 shows why the count is of valid games: one of its three has no defensive play.)
+    valid = pl.col("adj_off_epa").is_not_null() & pl.col("adj_def_epa").is_not_null()
+    rows = ledger_2026.with_columns(n_valid=valid.sum().over("team_id"), valid=valid)
+    two = rows.filter((pl.col("n_valid") == 2) & (pl.col("valid") == True))  # noqa: E712
+    assert two.height > 0
+    assert two["loo_net_adj_epa"].is_null().all()
+    assert rows.filter(pl.col("n_valid") >= 3)["loo_net_adj_epa"].is_not_null().all()
+
+
+def test_ledger_without_influence_and_as_pandas() -> None:
+    plays = _plays_2026()
+    plain = cfb_adjusted_epa_ledger(plays, influence=False)
+    assert "game_influence" not in plain.columns and "season_type" not in plain.columns
+    assert plain.columns[:3] == ["game_id", "week", "team_id"]
+    pdf = cfb_adjusted_epa_ledger(plays, influence=False, return_as_pandas=True)
+    assert list(pdf.columns) == plain.columns and len(pdf) == plain.height
+
+
+def test_ledger_influence_when_the_refit_loses_the_home_term_or_a_team() -> None:
+    # Edge cases the real fixture never reaches, each checked against the independent play-level refit:
+    # game 1 is the only non-neutral game, so leaving it out leaves no home/away contrast (the home term
+    # is fit at 0), and team 5 plays one game (99), so leaving it out removes a team from the fit.
+    base = _synthetic_pbp().with_columns(neutral_site=pl.col("game_id") != 1)
+    extra = base.filter(pl.col("game_id") == 2).with_columns(
+        game_id=pl.lit(99, dtype=pl.Int64),
+        week=pl.lit(9, dtype=pl.Int64),
+        pos_team=pl.when(pl.col("pos_team_id") == "1").then(pl.lit("T1")).otherwise(pl.lit("T5")),
+        pos_team_id=pl.when(pl.col("pos_team_id") == "1").then(pl.lit("1")).otherwise(pl.lit("5")),
+        def_pos_team_id=pl.when(pl.col("def_pos_team_id") == "1").then(pl.lit("1")).otherwise(pl.lit("5")),
+    )
+    plays = pl.concat([base, extra], how="vertical_relaxed")
+    ledger = cfb_adjusted_epa_ledger(plays)
+    assert "5" not in ledger["team_id"].to_list()  # one game: not rated
+    for gid in (1, 99):
+        refit = cfb_adjusted_epa(plays.filter(pl.col("game_id") != gid)).select("team_id", expected="net_adj_epa")
+        rows = ledger.filter(pl.col("game_id") == str(gid)).join(refit, on="team_id", how="left")
+        assert rows.height > 0
+        for got, expected in rows.select("loo_net_adj_epa", "expected").iter_rows():
+            assert got == pytest.approx(expected, abs=1e-12)
+
+
+def test_ledger_influence_is_null_for_a_team_with_an_unidentified_opponent() -> None:
+    # One of team 1's offensive plays in game 2 has no defense id: the per-game rows cannot say
+    # which opponent that play's defensive side faced, so team 1's refits are not guessed.
+    plays = _synthetic_pbp().with_row_index("_i")
+    first = plays.filter((pl.col("game_id") == 2) & (pl.col("pos_team_id") == "1"))["_i"][0]
+    plays = plays.with_columns(
+        def_pos_team_id=pl.when(pl.col("_i") == first).then(None).otherwise(pl.col("def_pos_team_id"))
+    ).drop("_i")
+    ledger = cfb_adjusted_epa_ledger(plays)
+    assert ledger.filter(pl.col("team_id") == "1")["loo_net_adj_epa"].is_null().all()
+    assert ledger.filter(pl.col("team_id") != "1")["loo_net_adj_epa"].is_not_null().any()
+    season = cfb_adjusted_epa(plays).select("team_id", "net_adj_epa")
+    sums = ledger.group_by("team_id").agg(total=pl.col("contribution").sum()).join(season, on="team_id")
+    assert (sums["total"] - sums["net_adj_epa"]).abs().max() < 1e-12

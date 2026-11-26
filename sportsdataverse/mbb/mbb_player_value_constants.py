@@ -200,8 +200,11 @@ def player_per100_features(season_stats: pl.DataFrame) -> pl.DataFrame:
         return pl.DataFrame(schema=_FEATURE_SCHEMA)
     fga = pl.col("field_goals_attempted")
     fta = pl.col("free_throws_attempted")
-    # ponytail: the pro weight, not the college 0.475: the player-value model was fit on these features;
-    # switch with a refit.
+    # The pro weight, not the college 0.475: the box-BPM model was fit on these features. A box-BPM refit at
+    # 0.475 (2026-11-26, pre-registered gate: Spearman / MAE vs the 2025 external BPM within 2 team-clustered
+    # SEs of the shipped model) passed for men (0.8809 -> 0.8819, MAE 1.425 -> 1.414) and failed for women
+    # (0.9070 -> 0.9055, MAE 1.638 -> 1.650; a 0.44 refit on the same releases does worse, 0.9047 / 1.660).
+    # One weight serves both leagues, so 0.44 stays; see sportsdataverse._common.possessions.
     poss_used = fga + PRO_FT_POSSESSION_WEIGHT * fta + pl.col("turnovers")
     shots = pl.col("fga_rim") + pl.col("fga_mid") + pl.col("fga_three")
     reb = pl.col("offensive_rebounds") + pl.col("defensive_rebounds")

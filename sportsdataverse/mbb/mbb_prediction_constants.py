@@ -95,10 +95,12 @@ _NET_QUAD_THRESHOLDS_WOMENS: dict[str, dict[str, int]] = {
 }
 
 # Both leagues' hfa / margin_sd / em_scale / avg_tempo / bubble_adj_em were
-# fitted on their 2024 as-of-date backtests (``dev/mbb_prediction/fit_pregame.py``,
+# fitted on their 2024 as-of-date backtests (``tools/models/mbb_prediction/fit_pregame.py``,
 # joint least squares of actual margin on em_diff + non-neutral indicator;
-# mens: 4,359 eligible games, womens: 4,133 with ``PRED_LEAGUE=womens``; each
-# iterated to a fixed point because the ratings engine reads hfa/avg_tempo).
+# mens: 4,359 eligible games, womens: 4,133 with ``--league womens``; each
+# iterated to a fixed point because the ratings engine reads hfa/avg_tempo). On today's engine the script
+# gives the women's values to 2e-4; the men's need the engine as it was at the fit (no zero-turnover game
+# drop): today's men's fixed point is hfa 2.929, em_scale 0.5763, margin_sd 11.22, avg_tempo 69.6269.
 # Quad thresholds are the NCAA's published NET ranges, per league.
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "mens": LeagueConstants(

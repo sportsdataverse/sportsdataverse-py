@@ -54,6 +54,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Literal, overload
 
+import numpy as np
 import polars as pl
 
 from sportsdataverse.cfb.cfb_opponent_adjust import flag_garbage_time
@@ -61,7 +62,7 @@ from sportsdataverse.cfb.cfb_opponent_adjust import flag_garbage_time
 if TYPE_CHECKING:
     import pandas as pd
 
-__all__ = ["cfb_adjusted_epa", "cfb_adjusted_epa_by_game"]
+__all__ = ["cfb_adjusted_epa", "cfb_adjusted_epa_by_game", "cfb_adjusted_epa_ledger"]
 
 # Ridge penalty, PER OBSERVATION -- `dropped_level_ridge` forms the sklearn
 # penalty as `alpha = ridge_lambda * n_plays`.
@@ -333,6 +334,26 @@ def _adjust_games(
     )
 
 
+def _team_season(opp: pl.DataFrame) -> pl.DataFrame:
+    """Per-team season figures from per-game rows: each side is the mean over the games where it is not null."""
+    return (
+        opp.group_by("pos_team_id")
+        .agg(
+            pos_team=pl.col("pos_team").last(),
+            valid_games=(pl.col("adj_off_epa").is_not_null() & pl.col("adj_def_epa").is_not_null()).sum(),
+            adj_off_epa=pl.col("adj_off_epa").mean(),
+            adj_def_epa=pl.col("adj_def_epa").mean(),
+            off_strength_faced=pl.col("adjmodelOff").mean(),
+            def_strength_faced=pl.col("adjmodelDef").mean(),
+        )
+        .filter(
+            pl.col("adj_off_epa").is_not_null() & pl.col("adj_def_epa").is_not_null() & (pl.col("valid_games") >= 2)
+        )
+        .with_columns(net_adj_epa=pl.col("adj_off_epa") - pl.col("adj_def_epa"))
+        .sort("pos_team_id")
+    )
+
+
 @overload
 def cfb_adjusted_epa(
     plays: pl.DataFrame | pd.DataFrame,
@@ -428,23 +449,7 @@ def cfb_adjusted_epa(
         base, clean = _prepare(plays, _ADJ_REQUIRED, None)
         offense, defense, _ = _fit_team_strengths(clean, lam)
         base = clean  # a team's own EPA on the same plays as the fit
-    opp = _adjust_games(base, offense, defense, fill_strength=None)
-    team = (
-        opp.group_by("pos_team_id")
-        .agg(
-            pos_team=pl.col("pos_team").last(),
-            valid_games=(pl.col("adj_off_epa").is_not_null() & pl.col("adj_def_epa").is_not_null()).sum(),
-            adj_off_epa=pl.col("adj_off_epa").mean(),
-            adj_def_epa=pl.col("adj_def_epa").mean(),
-            off_strength_faced=pl.col("adjmodelOff").mean(),
-            def_strength_faced=pl.col("adjmodelDef").mean(),
-        )
-        .filter(
-            pl.col("adj_off_epa").is_not_null() & pl.col("adj_def_epa").is_not_null() & (pl.col("valid_games") >= 2)
-        )
-        .with_columns(net_adj_epa=pl.col("adj_off_epa") - pl.col("adj_def_epa"))
-        .sort("pos_team_id")
-    )
+    team = _team_season(_adjust_games(base, offense, defense, fill_strength=None))
     out = team.with_columns(
         adj_off_epa_rank=_rank("adj_off_epa", descending=True),
         adj_def_epa_rank=_rank("adj_def_epa", descending=False),
@@ -580,4 +585,304 @@ def cfb_adjusted_epa_by_game(
         .select(_BY_GAME_COLUMNS)
         .sort(["week", "team_id"])
     )
+    return out.to_pandas() if return_as_pandas else out
+
+
+# Per-game meta columns the ledger carries when the input has them (input name -> output name).
+_LEDGER_META = {"season": "season", "week": "week", "seasonType": "season_type"}
+
+
+def _cell_normal_equations(
+    clean: pl.DataFrame,
+) -> tuple[dict[str, int], int, np.ndarray, Callable[[np.ndarray], tuple[np.ndarray, np.ndarray]]]:
+    """The fit plays as (game, offense, defense, site) cells -> (team index, team count, cell game ids, terms).
+
+    Every regressor of :func:`_fit_team_strengths`' ridge is constant within a cell, so the
+    play-level ``X'X`` / ``X'y`` are sums of one weighted outer product per cell; ``terms(rows)``
+    returns that sum over the given cell rows. Columns: [off_0..off_{T-1}, def_0..def_{T-1}, intercept, home].
+    """
+    cells = (
+        clean.filter(pl.col("pos_team_id").is_not_null() & pl.col("def_pos_team_id").is_not_null())
+        .group_by(["game_id", "pos_team_id", "def_pos_team_id", "hfa"])
+        .agg(n=pl.len().cast(pl.Float64), y=pl.col("EPA").sum())
+    )
+    teams = sorted(set(cells["pos_team_id"].to_list()) | set(cells["def_pos_team_id"].to_list()))
+    idx = {t: i for i, t in enumerate(teams)}
+    n_t = len(teams)
+    p = 2 * n_t + 2
+    n_w = cells["n"].to_numpy()
+    y_w = cells["y"].to_numpy()  # sum of EPA in the cell = n * mean
+    off_i = np.array([idx[t] for t in cells["pos_team_id"].to_list()], dtype=int)
+    def_i = n_t + np.array([idx[t] for t in cells["def_pos_team_id"].to_list()], dtype=int)
+    hfa = cells["hfa"].cast(pl.Float64).to_numpy()
+
+    def terms(rows: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        a = np.zeros((p, p))
+        b = np.zeros(p)
+        for r in rows:
+            x = np.zeros(p)
+            x[[off_i[r], def_i[r], 2 * n_t]] = 1.0
+            x[2 * n_t + 1] = hfa[r]
+            a += n_w[r] * np.outer(x, x)
+            b += y_w[r] * x
+        return a, b
+
+    return idx, n_t, cells["game_id"].to_numpy(), terms
+
+
+def _untraced_teams(clean: pl.DataFrame) -> set[str]:
+    """Teams with a fit play whose offense or defense id is null (that play's opponent is unknown)."""
+    return set(
+        clean.filter(pl.col("pos_team_id").is_null() | pl.col("def_pos_team_id").is_null())
+        .select(pl.concat_list("pos_team_id", "def_pos_team_id").explode(empty_as_null=True).drop_nulls())
+        .to_series()
+        .to_list()
+    )
+
+
+def _leave_one_game_out(clean: pl.DataFrame, opp: pl.DataFrame, lam: float) -> pl.DataFrame:
+    """Each team's season net adjusted EPA with one of its games removed, one row per (game, team).
+
+    Removing game ``g`` refits the strengths without it and drops it from both teams' own
+    averages, exactly as if ``g`` had never been played. Null when the team would keep fewer
+    than two valid games (it would have no season value), and for every game of a team with a
+    play whose offense or defense id is null: the per-game rows do not carry the opponent of
+    such a play, so its refit cannot be reproduced and is not guessed.
+
+    The fit is :func:`_fit_team_strengths`' ridge solved from its normal equations: every
+    regressor is constant within a (game, offense, defense, site) cell, so the play-level
+    ``X'X`` and ``X'y`` are sums of one weighted term per cell, and dropping a game subtracts
+    that game's cells. One small solve per game, no frame operations inside the loop.
+    """
+    idx, n_t, cell_game, cell_terms = _cell_normal_equations(clean)
+    p = 2 * n_t + 2
+    a_all, b_all = cell_terms(np.arange(cell_game.size))
+    penalty = np.full(p, lam * _TEAM_SEASON_PLAYS)
+    penalty[2 * n_t] = 0.0  # free intercept
+    penalty[2 * n_t + 1] = 0.0  # free home term
+
+    # per team-game rows the season mean is taken over (`_adjust_games` output)
+    rows_team = opp["pos_team_id"].to_numpy()
+    rows_game = opp["game_id"].to_numpy()
+    rows_opp = np.array([idx.get(t, -1) for t in opp["def_pos_team_id"].to_list()])
+    raw_off = opp["raw_off_epa"].cast(pl.Float64).fill_null(np.nan).to_numpy()
+    raw_def = opp["raw_def_epa"].cast(pl.Float64).fill_null(np.nan).to_numpy()
+    untraced = _untraced_teams(clean)
+    out_game: list[str] = []
+    out_team: list[str] = []
+    out_val: list[float | None] = []
+    # a null game id (never seen in cfbfastR pbp) gets no refit: its rows keep a null influence
+    for gid in opp.filter(pl.col("game_id").is_not_null())["game_id"].unique().sort().to_list():
+        a_g, b_g = cell_terms(np.flatnonzero(cell_game == gid))
+        a = a_all - a_g
+        pen = penalty.copy()
+        # no home/away contrast left (every remaining play neutral): fit the term at 0, as `opponent_adjusted_ridge`
+        # does. Its `ptp == 0` test also fires on a constant nonzero column, which a real game frame cannot produce
+        # (each non-neutral game has a +1 and a -1 side).
+        if np.isclose(a[2 * n_t + 1, 2 * n_t + 1], 0.0):
+            a[2 * n_t + 1, :] = 0.0
+            a[:, 2 * n_t + 1] = 0.0
+            pen[2 * n_t + 1] = 1.0
+        beta = np.linalg.solve(a + np.diag(pen), b_all - b_g)
+        off_str = beta[:n_t] + beta[2 * n_t]
+        def_str = beta[n_t : 2 * n_t] + beta[2 * n_t]
+        for team in np.unique(rows_team[rows_game == gid]):
+            keep = (rows_team == team) & (rows_game != gid) & (rows_opp >= 0)
+            adj_off = raw_off[keep] - def_str[rows_opp[keep]]
+            adj_def = raw_def[keep] - off_str[rows_opp[keep]]
+            valid = int((~np.isnan(adj_off) & ~np.isnan(adj_def)).sum())
+            ok = valid >= 2 and (~np.isnan(adj_off)).any() and (~np.isnan(adj_def)).any()
+            ok = ok and team not in untraced
+            out_game.append(gid)
+            out_team.append(team)
+            out_val.append(float(np.nanmean(adj_off) - np.nanmean(adj_def)) if ok else None)
+    return pl.DataFrame(
+        {"game_id": out_game, "pos_team_id": out_team, "loo_net_adj_epa": out_val},
+        schema={
+            "game_id": pl.Utf8,
+            "pos_team_id": pl.Utf8,
+            "loo_net_adj_epa": pl.Float64,
+        },
+    )
+
+
+# The ledger's value columns, after the id / carried meta columns (`_ledger_frame` names, after the renames).
+_LEDGER_VALUE_COLUMNS = (
+    "team_id",
+    "pos_team",
+    "opponent_id",
+    "site",
+    "off_plays",
+    "def_plays",
+    "raw_off_epa",
+    "raw_def_epa",
+    "raw_net_epa",
+    "off_strength_faced",
+    "def_strength_faced",
+    "schedule_adj",
+    "adj_off_epa",
+    "adj_def_epa",
+    "adj_net_epa",
+    "off_weight",
+    "def_weight",
+    "raw_contribution",
+    "schedule_contribution",
+    "contribution",
+    "net_adj_epa",
+)
+
+
+def _ledger_frame(clean: pl.DataFrame, opp: pl.DataFrame, season: pl.DataFrame) -> pl.DataFrame:
+    """Per team-game ledger columns: site, plays in the fit, the schedule term, weights and contributions."""
+    meta = [c for c in _LEDGER_META if c in clean.columns and c not in opp.columns]
+    games = clean.group_by("game_id").agg(pl.col(c).first().alias(_LEDGER_META[c]) for c in meta)
+    off_n = clean.group_by(["game_id", "pos_team_id"]).agg(off_plays=pl.len(), _hfa=pl.col("hfa").first())
+    def_n = clean.group_by(["game_id", "def_pos_team_id"]).agg(def_plays=pl.len())
+    n_off = pl.col("adj_off_epa").is_not_null().sum().over("pos_team_id")
+    n_def = pl.col("adj_def_epa").is_not_null().sum().over("pos_team_id")
+    return (
+        opp.join(off_n, on=["game_id", "pos_team_id"], how="left")
+        .join(def_n, left_on=["game_id", "pos_team_id"], right_on=["game_id", "def_pos_team_id"], how="left")
+        .join(season, on="pos_team_id", how="left")
+        .join(games, on="game_id", how="left")
+        .with_columns(
+            site=pl.when(pl.col("_hfa") == 1)
+            .then(pl.lit("home"))
+            .when(pl.col("_hfa") == -1)
+            .then(pl.lit("away"))
+            .otherwise(pl.lit("neutral")),
+            def_plays=pl.col("def_plays").fill_null(0),
+            raw_net_epa=pl.col("raw_off_epa") - pl.col("raw_def_epa"),
+            schedule_adj=pl.col("adjmodelOff") - pl.col("adjmodelDef"),
+            adj_net_epa=pl.col("adj_off_epa") - pl.col("adj_def_epa"),
+            off_weight=pl.when(pl.col("adj_off_epa").is_not_null()).then(1.0 / n_off),
+            def_weight=pl.when(pl.col("adj_def_epa").is_not_null()).then(1.0 / n_def),
+        )
+        .with_columns(
+            raw_contribution=(pl.col("off_weight") * pl.col("raw_off_epa")).fill_null(0.0)
+            - (pl.col("def_weight") * pl.col("raw_def_epa")).fill_null(0.0),
+            schedule_contribution=(pl.col("def_weight") * pl.col("adjmodelOff")).fill_null(0.0)
+            - (pl.col("off_weight") * pl.col("adjmodelDef")).fill_null(0.0),
+            contribution=(pl.col("off_weight") * pl.col("adj_off_epa")).fill_null(0.0)
+            - (pl.col("def_weight") * pl.col("adj_def_epa")).fill_null(0.0),
+        )
+        .rename(
+            {
+                "pos_team_id": "team_id",
+                "def_pos_team_id": "opponent_id",
+                "adjmodelOff": "off_strength_faced",
+                "adjmodelDef": "def_strength_faced",
+            }
+        )
+    )
+
+
+@overload
+def cfb_adjusted_epa_ledger(
+    plays: pl.DataFrame | pd.DataFrame,
+    *,
+    ridge_lambda: float | None = ...,
+    influence: bool = ...,
+    return_as_pandas: Literal[False] = ...,
+) -> pl.DataFrame: ...
+
+
+@overload
+def cfb_adjusted_epa_ledger(
+    plays: pl.DataFrame | pd.DataFrame,
+    *,
+    ridge_lambda: float | None = ...,
+    influence: bool = ...,
+    return_as_pandas: Literal[True],
+) -> pd.DataFrame: ...
+
+
+def cfb_adjusted_epa_ledger(
+    plays: pl.DataFrame | pd.DataFrame,
+    *,
+    ridge_lambda: float | None = None,
+    influence: bool = True,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Per-game decomposition of :func:`cfb_adjusted_epa`'s season figure, one row per team-game.
+
+    The season ``net_adj_epa`` is a mean over games of ``adj_off_epa`` minus a mean over
+    games of ``adj_def_epa``, and each game's adjusted value is its raw EPA plus a schedule
+    term (the opponent's fitted strengths). This frame lays that sum out: per team-game the
+    raw net EPA, the schedule term, the game's weight in each mean and its contribution. It
+    uses the same plays, fit and penalty as :func:`cfb_adjusted_epa` (``method="current"``),
+    so for every team ``contribution`` sums to its season ``net_adj_epa``, and
+    ``raw_contribution + schedule_contribution == contribution`` row by row. The fitted
+    home-field term is not netted out of a team's own EPA (nor is it in the season figure),
+    so the ledger records each game's ``site`` and has no home term.
+
+    With ``influence=True`` it also refits the season once per game without that game
+    (leave one game out) and reports how far the game moved each of its two teams' season
+    values (the refit moves every team; the ledger reports the two that played).
+
+    Args:
+        plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the columns
+            :func:`cfb_adjusted_epa` reads. One season at a time. ``season``, ``week`` and
+            ``seasonType`` are carried through when present.
+        ridge_lambda: Ridge penalty, as in :func:`cfb_adjusted_epa` (``None`` means 0.075).
+        influence: Add ``loo_net_adj_epa`` and ``game_influence`` (one ridge refit per game;
+            seconds for a full FBS season).
+        return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
+
+    Returns:
+        One row per (game, team) for the teams :func:`cfb_adjusted_epa` rates (two or more
+        valid games), sorted by ``team_id``, then ``week`` (when present), then ``game_id``:
+        ``game_id``, the carried ``season`` / ``week`` / ``season_type``, ``team_id``,
+        ``pos_team``, ``opponent_id``, ``site`` (``home`` / ``away`` / ``neutral``),
+        ``off_plays`` / ``def_plays`` (the team's offensive / defensive plays in the fit),
+        ``raw_off_epa``, ``raw_def_epa``, ``raw_net_epa``, ``off_strength_faced`` /
+        ``def_strength_faced`` (the opponent's fitted offense / defense, EPA/play),
+        ``schedule_adj`` (``off_strength_faced - def_strength_faced``: what the schedule term
+        adds to this game's raw net), ``adj_off_epa``, ``adj_def_epa``, ``adj_net_epa``,
+        ``off_weight`` / ``def_weight`` (the game's weight in each season mean: 1 / the games
+        where that side has fit plays, so the two differ when a game has plays on one side only),
+        ``raw_contribution``, ``schedule_contribution``, ``contribution`` (to the season
+        value), ``net_adj_epa`` (the season value, repeated) and, with ``influence``,
+        ``loo_net_adj_epa`` (the season value without this game) and ``game_influence``
+        (``net_adj_epa - loo_net_adj_epa``; both null when the team would keep fewer than
+        two games).
+
+    Raises:
+        KeyError: If ``plays`` is missing a required column.
+        ValueError: If ``ridge_lambda`` is not positive or every play is garbage time.
+
+    Example:
+        Quick start (``plays`` is a season of FBS pass / rush plays with the columns the
+        module docstring lists, such as the cfbfastR-cfb-data team-summaries input; the
+        released ``load_cfb_pbp`` frame alone lacks ``home`` and ``neutral_site``)::
+
+            import polars as pl
+            import sportsdataverse.cfb as cfb
+            ledger = cfb.cfb_adjusted_epa_ledger(plays)
+            ledger.filter(pl.col("pos_team") == "LSU").select("opponent_id", "raw_net_epa", "schedule_adj")
+
+        The games that moved a team the most::
+
+            ledger.sort(pl.col("game_influence").abs(), descending=True).head()
+
+    See Also:
+        * `cfbfastR`_ -- the R implementation of the season fit (``adjust_epa``).
+
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    """
+    lam = _method_lambda("current", ridge_lambda)
+    _, clean = _prepare(plays, _ADJ_REQUIRED, None)
+    offense, defense, _ = _fit_team_strengths(clean, lam)
+    opp = _adjust_games(clean, offense, defense, fill_strength=None)
+    season = _team_season(opp).select("pos_team_id", "net_adj_epa")
+    opp = opp.join(season.select("pos_team_id"), on="pos_team_id", how="semi")
+    ledger = _ledger_frame(clean, opp, season)
+    cols = ["game_id", *(n for n in _LEDGER_META.values() if n in ledger.columns), *_LEDGER_VALUE_COLUMNS]
+    if influence:
+        loo = _leave_one_game_out(clean, opp, lam).rename({"pos_team_id": "team_id"})
+        ledger = ledger.join(loo, on=["game_id", "team_id"], how="left").with_columns(
+            game_influence=pl.col("net_adj_epa") - pl.col("loo_net_adj_epa")
+        )
+        cols += ["loo_net_adj_epa", "game_influence"]
+    out = ledger.select(cols).sort(["team_id", *(["week"] if "week" in cols else []), "game_id"])
     return out.to_pandas() if return_as_pandas else out
