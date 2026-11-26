@@ -460,7 +460,7 @@ def test_ledger_influence_is_null_when_a_team_would_keep_one_game(ledger_2026) -
     # (Team 57 shows why the count is of valid games: one of its three has no defensive play.)
     valid = pl.col("adj_off_epa").is_not_null() & pl.col("adj_def_epa").is_not_null()
     rows = ledger_2026.with_columns(n_valid=valid.sum().over("team_id"), valid=valid)
-    two = rows.filter((pl.col("n_valid") == 2) & pl.col("valid"))
+    two = rows.filter((pl.col("n_valid") == 2) & (pl.col("valid") == True))  # noqa: E712
     assert two.height > 0
     assert two["loo_net_adj_epa"].is_null().all()
     assert rows.filter(pl.col("n_valid") >= 3)["loo_net_adj_epa"].is_not_null().all()
@@ -473,3 +473,26 @@ def test_ledger_without_influence_and_as_pandas() -> None:
     assert plain.columns[:3] == ["game_id", "week", "team_id"]
     pdf = cfb_adjusted_epa_ledger(plays, influence=False, return_as_pandas=True)
     assert list(pdf.columns) == plain.columns and len(pdf) == plain.height
+
+
+def test_ledger_influence_when_the_refit_loses_the_home_term_or_a_team() -> None:
+    # Edge cases the real fixture never reaches, each checked against the independent play-level refit:
+    # game 1 is the only non-neutral game, so leaving it out leaves no home/away contrast (the home term
+    # is fit at 0), and team 5 plays one game (99), so leaving it out removes a team from the fit.
+    base = _synthetic_pbp().with_columns(neutral_site=pl.col("game_id") != 1)
+    extra = base.filter(pl.col("game_id") == 2).with_columns(
+        game_id=pl.lit(99, dtype=pl.Int64),
+        week=pl.lit(9, dtype=pl.Int64),
+        pos_team=pl.when(pl.col("pos_team_id") == "1").then(pl.lit("T1")).otherwise(pl.lit("T5")),
+        pos_team_id=pl.when(pl.col("pos_team_id") == "1").then(pl.lit("1")).otherwise(pl.lit("5")),
+        def_pos_team_id=pl.when(pl.col("def_pos_team_id") == "1").then(pl.lit("1")).otherwise(pl.lit("5")),
+    )
+    plays = pl.concat([base, extra], how="vertical_relaxed")
+    ledger = cfb_adjusted_epa_ledger(plays)
+    assert "5" not in ledger["team_id"].to_list()  # one game: not rated
+    for gid in (1, 99):
+        refit = cfb_adjusted_epa(plays.filter(pl.col("game_id") != gid)).select("team_id", expected="net_adj_epa")
+        rows = ledger.filter(pl.col("game_id") == str(gid)).join(refit, on="team_id", how="left")
+        assert rows.height > 0
+        for got, expected in rows.select("loo_net_adj_epa", "expected").iter_rows():
+            assert got == pytest.approx(expected, abs=1e-12)

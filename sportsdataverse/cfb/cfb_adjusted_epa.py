@@ -653,11 +653,15 @@ def _leave_one_game_out(clean: pl.DataFrame, opp: pl.DataFrame, lam: float) -> p
     out_game: list[str] = []
     out_team: list[str] = []
     out_val: list[float | None] = []
-    for gid in np.unique(rows_game):
+    # a null game id (never seen in cfbfastR pbp) gets no refit: its rows keep a null influence
+    for gid in opp.filter(pl.col("game_id").is_not_null())["game_id"].unique().sort().to_list():
         a_g, b_g = cell_terms(np.flatnonzero(cell_game == gid))
         a = a_all - a_g
         pen = penalty.copy()
-        if np.isclose(a[2 * n_t + 1, 2 * n_t + 1], 0.0):  # no home/away contrast left: fit it at 0
+        # no home/away contrast left (every remaining play neutral): fit the term at 0, as `opponent_adjusted_ridge`
+        # does. Its `ptp == 0` test also fires on a constant nonzero column, which a real game frame cannot produce
+        # (each non-neutral game has a +1 and a -1 side).
+        if np.isclose(a[2 * n_t + 1, 2 * n_t + 1], 0.0):
             a[2 * n_t + 1, :] = 0.0
             a[:, 2 * n_t + 1] = 0.0
             pen[2 * n_t + 1] = 1.0
@@ -723,7 +727,8 @@ def cfb_adjusted_epa_ledger(
     so the ledger records each game's ``site`` and has no home term.
 
     With ``influence=True`` it also refits the season once per game without that game
-    (leave one game out) and reports how far the game moved each team's season value.
+    (leave one game out) and reports how far the game moved each of its two teams' season
+    values (the refit moves every team; the ledger reports the two that played).
 
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the columns
@@ -744,7 +749,8 @@ def cfb_adjusted_epa_ledger(
         ``def_strength_faced`` (the opponent's fitted offense / defense, EPA/play),
         ``schedule_adj`` (``off_strength_faced - def_strength_faced``: what the schedule term
         adds to this game's raw net), ``adj_off_epa``, ``adj_def_epa``, ``adj_net_epa``,
-        ``off_weight`` / ``def_weight`` (the game's weight in each season mean, 1 / games),
+        ``off_weight`` / ``def_weight`` (the game's weight in each season mean: 1 / the games
+        where that side has fit plays, so the two differ when a game has plays on one side only),
         ``raw_contribution``, ``schedule_contribution``, ``contribution`` (to the season
         value), ``net_adj_epa`` (the season value, repeated) and, with ``influence``,
         ``loo_net_adj_epa`` (the season value without this game) and ``game_influence``

@@ -116,7 +116,8 @@ home-field term is not netted out of a team's own EPA (nor is it in the season f
 so the ledger records each game's `site` and has no home term.
 
 With `influence=True` it also refits the season once per game without that game
-(leave one game out) and reports how far the game moved each team's season value.
+(leave one game out) and reports how far the game moved each of its two teams' season
+values (the refit moves every team; the ledger reports the two that played).
 
 **Parameters**
 
@@ -129,7 +130,7 @@ With `influence=True` it also refits the season once per game without that game
 
 **Returns**
 
-One row per (game, team) for the teams `cfb_adjusted_epa` rates (two or more valid games), sorted by `team_id`, then `week` (when present), then `game_id`: `game_id`, the carried `season` / `week` / `season_type`, `team_id`, `pos_team`, `opponent_id`, `site` (`home` / `away` / `neutral`), `off_plays` / `def_plays` (the team's offensive / defensive plays in the fit), `raw_off_epa`, `raw_def_epa`, `raw_net_epa`, `off_strength_faced` / `def_strength_faced` (the opponent's fitted offense / defense, EPA/play), `schedule_adj` (`off_strength_faced - def_strength_faced`: what the schedule term adds to this game's raw net), `adj_off_epa`, `adj_def_epa`, `adj_net_epa`, `off_weight` / `def_weight` (the game's weight in each season mean, 1 / games), `raw_contribution`, `schedule_contribution`, `contribution` (to the season value), `net_adj_epa` (the season value, repeated) and, with `influence`, `loo_net_adj_epa` (the season value without this game) and `game_influence` (`net_adj_epa - loo_net_adj_epa`; both null when the team would keep fewer than two games).
+One row per (game, team) for the teams `cfb_adjusted_epa` rates (two or more valid games), sorted by `team_id`, then `week` (when present), then `game_id`: `game_id`, the carried `season` / `week` / `season_type`, `team_id`, `pos_team`, `opponent_id`, `site` (`home` / `away` / `neutral`), `off_plays` / `def_plays` (the team's offensive / defensive plays in the fit), `raw_off_epa`, `raw_def_epa`, `raw_net_epa`, `off_strength_faced` / `def_strength_faced` (the opponent's fitted offense / defense, EPA/play), `schedule_adj` (`off_strength_faced - def_strength_faced`: what the schedule term adds to this game's raw net), `adj_off_epa`, `adj_def_epa`, `adj_net_epa`, `off_weight` / `def_weight` (the game's weight in each season mean: 1 / the games where that side has fit plays, so the two differ when a game has plays on one side only), `raw_contribution`, `schedule_contribution`, `contribution` (to the season value), `net_adj_epa` (the season value, repeated) and, with `influence`, `loo_net_adj_epa` (the season value without this game) and `game_influence` (`net_adj_epa - loo_net_adj_epa`; both null when the team would keep fewer than two games).
 
 **Raises**
 
