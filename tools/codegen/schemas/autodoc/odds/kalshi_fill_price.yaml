@@ -1,0 +1,37 @@
+schema: kalshi_fill_price
+kind: dataframe
+hand_authored: true
+columns:
+- name: side
+  type: character
+  description: ''
+- name: action
+  type: character
+  description: ''
+- name: size_requested
+  type: numeric
+  description: ''
+- name: size_filled
+  type: numeric
+  description: ''
+- name: filled
+  type: logical
+  description: ''
+- name: avg_price
+  type: numeric
+  description: ''
+- name: best_price
+  type: numeric
+  description: ''
+- name: worst_price
+  type: numeric
+  description: ''
+- name: slippage
+  type: numeric
+  description: ''
+- name: cost
+  type: numeric
+  description: ''
+- name: levels_used
+  type: integer
+  description: ''

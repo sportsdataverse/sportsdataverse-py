@@ -166,6 +166,18 @@ def test_run_team_totals_are_the_sum_of_the_game_boxes(lg: str) -> None:
     teams = tournament_run_teams(games, box)
     assert teams.schema == pl.Schema(RUN_TEAMS_SCHEMA)
     assert teams.height == games["run_id"].n_unique()
+    # each run carries its tournament's name and kind, the ones on every one of its game rows
+    names = games.group_by("run_id").agg(
+        pl.col("tournament_name").n_unique().alias("n_names"),
+        pl.col("tournament_kind").n_unique().alias("n_kinds"),
+        pl.col("tournament_name").first().alias("game_name"),
+        pl.col("tournament_kind").first().alias("game_kind"),
+    )
+    assert (names["n_names"] == 1).all() and (names["n_kinds"] == 1).all()
+    tagged = teams.join(names, on="run_id")
+    assert tagged.height == teams.height and teams["tournament_kind"].null_count() == 0
+    assert tagged["tournament_name"].eq_missing(tagged["game_name"]).all()
+    assert tagged["tournament_kind"].eq_missing(tagged["game_kind"]).all()
     expected = (
         box.with_columns(pl.col("game_id", "team_id").cast(pl.Int64))
         .join(games.select("run_id", "game_id", "team_id"), on=["game_id", "team_id"])

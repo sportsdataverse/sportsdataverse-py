@@ -294,7 +294,7 @@ CFB_ESPN_TRY_ON_TD_ROW_FROM: int = 2014
 CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM: int = 2018
 
 #: First season of the 12-team CFP selection rule with conference-specific automatic bids (ACC /
-#: Big Ten / Big 12 / SEC champions, the best Group-of-6 champion, a top-12 Notre Dame); 2024-2025
+#: Big Ten / Big 12 / SEC champions, the best-ranked Group-of-6 team, a top-12 Notre Dame); 2024-2025
 #: guaranteed the 5 highest-ranked champions instead. Read by ``cfb_standings.cfb_playoff_seeds``.
 CFB_CFP_AUTOBID_2026_FROM: int = 2026
 

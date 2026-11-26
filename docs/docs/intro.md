@@ -149,7 +149,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 | Hockey (Europe) | [Ligue Magnus](magnus/) | `sportsdataverse.hockey.magnus` | Ligue Magnus (11) |
 | Hockey (Europe) | [KHL](khl/) | `sportsdataverse.hockey.khl` | KHL (site REST + webcaster API) (25): KHL site REST (www.khl.ru/rest) 14, KHL webcaster mobile API (khl.api.webcaster.pro) 9, Hand-written wrappers 2 |
 | Hockey (Europe) | [VHL](vhl/) | `sportsdataverse.hockey.vhl` | VHL (14): (vhlru.ru server-rendered pages, parsed) 13, Hand-written wrappers 1 |
-| Baseball | [MLB](mlb/) | `sportsdataverse.mlb` | ESPN (123), sportsdataverse-data releases (35), MLB Stats API (79), Baseball Savant (Statcast) (43), Fox Sports API (23) |
+| Baseball | [MLB](mlb/) | `sportsdataverse.mlb` | ESPN (123), sportsdataverse-data releases (35), MLB Stats API (79), Baseball Savant (Statcast) (43), Chadwick Baseball Bureau register (1), Fox Sports API (23) |
 | Baseball (College baseball & softball) | [College baseball](college_baseball/) | `sportsdataverse.baseball.college_baseball` | ESPN (122), stats.ncaa.org (3) |
 | Baseball (College baseball & softball) | [College softball](college_softball/) | `sportsdataverse.baseball.college_softball` | ESPN (121): site API (v2) 25, web API (v3) 5, core API (v2) 87, FPI API (fitt v3) 1, CDN API (cdn.espn.com) 3 |
 | Soccer | [Soccer (all)](soccer/) | `sportsdataverse.soccer` | ESPN (112), American Soccer Analysis (16), FotMob (14), UEFA (7), FIFA (9), Football-Data.co.uk (3), OpenLigaDB (11), kloppy open event data (8) |
@@ -168,7 +168,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 | More sports & sources (Cricket) | [Cricket](cricket/) | `sportsdataverse.cricket` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
 | More sports & sources (Lacrosse) | [Lacrosse](lacrosse/) | `sportsdataverse.lacrosse` | ESPN (35), Premier Lacrosse League stats API (19) |
 | More sports & sources (Golf) | [Golf](golf/) | `sportsdataverse.golf` | ESPN (46), PGA TOUR GraphQL API (21) |
-| More sports & sources (Betting & prediction markets) | [Betting odds](odds/) | `sportsdataverse.odds` | The Odds API (11), Polymarket (14), Kalshi (9) |
+| More sports & sources (Betting & prediction markets) | [Betting odds](odds/) | `sportsdataverse.odds` | The Odds API (11), Polymarket (14), Kalshi (11) |
 | More sports & sources (Cross-sport providers) | [CBS Sports](cbs/) | `sportsdataverse.providers.cbs` | CBS Sports NAPI (82) |
 | More sports & sources (Cross-sport providers) | [Yahoo Sports](yahoo/) | `sportsdataverse.providers.yahoo` | Yahoo Sports Shangrila (105) |
 | More sports & sources (Cross-sport providers) | [Fox Sports](fox/) | `sportsdataverse.providers.fox` | Fox Sports API (33) |

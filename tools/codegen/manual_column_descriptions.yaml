@@ -1668,9 +1668,9 @@ cfb_playoff_seeds:
   losses: Losses across all played games.
   pd: Point differential (points for minus points against, via game margins) summed over all played games.
   seed: College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From
-    2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 champion and a Notre Dame ranked within
-    the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions.
-    Automatic qualifiers are capped at the field size.
+    2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 team (champion or not) and a Notre
+    Dame ranked within the field size are selected before at-large teams; before 2026, the five highest-ranked
+    conference champions. Automatic qualifiers are capped at the field size.
   sim: Season or simulation identifier the standings row belongs to.
   sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall version) - conference opponents' summed conference
     wins (ties half) over their summed conference games, one term per conference game played (pooled, as cfbseedR); 0.0 for
@@ -81921,9 +81921,13 @@ leaderboard:
   position: Displayed position, with a "T" prefix for a tie (e.g. "1", "T3"). Null for a player off the board (missed
     cut, withdrawn) and on the scoreboard.
   position_is_tie: True when the position is shared. Null for a player off the board and on the scoreboard.
-  player_status: Player status name (e.g. "STATUS_FINISH", "STATUS_CUT", "STATUS_WD", "STATUS_IN_PROGRESS"). Null on the
-    scoreboard.
-  thru: Hole the player last completed in the current round (18 when the round is done). Null on the scoreboard.
+  player_status: Player status name (e.g. "STATUS_FINISH", "STATUS_CUT", "STATUS_IN_PROGRESS"). ESPN files a withdrawal
+    and a disqualification under "STATUS_CUT" too; player_status_abbr separates them. Null on the scoreboard.
+  player_status_abbr: Player status as ESPN abbreviates it ("F" finished, "CUT" missed cut, "WD" withdrawn, "DQ"
+    disqualified). Null on the scoreboard.
+  playoff: True for a player who was in the event's playoff, False otherwise. Null on the scoreboard.
+  thru: Holes completed in the current round (18 when the round is done), whatever hole the round started on. 18 for a
+    playoff player (playoff holes are not a round). Null on the scoreboard.
   to_par: Total score relative to par as an integer ("E" is 0, "-12" is -12); null when no score is posted.
   to_par_display: Total score relative to par as ESPN displays it (e.g. "-12", "E", "+3").
   total_strokes: Total strokes over the rounds played. On the scoreboard it is summed from round_1 to round_4.
@@ -83307,6 +83311,9 @@ mbb_tournament_run_players:
   run_id: 'Run key: ''{season}-{tournament_key}-{ESPN team id}'', one team''s games in one tournament.'
 mbb_tournament_run_teams:
   season: Season, named by the year it ends (2025 is 2024-25).
+  tournament_name: The run's tournament name, as on its tournament_runs rows.
+  tournament_kind: 'The run''s tournament kind, as on its tournament_runs rows: ncaa (the NCAA tournament), conference (a
+    conference tournament) or postseason (the NIT, WNIT, CBI, Crown, WBIT and other postseason events).'
   team_id: ESPN team id of the row's team (joins the ESPN schedule and team box scores).
   team_abbreviation: Team abbreviation.
   games: Final games in the run.
@@ -83418,6 +83425,9 @@ wbb_tournament_run_players:
   run_id: 'Run key: ''{season}-{tournament_key}-{ESPN team id}'', one team''s games in one tournament.'
 wbb_tournament_run_teams:
   season: Season, named by the year it ends (2025 is 2024-25).
+  tournament_name: The run's tournament name, as on its tournament_runs rows.
+  tournament_kind: 'The run''s tournament kind, as on its tournament_runs rows: ncaa (the NCAA tournament), conference (a
+    conference tournament) or postseason (the NIT, WNIT, CBI, Crown, WBIT and other postseason events).'
   team_id: ESPN team id of the row's team (joins the ESPN schedule and team box scores).
   team_abbreviation: Team abbreviation.
   games: Final games in the run.
@@ -83499,3 +83509,25 @@ add_shot_make_prob:
   def_player_5: NBA Stats player id of defensive on-court player 5 of 5 during the event.
   xfg: Make chance of a located two- or three-point attempt from the bundled location model; null on every other row (free
     throws, non-shots, an attempt without a location).
+kalshi_book_quotes:
+  side: 'Contract side: yes (pays $1 if the event happens) or no.'
+  quote: 'bid (the side''s own resting bids) or ask (the opposite side''s bids at 1 - price: a NO bid at p is a YES offer
+    at 1 - p).'
+  level: Rank within the side's bid or ask ladder, 1 = best (highest bid, lowest ask).
+  price: Price per contract in dollars from 0 to 1, rounded to the book's four decimals.
+  size: Contracts resting at this price (Kalshi fixed-point counts, so fractions occur).
+  cum_size: Contracts available at this level and every better one on the same ladder.
+kalshi_fill_price:
+  side: Contract side filled, yes or no.
+  action: buy (walks the side's asks from the cheapest up) or sell (walks its bids from the highest down).
+  size_requested: Contracts asked for.
+  size_filled: Contracts the book can fill; below size_requested when the ladder runs out.
+  filled: True when the whole size_requested fills.
+  avg_price: Volume-weighted price per contract in dollars over the filled contracts, before Kalshi's trading fee; null
+    when nothing fills.
+  best_price: Price of the ladder's best level (the touch); null when the ladder is empty.
+  worst_price: Price of the last level the fill reaches; null when nothing fills.
+  slippage: How much worse avg_price is than best_price, in dollars per contract (paid above the best ask, or received
+    below the best bid); 0 when the touch fills it all.
+  cost: Dollars paid (buy) or received (sell) for the filled contracts, before fees; null when nothing fills.
+  levels_used: Price levels the fill touches.
