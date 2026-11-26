@@ -227,6 +227,22 @@ goalie's own record over every earlier game in `seasons`, shrunk toward `save_pc
 
 A polars (or pandas) DataFrame, one row per projected goalie-game. Because saves are whole numbers, the interval holds at least `coverage` of the predicted distribution. Empty input returns a zero-row frame with this schema. |col_name |type | |:-----------------|:------| |season |Int64 | |game_id |Int64 | |game_date |Date | |player_id |Int64 | |team |String | |opp_team |String | |is_home |Boolean| |exp_shots_against |Float64| |exp_save_pct |Float64| |exp_saves |Float64| |saves_lo |Int64 | |saves_hi |Int64 | |coverage |Float64|
 
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | NHL season id of the game, both years run together (e.g. 20242025 for 2024-25). |
+| `game_id` | Int64 | NHL game id (e.g. 2024020001). |
+| `game_date` | String | Date of the game. |
+| `player_id` | Int64 | NHL player id of the projected starting goalie. |
+| `team` | String | Abbreviation of the goalie's team (e.g. "NJD"). |
+| `opp_team` | String | Abbreviation of the opponent whose shots the goalie faces (e.g. "BUF"). |
+| `is_home` | Boolean | True when the goalie's team is the home team. |
+| `exp_shots_against` | Float64 | Expected shots on goal the starter faces: the mean of the team's shots-against rate and the opponent's shots-for rate over earlier games that season (shrunk toward the league mean), less half the home-ice shot edge for a home goalie and plus half for a visitor, times the starter's share of a game's shots. |
+| `exp_save_pct` | Float64 | The goalie's save percentage over every earlier game in the seasons loaded, shrunk toward the league's save_pct_prior (the prior alone for a goalie with no earlier game). |
+| `exp_saves` | Float64 | Expected saves, exp_shots_against x exp_save_pct (the negative-binomial mean). |
+| `saves_lo` | Int64 | Lower end of the central interval, the (1 - coverage) / 2 quantile of the predicted saves. |
+| `saves_hi` | Int64 | Upper end of the central interval, the (1 + coverage) / 2 quantile of the predicted saves. |
+| `coverage` | Float64 | Central probability the saves_lo-saves_hi interval was built for (the coverage argument, 0.8 by default). |
+
 **Raises**
 
 | Exception | Description |
@@ -440,6 +456,15 @@ scoreline, the home-win probability equals the row's `home_win_prob` and the mea
 
 A polars (or pandas) DataFrame, `top_n` rows per game. `prob_beyond_regulation` is the part of `prob` from games tied after 60 minutes (a one-goal score only). `game_id` keeps the input's dtype (Int64 from `nhl_predict_games`). |col_name |type | |:----------------------|:------| |game_id |Int64 | |rank |Int64 | |home_goals |Int64 | |away_goals |Int64 | |prob |Float64| |prob_beyond_regulation |Float64|
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | Game id, the input predictions' game_id with its dtype kept. |
+| `rank` | Int64 | Scoreline's rank within the game, 1 for the most likely final score. |
+| `home_goals` | Int64 | Home team's goals in this final score (an overtime or shootout win counts as one goal). |
+| `away_goals` | Int64 | Away team's goals in this final score (an overtime or shootout win counts as one goal). |
+| `prob` | Float64 | Probability the game ends with exactly this score; over every scoreline the home-win share equals the row's home_win_prob. |
+| `prob_beyond_regulation` | Float64 | Part of prob from games tied after 60 minutes and settled in overtime or a shootout; zero unless the score is a one-goal margin. |
+
 **Raises**
 
 | Exception | Description |
@@ -513,6 +538,13 @@ Distribution of the final-score total goals per game, from the same model as `nh
 **Returns**
 
 A polars (or pandas) DataFrame, one row per game and total from 0 to 32 goals. `prob_over` is `P(total > total_goals)`, the over probability for a line of `total_goals + 0.5`. Per game the probabilities sum to 1 and their mean is the row's `exp_total`. `game_id` keeps the input's dtype. |col_name |type | |:-----------|:------| |game_id |Int64 | |total_goals |Int64 | |prob |Float64| |prob_over |Float64|
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | Game id, the input predictions' game_id with its dtype kept. |
+| `total_goals` | Int64 | Total goals in the final score, both teams (0 to 32; an overtime or shootout win adds one). |
+| `prob` | Float64 | Probability the final score totals exactly total_goals; a game's rows sum to 1, and their prob-weighted mean of total_goals is the row's exp_total. |
+| `prob_over` | Float64 | Probability the total is above total_goals, the over price for a line of total_goals + 0.5. |
 
 **Raises**
 

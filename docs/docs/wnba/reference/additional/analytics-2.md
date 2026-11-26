@@ -530,5 +530,5 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 | `stat_reb_exp` | Float64 |  |
 | `stat_ast_exp` | Float64 |  |
 | `stat_fg3m_exp` | Float64 |  |
-| `minutes_exp` | Float64 |  |
+| `minutes_exp` | Float64 | Expected minutes: the player's share of the minutes logged for the current team before the as-of cut (every logged game when no cut applies; a game sat counts as zero), times the team's 200 game minutes (5 x 40), so a team's rows sum to 200. The stat_*_exp lines assume the player plays; this does not. |
 | `pace_proj` | Float64 |  |
