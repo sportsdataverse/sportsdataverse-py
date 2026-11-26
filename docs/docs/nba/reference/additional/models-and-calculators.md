@@ -277,7 +277,7 @@ Forecast-accuracy metrics: predicted-vs-actual next-season rating over held-out 
 
 ### LeagueConstants {#LeagueConstants}
 
-`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', pts_sd_a: 'float', pts_sd_b: 'float', count_dispersion: 'float', in_game_wp_artifact: 'str' = 'nba_in_game_wp.ubj', stat_dispersion: 'Mapping[str, float]' = <factory>, rate_prior_minutes: 'Mapping[str, float]' = <factory>) -> None`
+`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', pts_sd_a: 'float', pts_sd_b: 'float', count_dispersion: 'float', in_game_wp_artifact: 'str' = 'nba_in_game_wp.ubj', stat_dispersion: 'Mapping[str, float]' = <factory>, rate_prior_minutes: 'Mapping[str, float]' = <factory>, recent_mixture: 'Mapping[str, float]' = <factory>) -> None`
 
 Per-`league_id` fitted constants for the NBA prediction & market stack.
 
@@ -296,6 +296,7 @@ Per-`league_id` fitted constants for the NBA prediction & market stack.
 | `in_game_wp_artifact` | `str` | `'nba_in_game_wp.ubj'` | Filename of the bundled in-game-WP coefficients under `sportsdataverse/nba/models` (committed in Phase 3). |
 | `stat_dispersion` | `Mapping[str, float]` | `<factory>` | `var/mean` per stat for the other prop counts (`stl, blk, tov, fgm, ftm`); a stat missing here has no fitted distribution in that league. |
 | `rate_prior_minutes` | `Mapping[str, float]` | `<factory>` | Pseudo-minutes `k` per stat that `~sportsdataverse.nba.nba_player_props.player_rates` shrinks a player's per-minute rate with, toward his minutes-and-role tier's pooled rate; empty means raw rates. |
+| `recent_mixture` | `Mapping[str, float]` | `<factory>` | The "recent window is a new rate" mixture of `~sportsdataverse.nba.nba_player_props.nba_player_props`: `games` (the window), `a` / `b` (weight `logistic(a + b * \|dmin\| / sd)`), `sd_floor` / `sd_fallback` (the minutes SD), `pts_sd_a` / `pts_sd_b` (the points SD law of each component); empty means no mixture. |
 
 ### MeasureSpec {#MeasureSpec}
 

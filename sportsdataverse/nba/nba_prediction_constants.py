@@ -78,6 +78,11 @@ class LeagueConstants:
             :func:`~sportsdataverse.nba.nba_player_props.player_rates` shrinks a
             player's per-minute rate with, toward his minutes-and-role tier's
             pooled rate; empty means raw rates.
+        recent_mixture: The "recent window is a new rate" mixture of
+            :func:`~sportsdataverse.nba.nba_player_props.nba_player_props`: ``games`` (the
+            window), ``a`` / ``b`` (weight ``logistic(a + b * |dmin| / sd)``), ``sd_floor`` /
+            ``sd_fallback`` (the minutes SD), ``pts_sd_a`` / ``pts_sd_b`` (the points SD law of
+            each component); empty means no mixture.
         in_game_wp_artifact: Filename of the bundled in-game-WP coefficients
             under ``sportsdataverse/nba/models`` (committed in Phase 3).
     """
@@ -93,6 +98,7 @@ class LeagueConstants:
     in_game_wp_artifact: str = "nba_in_game_wp.ubj"
     stat_dispersion: Mapping[str, float] = field(default_factory=dict)
     rate_prior_minutes: Mapping[str, float] = field(default_factory=dict)
+    recent_mixture: Mapping[str, float] = field(default_factory=dict)
 
 
 # hfa/margin_sd are FITTED per league on their own as-of-date backtest
@@ -128,6 +134,18 @@ class LeagueConstants:
 #   clustered bootstrap SEs (7.1 to 20.3 clustered by player); non-inferior on pra; 80% coverage rises
 #   on every stat and moves no more than .01 away from .80 on any (pts .799 -> .807). The gain sits in
 #   players' first 10 games (pts +0.106) and is about zero after 30.
+# recent_mixture (NBA only) is FITTED by the same script (`--mixture`; `--holdout-mixture 2019` re-scores it)
+# on the same 2024-25 / 2025-26 rows (it gives pts_sd_a 0.9768, the Nelder-Mead tolerance): the weights a/b by
+# Nelder-Mead on the summed relative CRPS of pts/reb/ast over players with >= 11 earlier games (the
+# window's minutes SD floor 1.0; fallback the median player minutes SD 5.632, defensive: >= 11 games
+# always have an SD), then the components'
+# points SD law on those rows by Nelder-Mead on points CRPS, every other constant frozen. Held-out
+# check, run once on 2018-19 with the keep rule pre-registered first (keep iff CRPS gain > 2 SE on pts/reb/ast
+# overall and in the top |dmin| tercile, non-inferior elsewhere, 80% coverage within .01) (25,530 player-games, 168 days; no
+# props decision had used that season): CRPS gain against the single (shrunk) predictive pts +0.0350
+# (z 8.3), reb +0.0177 (z 8.6), ast +0.0087 (z 7.3), the other seven non-inferior, 80% coverage
+# pts .815 -> .818; the gain sits in the top tercile of |dmin| (pts +0.100). It lifts the mean
+# (pts bias +0.34 -> +0.44 there). With <= 10 earlier games the two windows coincide: no mixture.
 # WNBA and G-League are not fitted (no held-out season has been set aside to check a fit there), so
 # they keep raw rates and have no distribution for the five extra stats.
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
@@ -152,6 +170,15 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
             "tov": 160.0,
             "fgm": 64.0,
             "ftm": 100.0,
+        },
+        recent_mixture={
+            "games": 10,
+            "a": -1.133,
+            "b": 1.872,
+            "sd_floor": 1.0,
+            "sd_fallback": 5.632,
+            "pts_sd_a": 0.9769,
+            "pts_sd_b": 1.5024,
         },
     ),
     "10": LeagueConstants(
