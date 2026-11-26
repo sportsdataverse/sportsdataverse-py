@@ -61,9 +61,9 @@ from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design,
 
 #: Prior scales scored (``k = 1``: the prior as fit; ``k = 0``: no prior, plain RAPM).
 PRIOR_SCALES = (0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0)
-#: The scale frozen in ``ADJ_RAPM_PRIOR_SCALE`` (both leagues): where next-season R^2 and Spearman peak, the
-#: conservative end of the range where held-out game error also falls (see the report).
-CHOSEN_SCALE = 2.0
+#: The scale frozen in ``ADJ_RAPM_PRIOR_SCALE`` (both leagues): where next-season R^2 and Spearman peak and
+#: held-out game error is at or near its minimum (see the report). 2 for the equal-weight SPM prior (#1150).
+CHOSEN_SCALE = 1.5
 #: league -> (season end years, training end years, league id, year-over-year possession floor,
 #: scale-check off_poss floor). Training is every complete season (fit 2026-11-09: NBA 2026-27 is in
 #: progress, WNBA 2026 is complete). The first season has no prior (the producers' chain starts there).

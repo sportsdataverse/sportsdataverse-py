@@ -44,15 +44,15 @@ def _pooled(league: str, k: float) -> pl.DataFrame:
 def test_the_frozen_penalty_and_scale_are_the_pooled_cv_minimum(league) -> None:
     lid = _LEAGUE_ID[league]
     k = ADJ_RAPM_PRIOR_SCALE[lid]
-    assert k == fit.CHOSEN_SCALE == 2.0
+    assert k == fit.CHOSEN_SCALE == 1.5
     p = _pooled(league, k)
     assert (p["seasons"] == 30).all()
     assert p.sort("sse")["alpha"][0] == pytest.approx(ADJ_RAPM_PENALTY[lid], rel=1e-12)
     # k = 0 is plain RAPM: its pooled pick is #1121's frozen value
     assert _pooled(league, 0.0).sort("sse")["alpha"][0] == pytest.approx(RAPM_PENALTY[lid], rel=1e-12)
-    # the prior-scale evidence: at its own best penalty, k = 2 beats the unscaled prior on held-out games
+    # the prior-scale evidence: at its own best penalty, k = 1.5 beats the unscaled prior on held-out games
     assert p["sse"].min() < _pooled(league, 1.0)["sse"].min()
-    picks = {"nba": 3162.2776601683795, "wnba": 2275.8459260747886}  # k = 1, observed 2026-11-09
+    picks = {"nba": 3727.593720314938, "wnba": 2682.6957952797247}  # k = 1, observed 2026-11-25
     assert _pooled(league, 1.0).sort("sse")["alpha"][0] == pytest.approx(picks[league], rel=1e-12)
 
 
@@ -77,8 +77,9 @@ def test_the_fitters_ridge_is_nba_adj_rapm() -> None:
     games = rows.drop_nulls([f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)])["game_id"]
     res = fit.season_curves(X, Y, games.rank("dense").to_numpy())
     a = int(np.argmin(np.abs(fit.GRID - ADJ_RAPM_PENALTY["10"])))
-    kc = fit.PRIOR_SCALES.index(2.0)
-    beta = 2.0 * pm + res["coef"][kc, :, a]
+    k = ADJ_RAPM_PRIOR_SCALE["10"]
+    kc = fit.PRIOR_SCALES.index(k)
+    beta = k * pm + res["coef"][kc, :, a]
     out = nba_adj_rapm(rows, prior, league_id="10", n_samples=2, seed=0)  # the league's frozen alpha and scale
     want = pl.DataFrame({"player_id": np.asarray(pids, dtype=np.int64), "o": 100 * beta[:P], "d": -100 * beta[P:]})
     j = out.join(want, on="player_id")
