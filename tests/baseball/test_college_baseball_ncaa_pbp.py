@@ -248,3 +248,24 @@ def test_bare_initial_names_and_no_play_rows_classify() -> None:
         [{"description": "BAINER L flied out to rf (2-1)."}, {"description": "No play."}]
     ).to_dicts()
     assert [(r["batter"], r["play_type"]) for r in rows] == [("BAINER L", "flyout"), (None, "other")]
+
+
+def test_bare_initial_substitution_has_no_batter() -> None:
+    """A real legacy-era row ("B Hughes to p for J Barroqueir.") must stay a substitution with no batter."""
+    row = decompose_college_baseball_plays([{"description": "B Hughes to p for J Barroqueir."}]).row(0, named=True)
+    assert (row["play_type"], row["batter"]) == ("substitution", None)
+
+
+def test_runner_led_row_and_out_after_advance() -> None:
+    """2020 contest 1829869 / 2012 contest 755683: the lead runner's own advance is recorded, and a runner
+    who advances and is then put out counts the out."""
+    lead, thrown_out = decompose_college_baseball_plays(
+        [
+            {"description": "Fogel, A. advanced to second Kaler, K. advanced to third on a wild pitch."},
+            {
+                "description": "PICKENS doubled to right center (1-0) BIRKOFER advanced to third, out at home rf to ss to c."
+            },
+        ]
+    ).to_dicts()
+    assert (lead["play_type"], lead["runners_advanced"]) == ("wild_pitch", ["Fogel, A.->second", "Kaler, K.->third"])
+    assert (thrown_out["play_type"], thrown_out["outs_on_play"]) == ("double", 1)

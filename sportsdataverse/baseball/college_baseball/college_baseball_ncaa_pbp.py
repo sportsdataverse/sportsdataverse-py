@@ -72,7 +72,7 @@ _ADVANCED_RE = re.compile(rf"^({_NAME})\s+advanced to (\w+)")
 _OUT_RE = re.compile(r"\bout (?:at|on)\b")
 _POS_CODES = r"(?:p|1b|2b|3b|ss|lf|cf|rf|c|dh|ph|pr|dp|flex)"
 # A "Last", "Last, F", or legacy "First Last" name (no intervening verbs).
-_SUB_NAME = r"[A-Z][A-Za-z'.\-]+(?:\s+[A-Z][A-Za-z'.\-]+)*(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
+_SUB_NAME = _NAME  # the same name shapes, bare initials included ("C Mcguire to p for Smith.")
 # A substitution clause = "<player> to <pos>" (optionally "for <player>") and the
 # WHOLE clause is just that. The player name sits DIRECTLY before "to <pos>" -- no
 # action verb between -- which separates it both from a batted ball ("singled to
@@ -229,8 +229,9 @@ def _decompose(desc: str) -> "dict":
         if out["is_out"]:
             out["outs_on_play"] += 1
 
-    # runner clauses
-    for c in clauses[1:]:
+    # runner clauses; a row led by a runner's advance ("Fogel, A. advanced to second Kaler, K. ...") counts it too
+    lead_runner = bool(_ADVANCED_RE.match(primary))
+    for c in clauses if lead_runner else clauses[1:]:
         sc = _SCORED_RE.match(c)
         if sc:
             out["runs_scored"] += 1
@@ -242,6 +243,8 @@ def _decompose(desc: str) -> "dict":
             if _THEN_SCORED_RE.search(c):
                 out["runs_scored"] += 1
                 out["scoring_runners"].append(ac.group(1))
+            elif _OUT_RE.search(c.lower()):  # "BIRKOFER advanced to third, out at home rf to ss to c."
+                out["outs_on_play"] += 1
             continue
         sh = re.match(rf"^({_NAME})\s+stole home", c)  # a steal of home is a run
         if sh:
@@ -254,7 +257,7 @@ def _decompose(desc: str) -> "dict":
     if (ps := _SCORED_RE.match(primary)) and out["play_type"] != "home_run":
         out["runs_scored"] += 1
         out["scoring_runners"].append(ps.group(1))
-    elif out["batter"] and out["play_type"] != "home_run" and _THEN_SCORED_RE.search(primary):
+    elif out["batter"] and not lead_runner and out["play_type"] != "home_run" and _THEN_SCORED_RE.search(primary):
         # the batter comes all the way round: "Vitaletti tripled to center field, scored on a throwing error"
         out["runs_scored"] += 1
         out["scoring_runners"].append(out["batter"])

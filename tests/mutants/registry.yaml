@@ -12171,6 +12171,26 @@
   expected: kill
   note: "2020's 'fielders choice' (no apostrophe) reads as unknown and the batter is not on base."
 
+- id: bb-out-after-advance-dropped
+  group: bb-runner-clauses
+  finding: bb-runner-clause-split
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "elif _OUT_RE.search(c.lower()):  # \"BIRKOFER advanced to third, out at home rf to ss to c.\""
+  mutant: "elif False:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py::test_runner_led_row_and_out_after_advance"
+  expected: kill
+  note: "A runner who advances and is then put out counts no out."
+
+- id: bb-lead-runner-advance-dropped
+  group: bb-runner-clauses
+  finding: bb-runner-clause-split
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "for c in clauses if lead_runner else clauses[1:]:"
+  mutant: "for c in clauses[1:]:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py::test_runner_led_row_and_out_after_advance"
+  expected: kill
+  note: "A row led by a runner's advance drops that runner from runners_advanced."
+
 # --- PR #1268: free throws on the lineup at their foul -------------------------------------------
 - id: ft-box-follows-the-foul
   group: ft-foul
