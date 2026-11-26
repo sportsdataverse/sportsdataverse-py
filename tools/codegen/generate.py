@@ -5290,22 +5290,24 @@ def _resolve_autodoc_arg(value, memo: dict):
 
 
 class _CallTimeout(BaseException):
-    """Raised by :func:`_call_with_timeout`. A ``BaseException`` on purpose: the HTTP layer
-    (``dl_utils.download``) retries on any ``Exception``, which would swallow a plain
-    ``TimeoutError`` and retry the stalled call with no alarm left."""
+    """Raised by :func:`_call_with_timeout`. A ``BaseException`` on purpose: the alarm raises it
+    inside the call, and the HTTP layer (``dl_utils.download``) retries on any ``Exception``, which
+    would swallow a plain ``TimeoutError`` and retry the stalled call with no alarm left."""
 
 
 def _call_with_timeout(thunk, seconds: float):
     """``thunk()``, raising :class:`_CallTimeout` after ``seconds`` (0 = no limit).
 
     stats.nba.com stalls rather than failing on a datacenter IP; one such call must not
-    hang the whole capture run. Needs SIGALRM and the main thread; elsewhere (Windows, a
-    worker thread) the call simply runs unbounded."""
+    hang the whole capture run. SIGALRM interrupts the call on the main thread; elsewhere
+    (Windows, a worker thread) :func:`_call_in_thread` stops waiting for it."""
     import signal
     import threading
 
-    if not seconds or not hasattr(signal, "SIGALRM") or threading.current_thread() is not threading.main_thread():
+    if not seconds:
         return thunk()
+    if not hasattr(signal, "SIGALRM") or threading.current_thread() is not threading.main_thread():
+        return _call_in_thread(thunk, seconds)
 
     def _alarm(*_):
         raise _CallTimeout(f"no answer within {seconds:g}s (SDV_AUTODOC_CALL_TIMEOUT)")
@@ -5317,6 +5319,36 @@ def _call_with_timeout(thunk, seconds: float):
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)
         signal.signal(signal.SIGALRM, old)
+
+
+def _call_in_thread(thunk, seconds: float):
+    """``thunk()`` on a daemon thread, raising :class:`_CallTimeout` if it has not returned in ``seconds`` (> 0).
+
+    The fallback where SIGALRM cannot interrupt the call. Its exception, if any, is re-raised here. A call
+    that times out is not stopped: it keeps running, and its result is dropped."""
+    import threading
+
+    box: list = []
+
+    def run() -> None:
+        try:
+            box.append((True, thunk()))
+        except BaseException as e:  # noqa: BLE001 -- handed back to the caller as is
+            box.append((False, e))
+
+    # ponytail: a stalled call is abandoned, not killed; it holds its thread and socket until it
+    # returns or the process exits, and later calls run beside it (a second request to a host that
+    # is stalling, a ``$call`` input it may still memoize). Fine for one capture run; a subprocess
+    # per call if that bites.
+    worker = threading.Thread(target=run, name="autodoc-call", daemon=True)
+    worker.start()
+    worker.join(seconds)
+    if not box:
+        raise _CallTimeout(f"no answer within {seconds:g}s (SDV_AUTODOC_CALL_TIMEOUT)")
+    ok, value = box[0]
+    if ok:
+        return value
+    raise value
 
 
 def _returns_a_frame(annotation) -> bool:
@@ -5406,7 +5438,8 @@ def refresh_autodoc_schemas() -> int:
                 continue  # not a frame function: never call it blind (it may write files or clear a cache)
             try:
                 df = _call_with_timeout(
-                    lambda: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}), timeout
+                    lambda obj=obj, kwargs=kwargs: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}),
+                    timeout,
                 )
             except (Exception, _CallTimeout) as e:  # noqa: BLE001 -- a live call of any public fn; every skip is reported
                 msg = str(e).splitlines()[0][:120] if str(e) else type(e).__name__
