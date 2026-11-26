@@ -65,8 +65,9 @@ null values and ``_n`` 0.
 **Tiers.** ``war_tier`` places a player on a five-step depth ladder by his ``war_pct`` within the
 league-season (:data:`WAR_TIERS`): the top 5% ``Star`` (``war_pct`` 95 or more), the next 15%
 ``Starter`` (80 to 95), the next 30% ``Rotation`` (50 to 80), the next 30% ``Bench`` (20 to 50) and the
-rest ``Fringe``. The cohort is ``war_pct``'s: every player of the season with possessions, so a
-10-possession call-up counts in the denominator and sits at the bottom. A player with no ``war_pct``
+rest ``Fringe``, each share to within a player at its floors. The cohort is ``war_pct``'s: every
+player of the season with possessions, so a 10-possession call-up counts in the denominator and sits at
+the bottom. A player with no ``war_pct``
 (under :data:`MIN_COHORT_PLAYERS` in the season) has no tier. :func:`roster_tier_shape` gives the
 league's median roster: the median number of players per team in each tier, a player counted on the
 team he played most possessions for (``team_id``).
@@ -156,8 +157,9 @@ PTS_PER_WIN: dict[str, float] = {"nba": 31.56, "wnba": 31.31, "mbb": 38.91, "wbb
 PER_GAME: dict[str, str] = {"pts_pg": "pts", "reb_pg": "reb", "ast_pg": "ast"}
 
 #: The depth ladder, best first: tier -> the lowest ``war_pct`` it takes (a player is in the first
-#: tier he clears). Fixed shares of the league-season (top 5%, then 15%, 30%, 30% and the last 20%),
-#: not fitted: a ladder that reads the same in every league and season.
+#: tier he clears). Fixed floors, not fitted: over a league-season they hold about the top 5%, then 15%,
+#: 30%, 30% and the last 20% (to within a player at each floor; a season of ten players has no Star, its best
+#: ``war_pct`` being 100 * 10 / 11), a ladder that reads the same in every league and season.
 WAR_TIERS: dict[str, float] = {"Star": 95.0, "Starter": 80.0, "Rotation": 50.0, "Bench": 20.0, "Fringe": 0.0}
 
 #: Bootstrap replicates behind ``war_lo`` / ``war_hi``, and the interval's percentiles.
