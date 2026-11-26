@@ -101,10 +101,13 @@ def slug(value: Any) -> str:
 
 
 def _wire(params: dict | None) -> dict[str, Any]:
-    """Query values as the site sends them: ``True`` -> ``"true"`` (in a list too); a list repeats its key."""
+    """Query values as the site sends them: ``True`` -> ``"true"``, ``2026.0`` -> ``2026`` (in a list too); a list
+    repeats its key. A whole float goes through ``int``: the API answers 400 to ``year=2026.0``."""
 
     def one(v: Any) -> Any:
-        return str(v).lower() if isinstance(v, bool) else v
+        if isinstance(v, bool):
+            return str(v).lower()
+        return int(v) if isinstance(v, float) and v.is_integer() else v
 
     return {
         k: ([one(x) for x in v] if isinstance(v, list) else one(v)) for k, v in (params or {}).items() if v is not None

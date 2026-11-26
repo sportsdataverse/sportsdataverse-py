@@ -35,5 +35,3 @@ site's own `Referer`.
 | `glg_schedule_intlm_2026.json` | `/api/glg/{glg_league}/games` | `glg_league="intlm", year=2026` |
 | `glg_standings_intlm_2026.json` | `/api/glg/{glg_league}/standings` | `glg_league="intlm", year=2026` |
 | `wll_schedule_2026.json` | `/api/wll/v1/events` | `year=2026` |
-
-The route catalog, field glossary and probes live in sdv-internal-refs `pll/`.

@@ -175,7 +175,7 @@ def test_get_sends_the_referer_and_returns_stamped_data(monkeypatch):
 
     monkeypatch.setattr(rt._rt, "_get", fake)
     monkeypatch.setattr(rt, "MIN_INTERVAL", 0)
-    out = rt._get(f"{rt.HOST}/api/v4/standings", params={"year": 2026, "champSeries": True})
+    out = rt._get(f"{rt.HOST}/api/v4/standings", params={"year": 2026.0, "champSeries": True})
     assert seen["headers"]["Referer"] == "https://stats.premierlacrosseleague.com/"
     assert "Authorization" not in seen["headers"] and seen["params"] == {"year": 2026, "champSeries": "true"}
     assert out == {"items": [{"id": 1}], "_request": {"year": 2026, "champSeries": "true"}}
