@@ -297,7 +297,7 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 
 ## Python ↔ R parity
 
-Each `sportsdataverse` function and its equivalent in the sister R package, [`wehoop`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
+Each `sportsdataverse` function and its equivalent in the sister R package, [`wehoop`](https://wehoop.sportsdataverse.org). Same-named where possible; the R column links the package's pkgdown reference.
 
 | `sportsdataverse.wbb` (Python) | `wehoop` (R) |
 |---|---|
@@ -400,6 +400,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wbb_groups`](reference/loaders/other#load_wbb_groups) | [`load_wbb_groups`](https://wehoop.sportsdataverse.org/reference/load_wbb_groups.html) |
 | [`load_wbb_officials`](reference/loaders/other#load_wbb_officials) | [`load_wbb_officials`](https://wehoop.sportsdataverse.org/reference/load_wbb_officials.html) |
 | [`load_wbb_pbp`](reference/loaders/other#load_wbb_pbp) | [`load_wbb_pbp`](https://wehoop.sportsdataverse.org/reference/load_wbb_pbp.html) |
+| [`load_wbb_player_aliases`](reference/loaders/player#load_wbb_player_aliases) | [`load_wbb_player_aliases`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_aliases.html) |
 | [`load_wbb_player_boxscore`](reference/loaders/player#load_wbb_player_boxscore) | [`load_wbb_player_box`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_box.html) |
 | [`load_wbb_player_core`](reference/loaders/player#load_wbb_player_core) | [`load_wbb_player_core`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_core.html) |
 | [`load_wbb_player_crosswalk`](reference/loaders/player#load_wbb_player_crosswalk) | [`load_wbb_player_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_crosswalk.html) |
@@ -411,6 +412,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wbb_schedule_crosswalk`](reference/loaders/schedule#load_wbb_schedule_crosswalk) | [`load_wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule_crosswalk.html) |
 | [`load_wbb_shots`](reference/loaders/other#load_wbb_shots) | [`load_wbb_shots`](https://wehoop.sportsdataverse.org/reference/load_wbb_shots.html) |
 | [`load_wbb_standings`](reference/loaders/other#load_wbb_standings) | [`load_wbb_standings`](https://wehoop.sportsdataverse.org/reference/load_wbb_standings.html) |
+| [`load_wbb_team_aliases`](reference/loaders/team#load_wbb_team_aliases) | [`load_wbb_team_aliases`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_aliases.html) |
 | [`load_wbb_team_boxscore`](reference/loaders/team#load_wbb_team_boxscore) | [`load_wbb_team_box`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_box.html) |
 | [`load_wbb_team_crosswalk`](reference/loaders/team#load_wbb_team_crosswalk) | [`load_wbb_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_crosswalk.html) |
 | [`load_wbb_team_group_seasons`](reference/loaders/team#load_wbb_team_group_seasons) | [`load_wbb_team_group_seasons`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_group_seasons.html) |
