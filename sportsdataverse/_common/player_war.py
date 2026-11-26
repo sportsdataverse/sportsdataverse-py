@@ -540,7 +540,9 @@ def war_tiers(war: pl.DataFrame) -> pl.DataFrame:
     """``war`` with ``war_tier``: each player's :data:`WAR_TIERS` step within his season's tier cohort.
 
     The cohort is the season's players with ``poss`` at least :data:`TIER_MIN_POSS_SHARE` of the season's
-    possessions per team (``sum(poss) / 5 / teams`` over ``war``'s own rows, so pass whole league-seasons).
+    possessions per team: :func:`player_war`'s own season count, taken over the stints before each player is
+    put on one team; standalone, ``sum(poss) / 5 / teams`` over ``war``'s rows (so pass whole league-seasons;
+    the two agree unless a team has no player whose main team it was).
     Their ``war`` is ranked within the season (ties averaged) and the percentile
     ``100 * (n + 1 - rank) / (n + 1)`` picks the tier. Under the floor, with a null or non-finite ``war``,
     or in a season whose cohort is under :data:`MIN_COHORT_PLAYERS`, a player has no tier (null).
@@ -565,7 +567,11 @@ def war_tiers(war: pl.DataFrame) -> pl.DataFrame:
             from sportsdataverse.nba.nba_player_war import nba_player_war
             war_tiers(nba_player_war(2026)).group_by("war_tier").len()
     """
-    lg_team_poss = pl.col("poss").sum().over("season") / 5 / pl.col("team_id").n_unique().over("season")
+    lg_team_poss = (
+        pl.col("_lg_poss")
+        if "_lg_poss" in war.columns
+        else pl.col("poss").sum().over("season") / 5 / pl.col("team_id").n_unique().over("season")
+    )
     cohort = war.with_columns(
         pl.when(pl.col("poss") >= TIER_MIN_POSS_SHARE * lg_team_poss).then(pl.col("war")).alias("_tier_war")
     )
