@@ -36,7 +36,7 @@ holds each model's gates, retrain date and cadence. Each booster here ships a
 | `sportsdataverse/cfb/models/wp_naive.ubj` | `model_training/train_wp.py --variant naive` | `05bfcb1641` | no (release asset 2026-06-18) |
 | `sportsdataverse/cfb/models/cfb_cp_model.ubj` | `cpoe/` (`python -m cfb_model_build.cpoe --variant game_state`) | `fbe11c473a` | no |
 | `sportsdataverse/cfb/models/cfb_cp_model_air_yards.ubj` | `cpoe/` (air-yards variant) | `4b34e0e81e` | yes |
-| `sportsdataverse/cfb/models/fd_model.ubj` | `model_training/fourth_down/`; kept by the 2026-holdout rebuild gate (`fourth_down/rebuild_gate.py`, result `models/fourth_down/fd_rebuild.gate.json`, read at `fc8f4ddeb`) | `fbe11c473a` | no |
+| `sportsdataverse/cfb/models/fd_model.ubj` | `model_training/fourth_down/`; kept by the 2026-holdout rebuild gate (`fourth_down/rebuild_gate.py`, result `models/fourth_down/fd_rebuild.gate.json`, cfb-data `895b0e21f`) | `fbe11c473a` | no |
 | `sportsdataverse/cfb/models/fg_model.ubj` | `model_training/train_fg.py` | `05bfcb1641` | no |
 | `sportsdataverse/cfb/models/two_pt_model.ubj` | `model_training/train_two_pt.py` | `05bfcb1641` | no |
 | `sportsdataverse/cfb/models/xpass_model.ubj` | `model_training/train_xpass.py` | `05bfcb1641` | no |
