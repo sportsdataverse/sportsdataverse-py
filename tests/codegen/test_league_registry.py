@@ -47,6 +47,7 @@ def test_registry_sports_and_labels():
     assert by_sport["other"] == {
         "f1": "Formula 1",
         "espn_content": "ESPN content (news)",
+        "espn_fantasy": "ESPN Fantasy",
         "thesportsdb": "TheSportsDB",
         "cricket": "Cricket",
         "lacrosse": "Lacrosse",

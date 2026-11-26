@@ -1,0 +1,44 @@
+[
+  {
+    "abbrev": "FHL 2027",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 59
+    },
+    "display": true,
+    "displayOrder": -1,
+    "endDate": 1846566000000,
+    "gameId": 4,
+    "id": 2027,
+    "name": "Fantasy Hockey 2027",
+    "startDate": 1783407600000
+  },
+  {
+    "abbrev": "FHL 2026",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 193
+    },
+    "display": true,
+    "displayOrder": -1,
+    "endDate": 1783407600000,
+    "gameId": 4,
+    "id": 2026,
+    "name": "Fantasy Hockey 2026",
+    "startDate": 1751958000000
+  },
+  {
+    "abbrev": "FHL 2025",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 197
+    },
+    "display": true,
+    "displayOrder": -1,
+    "endDate": 1751958000000,
+    "gameId": 4,
+    "id": 2025,
+    "name": "Fantasy Hockey 2025",
+    "startDate": 1720681200000
+  }
+]

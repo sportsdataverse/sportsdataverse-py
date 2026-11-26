@@ -1,0 +1,44 @@
+[
+  {
+    "abbrev": "FFL 2026",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 12
+    },
+    "display": true,
+    "displayOrder": 0,
+    "endDate": 1837580400000,
+    "gameId": 1,
+    "id": 2026,
+    "name": "Fantasy Football 2026",
+    "startDate": 1774422000000
+  },
+  {
+    "abbrev": "FFL 2025",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 19
+    },
+    "display": true,
+    "displayOrder": 0,
+    "endDate": 1774422000000,
+    "gameId": 1,
+    "id": 2025,
+    "name": "Fantasy Football 2025",
+    "startDate": 1742972400000
+  },
+  {
+    "abbrev": "FFL 2024",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 19
+    },
+    "display": true,
+    "displayOrder": 0,
+    "endDate": 1742972400000,
+    "gameId": 1,
+    "id": 2024,
+    "name": "Fantasy Football 2024",
+    "startDate": 1711350000000
+  }
+]

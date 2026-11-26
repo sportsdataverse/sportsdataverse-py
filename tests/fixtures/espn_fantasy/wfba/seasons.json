@@ -1,0 +1,44 @@
+[
+  {
+    "abbrev": "WFBA 2026",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 141
+    },
+    "display": true,
+    "displayOrder": 0,
+    "endDate": 1833350400000,
+    "gameId": 5,
+    "id": 2026,
+    "name": "Fantasy Womens Basketball 2026",
+    "startDate": 1770278400000
+  },
+  {
+    "abbrev": "WFBA 2025",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 120
+    },
+    "display": true,
+    "displayOrder": 0,
+    "endDate": 1770278400000,
+    "gameId": 5,
+    "id": 2025,
+    "name": "Fantasy Womens Basketball 2025",
+    "startDate": 1737619200000
+  },
+  {
+    "abbrev": "WFBA 2024",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 130
+    },
+    "display": true,
+    "displayOrder": 0,
+    "endDate": 1737619200000,
+    "gameId": 5,
+    "id": 2024,
+    "name": "Fantasy Womens Basketball 2024",
+    "startDate": 1706083200000
+  }
+]

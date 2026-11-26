@@ -173,6 +173,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 | More sports & sources (Cross-sport providers) | [Yahoo Sports](yahoo/) | `sportsdataverse.providers.yahoo` | Yahoo Sports Shangrila (105) |
 | More sports & sources (Cross-sport providers) | [Fox Sports](fox/) | `sportsdataverse.providers.fox` | Fox Sports API (33) |
 | More sports & sources (Cross-sport providers) | [ESPN content (news)](espn_content/) | `sportsdataverse.providers.espn_content` | ESPN (3) |
+| More sports & sources (Cross-sport providers) | [ESPN Fantasy](espn_fantasy/) | `sportsdataverse.providers.espn_fantasy` | ESPN (16) |
 | More sports & sources (Cross-sport providers) | [TheSportsDB](thesportsdb/) | `sportsdataverse.providers.thesportsdb` | TheSportsDB (12) |
 | More sports & sources (Motorsport) | [Formula 1](f1/) | `sportsdataverse.f1` | Jolpica F1 API (Ergast-compatible) (16): Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour) 15, Hand-written wrappers 1 |
 <!-- END generated: leagues-and-sources -->
