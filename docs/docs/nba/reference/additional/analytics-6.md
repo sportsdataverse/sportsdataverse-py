@@ -376,13 +376,13 @@ One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `hom
 | `pts` | Int64 | Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free throws. |
 | `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
 | `seconds` | Float64 | Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60 x (poss + opp_poss) / 2 / summed seconds. |
-| `season_type` | String | The game's stats.nba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call asked for. Asked for a list, each type's rows add up to that type's season rates; the team page's Playoffs game set reads the playoffs rows. |
+| `season_type` | String | The game's stats.nba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call asked for. Asked for a list, each type's rows add up to that type's season rates. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above. |
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above (or names none, as an empty list). |
 
 **Example**
 

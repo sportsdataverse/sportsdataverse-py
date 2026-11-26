@@ -313,7 +313,7 @@ def nba_team_game_possessions(
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
-            of the four above.
+            of the four above (or names none, as an empty list).
 
     Example:
         Quick start::
@@ -324,6 +324,8 @@ def nba_team_game_possessions(
             games.group_by("team_id").agg(pl.col("pts").sum() * 100 / pl.col("poss").sum())
     """
     types = [season_type] if isinstance(season_type, str) else list(dict.fromkeys(season_type))
+    if not types:
+        raise ValueError("season_type must name at least one type, got an empty list")
     for t in types:
         _check_args(league_id, t)
     seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)

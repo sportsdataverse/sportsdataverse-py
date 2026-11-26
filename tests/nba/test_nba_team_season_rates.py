@@ -472,6 +472,8 @@ def test_wnba_2025_regular_season_and_playoffs_in_one_read(monkeypatch: pytest.M
     assert played.height == 2 * sched.height
     with pytest.raises(ValueError, match="season_type"):
         wnba_team_game_possessions(2025, season_type=["regular-season", "postseason"])
+    with pytest.raises(ValueError, match="at least one"):
+        wnba_team_game_possessions(2025, season_type=[])
 
 
 def test_team_game_possessions_empty_and_missing() -> None:
