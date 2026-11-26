@@ -16,6 +16,12 @@ columns:
 - name: teams
   type: integer
   description: ''
+- name: team_ids
+  type: character
+  description: ''
+- name: conference_id
+  type: character
+  description: ''
 - name: min
   type: double
   description: ''
@@ -56,6 +62,9 @@ columns:
   type: integer
   description: ''
 - name: war_tier
+  type: character
+  description: ''
+- name: war_tier_conf
   type: character
   description: ''
 - name: pts_pg

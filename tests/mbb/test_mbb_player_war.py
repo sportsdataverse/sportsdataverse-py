@@ -190,6 +190,11 @@ def test_mbb_player_war_reads_box_bpm_and_ratings(monkeypatch: pytest.MonkeyPatc
 
     monkeypatch.setattr(war_mod, "mbb_box_bpm", box)
     monkeypatch.setattr(war_mod, "mbb_team_ratings", ratings)
+    monkeypatch.setattr(
+        war_mod,
+        "_conferences",
+        lambda seasons, league: pl.DataFrame(schema={"season": pl.Int64, "team_id": pl.Utf8, "conference_id": pl.Utf8}),
+    )
     monkeypatch.setattr("sportsdataverse.wbb.wbb_loaders.load_wbb_player_boxscore", games)
     # an empty box leaves the stints without game rows: refused, never a silently null interval
     with pytest.raises(ValueError, match="differ from their game rows"):
@@ -250,6 +255,11 @@ def test_the_public_college_path_ships_the_interval(monkeypatch: pytest.MonkeyPa
     games = (_bb("mbb_player_games_2025.parquet"), _bb("mbb_team_games_2025.parquet"))
     monkeypatch.setattr(war_mod, "mbb_box_bpm", lambda seasons, league="mens": stints)
     monkeypatch.setattr(war_mod, "mbb_team_ratings", lambda seasons, league="mens": net)
+    monkeypatch.setattr(
+        war_mod,
+        "_conferences",
+        lambda seasons, league: pl.DataFrame(schema={"season": pl.Int64, "team_id": pl.Utf8, "conference_id": pl.Utf8}),
+    )
     monkeypatch.setattr(war_mod, "load_mbb_player_boxscore", lambda seasons: stints)
     monkeypatch.setattr(war_mod, "_war_stints", lambda box, ratings: (stints, net))
     monkeypatch.setattr(war_mod, "_game_rows", lambda box, ratings: games)
@@ -271,6 +281,11 @@ def test_a_played_row_without_an_athlete_is_dropped_on_both_sides(monkeypatch: p
     monkeypatch.setattr(pvc, "_load_shots", lambda seasons, league: pl.DataFrame())  # no 2014 shots release
     monkeypatch.setattr(bpm_mod, "mbb_team_ratings", lambda seasons, league="mens": ratings)
     monkeypatch.setattr(war_mod, "mbb_team_ratings", lambda seasons, league="mens": ratings)
+    monkeypatch.setattr(
+        war_mod,
+        "_conferences",
+        lambda seasons, league: pl.DataFrame(schema={"season": pl.Int64, "team_id": pl.Utf8, "conference_id": pl.Utf8}),
+    )
     monkeypatch.setattr(war_mod, "load_mbb_player_boxscore", lambda seasons: box)
     agg = pvc.aggregate_player_seasons([2014])
     assert agg["player_id"].null_count() == 0

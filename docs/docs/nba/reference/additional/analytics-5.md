@@ -42,6 +42,7 @@ One row per `(season, player_id)` (stats.nba.com ids, Int64): `player_name`, `te
 | `player_name` | String | Player name, from the player impact release. |
 | `team_id` | Int64 | stats.nba.com team id of the team he played the most possessions for. |
 | `teams` | Int64 | How many teams he played for in the regular season. |
+| `team_ids` | String | Every team he played for that season, comma-separated, most possessions first (the first is team_id); roster_tiers puts him on each. |
 | `min` | Float64 | Regular-season minutes (the player impact release's). |
 | `poss` | Float64 | On-court possessions, offensive plus defensive over 2, counted from the stats.nba.com possessions (every possession row, BB-D3's convention). The minutes basis of vorp and war. |
 | `rating` | Float64 | Points per 100 possessions above a league-average player: the mean of rating_bpm, rating_rapm and rating_boban. |

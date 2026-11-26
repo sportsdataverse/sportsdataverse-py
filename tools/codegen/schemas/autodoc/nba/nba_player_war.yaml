@@ -16,6 +16,9 @@ columns:
 - name: teams
   type: integer
   description: ''
+- name: team_ids
+  type: character
+  description: ''
 - name: min
   type: double
   description: ''

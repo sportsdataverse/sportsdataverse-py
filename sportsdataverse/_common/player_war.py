@@ -71,9 +71,16 @@ possessions per team. WAR counts playing time, so without the floor a deep call-
 and a WAR near 0 would rank above a rotation player with negative WAR and fill the middle tiers. A player
 under the floor has no tier, as does every player of a season whose cohort is under
 :data:`MIN_COHORT_PLAYERS`. The percentile is the ``_pct`` formula, ``100 * (n + 1 - rank) / (n + 1)``
-among the cohort, not ``war_pct`` (which ranks every player). :func:`roster_tier_shape` gives the
-league's median roster: the median number of players per team in each tier, a player counted on the
-team he played most possessions for (``team_id``).
+among the cohort, not ``war_pct`` (which ranks every player). College rows also carry ``war_tier_conf``:
+the same ladder within the league-season's conference (the conference of the team he played most
+possessions for), over the same possession floor.
+
+**Rosters.** ``team_ids`` lists every team a player played for, most possessions first.
+:func:`roster_tiers` puts him on each of them with his full-season tiers, and :func:`roster_tier_shape`
+gives the median roster from those rows: per tier, the median number of players per team, league-wide
+(``scope`` ``league``) and in college per conference (``scope`` ``conference``). A traded player counts
+on every team he played for, so a team's counts add up to every tiered player it used and the league's
+rosters add up to more players than the league has.
 
 **Cohort counts.** :func:`player_war_league_averages` gives the league-average rows of a season, whose
 ``n`` is the number of players each column is ranked among (the ``n`` of the ``_pct`` formula): the
@@ -110,6 +117,7 @@ __all__ = [
     "REPLACEMENT_LEVEL",
     "REPLACEMENT_SHARE",
     "TIER_MIN_POSS_SHARE",
+    "TIER_SHAPE_SCHEMA",
     "WAR_TIERS",
     "box_seasons",
     "player_war",
@@ -119,6 +127,7 @@ __all__ = [
     "replacement_level_by_season",
     "replacement_win_pct",
     "roster_tier_shape",
+    "roster_tiers",
     "season_rows",
     "war_tiers",
 ]
@@ -182,19 +191,25 @@ _INTERVAL = (5.0, 95.0)
 _SEED = 0
 
 
-def player_war_schema(player_dtype: pl.DataType, team_dtype: pl.DataType, sources: list[str]) -> dict[str, pl.DataType]:
+def player_war_schema(
+    player_dtype: pl.DataType, team_dtype: pl.DataType, sources: list[str], *, conferences: bool = False
+) -> dict[str, pl.DataType]:
     """Columns of :func:`player_war` for a league's id dtypes and rating ``sources``.
 
     With one source (college) the per-source ``rating_<s>`` / ``war_<s>`` columns are left out:
-    ``rating`` and ``war`` are that source.
+    ``rating`` and ``war`` are that source. ``conferences`` (college) adds ``conference_id`` and
+    ``war_tier_conf``.
     """
     per = sources if len(sources) > 1 else []
+    conf = {"conference_id": pl.Utf8()} if conferences else {}
     return {
         "season": pl.Int64(),
         "player_id": player_dtype,
         "player_name": pl.Utf8(),
         "team_id": team_dtype,
         "teams": pl.Int64(),
+        "team_ids": pl.Utf8(),
+        **conf,
         "min": pl.Float64(),
         "poss": pl.Float64(),
         "rating": pl.Float64(),
@@ -211,6 +226,7 @@ def player_war_schema(player_dtype: pl.DataType, team_dtype: pl.DataType, source
         "vorp_n": pl.Int64(),
         "war_n": pl.Int64(),
         "war_tier": pl.Utf8(),
+        **({"war_tier_conf": pl.Utf8()} if conferences else {}),
         **{m: pl.Float64() for m in PER_GAME},
         **{f"{m}_rank": pl.Float64() for m in PER_GAME},
         **{f"{m}_pct": pl.Float64() for m in PER_GAME},
@@ -453,6 +469,7 @@ def player_war(
     player_games: pl.DataFrame | None = None,
     n_boot: int = N_BOOT,
     box: pl.DataFrame | None = None,
+    conferences: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
     """WAR and VORP per player-season from rating stints.
 
@@ -471,10 +488,13 @@ def player_war(
         n_boot: Bootstrap replicates behind ``war_lo`` / ``war_hi`` (:func:`war_interval`).
         box: :func:`box_seasons` rows for the per-game columns. Without it they are null (``_n`` 0);
             the ``{lg}_player_war`` functions always pass it.
+        conferences: College only: ``season``, ``team_id`` and ``conference_id`` (Utf8) per team-season.
+            Adds ``conference_id`` (his ``team_id``'s) and ``war_tier_conf`` (:func:`war_tiers`).
 
     Returns:
         :func:`player_war_schema` rows sorted by season and ``war`` (most first). ``team_id`` is
-        the team he played most possessions for and ``teams`` how many he played for. ``war`` and
+        the team he played most possessions for, ``teams`` how many he played for and ``team_ids``
+        their ids, comma-separated, most possessions first. ``war`` and
         ``vorp`` carry ``_rank`` (1 = most), ``_pct`` and ``_n`` (possessions) among every
         player of the season, null under :data:`MIN_COHORT_PLAYERS`; ``war_tier`` is his
         :data:`WAR_TIERS` step in the tier cohort (:func:`war_tiers`; null under its floor); ``war_lo`` / ``war_hi`` are
@@ -483,7 +503,9 @@ def player_war(
         games gate. Stints on a team without ``net`` are dropped.
         Empty input returns that schema with zero rows.
     """
-    schema = player_war_schema(stints.schema["player_id"], stints.schema["team_id"], sources)
+    schema = player_war_schema(
+        stints.schema["player_id"], stints.schema["team_id"], sources, conferences=conferences is not None
+    )
     if stints.height == 0:
         return pl.DataFrame(schema=schema)
     repl, ppw = REPLACEMENT_LEVEL[league], PTS_PER_WIN[league]
@@ -499,6 +521,7 @@ def player_war(
             pl.col("player_name").drop_nulls().first(),
             pl.col("team_id").first(),
             pl.col("team_id").n_unique().cast(pl.Int64).alias("teams"),
+            pl.col("team_id").cast(pl.Utf8).str.join(",").alias("team_ids"),
             pl.col("min").sum(),
             pl.col("poss").sum(),
             pl.col("_lg_poss").first(),
@@ -511,6 +534,12 @@ def player_war(
             *[(pl.col(f"_par_{s}") / 100 / ppw).alias("war" if s == "rating" else f"war_{s}") for s in rated],
         )
     )
+    if conferences is not None:
+        conf = conferences.select("season", "team_id", pl.col("conference_id").cast(pl.Utf8)).unique(
+            ["season", "team_id"]
+        )
+        assert out.schema["team_id"] == conf.schema["team_id"], "team_id dtype differs between WAR and conferences"
+        out = out.join(conf, on=["season", "team_id"], how="left", validate="m:1")
     if team_games is not None and player_games is not None:
         interval = war_interval(stints, net, team_games, player_games, league=league, sources=sources, n_boot=n_boot)
         assert out.schema["player_id"] == interval.schema["player_id"], "player_id dtype differs in the interval"
@@ -545,13 +574,17 @@ def war_tiers(war: pl.DataFrame) -> pl.DataFrame:
     the two agree unless a team has no player whose main team it was).
     Their ``war`` is ranked within the season (ties averaged) and the percentile
     ``100 * (n + 1 - rank) / (n + 1)`` picks the tier. Under the floor, with a null or non-finite ``war``,
-    or in a season whose cohort is under :data:`MIN_COHORT_PLAYERS`, a player has no tier (null).
+    or in a season whose cohort is under :data:`MIN_COHORT_PLAYERS`, a player has no tier (null). With a
+    ``conference_id`` column (college), ``war_tier_conf`` is the same ladder ranked within each
+    ``(season, conference_id)`` over the same floor (null with no conference or a conference cohort under
+    :data:`MIN_COHORT_PLAYERS`).
 
     Args:
         war: :func:`player_war` rows: ``season``, ``team_id``, ``poss`` and ``war``.
 
     Returns:
-        ``war`` with ``war_tier`` (Utf8) added or replaced; nothing else changes.
+        ``war`` with ``war_tier`` (and with a ``conference_id``, ``war_tier_conf``; Utf8) added or replaced;
+        nothing else changes.
 
     Raises:
         polars.exceptions.ColumnNotFoundError: If ``war`` lacks ``season``, ``team_id``, ``poss`` or
@@ -576,18 +609,65 @@ def war_tiers(war: pl.DataFrame) -> pl.DataFrame:
         pl.when(pl.col("poss") >= TIER_MIN_POSS_SHARE * lg_team_poss).then(pl.col("war")).alias("_tier_war")
     )
     ranked = attach_ranks(cohort, ["_tier_war"], min_cohort=MIN_COHORT_PLAYERS, by=("season",))
-    return ranked.with_columns(_war_tier(pl.col("_tier_war_pct"))).drop("_tier_war", "_tier_war_rank", "_tier_war_pct")
+    out = ranked.with_columns(_war_tier(pl.col("_tier_war_pct"))).drop("_tier_war_rank", "_tier_war_pct")
+    if "conference_id" in war.columns:
+        out = attach_ranks(out, ["_tier_war"], min_cohort=MIN_COHORT_PLAYERS, by=("season", "conference_id"))
+        out = out.with_columns(_war_tier(pl.col("_tier_war_pct")).alias("war_tier_conf")).drop(
+            "_tier_war_rank", "_tier_war_pct"
+        )
+    return out.drop("_tier_war")
 
 
-def _team_tier_counts(war: pl.DataFrame) -> pl.DataFrame:
-    """Players per ``(season, team_id, war_tier)``, a zero row for every tier a team has nobody in.
+def roster_tiers(war: pl.DataFrame) -> pl.DataFrame:
+    """Each player on every team he played for (``team_ids``), with his full-season tiers.
 
-    The teams are those with a tiered player that season; a player counts once, on ``team_id``.
+    Args:
+        war: :func:`player_war` rows: ``season``, ``player_id``, ``player_name``, ``team_id``, ``team_ids``,
+            ``poss``, ``war``, ``war_tier`` and, in college, ``conference_id`` / ``war_tier_conf``.
+
+    Returns:
+        One row per ``(season, team_id, player_id)``: ``player_name``, ``main_team`` (Boolean: the team he
+        played most possessions for), ``poss`` and ``war`` (his season's, not the team's share),
+        ``war_tier`` and in college ``conference_id`` (that team's conference, from the players whose main
+        team it is) and ``war_tier_conf``. Sorted by season, team and ``war`` (most first).
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If ``war`` lacks one of those columns.
+
+    See Also:
+        :func:`roster_tier_shape`: the league's median roster from these rows.
     """
-    tiered = war.filter(pl.col("war_tier").is_not_null() & pl.col("team_id").is_not_null())
-    teams = tiered.select("season", "team_id").unique()
+    conf = "conference_id" in war.columns
+    tiers = ["war_tier", *(["war_tier_conf"] if conf else [])]
+    rows = (
+        war.select(
+            "season",
+            "player_id",
+            "player_name",
+            pl.col("team_id").alias("_main"),
+            pl.col("team_ids").str.split(",").alias("team_id"),
+            "poss",
+            "war",
+            *tiers,
+        )
+        .explode("team_id")
+        .drop_nulls("team_id")
+        .with_columns(pl.col("team_id").cast(war.schema["team_id"]))
+        .with_columns((pl.col("team_id") == pl.col("_main")).alias("main_team"))
+        .drop("_main")
+    )
+    if conf:
+        team_conf = war.select("season", "team_id", "conference_id").drop_nulls().unique(["season", "team_id"])
+        rows = rows.join(team_conf, on=["season", "team_id"], how="left", validate="m:1")
+    cols = ["season", "team_id", "player_id", "player_name", "main_team", "poss", "war", "war_tier"]
+    cols += ["conference_id", "war_tier_conf"] if conf else []
+    return rows.select(cols).sort(["season", "team_id", "war"], descending=[False, False, True], nulls_last=True)
+
+
+def _tier_frame() -> pl.DataFrame:
+    """The tiers in order with their percentile bands (``pct_ceiling`` null above the top floor)."""
     floors = list(WAR_TIERS.values())
-    tiers = pl.DataFrame(
+    return pl.DataFrame(
         {
             "war_tier": list(WAR_TIERS),
             "tier_order": list(range(1, len(WAR_TIERS) + 1)),
@@ -596,37 +676,67 @@ def _team_tier_counts(war: pl.DataFrame) -> pl.DataFrame:
         },
         schema={"war_tier": pl.Utf8, "tier_order": pl.Int64, "pct_floor": pl.Float64, "pct_ceiling": pl.Float64},
     )
-    counts = tiered.group_by("season", "team_id", "war_tier").agg(pl.len().cast(pl.Int64).alias("players"))
+
+
+def _team_tier_counts(rows: pl.DataFrame, tier: str = "war_tier", by: tuple[str, ...] = ()) -> pl.DataFrame:
+    """Players per ``(season, *by, team_id, tier)`` of :func:`roster_tiers` rows, zero rows included.
+
+    The teams are those with a player tiered in ``tier`` that season; a traded player counts on each.
+    """
+    keys = ["season", *by, "team_id"]
+    tiered = rows.filter(pl.col(tier).is_not_null() & pl.all_horizontal(pl.col(k).is_not_null() for k in keys))
+    counts = tiered.group_by(*keys, pl.col(tier).alias("war_tier")).agg(pl.len().cast(pl.Int64).alias("players"))
     return (
-        teams.join(tiers, how="cross")
-        .join(counts, on=["season", "team_id", "war_tier"], how="left")
+        tiered.select(keys)
+        .unique()
+        .join(_tier_frame(), how="cross")
+        .join(counts, on=[*keys, "war_tier"], how="left")
         .with_columns(pl.col("players").fill_null(0))
     )
 
 
-def roster_tier_shape(war: pl.DataFrame) -> pl.DataFrame:
-    """The league's median roster on the :data:`WAR_TIERS` ladder: one row per season and tier.
+#: :func:`roster_tier_shape`'s columns.
+TIER_SHAPE_SCHEMA: dict[str, pl.DataType] = {
+    "season": pl.Int64(),
+    "scope": pl.Utf8(),
+    "conference_id": pl.Utf8(),
+    "war_tier": pl.Utf8(),
+    "tier_order": pl.Int64(),
+    "pct_floor": pl.Float64(),
+    "pct_ceiling": pl.Float64(),
+    "players_median": pl.Float64(),
+    "players_mean": pl.Float64(),
+    "teams": pl.Int64(),
+}
 
-    Each team's count of players in each tier (zero when it has none, a player counted on the team
-    he played most possessions for), then the median over the season's teams. The medians of the
-    five tiers need not add up to the median roster.
+
+def roster_tier_shape(war: pl.DataFrame) -> pl.DataFrame:
+    """The median roster on the :data:`WAR_TIERS` ladder: one row per season, scope and tier.
+
+    From :func:`roster_tiers`: each team's count of players in each tier (zero when it has none; a traded
+    player counts on every team he played for, with his full-season tier), then the median over the teams.
+    ``scope`` ``league`` is every team of the league-season by ``war_tier`` (``conference_id`` null);
+    ``scope`` ``conference`` (college) is each conference's teams by ``war_tier_conf``. The medians of the
+    five tiers need not add up to the median roster, and because a traded player is on two rosters the
+    means add up to the average roster of players used, more than the league's players over its teams.
 
     Args:
         war: :func:`player_war` rows (any seasons of one league), with ``war_tier``.
 
     Returns:
-        ``season`` (Int64), ``war_tier`` (Utf8), ``tier_order`` (Int64, 1 = ``Star``), ``pct_floor`` /
-        ``pct_ceiling`` (Float64: the tier's band of the tier-cohort WAR percentile, floor inclusive,
-        ceiling exclusive, null ceiling for ``Star``; :data:`WAR_TIERS`), ``players_median`` (Float64:
-        the median over teams of the players in that tier), ``players_mean`` (Float64) and ``teams``
-        (Int64: the teams with a tiered player). Sorted by season and tier. An input with no tiered
-        player returns that schema with zero rows.
+        :data:`TIER_SHAPE_SCHEMA` rows: ``season``, ``scope``, ``conference_id`` (Utf8), ``war_tier``,
+        ``tier_order`` (1 = ``Star``), ``pct_floor`` / ``pct_ceiling`` (the tier's band of the tier-cohort
+        WAR percentile, floor inclusive, ceiling exclusive, null ceiling for ``Star``; :data:`WAR_TIERS`),
+        ``players_median`` (the median over teams of the players in that tier), ``players_mean`` and
+        ``teams`` (the teams with a tiered player in that scope). Sorted by season, scope, conference and
+        tier. An input with no tiered player returns that schema with zero rows.
 
     Raises:
-        polars.exceptions.ColumnNotFoundError: If ``war`` lacks ``season``, ``team_id`` or ``war_tier``.
+        polars.exceptions.ColumnNotFoundError: If ``war`` lacks a :func:`roster_tiers` column.
 
     See Also:
         :func:`war_tiers`: the tier cohort and the cut points behind ``war_tier``.
+        :func:`roster_tiers`: the team rows the medians are over.
 
     Example:
         Quick start::
@@ -635,16 +745,27 @@ def roster_tier_shape(war: pl.DataFrame) -> pl.DataFrame:
             from sportsdataverse.nba.nba_player_war import nba_player_war
             roster_tier_shape(nba_player_war(2026))
     """
-    return (
-        _team_tier_counts(war)
-        .group_by("season", "war_tier", "tier_order", "pct_floor", "pct_ceiling")
-        .agg(
-            pl.col("players").median().cast(pl.Float64).alias("players_median"),
-            pl.col("players").mean().cast(pl.Float64).alias("players_mean"),
-            pl.len().cast(pl.Int64).alias("teams"),
+    rows = roster_tiers(war)
+    scopes: list[tuple[str, str, tuple[str, ...]]] = [("league", "war_tier", ())]
+    if "war_tier_conf" in rows.columns:
+        scopes.append(("conference", "war_tier_conf", ("conference_id",)))
+    out = []
+    for scope, tier, by in scopes:
+        shape = (
+            _team_tier_counts(rows, tier, by)
+            .group_by("season", *by, "war_tier", "tier_order", "pct_floor", "pct_ceiling")
+            .agg(
+                pl.col("players").median().cast(pl.Float64).alias("players_median"),
+                pl.col("players").mean().cast(pl.Float64).alias("players_mean"),
+                pl.len().cast(pl.Int64).alias("teams"),
+            )
+            .with_columns(pl.lit(scope).alias("scope"))
         )
-        .with_columns(pl.col("season").cast(pl.Int64))
-        .sort("season", "tier_order")
+        if not by:
+            shape = shape.with_columns(pl.lit(None, pl.Utf8).alias("conference_id"))
+        out.append(shape.select(list(TIER_SHAPE_SCHEMA)).cast(TIER_SHAPE_SCHEMA))
+    return pl.concat(out).sort(
+        "season", "scope", "conference_id", "tier_order", descending=[False, True, False, False], nulls_last=False
     )
 
 

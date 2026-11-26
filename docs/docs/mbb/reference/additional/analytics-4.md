@@ -31,7 +31,7 @@ level and points per win are fitted per league
 
 **Returns**
 
-One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10 or more games in `~sportsdataverse.mbb.mbb_team_ratings.mbb_team_ratings`, box BPM's own centring set, so a season is empty until its teams reach 10 games: `player_name`, `team_id` (the team he played most possessions for), `teams`, `min`, `poss` (minutes / 40 * the team's adjusted tempo), `rating` (anchored box BPM, per 100), `vorp` and `war` with `war_lo` / `war_hi` (a nominal 90% interval from a bootstrap over each team-season's games: the sampling uncertainty of the team side and the playing time, not of box BPM itself), with `_rank` (1 = most), `_pct` and `_n` (possessions) for `vorp` and `war` among every player of the season. Sorted by season and `war`. Empty input returns that schema with zero rows.
+One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10 or more games in `~sportsdataverse.mbb.mbb_team_ratings.mbb_team_ratings`, box BPM's own centring set, so a season is empty until its teams reach 10 games: `player_name`, `team_id` (the team he played most possessions for), `teams`, `team_ids`, `conference_id` (`team_id`'s, from the schedule release), `min`, `poss` (minutes / 40 * the team's adjusted tempo), `rating` (anchored box BPM, per 100), `vorp` and `war` with `war_lo` / `war_hi` (a nominal 90% interval from a bootstrap over each team-season's games: the sampling uncertainty of the team side and the playing time, not of box BPM itself), with `_rank` (1 = most), `_pct` and `_n` (possessions) for `vorp` and `war` among every player of the season, and `war_tier` (across Division I) and `war_tier_conf` (within his conference). Sorted by season and `war`. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -40,6 +40,8 @@ One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10
 | `player_name` | String | Player name, from the box score. |
 | `team_id` | String | ESPN team id of the Division I team he played the most possessions for. |
 | `teams` | Int64 | How many Division I teams he played for. |
+| `team_ids` | String | Every team he played for that season, comma-separated, most possessions first (the first is team_id); roster_tiers puts him on each. |
+| `conference_id` | String | ESPN conference id of team_id that season (college_teams over the schedule release); null for a team the schedule gives no Division I conference. |
 | `min` | Float64 | Minutes in the season's box scores. |
 | `poss` | Float64 | Possessions: minutes / 40 * the team's adjusted tempo (mbb_team_ratings adj_tempo, possessions per 40 minutes). College has no published on-court possessions for every game. The minutes basis of vorp and war. |
 | `rating` | Float64 | Points per 100 possessions above an average Division I player: box BPM (mbb_box_bpm, model 1 of the player-value spine), re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted mean is 0. |
@@ -54,6 +56,7 @@ One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10
 | `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
 | `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
 | `war_tier` | String | Depth-ladder tier by WAR percentile within the season's tier cohort, the players with on-court possessions of at least a tenth of the season's possessions per team (TIER_MIN_POSS_SHARE): Star (95 or more), Starter (80 to under 95), Rotation (50 to under 80), Bench (20 to under 50), Fringe (under 20), about the top 5%, then 15%, 30%, 30% and 20%, to within a player at each floor. The percentile is 100 * (n + 1 - rank) / (n + 1) among the cohort, not war_pct. Null under the possession floor (a call-up who barely played) and in a season whose cohort is under ten players. |
+| `war_tier_conf` | String | war_tier's ladder within the season's conference (his team_id's), over the same possession floor: Star (95 or more), Starter (80 to under 95), Rotation (50 to under 80), Bench (20 to under 50), Fringe (under 20). Null under the floor, with no conference, or in a conference whose cohort is under ten players. |
 | `pts_pg` | Float64 | Points per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
 | `reb_pg` | Float64 | Rebounds per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
 | `ast_pg` | Float64 | Assists per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
