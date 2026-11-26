@@ -48566,6 +48566,22 @@ load_nhl_groups:
   league: League code of the table ("nhl"); the prefix of every group_id in it.
   level: 'Hierarchy level of the group: "league", "subdivision", "conference" or "division".'
   notes: 'Builder notes on the group: the lineage decisions behind its group_id and any source caveats.'
+load_nhl_pregame_snapshots:
+  season: "NHL season, the ENDING year (2027 = 2026-27)."
+  game_date: "ET game date (YYYY-MM-DD) of the game the state belongs to."
+  game_id: "NHL game id, bridged from the ESPN event by ET date and both team abbreviations; null when the bridge fails."
+  espn_event_id: "ESPN event id of the game."
+  start_time_utc: "Scheduled puck drop (UTC) as ESPN lists it; subtract a lead (e.g. 3 hours) to get a decision time."
+  team_id: "NHL team id of the team the state belongs to."
+  team_abbr: "NHL team abbreviation (NJD, TBL, SJS, LAK where ESPN writes NJ, TB, SJ, LA)."
+  kind: "'probable_goalie' (the listed starting goalie) or 'injury' (a player on the ESPN injury list)."
+  player_id: "NHL player id, matched by folded name against the season roster, then any season's when the name is unique league-wide; null when ambiguous or unknown."
+  espn_athlete_id: "ESPN athlete id; always present, also where player_id is null."
+  player_name: "Player name as ESPN lists it."
+  status: "For a goalie, ESPN's 'Expected' or 'Confirmed'; for an injury, ESPN's status ('Out', 'Day-To-Day', 'Injured Reserve', 'Suspension', ...)."
+  valid_from: "First capture (UTC) that showed this state; the state was not known before it."
+  valid_to: "First capture (UTC) that no longer showed this state; null while it is still current. The interval is half-open: valid_from <= t < valid_to."
+  source: "'espn_scoreboard' (probable goalies) or 'espn_injuries' (the league injury list)."
 load_nhl_penalties:
   committedByPlayer.firstName.cs: Alternate given name for the penalized player under the NHL feed's Czech key. Verified against
     the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei),
