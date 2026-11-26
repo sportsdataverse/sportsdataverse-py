@@ -37,12 +37,14 @@ test reads its position in that same ordering.
 
 Differs from cfbseedR 0.3.0's selection rule (`autobid`) in one place:
 cfbseedR tests Notre Dame's committee `rank` only (no bid without
-`rankings`). Neither engine reads `postseason_eligible` when seeding,
-so an ineligible team can take a bid. Both match Notre Dame as `"Notre Dame"` or `"87"`, and cfbseedR's
+`rankings`). Both match Notre Dame as `"Notre Dame"` or `"87"`, and cfbseedR's
 `cfb_standings()` keys the rule by a `season`-keyed input as
 `cfb_standings` does here; its
 `cfb_simulations()` takes an explicit `autobid` (default `"2026"`)
 where `sportsdataverse.cfb.cfb_simulations` follows the season.
+
+Neither engine reads `postseason_eligible` when seeding, so an
+ineligible team can still take the G6, Notre Dame or an at-large bid.
 
 Called on its own, this function cannot see a season: pass `season=`
 for standings of a pre-2026 season (`cfb_standings(...,

@@ -102,15 +102,16 @@ tiebreak <- rbind(
 )
 
 # CFP selection: 16 ranked teams. P4 champions T01 (SEC), T02 (Big Ten), T06
-# (ACC) and T14 (Big 12, ranked outside the top 12); the best G6 team is T10,
-# a Mountain West non-champion, ranked above the Sun Belt champion T13 (the MAC
-# champion T16 ranks behind both); Notre Dame 12th. The 2026 rule's G6 bid goes
-# to T10 (already in the field), so T13 misses; the 2025 rule's goes to T13.
+# (ACC) and T14 (Big 12, ranked outside the top 12); the best G6 team is T13,
+# a Mountain West non-champion ranked outside the top 12, above the Sun Belt
+# champion T15 and the MAC champion T16; Notre Dame 12th. The 2026 G6 bid goes
+# to T13 and the 2025 one to T15, both from outside the at-large cutoff, so
+# removing the bid or requiring a champion changes the 2026 field.
 conf <- c("SEC", "Big Ten", "Big Ten", "Other", "Big 12", "ACC", "SEC", "Other",
-          "Other", "Mountain West", "Other", "FBS Independents", "Sun Belt", "Big 12", "Other", "MAC")
+          "Other", "Other", "Other", "FBS Independents", "Mountain West", "Big 12", "Sun Belt", "MAC")
 seed_st <- data.frame(
   sim = 1, team = c(sprintf("T%02d", 1:11), "Notre Dame", sprintf("T%02d", 13:16)),
-  conference = conf, conf_champ = seq_len(16) %in% c(1, 2, 6, 13, 14, 16),
+  conference = conf, conf_champ = seq_len(16) %in% c(1, 2, 6, 14, 15, 16),
   win_pct = 1 - (1:16) / 100, sov = 0.5, sos = 0.5, pd = 100 - (1:16)
 )
 seed_rank <- data.frame(team = seed_st$team, rank = 1:16)
