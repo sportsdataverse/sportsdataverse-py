@@ -19,8 +19,13 @@ Stages:
   player-grouped 5-fold CV error of :func:`~sportsdataverse.nba.nba_spm.train_spm` (minute-weighted) at
   every :data:`SPM_ALPHAS` point, then prints the pooled pick and writes ``spm_cv.parquet``, which
   ``tests/fixtures/bb_adj_rapm_penalty`` commits so a test re-derives
-  :data:`~sportsdataverse.nba.nba_spm.SPM_ALPHA`. Run it before ``curves``: the prior is
-  ``train_spm`` at its defaults.
+  :data:`~sportsdataverse.nba.nba_spm.SPM_ALPHA_WEIGHTED`. Run it before ``curves``: the ``weighted``
+  prior rule is ``train_spm(..., weight="min", alpha=SPM_ALPHA_WEIGHTED)``.
+
+The minute-weighted stages fit an UNSHIPPED alternative (2026-11-26): ``train_spm``'s default is the
+equal-weight fit at ``SPM_ALPHA`` 100 with ``ADJ_RAPM_PRIOR_SCALE`` 2, the published configuration (the
+``equal`` prior rule). The weighted rule's constants are ``SPM_ALPHA_WEIGHTED`` and
+``ADJ_RAPM_PRIOR_SCALE_WEIGHTED``; it fails the NBA producer's ``r_rapm_adj_min`` publish floor.
 * ``curves`` (network: the possessions / schedule release assets; the leaguegamelog captures of the
   -raw stores, a local checkout or an ``http(s)://`` base) writes one ``.npz`` per league and season
   (regular season): the grouped-CV SSE per fold, ``k`` and grid point, the leave-one-possession-out
@@ -61,11 +66,11 @@ from fit_rapm_penalty import FOLDS, GRID, SEASON_TYPES, _rows  # noqa: E402
 
 from sportsdataverse.nba import box_features, nba_box_logs, nba_raw_store_season_frame, nba_spm, train_spm  # noqa: E402
 from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design, nba_rapm  # noqa: E402
-from sportsdataverse.nba.nba_spm import SPM_ALPHA  # noqa: E402
+from sportsdataverse.nba.nba_spm import SPM_ALPHA, SPM_ALPHA_WEIGHTED  # noqa: E402
 
 #: Prior scales scored (``k = 1``: the prior as fit; ``k = 0``: no prior, plain RAPM).
 PRIOR_SCALES = (0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0)
-#: The scale frozen in ``ADJ_RAPM_PRIOR_SCALE`` (both leagues): where next-season R^2 and Spearman peak and
+#: The scale frozen in ``ADJ_RAPM_PRIOR_SCALE_WEIGHTED`` (both leagues; the weighted alternative): where next-season R^2 and Spearman peak and
 #: held-out game error is at or near its minimum (see the report). 2 for the equal-weight SPM prior (#1150).
 CHOSEN_SCALE = 1.5
 #: league -> (season end years, training end years, league id, year-over-year possession floor,
@@ -78,13 +83,13 @@ LEAGUES = {
 #: ``train_spm`` penalties the ``spm`` stage scores (raw per-100 features, minute weights at mean 1).
 SPM_ALPHAS = (0.0, 0.1, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0)
 SPM_FOLDS = 5
-#: ``train_spm`` keywords of the prior ``curves`` chains: ``weighted`` is the shipped default; ``equal`` is the
+#: ``train_spm`` keywords of the prior ``curves`` chains: ``weighted`` is the unshipped alternative; ``equal`` is the
 #: equal-weight alpha-100 fit before minute weighting, run into a second OUT for ``report --baseline``. ``curves``
 #: records the rule it ran in ``OUT/curves_config.json`` and refuses to resume an OUT written under another one (or an
 #: unstamped OUT from before the stamp: rerun into a fresh OUT, or write the stamp by hand once the rule is confirmed).
 PRIOR_RULES: dict[str, dict] = {
-    "weighted": {"weight": "min", "alpha": SPM_ALPHA},
-    "equal": {"weight": None, "alpha": 100.0},
+    "weighted": {"weight": "min", "alpha": SPM_ALPHA_WEIGHTED},
+    "equal": {"weight": None, "alpha": SPM_ALPHA},
 }
 #: The prior scale the ``equal`` rule shipped with (#1150), the baseline ``report --baseline`` pairs against.
 BASELINE_SCALE = 2.0
@@ -287,7 +292,7 @@ def spm_cv(rows: pl.DataFrame, alphas=SPM_ALPHAS) -> np.ndarray:
         train, test = rows[tr], rows[te]
         w = (test["min"] / train["min"].mean()).to_numpy()
         for k, a in enumerate(alphas):
-            pred = nba_spm(test, train_spm(train, train.select("player_id", "o_rapm", "d_rapm"), alpha=a))
+            pred = nba_spm(test, train_spm(train, train.select("player_id", "o_rapm", "d_rapm"), weight="min", alpha=a))
             assert (pred["player_id"] == test["player_id"]).all()
             err = (test["o_rapm"] - pred["ospm"]) ** 2 + (test["d_rapm"] - pred["dspm"]) ** 2
             sse[k] += float((w * err.to_numpy()).sum())

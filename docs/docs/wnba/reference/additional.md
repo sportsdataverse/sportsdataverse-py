@@ -134,7 +134,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_player_factor_rapm](additional/analytics-2.md#wnba_player_factor_rapm) | WNBA four-factor RAPM split (league_id='10'). See sportsdataverse.nba.nba_player_factor_rapm.nba_player_factor_rapm. |
 | [wnba_player_game_expected_box](additional/analytics-2.md#wnba_player_game_expected_box) | WNBA points, rebounds and assists per player-game against his season, per minute and usage-adjusted. |
 | [wnba_player_on_off](additional/analytics-2.md#wnba_player_on_off) | WNBA player on/off (league_id='10'). See sportsdataverse.nba.nba_player_on_off.nba_player_on_off. |
-| [wnba_player_props](additional/analytics-2.md#wnba_player_props) | WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props. |
+| [wnba_player_props](additional/analytics-3.md#wnba_player_props) | WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props. |
 | [wnba_player_season_box_rates](additional/analytics-3.md#wnba_player_season_box_rates) | WNBA per-36 points, rebounds and assists per player-season, ranked, with the season usage. |
 | [wnba_player_shot_zones](additional/analytics-3.md#wnba_player_shot_zones) | WNBA season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3 (league_id='10'). See … |
 | [wnba_player_war](additional/analytics-3.md#wnba_player_war) | WNBA WAR and VORP per player-season from our BPM, RAPM and BOBAN (league_id='10'). See sportsdataverse.nba.nba_player_war.nba_player_war. |
@@ -148,8 +148,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wnba_season_standings](additional/analytics-3.md#wnba_season_standings) | WNBA standings with the WNBA tiebreakers (league_id='10'). See sportsdataverse.nba.nba_season_rules.nba_season_standings. |
 | [wnba_shot_value](additional/analytics-3.md#wnba_shot_value) | WNBA one-call shot-value spine (`league_id="10"`). |
 | [wnba_situational_lineup](additional/analytics-3.md#wnba_situational_lineup) | WNBA five-man unit splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_lineup. |
-| [wnba_situational_player](additional/analytics-3.md#wnba_situational_player) | WNBA player on-floor splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_player. |
-| [wnba_situational_team](additional/analytics-3.md#wnba_situational_team) | WNBA team splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_team. |
+| [wnba_situational_player](additional/analytics-4.md#wnba_situational_player) | WNBA player on-floor splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_player. |
+| [wnba_situational_team](additional/analytics-4.md#wnba_situational_team) | WNBA team splits by situation (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_team. |
 | [wnba_situational_team_games](additional/analytics-4.md#wnba_situational_team_games) | WNBA team splits by situation, one game at a time (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_team_games. |
 | [wnba_team_clutch](additional/analytics-4.md#wnba_team_clutch) | WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch. |
 | [wnba_team_game_four_factors](additional/analytics-4.md#wnba_team_game_four_factors) | WNBA per team and game four factors in points against the league average (league_id='10'). See … |

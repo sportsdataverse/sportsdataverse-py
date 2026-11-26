@@ -499,36 +499,3 @@ One row per `(season, team_id, player_id)`: `games` on the floor and `team_games
 | `off_rtg_diff_n` | Int64 | Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n. |
 | `def_rtg_diff_n` | Int64 | Sample size of def_rtg_diff: the smaller of def_rtg_on_n and def_rtg_off_n. |
 | `net_rtg_diff_n` | Int64 | Sample size of net_rtg_diff: the smaller of net_rtg_on_n and net_rtg_off_n. |
-
-### wnba_player_props {#wnba_player_props}
-
-`wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '10', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  |  |
-| `game_id` | `str` |  |  |
-| `home_team_id` | `str` |  |  |
-| `away_team_id` | `str` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `as_of_date` | `Union[date, None]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj`. `team_id` is his team in his latest game before the cut with positive minutes, exhibition (All-Star) games left out, so a traded player projects for his new team. The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the minutes logged for the team by the players it now projects (a traded player's minutes stay with his latest team), counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | String | ESPN athlete id (Utf8). |
-| `team_id` | String | ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team. |
-| `stat_pts_exp` | Float64 | Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor. |
-| `stat_reb_exp` | Float64 | Expected rebounds if he plays, on the same basis. |
-| `stat_ast_exp` | Float64 | Expected assists if he plays, on the same basis. |
-| `stat_fg3m_exp` | Float64 | Expected made threes if he plays, on the same basis. |
-| `minutes_exp` | Float64 | Expected minutes: the player's minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 200; a team's rows sum to 200. The stat_*_exp lines assume the player plays; this does not. |
-| `pace_proj` | Float64 | Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet. |

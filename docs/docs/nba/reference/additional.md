@@ -239,7 +239,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [shot_coordinates](additional/models-and-calculators-4.md#shot_coordinates) | Shot locations in the court frame the Game on Paper hex chart uses. |
 | [team_game_rates](additional/models-and-calculators-4.md#team_game_rates) | Four factors, possessions, ratings and pace for both teams of one game. |
 | [train_box_prior](additional/models-and-calculators-4.md#train_box_prior) | Possession-weighted ridge of the career target on the box-prior features, cross-fit by player. |
-| [train_spm](additional/models-and-calculators-4.md#train_spm) | Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions), weighted by minutes. |
+| [train_spm](additional/models-and-calculators-4.md#train_spm) | Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions). |
 | [validate_model](additional/models-and-calculators-4.md#validate_model) | Run the selected oracles and assemble a `ValidationReport`. |
 | [walk_forward](additional/models-and-calculators-4.md#walk_forward) | Oracle 6: time-ordered "predict tomorrow" retrodiction. |
 | [win_prob_from_margin](additional/models-and-calculators-4.md#win_prob_from_margin) | Home win probability from an expected margin (normal-CDF closed form). |
@@ -343,7 +343,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_tracking_touch_value](additional/analytics-8.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
 | [nbadraft_mock_draft](additional/analytics-8.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |
 | [player_play_context](additional/analytics-8.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
-| [player_rates](additional/analytics-8.md#player_rates) | Per-player per-minute rate stats from box logs. |
+| [player_rates](additional/analytics-8.md#player_rates) | Per-player per-minute rate stats from box logs, shrunk toward a tier prior in the NBA. |
 | [players_on_court_from_pbp](additional/analytics-8.md#players_on_court_from_pbp) | Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters. |
 | [players_on_court_from_quarter_boxscores](additional/analytics-8.md#players_on_court_from_quarter_boxscores) | Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible. |
 | [players_on_court_from_rotation](additional/analytics-8.md#players_on_court_from_rotation) | Reconstruct the 5-on-5 on-court lineup via the rotation (gamerotation) algorithm. |

@@ -12364,8 +12364,8 @@
   group: props-minutes-coldstart
   finding: props-team-minutes
   file: sportsdataverse/nba/nba_player_props.py
-  snippet: 'rates = player_rates(logs.sort("game_date", "game_id"))'
-  mutant: 'rates = player_rates(logs)'
+  snippet: 'rates = player_rates(logs.sort("game_date", "game_id"), prior_logs=prior, league_id=league_id)'
+  mutant: 'rates = player_rates(logs, prior_logs=prior, league_id=league_id)'
   test: tests/nba/test_nba_player_props_team_minutes.py -k traded
   expected: kill
   note: The release logs come newest first, so a traded player would project for his first team.
@@ -12895,6 +12895,94 @@
   test: tests/nba/test_nba_team_season_rates.py::test_wnba_2025_regular_season_and_playoffs_in_one_read
   expected: kill
   note: Every asked type would carry the first type's games, so the playoffs rows would be the regular season again.
+# --- NBA props rate prior: per-minute rates shrunk toward a minutes-and-role tier ---------------------
+# Killers: tests/nba/test_nba_player_props_rate_prior.py on the committed real Boston / New York 2024-25 and
+# early 2025-26 release rows, against a plain-Python oracle of the tiers and pooled rates.
+- id: nba-props-rate-prior-k-zero
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        ks = float(k.get(s, 0.0))'
+  mutant: '        ks = 0.0'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k "formula or short_samples or previous_regular"
+  expected: kill
+  note: The shrinkage off -- every rate is the raw rate again, including a two-game player's.
+- id: nba-props-rate-prior-no-starter-split
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '(starter_share >= 0.5)'
+  mutant: '(starter_share >= 2.0)'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k formula
+  expected: kill
+  note: Starters and bench players of the same minutes would pool into one tier.
+- id: nba-props-rate-prior-ignores-last-season
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: 'frames = {"box_logs": df} if prior_logs is None else {"box_logs": df, "prior_logs": _played(prior_logs)}'
+  mutant: 'frames = {"box_logs": df}'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k formula
+  expected: kill
+  note: The tier prior would pool only this season's few games, so opening night has no prior.
+- id: nba-props-rate-prior-pools-playoffs
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '_load_player_logs(season - 1, league_id).filter(pl.col("season_type") == 2)'
+  mutant: '_load_player_logs(season - 1, league_id)'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k previous_regular
+  expected: kill
+  note: Last season's playoff games would enter the tier prior; the fit and the 2021-22 test used the regular season.
+- id: nba-props-rate-prior-prior-uncut
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        prior = prior.filter(pl.col("game_date") < as_of_date)'
+  mutant: '        prior = prior'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: The prior frame is cut at the as-of date too; the as-of corpus serves the same season as "last season", so uncut, the target game's own line reaches the tier prior (own-line probe red).
+
+# --- NBA props recent-window mixture: (1 - w) F(season line) + w F(last-10 line) --------------------------
+# Killers: tests/nba/test_nba_player_props_recent_mixture.py on the committed real Boston / New York 2023-24 and
+# 2024-25 release rows (plain-Python oracle, and a paired-CRPS gate on the rows with a positive weight).
+- id: nba-props-recent-weight-zero
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '.then(w).otherwise(0.0).alias("recent_weight")'
+  mutant: '.then(0.0).otherwise(0.0).alias("recent_weight")'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k "oracle or beats"
+  expected: kill
+  note: The mixture off -- every player prices from his season line alone, however far his role has moved.
+- id: nba-props-recent-window-ignored
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: 'own = df.sort(sort).group_by("player_id", maintain_order=True).tail(recent_games)'
+  mutant: 'own = df'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k "oracle or beats"
+  expected: kill
+  note: The "recent" line would be the season line again, so the mixture could not move the price.
+- id: nba-props-recent-mixture-single-sd-law
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        law = (mix["pts_sd_a"], mix["pts_sd_b"])'
+  mutant: '        law = (c.pts_sd_a, c.pts_sd_b)'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k weighted_components
+  expected: kill
+  note: The components would keep the single points SD law, the width that failed E2's coverage rule.
+- id: nba-props-recent-cutoff-at-ten
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: 'pl.when(pl.col("games") > n)'
+  mutant: 'pl.when(pl.col("games") >= n)'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k eleventh
+  expected: kill
+  note: At 10 earlier games the windows coincide; a weight there would only swap in the mixture's SD law.
 - id: bb-war-tier-counts-zero-teams
   group: bb-war-tier
   finding: bb-g61-depth-ladder
