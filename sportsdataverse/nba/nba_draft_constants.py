@@ -405,6 +405,16 @@ COMBINE_FEATURES: list[str] = [
 ]
 
 
+# The combine wrappers' names for the measurements ``COMBINE_FEATURES`` calls otherwise.
+_WRAPPER_RENAMES: dict[str, str] = {
+    "lane_agility_time": "lane_agility",
+    "standing_vertical_leap": "standing_vertical",
+    "max_vertical_leap": "max_vertical",
+    "fifteen_corner_left_pct": "spot_fifteen_corner_left_pct",
+    "off_drib_fifteen_top_key_pct": "offdrib_fifteen_top_pct",
+}
+
+
 def _assert_utf8_player_id(df: pl.DataFrame, name: str) -> None:
     if "player_id" in df.columns and df.schema["player_id"] != pl.Utf8:
         raise ValueError(f"{name}.player_id must be Utf8, got {df.schema['player_id']}")
@@ -420,12 +430,14 @@ def build_combine_features(
 ) -> pl.DataFrame:
     """Join the four combine frames into one per-prospect feature vector.
 
-    Outer-joins ``anthro``/``drills``/``spot``/``nonstat`` on ``player_id`` (+
+    Renames the wrappers' measurement columns to :data:`COMBINE_FEATURES` names
+    (``lane_agility_time`` -> ``lane_agility``, ...), keeps only those and the keys,
+    left-joins ``drills``/``spot``/``nonstat`` onto ``anthro`` on ``player_id`` (+
     ``draft_year`` when present), asserts ``player_id`` is ``Utf8`` on every
-    input, derives ``bmi`` and ``wingspan_diff``, and imputes missing drill/
-    shooting measurements with ``0.0`` (a neutral, documented placeholder —
-    the bundled draft artifact's ``feature_median`` supersedes this at score
-    time via ``nba_draft_model``'s ``fill_null``).
+    input, casts every measurement to ``Float64`` (some seasons send numbers as
+    text) and derives ``bmi`` and ``wingspan_diff``. A missing measurement stays
+    null: ``nba_draft_model`` imputes it with the bundled artifact's
+    training-class ``feature_median``, the same imputation the model was fit on.
 
     Args:
         anthro: ``nba_stats_draftcombineplayeranthro``-shaped frame.
@@ -462,10 +474,19 @@ def build_combine_features(
         return pl.DataFrame(schema=schema)
 
     join_keys = ["player_id"] + (["draft_year"] if "draft_year" in anthro.columns else [])
-    joined = anthro
+
+    def measurements(frame: pl.DataFrame) -> pl.DataFrame:
+        # Every wrapper also carries first_name/last_name/position...; keep only keys and features.
+        frame = frame.rename(
+            {k: v for k, v in _WRAPPER_RENAMES.items() if k in frame.columns and v not in frame.columns}
+        )
+        return frame.select([c for c in join_keys + COMBINE_FEATURES if c in frame.columns])
+
+    joined = measurements(anthro)
     for other in (drills, spot, nonstat):
         if other.is_empty():
             continue
+        other = measurements(other)
         other_keys = [k for k in join_keys if k in other.columns]
         joined = joined.join(other, on=other_keys, how="left")
 
@@ -473,11 +494,11 @@ def build_combine_features(
         if col not in joined.columns:
             joined = joined.with_columns(pl.lit(None).cast(pl.Float64).alias(col))
 
+    joined = joined.with_columns([pl.col(c).cast(pl.Float64, strict=False) for c in COMBINE_FEATURES])
     joined = joined.with_columns(
         (pl.col("weight") / (pl.col("height_wo_shoes") ** 2) * 703.0).alias("bmi"),
         (pl.col("wingspan") - pl.col("height_wo_shoes")).alias("wingspan_diff"),
     )
-    joined = joined.with_columns([pl.col(c).fill_null(0.0).cast(pl.Float64) for c in COMBINE_FEATURES])
 
     keep = ["player_id"] + (["draft_year"] if "draft_year" in joined.columns else []) + COMBINE_FEATURES
     return joined.select(keep)
