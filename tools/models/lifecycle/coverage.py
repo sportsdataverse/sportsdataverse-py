@@ -40,7 +40,7 @@ Usage::
     uv run python tools/models/lifecycle/coverage.py --league nba --out lifecycle_nba_season_sim.json
     uv run python tools/models/lifecycle/coverage.py --league wnba --n-sims 5000
 
-Design: ClaudeCowork ``specs/2026-11-25-model-lifecycle-checks-design.md`` (a).
+Design: the coverage check, rule (a) of the lifecycle checks; its constants are fixed below.
 """
 
 from __future__ import annotations
@@ -65,9 +65,9 @@ assert _spec is not None and _spec.loader is not None
 retire = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(retire)
 
-# The reading's constants are the spec's, set before any run and never loosened to pass a model:
+# The reading's constants are the lifecycle rule's, set before any run and never loosened to pass a model:
 # the 80% level, the 0.05 / 2 SE tolerance, and a CR1 SE only at 8 or more seasons
-# (ClaudeCowork specs/2026-11-25-model-lifecycle-checks-design.md, section (a)).
+# (lifecycle-check rule (a)).
 LEVELS = (0.5, 0.8, 0.95)
 GATE_LEVEL = 0.8
 MIN_CLUSTERS = 8

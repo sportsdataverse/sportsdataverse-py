@@ -28,7 +28,7 @@ One row per player and run: totals, per-game lines, `ts_pct`, the regular season
 | `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
 | `run_id` | String | Run key: '{season}-{tournament_key}-{ESPN team id}', one team's games in one tournament. |
 | `team_id` | Int64 | ESPN team id of the player's team in the run. |
-| `athlete_id` | Int64 | ESPN athlete id. |
+| `athlete_id` | Int64 | ESPN athlete id (joins the ESPN rosters and player box scores). |
 | `athlete_display_name` | String | The player's name. |
 | `games` | Int64 | Run games played (not marked did-not-play, with minutes or any box count). |
 | `min` | Float64 | Total minutes in the run. |
@@ -106,11 +106,11 @@ One row per run with a final game: the run's `tournament_name` and `tournament_k
 | `run_id` | String | Run key: '{season}-{tournament_key}-{ESPN team id}', one team's games in one tournament. |
 | `tournament_name` | String | The run's tournament name, as on its tournament_runs rows. |
 | `tournament_kind` | String | The run's tournament kind, as on its tournament_runs rows: ncaa (the NCAA tournament), conference (a conference tournament) or postseason (the NIT, WNIT, CBI, Crown, WBIT and other postseason events). |
-| `team_id` | Int64 | ESPN team id. |
+| `team_id` | Int64 | ESPN team id of the row's team (joins the ESPN schedule and team box scores). |
 | `team_abbreviation` | String | Team abbreviation. |
 | `games` | Int64 | Final games in the run. |
-| `wins` | Int64 | Run wins. |
-| `losses` | Int64 | Run losses. |
+| `wins` | Int64 | Games the team won in the tournament run, counting its final games only. |
+| `losses` | Int64 | Games the team lost in the tournament run, counting its final games only. |
 | `opp_pts` | Int64 | Opponent points over the run's final games. |
 | `pts` | Int64 | Total points over the run's final games: the sum of the team's ESPN game boxes. |
 | `fgm` | Int64 | Total field goals made over the run's final games: the sum of the team's ESPN game boxes. |
@@ -165,7 +165,7 @@ Two rows per tournament game, as the mbb function: the run keys, the tournament'
 | `conference_id` | Int64 | ESPN group id of the conference, for a conference tournament; null otherwise. |
 | `round_name` | String | The rest of the game headline after the event name (for example 'East Region - 1st Round', 'Final'), without a trailing site. |
 | `game_number` | Int64 | Game number within the run, by tip-off. |
-| `game_id` | Int64 | ESPN game id. |
+| `game_id` | Int64 | ESPN game id of the tournament game (joins the ESPN schedule, summary and box score). |
 | `game_date` | String | Game date (US). |
 | `completed` | Boolean | True when the game is final. |
 | `home_away` | String | home or away, or neutral at a neutral site. |
