@@ -291,7 +291,7 @@ The input plus `xfg:Float64`: the make chance of every row with `shot_value` 2 o
 
 | col_name | type | description |
 |---|---|---|
-| `order_index` | Int64 |  |
+| `order_index` | Int64 | Stable within-game ordering index for events, after the feed's events are put in play order. |
 | `action_number` | Int64 | Sequential action number within a game (V3 PBP). |
 | `clock` | String | Game clock value. |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
@@ -318,27 +318,27 @@ The input plus `xfg:Float64`: the make chance of every row with `shot_value` 2 o
 | `game_id` | String | Unique game identifier. |
 | `seconds_remaining` | Float64 | Seconds remaining in the period. |
 | `event_type` | String | Event / play type code (V2 PBP). |
-| `is_made_shot` | Boolean |  |
-| `is_missed_shot` | Boolean |  |
-| `is_free_throw` | Boolean |  |
-| `is_rebound` | Boolean |  |
-| `is_turnover` | Boolean |  |
-| `is_foul` | Boolean |  |
-| `is_substitution` | Boolean |  |
-| `is_jump_ball` | Boolean |  |
-| `is_timeout` | Boolean |  |
-| `is_period` | Boolean |  |
+| `is_made_shot` | Boolean | Whether the event is a made field goal. |
+| `is_missed_shot` | Boolean | Whether the event is a missed field goal. |
+| `is_free_throw` | Boolean | Whether the event is a free throw attempt. |
+| `is_rebound` | Boolean | Whether the event is a rebound. |
+| `is_turnover` | Boolean | Whether the event is a turnover. |
+| `is_foul` | Boolean | Whether the event is a foul. |
+| `is_substitution` | Boolean | Whether the event is a substitution. |
+| `is_jump_ball` | Boolean | Whether the event is a jump ball. |
+| `is_timeout` | Boolean | Whether the event is a timeout. |
+| `is_period` | Boolean | Whether the event is a period start or end marker. |
 | `possession_number` | Int64 | Possession number. |
-| `off_player_1` | Int64 |  |
-| `off_player_2` | Int64 |  |
-| `off_player_3` | Int64 |  |
-| `off_player_4` | Int64 |  |
-| `off_player_5` | Int64 |  |
-| `def_player_1` | Int64 |  |
-| `def_player_2` | Int64 |  |
-| `def_player_3` | Int64 |  |
-| `def_player_4` | Int64 |  |
-| `def_player_5` | Int64 |  |
+| `off_player_1` | Int64 | NBA Stats player id of offensive on-court player 1 of 5 during the event. |
+| `off_player_2` | Int64 | NBA Stats player id of offensive on-court player 2 of 5 during the event. |
+| `off_player_3` | Int64 | NBA Stats player id of offensive on-court player 3 of 5 during the event. |
+| `off_player_4` | Int64 | NBA Stats player id of offensive on-court player 4 of 5 during the event. |
+| `off_player_5` | Int64 | NBA Stats player id of offensive on-court player 5 of 5 during the event. |
+| `def_player_1` | Int64 | NBA Stats player id of defensive on-court player 1 of 5 during the event. |
+| `def_player_2` | Int64 | NBA Stats player id of defensive on-court player 2 of 5 during the event. |
+| `def_player_3` | Int64 | NBA Stats player id of defensive on-court player 3 of 5 during the event. |
+| `def_player_4` | Int64 | NBA Stats player id of defensive on-court player 4 of 5 during the event. |
+| `def_player_5` | Int64 | NBA Stats player id of defensive on-court player 5 of 5 during the event. |
 | `season` | Int64 | Season year. |
 | `xfg` | Float64 | Make chance of a located two- or three-point attempt from the bundled location model; null on every other row (free throws, non-shots, an attempt without a location). |
 

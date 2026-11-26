@@ -83476,5 +83476,26 @@ wbb_tournament_runs:
     tournament''s last date), eliminated (lost its last listed game) or alive. The outcome as of the release, repeated on
     every row of the run, not as of that game: never use it as a feature for an earlier game.'
 add_shot_make_prob:
-  xfg: Make chance of a located two- or three-point attempt from the bundled location model; null on every other
-    row (free throws, non-shots, an attempt without a location).
+  order_index: Stable within-game ordering index for events, after the feed's events are put in play order.
+  is_made_shot: Whether the event is a made field goal.
+  is_missed_shot: Whether the event is a missed field goal.
+  is_free_throw: Whether the event is a free throw attempt.
+  is_rebound: Whether the event is a rebound.
+  is_turnover: Whether the event is a turnover.
+  is_foul: Whether the event is a foul.
+  is_substitution: Whether the event is a substitution.
+  is_jump_ball: Whether the event is a jump ball.
+  is_timeout: Whether the event is a timeout.
+  is_period: Whether the event is a period start or end marker.
+  off_player_1: NBA Stats player id of offensive on-court player 1 of 5 during the event.
+  off_player_2: NBA Stats player id of offensive on-court player 2 of 5 during the event.
+  off_player_3: NBA Stats player id of offensive on-court player 3 of 5 during the event.
+  off_player_4: NBA Stats player id of offensive on-court player 4 of 5 during the event.
+  off_player_5: NBA Stats player id of offensive on-court player 5 of 5 during the event.
+  def_player_1: NBA Stats player id of defensive on-court player 1 of 5 during the event.
+  def_player_2: NBA Stats player id of defensive on-court player 2 of 5 during the event.
+  def_player_3: NBA Stats player id of defensive on-court player 3 of 5 during the event.
+  def_player_4: NBA Stats player id of defensive on-court player 4 of 5 during the event.
+  def_player_5: NBA Stats player id of defensive on-court player 5 of 5 during the event.
+  xfg: Make chance of a located two- or three-point attempt from the bundled location model; null on every other row (free
+    throws, non-shots, an attempt without a location).
