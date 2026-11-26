@@ -14,7 +14,7 @@ WAR and VORP per player-season, from our box BPM.
 
 Box BPM is anchored to the team and centred on Division I, so 0 is an average D1 player.
 `vorp` is points per 100 team possessions above a replacement player over one team's
-season of possessions (Basketball-Reference's VORP scale); `war` is wins above replacement
+season of possessions (so a full season of possessions at `R + 1` per 100 is a VORP of 1); `war` is wins above replacement
 against an average D1 schedule. A replacement-level player has 0, and a season's `war`
 adds up to the D1 teams' wins minus those of a team of replacement players. The replacement
 level and points per win are fitted per league
@@ -43,7 +43,7 @@ One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10
 | `min` | Float64 | Minutes in the season's box scores. |
 | `poss` | Float64 | Possessions: minutes / 40 * the team's adjusted tempo (mbb_team_ratings adj_tempo, possessions per 40 minutes). College has no published on-court possessions for every game. The minutes basis of vorp and war. |
 | `rating` | Float64 | Points per 100 possessions above an average Division I player: box BPM (mbb_box_bpm, model 1 of the player-value spine), re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted mean is 0. |
-| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per D1 team, R the league's replacement level (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference's VORP scale. |
+| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per D1 team, R the league's replacement level (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). A season of possessions at R + 1 is a VORP of 1. |
 | `war` | Float64 | Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91, WBB 47.10). 0 at replacement level; a replacement team wins about .35. |
 | `war_lo` | Float64 | Low end of the nominal 90% interval for war (5th percentile of 1000 bootstrap replicates, each team-season seeded on its own): each team-season's games resampled with replacement (a game's player possessions, team possessions and margin move together), then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level are held fixed, so this is the sampling uncertainty of the team side and the playing time (in college the replicate's adjusted net rating is the adjusted rating plus the change in the raw one); box BPM's own sampling error is in no column. |
 | `war_hi` | Float64 | High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo). |

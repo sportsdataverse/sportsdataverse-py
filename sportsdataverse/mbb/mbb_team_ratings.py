@@ -1,7 +1,7 @@
 """Adjusted-efficiency team-rating engine (model ①) for the prediction stack.
 
-Computes opponent-adjusted offensive/defensive efficiency (KenPom / Torvik
-style) from schedule results + per-team boxscores. The pieces:
+Computes opponent-adjusted offensive/defensive efficiency (points per 100
+possessions against an average opponent) from schedule results + per-team boxscores. The pieces:
 
 * :func:`raw_game_efficiency` -- per-team, per-game possessions + raw
   offensive/defensive efficiency.
@@ -318,7 +318,7 @@ def adjust_efficiency(
 ) -> pl.DataFrame:
     """Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
 
-    KenPom-style fixed point: initialise ``adj_o = raw_o`` / ``adj_d = raw_d``,
+    Iterative fixed point: initialise ``adj_o = raw_o`` / ``adj_d = raw_d``,
     then repeatedly recompute each team's rating from its games with the
     opponent's *current* adjusted rating and a home-court adjustment removed,
     until the largest change is below ``tol``. Ratings are computed independently
