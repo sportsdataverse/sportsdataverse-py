@@ -496,3 +496,19 @@ def test_ledger_influence_when_the_refit_loses_the_home_term_or_a_team() -> None
         assert rows.height > 0
         for got, expected in rows.select("loo_net_adj_epa", "expected").iter_rows():
             assert got == pytest.approx(expected, abs=1e-12)
+
+
+def test_ledger_influence_is_null_for_a_team_with_an_unidentified_opponent() -> None:
+    # One of team 1's offensive plays in game 2 has no defense id: the per-game rows cannot say
+    # which opponent that play's defensive side faced, so team 1's refits are not guessed.
+    plays = _synthetic_pbp().with_row_index("_i")
+    first = plays.filter((pl.col("game_id") == 2) & (pl.col("pos_team_id") == "1"))["_i"][0]
+    plays = plays.with_columns(
+        def_pos_team_id=pl.when(pl.col("_i") == first).then(None).otherwise(pl.col("def_pos_team_id"))
+    ).drop("_i")
+    ledger = cfb_adjusted_epa_ledger(plays)
+    assert ledger.filter(pl.col("team_id") == "1")["loo_net_adj_epa"].is_null().all()
+    assert ledger.filter(pl.col("team_id") != "1")["loo_net_adj_epa"].is_not_null().any()
+    season = cfb_adjusted_epa(plays).select("team_id", "net_adj_epa")
+    sums = ledger.group_by("team_id").agg(total=pl.col("contribution").sum()).join(season, on="team_id")
+    assert (sums["total"] - sums["net_adj_epa"]).abs().max() < 1e-12

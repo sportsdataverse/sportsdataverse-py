@@ -142,15 +142,16 @@ One row per (game, team) for the teams `cfb_adjusted_epa` rates (two or more val
 **Example**
 
 ```python
-import polars as pl
-import sportsdataverse.cfb as cfb
-pbp = cfb.load_cfb_pbp(seasons=[2025])
-ledger = cfb.cfb_adjusted_epa_ledger(pbp)
-ledger.filter(pl.col("pos_team") == "LSU").select("opponent_id", "raw_net_epa", "schedule_adj")
+# Quick start (``plays`` is a season of FBS pass / rush plays with the columns the module docstring lists, such as the cfbfastR-cfb-data team-summaries input; the released ``load_cfb_pbp`` frame alone lacks ``home`` and ``neutral_site``)
+
+    import polars as pl
+    import sportsdataverse.cfb as cfb
+    ledger = cfb.cfb_adjusted_epa_ledger(plays)
+    ledger.filter(pl.col("pos_team") == "LSU").select("opponent_id", "raw_net_epa", "schedule_adj")
 
 # The games that moved a team the most
 
-ledger.sort(pl.col("game_influence").abs(), descending=True).head()
+    ledger.sort(pl.col("game_influence").abs(), descending=True).head()
 ```
 
 ### cfb_compute_results {#cfb_compute_results}

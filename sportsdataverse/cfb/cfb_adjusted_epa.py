@@ -596,7 +596,9 @@ def _leave_one_game_out(clean: pl.DataFrame, opp: pl.DataFrame, lam: float) -> p
 
     Removing game ``g`` refits the strengths without it and drops it from both teams' own
     averages, exactly as if ``g`` had never been played. Null when the team would keep fewer
-    than two valid games (it would have no season value).
+    than two valid games (it would have no season value), and for every game of a team with a
+    play whose offense or defense id is null: the per-game rows do not carry the opponent of
+    such a play, so its refit cannot be reproduced and is not guessed.
 
     The fit is :func:`_fit_team_strengths`' ridge solved from its normal equations: every
     regressor is constant within a (game, offense, defense, site) cell, so the play-level
@@ -650,6 +652,12 @@ def _leave_one_game_out(clean: pl.DataFrame, opp: pl.DataFrame, lam: float) -> p
     raw_off = opp["raw_off_epa"].cast(pl.Float64).fill_null(np.nan).to_numpy()
     raw_def = opp["raw_def_epa"].cast(pl.Float64).fill_null(np.nan).to_numpy()
 
+    untraced = set(
+        clean.filter(pl.col("pos_team_id").is_null() | pl.col("def_pos_team_id").is_null())
+        .select(pl.concat_list("pos_team_id", "def_pos_team_id").explode(empty_as_null=True).drop_nulls())
+        .to_series()
+        .to_list()
+    )
     out_game: list[str] = []
     out_team: list[str] = []
     out_val: list[float | None] = []
@@ -676,6 +684,7 @@ def _leave_one_game_out(clean: pl.DataFrame, opp: pl.DataFrame, lam: float) -> p
             ok = valid >= 2 and (~np.isnan(adj_off)).any() and (~np.isnan(adj_def)).any()
             out_game.append(gid)
             out_team.append(team)
+            ok = ok and team not in untraced
             out_val.append(float(np.nanmean(adj_off) - np.nanmean(adj_def)) if ok else None)
     return pl.DataFrame(
         {"game_id": out_game, "pos_team_id": out_team, "loo_net_adj_epa": out_val},
@@ -833,12 +842,13 @@ def cfb_adjusted_epa_ledger(
         ValueError: If ``ridge_lambda`` is not positive or every play is garbage time.
 
     Example:
-        Quick start::
+        Quick start (``plays`` is a season of FBS pass / rush plays with the columns the
+        module docstring lists, such as the cfbfastR-cfb-data team-summaries input; the
+        released ``load_cfb_pbp`` frame alone lacks ``home`` and ``neutral_site``)::
 
             import polars as pl
             import sportsdataverse.cfb as cfb
-            pbp = cfb.load_cfb_pbp(seasons=[2025])
-            ledger = cfb.cfb_adjusted_epa_ledger(pbp)
+            ledger = cfb.cfb_adjusted_epa_ledger(plays)
             ledger.filter(pl.col("pos_team") == "LSU").select("opponent_id", "raw_net_epa", "schedule_adj")
 
         The games that moved a team the most::
