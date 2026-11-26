@@ -41,7 +41,7 @@ A polars (or pandas) `DataFrame`, one row per player (both teams), with `side` a
 | `position` | String | Primary position as reported by NFL.com |
 | `jerseyNumber` | Int64 | Jersey number worn by the player during the game. |
 | `playerName` | String | Full display name of the player as shown in the NFL Next Gen Stats gamecenter. |
-| `zones` | Int64 | Serialized or structured representation of field zones targeted or covered by the player during the game. |
+| `zones` | List | Serialized or structured representation of field zones targeted or covered by the player during the game. |
 | `passYards` | Int64 | Total passing yards accumulated by the player (relevant for quarterbacks) in the NGS gamecenter overview. |
 | `touchdowns` | Int64 | Total number of touchdowns scored or thrown by the player in the NGS gamecenter overview. |
 | `interceptions` | Int64 | The number of interceptions thrown. |
@@ -135,7 +135,7 @@ A polars (or pandas) `DataFrame`, one row per leader entry.
 | `play_isScoring` | Boolean | Boolean flag indicating whether the highlighted play resulted in a score. |
 | `play_playDescription` | String | Full text description of the highlighted play as recorded by official NFL scorers. |
 | `play_playState` | String | State or status of the highlighted play (e.g., 'APPROVED', 'CHALLENGED') in the NGS system. |
-| `play_playStats` | Int64 | Serialized statistical outcomes or stat codes associated with the highlighted play. |
+| `play_playStats` | List | Serialized statistical outcomes or stat codes associated with the highlighted play. |
 | `play_playType` | String | Text label describing the type of the highlighted play (e.g., 'PASS', 'RUSH', 'KICK'). |
 | `play_playTypeCode` | Int64 | Numeric or short code identifying the play type of the highlighted play in the NGS system. |
 | `play_possessionTeamId` | String | Unique identifier for the team that had possession of the ball during the highlighted play. |
@@ -623,7 +623,7 @@ A one-row polars (or pandas) `DataFrame` with `gameId`, `playId`, `isHighlight` 
 | `highlight_play_isPenalty` | Boolean | Boolean flag indicating whether a penalty was assessed on the highlighted play. |
 | `highlight_play_homeScore` | Int64 | Home team's score at the end of the highlighted play. |
 | `highlight_play_visitorScore` | Int64 | Visiting team's score at the end of the highlighted play. |
-| `highlight_play_playStats` | Int64 | Serialized or encoded statistical detail associated with the play outcomes (e.g., yards, player ids). |
+| `highlight_play_playStats` | List | Serialized or encoded statistical detail associated with the play outcomes (e.g., yards, player ids). |
 | `highlight_play_playId` | Int64 | NFL Shield API unique integer identifier for the specific play within the game. |
 | `highlight_play_playDescription` | String | Official NFL text description of the highlighted play (e.g., '(12:34) T.Brady pass short right to J.Edelman for 8 yards'). |
 | `highlight_play_playTypeCode` | Int64 | Integer code corresponding to the play type classification in the NFL Shield API. |
@@ -649,7 +649,7 @@ A one-row polars (or pandas) `DataFrame` with `gameId`, `playId`, `isHighlight` 
 | `highlight_play_playDirection` | String | Direction of the play (left, right, middle) as recorded in the NFL Shield tracking data. |
 | `highlight_play_isBigPlay` | Boolean | Boolean flag indicating whether the play was classified as a 'big play' (e.g., long gain or turnover) by the NFL Shield API. |
 | `highlight_play_isChangeOfPossession` | Boolean | Boolean flag indicating whether the highlighted play resulted in a change of possession. |
-| `highlight_players` | Int64 | Serialized list or count of player tracking records associated with the highlight clip. |
+| `highlight_players` | List | Serialized list or count of player tracking records associated with the highlight clip. |
 | `highlight_season` | Int64 | NFL season year (e.g., 2024) in which the highlighted play occurred. |
 | `highlight_seasonType` | String | Season phase of the highlighted play (e.g., 'REG' for regular season, 'POST' for playoffs). |
 | `highlight_teamAbbr` | String | Team abbreviation of the team featured in or associated with the highlight clip. |

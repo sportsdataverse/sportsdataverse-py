@@ -106,7 +106,7 @@ A polars (or pandas) `DataFrame`, one row per play (empty frame if the game has 
 | `playDescription` | String | Official text description of the play as provided by the NFL. |
 | `playDescriptionWithJerseyNumbers` | String | Play description text augmented with player jersey numbers for participant identification. |
 | `playId` | Int64 |  |
-| `playStats` | Int64 | Internal NFL stat identifier linking this play to associated statistical records. |
+| `playStats` | List | Internal NFL stat identifier linking this play to associated statistical records. |
 | `playType` | String | Categorical classification of the play type (e.g., PASS, RUSH, PUNT, KICKOFF). |
 | `prePlayByPlay` | String | Narrative text describing the game situation or setup immediately before this play. |
 | `quarter` | Int64 | Game quarter in which the play occurred (1–4 for regulation, 5 for overtime). |
@@ -300,10 +300,10 @@ A polars (or pandas) `DataFrame`, one row per game.
 | `status` | String |  |
 | `week` | Int64 | Season week. |
 | `weekType` | String | Classification of the week type within the season (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB'). |
-| `externalIds` | String | Serialized list of external system identifiers (e.g., partner IDs, league IDs) mapped to this game. |
+| `externalIds` | List | Serialized list of external system identifiers (e.g., partner IDs, league IDs) mapped to this game. |
 | `ticketUrl` | String | URL to the official ticket purchasing page for this game. |
-| `ticketVendors` | String | Serialized list of authorized ticket vendors or marketplaces for this game. |
-| `extensions` | String | Serialized JSON or string of additional extension metadata attached to the game record by the NFL Shield API. |
+| `ticketVendors` | List | Serialized list of authorized ticket vendors or marketplaces for this game. |
+| `extensions` | List | Additional extension metadata the NFL Shield API attaches to the game record, as the list the API sends. |
 | `version` | Int64 | API response version integer returned by the NFL Shield API for this game record. |
 | `homeTeam_id` | String | NFL Shield team identifier for the home team. |
 | `homeTeam_currentLogo` | String | URL for the home team's current primary logo image as served by the NFL Shield API. |
@@ -311,12 +311,12 @@ A polars (or pandas) `DataFrame`, one row per game.
 | `awayTeam_id` | String | NFL Shield team identifier for the away team. |
 | `awayTeam_currentLogo` | String | URL for the away team's current primary logo image as served by the NFL Shield API. |
 | `awayTeam_fullName` | String | Full name of the away team (e.g., 'Kansas City Chiefs'). |
-| `broadcastInfo_homeNetworkChannels` | String | Serialized list of TV/streaming channels designated as the home team's local broadcast. |
-| `broadcastInfo_awayNetworkChannels` | String | Serialized list of TV/streaming channels designated as the away team's local broadcast. |
-| `broadcastInfo_internationalWatchOptions` | String | Serialized list of international streaming or broadcast options for viewers outside the United States. |
-| `broadcastInfo_streamingNetworks` | String | Serialized list of streaming platforms (e.g., Peacock, Amazon Prime Video) carrying the game. |
+| `broadcastInfo_homeNetworkChannels` | List | Serialized list of TV/streaming channels designated as the home team's local broadcast. |
+| `broadcastInfo_awayNetworkChannels` | List | Serialized list of TV/streaming channels designated as the away team's local broadcast. |
+| `broadcastInfo_internationalWatchOptions` | List | Serialized list of international streaming or broadcast options for viewers outside the United States. |
+| `broadcastInfo_streamingNetworks` | List | Serialized list of streaming platforms (e.g., Peacock, Amazon Prime Video) carrying the game. |
 | `broadcastInfo_territory` | String | Geographic territory or market designation for which this broadcast record applies. |
-| `broadcastInfo_audioNetworks` | String | Serialized list of radio networks carrying the game's audio broadcast. |
+| `broadcastInfo_audioNetworks` | List | Serialized list of radio networks carrying the game's audio broadcast. |
 | `venue_id` | String |  |
 | `venue_name` | String |  |
 | `venue_city` | String |  |

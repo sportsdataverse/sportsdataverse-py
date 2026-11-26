@@ -742,7 +742,7 @@ A `polars.DataFrame` containing only rows with `date < cutoff_date`.
 |---|---|---|
 | `game_id` | String | Unique game identifier. |
 | `season` | Int64 | Season year. |
-| `date` | String | Date in YYYY-MM-DD format. |
+| `date` | Date | Date in YYYY-MM-DD format. |
 | `team_id` | String | Unique team identifier. |
 | `opp_team_id` | String |  |
 | `is_home` | Boolean | Whether the team was home. |

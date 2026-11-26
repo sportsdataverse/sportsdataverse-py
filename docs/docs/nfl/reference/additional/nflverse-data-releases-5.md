@@ -46,7 +46,7 @@ Polars dataframe of weekly rosters for the requested seasons (`pandas.DataFrame`
 | `full_name` | String | Player's full display name. |
 | `first_name` | String | Player's first (given) name. |
 | `last_name` | String | Player's last (family) name. |
-| `birth_date` | String | Player's date of birth (YYYY-MM-DD). |
+| `birth_date` | Date | Player's date of birth (YYYY-MM-DD). |
 | `height` | Float64 | Player's height in inches. |
 | `weight` | Int64 | Player's listed weight in pounds. |
 | `college` | String | College or university the player attended. |
@@ -489,7 +489,7 @@ Polars dataframe containing NFL trade information.
 |---|---|---|
 | `trade_id` | Int64 | ID of Trade |
 | `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `trade_date` | String | Exact date that trade occurred |
+| `trade_date` | Date | Exact date that trade occurred |
 | `gave` | String | Team that gave pick/player in row |
 | `received` | String | Team that received pick/player in row |
 | `pick_season` | Int64 | Draft in which traded pick was in |

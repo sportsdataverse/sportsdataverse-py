@@ -26,7 +26,7 @@ columns:
   type: character
   description: ''
 - name: team_logos
-  type: integer
+  type: list
   description: ''
 - name: team_name
   type: character

@@ -17,7 +17,7 @@ columns:
   type: character
   description: ''
 - name: start_date
-  type: character
+  type: datetime
   description: ''
 - name: sequence_number
   type: integer

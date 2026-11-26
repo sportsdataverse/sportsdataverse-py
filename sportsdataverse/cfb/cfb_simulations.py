@@ -44,6 +44,7 @@ the SAME semantics so outputs cross-validate):
 
 from __future__ import annotations
 
+import math
 from typing import Any, cast
 from collections.abc import Callable
 
@@ -54,11 +55,13 @@ from sportsdataverse.cfb.cfb_standings import (
     FrameLike,
     _is_independent,
     _validate_games,
+    _team_id,
+    _to_polars,
     _validate_teams,
     cfb_standings,
 )
 
-__all__ = ["cfb_simulations", "cfb_compute_results"]
+__all__ = ["cfb_simulations", "cfb_compute_results", "cfb_ratings_compute_results"]
 
 _SIM_INCLUDES = ("REG", "CONF", "POST")
 
@@ -234,6 +237,231 @@ def cfb_compute_results(
 
     games_out = g.select(games.columns)
     return {"teams": teams, "games": games_out}
+
+
+# Defaults of cfb_ratings_compute_results by rating_type, the same values as cfbseedR's
+# cfbseedR_ratings_compute_results(). points / raw_epa: cfbseedR data-raw/cfb_generator_constants.R
+# (walk-forward FBS-vs-FBS 2014-2025, 2020 out; home fixed at the ELO generator's 2.376). adj_epa is
+# read live from cfb_prediction_constants (modern era) in _ratings_defaults, so a refit there moves
+# both; cfbseedR copies the numbers, and the shared fixture test turns red until it does.
+_RATINGS_DEFAULTS: dict[str, dict[str, Any]] = {
+    "points": {
+        "scale": {"0-3": 1.0929, "4-5": 0.9234, "6-7": 1.0305, "8-20": 1.0628},
+        "margin_sd": {"0-3": 16.9680, "4-5": 16.6383, "6-7": 16.2311, "8-20": 16.4509},
+        "home_field": 2.376,
+    },
+    "raw_epa": {
+        "scale": {"0-3": 28.5848, "4-5": 34.3212, "6-7": 45.0972, "8-20": 52.0247},
+        "margin_sd": {"0-3": 17.9308, "4-5": 17.2400, "6-7": 16.9808, "8-20": 17.3931},
+        "home_field": 2.376,
+    },
+}
+_RATING_TYPES = ("points", "adj_epa", "raw_epa")
+
+
+def _ratings_defaults(rating_type: str) -> dict[str, Any]:
+    if rating_type not in _RATING_TYPES:
+        raise ValueError(f"rating_type must be one of {_RATING_TYPES}, not {rating_type!r}")
+    if rating_type == "adj_epa":
+        from sportsdataverse.cfb.cfb_prediction_constants import get_constants
+
+        c = get_constants("modern")
+        return {"scale": dict(c.slope_by_games), "margin_sd": c.margin_sd, "home_field": c.hfa_points}
+    return _RATINGS_DEFAULTS[rating_type]
+
+
+def _bucket_values(x: float | dict[str, float], n_games: np.ndarray, arg: str) -> np.ndarray:
+    """Per-game value from a scalar or ``"lo-hi"`` buckets (cfbseedR ``ratings_bucket_value``).
+
+    A count takes the bucket with the largest lower bound at or below it (R ``findInterval``); a
+    count below every bucket takes the bottom one; NaN (unknown) takes the top one.
+    """
+    if not isinstance(x, dict):
+        if isinstance(x, (int, float)) and not math.isnan(float(x)):
+            return np.full(n_games.shape, float(x))
+        raise ValueError(f"{arg} must be a number or a dict of 'lo-hi' buckets")
+    try:
+        parts = [k.split("-") for k in x]
+        ok = all(len(b) == 2 for b in parts)
+        lo = [float(b[0]) for b in parts]
+        hi = [float(b[1]) for b in parts]
+        ok = ok and not any(math.isnan(v) for v in lo + hi)
+    except (ValueError, IndexError):
+        ok, lo = False, []
+    if not x or not ok or len(set(lo)) != len(lo):
+        raise ValueError(f"{arg} buckets must be distinct games-played ranges written 'lo-hi', e.g. '0-3'")
+    order = np.argsort(lo, kind="stable")
+    lo_sorted = np.asarray(lo)[order]
+    vals = np.asarray([float(v) for v in x.values()])[order]
+    if np.isnan(vals).any():
+        raise ValueError(f"{arg} buckets must not hold NaN")
+    pick = np.maximum(np.searchsorted(lo_sorted, n_games, side="right") - 1, 0)
+    pick[np.isnan(n_games)] = len(vals) - 1
+    return vals[pick]
+
+
+def _ratings_expected_margin(
+    home_team: list[str],
+    away_team: list[str],
+    neutral: np.ndarray,
+    ratings: FrameLike,
+    *,
+    rating_type: str = "points",
+    scale: float | dict[str, float] | None = None,
+    home_field: float | None = None,
+    margin_sd: float | dict[str, float] | None = None,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Expected home margin and margin SD per game (cfbseedR ``ratings_expected_margin``)."""
+    r = _to_polars(ratings)
+    if not {"team", "rating"} <= set(r.columns):
+        raise ValueError("ratings must have columns 'team' and 'rating'")
+    if not r.schema["rating"].is_numeric() or r["rating"].null_count() > 0 or r["rating"].is_nan().any():
+        raise ValueError("ratings 'rating' must be numeric with no missing values")
+    if r["team"].n_unique() != r.height:
+        raise ValueError("ratings has more than one row for a team")
+    has_games = "games" in r.columns
+    if has_games and (not r.schema["games"].is_numeric() or (r["games"].drop_nulls() < 0).any()):
+        raise ValueError("ratings 'games' must be a non-negative number")
+    d = _ratings_defaults(rating_type)
+    scale = d["scale"] if scale is None else scale
+    home_field = d["home_field"] if home_field is None else home_field
+    if not isinstance(home_field, (int, float)) or not math.isfinite(float(home_field)):
+        raise ValueError("home_field must be a single finite number")
+    margin_sd = d["margin_sd"] if margin_sd is None else margin_sd
+
+    teams = r.select(_team_id(r, "team"))["team"].to_list()  # float ids join as "87", never "87.0"
+    rating = dict(zip(teams, r["rating"].cast(pl.Float64).to_list(), strict=True))
+    r_home = np.asarray([rating.get(t, 0.0) for t in home_team], dtype=float)
+    r_away = np.asarray([rating.get(t, 0.0) for t in away_team], dtype=float)
+    n_games = np.full(len(home_team), np.nan)
+    if has_games:
+        g = dict(zip(teams, r["games"].cast(pl.Float64).fill_null(float("nan")).to_list(), strict=True))
+        g_home = np.asarray([g.get(t, np.nan) for t in home_team], dtype=float)
+        g_away = np.asarray([g.get(t, np.nan) for t in away_team], dtype=float)
+        n_games = np.fmin(g_home, g_away)  # NaN-ignoring, like R pmin(na.rm = TRUE)
+    s = _bucket_values(scale, n_games, "scale")
+    sd = _bucket_values(margin_sd, n_games, "margin_sd")
+    if (sd < 0).any():
+        raise ValueError("margin_sd must be at least 0")
+    expected = s * (r_home - r_away) + np.where(neutral == 1, 0.0, float(home_field))
+    return expected, sd
+
+
+def _sample_margins(
+    expected: np.ndarray, sd: np.ndarray, postseason: np.ndarray, rng: np.random.Generator
+) -> np.ndarray:
+    """Normal draws rounded away from zero; a postseason 0 is re-broken to +-1 by ``Phi(expected / sd)``."""
+    raw = rng.normal(expected, sd)
+    res = np.where(raw > 0, np.ceil(raw), np.where(raw < 0, np.floor(raw), 0.0))
+    tie = postseason & (res == 0.0)
+    if tie.any():
+        with np.errstate(invalid="ignore", divide="ignore"):
+            z = expected[tie] / sd[tie]
+        wp = np.asarray([0.5 if np.isnan(v) else 0.5 * (1.0 + math.erf(v / math.sqrt(2.0))) for v in z])
+        res[tie] = np.where(rng.uniform(0.0, 1.0, int(tie.sum())) < wp, 1.0, -1.0)
+    return res
+
+
+def cfb_ratings_compute_results(
+    teams: pl.DataFrame,
+    games: pl.DataFrame,
+    week_num: int,
+    *,
+    ratings: FrameLike,
+    rating_type: str = "points",
+    scale: float | dict[str, float] | None = None,
+    home_field: float | None = None,
+    margin_sd: float | dict[str, float] | None = None,
+    rng: np.random.Generator | None = None,
+    **kwargs: Any,
+) -> dict[str, pl.DataFrame]:
+    """Results generator driven by fixed team ratings (points, adjusted EPA or raw EPA).
+
+    An alternative to :func:`cfb_compute_results` (dynamic ELO), with cfbseedR's
+    ``cfbseedR_ratings_compute_results()`` semantics and defaults: each unplayed ``week == week_num``
+    game gets ``Normal(scale * (rating_home - rating_away) + home_field, margin_sd)`` (no home field at
+    a neutral site), rounded away from zero; a postseason draw of exactly 0 is re-decided by
+    ``Phi(expected / margin_sd)`` with a 1-point margin. Ratings are fixed; ``teams`` passes through.
+    ``scale`` / ``margin_sd`` buckets use the smaller ``games`` of the two teams (unrated or null counts
+    skipped), then the bucket with the largest lower bound at or below it (bottom bucket below all;
+    top bucket when no count). Defaults: ``"adj_epa"`` (the scale of :func:`cfb_ratings` ``adj_net``)
+    reads the modern-era ``slope_by_games`` / ``margin_sd`` / ``hfa_points`` of
+    :data:`sportsdataverse.cfb.cfb_prediction_constants.CFB_CONSTANTS`; ``"points"`` and ``"raw_epa"``
+    are ``_RATINGS_DEFAULTS``, cfbseedR's walk-forward fit (FBS-vs-FBS 2014-2025). In that test the ELO
+    formula on CollegeFootballData's pregame ELO had the smallest error (MAE 12.94 vs 13.10 for a
+    least-squares points rating); from about six games on the points rating is level with it.
+
+    Args:
+        teams: Per-sim team table (``sim``, ``team``, ``conference``); returned unchanged.
+        games: Per-sim games table (engine schema; see :func:`sportsdataverse.cfb.cfb_standings`).
+        week_num: The week to fill.
+        ratings: One row per team: ``team``, ``rating`` (numeric, no nulls) and optionally
+            ``games`` (non-negative games behind the rating; null = unknown). Polars or pandas.
+            Teams missing from it rate 0 (league average).
+        rating_type: ``"points"`` (default), ``"adj_epa"`` or ``"raw_epa"``; picks the defaults.
+        scale: Points of margin per rating unit: a number or ``{"lo-hi": value}`` buckets.
+            ``None`` uses the default for ``rating_type``.
+        home_field: Home-field advantage in points for non-neutral games. ``None`` = default.
+        margin_sd: Margin SD in points (at least 0): a number or buckets. ``None`` = default.
+        rng: numpy Generator (seeded by :func:`cfb_simulations`). A fresh default generator is
+            created when omitted.
+        **kwargs: Ignored (forward-compatibility for custom callers).
+
+    Returns:
+        ``{"teams": teams, "games": games}`` with ``result`` (Float64 home margin) filled for this
+        week's previously unplayed games.
+
+    Raises:
+        ValueError: On an unknown ``rating_type``, missing ``team`` / ``rating`` columns, a null, NaN or
+            duplicated rating, a bad ``games`` count, malformed or NaN constants, or a negative ``margin_sd``.
+
+    Example:
+        Fill week 3 from points ratings::
+
+            import polars as pl
+            from sportsdataverse.cfb.cfb_simulations import cfb_ratings_compute_results
+            ratings = pl.DataFrame({"team": ["A", "B"], "rating": [7.0, -7.0], "games": [8, 8]})
+            out = cfb_ratings_compute_results(teams, games, 3, ratings=ratings, rating_type="points")
+
+        Simulate a season with it (``cfb_simulations`` passes only ``rng``, so bind the ratings
+        with ``functools.partial``)::
+
+            import functools
+            from sportsdataverse.cfb.cfb_simulations import cfb_ratings_compute_results, cfb_simulations
+            cr = functools.partial(cfb_ratings_compute_results, ratings=ratings, rating_type="points")
+            sims = cfb_simulations(games, teams, compute_results=cr, seed=1)
+
+    See Also:
+        * `cfbseedR <https://cfbseedR.sportsdataverse.org>`_ -- ``cfbseedR_ratings_compute_results()``.
+        * `cfbfastR <https://cfbfastR.sportsdataverse.org>`_ -- CFB data in R.
+    """
+    if rng is None:
+        rng = np.random.default_rng()
+    g = games.with_columns(pl.col("result").cast(pl.Float64))
+    g = g.with_columns(pl.col("result").fill_nan(None))
+    idx = np.flatnonzero(((g["week"] == week_num) & g["result"].is_null()).to_numpy())
+    if idx.size == 0:
+        return {"teams": teams, "games": games}
+    sub = g[idx]
+    neutral = (
+        sub["neutral"].cast(pl.Float64).fill_null(0.0).to_numpy() if "neutral" in sub.columns else np.zeros(idx.size)
+    )
+    expected, sd = _ratings_expected_margin(
+        sub.select(_team_id(sub, "home_team"))["home_team"].to_list(),
+        sub.select(_team_id(sub, "away_team"))["away_team"].to_list(),
+        neutral,
+        ratings,
+        rating_type=rating_type,
+        scale=scale,
+        home_field=home_field,
+        margin_sd=margin_sd,
+    )
+    postseason = sub["game_type"].fill_null("REG").to_numpy() != "REG"
+    res = _sample_margins(expected, sd, postseason, rng)
+    filled = g["result"].to_numpy(allow_copy=True).astype(float, copy=True)
+    filled[idx] = res
+    games_out = g.with_columns(pl.Series("result", filled, dtype=pl.Float64).fill_nan(None))
+    return {"teams": teams, "games": games_out.select(games.columns)}
 
 
 def _apply_compute_results(

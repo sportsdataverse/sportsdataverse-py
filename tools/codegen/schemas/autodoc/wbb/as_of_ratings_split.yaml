@@ -236,10 +236,10 @@ columns:
   type: character
   description: ''
 - name: game_date_time
-  type: character
+  type: datetime
   description: ''
 - name: date
-  type: character
+  type: date
   description: ''
 - name: PBP
   type: logical

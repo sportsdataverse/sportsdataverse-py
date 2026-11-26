@@ -77,7 +77,7 @@ columns:
   type: integer
   description: ''
 - name: playStats
-  type: integer
+  type: list
   description: ''
 - name: playType
   type: character

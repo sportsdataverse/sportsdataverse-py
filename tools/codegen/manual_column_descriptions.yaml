@@ -1743,6 +1743,16 @@ cfb_predict_games:
   home_team_id: Home team ESPN id (character; the ratings `team_id` join key).
   home_win_prob: Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model.
   neutral_site: Whether the game is at a neutral site (home-field advantage is dropped when true).
+cfb_ratings_compute_results:
+  away_team: Team name of the away team in the simulated game (returned games frame).
+  game_type: Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship) or
+    POST (postseason/CFP).
+  home_team: Team name of the home team in the simulated game (returned games frame).
+  neutral: Neutral-site flag (1 = neutral site, 0 = true home game; only non-neutral games receive home_field).
+  result: Home-team margin of victory (home score minus away score) - real results are preserved and the target week's unplayed
+    games are filled from the fixed team ratings.
+  sim: Simulation identifier the game row belongs to (1..n simulated seasons).
+  week: Week of the season the game is played in; only games matching the requested week_num are filled.
 cfb_recruiting_projection:
   pred_margin: Ridge-projected average scoring margin per game.
   pred_net_epa: Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s).
@@ -3908,9 +3918,11 @@ espn_nhl_player_stats:
     season type.
 espn_nhl_schedule:
   away_linescores: Period-by-period goal totals for the away team, stored as an array of integer scores indexed by period.
-  away_records: Serialized win-loss-overtime record string for the away team at the time of the scheduled game.
+  away_records: The away team's records at the time of the game, a list with one struct per record type (name,
+    abbreviation, type, and the summary such as "30-10-5").
   home_linescores: Period-by-period goal totals for the home team, stored as an array of integer scores indexed by period.
-  home_records: Serialized win-loss-overtime record string for the home team at the time of the scheduled game.
+  home_records: The home team's records at the time of the game, a list with one struct per record type (name,
+    abbreviation, type, and the summary such as "30-10-5").
   status_type_alt_detail: ESPN's short extra-time label on a final ("OT", "SO"); null when the game ended in regulation.
   venue_address_country: Country name or code for the country in which the game venue is located, as provided by ESPN's schedule
     endpoint.
@@ -9781,7 +9793,8 @@ load_cfb_pbp:
   stuffed_run: True on a rush (any play type the processor counts as a rush, not a kneel) that gained zero or
     fewer yards; its mean over scrimmage rushes (rush and scrimmage_play) is the stuff rate.
   td_check: Internal flag used while reconciling whether the play produced a touchdown.
-  teamParticipants: Raw ESPN team-level participants payload carried through from the plays feed (stringified).
+  teamParticipants: Raw ESPN team-level participants payload carried through from the plays feed, a list as the live
+    feed sends it, stringified in the release files.
   text_dupe: Always False in the emitted frame -- the duplicate-row filter it gates runs before the column is
     returned, so it marks nothing and is retained only for schema stability.
   turnover_team: Team id charged with the giveaway on the play.
@@ -38195,6 +38208,8 @@ nba_team_game_four_factors:
   team_id: stats.nba.com team id (the 10-digit franchise id).
   turnover_pts: 'Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance.'
 nba_team_game_possessions:
+  season_type: The game's stats.nba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call
+    asked for. Asked for a list, each type's rows add up to that type's season rates.
   game_id: stats.nba.com game id. The game this row's possessions are from.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
@@ -38624,6 +38639,8 @@ wnba_team_game_four_factors:
   team_id: stats.wnba.com team id.
   turnover_pts: 'Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance.'
 wnba_team_game_possessions:
+  season_type: The game's stats.wnba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call
+    asked for. Asked for a list, each type's rows add up to that type's season rates.
   game_id: stats.wnba.com game id. The game this row's possessions are from.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
@@ -40635,8 +40652,10 @@ nba_rated_priors:
 nba_season_sim:
   adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
     opponent on a neutral court.'
-  adj_net_rtg_sd: Posterior sd of adj_net_rtg (points per 100) from the ridge, capped so two teams' shift carries at most
-    3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws.
+  adj_net_rtg_sd: 'Error sd of adj_net_rtg (points per 100), capped so two teams'' shift carries at most 3/4 of a game''s
+    variance; the sd of the per-season rating shift each simulated season draws. With a preseason prior it is the prior''s
+    miss at the weight the ridge leaves it plus the sampling noise of the possessions played (PRIOR_MISS_POSS: fitted for
+    the WNBA; the NBA keeps the ridge posterior); with none, the ridge posterior.'
   as_of_date: 'The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with
     a score counts as played.'
   conference: NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table).
@@ -40700,8 +40719,10 @@ nba_season_sim:
 wnba_season_sim:
   adj_net_rtg: 'As-of adjusted net rating from the possession ridge at the sim''s penalty: points per 100 over an average
     opponent on a neutral court.'
-  adj_net_rtg_sd: Posterior sd of adj_net_rtg (points per 100) from the ridge, capped so two teams' shift carries at most
-    3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws.
+  adj_net_rtg_sd: 'Error sd of adj_net_rtg (points per 100), capped so two teams'' shift carries at most 3/4 of a game''s
+    variance; the sd of the per-season rating shift each simulated season draws. With a preseason prior it is the prior''s
+    miss at the weight the ridge leaves it plus the sampling noise of the possessions played (PRIOR_MISS_POSS: fitted for
+    the WNBA; the NBA keeps the ridge posterior); with none, the ridge posterior.'
   as_of_date: 'The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with
     a score counts as played.'
   conference: NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table).
@@ -51666,7 +51687,7 @@ nfl_week_games:
   broadcastInfo_streamingNetworks: Serialized list of streaming platforms (e.g., Peacock, Amazon Prime Video) carrying the
     game.
   broadcastInfo_territory: Geographic territory or market designation for which this broadcast record applies.
-  extensions: Serialized JSON or string of additional extension metadata attached to the game record by the NFL Shield API.
+  extensions: Additional extension metadata the NFL Shield API attaches to the game record, as the list the API sends.
   externalIds: Serialized list of external system identifiers (e.g., partner IDs, league IDs) mapped to this game.
   homeTeam_currentLogo: URL for the home team's current primary logo image as served by the NFL Shield API.
   homeTeam_fullName: Full name of the home team (e.g., 'Dallas Cowboys').

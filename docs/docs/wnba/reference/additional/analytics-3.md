@@ -615,7 +615,7 @@ One row per team (stats.nba.com `team_id`, Int64), sorted by conference and mean
 | `losses` | Int64 | Regular-season losses in the games already played. |
 | `games_remaining` | Int64 | Regular-season games on the schedule still to play (simulated). |
 | `adj_net_rtg` | Float64 | As-of adjusted net rating from the possession ridge at the sim's penalty: points per 100 over an average opponent on a neutral court. |
-| `adj_net_rtg_sd` | Float64 | Posterior sd of adj_net_rtg (points per 100) from the ridge, capped so two teams' shift carries at most 3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws. |
+| `adj_net_rtg_sd` | Float64 | Error sd of adj_net_rtg (points per 100), capped so two teams' shift carries at most 3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws. With a preseason prior it is the prior's miss at the weight the ridge leaves it plus the sampling noise of the possessions played (PRIOR_MISS_POSS: fitted for the WNBA; the NBA keeps the ridge posterior); with none, the ridge posterior. |
 | `proj_wins` | Float64 | Mean final regular-season wins over the simulated seasons (played wins plus simulated ones). |
 | `proj_losses` | Float64 | Mean final regular-season losses over the simulated seasons. |
 | `proj_wins_sd` | Float64 | Standard deviation of the final wins over the simulated seasons. |

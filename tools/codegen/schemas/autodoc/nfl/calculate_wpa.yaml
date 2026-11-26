@@ -32,7 +32,7 @@ columns:
   type: character
   description: ''
 - name: teamParticipants
-  type: integer
+  type: list
   description: ''
 - name: isPenalty
   type: logical

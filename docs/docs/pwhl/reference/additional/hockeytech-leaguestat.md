@@ -1185,7 +1185,7 @@ One row per player for that season and position, as the feed ships it (~90 colum
 | `player_image` | String | URL to the player's headshot image as served by the HockeyTech/PWHL data feed. |
 | `namelink` | String | Player name as plain text (the text of the feed's player link; equals name in the captures), not HTML. |
 | `teamlink` | String | HTML link for the team. |
-| `team_breakdown` | Int64 | Per-team statistical breakdown. |
+| `team_breakdown` | List | Per-team statistical breakdown. |
 | `is_total` | Float64 | Whether the row is a season total. |
 
 **Raises**

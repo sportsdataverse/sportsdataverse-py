@@ -1,5 +1,5 @@
 # tools/fit_pro_rating_sd.py
-"""Candidate refit of the NBA / WNBA season sim's rating-uncertainty pseudo-count. FAILED its gate; not shipped.
+"""Fit of the NBA / WNBA season sim's prior-miss pseudo-count (``PRIOR_MISS_POSS``): WNBA shipped, NBA rejected.
 
 The sim draws one rating shift per team per simulated season,
 ``N(0, s2 / (n_off + k) + s2 / (n_def + k))`` (``s2`` the variance of points per 100 per
@@ -37,7 +37,13 @@ re-gated, since a third look at 2010-2017 can only be a comparison.
   1.4x (NBA, Dec 1) and 1.75x (WNBA, June 15) the variance the gate used. The in-season failures (NBA
   0.748 against 0.831, WNBA 0.729 against 0.853) are largely that.
 
-The gate seasons had been seen before (the first coverage run found the wide preseason bands on
+**Re-gate (2026-11-26), consistent form, fresh seasons.** The sim now draws per side
+``(lam / (n + lam))^2 * s2 / k + n * s2 / (n + lam)^2`` (``nba_season_sim.PRIOR_MISS_POSS``), with the
+centring-corrected ``k``, gated once on NBA 1998 2000-2009 and WNBA 1998 1999 2003-2009 under a
+pre-registration. WNBA passed and ships ``k = 1060``; NBA failed at the preseason (0.704 against 0.823,
+too narrow) and keeps ``k = lam``. The numbers are in the constant's comment.
+
+The first gate's seasons had been seen before (the first coverage run found the wide preseason bands on
 them). Reports: ClaudeCowork ``data/2026-11-25-model-lifecycle/refit_candidate/``.
 
 The train seasons are the sim's own (``SIM_CONSTANTS``). Inputs are the
@@ -132,7 +138,7 @@ def fit(lg: str, train: list[int], cache: Path) -> dict[str, object]:
         "mean_s2_prior": round(s2, 2),
         "preseason_sd_fit": round(float(np.sqrt(v)), 4),
         "pick": round(k, -1),  # possessions, to 10
-        "ridge_penalty": SIM_CONSTANTS[lid][0],  # what the sim uses: the pick failed its gate
+        "ridge_penalty": SIM_CONSTANTS[lid][0],  # k = lam, what the NBA keeps (its pick failed the gate)
     }
 
 
