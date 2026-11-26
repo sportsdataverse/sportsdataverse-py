@@ -212,7 +212,8 @@ def xpoints_baseline(league_avgs: pl.DataFrame) -> pl.DataFrame:
 
     Args:
         league_avgs: The ``LeagueAverages`` result set from
-            ``nba_stats_shotchartdetail`` (``shot_zone_basic`` /
+            ``nba_stats_shotchartdetail`` (``ShotChartLineupLeagueAverage`` from
+            ``nba_stats_shotchartlineupdetail``, same columns: ``shot_zone_basic`` /
             ``shot_zone_area`` / ``shot_zone_range`` / ``fga`` / ``fgm`` /
             ``fg_pct``).
 
@@ -858,7 +859,8 @@ def nba_shot_value_lineups(
     )
     parsed = parse_nba_stats_result_sets(raw)
     shots = parsed.get("ShotChartLineupDetail") if isinstance(parsed, dict) else parsed
-    league_avgs = parsed.get("LeagueAverages") if isinstance(parsed, dict) else pl.DataFrame()
+    # shotchartlineupdetail names its zone table ShotChartLineupLeagueAverage (shotchartdetail: LeagueAverages)
+    league_avgs = parsed.get("ShotChartLineupLeagueAverage") if isinstance(parsed, dict) else pl.DataFrame()
     if shots is None or shots.is_empty():
         empty = pl.DataFrame(schema={"group_id": pl.Utf8, "shot_type": pl.Utf8, **_SCORED_EXTRA})
         return empty.to_pandas() if return_as_pandas else empty

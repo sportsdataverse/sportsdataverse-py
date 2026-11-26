@@ -231,7 +231,7 @@ League-average FG% baseline table keyed by the three shot-zone columns.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `league_avgs` | `DataFrame` |  | The `LeagueAverages` result set from `nba_stats_shotchartdetail` (`shot_zone_basic` / `shot_zone_area` / `shot_zone_range` / `fga` / `fgm` / `fg_pct`). |
+| `league_avgs` | `DataFrame` |  | The `LeagueAverages` result set from `nba_stats_shotchartdetail` (`ShotChartLineupLeagueAverage` from `nba_stats_shotchartlineupdetail`, same columns: `shot_zone_basic` / `shot_zone_area` / `shot_zone_range` / `fga` / `fgm` / `fg_pct`). |
 
 **Returns**
 

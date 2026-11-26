@@ -44,10 +44,30 @@ def test_orchestrator_empty_fetch(monkeypatch):
 
 def test_lineups_scored(monkeypatch, shot_value_corpus):
     lineup_shots = shot_value_corpus["shots"].head(200).with_columns(pl.lit("201939-202691").alias("group_id"))
-    raw = _raw_from_frames({"ShotChartLineupDetail": lineup_shots, "LeagueAverages": shot_value_corpus["league_avgs"]})
+    # the endpoint's own result-set names (tests/fixtures/nba_stats/endpoints/shotchartlineupdetail.json)
+    raw = _raw_from_frames(
+        {"ShotChartLineupDetail": lineup_shots, "ShotChartLineupLeagueAverage": shot_value_corpus["league_avgs"]}
+    )
     monkeypatch.setattr(nba_stats, "nba_stats_shotchartlineupdetail", lambda **kw: raw)
     df = nba_shot_value_lineups("201939-202691", "2022-23", team_id=1610612744)
     assert "xpoints" in df.columns and df.schema["group_id"] == pl.Utf8 and df.height == 200
+    assert df["xpoints"].null_count() == 0, "the zone table was not found: every lineup shot unscored"
+
+
+def test_lineup_capture_names_its_zone_table():
+    """The vendored capture (and a live call, 2026-11-25) carry ShotChartLineupLeagueAverage, not LeagueAverages."""
+    import json
+    from pathlib import Path
+
+    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
+
+    caps = Path(__file__).resolve().parents[1] / "fixtures" / "nba_stats" / "endpoints"
+    parsed = parse_nba_stats_result_sets(json.loads((caps / "shotchartlineupdetail.json").read_text(encoding="utf-8")))
+    assert set(parsed) == {"ShotChartLineupDetail", "ShotChartLineupLeagueAverage"}
+    assert parsed["ShotChartLineupLeagueAverage"].height > 0
+    # the scorer reads it as it reads shotchartdetail's LeagueAverages: the same columns
+    detail = parse_nba_stats_result_sets(json.loads((caps / "shotchartdetail.json").read_text(encoding="utf-8")))
+    assert parsed["ShotChartLineupLeagueAverage"].columns == detail["LeagueAverages"].columns
 
 
 def test_lineups_empty(monkeypatch):
