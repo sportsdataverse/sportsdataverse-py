@@ -8,8 +8,7 @@ adjustment makes each team's minutes-weighted player scores sum to the team's
 adjusted rating (the BPM constraint). No lineup data is required at fit or
 call time.
 
-Methodology reference: Basketball-Reference's Box Plus/Minus 2.0 write-up
-(Daniel Myers) -- methodology only, no ported code.
+Methodology: Box Plus/Minus 2.0 -- methodology only, no ported code.
 """
 
 from __future__ import annotations

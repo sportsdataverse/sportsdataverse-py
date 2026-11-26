@@ -5,9 +5,9 @@ League-agnostic: consumes the oracle-frame game contract
 emits pre-game ratings + P(home). Every constant is a tunable
 (:class:`EloConfig`) — the fixed "K=20/HFA=65/1/3-reversion" recipe was
 refuted in RESEARCH; seeds here are starting points for the harness sweep
-(nfelo: k~9.1, z~402, carryover~0.53).
+(k~9.1, z~402, carryover~0.53).
 
-MOV multiplier (538 form): ``ln(|pd|+1) * 2.2 / ((elo_w - elo_l)*0.001 + 2.2)``
+MOV multiplier: ``ln(|pd|+1) * 2.2 / ((elo_w - elo_l)*0.001 + 2.2)``
 — log-diminishing returns plus the autocorrelation correction that shrinks
 credit when big favorites win big.
 """
@@ -33,7 +33,7 @@ class EloConfig:
         hfa: Home-field advantage in rating points (0 applied at neutral sites).
         init: Rating for a team's first-ever appearance.
         carryover: Fraction of (rating - init) kept across seasons
-            (0 = full reset, 1 = no reversion; nfelo ~0.53).
+            (0 = full reset, 1 = no reversion; seed ~0.53).
         mov_mult: Apply the margin-of-victory multiplier.
     """
 

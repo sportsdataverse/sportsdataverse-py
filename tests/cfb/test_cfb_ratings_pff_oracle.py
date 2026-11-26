@@ -45,21 +45,21 @@ def _joined() -> pl.DataFrame:
 
 
 def test_adj_net_tracks_pff_overall() -> None:
-    """Net EPA vs PFF overall team grade (observed 0.802). Floor 0.75."""
+    """Net EPA vs PFF overall team grade (observed 0.769; 0.802 before 2026-11-25). Floor 0.75."""
     j = _joined()
     r = spearman_corr(j["adj_net"].to_numpy(), j["pff_overall"].to_numpy())
     assert r >= 0.75, r
 
 
 def test_adj_off_tracks_pff_offense() -> None:
-    """Offensive EPA vs PFF offense grade (observed 0.794; both higher=better). Floor 0.72."""
+    """Offensive EPA vs PFF offense grade (observed 0.818; both higher=better). Floor 0.72."""
     j = _joined()
     r = spearman_corr(j["adj_off_epa"].to_numpy(), j["pff_offense"].to_numpy())
     assert r >= 0.72, r
 
 
 def test_adj_def_inversely_tracks_pff_defense() -> None:
-    """Defensive EPA-allowed vs PFF defense grade (observed -0.669).
+    """Defensive EPA-allowed vs PFF defense grade (observed -0.682).
 
     The correlation is NEGATIVE by construction and that is the pass condition:
     ``adj_def_epa`` is EPA *allowed* per play (lower = better defense) while the

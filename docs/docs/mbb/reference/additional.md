@@ -149,7 +149,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [reset_config](additional/stats-ncaa-org-3.md#reset_config) | Reset the active config to its env-var-derived defaults. |
 | [resolve_possessions](additional/stats-ncaa-org-3.md#resolve_possessions) | Attach a `player_id` to each of the ten on-floor slots. |
 | [right_kind_of_shot](additional/stats-ncaa-org-3.md#right_kind_of_shot) | Whether `pbp_event`'s shot type is compatible with `shot`'s |
-| [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
+| [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | Iterative SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
 | [same_school](additional/stats-ncaa-org-3.md#same_school) | Whether two team-name spellings denote the same school. |
 | [season_slice](additional/stats-ncaa-org-3.md#season_slice) | Cut a POOLED fit's players back to ONE season's participants and exposure. |
 | [select_contains](additional/stats-ncaa-org-3.md#select_contains) | JSoup `root.select(sel + ":contains(text)")`: candidates whose full |
