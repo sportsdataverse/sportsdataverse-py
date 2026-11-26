@@ -38,15 +38,15 @@ if TYPE_CHECKING:
 #: The WNBA (``"10"``) has none: its booster failed the walk-forward gates on 2016-2020 and 2022
 #: (``tools/models/nba_shot_value/shot_make_wnba_holdout.json``). The G League (``"20"``) has no
 #: play-by-play release to fit on.
-SHOT_MAKE_MODELS: "dict[str, str]" = {"00": "nba_shot_make.ubj"}
+SHOT_MAKE_MODELS: dict[str, str] = {"00": "nba_shot_make.ubj"}
 #: The columns the shot-make model reads (play-by-play names; ``x_legacy`` / ``y_legacy`` in tenths of
 #: a foot from the hoop).
-SHOT_MAKE_INPUTS: "list[str]" = ["x_legacy", "y_legacy", "shot_value", "sub_type"]
+SHOT_MAKE_INPUTS: list[str] = ["x_legacy", "y_legacy", "shot_value", "sub_type"]
 #: The design's numeric columns, in order. ``distance_ft`` is the location's distance from the hoop:
 #: the play-by-play's ``shot_distance`` rounds where the shot chart's truncates (they differ on half of
 #: all shots) and codes many corner threes at 0 ft, so neither source's column is read. One indicator
 #: per level in the booster's ``shot_types`` attribute follows.
-SHOT_MAKE_NUMERIC: "list[str]" = ["distance_ft", "x_legacy", "y_legacy", "shot_value"]
+SHOT_MAKE_NUMERIC: list[str] = ["distance_ft", "x_legacy", "y_legacy", "shot_value"]
 
 _ZONE_KEYS = ["shot_zone_basic", "shot_zone_area", "shot_zone_range"]
 _BASELINE_SCHEMA = {
@@ -65,7 +65,7 @@ _SCORED_EXTRA = {
 
 
 @functools.lru_cache(maxsize=4)
-def load_shot_make_model(league_id: str = "00") -> "xgb.Booster":
+def load_shot_make_model(league_id: str = "00") -> xgb.Booster:
     """Load the bundled shot-make booster for ``league_id`` (only ``"00"``, the NBA, has one).
 
     Its attributes carry the shot-type levels it was fitted with (``shot_types``, a JSON list),
@@ -106,12 +106,12 @@ def load_shot_make_model(league_id: str = "00") -> "xgb.Booster":
     return booster
 
 
-def _shot_make_levels(booster: "xgb.Booster") -> "list[str]":
+def _shot_make_levels(booster: xgb.Booster) -> list[str]:
     """The shot-type levels a shot-make booster was fitted with (its ``shot_types`` attribute)."""
     return json.loads(booster.attr("shot_types") or "[]")
 
 
-def _shot_make_feature_names(levels: "list[str]") -> "list[str]":
+def _shot_make_feature_names(levels: list[str]) -> list[str]:
     """The shot-make design's column names: :data:`SHOT_MAKE_NUMERIC`, then ``sub_type=<level>``."""
     return [*SHOT_MAKE_NUMERIC, *(f"sub_type={t}" for t in levels)]
 
@@ -120,7 +120,7 @@ def _located(c: str) -> pl.Expr:
     return pl.col(c).cast(pl.Float64).fill_nan(None)
 
 
-def _shot_make_design(shots: pl.DataFrame, levels: "list[str]") -> np.ndarray:
+def _shot_make_design(shots: pl.DataFrame, levels: list[str]) -> np.ndarray:
     """The shot-make design matrix: the numeric inputs (null as NaN), then one indicator per level.
 
     A shot type outside ``levels`` (rare, or new to the feed) gets every indicator 0, the trees'
@@ -143,7 +143,7 @@ def add_shot_make_prob(
     *,
     league_id: str = "00",
     return_as_pandas: bool = False,
-) -> "Union[pl.DataFrame, pd.DataFrame]":
+) -> pl.DataFrame | pd.DataFrame:
     """Add each field-goal attempt's make chance from the bundled location model.
 
     The model reads only what the play-by-play records for a shot: its court location
@@ -241,29 +241,25 @@ def score_shot_xpoints(
     league_avgs: pl.DataFrame,
     *,
     league_id: str = "00",
-    model: "Literal['zone', 'location']" = "zone",
+    model: Literal["zone", "location"] = "zone",
     return_as_pandas: bool = False,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Score each shot with its make chance and expected points.
 
-    ``base_fg_pct`` is the shot's make chance. With ``model="zone"`` (the default) it is the
-    league's FG% in the shot's zone triple from ``LeagueAverages``, falling back to the
-    within-``shot_zone_range`` mean when a triple is unmatched. With ``model="location"`` (the NBA
-    only) it is the bundled location model's (:func:`add_shot_make_prob`, on the shot chart's
-    ``loc_x`` / ``loc_y`` / ``action_type`` / ``shot_type``); a shot it cannot score (no location)
-    takes the zone value. Either way the frame gains ``shot_value`` (3 for a ``3PT`` shot else 2),
-    ``xpoints = base_fg_pct * shot_value`` and ``actual_points = shot_made_flag * shot_value``.
+    ``base_fg_pct`` is the shot's make chance: with ``model="zone"`` (the default) the league's FG%
+    in its zone triple from ``LeagueAverages`` (unmatched: the ``shot_zone_range`` mean); with
+    ``model="location"`` (NBA only) :func:`add_shot_make_prob` on ``loc_x`` / ``loc_y`` /
+    ``action_type`` / ``shot_type``, the zone value where a shot has no location. The frame gains
+    ``shot_value`` (3 for ``3PT`` else 2), ``xpoints = base_fg_pct * shot_value`` and
+    ``actual_points = shot_made_flag * shot_value``.
 
-    How the two compare, walk-forward by season on the NBA's regular-season play-by-play (fit
-    report ``tools/models/nba_shot_value/shot_make_nba_holdout.json``): the location model's log
-    loss is 3% to 4% below the zone table's on every season from 2018-19, the table built from the
-    scored season's own shots, almost all of it at the rim and none on threes. The zone table is
-    calibrated to its own season by construction; the location model carries its training seasons'
-    level, off by more than a point on 2018-19, 2020-21 and 2022-23 and on 2026-27 so far.
-    ``shooter_talent`` and the shrinkage ``k`` in ``nba_shot_value_constants`` are fitted for the
-    zone table: with the location model, talent reads as make% above what the shot type and spot
-    predict (the type is the scorer's label, written after the play), and ``k`` fits 60.7
-    (``tools/fit_nba_shot_shrinkage_k.py --model location``).
+    Walk-forward on the NBA's play-by-play (``tools/models/nba_shot_value/shot_make_nba_holdout.json``)
+    the location model's log loss is 3% to 4% under the zone table's on every season from 2018-19,
+    nearly all at the rim, none on threes; but it carries its training seasons' level (off by more
+    than a point on 2018-19, 2020-21, 2022-23 and 2026-27 so far), where the zone table is its own
+    season's. ``shooter_talent``'s ``k`` is the zone table's; the location model's fits 60.7
+    (``tools/fit_nba_shot_shrinkage_k.py --model location``), and its talent is make% above what the
+    spot and the scorer's after-the-play shot type predict.
 
     Args:
         shots: Per-shot ``Shot_Chart_Detail`` frame (needs ``shot_type``, the

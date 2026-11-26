@@ -355,28 +355,24 @@ injuries.filter(pl.col("status") == "Out").select("player", "team", "injury")
 
 ### score_shot_xpoints {#score_shot_xpoints}
 
-`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, league_id: 'str' = '00', model: '"Literal[\'zone\', \'location\']"' = 'zone', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, league_id: 'str' = '00', model: "Literal['zone', 'location']" = 'zone', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Score each shot with its make chance and expected points.
 
-`base_fg_pct` is the shot's make chance. With `model="zone"` (the default) it is the
-league's FG% in the shot's zone triple from `LeagueAverages`, falling back to the
-within-`shot_zone_range` mean when a triple is unmatched. With `model="location"` (the NBA
-only) it is the bundled location model's (`add_shot_make_prob`, on the shot chart's
-`loc_x` / `loc_y` / `action_type` / `shot_type`); a shot it cannot score (no location)
-takes the zone value. Either way the frame gains `shot_value` (3 for a `3PT` shot else 2),
-`xpoints = base_fg_pct * shot_value` and `actual_points = shot_made_flag * shot_value`.
+`base_fg_pct` is the shot's make chance: with `model="zone"` (the default) the league's FG%
+in its zone triple from `LeagueAverages` (unmatched: the `shot_zone_range` mean); with
+`model="location"` (NBA only) `add_shot_make_prob` on `loc_x` / `loc_y` /
+`action_type` / `shot_type`, the zone value where a shot has no location. The frame gains
+`shot_value` (3 for `3PT` else 2), `xpoints = base_fg_pct * shot_value` and
+`actual_points = shot_made_flag * shot_value`.
 
-How the two compare, walk-forward by season on the NBA's regular-season play-by-play (fit
-report `tools/models/nba_shot_value/shot_make_nba_holdout.json`): the location model's log
-loss is 3% to 4% below the zone table's on every season from 2018-19, the table built from the
-scored season's own shots, almost all of it at the rim and none on threes. The zone table is
-calibrated to its own season by construction; the location model carries its training seasons'
-level, off by more than a point on 2018-19, 2020-21 and 2022-23 and on 2026-27 so far.
-`shooter_talent` and the shrinkage `k` in `nba_shot_value_constants` are fitted for the
-zone table: with the location model, talent reads as make% above what the shot type and spot
-predict (the type is the scorer's label, written after the play), and `k` fits 60.7
-(`tools/fit_nba_shot_shrinkage_k.py --model location`).
+Walk-forward on the NBA's play-by-play (`tools/models/nba_shot_value/shot_make_nba_holdout.json`)
+the location model's log loss is 3% to 4% under the zone table's on every season from 2018-19,
+nearly all at the rim, none on threes; but it carries its training seasons' level (off by more
+than a point on 2018-19, 2020-21, 2022-23 and 2026-27 so far), where the zone table is its own
+season's. `shooter_talent`'s `k` is the zone table's; the location model's fits 60.7
+(`tools/fit_nba_shot_shrinkage_k.py --model location`), and its talent is make% above what the
+spot and the scorer's after-the-play shot type predict.
 
 **Parameters**
 

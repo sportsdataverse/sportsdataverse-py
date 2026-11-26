@@ -261,7 +261,7 @@ print(poss.group_by("is_transition").len())
 
 ### add_shot_make_prob {#add_shot_make_prob}
 
-`add_shot_make_prob(shots: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+`add_shot_make_prob(shots: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Add each field-goal attempt's make chance from the bundled location model.
 
@@ -934,7 +934,7 @@ print(lu.sort("pts_per_100", descending=True).head())
 
 ### load_shot_make_model {#load_shot_make_model}
 
-`load_shot_make_model(league_id: 'str' = '00') -> "'xgb.Booster'"`
+`load_shot_make_model(league_id: 'str' = '00') -> 'xgb.Booster'`
 
 Load the bundled shot-make booster for `league_id` (only `"00"`, the NBA, has one).
 
