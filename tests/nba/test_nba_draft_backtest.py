@@ -22,7 +22,7 @@ floor, the following was tried and recorded:
    that. With `cutoff_year=2015` (train=2000-2015, 1080 prospects;
    holdout=2016-2019, 248 prospects) holdout Spearman rises to **0.147**
    and AUC to **0.575** -- both now clearly positive and non-trivial, but
-   still well under the slot-only baseline (Spearman 0.47 on the same
+   still well under the slot-only baseline (Spearman 0.455 on the same
    holdout, n=177 drafted-with-known-pick players).
 
 **Conclusion:** this is a genuine, well-powered (1080-row training set)
@@ -162,8 +162,9 @@ def test_draft_holdout_vs_slot_baseline_diagnostic() -> None:
     """Documented, non-blocking diagnostic (see module docstring).
 
     Combine-only measurements do not beat the slot-only baseline on this
-    corpus (observed: model Spearman 0.149 vs slot-baseline Spearman 0.474,
-    n=177 holdout prospects with a known draft slot). This assertion checks
+    corpus (observed: model Spearman 0.149 on all 248 holdout prospects and
+    0.048 on the 177 with a known draft slot, vs slot-baseline Spearman 0.455
+    on those 177). This assertion checks
     the diagnostic stays in the same ballpark run-to-run (an order-of-magnitude
     regression check), not that the model beats the baseline -- beating it is
     not, on this evidence, an achievable bar for a combine-only model.

@@ -209,6 +209,11 @@ from sportsdataverse.nba.nba_team_season_rates import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_team_strength import nba_team_strength  # noqa: F401
 from sportsdataverse.nba.nba_team_luck import nba_team_luck  # noqa: F401
+from sportsdataverse.nba.nba_playoff_series import (  # noqa: F401
+    nba_playoff_series,
+    nba_playoff_series_players,
+    nba_playoff_series_teams,
+)
 from sportsdataverse.nba.nba_shot_zone_profiles import nba_player_shot_zones, nba_team_shot_zones  # noqa: F401
 from sportsdataverse.nba.nba_player_war import nba_player_war  # noqa: F401
 from sportsdataverse.nba.nba_coach_seasons import nba_coach_careers, nba_coach_seasons  # noqa: F401
