@@ -26,7 +26,8 @@ implements them standalone per the T3.3 plan (mirroring MBB names).
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass, field
 
 from sportsdataverse._common.metrics import (
     as_of_ratings_split as as_of_ratings_split,
@@ -70,6 +71,13 @@ class LeagueConstants:
         pts_sd_b: Slope of that law.
         count_dispersion: Player-prop count over-dispersion ``var/mean`` for
             reb/ast/fg3m (Negative-Binomial when > 1).
+        stat_dispersion: ``var/mean`` per stat for the other prop counts
+            (``stl, blk, tov, fgm, ftm``); a stat missing here has no fitted
+            distribution in that league.
+        rate_prior_minutes: Pseudo-minutes ``k`` per stat that
+            :func:`~sportsdataverse.nba.nba_player_props.player_rates` shrinks a
+            player's per-minute rate with, toward his minutes-and-role tier's
+            pooled rate; empty means raw rates.
         in_game_wp_artifact: Filename of the bundled in-game-WP coefficients
             under ``sportsdataverse/nba/models`` (committed in Phase 3).
     """
@@ -83,6 +91,8 @@ class LeagueConstants:
     pts_sd_b: float
     count_dispersion: float
     in_game_wp_artifact: str = "nba_in_game_wp.ubj"
+    stat_dispersion: Mapping[str, float] = field(default_factory=dict)
+    rate_prior_minutes: Mapping[str, float] = field(default_factory=dict)
 
 
 # hfa/margin_sd are FITTED per league on their own as-of-date backtest
@@ -105,6 +115,21 @@ class LeagueConstants:
 #   WNBA ("10"): 107 players -> sd = 1.190 + 1.363*sqrt(mu), dispersion 1.19 (2026-11-24); at
 #                15 pts that is 6.46 vs NBA 6.81 (player-bootstrap 95% CIs 6.23-6.71 / 6.69-6.94).
 # G-League ("20") has no box-log fixture, so it carries the NBA values as seeds, like its hfa.
+#
+# stat_dispersion / rate_prior_minutes (NBA only) are FITTED by
+# tools/models/nba_prediction/fit_player_rate_prior.py on the 2024-25 and 2025-26 regular seasons
+# (ESPN player box release; 2023-24 feeds only the 2024-25 tier prior), 2026-11-25:
+#   stat_dispersion: median single-game var/mean over 704 rotation player-seasons.
+#   rate_prior_minutes: the k minimizing mean CRPS of each stat's predictive over 51,752 played
+#     player-games (players with >= 1 earlier game), grid then x1.25 refinement.
+#   Held-out check on 2021-22, the keep rule written before it ran (25,373 player-games, 164 days;
+#   no props constant had used that season; reproduce with the script's `--holdout 2022`): CRPS gain
+#   against raw rates on every one of the nine stats, z 3.0 (pts) to 5.9 (stl) with game-day
+#   clustered bootstrap SEs (7.1 to 20.3 clustered by player); non-inferior on pra; 80% coverage rises
+#   on every stat and moves no more than .01 away from .80 on any (pts .799 -> .807). The gain sits in
+#   players' first 10 games (pts +0.106) and is about zero after 30.
+# WNBA and G-League are not fitted (no held-out season has been set aside to check a fit there), so
+# they keep raw rates and have no distribution for the five extra stats.
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "00": LeagueConstants(
         hfa=2.184,
@@ -116,6 +141,18 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         pts_sd_b=1.396,
         count_dispersion=1.24,
         in_game_wp_artifact="nba_in_game_wp.ubj",
+        stat_dispersion={"stl": 1.057, "blk": 1.039, "tov": 1.037, "fgm": 1.306, "ftm": 1.928},
+        rate_prior_minutes={
+            "pts": 50.0,
+            "reb": 40.0,
+            "ast": 40.0,
+            "fg3m": 40.0,
+            "stl": 320.0,
+            "blk": 100.0,
+            "tov": 160.0,
+            "fgm": 64.0,
+            "ftm": 100.0,
+        },
     ),
     "10": LeagueConstants(
         hfa=1.184,

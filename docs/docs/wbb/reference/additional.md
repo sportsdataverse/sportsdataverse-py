@@ -381,7 +381,10 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_team_season_rates](additional/analytics-5.md#wbb_team_season_rates) | Women's college season team rates from possessions, with home/away/close/clutch splits. |
 | [wbb_team_shot_zones](additional/analytics-5.md#wbb_team_shot_zones) | Women's college season shot profile by zone per team, for and allowed. |
 | [wbb_team_strength](additional/analytics-5.md#wbb_team_strength) | Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
-| [weighted_avg](additional/analytics-5.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
+| [wbb_tournament_run_players](additional/analytics-6.md#wbb_tournament_run_players) | Each women's player's run line against the regular season. Delegates to `mbb_tournament_run_players`. |
+| [wbb_tournament_run_teams](additional/analytics-6.md#wbb_tournament_run_teams) | Each women's run's record and box totals. Delegates to `mbb_tournament_run_teams(league="womens")`. |
+| [wbb_tournament_runs](additional/analytics-6.md#wbb_tournament_runs) | Women's tournament games, once per side, keyed to each team's run (NCAA, WNIT, WBIT, conference ...). |
+| [weighted_avg](additional/analytics-6.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 
 ## Dates and seasons
 

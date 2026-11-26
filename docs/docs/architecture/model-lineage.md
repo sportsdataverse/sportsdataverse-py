@@ -36,7 +36,7 @@ holds each model's gates, retrain date and cadence. Each booster here ships a
 | `sportsdataverse/cfb/models/wp_naive.ubj` | `model_training/train_wp.py --variant naive` | `05bfcb1641` | no (release asset 2026-06-18) |
 | `sportsdataverse/cfb/models/cfb_cp_model.ubj` | `cpoe/` (`python -m cfb_model_build.cpoe --variant game_state`) | `fbe11c473a` | no |
 | `sportsdataverse/cfb/models/cfb_cp_model_air_yards.ubj` | `cpoe/` (air-yards variant) | `4b34e0e81e` | yes |
-| `sportsdataverse/cfb/models/fd_model.ubj` | `model_training/fourth_down/` | `fbe11c473a` | no |
+| `sportsdataverse/cfb/models/fd_model.ubj` | `model_training/fourth_down/`; kept by the 2026-holdout rebuild gate (`fourth_down/rebuild_gate.py`, result `models/fourth_down/fd_rebuild.gate.json`, cfb-data `895b0e21f`) | `fbe11c473a` | no |
 | `sportsdataverse/cfb/models/fg_model.ubj` | `model_training/train_fg.py` | `05bfcb1641` | no |
 | `sportsdataverse/cfb/models/two_pt_model.ubj` | `model_training/train_two_pt.py` | `05bfcb1641` | no |
 | `sportsdataverse/cfb/models/xpass_model.ubj` | `model_training/train_xpass.py` | `05bfcb1641` | no |
@@ -188,9 +188,11 @@ an owner decision:
 - **Retire rule** (`tools/models/lifecycle/retire.py`). After each completed season
   past the holdout, score the model once against its baseline (same metric,
   paired, same clustering, no refit). Two consecutive seasons whose upper 97.5%
-  bound of `model - baseline` is at or above 0, or one season worse than the
-  baseline by more than the adoption margin at 1.96 SE (its lower 97.5% bound
-  above the margin), make it a RETIRE-candidate. The latest
+  bound of `model - baseline` is at or above 0 (consecutive scored seasons: a
+  season with no record between two failures does not break the run), or one season worse than the
+  baseline by more than the adoption margin's magnitude (`abs(adoption_margin)`;
+  the ledger stores a gain as negative) at 1.96 SE (its lower 97.5% bound above
+  it), make it a RETIRE-candidate. The latest
   season failing alone is WATCH; before any season is scored it is UNSCORED. The rule
   runs only on a row with both a `baseline` and `holdout_seasons`. Retiring is the owner's call: `status: retired`
   with `retired_reason`, one release of warning through
