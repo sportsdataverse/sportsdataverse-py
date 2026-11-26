@@ -132,10 +132,9 @@ def test_build_combine_features_join_and_derived_cols() -> None:
     assert row1["wingspan_diff"][0] == 4.0
     assert row1["lane_agility"][0] == 11.0
 
-    # missing drill measurement for player 2 is imputed, not null
+    # a missing drill measurement stays null: nba_draft_model imputes the training median
     row2 = out.filter(pl.col("player_id") == "2")
-    assert row2["lane_agility"][0] is not None
-    assert row2["lane_agility"][0] == 0.0
+    assert row2["lane_agility"][0] is None
 
 
 def test_build_combine_features_empty_input_has_full_schema() -> None:
