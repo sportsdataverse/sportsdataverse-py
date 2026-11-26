@@ -428,6 +428,9 @@ mbb:
   college_play_style_features: {seasons: 2026}
   mbb_team_strength: {seasons: 2025}
   mbb_team_luck: {seasons: 2025}
+  mbb_tournament_runs: {seasons: 2025}
+  mbb_tournament_run_teams: {seasons: 2025}
+  mbb_tournament_run_players: {seasons: 2025}
   mbb_player_shot_zones: {seasons: 2025}
   mbb_team_shot_zones: {seasons: 2025}
   mbb_official_seasons: {seasons: 2026}
@@ -524,6 +527,9 @@ wbb:
   wbb_play_styles: {seasons: 2026}
   wbb_team_strength: {seasons: 2025}
   wbb_team_luck: {seasons: 2025}
+  wbb_tournament_runs: {seasons: 2025}
+  wbb_tournament_run_teams: {seasons: 2025}
+  wbb_tournament_run_players: {seasons: 2025}
   wbb_player_shot_zones: {seasons: 2025}
   wbb_team_shot_zones: {seasons: 2025}
   wbb_official_seasons: {seasons: 2026}

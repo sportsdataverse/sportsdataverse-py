@@ -620,6 +620,9 @@ from sportsdataverse.wbb import wbb_team_season_flow as wbb_team_season_flow  # 
 from sportsdataverse.wbb import wbb_team_season_rates as wbb_team_season_rates  # noqa: F401
 from sportsdataverse.wbb import wbb_team_shot_zones as wbb_team_shot_zones  # noqa: F401
 from sportsdataverse.wbb import wbb_team_strength as wbb_team_strength  # noqa: F401
+from sportsdataverse.wbb import wbb_tournament_run_players as wbb_tournament_run_players  # noqa: F401
+from sportsdataverse.wbb import wbb_tournament_run_teams as wbb_tournament_run_teams  # noqa: F401
+from sportsdataverse.wbb import wbb_tournament_runs as wbb_tournament_runs  # noqa: F401
 from sportsdataverse.wbb import weighted_avg as weighted_avg  # noqa: F401
 from sportsdataverse.wbb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 
@@ -1221,6 +1224,9 @@ __all__ = [
     "wbb_team_season_rates",
     "wbb_team_shot_zones",
     "wbb_team_strength",
+    "wbb_tournament_run_players",
+    "wbb_tournament_run_teams",
+    "wbb_tournament_runs",
     "weighted_avg",
     "win_prob_from_margin",
 ]
