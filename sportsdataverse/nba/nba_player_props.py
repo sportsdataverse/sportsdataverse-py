@@ -104,8 +104,8 @@ def _tier_totals(played: pl.DataFrame, stats: list[str]) -> pl.DataFrame:
 def player_rates(
     box_logs: pl.DataFrame,
     *,
-    prior_logs: Union[pl.DataFrame, None] = None,
-    league_id: Union[str, None] = None,
+    prior_logs: pl.DataFrame | None = None,
+    league_id: str | None = None,
 ) -> pl.DataFrame:
     """Per-player per-minute rate stats from box logs, shrunk toward a tier prior in the NBA.
 
@@ -404,6 +404,18 @@ def _load_game_date(season: int, league_id: str, game_id: str) -> Union[dt.date,
     return hit.select(as_date(pl.col("date"))).to_series().min() if hit.height else None
 
 
+def _prior_season_logs(season: int, league_id: str, as_of_date: dt.date | None) -> pl.DataFrame | None:
+    """The previous regular season for the rate prior; ``None`` in a league without shrinkage."""
+    if not get_constants(league_id).rate_prior_minutes:
+        return None
+    prior = _load_player_logs(season - 1, league_id).filter(pl.col("season_type") == 2)
+    if as_of_date is not None:
+        prior = prior.filter(pl.col("game_date") < as_of_date)
+    if prior.height == 0:  # e.g. a release without season_type: never let the prior vanish silently
+        raise ValueError(f"nba_player_props: no {season - 1} regular-season box logs for the rate prior")
+    return prior
+
+
 _PROPS_SCHEMA = {
     "player_id": pl.Utf8,
     "team_id": pl.Utf8,
@@ -485,9 +497,8 @@ def nba_player_props(
     strictly before ``as_of_date`` (both inputs), computes per-minute
     :func:`player_rates`, and projects each player's line onto their mean
     minutes and the matchup's pace factor (``exp_poss / avg_pace``). Only the
-    two teams in the matchup are returned. In the NBA the rates are shrunk toward
-    each player's minutes-and-role tier, pooled over this season's earlier games
-    and the previous regular season (one more box-log read).
+    two teams in the matchup are returned. NBA rates are shrunk toward a tier prior
+    that also pools the previous regular season (one more box-log read).
 
     Args:
         season: End year of the season (e.g. ``2024``).
@@ -518,9 +529,8 @@ def nba_player_props(
         rows.
 
     Raises:
-        ValueError: The box logs carry no ``game_date`` (the as-of cut cannot be applied); or,
-            in the NBA, the previous season has no regular-season box logs or no ``starter``
-            values for the rate prior.
+        ValueError: The box logs carry no ``game_date`` (the as-of cut cannot be applied), or
+            (NBA) the previous regular season is empty or has no ``starter`` values.
 
     Warns:
         AsOfCutWarning: ``as_of_date`` is ``None`` and ``game_id`` is in neither
@@ -553,14 +563,7 @@ def nba_player_props(
         # Strict `<`: the target game's own line (and every later one) never feeds its projection.
         logs = logs.filter(pl.col("game_date") < as_of_date)
     ratings = _load_ratings(season, league_id, as_of_date=as_of_date)
-    prior = None
-    if get_constants(league_id).rate_prior_minutes:
-        prior = _load_player_logs(season - 1, league_id).filter(pl.col("season_type") == 2)  # last regular season
-        if as_of_date is not None:
-            prior = prior.filter(pl.col("game_date") < as_of_date)
-        if prior.height == 0:  # e.g. a release without season_type: never let the prior vanish silently
-            raise ValueError(f"nba_player_props: no {season - 1} regular-season box logs for the rate prior")
-    rates = player_rates(logs, prior_logs=prior, league_id=league_id)
+    rates = player_rates(logs, prior_logs=_prior_season_logs(season, league_id, as_of_date), league_id=league_id)
     if rates.height == 0 or ratings.height == 0:
         out = pl.DataFrame(schema=_PROPS_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
@@ -571,11 +574,7 @@ def nba_player_props(
     out = (
         _expected_minutes(rates, logs, league_id)
         .with_columns(
-            (pl.col("pts_per_min") * pl.col("minutes_pg") * pace_factor).alias("stat_pts_exp"),
-            (pl.col("reb_per_min") * pl.col("minutes_pg") * pace_factor).alias("stat_reb_exp"),
-            (pl.col("ast_per_min") * pl.col("minutes_pg") * pace_factor).alias("stat_ast_exp"),
-            (pl.col("fg3m_per_min") * pl.col("minutes_pg") * pace_factor).alias("stat_fg3m_exp"),
-            *[(pl.col(f"{s}_per_min") * pl.col("minutes_pg") * pace_factor).alias(f"stat_{s}_exp") for s in _STATS[4:]],
+            *[(pl.col(f"{s}_per_min") * pl.col("minutes_pg") * pace_factor).alias(f"stat_{s}_exp") for s in _STATS],
             pl.lit(pace_proj, dtype=pl.Float64).alias("pace_proj"),
         )
         .select(list(_PROPS_SCHEMA))

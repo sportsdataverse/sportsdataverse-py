@@ -422,9 +422,8 @@ Loads the season's player box logs + team ratings, keeps only games played
 strictly before `as_of_date` (both inputs), computes per-minute
 `player_rates`, and projects each player's line onto their mean
 minutes and the matchup's pace factor (`exp_poss / avg_pace`). Only the
-two teams in the matchup are returned. In the NBA the rates are shrunk toward
-each player's minutes-and-role tier, pooled over this season's earlier games
-and the previous regular season (one more box-log read).
+two teams in the matchup are returned. NBA rates are shrunk toward a tier prior
+that also pools the previous regular season (one more box-log read).
 
 **Parameters**
 
@@ -462,7 +461,7 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 
 | Exception | Description |
 |---|---|
-| `ValueError` | The box logs carry no `game_date` (the as-of cut cannot be applied); or, in the NBA, the previous season has no regular-season box logs or no `starter` values for the rate prior. |
+| `ValueError` | The box logs carry no `game_date` (the as-of cut cannot be applied), or (NBA) the previous regular season is empty or has no `starter` values. |
 
 **Example**
 

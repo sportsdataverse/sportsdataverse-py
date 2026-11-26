@@ -12827,8 +12827,8 @@
   group: nba-props-rate-prior
   finding: nba-props-rate-prior
   file: sportsdataverse/nba/nba_player_props.py
-  snippet: '            prior = prior.filter(pl.col("game_date") < as_of_date)'
-  mutant: '            prior = prior'
+  snippet: '        prior = prior.filter(pl.col("game_date") < as_of_date)'
+  mutant: '        prior = prior'
   test: tests/nba/test_nba_player_props_asof.py
   expected: kill
   note: The prior frame is cut at the as-of date too; the as-of corpus serves the same season as "last season", so uncut, the target game's own line reaches the tier prior (own-line probe red).

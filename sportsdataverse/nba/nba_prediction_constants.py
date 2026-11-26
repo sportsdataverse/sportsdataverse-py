@@ -26,8 +26,8 @@ implements them standalone per the T3.3 plan (mirroring MBB names).
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Mapping
 
 from sportsdataverse._common.metrics import (
     as_of_ratings_split as as_of_ratings_split,
