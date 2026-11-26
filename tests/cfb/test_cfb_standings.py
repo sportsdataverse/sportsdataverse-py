@@ -287,6 +287,15 @@ class TestCommonOpponentDescent:
         # real title-game pairing).
         assert self._top2("ACC") == ("Virginia", "Duke")
 
+    def test_2025_fixture_leaves_out_the_non_conference_ncstate_virginia_game(self) -> None:
+        # The schedule flags the week-2 NC State-Virginia meeting non-conference; the fixture drops it.
+        games = pl.read_csv(TITLE_TIES_2025_DIR / "games.csv")
+        teams = pl.read_csv(TITLE_TIES_2025_DIR / "teams.csv")
+        st = cfb_standings(games, teams)
+        va = st.filter(pl.col("team") == "Virginia")
+        assert (va["conf_wins"].item(), va["conf_losses"].item()) == (7, 1)
+        assert st.filter(pl.col("conference") == "ACC")["conf_games"].sum() / 2 == 68
+
     def test_2025_sec_four_way_tie_seeds_alabama_then_georgia(self) -> None:
         # Alabama, Georgia, Ole Miss and Texas A&M tied at 7-1; Alabama was
         # seeded first and Georgia second (Alabama hosted the title game).
