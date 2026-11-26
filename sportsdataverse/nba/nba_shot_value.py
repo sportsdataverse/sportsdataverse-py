@@ -212,7 +212,8 @@ def xpoints_baseline(league_avgs: pl.DataFrame) -> pl.DataFrame:
 
     Args:
         league_avgs: The ``LeagueAverages`` result set from
-            ``nba_stats_shotchartdetail`` (``shot_zone_basic`` /
+            ``nba_stats_shotchartdetail`` (``ShotChartLineupLeagueAverage`` from
+            ``nba_stats_shotchartlineupdetail``, same columns: ``shot_zone_basic`` /
             ``shot_zone_area`` / ``shot_zone_range`` / ``fga`` / ``fgm`` /
             ``fg_pct``).
 
