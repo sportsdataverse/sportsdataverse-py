@@ -680,6 +680,7 @@ def parse_pgatour_tournaments(raw: Any, return_as_pandas: bool = False) -> pl.Da
             "location": t.get("tournamentLocation"),
         }
         for t in _l(raw)
+        if _str(t.get("id"))
     ]  # fmt: skip
     return _frame(rows, TOURNAMENTS_SCHEMA, return_as_pandas)
 
@@ -711,6 +712,7 @@ def parse_pgatour_past_champions(raw: Any, return_as_pandas: bool = False) -> pl
             "to_par": _str(c.get("score")),
         }
         for c in _l(raw.get("pastChampions"))
+        if _str(c.get("playerId"))
     ]  # fmt: skip
     return _frame(rows, PAST_CHAMPIONS_SCHEMA, return_as_pandas)
 
@@ -775,7 +777,11 @@ def parse_pgatour_leaderboard_stats(raw: Any, return_as_pandas: bool = False) ->
     """
     raw = _d(raw)
     ids, titles = raw.get("statIds"), raw.get("titles")
-    title = {_str(i): t for i, t in zip(ids, titles)} if isinstance(ids, list) and isinstance(titles, list) else {}
+    title = (
+        {_str(i): t for i, t in zip(ids, titles, strict=False)}
+        if isinstance(ids, list) and isinstance(titles, list)
+        else {}
+    )
     rows = [
         {
             "tournament_id": _tournament(raw.get("id")), "stats_type": raw.get("type"), "player_id": _str(p.get("playerId")),
@@ -814,6 +820,7 @@ def parse_pgatour_field(raw: Any, return_as_pandas: bool = False) -> pl.DataFram
             "owgr": _str(p.get("owgr")), "qualifier": p.get("qualifier"), "ranking_points": _str(p.get("rankingPoints")),
         }
         for p in _l(raw.get("players")) + _l(raw.get("alternates"))
+        if _str(p.get("id"))
     ]  # fmt: skip
     return _frame(rows, FIELD_SCHEMA, return_as_pandas)
 

@@ -55,6 +55,25 @@ def test_parser_rows_and_schema(short, fixture, schema, min_rows):
     assert isinstance(parse(_load(fixture), return_as_pandas=True), pd.DataFrame)
 
 
+NEW_SHORTS = (
+    "schedule_years", "tournaments", "past_champions", "hole_by_hole", "leaderboard_stats", "field",
+    "past_results", "course_stats", "hole_details", "scorecard_stats", "player_results",
+)  # fmt: skip
+
+
+@pytest.mark.parametrize("short, fixture, schema, min_rows", [c for c in CASES if c[0] in NEW_SHORTS])
+def test_every_column_is_read_from_the_fixture(short, fixture, schema, min_rows):
+    # _frame builds the full schema, so a misspelled answer key would only leave a column of nulls
+    df = getattr(P, f"parse_pgatour_{short}")(_load(fixture))
+    assert not [c for c in df.columns if df[c].null_count() == df.height]
+
+
+@pytest.mark.parametrize("short", ["tournaments", "past_champions", "field"])
+@pytest.mark.parametrize("payload", [[{}], {"players": [{}], "pastChampions": [{}]}])
+def test_an_entry_without_an_id_is_no_row(short, payload):
+    assert getattr(P, f"parse_pgatour_{short}")(payload).height == 0
+
+
 @pytest.mark.parametrize("short, fixture, schema, min_rows", CASES)
 @pytest.mark.parametrize("payload", [None, {}, [], "x", {"payload": {}}, {"players": "x", "rounds": [1]}])
 def test_empty_or_malformed_is_zero_rows_with_schema(short, fixture, schema, min_rows, payload):
