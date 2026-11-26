@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 import polars as pl
 
@@ -54,28 +54,22 @@ _INT_COLUMNS = (
 )
 
 
-def load_mlb_chadwick_register(return_as_pandas: bool = False) -> Union[pl.DataFrame, pd.DataFrame]:
+def load_mlb_chadwick_register(return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """Load the Chadwick Baseball Bureau person register (every baseball person id crosswalk).
 
-    One row per person (players, managers, umpires, coaches; MLB, minors, NPB, college and
-    other leagues) with the person's id in each provider the register tracks, name fields,
-    birth/death dates and first/last seasons played, managed and umpired. The 16 ``people``
-    shards are read from the register's GitHub repository on every call and stacked.
-
-    The register is published under the Open Data Commons Attribution License (ODC-By 1.0):
-    credit the Chadwick Baseball Bureau when you redistribute derived data.
+    One row per person (players, managers, umpires, coaches in any league) with their id in each
+    provider the register tracks, names, birth/death dates and first/last seasons. The 16
+    ``people`` shards are read from the register's GitHub repository on every call. Licence:
+    ODC-By 1.0; credit the Chadwick Baseball Bureau when you redistribute derived data.
 
     Args:
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False (default),
-            returns a polars dataframe.
+        return_as_pandas (bool): If True, returns a pandas dataframe, else polars (default).
 
     Returns:
-        pl.DataFrame: One row per person (about 528,000; ``key_person`` is unique), with the
-        columns below. ``key_mlbam`` and ``key_fangraphs`` are Int64, so ``key_mlbam`` joins
-        directly to the Int64 MLBAM ids of ``load_mlb_pbp`` (``batter_id``, ``pitcher_id``) and
-        ``load_mlb_statcast``. The other ids are Utf8 (``key_npb`` keeps its zero padding). If
-        upstream ever ships a value one of the Int64 columns cannot hold, that column comes back
-        as Utf8, unchanged, with a ``SchemaDriftWarning`` naming it.
+        pl.DataFrame: One row per person (about 528,000; ``key_person`` is unique). ``key_mlbam``
+        is Int64 and joins the Int64 MLBAM ids of ``load_mlb_pbp`` (``batter_id``, ``pitcher_id``)
+        and ``load_mlb_statcast``; ``key_npb`` keeps its zero padding as Utf8. An Int64 column
+        holding a value upstream that is not an integer comes back as Utf8 with a ``SchemaDriftWarning``.
 
         | col_name | type | description |
         |:---|:---|:---|
