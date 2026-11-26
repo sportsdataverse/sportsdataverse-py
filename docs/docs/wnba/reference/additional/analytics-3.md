@@ -32,17 +32,17 @@ One row per player on either team: `player_id, team_id`, `stat_<stat>_exp` and `
 |---|---|---|
 | `player_id` | String | ESPN athlete id (Utf8). |
 | `team_id` | String | ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team. |
-| `stat_pts_exp` | Float64 | Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor. |
+| `stat_pts_exp` | Float64 | Expected points if he plays, per-minute rate (shrunk toward his minutes-and-role tier's) x mean minutes when playing x the pace factor. |
 | `stat_reb_exp` | Float64 | Expected rebounds if he plays, on the same basis. |
 | `stat_ast_exp` | Float64 | Expected assists if he plays, on the same basis. |
 | `stat_fg3m_exp` | Float64 | Expected made threes if he plays, on the same basis. |
 | `minutes_exp` | Float64 | Expected minutes: the player's minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 200; a team's rows sum to 200. The stat_*_exp lines assume the player plays; this does not. |
 | `pace_proj` | Float64 | Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet. |
-| `stat_stl_exp` | Float64 |  |
-| `stat_blk_exp` | Float64 |  |
-| `stat_tov_exp` | Float64 |  |
-| `stat_fgm_exp` | Float64 |  |
-| `stat_ftm_exp` | Float64 |  |
+| `stat_stl_exp` | Float64 | Expected steals if he plays, on the same basis; null when the box logs carry no steals. |
+| `stat_blk_exp` | Float64 | Expected blocks if he plays, on the same basis; null when the box logs carry no blocks. |
+| `stat_tov_exp` | Float64 | Expected turnovers if he plays, on the same basis; null when the box logs carry no turnovers. |
+| `stat_fgm_exp` | Float64 | Expected made field goals if he plays, on the same basis; null when the box logs carry none. |
+| `stat_ftm_exp` | Float64 | Expected made free throws if he plays, on the same basis; null when the box logs carry none. |
 | `stat_pts_recent_exp` | Float64 | Expected points if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
 | `stat_reb_recent_exp` | Float64 | Expected rebounds if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
 | `stat_ast_recent_exp` | Float64 | Expected assists if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
