@@ -28047,6 +28047,37 @@ load_nhl_player_boxscores:
   type: Int64
 - name: saves
   type: Int64
+load_nhl_pregame_snapshots:
+- name: season
+  type: Int32
+- name: game_date
+  type: String
+- name: game_id
+  type: Int64
+- name: espn_event_id
+  type: Int64
+- name: start_time_utc
+  type: Datetime(time_unit='us', time_zone='UTC')
+- name: team_id
+  type: Int64
+- name: team_abbr
+  type: String
+- name: kind
+  type: String
+- name: player_id
+  type: Int64
+- name: espn_athlete_id
+  type: Int64
+- name: player_name
+  type: String
+- name: status
+  type: String
+- name: valid_from
+  type: Datetime(time_unit='us', time_zone='UTC')
+- name: valid_to
+  type: Datetime(time_unit='us', time_zone='UTC')
+- name: source
+  type: String
 load_nhl_rosters:
 - name: player_id
   type: Int32

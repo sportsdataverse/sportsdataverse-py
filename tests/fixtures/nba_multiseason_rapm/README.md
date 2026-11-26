@@ -19,4 +19,4 @@ possessions) and 2026-27 (`season` 2027, `0022600001`-`0022600035`, 5,924). The 
 on the pooled and single-season frames and to check its `n_seasons` count.
 
 The oracle gate (`tools/gate_multiseason_rapm.py`) compares the full 2019-20 to 2026-27 window with
-Jeremias Engelmann's 8-season RAPM. His sheet has no license, so it is not committed here.
+an external 8-season RAPM. It carries no license, so it is not committed here.

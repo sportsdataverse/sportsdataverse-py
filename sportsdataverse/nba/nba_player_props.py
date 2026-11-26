@@ -380,15 +380,15 @@ def nba_player_props(
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
-        One row per player on either team: ``player_id, team_id, stat_pts_exp,
-        stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj``.
-        The ``stat_*_exp`` lines assume the player plays (per-minute rate x
-        mean minutes when playing x pace factor). ``minutes_exp`` is the
-        player's share of the team's minutes, counting a game sat as zero, so
-        it sums to ``5 * game_minutes`` per team: 200 in the WNBA, 240 in the
-        NBA. A team with no game before the cut has no player rows, and its
-        pace is the league average. Empty input returns that schema with zero
-        rows.
+        One row per player on either team: ``player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp,
+        stat_fg3m_exp, minutes_exp, pace_proj``. ``team_id`` is his team in his latest game before the cut
+        with positive minutes, exhibition (All-Star) games left out, so a traded player projects for his new
+        team. The ``stat_*_exp`` lines assume the player plays (per-minute rate x mean minutes when playing x
+        pace factor). ``minutes_exp`` is the player's share
+        of the minutes logged for the team by the players it now projects (a traded player's minutes stay
+        with his latest team), counting a game sat as zero, so it sums to ``5 * game_minutes`` per team: 200
+        in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is
+        the league average. Empty input returns that schema with zero rows.
 
     Raises:
         ValueError: The box logs carry no ``game_date`` (the as-of cut cannot be applied).
@@ -423,8 +423,14 @@ def nba_player_props(
     if as_of_date is not None:
         # Strict `<`: the target game's own line (and every later one) never feeds its projection.
         logs = logs.filter(pl.col("game_date") < as_of_date)
+    # ESPN's All-Star teams: an exhibition team is no one's latest team, and its minutes are no team's.
+    # It is a team every one of whose players also logs for another team; an expansion team's first
+    # game (one game, its own players) is kept. ponytail: a roster rule, not a per-league id list.
+    # (two steps: a window nested inside another window's group is evaluated within that group)
+    logs = logs.with_columns((pl.col("team_id").n_unique().over("player_id") > 1).alias("_on_other_team"))
+    logs = logs.filter(~pl.col("_on_other_team").all().over("team_id")).drop("_on_other_team")
     ratings = _load_ratings(season, league_id, as_of_date=as_of_date)
-    rates = player_rates(logs)
+    rates = player_rates(logs.sort("game_date", "game_id"))  # date order: team_id is a traded player's latest
     if rates.height == 0 or ratings.height == 0:
         out = pl.DataFrame(schema=_PROPS_SCHEMA)
         return out.to_pandas() if return_as_pandas else out

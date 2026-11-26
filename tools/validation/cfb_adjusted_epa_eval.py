@@ -45,10 +45,7 @@ from pathlib import Path
 import numpy as np
 import polars as pl
 
-from sportsdataverse.cfb import cfb_adjusted_epa
 from sportsdataverse.cfb.cfb_adjusted_epa import (
-    _ADJ_REQUIRED,
-    _FIT_WP,
     _RIDGE_LAMBDA,
     _REQUIRED_COLUMNS,
     _TEAM_SEASON_PLAYS,
@@ -57,6 +54,12 @@ from sportsdataverse.cfb.cfb_adjusted_epa import (
     _fit_team_strengths,
     _prepare,
 )
+
+# The #598 fit this tool evaluates: the naive-WP band. cfb_adjusted_epa moved to the
+# score-margin garbage-time rule (own EPA on the same plays) on 2026-11-25; `adjusted` below
+# pins the #598 design so the #598 numbers still reproduce.
+_FIT_WP = ("wp_before_naive", 0.05, 0.95)
+_ADJ_REQUIRED = (*_REQUIRED_COLUMNS[:-1], _FIT_WP[0])
 
 TRAIN, EVAL = (2019, 2021, 2022), (2023, 2024, 2025)
 GRID = [round(0.005 * i, 3) for i in range(1, 16)] + [0.1, 0.15, 0.2, 0.3]
@@ -115,8 +118,16 @@ def published(plays: pl.DataFrame) -> pl.DataFrame:
 
 
 def adjusted(plays: pl.DataFrame, lam: float) -> pl.DataFrame:
-    return cfb_adjusted_epa(plays, ridge_lambda=lam).select(
-        "team_id", pl.col("net_adj_epa").alias("net"), "valid_games"
+    """The #598 fit: naive-WP band for the strengths, own EPA on every pass/rush play."""
+    base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)
+    off, dfn, _ = _fit_team_strengths(clean, lam)
+    valid = pl.col("adj_off_epa").is_not_null() & pl.col("adj_def_epa").is_not_null()
+    return (
+        _adjust_games(base, off, dfn, fill_strength=None)
+        .group_by("pos_team_id")
+        .agg(valid_games=valid.sum(), net=pl.col("adj_off_epa").mean() - pl.col("adj_def_epa").mean())
+        .filter(pl.col("valid_games") >= 2)
+        .rename({"pos_team_id": "team_id"})
     )
 
 

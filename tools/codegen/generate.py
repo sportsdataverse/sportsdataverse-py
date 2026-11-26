@@ -242,6 +242,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.basketball.genius.genius_runtime",
         "sportsdataverse.basketball.atrium.atrium_runtime",
         "sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime",
+        "sportsdataverse.lacrosse.pll_runtime",
         "sportsdataverse.basketball.feb.feb_runtime",
         "sportsdataverse.basketball.scb.scb_runtime",
         "sportsdataverse.basketball.lba.lba_runtime",
@@ -299,6 +300,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.nfl.nflpro_runtime",
         # 4.4
         "sportsdataverse.providers.cbs.cbs_napi_runtime",
+        "sportsdataverse.golf.pgatour_runtime",
     }
 )
 # (error name, aliases a YAML ``raises:`` line may already use for it, line to add)
@@ -1462,7 +1464,9 @@ class _EndpointView:
 
         # The route's own getter (``getter:``) as (module, call name); default the family's ``_get``.
         route_module, self.getter_name = route_getter or (getter_module, "_get")
-        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module, route_module)
+        # a league-param family's example may name its own league (a college-only route): the URL follows it
+        example_league = str(ep.example_args.get("league", league.league)) if league.league_param else league.league
+        self.example_url = _example_request(ep_host, ep, league.sport, example_league, getter_module, route_module)
         # A body endpoint (``body: form|json``) has no fetchable URL: the query string carries only the
         # ``in: query`` params and the rest travels in the body, so show a curl request instead.
         self.body_kind = ep.body
@@ -3110,6 +3114,7 @@ FLAT_APIS = [
     ("sleeper", "nfl"),
     ("f1", "f1"),  # Jolpica F1 (Ergast-compatible)
     ("pgatour", "golf"),  # PGA TOUR GraphQL (orchestrator.pgatour.com), runtime only
+    ("pll", "lacrosse"),  # Premier Lacrosse League stats API (stats.premierlacrosseleague.com), runtime only
     # wave-2 intake families (espn-content, thesportsdb, football-data.co.uk, openligadb,
     # polymarket, kalshi)
     ("espn_content", "espn_content"),
@@ -3835,6 +3840,7 @@ _FLAT_API_DOC = {
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
     "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
     "pgatour": "PGA TOUR GraphQL API (orchestrator.pgatour.com; runtime only, public frontend key or $PGA_API_KEY)",
+    "pll": "Premier Lacrosse League stats API (stats.premierlacrosseleague.com; runtime only, no key, the site's Referer)",
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
     "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",

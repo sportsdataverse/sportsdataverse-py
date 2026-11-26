@@ -1,0 +1,22 @@
+schema: nhl_score_distribution
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: rank
+  type: integer
+  description: ''
+- name: home_goals
+  type: integer
+  description: ''
+- name: away_goals
+  type: integer
+  description: ''
+- name: prob
+  type: double
+  description: ''
+- name: prob_beyond_regulation
+  type: double
+  description: ''

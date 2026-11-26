@@ -99,11 +99,17 @@ def test_exp_wins_rank_calibrated() -> None:
     adjust_epa statistic; was 0.928 on the pre-rescale coefficient scale). The
     netted stat includes garbage time by construction (gameonpaper parity), so
     mid-tier ranks carry slightly more noise while the market-facing gates
-    improved (spread MAE 4.06 -> 3.23, Brier beats ESPN FPI). Floor re-derived
-    just below the NEW statistic's observed value.
+    improved (spread MAE 4.06 -> 3.23, Brier beats ESPN FPI).
+
+    2026-11-25: the 2023 pbp fixture was recaptured from the reprocessed release
+    (to carry ``wp_before_naive``). On it the previous engine scores 0.8833 and the
+    current one 0.8848 -- both BELOW the old 0.885 floor -- so the data moved the
+    value, not the engine. Floor lowered to 0.88 for that reason only. The same
+    day the score-margin garbage-time rule moved it to 0.8993, so the floor is
+    re-derived just below that: 0.895.
     """
     r = spearman_corr(_JOINED["wins"].to_numpy(), _JOINED["actual_wins"].to_numpy())
-    assert r >= 0.885, r
+    assert r >= 0.895, r
 
 
 def test_cfp_field_playoff_prob_towers_over_median() -> None:
