@@ -239,7 +239,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [shot_coordinates](additional/models-and-calculators-4.md#shot_coordinates) | Shot locations in the court frame the Game on Paper hex chart uses. |
 | [team_game_rates](additional/models-and-calculators-4.md#team_game_rates) | Four factors, possessions, ratings and pace for both teams of one game. |
 | [train_box_prior](additional/models-and-calculators-4.md#train_box_prior) | Possession-weighted ridge of the career target on the box-prior features, cross-fit by player. |
-| [train_spm](additional/models-and-calculators-4.md#train_spm) | Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions). |
+| [train_spm](additional/models-and-calculators-4.md#train_spm) | Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions), weighted by minutes. |
 | [validate_model](additional/models-and-calculators-4.md#validate_model) | Run the selected oracles and assemble a `ValidationReport`. |
 | [walk_forward](additional/models-and-calculators-4.md#walk_forward) | Oracle 6: time-ordered "predict tomorrow" retrodiction. |
 | [win_prob_from_margin](additional/models-and-calculators-4.md#win_prob_from_margin) | Home win probability from an expected margin (normal-CDF closed form). |

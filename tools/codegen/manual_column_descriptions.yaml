@@ -1625,6 +1625,9 @@ cfb_field_position:
   season: Season the field-position stats cover.
   team_id: Team ESPN id (character join key).
 cfb_games_from_schedule:
+  conf_game: The schedule's conference_game flag, passed through (null when the schedule has none). False keeps a game between
+    two members of one conference out of the conference standings in cfb_standings (a non-conference meeting, the Pac-12's
+    2026 Flex Week).
   away_points: Away team's final score, passed through from the schedule frame; null when missing (unplayed game). Feeds the
     SEC capped_scoring_margin official conference tiebreaker rung in cfb_standings - the rung is skipped when absent.
   away_team: Team name of the away team, passed through from the schedule frame.

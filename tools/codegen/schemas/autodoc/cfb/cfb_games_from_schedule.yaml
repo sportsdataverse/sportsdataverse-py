@@ -28,3 +28,6 @@ columns:
 - name: away_points
   type: double
   description: ''
+- name: conf_game
+  type: logical
+  description: ''
