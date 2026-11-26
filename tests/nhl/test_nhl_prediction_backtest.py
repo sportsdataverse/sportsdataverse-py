@@ -123,9 +123,14 @@ TOTAL_OVER_BRIER_FLOOR = 0.25
 # Mean exp_total - actual_total over the 1174 games: -2.2389 with the old centring on
 # avg_total_goals, -0.4239 after centring on 2 * avg_xgf (2026-11-11), both against labels that
 # counted every scoring shootout attempt. Against settled scores (a shootout is one goal):
-# -0.3139 with the 6.05 seed, -0.1740 with the fitted 6.19 (2026-11-25). The floor is that observed
-# -0.1740 rounded to the safe side, so it gates the level: the 6.05 seed fails it. 2022-23 is outside
-# the 2023-24 .. 2025-26 seasons the 6.19 mean is fitted on. Never loosen it to pass.
+# -0.3139 with the 6.05 seed, -0.1740 with the fitted 6.19 (2026-11-25). The floor sits between the
+# fitted -0.174 and the seed's -0.314: 0.076 of headroom, 0.064 of kill margin, each about one
+# clustered SE on 1174 games (the fixture is fixed, so it cannot flake). 2022-23 is outside the
+# 2023-24 .. 2025-26 seasons the 6.19 mean is fitted on. The bias is about avg_total_goals - 6.364
+# (2022-23's settled mean), so the gate passes avg_total_goals in roughly 6.11 .. 6.61 and is
+# one-sided in practice: it catches a drop of about 0.08 goals, a rise only past about 0.42.
+# A correct refit that lands outside that window moves the gate to the newest season left out of
+# the fit, with the floor re-derived there; never loosen it to pass.
 TOTAL_BIAS_FLOOR = 0.25
 
 
