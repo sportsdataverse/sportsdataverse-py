@@ -17,8 +17,8 @@ player missing a rating (null, NaN or infinite) is his team's average on that te
 **Value.** With ``R`` the league's replacement level and ``poss`` his possessions:
 
 * ``vorp = (rating - R) * poss / lg_team_poss``: points per 100 team possessions above a
-  replacement player, over the possessions one team plays in the season (Basketball-Reference's
-  VORP scale: playing every possession of a season at ``R + 1`` is a VORP of 1).
+  replacement player, over the possessions one team plays in the season (so playing every
+  possession of a season at ``R + 1`` per 100 is a VORP of 1).
 * ``war = (rating - R) * poss / 100 / pts_per_win``: wins above replacement.
 
 ``R`` (:data:`REPLACEMENT_LEVEL`) and ``pts_per_win`` (:data:`PTS_PER_WIN`) are per league,
@@ -134,7 +134,7 @@ __all__ = [
 
 #: The replacement pool: the players who together played the league's least-used share of
 #: possessions, the same in every league. A convention, picked among 10%, 15% and 20% by the NBA
-#: level it gives over 1997-2026 against Basketball-Reference's -2.0 BPM (-2.61, -2.32, -2.08
+#: level it gives over 1997-2026 against a -2.0 per 100 replacement level (-2.61, -2.32, -2.08
 #: then; -1.98 on the train span now). In college it is the deep bench of every D1 team, which
 #: sits only about 1.7 per 100 below average: a team of them would win about .35 against an
 #: average D1 schedule, and about a third of D1 teams rate below that.

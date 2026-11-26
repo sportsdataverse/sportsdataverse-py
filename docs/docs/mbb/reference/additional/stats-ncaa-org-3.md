@@ -870,7 +870,7 @@ right_kind_of_shot(shot, pbp_event, strict=True)
 
 `run_iterative_adjustment_with_hca(teams: 'Sequence[TeamDetail]', team_by_name: 'dict[str, TeamDetail]', fields: 'Sequence[str]', league_averages: 'LeagueAverages', poss_splits: 'dict[str, PossessionSplits]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'IterationResult'`
 
-KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`).
+Iterative SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`).
 
 Each iteration (Jacobi -- all teams read the *previous* iteration's
 adjustments, then commit together):
