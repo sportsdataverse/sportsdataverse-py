@@ -34,19 +34,19 @@ A tour's season schedule: one row per tournament (id, dates, course, purse, cham
 
 | col_name | type | description |
 |---|---|---|
-| `season` | String | Season year the schedule belongs to (e.g. 2026). |
+| `season` | Int64 | Season year the schedule belongs to (e.g. 2026). |
 | `schedule_status` | String | "completed" for an event already played, "upcoming" for one still to come. |
 | `tournament_id` | String | PGA TOUR tournament id (tour code + season + event number, e.g. "R2026014"); the id the leaderboard, scorecard, tee-times and shot-details wrappers take. |
-| `tournament_name` | String | Tournament name. |
+| `tournament_name` | String | Tournament's full name, sponsor included (e.g. "Travelers Championship"). |
 | `date` | String | Tournament dates as the site displays them (e.g. "Apr 9 - 12"). |
 | `start_date` | String | Tournament start (UTC). |
 | `sequence_number` | Int64 | Event's order in the season. |
 | `tournament_status` | String | Tournament status (e.g. "COMPLETED", "IN_PROGRESS", "NOT_STARTED"). |
-| `course_name` | String | Host course. |
-| `city` | String | Host city. |
+| `course_name` | String | Course hosting the event (e.g. "TPC River Highlands"). |
+| `city` | String | City the host course is in (e.g. "Cromwell"). |
 | `state` | String | Host state or province. |
 | `state_code` | String | Host state or province abbreviation. |
-| `country` | String | Host country. |
+| `country` | String | Country the host course is in, spelled out (e.g. "United States of America"). |
 | `country_code` | String | Host country code (e.g. "USA"). |
 | `purse` | String | Total purse as displayed (e.g. "$9,100,000"). |
 | `champion` | String | Winner's name; null before the event finishes. |
@@ -61,9 +61,9 @@ A tour's season schedule: one row per tournament (id, dates, course, purse, cham
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
-| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_schedule-example}
 
@@ -120,9 +120,9 @@ One tournament's leaderboard: position, total to par, strokes, holes completed, 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
-| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_leaderboard-example}
 
@@ -151,11 +151,11 @@ One player's scorecard for a tournament: one row per hole per round (par, yardag
 |---|---|---|
 | `tournament_id` | String | PGA TOUR tournament id (the answer's own id carries the player id too; it is stripped). |
 | `player_id` | String | PGA TOUR player id. |
-| `round_number` | Int64 | Round number. |
+| `round_number` | Int64 | Tournament round the hole was played in (1-4). |
 | `course_id` | String | Course id (an event played on more than one course carries one per round). |
-| `course_name` | String | Course name. |
+| `course_name` | String | Course the round was played on (e.g. "Augusta National Golf Club"). |
 | `hole_number` | Int64 | Hole number (1-18). |
-| `par` | Int64 | Hole par. |
+| `par` | Int64 | Par of the hole (3, 4 or 5). |
 | `yardage` | Int64 | Hole length in yards that round. |
 | `score` | Int64 | Strokes on the hole; null when the hole is not yet played. |
 | `score_status` | String | Result on the hole (e.g. "BIRDIE", "PAR", "BOGEY", "EAGLE", "DOUBLE_BOGEY"). |
@@ -167,9 +167,9 @@ One player's scorecard for a tournament: one row per hole per round (par, yardag
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
-| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_scorecard-example}
 
@@ -196,14 +196,14 @@ A tournament's tee times: one row per player per group per round (tee time in UT
 | col_name | type | description |
 |---|---|---|
 | `tournament_id` | String | PGA TOUR tournament id. |
-| `round_number` | Int64 | Round number. |
+| `round_number` | Int64 | Tournament round the tee times are for (1-4). |
 | `round_status` | String | Round status (e.g. "COMPLETE", "IN_PROGRESS", "UPCOMING"). |
 | `group_number` | Int64 | Tee-time group number within the round. |
 | `tee_time` | String | Group's tee time (UTC). |
 | `start_tee` | Int64 | Starting hole (1, or 10 for a two-tee start). |
 | `back_nine` | Boolean | True when the group starts on the back nine. |
-| `course_id` | String | Course id. |
-| `course_name` | String | Course name. |
+| `course_id` | String | PGA TOUR course id of the course the group tees off on (e.g. "014"). |
+| `course_name` | String | Course the group tees off on (e.g. "Augusta National Golf Club"). |
 | `player_id` | String | PGA TOUR player id. |
 | `display_name` | String | Player's full name. |
 | `country` | String | Player's country code. |
@@ -215,9 +215,9 @@ A tournament's tee times: one row per player per group per round (tee time in UT
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
-| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_tee_times-example}
 
@@ -244,9 +244,9 @@ One player's profile: name, country, world ranking, height, weight, birth date a
 | col_name | type | description |
 |---|---|---|
 | `player_id` | String | PGA TOUR player id. |
-| `first_name` | String | First name. |
-| `last_name` | String | Last name. |
-| `display_name` | String | Full name. |
+| `first_name` | String | Player's first (given) name. |
+| `last_name` | String | Player's last (family) name. |
+| `display_name` | String | Player's full name as the site displays it (e.g. "Rory McIlroy"). |
 | `country` | String | Country the player represents. |
 | `country_code` | String | Country code (e.g. "NIR"). |
 | `owgr` | String | Official World Golf Ranking position as displayed. |
@@ -254,7 +254,7 @@ One player's profile: name, country, world ranking, height, weight, birth date a
 | `height_meters` | String | Height in meters. |
 | `weight` | String | Weight in pounds. |
 | `weight_kilograms` | String | Weight in kilograms. |
-| `age` | String | Age in years. |
+| `age` | String | Player's age in years, as text (e.g. "37"). |
 | `born` | String | Birth date as displayed (e.g. "May 4, 1989"). |
 | `birthplace_city` | String | Birthplace city. |
 | `birthplace_state` | String | Birthplace state or province. |
@@ -273,9 +273,9 @@ One player's profile: name, country, world ranking, height, weight, birth date a
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
-| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_player-example}
 
@@ -305,13 +305,13 @@ A tour's player directory: one row per player (id, name, country, age, college, 
 | `tour_code` | String | Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour). |
 | `player_id` | String | PGA TOUR player id. |
 | `is_active` | Boolean | True for a player active on the tour. |
-| `first_name` | String | First name. |
-| `last_name` | String | Last name. |
-| `short_name` | String | Short name. |
-| `display_name` | String | Full name. |
+| `first_name` | String | Player's first (given) name. |
+| `last_name` | String | Player's last (family) name. |
+| `short_name` | String | Player's first initial and last name (e.g. "L Åberg"). |
+| `display_name` | String | Player's full name as the site displays it (e.g. "Ludvig Åberg"). |
 | `country` | String | Country the player represents. |
-| `country_code` | String | Country code. |
-| `age` | String | Age in years. |
+| `country_code` | String | Three-letter code of the country the player represents (e.g. "SWE"). |
+| `age` | String | Player's age in years, as text (e.g. "27"); null when the profile gives none. |
 | `education` | String | College or university. |
 | `turned_pro` | String | Year the player turned professional. |
 
@@ -321,9 +321,9 @@ A tour's player directory: one row per player (id, name, country, age, college, 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
-| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_player_directory-example}
 
@@ -350,13 +350,13 @@ Every stat a tour publishes: category, sub-category, stat id and title. The stat
 
 | col_name | type | description |
 |---|---|---|
-| `tour_code` | String | Tour code. |
-| `year` | Int64 | Season year. |
+| `tour_code` | String | Tour the catalog lists stats for (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour). |
+| `year` | Int64 | Season the catalog lists stats for (e.g. 2026). |
 | `category` | String | Stat category key (e.g. "STROKES_GAINED", "SCORING"). |
 | `category_name` | String | Stat category name (e.g. "Strokes Gained"). |
 | `sub_category` | String | Sub-category the stat is listed under. |
 | `stat_id` | String | PGA TOUR stat id (e.g. "02675" for SG Total); the id pgatour_stat_details takes. |
-| `stat_title` | String | Stat name. |
+| `stat_title` | String | Stat's display name (e.g. "Approaches from 50-125 yards"). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -364,9 +364,9 @@ Every stat a tour publishes: category, sub-category, stat id and title. The stat
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
-| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_stat_catalog-example}
 
@@ -394,8 +394,8 @@ One stat's season table, long form: one row per player per stat column (rank, co
 
 | col_name | type | description |
 |---|---|---|
-| `tour_code` | String | Tour code. |
-| `year` | Int64 | Season year. |
+| `tour_code` | String | Tour the stat table is for (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour). |
+| `year` | Int64 | Season the stat table covers (e.g. 2026). |
 | `stat_id` | String | PGA TOUR stat id. |
 | `stat_title` | String | Stat name (e.g. "Scoring Average"). |
 | `stat_type` | String | Stat window (e.g. "YTD"). |
@@ -415,9 +415,9 @@ One stat's season table, long form: one row per player per stat column (rank, co
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
-| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_stat_details-example}
 
@@ -447,13 +447,13 @@ A season-long points race (the FedExCup by default): one row per player with off
 |---|---|---|
 | `cup_id` | String | Points race id with season (e.g. "R-02671-2025" for the 2025 FedExCup). |
 | `title` | String | Points race name (e.g. "FedExCup Standings"). |
-| `season` | String | Season year (read from the race's title, e.g. "2025 Standings"). |
+| `season` | Int64 | Season year (read from the race's title, e.g. "2025 Standings"). |
 | `player_id` | String | PGA TOUR player id. |
-| `first_name` | String | First name. |
-| `last_name` | String | Last name. |
-| `display_name` | String | Full name. |
+| `first_name` | String | Player's first (given) name. |
+| `last_name` | String | Player's last (family) name. |
+| `display_name` | String | Player's full name as the site displays it (e.g. "Wyndham Clark"). |
 | `country` | String | Country the player represents. |
-| `country_code` | String | Country code. |
+| `country_code` | String | Three-letter code of the country the player represents (e.g. "IRL"). |
 | `rank_official` | String | Official rank as displayed ("-" for none). |
 | `rank_projected` | String | Rank projected from live results, as displayed. |
 | `rank_movement` | String | Direction of the projected rank change (e.g. "UP", "DOWN", "CONSTANT"). |
@@ -467,9 +467,9 @@ A season-long points race (the FedExCup by default): one row per player with off
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
-| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_tour_cup-example}
 
@@ -499,9 +499,9 @@ ShotLink shot tracking for one player's round: one row per stroke with descripti
 |---|---|---|
 | `tournament_id` | String | PGA TOUR tournament id. |
 | `player_id` | String | PGA TOUR player id. |
-| `round_number` | Int64 | Round number. |
-| `hole_number` | Int64 | Hole number. |
-| `par` | Int64 | Hole par. |
+| `round_number` | Int64 | Tournament round the shots were played in (1-4). |
+| `hole_number` | Int64 | Hole the shots were played on (1-18). |
+| `par` | Int64 | Par of the hole (3, 4 or 5). |
 | `yardage` | Int64 | Hole length in yards. |
 | `hole_score` | Int64 | Strokes on the hole. |
 | `hole_status` | String | Result on the hole (e.g. "BIRDIE", "PAR"). |
@@ -528,9 +528,9 @@ ShotLink shot tracking for one player's round: one row per stroke with descripti
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | The API answered null for the request (an unknown tournament, player or stat id). |
-| `ValueError` | The API rejected the query variables. |
-| `sportsdataverse.errors.AssetFetchError` | Any other GraphQL error, or a compressed payload that does not decode. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
 ### Example {#pgatour_shot_details-example}
 

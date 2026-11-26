@@ -11,7 +11,7 @@ row) are all invisible to a synthetic capture.
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 
 import polars as pl
 import pytest
@@ -21,11 +21,14 @@ from sportsdataverse.espn_snapshots import (
     ESPN_DEPTHCHART_LEAGUES,
     ESPN_INJURY_LEAGUES,
     INJURY_SNAPSHOT_SCHEMA,
+    PROBABLES_SNAPSHOT_SCHEMA,
     _as_id,
     espn_depthcharts_snapshot,
     espn_injuries_snapshot,
     parse_depthchart_snapshot,
     parse_injuries_snapshot,
+    parse_probables_snapshot,
+    pregame_state_as_of,
 )
 from tests.conftest import load_fixture, skip_if_no_live
 
@@ -714,3 +717,99 @@ def test_a_bad_athlete_id_the_headshot_recovers_names_the_headshot():
     ):
         df = parse_injuries_snapshot(raw, league="nfl", as_of_date=STAMP)
     assert df["athlete_id"][0] == clean
+
+
+# ---------------------------------------------------------------------------
+# Scoreboard probables + the as-of reader
+# ---------------------------------------------------------------------------
+
+
+def _probables(name: str = "scoreboard_nhl_pregame") -> pl.DataFrame:
+    return parse_probables_snapshot(load_fixture("espn", name), league="nhl")
+
+
+def test_probables_read_both_goalies_of_every_pregame_event():
+    """2026-11-25 slate fetched at 00:10Z: 14 events, each lists one goalie per side."""
+    df = _probables()
+    assert dict(df.schema) == PROBABLES_SNAPSHOT_SCHEMA
+    assert df.height == 28
+    assert df.group_by("event_id").len()["len"].to_list() == [2] * 14
+    assert set(df["role"]) == {"probableStartingGoalie"}
+    assert df["athlete_id"].null_count() == 0 and df["team_id"].null_count() == 0
+    assert df["status"].value_counts().sort("status").rows() == [("Confirmed", 24), ("Expected", 4)]
+    assert df.unique("event_id")["event_state"].value_counts().sort("event_state").rows() == [("in", 6), ("pre", 8)]
+    row = df.filter((pl.col("event_id") == 401892790) & (pl.col("home_away") == "away")).row(0, named=True)
+    assert (row["team_id"], row["team_abbreviation"], row["athlete_id"], row["status"]) == (
+        27,
+        "NSH",
+        3042109,
+        "Expected",
+    )
+
+
+def test_probables_survive_on_a_final_game():
+    """ESPN keeps the field after the final (2024-12-01 capture): DET Talbot, VAN Lankinen."""
+    df = _probables("scoreboard_nhl").filter(pl.col("event_id") == 401687987)
+    assert sorted(zip(df["team_abbreviation"], df["athlete_id"])) == [("DET", 5734), ("VAN", 4341584)]
+
+
+@pytest.mark.parametrize(
+    "payload", [None, {}, {"events": "x"}, {"events": [1, {"competitions": [{"competitors": [{}]}]}]}]
+)
+def test_probables_degrade_to_the_documented_empty_frame(payload):
+    df = parse_probables_snapshot(payload, league="nhl")
+    assert df.height == 0 and dict(df.schema) == PROBABLES_SNAPSHOT_SCHEMA
+
+
+def test_probables_pandas_keeps_ids_nullable_int():
+    pdf = parse_probables_snapshot(load_fixture("espn", "scoreboard_nhl_pregame"), league="nhl", return_as_pandas=True)
+    assert str(pdf["athlete_id"].dtype) == "Int64" and len(pdf) == 28
+
+
+_UTC = timezone.utc
+_T = datetime(2026, 11, 25, 21, 0, tzinfo=_UTC)  # puck drop 00:00Z minus three hours
+
+
+def _intervals() -> pl.DataFrame:
+    """Four intervals placed on the boundaries around ``_T``; the real-table read is in the loader test."""
+    sec = timedelta(seconds=1)
+    return pl.DataFrame(
+        {
+            "player_id": ["expected", "confirmed", "late", "ended_at_t"],
+            "valid_from": [_T - timedelta(hours=6), _T, _T + sec, _T - timedelta(hours=1)],
+            "valid_to": [_T, None, None, _T],
+        },
+        schema={"player_id": pl.Utf8, "valid_from": pl.Datetime("us", "UTC"), "valid_to": pl.Datetime("us", "UTC")},
+    )
+
+
+def test_as_of_excludes_a_state_published_one_second_after_t():
+    """The leakage test: valid_from = t + 1 s is not known at t; the half-open end excludes valid_to == t."""
+    assert pregame_state_as_of(_intervals(), _T)["player_id"].to_list() == ["confirmed"]
+    earlier = pregame_state_as_of(_intervals(), _T - timedelta(seconds=1))["player_id"].to_list()
+    assert sorted(earlier) == ["ended_at_t", "expected"]
+
+
+def test_as_of_takes_a_per_row_time_and_a_lazy_frame():
+    snap = _intervals().with_columns(decision=pl.lit(_T + timedelta(seconds=1)).dt.replace_time_zone("UTC"))
+    out = pregame_state_as_of(snap.lazy(), pl.col("decision")).collect()
+    assert sorted(out["player_id"]) == ["confirmed", "late"]
+
+
+def test_as_of_reads_any_aware_timezone_as_the_same_instant():
+    """A named zone (not a fixed offset, which polars folds to UTC by itself) on t and on the columns."""
+    from zoneinfo import ZoneInfo
+
+    eastern = ZoneInfo("America/New_York")
+    assert pregame_state_as_of(_intervals(), _T.astimezone(eastern))["player_id"].to_list() == ["confirmed"]
+    local = _intervals().with_columns(pl.col("valid_from", "valid_to").dt.convert_time_zone("America/New_York"))
+    assert pregame_state_as_of(local, _T)["player_id"].to_list() == ["confirmed"]
+    per_row = local.with_columns(decision=pl.lit(_T).dt.convert_time_zone("America/New_York"))
+    assert pregame_state_as_of(per_row, pl.col("decision"))["player_id"].to_list() == ["confirmed"]
+
+
+def test_as_of_refuses_a_naive_time_and_a_frame_without_intervals():
+    with pytest.raises(ValueError, match="timezone-aware"):
+        pregame_state_as_of(_intervals(), _T.replace(tzinfo=None))
+    with pytest.raises(ValueError, match="valid_to"):
+        pregame_state_as_of(_intervals().drop("valid_to"), _T)
