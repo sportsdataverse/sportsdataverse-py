@@ -76,8 +76,11 @@ def test_espn_valid_url_is_what_the_example_requests(monkeypatch, prefix):
     views, dotted = _espn_views(prefix)
     lg = _LEAGUES[prefix]
     league = lg.league if lg.league_param else ""
-    if league:  # the example call must carry the required ``league`` argument
-        assert all(v.example_call.startswith(f"{v.fn_name}(league={league!r}") for v in views)
+    if (
+        league
+    ):  # the example call must carry the required ``league`` argument (a route-specific example may pick its own)
+        for v in views:
+            assert v.example_call.startswith(f"{v.fn_name}(league={v.example_args.get('league', league)!r}"), v.fn_name
     assert _assert_valid_urls(monkeypatch, views, dotted, league) == len(views)
 
 

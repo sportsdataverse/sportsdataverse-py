@@ -1,4 +1,4 @@
-"""Women's college basketball KenPom-style strength-adjustment engine.
+"""Women's college basketball iterative strength-adjustment engine.
 
 Thin shim over :mod:`sportsdataverse.mbb.mbb_ncaa_strength` -- the faithful
 port of hoop-explorer's ``buildStrengthAdjustedStats``

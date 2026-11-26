@@ -2,8 +2,8 @@
 
 Thin wrapper around :mod:`sportsdataverse.cfb.cfb_adjusted_epa` -- reuses its
 ridge primitives instead of forking a second solver: :func:`efficiency_ratings`
-runs the same fit as ``cfb_adjusted_epa`` (``_prepare`` with the ``_FIT_WP``
-band, ``_fit_team_strengths`` at ``_ADJ_EPA_LAMBDA``), and :func:`fei_ratings`
+runs the same fit as ``cfb_adjusted_epa`` (``_prepare`` with the score-margin
+garbage-time rule, ``_fit_team_strengths`` at ``_ADJ_EPA_LAMBDA``), and :func:`fei_ratings`
 keeps ``_fit_opponent_ridge`` on drives. Callers are responsible for any as-of-date filtering
 (e.g. via :func:`sportsdataverse.cfb.cfb_prediction_constants.as_of_ratings_split`)
 before calling :func:`efficiency_ratings` -- this module performs no date
@@ -40,7 +40,6 @@ from sportsdataverse._temporal import as_date
 from sportsdataverse.cfb.cfb_adjusted_epa import (
     _ADJ_EPA_LAMBDA,
     _ADJ_REQUIRED,
-    _FIT_WP,
     _adjust_games,
     _fit_opponent_ridge,
     _fit_team_strengths,
@@ -228,22 +227,25 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
 
     The same fit as :func:`sportsdataverse.cfb.cfb_adjusted_epa`: one ridge of
     per-play EPA on offense, defense and home-field indicators over the pass
-    and rush plays with ``0.05 <= wp_before_naive <= 0.95`` (the spread-free
+    and rush plays that are not garbage time (score margin at the snap above
+    43 / 37 / 27 / 21 in Q1-Q4 and overtime, the
+    :func:`~sportsdataverse.cfb.cfb_opponent_adjust.flag_garbage_time` rule; no
     win probability, so the pregame line never decides which plays count),
     every team shrunk toward the league average by its own play count
-    (``_ADJ_EPA_LAMBDA``). Each team's raw per-game EPA (all pass/rush plays,
-    garbage time included) is then netted against the opponent's fitted
-    strength and averaged across games -- the R ``adjust_epa`` statistic and
-    scale (a top team nets ~0.30-0.40/play). Through 0.2.0b1 this function fit
-    a separate standardized ridge (lambda 0.035) on ``0.1 <= wp_before <=
-    0.9``, which priced the pregame spread into the fit and predicted next
-    week's margins 0.67 points worse.
+    (``_ADJ_EPA_LAMBDA``). Each team's raw per-game EPA on those same plays is
+    then netted against the opponent's fitted strength and averaged across
+    games -- the R ``adjust_epa`` statistic. ``games`` and ``off_pace`` still
+    count every pass/rush play. Through 0.2.0b1 this function fit a separate
+    standardized ridge (lambda 0.035) on ``0.1 <= wp_before <= 0.9``, which
+    priced the pregame spread into the fit and predicted next week's margins
+    0.67 points worse.
 
     Args:
         plays: A cfbfastR-schema play-by-play frame carrying every column in
             ``cfb_adjusted_epa._ADJ_REQUIRED`` (``game_id``, ``pos_team``,
             ``pos_team_id``, ``def_pos_team_id``, ``home``, ``neutral_site``,
-            ``EPA``, ``pass``, ``rush``, ``wp_before_naive``). Callers pass an
+            ``EPA``, ``pass``, ``rush``, ``period``, ``pos_score_diff_start``).
+            Callers pass an
             already as-of-date-filtered frame; this function is pure.
         config: Accepted for signature parity with :func:`fei_ratings`; not
             read here (the penalty is ``cfb_adjusted_epa``'s, so the two
@@ -254,7 +256,7 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
         (Utf8), ``adj_off_epa`` / ``adj_def_epa`` / ``adj_net`` (Float64),
         ``games`` (Int64), ``off_pace`` (Float64 -- scrimmage plays per game,
         the tempo input the totals model consumes). Empty (zero-row,
-        correctly-typed) when no play falls in the fit band.
+        correctly-typed) when every play is garbage time.
 
     Raises:
         KeyError: If ``plays`` is missing a required column.
@@ -272,16 +274,17 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
     .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     del config  # signature parity only; see Args
-    base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)
+    base, clean = _prepare(plays, _ADJ_REQUIRED, None)
     if clean.height == 0:
         return pl.DataFrame(schema=_OUTPUT_SCHEMA)
 
     offense, defense, _intercept = _fit_team_strengths(clean, _ADJ_EPA_LAMBDA)
 
-    # R `adjust_epa` netting: each team's raw per-GAME EPA minus the opponent's
-    # fitted strength, averaged across games -- NOT coefficient + intercept,
-    # which runs ~1.8x hot (releases before 2026-07-28 carried that scale).
-    opp = _adjust_games(base, offense, defense, fill_strength=None)
+    # R `adjust_epa` netting: each team's raw per-GAME EPA on the fit's own
+    # (non-garbage) plays minus the opponent's fitted strength, averaged across
+    # games -- NOT coefficient + intercept, which runs ~1.8x hot (releases
+    # before 2026-07-28 carried that scale).
+    opp = _adjust_games(clean, offense, defense, fill_strength=None)
     netted = (
         opp.group_by("pos_team_id")
         .agg(
@@ -309,9 +312,8 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
     out = (
         games.join(netted, on="team_id", how="left")
         .with_columns(
-            # Netted values are centered near zero, so a team none of whose
-            # opponents had a fit-band play (no fitted strength to net against)
-            # falls back to league-neutral 0.0.
+            # Netted values are centered near zero, so a team with no
+            # non-garbage play to net falls back to league-neutral 0.0.
             pl.col("adj_off_epa").fill_null(0.0),
             pl.col("adj_def_epa").fill_null(0.0),
             pl.col("games").fill_null(0),

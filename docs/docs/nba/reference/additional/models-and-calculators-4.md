@@ -702,12 +702,17 @@ prior = apply_box_prior(features_2015, model)
 
 ### train_spm {#train_spm}
 
-`train_spm(box_features: 'pl.DataFrame', rapm_target: 'pl.DataFrame', *, feature_names: 'Optional[List[str]]' = None, alpha: 'float' = 100.0) -> 'SpmCoefficients'`
+`train_spm(box_features: 'pl.DataFrame', rapm_target: 'pl.DataFrame', *, feature_names: 'Optional[List[str]]' = None, alpha: 'float' = 30.0, weight: 'Optional[str]' = 'min') -> 'SpmCoefficients'`
 
-Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions).
+Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions), weighted by minutes.
 
 The two models share the same feature matrix but separate target vectors,
 producing independent offense and defense coefficient vectors.
+
+Each row is weighted by the player's minutes (`weight`, normalized to mean 1). A player's
+per-100 rates and his RAPM target are both noisiest when he played little, and a quarter to a
+half of a season's rows are players under 250 minutes; fit with equal weights they dominate the
+regression, which then predicts with about a quarter of the target's spread.
 
 **Parameters**
 
@@ -716,7 +721,8 @@ producing independent offense and defense coefficient vectors.
 | `box_features` | `DataFrame` |  | Per-player per-100 features. Must contain `player_id` and every column in *feature_names*. |
 | `rapm_target` | `DataFrame` |  | Per-player RAPM target frame with columns `player_id`, `o_rapm`, and `d_rapm`. Only the rows whose `player_id` appears in *box_features* are used (inner join). |
 | `feature_names` | `Optional[List[str]]` | `None` | Ordered list of feature columns to regress on. Defaults to `SPM_FEATURES` (= `_STATS` from `nba_box_logs`). |
-| `alpha` | `float` | `100.0` | Ridge regularization strength (`sklearn.linear_model.Ridge`). Lower values approach OLS; higher values shrink toward zero. |
+| `alpha` | `float` | `30.0` | Ridge regularization strength (`sklearn.linear_model.Ridge`) on the raw per-100 features with the weights at mean 1. Defaults to `SPM_ALPHA`. Lower values approach OLS; higher values shrink toward zero. |
+| `weight` | `Optional[str]` | `'min'` | The column (of *box_features*, or of *rapm_target* when *box_features* lacks it) holding each row's sample weight, e.g. `"min"` (the default) or `"off_poss"`. `None` fits every row with the same weight (the rule before minute weighting). |
 
 **Returns**
 
@@ -726,7 +732,7 @@ producing independent offense and defense coefficient vectors.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If *feature_names* lists a column absent from *box_features* or *rapm_target* is missing required columns. |
+| `ValueError` | If *feature_names* lists a column absent from *box_features*, *rapm_target* is missing required columns, or the *weight* column is missing, negative, non-finite or sums to zero over the joined rows. |
 
 **Example**
 
@@ -734,9 +740,10 @@ producing independent offense and defense coefficient vectors.
 from sportsdataverse.nba import train_spm
 coef = train_spm(box_feats, rapm_ratings)
 
-# With custom regularization
+# With custom regularization, or the equal-weight fit
 
 coef = train_spm(box_feats, rapm_ratings, alpha=50.0)
+coef_equal = train_spm(box_feats, rapm_ratings, weight=None)
 ```
 
 ### validate_model {#validate_model}

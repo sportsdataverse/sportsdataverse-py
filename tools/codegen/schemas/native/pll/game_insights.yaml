@@ -1,0 +1,45 @@
+schema: pll_game_insights
+kind: dataframe
+columns:
+- name: event_slug
+  type: character
+  description: ''
+- name: insight_index
+  type: integer
+  description: ''
+- name: title
+  type: character
+  description: ''
+- name: insight_type
+  type: character
+  description: ''
+- name: subject
+  type: character
+  description: ''
+- name: detail
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: jersey_number
+  type: character
+  description: ''
+- name: period
+  type: integer
+  description: ''
+- name: minutes
+  type: integer
+  description: ''
+- name: seconds
+  type: integer
+  description: ''
+- name: primary_image_url
+  type: character
+  description: ''
