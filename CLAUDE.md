@@ -1201,6 +1201,13 @@ code at the source; never blanket-ignore a category.
   cited scripts that are lost or only on the maintainer's disk). Put a new fitter under `tools/fit_<what>.py`,
   never the gitignored `dev/`, and label a seeded value as seeded. `tests/test_model_lineage.py` fails on a
   cited script that is neither tracked nor in the gap table, and on a booster without a row.
+- **Model lifecycle: ledger fields and the retire rule.** Every `tools/models/model_ledger.json` row carries
+  `baseline`, `primary_metric`, `adoption_margin`, `status` and `lifecycle_note`. Fill them from committed evidence
+  only. A field with no evidence stays null and the note gives the reason; never type a number the evidence does not
+  state. `retire.py --check-ledger` (run by `tests/tools/test_model_lifecycle.py`) enforces this. After each completed
+  season past a model's holdout, score it once against its baseline with `tools/models/lifecycle/retire.py`. Only the
+  owner sets `status: retired`. Season sims also get `coverage.py`, refit-per-season models get `signs.py`. Rules:
+  `docs/docs/architecture/model-lineage.md#lifecycle-baseline-retire-rule-coverage-sign-stability`.
 - **Cache invalidation when modifying loaders.** The `@cached_loader`
   decorator hashes `(qualified_name, args, sorted_kwargs)` — it does NOT
   hash the URL or function body. If you change a loader's URL or
