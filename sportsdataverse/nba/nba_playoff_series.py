@@ -79,6 +79,9 @@ def nba_playoff_series(
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"`` (checked before any load).
 
+    See Also:
+        :func:`nba_playoff_series_teams`, :func:`nba_playoff_series_players`; the cores in :mod:`sportsdataverse._common.playoff_series`.
+
     Example:
         The 2025 Finals::
 
@@ -109,6 +112,9 @@ def nba_playoff_series_teams(
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
+
+    See Also:
+        :func:`nba_playoff_series`, :func:`nba_playoff_series_players`; the cores in :mod:`sportsdataverse._common.playoff_series`.
 
     Example:
         Quick start::
@@ -142,6 +148,9 @@ def nba_playoff_series_players(
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``.
+
+    See Also:
+        :func:`nba_playoff_series`, :func:`nba_playoff_series_teams`; the cores in :mod:`sportsdataverse._common.playoff_series`.
 
     Example:
         Who rose the most in the 2025 Finals::

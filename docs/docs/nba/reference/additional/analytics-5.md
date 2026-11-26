@@ -261,7 +261,7 @@ One row per player who played (minutes above zero) in a final game of the series
 | `team_id` | Int64 | ESPN team id of the player's team in the series. |
 | `athlete_id` | Int64 | ESPN athlete id. |
 | `athlete_display_name` | String | The player's name. |
-| `games` | Int64 | Series games played (minutes above zero). |
+| `games` | Int64 | Series games played (not marked did-not-play, with minutes or any box count). |
 | `min` | Float64 | Total minutes in the series. |
 | `pts` | Int64 | Total points in the series: the sum of the player's ESPN game boxes. |
 | `fgm` | Int64 | Total field goals made in the series: the sum of the player's ESPN game boxes. |

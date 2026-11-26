@@ -82005,7 +82005,7 @@ nba_playoff_series_players:
   team_id: ESPN team id of the player's team in the series.
   athlete_id: ESPN athlete id.
   athlete_display_name: The player's name.
-  games: Series games played (minutes above zero).
+  games: Series games played (not marked did-not-play, with minutes or any box count).
   min: Total minutes in the series.
   pts: 'Total points in the series: the sum of the player''s ESPN game boxes.'
   fgm: 'Total field goals made in the series: the sum of the player''s ESPN game boxes.'
@@ -82112,7 +82112,7 @@ wnba_playoff_series_players:
   team_id: ESPN team id of the player's team in the series.
   athlete_id: ESPN athlete id.
   athlete_display_name: The player's name.
-  games: Series games played (minutes above zero).
+  games: Series games played (not marked did-not-play, with minutes or any box count).
   min: Total minutes in the series.
   pts: 'Total points in the series: the sum of the player''s ESPN game boxes.'
   fgm: 'Total field goals made in the series: the sum of the player''s ESPN game boxes.'

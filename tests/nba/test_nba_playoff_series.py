@@ -16,6 +16,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse._common.playoff_series import (
+    SERIES_BOX_STATS,
     SERIES_GAMES_SCHEMA,
     SERIES_PLAYERS_SCHEMA,
     SERIES_TEAMS_SCHEMA,
@@ -80,21 +81,47 @@ def test_wnba_2025_finals_sweep() -> None:
     assert last["decided"].all()
 
 
-@pytest.mark.parametrize("lg", LEAGUES)
-def test_a_series_in_progress_is_not_decided(lg: str) -> None:
-    sched = _read(lg, "schedule")
-    finals = _games(lg).filter(pl.col("round") == 4).sort("game_number")
-    last_id = finals["game_id"][-1]
-    live = sched.with_columns(
-        pl.when(pl.col("game_id") == last_id)
+def _unplay(sched: pl.DataFrame, game_ids: list[int]) -> pl.DataFrame:
+    """The schedule with these games not yet played (as ESPN lists them before tip-off)."""
+    return sched.with_columns(
+        pl.when(pl.col("game_id").is_in(game_ids))
         .then(False)
         .otherwise(pl.col("status_type_completed"))
         .alias("status_type_completed")
     )
-    row = playoff_series_games(live, league=lg).filter(pl.col("game_id") == last_id).row(0, named=True)
-    assert row["winner_team_id"] is None
-    assert not row["decided"] and row["series_winner_team_id"] is None
-    assert row["team_a_wins"] + row["team_b_wins"] == finals.height - 1
+
+
+# the NBA Finals stood 3-2 Oklahoma City after game 5; the WNBA Finals 3-0 Las Vegas after game 3
+@pytest.mark.parametrize(("lg", "unplayed", "score"), [("nba", 2, (3, 2)), ("wnba", 1, (3, 0))])
+def test_a_series_whose_leader_has_not_clinched_is_not_decided(lg: str, unplayed: int, score: tuple[int, int]) -> None:
+    finals = _games(lg).filter(pl.col("round") == 4).sort("game_number")
+    later = finals["game_id"].to_list()[-unplayed:]
+    live = playoff_series_games(_unplay(_read(lg, "schedule"), later), league=lg).filter(pl.col("round") == 4)
+    last = live.filter(pl.col("game_id") == later[-1]).row(0, named=True)
+    assert last["winner_team_id"] is None
+    assert (last["team_a_wins"], last["team_b_wins"]) == score
+    assert not last["decided"] and last["series_winner_team_id"] is None
+    assert live["decided"].unique().to_list() == [False]
+    # a tied series has no leader and is not decided either (the NBA Finals at 3-3)
+    if lg == "nba":
+        tied = playoff_series_games(_unplay(_read(lg, "schedule"), later[-1:]), league=lg).filter(pl.col("round") == 4)
+        assert tied["decided"].unique().to_list() == [False]
+
+
+def test_without_espn_rounds_the_latest_series_is_the_final() -> None:
+    """Older seasons carry type_abbreviation STD on every postseason game: no round number, and the season's
+    latest-starting series takes the Finals' clinch rule (WNBA 2025: four wins)."""
+    std = _read("wnba", "schedule").with_columns(pl.lit("STD").alias("type_abbreviation"))
+    games = playoff_series_games(std, league="wnba")
+    assert games["round"].null_count() == games.height and games["round_code"].null_count() == games.height
+    last = games.group_by("series_id").agg(pl.all().last())
+    assert last["decided"].all()  # the early rounds through plays-on, the Finals through the clinch
+    assert last.filter(pl.col("series_id") == "2025-11-17")["series_winner_team_id"].to_list() == [17]
+    finals = games.filter(pl.col("series_id") == "2025-11-17").sort("game_number")
+    live = playoff_series_games(_unplay(std, finals["game_id"].to_list()[-1:]), league="wnba")
+    assert live.filter(pl.col("series_id") == "2025-11-17")["decided"].unique().to_list() == [False]
+    # a first-round series stays decided through its winner playing on, with no clinch rule for its round
+    assert last.filter(pl.col("series_id") == "2025-14-17")["series_winner_team_id"].to_list() == [17]
 
 
 @pytest.mark.parametrize("lg", LEAGUES)
@@ -179,3 +206,48 @@ def test_empty_input_keeps_the_schema() -> None:
 def test_bad_league_id_raises_before_any_load() -> None:
     with pytest.raises(ValueError, match="league_id"):
         nba_playoff_series(2025, league_id="20")
+
+
+def test_a_zero_minute_cameo_with_a_stat_counts_as_played() -> None:
+    """ESPN lists some cameos at 0.0 minutes with a box count; the NBA fixture holds twelve rows like that (one
+    scores 2). They count as games played, and their counts reach the totals."""
+    box = _read("nba", "player_box")
+    counts = pl.sum_horizontal([pl.col(c).fill_null(0) for c in SERIES_BOX_STATS.values()])
+    played = (pl.col("did_not_play").fill_null(False) == False) & ((pl.col("minutes").fill_null(0) > 0) | (counts > 0))  # noqa: E712
+    cameo = box.filter((pl.col("minutes").fill_null(0) <= 0) & played)
+    assert cameo.height == 12 and cameo["points"].max() == 2
+    players = playoff_series_players(_games("nba"), box)
+    checked = 0
+    for athlete in cameo.filter(pl.col("season_type") == 2)["athlete_id"].unique().to_list():
+        rows = box.filter((pl.col("athlete_id") == athlete) & (pl.col("season_type") == 2) & played)
+        for p in players.filter(pl.col("athlete_id") == athlete).iter_rows(named=True):
+            assert p["reg_games"] == rows.height
+            assert p["reg_pts_pg"] * p["reg_games"] == pytest.approx(rows["points"].sum())
+            checked += 1
+    assert checked > 0
+    # a cameo in a series game is one of the player's series games
+    po = cameo.filter(pl.col("season_type") == 3).row(0, named=True)
+    series = _games("nba").filter(pl.col("game_id") == po["game_id"])["series_id"][0]
+    row = players.filter((pl.col("series_id") == series) & (pl.col("athlete_id") == po["athlete_id"])).row(
+        0, named=True
+    )
+    assert (
+        row["games"]
+        == box.filter(
+            (pl.col("athlete_id") == po["athlete_id"])
+            & pl.col("game_id").is_in(
+                _games("nba").filter(pl.col("series_id") == series)["game_id"].cast(pl.Int32).implode()
+            )
+            & played
+        ).height
+    )
+
+
+@pytest.mark.parametrize("lg", LEAGUES)
+def test_a_box_row_listed_twice_counts_once(lg: str) -> None:
+    games = _games(lg)
+    team, player = _read(lg, "team_box"), _read(lg, "player_box")
+    assert playoff_series_teams(games, pl.concat([team, team.head(5)])).equals(playoff_series_teams(games, team))
+    assert playoff_series_players(games, pl.concat([player, player.head(50)])).equals(
+        playoff_series_players(games, player)
+    )

@@ -117,10 +117,24 @@ def wins_to_clinch(league: str, season: int, *, final: bool) -> int | None:
     """Wins that settle a series, where the format is fixed for the round; None where it varies.
 
     NBA: every round has been best-of-seven since 2003; before that the first round was
-    best-of-five, so only the later rounds are fixed. WNBA: the early rounds have changed format
-    often (single games, best-of-three, best-of-five), so only the Finals are fixed: best-of-three
-    through 2004, best-of-five 2005-2024, best-of-seven from 2025. A series without a fixed
-    format is decided when its leader plays a later series.
+    best-of-five, and only the Finals are taken as fixed. WNBA: the early rounds have changed
+    format often (single games, best-of-three, best-of-five), so only the Finals are fixed:
+    best-of-three through 2004, best-of-five 2005-2024, best-of-seven from 2025. A series without
+    a fixed format is decided when its leader plays a later series.
+
+    Args:
+        league: ``"nba"`` or ``"wnba"``.
+        season: The season, named by the year it ends.
+        final: Whether the series is the Finals.
+
+    Returns:
+        The wins that clinch the series, or None where the round's format is not fixed.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._common.playoff_series import wins_to_clinch
+            wins_to_clinch("wnba", 2024, final=True)  # 3: the Finals were best-of-five
     """
     if league == "nba":
         return 4 if (season >= 2003 or final) else None
@@ -144,7 +158,22 @@ def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame
         series and game number. ``winner_team_id`` is null until the game is final;
         ``team_a_wins`` / ``team_b_wins`` count the finals up to and including this game, and
         ``series_games`` / ``decided`` / ``series_winner_team_id`` repeat on every row of the
-        series. ``round_name`` is the game headline without its "Game N".
+        series. ``series_games`` counts the games listed in the series, played and scheduled.
+        ``round_name`` is the game headline without its "Game N".
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If ``schedule`` lacks a column named above.
+
+    See Also:
+        :func:`playoff_series_teams`, :func:`playoff_series_players`, and
+        :func:`sportsdataverse.nba.nba_playoff_series.nba_playoff_series` (the release reader).
+
+    Example:
+        From a loaded schedule::
+
+            from sportsdataverse.nba import load_nba_schedule
+            from sportsdataverse._common.playoff_series import playoff_series_games
+            games = playoff_series_games(load_nba_schedule([2025]), league="nba")
     """
     po = schedule.filter(pl.col("season_type") == 3)
     if po.height == 0:
@@ -153,7 +182,7 @@ def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame
     hi = pl.max_horizontal("home_id", "away_id").cast(pl.Int64)
     completed = pl.col("status_type_completed").fill_null(False)
     winner = (
-        pl.when(~completed)
+        pl.when(completed == False)  # noqa: E712 - an explicit boolean mask (house style)
         .then(None)
         .when(pl.col("home_score") > pl.col("away_score"))
         .then(pl.col("home_id"))
@@ -173,7 +202,7 @@ def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame
             .str.strip_chars()
             .alias("round_name"),
         )
-        .sort("season", "series_id", "game_date_time", "game_id")
+        .sort("season", "series_id", "game_date_time", "game_id", nulls_last=True)
         .with_columns(
             pl.int_range(1, pl.len() + 1).over("series_id").alias("game_number"),
             pl.col("home_id").first().over("series_id").cast(pl.Int64).alias("team_a_id"),
@@ -239,7 +268,7 @@ def _series_outcomes(games: pl.DataFrame, league: str) -> pl.DataFrame:
         pl.col("team_a_wins").max(),
         pl.col("team_b_wins").max(),
         pl.col("game_date").min().alias("first_date"),
-        pl.col("game_date").filter(pl.col("completed")).max().alias("last_date"),
+        pl.col("game_date").filter(pl.col("completed") == True).max().alias("last_date"),  # noqa: E712
     )
     # the season's latest-starting series is its final where ESPN gives no round (older seasons)
     latest = pl.col("first_date") == pl.col("first_date").max().over("season")
@@ -282,7 +311,10 @@ def _series_outcomes(games: pl.DataFrame, league: str) -> pl.DataFrame:
     return per.select(
         "series_id",
         "decided",
-        pl.when(pl.col("decided")).then(pl.col("leader")).cast(pl.Int64).alias("series_winner_team_id"),
+        pl.when(pl.col("decided") == True)  # noqa: E712
+        .then(pl.col("leader"))
+        .cast(pl.Int64)
+        .alias("series_winner_team_id"),
     )
 
 
@@ -298,18 +330,36 @@ def playoff_series_teams(games: pl.DataFrame, team_box: pl.DataFrame) -> pl.Data
     Returns:
         :data:`SERIES_TEAMS_SCHEMA` rows, two per series with a final game (a series whose games
         are all still to play has none): ``games``, ``wins``, ``losses``, ``pts`` and ``opp_pts``
-        over its final games, and the summed box counts.
+        over its final games, and the summed box counts. A box row listed twice in the release
+        is counted once (one row per ``(game_id, team_id)``).
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If ``team_box`` lacks a column named above.
+
+    See Also:
+        :func:`playoff_series_games`, :func:`playoff_series_players`.
+
+    Example:
+        From the loaded releases::
+
+            from sportsdataverse.nba import load_nba_schedule, load_nba_team_boxscore
+            from sportsdataverse._common.playoff_series import playoff_series_games, playoff_series_teams
+            games = playoff_series_games(load_nba_schedule([2025]), league="nba")
+            teams = playoff_series_teams(games, load_nba_team_boxscore([2025]))
     """
-    finals = games.filter(pl.col("completed")).select("season", "series_id", "game_id", "winner_team_id")
+    finals = games.filter(pl.col("completed") == True)  # noqa: E712 - an explicit boolean mask (house style)
+    finals = finals.select("season", "series_id", "game_id", "winner_team_id")
     if finals.height == 0:
         return pl.DataFrame(schema=SERIES_TEAMS_SCHEMA)
-    box = team_box.rename({"total_rebounds": "rebounds", "team_score": "points"}).with_columns(
-        pl.col("game_id", "team_id", "opponent_team_id").cast(pl.Int64)
+    box = (
+        team_box.unique(subset=["game_id", "team_id"], keep="first", maintain_order=True)
+        .rename({"total_rebounds": "rebounds", "team_score": "points"})
+        .with_columns(pl.col("game_id", "team_id", "opponent_team_id").cast(pl.Int64))
     )
     rows = finals.join(box, on="game_id", how="inner")
     out = rows.group_by("season", "series_id", "team_id").agg(
         pl.col("opponent_team_id").first(),
-        pl.col("team_abbreviation").last(),
+        pl.col("team_abbreviation").sort_by("game_id").last(),
         pl.len().alias("games"),
         (pl.col("winner_team_id") == pl.col("team_id")).sum().alias("wins"),
         (pl.col("winner_team_id") != pl.col("team_id")).sum().alias("losses"),
@@ -320,8 +370,16 @@ def playoff_series_teams(games: pl.DataFrame, team_box: pl.DataFrame) -> pl.Data
 
 
 def _played(box: pl.DataFrame) -> pl.DataFrame:
-    """Box rows the player took the floor in (a did-not-play row has no minutes)."""
-    return box.filter((pl.col("minutes").fill_null(0) > 0) & ~pl.col("did_not_play").fill_null(False))
+    """Box rows the player took the floor in: not marked did-not-play, with minutes or any box count.
+
+    ESPN lists some cameos at 0.0 minutes with a stat (a free throw, a rebound, a foul); those
+    count. A row listed twice in the release counts once (one row per ``(game_id, athlete_id)``).
+    """
+    counted = pl.sum_horizontal([pl.col(c).fill_null(0) for c in SERIES_BOX_STATS.values()]) > 0
+    return box.unique(subset=["game_id", "athlete_id"], keep="first", maintain_order=True).filter(
+        (pl.col("did_not_play").fill_null(False) == False)  # noqa: E712 - an explicit boolean mask (house style)
+        & ((pl.col("minutes").fill_null(0) > 0) | counted)
+    )
 
 
 def _ts(pts: pl.Expr, fga: pl.Expr, fta: pl.Expr) -> pl.Expr:
@@ -342,13 +400,28 @@ def playoff_series_players(games: pl.DataFrame, player_box: pl.DataFrame) -> pl.
 
     Returns:
         :data:`SERIES_PLAYERS_SCHEMA` rows, one per player who played in a final game of the
-        series. ``games`` and the totals count the games played (minutes above zero);
-        ``<stat>_pg`` divides by those games, ``reg_<stat>_pg`` is the same over his regular
-        season (every team he played for; null with no regular-season game) and
-        ``<stat>_pg_diff`` is series minus regular season. ``ts_pct`` is true shooting,
-        ``PTS / (2 * (FGA + 0.44 * FTA))``.
+        series. ``games`` and the totals count the games played (not marked did-not-play, with
+        minutes or any box count; a 0.0-minute cameo with a stat counts); ``<stat>_pg`` divides
+        by those games, ``reg_<stat>_pg`` is the same over the player's regular season (every
+        team played for; null with no regular-season game) and ``<stat>_pg_diff`` is series
+        minus regular season. ``ts_pct`` is true shooting, ``PTS / (2 * (FGA + 0.44 * FTA))``.
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If ``player_box`` lacks a column named above.
+
+    See Also:
+        :func:`playoff_series_games`, :func:`playoff_series_teams`.
+
+    Example:
+        From the loaded releases::
+
+            from sportsdataverse.nba import load_nba_player_boxscore, load_nba_schedule
+            from sportsdataverse._common.playoff_series import playoff_series_games, playoff_series_players
+            games = playoff_series_games(load_nba_schedule([2025]), league="nba")
+            players = playoff_series_players(games, load_nba_player_boxscore([2025]))
     """
-    finals = games.filter(pl.col("completed")).select("season", "series_id", "game_id")
+    finals = games.filter(pl.col("completed") == True)  # noqa: E712 - an explicit boolean mask (house style)
+    finals = finals.select("season", "series_id", "game_id")
     if finals.height == 0:
         return pl.DataFrame(schema=SERIES_PLAYERS_SCHEMA)
     box = (
@@ -360,7 +433,7 @@ def playoff_series_players(games: pl.DataFrame, player_box: pl.DataFrame) -> pl.
     po = (
         finals.join(box.drop("season"), on="game_id", how="inner")
         .group_by("season", "series_id", "team_id", "athlete_id")
-        .agg(pl.col("athlete_display_name").last(), pl.len().alias("games"), *sums)
+        .agg(pl.col("athlete_display_name").sort_by("game_id").last(), pl.len().alias("games"), *sums)
     )
     reg = (
         box.filter(pl.col("season_type") == 2)
