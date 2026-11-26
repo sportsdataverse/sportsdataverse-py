@@ -5,7 +5,7 @@ Compute-on-demand empirical-Bayes make-rate table over ``zone x type`` cells
 per-shot scorer that joins it back. No bundled artifact -- the model is a
 returned frame the caller can persist or refit at will.
 
-Methodology reference: Hoop-Math-style shot zones + standard
+Methodology: rim / mid-range / three-point shot zones + standard
 empirical-Bayes shrinkage -- methodology only, no ported code.
 """
 

@@ -1,0 +1,6 @@
+{
+  "label": "Premier Lacrosse League stats API (stats.premierlacrosseleague.com; runtime only, no key, the site's Referer)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "lacrosse/reference/pll"}
+}

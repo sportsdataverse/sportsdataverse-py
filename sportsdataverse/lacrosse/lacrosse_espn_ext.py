@@ -82,7 +82,7 @@ def espn_lacrosse_scoreboard(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/scoreboard``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/scoreboard?dates=20240115&limit=500
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/scoreboard?dates=20260801&limit=500
 
     Args:
         dates: One day (YYYYMMDD) or one calendar year (YYYY). A range (YYYYMMDD-YYYYMMDD) is rejected with HTTP 400; request each day, or use the Core v2 ``events`` wrapper.
@@ -105,7 +105,7 @@ def espn_lacrosse_scoreboard(
     Example:
         Quick start::
 
-            espn_lacrosse_scoreboard(league='pll', dates='20240115')
+            espn_lacrosse_scoreboard(league='pll', dates='20260801')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_scoreboard", kwargs)
@@ -140,7 +140,7 @@ def espn_lacrosse_summary(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/summary``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/summary
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/summary?event=401867221
 
     Args:
         event_id: event query parameter.
@@ -160,7 +160,7 @@ def espn_lacrosse_summary(
     Example:
         Quick start::
 
-            espn_lacrosse_summary(league='pll')
+            espn_lacrosse_summary(league='pll', event_id='401867221')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_summary", kwargs)
@@ -383,7 +383,7 @@ def espn_lacrosse_team(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/4
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/122896
 
     Args:
         team_id: team_id path parameter.
@@ -402,7 +402,7 @@ def espn_lacrosse_team(
     Example:
         Quick start::
 
-            espn_lacrosse_team(league='pll', team_id='4')
+            espn_lacrosse_team(league='pll', team_id='122896')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_team", kwargs)
@@ -432,7 +432,7 @@ def espn_lacrosse_team_schedule(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/schedule``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/4/schedule
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/122896/schedule
 
     Args:
         team_id: team_id path parameter.
@@ -452,7 +452,7 @@ def espn_lacrosse_team_schedule(
     Example:
         Quick start::
 
-            espn_lacrosse_team_schedule(league='pll', team_id='4')
+            espn_lacrosse_team_schedule(league='pll', team_id='122896')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_team_schedule", kwargs)
@@ -538,7 +538,7 @@ def espn_lacrosse_rankings(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/rankings``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/rankings
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/lacrosse/mens-college-lacrosse/rankings
 
     Args:
         return_parsed: parse the payload through parse_rankings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -556,7 +556,7 @@ def espn_lacrosse_rankings(
     Example:
         Quick start::
 
-            espn_lacrosse_rankings(league='pll')
+            espn_lacrosse_rankings(league='mens-college-lacrosse')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_rankings", kwargs)
@@ -727,7 +727,7 @@ def espn_lacrosse_season_info(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026
 
     Args:
         season: season path parameter.
@@ -746,7 +746,7 @@ def espn_lacrosse_season_info(
     Example:
         Quick start::
 
-            espn_lacrosse_season_info(league='pll', season=2024)
+            espn_lacrosse_season_info(league='pll', season=2026)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_season_info", kwargs)
@@ -775,7 +775,7 @@ def espn_lacrosse_season_types(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types
 
     Args:
         season: season path parameter.
@@ -794,7 +794,7 @@ def espn_lacrosse_season_types(
     Example:
         Quick start::
 
-            espn_lacrosse_season_types(league='pll', season=2024)
+            espn_lacrosse_season_types(league='pll', season=2026)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_season_types", kwargs)
@@ -824,7 +824,7 @@ def espn_lacrosse_season_type(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2
 
     Args:
         season: season path parameter.
@@ -844,7 +844,7 @@ def espn_lacrosse_season_type(
     Example:
         Quick start::
 
-            espn_lacrosse_season_type(league='pll', season=2024, season_type=2)
+            espn_lacrosse_season_type(league='pll', season=2026, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_season_type", kwargs)
@@ -875,7 +875,7 @@ def espn_lacrosse_season_group(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2/groups/118
 
     Args:
         season: season path parameter.
@@ -896,7 +896,7 @@ def espn_lacrosse_season_group(
     Example:
         Quick start::
 
-            espn_lacrosse_season_group(league='pll', season=2024, season_type=2, group_id=80)
+            espn_lacrosse_season_group(league='pll', season=2026, season_type=2, group_id=118)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_season_group", kwargs)
@@ -926,7 +926,7 @@ def espn_lacrosse_season_groups(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2/groups
 
     Args:
         season: season path parameter.
@@ -946,7 +946,7 @@ def espn_lacrosse_season_groups(
     Example:
         Quick start::
 
-            espn_lacrosse_season_groups(league='pll', season=2024, season_type=2)
+            espn_lacrosse_season_groups(league='pll', season=2026, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_season_groups", kwargs)
@@ -978,7 +978,7 @@ def espn_lacrosse_season_group_teams(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/teams``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/teams?limit=500
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/types/2/groups/118/teams?limit=500
 
     Args:
         season: season path parameter.
@@ -1000,7 +1000,7 @@ def espn_lacrosse_season_group_teams(
     Example:
         Quick start::
 
-            espn_lacrosse_season_group_teams(league='pll', season=2024, season_type=2, group_id=80)
+            espn_lacrosse_season_group_teams(league='pll', season=2026, season_type=2, group_id=118)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_season_group_teams", kwargs)
@@ -1034,7 +1034,7 @@ def espn_lacrosse_season_group_children(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/groups/80/children?limit=500
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/mens-college-lacrosse/seasons/2026/types/2/groups/90/children?limit=500
 
     Args:
         season: season path parameter.
@@ -1056,7 +1056,7 @@ def espn_lacrosse_season_group_children(
     Example:
         Quick start::
 
-            espn_lacrosse_season_group_children(league='pll', season=2024, season_type=2, group_id=80)
+            espn_lacrosse_season_group_children(league='mens-college-lacrosse', season=2026, season_type=2, group_id=90)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_season_group_children", kwargs)
@@ -1089,7 +1089,7 @@ def espn_lacrosse_season_teams(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/teams``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/teams?limit=1000&page=1
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/teams?limit=1000&page=1
 
     Args:
         season: season path parameter.
@@ -1110,7 +1110,7 @@ def espn_lacrosse_season_teams(
     Example:
         Quick start::
 
-            espn_lacrosse_season_teams(league='pll', season=2024)
+            espn_lacrosse_season_teams(league='pll', season=2026)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_season_teams", kwargs)
@@ -1143,7 +1143,7 @@ def espn_lacrosse_season_team(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/teams/{team_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/teams/4
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2026/teams/122896
 
     Args:
         season: season path parameter.
@@ -1163,7 +1163,7 @@ def espn_lacrosse_season_team(
     Example:
         Quick start::
 
-            espn_lacrosse_season_team(league='pll', season=2024, team_id='4')
+            espn_lacrosse_season_team(league='pll', season=2026, team_id='122896')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_season_team", kwargs)
@@ -1245,7 +1245,7 @@ def espn_lacrosse_game(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221
 
     Args:
         event_id: event_id path parameter.
@@ -1264,7 +1264,7 @@ def espn_lacrosse_game(
     Example:
         Quick start::
 
-            espn_lacrosse_game(league='pll', event_id='401584793')
+            espn_lacrosse_game(league='pll', event_id='401867221')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_game", kwargs)
@@ -1294,7 +1294,7 @@ def espn_lacrosse_game_competition(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221
 
     Args:
         event_id: event_id path parameter.
@@ -1314,7 +1314,7 @@ def espn_lacrosse_game_competition(
     Example:
         Quick start::
 
-            espn_lacrosse_game_competition(league='pll', event_id='401584793')
+            espn_lacrosse_game_competition(league='pll', event_id='401867221')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_game_competition", kwargs)
@@ -1346,7 +1346,7 @@ def espn_lacrosse_game_teams(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/competitors
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/competitors
 
     Args:
         event_id: event_id path parameter.
@@ -1366,7 +1366,7 @@ def espn_lacrosse_game_teams(
     Example:
         Quick start::
 
-            espn_lacrosse_game_teams(league='pll', event_id='401584793')
+            espn_lacrosse_game_teams(league='pll', event_id='401867221')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_game_teams", kwargs)
@@ -1399,7 +1399,7 @@ def espn_lacrosse_game_team(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/competitors/4
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/competitors/122896
 
     Args:
         event_id: event_id path parameter.
@@ -1420,7 +1420,7 @@ def espn_lacrosse_game_team(
     Example:
         Quick start::
 
-            espn_lacrosse_game_team(league='pll', event_id='401584793', team_id='4')
+            espn_lacrosse_game_team(league='pll', event_id='401867221', team_id='122896')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_game_team", kwargs)
@@ -1453,7 +1453,7 @@ def espn_lacrosse_game_team_linescores(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/competitors/4/linescores
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/competitors/122896/linescores
 
     Args:
         event_id: event_id path parameter.
@@ -1474,7 +1474,7 @@ def espn_lacrosse_game_team_linescores(
     Example:
         Quick start::
 
-            espn_lacrosse_game_team_linescores(league='pll', event_id='401584793', team_id='4')
+            espn_lacrosse_game_team_linescores(league='pll', event_id='401867221', team_id='122896')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_game_team_linescores", kwargs)
@@ -1506,7 +1506,7 @@ def espn_lacrosse_game_status(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/status``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/status
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/status
 
     Args:
         event_id: event_id path parameter.
@@ -1526,7 +1526,7 @@ def espn_lacrosse_game_status(
     Example:
         Quick start::
 
-            espn_lacrosse_game_status(league='pll', event_id='401584793')
+            espn_lacrosse_game_status(league='pll', event_id='401867221')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_game_status", kwargs)
@@ -1558,7 +1558,7 @@ def espn_lacrosse_game_broadcasts(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401584793/competitions/401584793/broadcasts
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/events/401867221/competitions/401867221/broadcasts
 
     Args:
         event_id: event_id path parameter.
@@ -1578,7 +1578,7 @@ def espn_lacrosse_game_broadcasts(
     Example:
         Quick start::
 
-            espn_lacrosse_game_broadcasts(league='pll', event_id='401584793')
+            espn_lacrosse_game_broadcasts(league='pll', event_id='401867221')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_game_broadcasts", kwargs)
@@ -1662,7 +1662,7 @@ def espn_lacrosse_team_core(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/teams/{team_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/teams/4
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/teams/122896
 
     Args:
         team_id: team_id path parameter.
@@ -1681,7 +1681,7 @@ def espn_lacrosse_team_core(
     Example:
         Quick start::
 
-            espn_lacrosse_team_core(league='pll', team_id='4')
+            espn_lacrosse_team_core(league='pll', team_id='122896')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_team_core", kwargs)
@@ -1760,7 +1760,7 @@ def espn_lacrosse_franchise(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/franchises/{franchise_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/franchises/2
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/franchises/122896
 
     Args:
         franchise_id: franchise_id path parameter.
@@ -1779,7 +1779,7 @@ def espn_lacrosse_franchise(
     Example:
         Quick start::
 
-            espn_lacrosse_franchise(league='pll', franchise_id='2')
+            espn_lacrosse_franchise(league='pll', franchise_id='122896')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_franchise", kwargs)
@@ -1810,7 +1810,7 @@ def espn_lacrosse_season_week_rankings(
     Bound to sport='lacrosse'; ``league`` is a required argument (e.g. 'pll').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/rankings``
-    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/pll/seasons/2024/types/2/weeks/1/rankings
+    Example URL: https://sports.core.api.espn.com/v2/sports/lacrosse/leagues/mens-college-lacrosse/seasons/2026/types/2/weeks/1/rankings
 
     Args:
         season: season path parameter.
@@ -1831,7 +1831,7 @@ def espn_lacrosse_season_week_rankings(
     Example:
         Quick start::
 
-            espn_lacrosse_season_week_rankings(league='pll', season=2024, season_type=2, week=1)
+            espn_lacrosse_season_week_rankings(league='mens-college-lacrosse', season=2026, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_lacrosse_season_week_rankings", kwargs)

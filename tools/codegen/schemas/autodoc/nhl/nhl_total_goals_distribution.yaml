@@ -1,0 +1,16 @@
+schema: nhl_total_goals_distribution
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: total_goals
+  type: integer
+  description: ''
+- name: prob
+  type: double
+  description: ''
+- name: prob_over
+  type: double
+  description: ''

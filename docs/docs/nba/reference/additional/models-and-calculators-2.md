@@ -485,7 +485,7 @@ curve.filter(pl.col("age").is_between(24, 30))
 
 Faithful BPM 2.0 per player, at season or single-game granularity.
 
-Team adjustment (Myers, "About Box Plus/Minus (BPM)", BPM 2.0, Basketball-Reference): a
+Team adjustment (BPM 2.0): a
 team's %Min-weighted ratings (five slots) sum to its rating, so its minute-weighted mean
 `bpm` is its net rating per 100 / 5, and its minute-weighted `obpm` is (its offensive
 rating - the league's) / 5, a separate constant. `dbpm = bpm - obpm` then averages (the

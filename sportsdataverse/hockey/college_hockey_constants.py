@@ -21,7 +21,7 @@ What the payload *does* support: team-game goals-for/against (from the
 scoreboard/boxscore), which is enough for an opponent-adjusted goal-margin
 rating (:mod:`sportsdataverse.hockey.college_hockey_ratings`), reusing the
 league-agnostic :func:`sportsdataverse._common.ratings.iterative_opponent_adjust`
-fixed point (the MBB/NBA KenPom-style solver).
+fixed point (the MBB/NBA opponent-adjustment solver).
 
 ``has_shot_coordinates`` / ``has_shift_data`` / ``has_full_pbp`` are locked
 ``False`` for both leagues today and are asserted by

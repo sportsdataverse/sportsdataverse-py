@@ -37797,8 +37797,8 @@ wnba_team_ratings:
     than five teams qualify; the fastest team ranks 1 (pace has no good direction), average ties.
 mbb_team_season_rates:
   def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  def_orb_pts: 'Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  def_orb_pts: 'Defensive rebounding points (the opponents'' offensive rebounding) per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
   def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the split.'
   def_rtg_pct: 'Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -37818,7 +37818,7 @@ mbb_team_season_rates:
     at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer
     than five qualifiers.
   efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts, the remainder parts, so more than the free throws (see off_ft_pts). The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
   ft_rate: Free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
   ft_rate_n: 'Sample size of ft_rate: the team''s field-goal attempts in the split, 0 when the rate is null.'
   ft_rate_pct: 'Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -37839,8 +37839,8 @@ mbb_team_season_rates:
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  off_orb_pts: 'Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  off_orb_pts: 'Offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
   off_rtg_pct: 'Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38012,9 +38012,9 @@ nba_possession_rate_rows:
   start_clock: Seconds left in the period when the possession starts (when the previous possession ended).
   tov: Offense turnovers on the possession.
 nba_team_season_rates:
-  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  def_orb_pts: 'Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
+  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  def_orb_pts: 'Defensive rebounding points (the opponents'' offensive rebounding) per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
   def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the split.'
   def_rtg_pct: 'Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38023,7 +38023,7 @@ nba_team_season_rates:
     at least half the most games any team played in the split, whose def_rtg_n is at least 2,000 defensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
-  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
   efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
   efg_pct_n: 'Sample size of efg_pct: the team''s field-goal attempts in the split.'
   efg_pct_pct: 'Percentile of efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38032,8 +38032,8 @@ nba_team_season_rates:
     at least half the most games any team played in the split, whose efg_pct_n is at least 1,200 field-goal attempts (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
-  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts.'
+  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts, the remainder parts, so more than the free throws (see off_ft_pts). The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts.'
   ft_rate: Free-throw rate, FTA / FGA.
   ft_rate_n: 'Sample size of ft_rate: the team''s field-goal attempts in the split.'
   ft_rate_pct: 'Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38053,9 +38053,9 @@ nba_team_season_rates:
     at least half the most games any team played in the split, whose net_rtg_n is at least 2,000 possessions (offense plus
     defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate,
     a null rate, or fewer than five qualifiers.
-  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  off_orb_pts: 'Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
+  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  off_orb_pts: 'Offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
   off_rtg_pct: 'Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38064,7 +38064,7 @@ nba_team_season_rates:
     at least half the most games any team played in the split, whose off_rtg_n is at least 1,300 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
-  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
   opp_efg_pct: Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
   opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponents'' field-goal attempts in the split.'
   opp_efg_pct_pct: 'Percentile of opp_efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
@@ -38119,7 +38119,7 @@ nba_team_season_rates:
     at least half the most games any team played in the split, whose orb_pct_n is at least 410 offensive-rebound chances (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
-  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts.'
   pace: 'Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game
     clock those possessions used.'
   pace_n: 'Sample size of pace: the game clock the split''s possessions used, in regulation games (48 minutes,
@@ -38170,7 +38170,7 @@ nba_team_season_rates:
     at least half the most games any team played in the split, whose tov_pct_n is at least 1,400 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
-  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts.'
 nba_team_game_four_factors:
   chance_pts: 'Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound.'
   exp_pts: Points a league-average offense scores on the team's counted possessions, lg_ppp x poss.
@@ -38247,8 +38247,8 @@ ncaa_team_box_count_rows:
   tov: Turnovers in the game.
 wbb_team_season_rates:
   def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  def_orb_pts: 'Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  def_orb_pts: 'Defensive rebounding points (the opponents'' offensive rebounding) per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
   def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the split.'
   def_rtg_pct: 'Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38268,7 +38268,7 @@ wbb_team_season_rates:
     at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer
     than five qualifiers.
   efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts, the remainder parts, so more than the free throws (see off_ft_pts). The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
   ft_rate: Free-throw rate, FTA / FGA. Game-level, from the NCAA team box; null in the clutch split.
   ft_rate_n: 'Sample size of ft_rate: the team''s field-goal attempts in the split, 0 when the rate is null.'
   ft_rate_pct: 'Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38289,8 +38289,8 @@ wbb_team_season_rates:
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
   off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  off_orb_pts: 'Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  off_orb_pts: 'Offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
   off_rtg_pct: 'Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38439,9 +38439,9 @@ wbb_team_game_possessions:
     clutch when the game has clutch possessions. A team-season''s rows of a split add up to its wbb_team_season_rates row.'
   team_id: ESPN team id. Non-D1 opponents have none and get no row.
 wnba_team_season_rates:
-  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  def_orb_pts: 'Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
+  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  def_orb_pts: 'Defensive rebounding points (the opponents'' offensive rebounding) per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
   def_rtg: 'Defensive rating: points allowed per 100 defensive possessions.'
   def_rtg_n: 'Sample size of def_rtg: the team''s defensive possessions in the split.'
   def_rtg_pct: 'Percentile of def_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38450,7 +38450,7 @@ wnba_team_season_rates:
     at least half the most games any team played in the split, whose def_rtg_n is at least 810 defensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
-  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
   efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
   efg_pct_n: 'Sample size of efg_pct: the team''s field-goal attempts in the split.'
   efg_pct_pct: 'Percentile of efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38459,8 +38459,8 @@ wnba_team_season_rates:
     at least half the most games any team played in the split, whose efg_pct_n is at least 750 field-goal attempts (the sample
     at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate, or fewer
     than five qualifiers.
-  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts.'
+  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts, the remainder parts, so more than the free throws (see off_ft_pts). The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts.'
   ft_rate: Free-throw rate, FTA / FGA.
   ft_rate_n: 'Sample size of ft_rate: the team''s field-goal attempts in the split.'
   ft_rate_pct: 'Percentile of ft_rate within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38480,9 +38480,9 @@ wnba_team_season_rates:
     at least half the most games any team played in the split, whose net_rtg_n is at least 840 possessions (offense plus defense)
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null
     rate, or fewer than five qualifiers.
-  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  off_orb_pts: 'Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
+  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  off_orb_pts: 'Offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
   off_rtg: 'Offensive rating: points scored per 100 offensive possessions.'
   off_rtg_n: 'Sample size of off_rtg: the team''s offensive possessions in the split.'
   off_rtg_pct: 'Percentile of off_rtg within the season and split among the same qualified teams: 100 * (n + 1 - rank) / (n
@@ -38491,7 +38491,7 @@ wnba_team_season_rates:
     at least half the most games any team played in the split, whose off_rtg_n is at least 660 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
-  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts.'
   opp_efg_pct: Opponents' effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction.
   opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponents'' field-goal attempts in the split.'
   opp_efg_pct_pct: 'Percentile of opp_efg_pct within the season and split among the same qualified teams: 100 * (n + 1 - rank)
@@ -38546,7 +38546,7 @@ wnba_team_season_rates:
     at least half the most games any team played in the split, whose orb_pct_n is at least 220 offensive-rebound chances (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
-  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts.'
   pace: 'Pace: possessions per 40 minutes, the mean of poss and opp_poss over the game clock those possessions used.'
   pace_n: 'Sample size of pace: the game clock the split''s possessions used, in regulation games (48 minutes,
     40 in the WNBA and college), rounded: a full game counts 1, a clutch split''s five-minute windows about 0.1 each.'
@@ -38599,7 +38599,7 @@ wnba_team_season_rates:
     at least half the most games any team played in the split, whose tov_pct_n is at least 1,100 offensive possessions (the
     sample at which the rate is half signal, rate_gates); null for a non-qualifier, a sample under that gate, a null rate,
     or fewer than five qualifiers.
-  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts.'
 wnba_team_game_four_factors:
   chance_pts: 'Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound.'
   exp_pts: Points a league-average offense scores on the team's counted possessions, lg_ppp x poss.
@@ -38724,9 +38724,9 @@ wnba_game_lineups_used:
   seconds: 'Game-clock seconds on the floor: the clock that ran into each action, credited to the lineup at that action.'
   team_id: stats.nba.com team id.
 nba_lineup_seasons:
-  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  def_orb_pts: 'Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
+  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  def_orb_pts: 'Defensive rebounding points (the opponents'' offensive rebounding) per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator. On 2024-25 units it runs about 5 above
     stats.nba.com''s lineup rating, which credits a possession to every lineup on the floor during it (its counts run ~4%
     higher).'
@@ -38738,7 +38738,7 @@ nba_lineup_seasons:
     (WNBA)), whose def_rtg_n is at least 2,000 defensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
-  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
   efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each possession's
     shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   efg_pct_n: 'Sample size of efg_pct: the unit''s field-goal attempts.'
@@ -38749,8 +38749,8 @@ nba_lineup_seasons:
     (WNBA)), whose efg_pct_n is at least 1,200 field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
-  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
+  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts, the remainder parts, so more than the free throws (see off_ft_pts). The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
   ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws, rebounds and
     turnovers count for the lineup that started it, even after a substitution inside it.'
   ft_rate_n: 'Sample size of ft_rate: the unit''s field-goal attempts.'
@@ -38774,9 +38774,9 @@ nba_lineup_seasons:
     (WNBA)), whose net_rtg_n is at least 2,000 possessions (offense plus defense) (the sample at which the rate was, on the fit seasons, half signal,
     rate_gates); null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer
     than ten qualifying units have a finite value of this rate or they all share one value.
-  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  off_orb_pts: 'Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
+  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  off_orb_pts: 'Offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator. On 2024-25 units it runs about 5 above stats.nba.com''s
     lineup rating, which credits a possession to every lineup on the floor during it (its counts run ~4% higher).'
   off_rtg_n: 'Sample size of off_rtg: poss.'
@@ -38787,7 +38787,7 @@ nba_lineup_seasons:
     (WNBA)), whose off_rtg_n is at least 1,300 offensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
-  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
   opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each
     possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
     inside it.
@@ -38848,7 +38848,7 @@ nba_lineup_seasons:
     (WNBA)), whose orb_pct_n is at least 410 offensive-rebound chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
-  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
   player_2: Player 2 of the unit, in lineup_id order; null past n_players.
   player_3: Player 3 of the unit, in lineup_id order; null past n_players.
@@ -38881,11 +38881,11 @@ nba_lineup_seasons:
     (WNBA)), whose tov_pct_n is at least 1,400 offensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
-  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
 wnba_lineup_seasons:
-  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  def_orb_pts: 'Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
+  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  def_orb_pts: 'Defensive rebounding points (the opponents'' offensive rebounding) per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   def_rtg_pct: 'Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
@@ -38895,7 +38895,7 @@ wnba_lineup_seasons:
     (WNBA)), whose def_rtg_n is at least 810 defensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
-  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
   efg_pct: Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each possession's
     shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution inside it.
   efg_pct_n: 'Sample size of efg_pct: the unit''s field-goal attempts.'
@@ -38906,8 +38906,8 @@ wnba_lineup_seasons:
     (WNBA)), whose efg_pct_n is at least 750 field-goal attempts (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
-  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
+  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts, the remainder parts, so more than the free throws (see off_ft_pts). The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
   ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each possession''s shots, free throws, rebounds and
     turnovers count for the lineup that started it, even after a substitution inside it.'
   ft_rate_n: 'Sample size of ft_rate: the unit''s field-goal attempts.'
@@ -38931,9 +38931,9 @@ wnba_lineup_seasons:
     (WNBA)), whose net_rtg_n is at least 840 possessions (offense plus defense) (the sample at which the rate was, on the fit seasons, half signal,
     rate_gates); null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer
     than ten qualifying units have a finite value of this rate or they all share one value.
-  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  off_orb_pts: 'Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
+  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  off_orb_pts: 'Offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator.'
   off_rtg_n: 'Sample size of off_rtg: poss.'
   off_rtg_pct: 'Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
@@ -38943,7 +38943,7 @@ wnba_lineup_seasons:
     (WNBA)), whose off_rtg_n is at least 660 offensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
-  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
   opp_efg_pct: The opponent's effective field-goal percentage with the unit on the floor. Null with a zero denominator. Each
     possession's shots, free throws, rebounds and turnovers count for the lineup that started it, even after a substitution
     inside it.
@@ -39004,7 +39004,7 @@ wnba_lineup_seasons:
     (WNBA)), whose orb_pct_n is at least 220 offensive-rebound chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
-  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
   player_2: Player 2 of the unit, in lineup_id order; null past n_players.
   player_3: Player 3 of the unit, in lineup_id order; null past n_players.
@@ -39037,11 +39037,11 @@ wnba_lineup_seasons:
     (WNBA)), whose tov_pct_n is at least 1,100 offensive possessions (the sample at which the rate was, on the fit seasons, half signal, rate_gates);
     null for a non-qualifier, a sample under that gate or a null rate, and for every unit of the group when fewer than ten
     qualifying units have a finite value of this rate or they all share one value.
-  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
 mbb_lineup_seasons:
-  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  def_orb_pts: 'Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
+  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  def_orb_pts: 'Defensive rebounding points (the opponents'' offensive rebounding) per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   def_rtg_pct: 'Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
@@ -39051,7 +39051,7 @@ mbb_lineup_seasons:
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
-  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
   efg_pct: 'Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each event
     counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   efg_pct_n: 'Sample size of efg_pct: the unit''s field-goal attempts.'
@@ -39062,7 +39062,7 @@ mbb_lineup_seasons:
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
-  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
   fg3_pct: 'Three-point percentage, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor
     at it (a free throw: the lineup at the last foul).'
   fg3_pct_n: 'Sample size of fg3_pct: the unit''s three-point attempts.'
@@ -39082,7 +39082,7 @@ mbb_lineup_seasons:
     among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
     and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
     one value.
-  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts, the remainder parts, so more than the free throws (see off_ft_pts). The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
   ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each event counts for the lineup on the floor at it
     (a free throw: the lineup at the last foul).'
   ft_rate_n: 'Sample size of ft_rate: the unit''s field-goal attempts.'
@@ -39124,9 +39124,9 @@ mbb_lineup_seasons:
     plus defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that
     gate or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this
     rate or they all share one value.
-  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  off_orb_pts: 'Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
+  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  off_orb_pts: 'Offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator.'
   off_rtg_n: 'Sample size of off_rtg: poss.'
   off_rtg_pct: 'Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
@@ -39136,7 +39136,7 @@ mbb_lineup_seasons:
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
-  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
   opp_efg_pct: 'The opponent''s effective field-goal percentage with the unit on the floor. Null with a zero denominator.
     Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponent''s field-goal attempts.'
@@ -39249,7 +39249,7 @@ mbb_lineup_seasons:
     chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate
     or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate
     or they all share one value.
-  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
   player_2: Player 2 of the unit, in lineup_id order; null past n_players.
   player_3: Player 3 of the unit, in lineup_id order; null past n_players.
@@ -39300,11 +39300,11 @@ mbb_lineup_seasons:
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
-  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
 wbb_lineup_seasons:
-  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  def_orb_pts: 'Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_efg_pts: 'Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
+  def_ft_pts: 'Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  def_orb_pts: 'Defensive rebounding points (the opponents'' offensive rebounding) per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
   def_rtg: 'Defensive rating: opp_pts per 100 opp_poss. Null with a zero denominator.'
   def_rtg_n: 'Sample size of def_rtg: opp_poss.'
   def_rtg_pct: 'Percentile of def_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
@@ -39314,7 +39314,7 @@ wbb_lineup_seasons:
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
-  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  def_tov_pts: 'Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null when the unit faced no possession (opp_poss = 0).'
   efg_pct: 'Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. Null with a zero denominator. Each event
     counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   efg_pct_n: 'Sample size of efg_pct: the unit''s field-goal attempts.'
@@ -39325,7 +39325,7 @@ wbb_lineup_seasons:
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
-  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  efg_pts: 'Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
   fg3_pct: 'Three-point percentage, as a fraction. Null with a zero denominator. Each event counts for the lineup on the floor
     at it (a free throw: the lineup at the last foul).'
   fg3_pct_n: 'Sample size of fg3_pct: the unit''s three-point attempts.'
@@ -39345,7 +39345,7 @@ wbb_lineup_seasons:
     among units with at least min_poss possessions (poss + opp_poss; default 200); null for a non-qualifier or a null rate,
     and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all share
     one value.
-  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  ft_pts: 'Net free throws points per 100: off_ft_pts + def_ft_pts, the remainder parts, so more than the free throws (see off_ft_pts). The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
   ft_rate: 'Free-throw rate: FTA / FGA. Null with a zero denominator. Each event counts for the lineup on the floor at it
     (a free throw: the lineup at the last foul).'
   ft_rate_n: 'Sample size of ft_rate: the unit''s field-goal attempts.'
@@ -39387,9 +39387,9 @@ wbb_lineup_seasons:
     plus defense) (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that
     gate or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this
     rate or they all share one value.
-  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
-  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor''s.'
-  off_orb_pts: 'Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_efg_pts: 'Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
+  off_ft_pts: 'Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws'' price plus the possessions and points the box estimate does not explain (on the pros, the possession count''s distance from the box estimate, which weights a free-throw attempt 0.44, less the league''s average gap per FGA), so its sign can differ from the free-throw factor''s.'
+  off_orb_pts: 'Offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
   off_rtg: 'Offensive rating: pts per 100 poss. Null with a zero denominator.'
   off_rtg_n: 'Sample size of off_rtg: poss.'
   off_rtg_pct: 'Percentile of off_rtg among the same qualified units: 100 * (n + 1 - rank) / (n + 1), n the number ranked;
@@ -39399,7 +39399,7 @@ wbb_lineup_seasons:
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
-  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  off_tov_pts: 'Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season''s league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null when the unit started no possession (poss = 0).'
   opp_efg_pct: 'The opponent''s effective field-goal percentage with the unit on the floor. Null with a zero denominator.
     Each event counts for the lineup on the floor at it (a free throw: the lineup at the last foul).'
   opp_efg_pct_n: 'Sample size of opp_efg_pct: the opponent''s field-goal attempts.'
@@ -39512,7 +39512,7 @@ wbb_lineup_seasons:
     chances (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate
     or a null rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate
     or they all share one value.
-  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  orb_pts: 'Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
   player_1: Player 1 of the unit, in lineup_id order; null past n_players.
   player_2: Player 2 of the unit, in lineup_id order; null past n_players.
   player_3: Player 3 of the unit, in lineup_id order; null past n_players.
@@ -39563,7 +39563,7 @@ wbb_lineup_seasons:
     (the sample at which the rate was, on the fit seasons, half signal, rate_gates); null for a non-qualifier, a sample under that gate or a null
     rate, and for every unit of the group when fewer than ten qualifying units have a finite value of this rate or they all
     share one value.
-  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch).'
+  tov_pts: 'Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null when either side has no possessions.'
 nba_lineup_count_rows:
   away_1: stats.nba.com id of away player 1 on the floor when the possession starts.
   away_2: stats.nba.com id of away player 2 on the floor when the possession starts.
@@ -48566,6 +48566,22 @@ load_nhl_groups:
   league: League code of the table ("nhl"); the prefix of every group_id in it.
   level: 'Hierarchy level of the group: "league", "subdivision", "conference" or "division".'
   notes: 'Builder notes on the group: the lineage decisions behind its group_id and any source caveats.'
+load_nhl_pregame_snapshots:
+  season: "NHL season, the ENDING year (2027 = 2026-27)."
+  game_date: "ET game date (YYYY-MM-DD) of the game the state belongs to."
+  game_id: "NHL game id, bridged from the ESPN event by ET date and both team abbreviations; null when the bridge fails."
+  espn_event_id: "ESPN event id of the game."
+  start_time_utc: "Scheduled puck drop (UTC) as ESPN lists it; subtract a lead (e.g. 3 hours) to get a decision time."
+  team_id: "NHL team id of the team the state belongs to."
+  team_abbr: "NHL team abbreviation (NJD, TBL, SJS, LAK where ESPN writes NJ, TB, SJ, LA)."
+  kind: "'probable_goalie' (the listed starting goalie) or 'injury' (a player on the ESPN injury list)."
+  player_id: "NHL player id, matched by folded name against the season roster, then any season's when the name is unique league-wide; null when ambiguous or unknown."
+  espn_athlete_id: "ESPN athlete id; always present, also where player_id is null."
+  player_name: "Player name as ESPN lists it."
+  status: "For a goalie, ESPN's 'Expected' or 'Confirmed'; for an injury, ESPN's status ('Out', 'Day-To-Day', 'Injured Reserve', 'Suspension', ...)."
+  valid_from: "First capture (UTC) that showed this state; the state was not known before it."
+  valid_to: "First capture (UTC) that no longer showed this state; null while it is still current. The interval is half-open: valid_from <= t < valid_to."
+  source: "'espn_scoreboard' (probable goalies) or 'espn_injuries' (the league injury list)."
 load_nhl_penalties:
   committedByPlayer.firstName.cs: Alternate given name for the penalized player under the NHL feed's Czech key. Verified against
     the data it is frequently a different name form rather than a re-spelling (Joshua published as Josh, Aliaksei as Alexei),
@@ -77953,7 +77969,7 @@ nba_player_war:
     the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset.'
   rating_boban: Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm.
   vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per team, R the league''s replacement level
-    (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference''s VORP scale: a season of possessions at R + 1 is 1.'
+    (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). On that scale a season of possessions at R + 1 is a VORP of 1.'
   war: 'Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement
     level; a season''s war adds up to the league''s wins minus a team of replacement players'' (.189 NBA 2024-25, .104 WNBA 2025).'
   war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
@@ -78002,7 +78018,7 @@ wnba_player_war:
     the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset.'
   rating_boban: Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm.
   vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per team, R the league''s replacement level
-    (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference''s VORP scale: a season of possessions at R + 1 is 1.'
+    (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). On that scale a season of possessions at R + 1 is a VORP of 1.'
   war: 'Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement
     level; a season''s war adds up to the league''s wins minus a team of replacement players'' (.189 NBA 2024-25, .104 WNBA 2025).'
   war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
@@ -78047,7 +78063,7 @@ mbb_player_war:
     re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted
     mean is 0.'
   vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per D1 team, R the league''s replacement level
-    (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference''s VORP scale.'
+    (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). A season of possessions at R + 1 is a VORP of 1.'
   war: 'Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91,
     WBB 47.10). 0 at replacement level; a replacement team wins about .35.'
   war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
@@ -78087,7 +78103,7 @@ wbb_player_war:
     re-anchored to the team (team mean = adjusted efficiency margin minus the D1 mean, / 5) and centred so the D1 possession-weighted
     mean is 0.'
   vorp: 'Value over replacement player: (rating - R) * poss / the season''s possessions per D1 team, R the league''s replacement level
-    (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). Basketball-Reference''s VORP scale.'
+    (REPLACEMENT_LEVEL; MBB -1.66, WBB -1.99 per 100). A season of possessions at R + 1 is a VORP of 1.'
   war: 'Wins above replacement against an average D1 schedule: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; MBB 38.91,
     WBB 47.10). 0 at replacement level; a replacement team wins about .35.'
   war_hi: High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo).
@@ -81057,6 +81073,24 @@ player_props:
   over_price: Median closing over price at the line, American odds.
   under_price: Median closing under price at the line, American odds.
   over_prob: No-vig probability of the over at the line, median over books.
+nba_player_props:
+  player_id: ESPN athlete id (Utf8).
+  team_id: ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team.
+  stat_pts_exp: Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor.
+  stat_reb_exp: Expected rebounds if he plays, on the same basis.
+  stat_ast_exp: Expected assists if he plays, on the same basis.
+  stat_fg3m_exp: Expected made threes if he plays, on the same basis.
+  minutes_exp: 'Expected minutes: the player''s minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 240; a team''s rows sum to 240. The stat_*_exp lines assume the player plays; this does not.'
+  pace_proj: Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet.
+wnba_player_props:
+  player_id: ESPN athlete id (Utf8).
+  team_id: ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team.
+  stat_pts_exp: Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor.
+  stat_reb_exp: Expected rebounds if he plays, on the same basis.
+  stat_ast_exp: Expected assists if he plays, on the same basis.
+  stat_fg3m_exp: Expected made threes if he plays, on the same basis.
+  minutes_exp: 'Expected minutes: the player''s minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 200; a team''s rows sum to 200. The stat_*_exp lines assume the player plays; this does not.'
+  pace_proj: Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet.
 wp_variants:
   game_id: ESPN game id, the join key to the play-by-play and the play_wp table (the dtype the pbp carries).
   game_play_number: Play order within the game, as in the play-by-play (the dtype the pbp carries).
@@ -81800,16 +81834,16 @@ pgatour_schedule:
   schedule_status: '"completed" for an event already played, "upcoming" for one still to come.'
   tournament_id: PGA TOUR tournament id (tour code + season + event number, e.g. "R2026014"); the id the
     leaderboard, scorecard, tee-times and shot-details wrappers take.
-  tournament_name: Tournament name.
+  tournament_name: 'Tournament''s full name, sponsor included (e.g. "Travelers Championship").'
   date: Tournament dates as the site displays them (e.g. "Apr 9 - 12").
   start_date: Tournament start (UTC).
   sequence_number: Event's order in the season.
   tournament_status: Tournament status (e.g. "COMPLETED", "IN_PROGRESS", "NOT_STARTED").
-  course_name: Host course.
-  city: Host city.
+  course_name: 'Course hosting the event (e.g. "TPC River Highlands").'
+  city: 'City the host course is in (e.g. "Cromwell").'
   state: Host state or province.
   state_code: Host state or province abbreviation.
-  country: Host country.
+  country: 'Country the host course is in, spelled out (e.g. "United States of America").'
   country_code: Host country code (e.g. "USA").
   purse: Total purse as displayed (e.g. "$9,100,000").
   champion: Winner's name; null before the event finishes.
@@ -81845,34 +81879,34 @@ pgatour_leaderboard:
 pgatour_scorecard:
   tournament_id: PGA TOUR tournament id (the answer's own id carries the player id too; it is stripped).
   player_id: PGA TOUR player id.
-  round_number: Round number.
+  round_number: 'Tournament round the hole was played in (1-4).'
   course_id: Course id (an event played on more than one course carries one per round).
-  course_name: Course name.
+  course_name: 'Course the round was played on (e.g. "Augusta National Golf Club").'
   hole_number: Hole number (1-18).
-  par: Hole par.
+  par: 'Par of the hole (3, 4 or 5).'
   yardage: Hole length in yards that round.
   score: Strokes on the hole; null when the hole is not yet played.
   score_status: Result on the hole (e.g. "BIRDIE", "PAR", "BOGEY", "EAGLE", "DOUBLE_BOGEY").
   round_to_par: Running score to par for the round after this hole, as displayed.
 pgatour_tee_times:
   tournament_id: PGA TOUR tournament id.
-  round_number: Round number.
+  round_number: 'Tournament round the tee times are for (1-4).'
   round_status: Round status (e.g. "COMPLETE", "IN_PROGRESS", "UPCOMING").
   group_number: Tee-time group number within the round.
   tee_time: Group's tee time (UTC).
   start_tee: Starting hole (1, or 10 for a two-tee start).
   back_nine: True when the group starts on the back nine.
-  course_id: Course id.
-  course_name: Course name.
+  course_id: 'PGA TOUR course id of the course the group tees off on (e.g. "014").'
+  course_name: 'Course the group tees off on (e.g. "Augusta National Golf Club").'
   player_id: PGA TOUR player id.
   display_name: Player's full name.
   country: Player's country code.
   amateur: True for an amateur.
 pgatour_player:
   player_id: PGA TOUR player id.
-  first_name: First name.
-  last_name: Last name.
-  display_name: Full name.
+  first_name: 'Player''s first (given) name.'
+  last_name: 'Player''s last (family) name.'
+  display_name: 'Player''s full name as the site displays it (e.g. "Rory McIlroy").'
   country: Country the player represents.
   country_code: Country code (e.g. "NIR").
   owgr: Official World Golf Ranking position as displayed.
@@ -81880,7 +81914,7 @@ pgatour_player:
   height_meters: Height in meters.
   weight: Weight in pounds.
   weight_kilograms: Weight in kilograms.
-  age: Age in years.
+  age: 'Player''s age in years, as text (e.g. "37").'
   born: Birth date as displayed (e.g. "May 4, 1989").
   birthplace_city: Birthplace city.
   birthplace_state: Birthplace state or province.
@@ -81896,26 +81930,26 @@ pgatour_player_directory:
   tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
   player_id: PGA TOUR player id.
   is_active: True for a player active on the tour.
-  first_name: First name.
-  last_name: Last name.
-  short_name: Short name.
-  display_name: Full name.
+  first_name: 'Player''s first (given) name.'
+  last_name: 'Player''s last (family) name.'
+  short_name: 'Player''s first initial and last name (e.g. "L Åberg").'
+  display_name: 'Player''s full name as the site displays it (e.g. "Ludvig Åberg").'
   country: Country the player represents.
-  country_code: Country code.
-  age: Age in years.
+  country_code: 'Three-letter code of the country the player represents (e.g. "SWE").'
+  age: 'Player''s age in years, as text (e.g. "27"); null when the profile gives none.'
   education: College or university.
   turned_pro: Year the player turned professional.
 pgatour_stat_catalog:
-  tour_code: Tour code.
-  year: Season year.
+  tour_code: 'Tour the catalog lists stats for (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).'
+  year: 'Season the catalog lists stats for (e.g. 2026).'
   category: Stat category key (e.g. "STROKES_GAINED", "SCORING").
   category_name: Stat category name (e.g. "Strokes Gained").
   sub_category: Sub-category the stat is listed under.
   stat_id: PGA TOUR stat id (e.g. "02675" for SG Total); the id pgatour_stat_details takes.
-  stat_title: Stat name.
+  stat_title: 'Stat''s display name (e.g. "Approaches from 50-125 yards").'
 pgatour_stat_details:
-  tour_code: Tour code.
-  year: Season year.
+  tour_code: 'Tour the stat table is for (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).'
+  year: 'Season the stat table covers (e.g. 2026).'
   stat_id: PGA TOUR stat id.
   stat_title: Stat name (e.g. "Scoring Average").
   stat_type: Stat window (e.g. "YTD").
@@ -81933,11 +81967,11 @@ pgatour_tour_cup:
   title: Points race name (e.g. "FedExCup Standings").
   season: Season year (read from the race's title, e.g. "2025 Standings").
   player_id: PGA TOUR player id.
-  first_name: First name.
-  last_name: Last name.
-  display_name: Full name.
+  first_name: 'Player''s first (given) name.'
+  last_name: 'Player''s last (family) name.'
+  display_name: 'Player''s full name as the site displays it (e.g. "Wyndham Clark").'
   country: Country the player represents.
-  country_code: Country code.
+  country_code: 'Three-letter code of the country the player represents (e.g. "IRL").'
   rank_official: Official rank as displayed ("-" for none).
   rank_projected: Rank projected from live results, as displayed.
   rank_movement: Direction of the projected rank change (e.g. "UP", "DOWN", "CONSTANT").
@@ -81947,9 +81981,9 @@ pgatour_tour_cup:
 pgatour_shot_details:
   tournament_id: PGA TOUR tournament id.
   player_id: PGA TOUR player id.
-  round_number: Round number.
-  hole_number: Hole number.
-  par: Hole par.
+  round_number: 'Tournament round the shots were played in (1-4).'
+  hole_number: 'Hole the shots were played on (1-18).'
+  par: 'Par of the hole (3, 4 or 5).'
   yardage: Hole length in yards.
   hole_score: Strokes on the hole.
   hole_status: Result on the hole (e.g. "BIRDIE", "PAR").
@@ -81969,3 +82003,759 @@ pgatour_shot_details:
   to_x: ShotLink tourcast x coordinate where the shot finished.
   to_y: ShotLink tourcast y coordinate where the shot finished.
   to_z: ShotLink tourcast z (elevation) coordinate where the shot finished.
+nhl_goalie_saves:
+  season: NHL season id of the game, both years run together (e.g. 20242025 for 2024-25).
+  game_id: NHL game id (e.g. 2024020001).
+  game_date: Date of the game.
+  player_id: NHL player id of the projected starting goalie.
+  team: Abbreviation of the goalie's team (e.g. "NJD").
+  opp_team: Abbreviation of the opponent whose shots the goalie faces (e.g. "BUF").
+  is_home: True when the goalie's team is the home team.
+  exp_shots_against: 'Expected shots on goal the starter faces: the mean of the team''s shots-against rate and the opponent''s
+    shots-for rate over earlier games that season (shrunk toward the league mean), less half the home-ice shot edge for a
+    home goalie and plus half for a visitor, times the starter''s share of a game''s shots.'
+  exp_save_pct: The goalie's save percentage over every earlier game in the seasons loaded, shrunk toward the league's
+    save_pct_prior (the prior alone for a goalie with no earlier game).
+  exp_saves: Expected saves, exp_shots_against x exp_save_pct (the negative-binomial mean).
+  saves_lo: Lower end of the central interval, the (1 - coverage) / 2 quantile of the predicted saves.
+  saves_hi: Upper end of the central interval, the (1 + coverage) / 2 quantile of the predicted saves.
+  coverage: Central probability the saves_lo-saves_hi interval was built for (the coverage argument, 0.8 by default).
+nhl_score_distribution:
+  game_id: Game id, the input predictions' game_id with its dtype kept.
+  rank: Scoreline's rank within the game, 1 for the most likely final score.
+  home_goals: Home team's goals in this final score (an overtime or shootout win counts as one goal).
+  away_goals: Away team's goals in this final score (an overtime or shootout win counts as one goal).
+  prob: Probability the game ends with exactly this score; over every scoreline the home-win share equals the row's
+    home_win_prob.
+  prob_beyond_regulation: Part of prob from games tied after 60 minutes and settled in overtime or a shootout; zero unless
+    the score is a one-goal margin.
+nhl_total_goals_distribution:
+  game_id: Game id, the input predictions' game_id with its dtype kept.
+  total_goals: Total goals in the final score, both teams (0 to 32; an overtime or shootout win adds one).
+  prob: Probability the final score totals exactly total_goals; a game's rows sum to 1, and their prob-weighted mean of
+    total_goals is the row's exp_total.
+  prob_over: Probability the total is above total_goals, the over price for a line of total_goals + 0.5.
+
+pll_schedule:
+  game_id: Numeric game id (a STRING); the per-game routes take event_slug, not this.
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  event_id: League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020).
+  external_id: External event id (not ESPN's event id; join ESPN on start_time and the team codes).
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  week: Week of the season (0 for the Championship Series).
+  game_number: Game number within the season.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
+  event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
+  period: Period (quarter; 5 and up is overtime).
+  home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
+  home_team_name: Home team name (e.g. Waterdogs).
+  home_team_location: Home team city or region.
+  home_team_location_code: Home team three-letter location code (e.g. PHI).
+  home_team_conference: Home team conference (eastern, western; null for GLG and WLL).
+  away_team_id: Away team code (e.g. WHP; equals ESPN's abbreviation).
+  away_team_name: Away team name (e.g. Whipsnakes).
+  away_team_location: Away team city or region.
+  away_team_location_code: Away team three-letter location code.
+  away_team_conference: Away team conference.
+  home_score: Home team points (a 2-point goal counts 2).
+  away_score: Away team points (the API's visitorScore).
+  venue: Venue (stadium) name.
+  location: City of the game, or the team's city or region.
+  broadcaster: Broadcast and streaming outlets, comma-separated.
+  description: Game description (round labels on Championship Series games; null on most), or the play text.
+  url_streaming: Streaming link.
+pll_glg_schedule:
+  game_id: Numeric game id (a STRING); the per-game routes take event_slug, not this.
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  event_id: League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020).
+  external_id: External event id (not ESPN's event id; join ESPN on start_time and the team codes).
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  week: Week of the season (0 for the Championship Series).
+  game_number: Game number within the season.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
+  event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
+  period: Period (quarter; 5 and up is overtime).
+  home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
+  home_team_name: Home team name (e.g. Waterdogs).
+  home_team_location: Home team city or region.
+  home_team_location_code: Home team three-letter location code (e.g. PHI).
+  home_team_conference: Home team conference (eastern, western; null for GLG and WLL).
+  away_team_id: Away team code (e.g. WHP; equals ESPN's abbreviation).
+  away_team_name: Away team name (e.g. Whipsnakes).
+  away_team_location: Away team city or region.
+  away_team_location_code: Away team three-letter location code.
+  away_team_conference: Away team conference.
+  home_score: Home team points (a 2-point goal counts 2).
+  away_score: Away team points (the API's visitorScore).
+  venue: Venue (stadium) name.
+  location: City of the game, or the team's city or region.
+  broadcaster: Broadcast and streaming outlets, comma-separated.
+  description: Game description (round labels on Championship Series games; null on most), or the play text.
+  url_streaming: Streaming link.
+pll_wll_schedule:
+  game_id: Numeric game id (a STRING); the per-game routes take event_slug, not this.
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  event_id: League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020).
+  external_id: External event id (not ESPN's event id; join ESPN on start_time and the team codes).
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  week: Week of the season (0 for the Championship Series).
+  game_number: Game number within the season.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
+  event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
+  period: Period (quarter; 5 and up is overtime).
+  home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
+  home_team_name: Home team name (e.g. Waterdogs).
+  home_team_location: Home team city or region.
+  home_team_location_code: Home team three-letter location code (e.g. PHI).
+  home_team_conference: Home team conference (eastern, western; null for GLG and WLL).
+  away_team_id: Away team code (e.g. WHP; equals ESPN's abbreviation).
+  away_team_name: Away team name (e.g. Whipsnakes).
+  away_team_location: Away team city or region.
+  away_team_location_code: Away team three-letter location code.
+  away_team_conference: Away team conference.
+  home_score: Home team points (a 2-point goal counts 2).
+  away_score: Away team points (the API's visitorScore).
+  venue: Venue (stadium) name.
+  location: City of the game, or the team's city or region.
+  broadcaster: Broadcast and streaming outlets, comma-separated.
+  description: Game description (round labels on Championship Series games; null on most), or the play text.
+  url_streaming: Streaming link.
+pll_game:
+  game_id: Numeric game id (a STRING); the per-game routes take event_slug, not this.
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  event_id: League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020).
+  external_id: External event id (not ESPN's event id; join ESPN on start_time and the team codes).
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  week: Week of the season (0 for the Championship Series).
+  game_number: Game number within the season.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
+  event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
+  period: Period (quarter; 5 and up is overtime).
+  home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
+  home_team_name: Home team name (e.g. Waterdogs).
+  home_team_location: Home team city or region.
+  home_team_location_code: Home team three-letter location code (e.g. PHI).
+  home_team_conference: Home team conference (eastern, western; null for GLG and WLL).
+  away_team_id: Away team code (e.g. WHP; equals ESPN's abbreviation).
+  away_team_name: Away team name (e.g. Whipsnakes).
+  away_team_location: Away team city or region.
+  away_team_location_code: Away team three-letter location code.
+  away_team_conference: Away team conference.
+  home_score: Home team points (a 2-point goal counts 2).
+  away_score: Away team points (the API's visitorScore).
+  venue: Venue (stadium) name.
+  location: City of the game, or the team's city or region.
+  broadcaster: Broadcast and streaming outlets, comma-separated.
+  description: Game description (round labels on Championship Series games; null on most), or the play text.
+  url_streaming: Streaming link.
+  home_period_scores: 'Home team points per period: a list of integers (List(Int64)), one per period played.'
+  away_period_scores: 'Away team points per period: a list of integers (List(Int64)), one per period played.'
+  home_team_wins: Home team wins, as the API reports them on the game.
+  home_team_losses: Home team losses, as the API reports them on the game.
+  home_team_ties: Home team ties.
+  away_team_wins: Away team wins, as the API reports them on the game.
+  away_team_losses: Away team losses, as the API reports them on the game.
+  away_team_ties: Away team ties.
+  pregame_home_win_probability: Home team's pregame win probability (0-1).
+  pregame_away_win_probability: Away team's pregame win probability (0-1).
+pll_play_by_play:
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  play_index: 0-based position of the play in the log (the log is in game order).
+  marker_id: Play marker id (<type>-<sequence>).
+  event_type: 'Play type: faceoff, groundball, shot, goal, turnover, penalty, shotclockexpired, pregame, gameEnd.'
+  period: Period (quarter; 5 and up is overtime).
+  minutes: Clock minutes remaining in the period.
+  seconds: Clock seconds remaining in the period.
+  seconds_passed: Game seconds elapsed at the play, cumulative across periods (720 per quarter).
+  team_id: Team code (e.g. WAT).
+  description: Game description (round labels on Championship Series games; null on most), or the play text.
+  shot_type: 'Shot value: 1_PT, 2_PT (MU on some man-up rows; null when not a shot).'
+  home_score: Home team points (a 2-point goal counts 2). The score after the play on shot and goal rows; other rows carry
+    the final score in the 2026 logs (the running score in 2021), so forward-fill from shot rows.
+  away_score: Away team points (the API's visitorScore). The score after the play on shot and goal rows; other rows carry
+    the final score in the 2026 logs (the running score in 2021), so forward-fill from shot rows.
+  home_win_probability: Home team's win probability after the play (0-1; null on some rows).
+  away_win_probability: Away team's win probability after the play (0-1; null on some rows).
+  penalty_length: Penalty length, seconds.
+  penalty_description: Penalty description.
+  faceoff_winner_id: Player id of the faceoff winner (a STRING).
+  faceoff_loser_id: Player id of the faceoff loser (a STRING).
+  ground_ball_player_id: Player id of the player who picked up the ground ball (a STRING).
+  committed_turnover_id: Player id of the player who committed the turnover (a STRING; null on a team turnover).
+  caused_turnover_id: Player id of the defender who caused the turnover (a STRING).
+  shooter_id: Player id of the shooter (a STRING).
+  goalie_id: Player id of the defending goalie (a STRING).
+  offense_goalie_id: Player id of the shooting team's goalie (a STRING).
+  committed_penalty_id: Player id of the penalised player (a STRING).
+  shot_assist_id: Player id of the assisting player on a goal (a STRING).
+  assist_opportunity_player_id: Player id of the passer on a shot that was a potential assist (a STRING).
+  closest_defender_id: Player id of the closest defender on the shot (a STRING).
+  shot_on_goal: True when the shot was on goal (null where the log has no shot details, e.g. 2021).
+  shot_saved: True when the shot was saved (null where the log has no shot details).
+  save_type: Save kind, clean or messy (null where the log has no shot details).
+pll_player_box:
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  team_id: Team code (e.g. WAT).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  position_name: Position name (Attack, Midfield, Defensive Midfield, Long Stick Midfield, Defense, Faceoff, Goalie).
+  jersey_number: Jersey number (a STRING).
+  points: Points (one_point_goals + 2 x two_point_goals + assists; checked on the captures).
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  two_point_shots: Shots from beyond the arc.
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saa: Scores against per 48 minutes on the field (scores_against / (tof / 2880); checked on the captures).
+  gaa: Scores against per game played (scores_against / games_played).
+  two_pt_gaa: 2-point goals against per game played.
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  assist_opportunities: Passes that led to a shot (a potential assist).
+  total_passes: Passes made, as the league's tracking counts them.
+  touches: Touches (possessions of the ball by the player).
+  games_played: Games played in the season segment (or career, on career leaderboards).
+pll_team_box:
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  team_id: Team code (e.g. WAT).
+  scores: Points scored (a 2-point goal counts 2).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  shots_on_goal_pct: Shots on goal per shot.
+  two_point_shots: Shots from beyond the arc.
+  two_point_shot_pct: Goals per shot from beyond the arc.
+  two_point_shots_on_goal: 2-point shots on goal.
+  two_point_shots_on_goal_pct: 2-point shots on goal per 2-point shot.
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  clears: Successful clears.
+  clear_attempts: Clearing attempts (moving the ball from the defensive to the offensive half).
+  clear_pct: Successful clears per attempt (clears / clear_attempts).
+  ride_attempts: Riding attempts (opponent clears contested).
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  shot_clock_expirations: Shot-clock violations.
+  times_man_up: Man-up (power-play) chances.
+  power_play_goals: Power-play goals.
+  power_play_shots: Power-play shots.
+  power_play_pct: Power-play goals per man-up chance.
+  times_short_handed: Man-down (short-handed) spells.
+  power_play_goals_against: Power-play goals allowed.
+  power_play_goals_against_pct: Power-play goals allowed per opponent man-up chance.
+  man_down_pct: Man-down (penalty kill) success rate.
+  total_passes: Passes made, as the league's tracking counts them.
+  touches: Touches (possessions of the ball by the player).
+  time_in_possesion: Time in possession, seconds (the API's spelling).
+  time_in_possesion_pct: Share of game time in possession (0-1).
+  total_possessions: Team possessions in the game.
+pll_game_insights:
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  insight_index: 0-based position of the insight in the league's list.
+  title: Headline of the insight (e.g. Save Streak).
+  insight_type: Insight kind (save-streak, faceoff-streak, ...).
+  subject: Player or team the insight is about.
+  detail: Insight text (e.g. 'has made 4 saves in a row').
+  team_id: Team code (e.g. WAT).
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  jersey_number: Jersey number (a STRING).
+  period: Period (quarter; 5 and up is overtime).
+  minutes: Clock minutes remaining in the period.
+  seconds: Clock seconds remaining in the period.
+  primary_image_url: Main image of the insight.
+pll_standings:
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  champ_series: True for the Championship Series table (the request's champ_series).
+  team_id: Team code (e.g. WAT).
+  full_name: Team name (e.g. Waterdogs).
+  location: City of the game, or the team's city or region.
+  location_code: Three-letter location code (e.g. PHI).
+  conference: Conference (eastern or western; null before conferences, 2019-2020).
+  seed: Playoff seed (null until set).
+  conference_seed: Seed within the conference (null until set).
+  wins: Wins in the season or segment.
+  losses: Losses in the season or segment.
+  ties: Ties in the season or segment.
+  scores: Points scored (a 2-point goal counts 2).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  score_diff: Points scored minus points allowed.
+  conference_wins: Wins against conference opponents.
+  conference_losses: Losses against conference opponents.
+  conference_ties: Ties against conference opponents.
+  conference_scores: Points scored against conference opponents.
+  conference_scores_against: Points allowed to conference opponents.
+pll_glg_standings:
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  champ_series: True for the Championship Series table (the request's champ_series).
+  team_id: Team code (e.g. WAT).
+  full_name: Team name (e.g. Waterdogs).
+  location: City of the game, or the team's city or region.
+  location_code: Three-letter location code (e.g. PHI).
+  conference: Conference (eastern or western; null before conferences, 2019-2020).
+  seed: Playoff seed (null until set).
+  conference_seed: Seed within the conference (null until set).
+  wins: Wins in the season or segment.
+  losses: Losses in the season or segment.
+  ties: Ties in the season or segment.
+  scores: Points scored (a 2-point goal counts 2).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  score_diff: Points scored minus points allowed.
+  conference_wins: Wins against conference opponents.
+  conference_losses: Losses against conference opponents.
+  conference_ties: Ties against conference opponents.
+  conference_scores: Points scored against conference opponents.
+  conference_scores_against: Points allowed to conference opponents.
+pll_team_season_stats:
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  team_id: Team code (e.g. WAT).
+  team_slug: Team slug, the id pll_team_stats and pll_team_roster take (e.g. waterdogs).
+  full_name: Team name (e.g. Waterdogs).
+  location: City of the game, or the team's city or region.
+  location_code: Three-letter location code (e.g. PHI).
+  conference: Conference (eastern or western; null before conferences, 2019-2020).
+  games_played: Games played in the season segment (or career, on career leaderboards).
+  scores: Points scored (a 2-point goal counts 2).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  scores_pg: Points scored per game.
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shots_pg: Shots per game.
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  shots_on_goal_pct: Shots on goal per shot.
+  two_point_shots: Shots from beyond the arc.
+  two_point_shot_pct: Goals per shot from beyond the arc.
+  two_point_shots_on_goal: 2-point shots on goal.
+  two_point_shots_on_goal_pct: 2-point shots on goal per 2-point shot.
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saa: Scores against per 48 minutes on the field (scores_against / (tof / 2880); checked on the captures).
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  clears: Successful clears.
+  clear_attempts: Clearing attempts (moving the ball from the defensive to the offensive half).
+  clear_pct: Successful clears per attempt (clears / clear_attempts).
+  rides: Successful rides (opponent clears stopped).
+  ride_attempts: Riding attempts (opponent clears contested).
+  rides_pct: Successful rides per ride attempt.
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  offsides: Offsides violations.
+  shot_clock_expirations: Shot-clock violations.
+  times_man_up: Man-up (power-play) chances.
+  power_play_goals: Power-play goals.
+  power_play_shots: Power-play shots.
+  power_play_pct: Power-play goals per man-up chance.
+  times_short_handed: Man-down (short-handed) spells.
+  short_handed_goals: Short-handed goals.
+  short_handed_shots: Short-handed shots.
+  short_handed_pct: Short-handed goals per man-down chance.
+  power_play_goals_against: Power-play goals allowed.
+  power_play_shots_against: Power-play shots allowed.
+  power_play_goals_against_pct: Power-play goals allowed per opponent man-up chance.
+  short_handed_goals_against: Short-handed goals allowed.
+  short_handed_shots_against: Short-handed shots allowed.
+  short_handed_goals_against_pct: Short-handed goals allowed per man-up chance.
+  man_down_pct: Man-down (penalty kill) success rate.
+  total_passes: Passes made, as the league's tracking counts them.
+  touches: Touches (possessions of the ball by the player).
+pll_team_stats:
+  team_id: Team code (e.g. WAT).
+  team_slug: Team slug, the id pll_team_stats and pll_team_roster take (e.g. waterdogs).
+  full_name: Team name (e.g. Waterdogs).
+  location: City of the game, or the team's city or region.
+  location_code: Three-letter location code (e.g. PHI).
+  conference: Conference (eastern or western; null before conferences, 2019-2020).
+  wins: Wins in the season or segment (the season record, repeated on each segment row).
+  losses: Losses in the season or segment (the season record, repeated on each segment row).
+  ties: Ties in the season or segment (the season record, repeated on each segment row).
+  seed: Playoff seed (null until set).
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  games_played: Games played in the season segment (or career, on career leaderboards).
+  scores: Points scored (a 2-point goal counts 2).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  scores_pg: Points scored per game.
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shots_pg: Shots per game.
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  shots_on_goal_pct: Shots on goal per shot.
+  two_point_shots: Shots from beyond the arc.
+  two_point_shot_pct: Goals per shot from beyond the arc.
+  two_point_shots_on_goal: 2-point shots on goal.
+  two_point_shots_on_goal_pct: 2-point shots on goal per 2-point shot.
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saa: Scores against per 48 minutes on the field (scores_against / (tof / 2880); checked on the captures).
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  clears: Successful clears.
+  clear_attempts: Clearing attempts (moving the ball from the defensive to the offensive half).
+  clear_pct: Successful clears per attempt (clears / clear_attempts).
+  rides: Successful rides (opponent clears stopped).
+  ride_attempts: Riding attempts (opponent clears contested).
+  rides_pct: Successful rides per ride attempt.
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  offsides: Offsides violations.
+  shot_clock_expirations: Shot-clock violations.
+  times_man_up: Man-up (power-play) chances.
+  power_play_goals: Power-play goals.
+  power_play_shots: Power-play shots.
+  power_play_pct: Power-play goals per man-up chance.
+  times_short_handed: Man-down (short-handed) spells.
+  short_handed_goals: Short-handed goals.
+  short_handed_shots: Short-handed shots.
+  short_handed_pct: Short-handed goals per man-down chance.
+  power_play_goals_against: Power-play goals allowed.
+  power_play_shots_against: Power-play shots allowed.
+  power_play_goals_against_pct: Power-play goals allowed per opponent man-up chance.
+  short_handed_goals_against: Short-handed goals allowed.
+  short_handed_shots_against: Short-handed shots allowed.
+  short_handed_goals_against_pct: Short-handed goals allowed per man-up chance.
+  man_down_pct: Man-down (penalty kill) success rate.
+  total_passes: Passes made, as the league's tracking counts them.
+  touches: Touches (possessions of the ball by the player).
+pll_team_roster:
+  team_slug: Team slug, the id pll_team_stats and pll_team_roster take (e.g. waterdogs).
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  last_name_suffix: Name suffix (Jr., III; null or empty when none).
+  nickname: Nickname (null when none).
+  jersey_number: Jersey number (a STRING).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  position_name: Position name (Attack, Midfield, Defensive Midfield, Long Stick Midfield, Defense, Faceoff, Goalie).
+  dob: Date of birth (YYYY-MM-DD).
+  age: Age in years on the day of the request.
+  height: Height (feet and inches, e.g. 6'1).
+  weight: Weight in pounds.
+  handedness: Shooting hand (R, L, or R/L).
+  country: Country of birth.
+  country_code: Country code (ISO 3166-1 alpha-3).
+  hometown: Player's hometown (city, state).
+  high_school: High school the player attended.
+  college: College the player attended.
+  college_year: Final college season (graduation year).
+  club_team: Club (amateur) team.
+  experience: PLL seasons of experience.
+  is_captain: true for a team captain.
+  scratch: true when scratched from the lineup.
+  injury_status: Injury status code (H healthy, Q questionable, IR injured reserve, as observed).
+  injury_description: Injury description (null when healthy).
+  status: Player status (current on a roster; active or retired on career leaderboards).
+  contract_status: Final season under contract (e.g. 2028).
+pll_player_season_stats:
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  jersey_number: Jersey number (a STRING).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  position_name: Position name (Attack, Midfield, Defensive Midfield, Long Stick Midfield, Defense, Faceoff, Goalie).
+  experience: PLL seasons of experience.
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  points: Points (one_point_goals + 2 x two_point_goals + assists; checked on the captures).
+  scoring_points: Points from goals alone (one_point_goals + 2 x two_point_goals).
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  shots_on_goal_pct: Shots on goal per shot.
+  two_point_shots: Shots from beyond the arc.
+  two_point_shot_pct: Goals per shot from beyond the arc.
+  two_point_shots_on_goal: 2-point shots on goal.
+  two_point_shots_on_goal_pct: 2-point shots on goal per 2-point shot.
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saa: Scores against per 48 minutes on the field (scores_against / (tof / 2880); checked on the captures).
+  gaa: Scores against per game played (scores_against / games_played).
+  two_pt_gaa: 2-point goals against per game played.
+  goalie_wins: Wins as the goalie of record.
+  goalie_losses: Losses as the goalie of record.
+  goalie_ties: Ties as the goalie of record.
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  pim_value: Penalty time as minutes (0.5 = a 30-second penalty).
+  power_play_goals: Power-play goals.
+  power_play_shots: Power-play shots.
+  short_handed_goals: Short-handed goals.
+  short_handed_shots: Short-handed shots.
+  short_handed_goals_against: Short-handed goals allowed.
+  power_play_goals_against: Power-play goals allowed.
+  tof: Time on the field, seconds.
+  plus_minus: Plus-minus as the league reports it.
+  shot_turnovers: Shots that ended the possession (the league's tracking count).
+  touches: Touches (possessions of the ball by the player).
+  total_passes: Passes made, as the league's tracking counts them.
+  unassisted_goals: Unassisted goals.
+  assisted_goals: Goals scored off an assist.
+  pass_rate: Passes per touch (total_passes / touches).
+  shot_rate: Shots per touch (shots / touches).
+  goal_rate: Goals per touch (goals / touches).
+  assist_rate: Assists per touch (assists / touches).
+  turnover_rate: Turnovers per touch (turnovers / touches).
+  games_played: Games played in the season segment (or career, on career leaderboards).
+  games_started: Games the player started.
+pll_player_advanced_stats:
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  jersey_number: Jersey number (a STRING).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  position_name: Position name (Attack, Midfield, Defensive Midfield, Long Stick Midfield, Defense, Faceoff, Goalie).
+  experience: PLL seasons of experience.
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  unassisted_goals: Unassisted goals.
+  assisted_goals: Goals scored off an assist.
+  settled_goals: Goals in the settled offense.
+  fastbreak_goals: Goals in transition (fast break).
+  substitution_goals: Goals the league's tracking tags as substitution goals (its label; the API does not define it).
+  doorstep_goals: Goals the league's tracking tags as doorstep goals (in tight to the crease; its label).
+  power_play_goals: Power-play goals.
+  assist_opportunities: Passes that led to a shot (a potential assist).
+  settled_assists: Assists in the settled offense.
+  power_play_assists: Assists on the power play.
+  fastbreak_assists: Assists in transition (fast break).
+  dodge_assists: Assists off a dodge.
+  pnr_assists: Assists off a pick-and-roll.
+  unassisted_shots: Unassisted shots.
+  assisted_shots: Shots taken off a pass that would be an assist if scored.
+  unassisted_shot_pct: Goals per shot on unassisted shots.
+  assisted_shot_pct: Goals per shot on assisted shots.
+  pipe_shots: Shots the league's tracking tags as pipe shots (its label; the API does not define it).
+  lh_shots: Left-handed shots.
+  lh_goals: Left-handed goals.
+  lh_shot_pct: Goals per shot, left-handed.
+  rh_shots: Right-handed shots.
+  rh_goals: Right-handed goals.
+  rh_shot_pct: Goals per shot, right-handed.
+pll_season_leaders:
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  stat: Stat name, snake case (points, save_pct, faceoff_pct, ...).
+  rank: 1-based position in the league's list for the stat (ties are not merged).
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  first_name: Player's first name.
+  last_name: Player's last name.
+  jersey_number: Jersey number (a STRING).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  stat_value: The stat's value.
+pll_career_leaders:
+  stat: Stat name, snake case (points, save_pct, faceoff_pct, ...).
+  rank: 1-based position in the league's list for the stat (ties are not merged).
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  status: Player status (current on a roster; active or retired on career leaderboards).
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  stat_value: The stat's value.
+  games_played: Games played in the season segment (or career, on career leaderboards).
+  seasons_played: PLL seasons played.
+  avg_per_season: Career stat value per season played (stat_value / seasons_played).
+pll_player:
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  last_name_suffix: Name suffix (Jr., III; null or empty when none).
+  nickname: Nickname (null when none).
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  position_name: Position name (Attack, Midfield, Defensive Midfield, Long Stick Midfield, Defense, Faceoff, Goalie).
+  jersey_number: Jersey number (a STRING).
+  dob: Date of birth (YYYY-MM-DD).
+  age: Age in years on the day of the request.
+  height: Height (feet and inches, e.g. 6'1).
+  weight: Weight in pounds.
+  handedness: Shooting hand (R, L, or R/L).
+  country: Country of birth.
+  country_code: Country code (ISO 3166-1 alpha-3).
+  hometown: Player's hometown (city, state).
+  high_school: High school the player attended.
+  college: College the player attended.
+  college_year: Final college season (graduation year).
+  club_team: Club (amateur) team.
+  exp_from_year: First professional season.
+  is_captain: true for a team captain.
+  scratch: true when scratched from the lineup.
+  injury_status: Injury status code (H healthy, Q questionable, IR injured reserve, as observed).
+  injury_description: Injury description (null when healthy).
+  status: Player status (current on a roster; active or retired on career leaderboards).
+  contract_status: Final season under contract (e.g. 2028).
+  all_years: 'Seasons the player has a PLL record in: a list of integers (List(Int64)).'
+  bio: Player biography text.
+pll_player_seasons:
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  points: Points (one_point_goals + 2 x two_point_goals + assists; checked on the captures).
+  scoring_points: Points from goals alone (one_point_goals + 2 x two_point_goals).
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  shots_on_goal_pct: Shots on goal per shot.
+  two_point_shots: Shots from beyond the arc.
+  two_point_shot_pct: Goals per shot from beyond the arc.
+  two_point_shots_on_goal: 2-point shots on goal.
+  two_point_shots_on_goal_pct: 2-point shots on goal per 2-point shot.
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saa: Scores against per 48 minutes on the field (scores_against / (tof / 2880); checked on the captures).
+  gaa: Scores against per game played (scores_against / games_played).
+  two_pt_gaa: 2-point goals against per game played.
+  goalie_wins: Wins as the goalie of record.
+  goalie_losses: Losses as the goalie of record.
+  goalie_ties: Ties as the goalie of record.
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  pim_value: Penalty time as minutes (0.5 = a 30-second penalty).
+  power_play_goals: Power-play goals.
+  power_play_shots: Power-play shots.
+  short_handed_goals: Short-handed goals.
+  short_handed_shots: Short-handed shots.
+  short_handed_goals_against: Short-handed goals allowed.
+  power_play_goals_against: Power-play goals allowed.
+  tof: Time on the field, seconds.
+  plus_minus: Plus-minus as the league reports it.
+  shot_turnovers: Shots that ended the possession (the league's tracking count).
+  touches: Touches (possessions of the ball by the player).
+  total_passes: Passes made, as the league's tracking counts them.
+  unassisted_goals: Unassisted goals.
+  assisted_goals: Goals scored off an assist.
+  pass_rate: Passes per touch (total_passes / touches).
+  shot_rate: Shots per touch (shots / touches).
+  goal_rate: Goals per touch (goals / touches).
+  assist_rate: Assists per touch (assists / touches).
+  turnover_rate: Turnovers per touch (turnovers / touches).
+  games_played: Games played in the season segment (or career, on career leaderboards).
+  games_started: Games the player started.

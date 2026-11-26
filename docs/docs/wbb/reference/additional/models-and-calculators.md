@@ -739,7 +739,7 @@ CBB season, named by the year it ends (`Year`, `Year.scala`).
 
 Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
 
-KenPom-style fixed point: initialise `adj_o = raw_o` / `adj_d = raw_d`,
+Iterative fixed point: initialise `adj_o = raw_o` / `adj_d = raw_d`,
 then repeatedly recompute each team's rating from its games with the
 opponent's *current* adjusted rating and a home-court adjustment removed,
 until the largest change is below `tol`. Ratings are computed independently
