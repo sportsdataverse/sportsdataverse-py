@@ -182,6 +182,7 @@ def capture_contests(
         from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
 
         fetcher = NcaaFetcher.with_browser()
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _PageServerError
 
     try:
         for contest_id in contest_ids:
@@ -197,9 +198,10 @@ def capture_contests(
                 logger.info("contest_id=%s not ready -- %s", contest_id, exc)
                 counts["not_ready"] += 1
                 continue
-            except NoDataError as exc:
-                # A real 404: the session got an answer, so this is neither a ban nor a soft-ban step.
-                logger.warning("contest_id=%s not on stats.ncaa.org -- bundle not written: %s", contest_id, exc)
+            except (NoDataError, _PageServerError) as exc:
+                # A real 404, or a page the origin 500s on every proxy: the session got an answer,
+                # so this is neither a ban nor a soft-ban step.
+                logger.warning("contest_id=%s not served by stats.ncaa.org -- bundle not written: %s", contest_id, exc)
                 counts["failed"] += 1
                 continue
             except AssetFetchError as exc:
