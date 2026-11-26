@@ -5548,7 +5548,7 @@ def render_category(label: str, position: int, collapsed: bool, link_doc: str | 
 
 
 def render_packages_page() -> str | None:
-    """Render ``packages.mdx`` from the committed packages.json snapshot.
+    """Render ``packages.mdx`` from a local packages.json snapshot (none is committed).
 
     Returns None when no snapshot exists (run ``fetch_packages.py`` to create one);
     the page is then simply omitted so the offline drift gate never needs the network."""

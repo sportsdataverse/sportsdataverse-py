@@ -1,5 +1,5 @@
 {
-  "total": 83,
+  "total": 84,
   "sports": [
     {
       "label": "Football",
@@ -418,6 +418,11 @@
           "label": "Baseball Savant (Statcast)",
           "href": "https://baseballsavant.mlb.com",
           "featured": true
+        },
+        {
+          "key": "chadwick_register",
+          "label": "Chadwick Baseball Bureau register",
+          "href": "https://github.com/chadwickbureau/register"
         },
         {
           "key": "fox",

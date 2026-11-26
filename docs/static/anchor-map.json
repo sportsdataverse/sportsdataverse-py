@@ -4585,6 +4585,7 @@
   "fox_mlb_team_stats": "fox-sports-api",
   "fox_mlb_teamnav": "fox-sports-api",
   "leverage_index": "models-and-calculators",
+  "load_mlb_chadwick_register": "chadwick-baseball-bureau-register",
   "mae": "models-and-calculators",
   "mlb_attendance": "mlb-stats-api",
   "mlb_base_out_transitions": "models-and-calculators",

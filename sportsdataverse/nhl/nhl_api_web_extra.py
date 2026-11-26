@@ -3,8 +3,8 @@
 These live alongside the generated :mod:`sportsdataverse.nhl.nhl_api_web`
 (``tools/codegen/endpoints/nhl_api_web.yaml``). Functions here use request
 shapes the single-URL-builder template can't represent faithfully -- currently
-just ``nhl_scoreboard`` (three mutually-exclusive URL forms). Listed in
-``tests/codegen/test_parity_native.py::_IRREGULAR``.
+just ``nhl_scoreboard`` (three mutually-exclusive URL forms).
+``tests/codegen/test_native_families_cut_over.py`` checks this module imports.
 """
 
 from __future__ import annotations

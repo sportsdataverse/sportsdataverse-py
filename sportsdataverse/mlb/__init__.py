@@ -24,6 +24,7 @@ from sportsdataverse.mlb.mlb_fox_ext import *
 from sportsdataverse.mlb.mlb_game_rosters import *
 from sportsdataverse.mlb.mlb_loaders import *
 from sportsdataverse.mlb.mlb_pbp import *
+from sportsdataverse.mlb.mlb_people_register import load_mlb_chadwick_register
 from sportsdataverse.mlb.mlb_command_plus import mlb_command_plus
 from sportsdataverse.mlb.mlb_pitch_classify import mlb_pitch_classify
 from sportsdataverse.mlb.mlb_pitch_era import mlb_pitch_era, siera_like, x_era

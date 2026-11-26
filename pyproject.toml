@@ -647,6 +647,7 @@ files = [
     "sportsdataverse/mlb/mlb_pitch_features.py",
     "sportsdataverse/mlb/mlb_stuff_plus.py",
     "sportsdataverse/mlb/mlb_command_plus.py",
+    "sportsdataverse/mlb/mlb_people_register.py",
     "sportsdataverse/mlb/mlb_pitch_era.py",
     "sportsdataverse/mlb/mlb_pitch_fatigue.py",
     "sportsdataverse/mlb/mlb_pitch_classify.py",

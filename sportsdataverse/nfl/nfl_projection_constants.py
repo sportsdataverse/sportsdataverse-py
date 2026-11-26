@@ -14,6 +14,7 @@ from typing import Dict, Tuple
 
 import numpy as np
 import polars as pl
+from sportsdataverse._temporal import as_date
 from sportsdataverse._common.metrics import (
     brier_score as brier_score,
     log_loss_score as log_loss_score,
@@ -241,3 +242,37 @@ def as_of_season_split(df: pl.DataFrame, target_season: int, *, season_col: str 
             hist = as_of_season_split(pl.DataFrame({"season": [2022, 2023, 2024]}), 2024)
     """
     return df.filter(pl.col(season_col) < target_season)
+
+
+def _season_rosters(rosters: pl.DataFrame) -> pl.DataFrame | None:
+    """``player_id, season, position, age`` per (player, season) from any season-roster frame, or None.
+
+    ``load_nfl_rosters`` carries ``gsis_id`` and ``birth_date``, not ``player_id`` and ``age``, so a
+    projection that read those names directly matched no row and never aged anyone. The id is the gsis
+    id under either name. ``age`` is the definition the committed projection corpus
+    (``tests/fixtures/nfl_projection/rosters_2020_2023.parquet``), and so every fitted constant and aging
+    curve, was built on: ``season + 0.75 - (birth_year + birth_day_of_year / 365.25)``, about the age on
+    October 1. It reproduces all 11,689 of that corpus's ages exactly.
+    """
+    cols = set(rosters.columns)
+    id_col = "player_id" if "player_id" in cols else "gsis_id" if "gsis_id" in cols else None
+    if rosters.height == 0 or id_col is None or "season" not in cols:
+        return None
+    if "age" in cols:
+        age = pl.col("age").cast(pl.Float64)
+    elif "birth_date" in cols:
+        born = as_date(pl.col("birth_date"))
+        age = (
+            pl.col("season").cast(pl.Float64)
+            + 0.75
+            - (born.dt.year().cast(pl.Float64) + born.dt.ordinal_day().cast(pl.Float64) / 365.25)
+        )
+    else:
+        age = pl.lit(None, dtype=pl.Float64)
+    position = pl.col("position").cast(pl.Utf8) if "position" in cols else pl.lit(None, dtype=pl.Utf8)
+    return rosters.select(
+        pl.col(id_col).cast(pl.Utf8).alias("player_id"),
+        pl.col("season").cast(pl.Int64),
+        position.alias("position"),
+        age.alias("age"),
+    ).unique(subset=["player_id", "season"], keep="first", maintain_order=True)

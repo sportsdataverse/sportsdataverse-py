@@ -49,6 +49,12 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mlb_statcast_search_minors](additional/baseball-savant-statcast.md#mlb_statcast_search_minors) | Minor-league Statcast search (`/statcast-search-minors/csv`), date-chunked. |
 | [mlb_statcast_search_wbc](additional/baseball-savant-statcast.md#mlb_statcast_search_wbc) | World Baseball Classic Statcast search (`/statcast-search-world-baseball-classic/csv`). |
 
+## Chadwick Baseball Bureau register
+
+| Function | Summary |
+|---|---|
+| [load_mlb_chadwick_register](additional/chadwick-baseball-bureau-register.md#load_mlb_chadwick_register) | Load the Chadwick Baseball Bureau person register (every baseball person id crosswalk). |
+
 ## Fox Sports API
 
 | Function | Summary |

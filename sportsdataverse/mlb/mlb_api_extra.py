@@ -2,7 +2,7 @@
 
 Live alongside the generated :mod:`sportsdataverse.mlb.mlb_api`. These use
 conditional `_csv` query inclusion, multi-param shaping, or the /api/v1.1/ host
-override. Listed in ``tests/codegen/test_parity_native.py::_IRREGULAR``.
+override. ``tests/codegen/test_native_families_cut_over.py`` checks this module imports.
 """
 
 from __future__ import annotations
