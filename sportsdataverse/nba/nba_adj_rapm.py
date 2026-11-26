@@ -31,8 +31,14 @@ from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, _possessions_leagu
 #: NBA season and 0.83 to 1.39 in every WNBA one (off_poss >= 300). Next-season fit to plain RAPM (R^2
 #: of a line fit the pair before): NBA 0.198, WNBA 0.107, against plain RAPM's 0.156 / 0.073 and the
 #: SPM prior's own 0.168 / 0.093 (0.129 / 0.062 before minute weighting); the #1150 constants with the
-#: equal-weight prior read 0.196 / 0.110. Year-over-year Spearman of adjusted RAPM itself: 0.581
-#: (NBA) and 0.549 (WNBA), from 0.530 / 0.519. The G League (``"20"``) is seeded with the NBA value.
+#: equal-weight prior read 0.197 / 0.110. Paired season by season against that configuration (the
+#: equal-weight prior at scale 2, ``report --baseline``, same held-out games): held-out error NBA
+#: +0.22 bp (SE 0.17; lower in 14 of 30 seasons), WNBA -0.41 (SE 0.22; 20 of 30); next-season
+#: Spearman NBA +0.004 (SE 0.003), WNBA -0.010 (SE 0.004); R^2 +0.001 (0.003) / -0.003 (0.004). So
+#: adjusted RAPM is about where it was, the WNBA's next-season rank slightly lower; the gain is in
+#: the SPM prior itself. (Year-over-year Spearman of adjusted RAPM rises, 0.530 -> 0.581 NBA, 0.519 ->
+#: 0.549 WNBA, but a wider prior raises that by itself; it is stability, not accuracy.) The G League
+#: (``"20"``) is seeded with the NBA value.
 ADJ_RAPM_PENALTY: dict[str, float] = {"00": 3727.593720314938, "10": 2682.6957952797247}
 ADJ_RAPM_PENALTY["20"] = ADJ_RAPM_PENALTY["00"]
 #: The multiplier on the SPM prior per league id. SPM is a ridge fit to shrunk RAPM, so the prior is

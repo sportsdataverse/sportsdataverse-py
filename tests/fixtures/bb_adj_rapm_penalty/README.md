@@ -23,6 +23,11 @@ and `curves` stages behind it read:
 - the leaguegamelog captures of local hoopR-nba-stats-raw / wehoop-wnba-stats-raw checkouts, which
   give the box logs the SPM prior is trained on.
 
+`report.json` is the same run's `report --baseline` output: per league the frozen penalty and scale,
+the per-season spread of adjusted RAPM against plain RAPM, the next-season forecast blocks, and
+`vs_baseline`, the season-paired comparison against a second `curves --prior-rule equal` OUT (the
+equal-weight SPM prior at its #1150 scale 2; that OUT's curves reproduce the 2026-11-09 corpus).
+
 Nothing is synthetic or edited. Rezipped at zstd level 19.
 
 The SPM prior's own fit (`tools/fit_adj_rapm_penalty.py spm`, run 2026-11-25 on the same inputs):
@@ -41,10 +46,12 @@ re-runs the CV on a committed season to match its row, and gates the weighting: 
 scored on 2025's box line, the default fit's Spearman and spread against 2025's own plain RAPM sit
 above floors that the equal-weight fit it replaced misses.
 
-`tests/tools/test_fit_adj_rapm_penalty.py` checks four things:
+`tests/tools/test_fit_adj_rapm_penalty.py` checks five things:
 
 - Summed over the training seasons at `k = 1.5` (`ADJ_RAPM_PRIOR_SCALE`), the minimum is
   `nba_adj_rapm.ADJ_RAPM_PENALTY` (NBA 3,728, WNBA 2,683).
 - At `k = 1` the minimum is the same two values.
 - The pooled error at `k = 1.5` is below the error at `k = 1` (the prior-scale evidence).
 - `k = 0` reproduces plain RAPM's frozen penalty, `RAPM_PENALTY`.
+- From `report.json`: every season's adjusted-RAPM spread is within 0.8-1.6 times plain RAPM's, and
+  the refit is not worse than the equal-weight baseline on held-out games by more than two SEs.
