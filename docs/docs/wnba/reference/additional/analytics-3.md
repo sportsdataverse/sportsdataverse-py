@@ -6,6 +6,54 @@ description: "WNBA — additional Python functions — Analytics: wnba_player–
 ---
 # WNBA — additional Python functions — Analytics: wnba_player–wnba_team
 
+### wnba_player_props {#wnba_player_props}
+
+`wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '10', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  |  |
+| `game_id` | `str` |  |  |
+| `home_team_id` | `str` |  |  |
+| `away_team_id` | `str` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `as_of_date` | `Union[date, None]` | `None` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per player on either team: `player_id, team_id`, `stat_<stat>_exp` and `stat_<stat>_recent_exp` for the nine stats (null if the logs lack one), `recent_weight, minutes_exp, pace_proj`. `team_id` is his latest team (All-Star games left out). Lines assume he plays (rate x mean minutes when playing x pace); the recent line and weight feed the `prob_over` mixture (weight 0 with <= 10 earlier games, null outside the NBA). `minutes_exp` is his share of his team's logged minutes x `5 * game_minutes`. A team with no game before the cut has no rows and the league pace; empty input gives that schema.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | ESPN athlete id (Utf8). |
+| `team_id` | String | ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team. |
+| `stat_pts_exp` | Float64 | Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor. |
+| `stat_reb_exp` | Float64 | Expected rebounds if he plays, on the same basis. |
+| `stat_ast_exp` | Float64 | Expected assists if he plays, on the same basis. |
+| `stat_fg3m_exp` | Float64 | Expected made threes if he plays, on the same basis. |
+| `minutes_exp` | Float64 | Expected minutes: the player's minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 200; a team's rows sum to 200. The stat_*_exp lines assume the player plays; this does not. |
+| `pace_proj` | Float64 | Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet. |
+| `stat_stl_exp` | Float64 |  |
+| `stat_blk_exp` | Float64 |  |
+| `stat_tov_exp` | Float64 |  |
+| `stat_fgm_exp` | Float64 |  |
+| `stat_ftm_exp` | Float64 |  |
+| `stat_pts_recent_exp` | Float64 | Expected points if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
+| `stat_reb_recent_exp` | Float64 | Expected rebounds if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
+| `stat_ast_recent_exp` | Float64 | Expected assists if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
+| `stat_fg3m_recent_exp` | Float64 | Expected made threes if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
+| `stat_stl_recent_exp` | Float64 | Expected steals if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
+| `stat_blk_recent_exp` | Float64 | Expected blocks if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
+| `stat_tov_recent_exp` | Float64 | Expected turnovers if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
+| `stat_fgm_recent_exp` | Float64 | Expected field goals made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
+| `stat_ftm_recent_exp` | Float64 | Expected free throws made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture). |
+| `recent_weight` | Float64 | Weight on the recent line in the prop mixture, logistic(a + b x \|last-10 minus season mean minutes\| / his season minutes SD); 0 with 10 or fewer earlier games, where the two windows coincide. Null in the WNBA (no fitted mixture). |
+
 ### wnba_player_season_box_rates {#wnba_player_season_box_rates}
 
 `wnba_player_season_box_rates(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -740,34 +788,3 @@ One row per `(season, team_id, game_id)`. `team_id` is the stats.nba.com team id
 | `lg_ft_rate` | Float64 | League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts). |
 | `lg_ft_pct` | Float64 | League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts). |
 | `chance_pts` | Float64 | Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound. |
-
-### wnba_team_game_possessions {#wnba_team_game_possessions}
-
-`wnba_team_game_possessions(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA per team and game possession counts (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_game_possessions.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `season_type` | `str` | `'regular-season'` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `home` or `away` row (neither at a neutral site) and, when it has clutch possessions, `close` and `clutch` rows. `team_id` is the stats.nba.com team id (Int64), `game_id` the stats.nba.com game id. `poss` / `opp_poss` are the team's offensive / defensive possessions, `pts` / `opp_pts` their points and `seconds` the game clock they used. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | WNBA season (its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
-| `game_id` | String | stats.wnba.com game id. The game this row's possessions are from. |
-| `split` | String | The season table's split this game is in: all (every game); home or away (neither at a neutral site); close and clutch when the game has clutch possessions. A team-season's rows of a split add up to its wnba_team_season_rates row. |
-| `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
-| `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
-| `pts` | Int64 | Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free throws. |
-| `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
-| `seconds` | Float64 | Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60 x (poss + opp_poss) / 2 / summed seconds. |

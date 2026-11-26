@@ -96,6 +96,54 @@ df = espn_injuries_snapshot("nfl")
 df = espn_injuries_snapshot(["nfl", "nba", "nhl", "mlb", "wnba", "cfb"])
 ```
 
+### pregame_state_as_of {#pregame_state_as_of}
+
+`pregame_state_as_of(snapshots: 'Any', t: 'datetime | pl.Expr') -> 'Any'`
+
+Keep the snapshot rows that were known at decision time `t`.
+
+A snapshot table stores each observed state as an interval: `valid_from` is the first
+capture that showed it, `valid_to` the first capture that no longer did (null while it
+is still current). A state is known at `t` iff `valid_from <= t < valid_to`, with a
+null `valid_to` read as open-ended. A row whose `valid_from` is after `t` is never
+returned, so a model that reads only this function's output cannot see a starter or an
+injury published after its decision time. The intervals already carry their end, so this
+is a filter, not an as-of join.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `snapshots` | `Any` |  | A polars `DataFrame` or `LazyFrame` with timezone-aware `valid_from` and `valid_to` datetime columns (any zone; compared as UTC instants), such as the `nhl_pregame_snapshots` release. |
+| `t` | `datetime \| Expr` |  | The decision time. A timezone-aware `datetime` applies one time to every row; a `pl.Expr` gives each row its own, for example puck drop minus three hours after a join to the schedule. The expression must also be timezone-aware. |
+
+**Returns**
+
+The rows of `snapshots` valid at `t`, with the input's columns and frame type.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `valid_from` or `valid_to` is missing, or `t` is a naive `datetime` (a naive time compared with a UTC column is a silent offset bug). A naive `valid_from` / `valid_to` column or `pl.Expr` raises polars' own error. |
+
+**Example**
+
+```python
+from datetime import datetime, timedelta, timezone
+import polars as pl
+from sportsdataverse.espn_snapshots import pregame_state_as_of
+from sportsdataverse.nhl import load_nhl_pregame_snapshots
+
+snapshots = load_nhl_pregame_snapshots(seasons=2027)
+t = datetime(2026, 11, 26, 0, 0, tzinfo=timezone.utc) - timedelta(hours=3)
+known = pregame_state_as_of(snapshots, t)
+
+# Each game's own lead, puck drop minus three hours
+
+known = pregame_state_as_of(snapshots, pl.col("start_time_utc") - pl.duration(hours=3))
+```
+
 ### xfl_pbp {#xfl_pbp}
 
 `xfl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`

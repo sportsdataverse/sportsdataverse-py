@@ -611,12 +611,9 @@ def nba_player_props(
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Per-player expected prop lines + team pace projection for a matchup.
 
-    Loads the season's player box logs + team ratings, keeps only games played
-    strictly before ``as_of_date`` (both inputs), computes per-minute
-    :func:`player_rates`, and projects each player's line onto their mean
-    minutes and the matchup's pace factor (``exp_poss / avg_pace``). Only the
-    two teams in the matchup are returned. NBA rates are shrunk toward a tier prior
-    that also pools the previous regular season (one more box-log read).
+    Loads the season's box logs and team ratings (games strictly before ``as_of_date``), computes
+    :func:`player_rates` (NBA: shrunk toward a tier prior that also pools last regular season), and
+    projects each line onto mean minutes and the pace factor ``exp_poss / avg_pace``, two teams only.
 
     Args:
         season: End year of the season (e.g. ``2024``).
@@ -635,13 +632,12 @@ def nba_player_props(
 
     Returns:
         One row per player on either team: ``player_id, team_id``, ``stat_<stat>_exp`` and
-        ``stat_<stat>_recent_exp`` for pts, reb, ast, fg3m, stl, blk, tov, fgm, ftm (null for a
-        stat the box logs lack), ``recent_weight, minutes_exp, pace_proj``. The lines assume
-        the player plays (per-minute rate x mean minutes when playing x pace factor); the recent
-        line and weight feed the :func:`prob_over` mixture (weight 0 with <= 10 earlier games;
-        both null outside the NBA). ``minutes_exp`` is his share of the team's minutes (a game
-        sat counts zero), summing to ``5 * game_minutes`` per team (240 NBA, 200 WNBA). A team
-        with no game before the cut has no rows and the league pace. Empty input: that schema.
+        ``stat_<stat>_recent_exp`` for the nine stats (null if the logs lack one), ``recent_weight,
+        minutes_exp, pace_proj``. ``team_id`` is his latest team (All-Star games left out). Lines
+        assume he plays (rate x mean minutes when playing x pace); the recent line and weight feed
+        the :func:`prob_over` mixture (weight 0 with <= 10 earlier games, null outside the NBA).
+        ``minutes_exp`` is his share of his team's logged minutes x ``5 * game_minutes``. A team with
+        no game before the cut has no rows and the league pace; empty input gives that schema.
 
     Raises:
         ValueError: The box logs carry no ``game_date`` (the as-of cut cannot be applied), or
@@ -677,9 +673,14 @@ def nba_player_props(
     if as_of_date is not None:
         # Strict `<`: the target game's own line (and every later one) never feeds its projection.
         logs = logs.filter(pl.col("game_date") < as_of_date)
+    # ESPN's All-Star teams play one game each: an exhibition team is no one's latest team, and its
+    # minutes are no team's. ponytail: the share-of-max rule nba_team_ratings ranks by, not an id list.
+    team_games = pl.col("game_id").n_unique().over("team_id")
+    logs = logs.filter(team_games >= 0.5 * team_games.max())
     ratings = _load_ratings(season, league_id, as_of_date=as_of_date)
     prior = _prior_season_logs(season, league_id, as_of_date)
-    rates = player_rates(logs, prior_logs=prior, league_id=league_id)
+    # date order: team_id is a traded player's latest
+    rates = player_rates(logs.sort("game_date", "game_id"), prior_logs=prior, league_id=league_id)
     if rates.height == 0 or ratings.height == 0:
         out = pl.DataFrame(schema=_PROPS_SCHEMA)
         return out.to_pandas() if return_as_pandas else out

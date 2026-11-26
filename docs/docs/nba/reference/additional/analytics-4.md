@@ -418,12 +418,9 @@ pos = nba_player_positions("2023-24", fetch=stub)
 
 Per-player expected prop lines + team pace projection for a matchup.
 
-Loads the season's player box logs + team ratings, keeps only games played
-strictly before `as_of_date` (both inputs), computes per-minute
-`player_rates`, and projects each player's line onto their mean
-minutes and the matchup's pace factor (`exp_poss / avg_pace`). Only the
-two teams in the matchup are returned. NBA rates are shrunk toward a tier prior
-that also pools the previous regular season (one more box-log read).
+Loads the season's box logs and team ratings (games strictly before `as_of_date`), computes
+`player_rates` (NBA: shrunk toward a tier prior that also pools last regular season), and
+projects each line onto mean minutes and the pace factor `exp_poss / avg_pace`, two teams only.
 
 **Parameters**
 
@@ -439,18 +436,18 @@ that also pools the previous regular season (one more box-log read).
 
 **Returns**
 
-One row per player on either team: `player_id, team_id`, `stat_<stat>_exp` and `stat_<stat>_recent_exp` for pts, reb, ast, fg3m, stl, blk, tov, fgm, ftm (null for a stat the box logs lack), `recent_weight, minutes_exp, pace_proj`. The lines assume the player plays (per-minute rate x mean minutes when playing x pace factor); the recent line and weight feed the `prob_over` mixture (weight 0 with <= 10 earlier games; both null outside the NBA). `minutes_exp` is his share of the team's minutes (a game sat counts zero), summing to `5 * game_minutes` per team (240 NBA, 200 WNBA). A team with no game before the cut has no rows and the league pace. Empty input: that schema.
+One row per player on either team: `player_id, team_id`, `stat_<stat>_exp` and `stat_<stat>_recent_exp` for the nine stats (null if the logs lack one), `recent_weight, minutes_exp, pace_proj`. `team_id` is his latest team (All-Star games left out). Lines assume he plays (rate x mean minutes when playing x pace); the recent line and weight feed the `prob_over` mixture (weight 0 with <= 10 earlier games, null outside the NBA). `minutes_exp` is his share of his team's logged minutes x `5 * game_minutes`. A team with no game before the cut has no rows and the league pace; empty input gives that schema.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | String | Unique player identifier. |
-| `team_id` | String | Unique team identifier. |
-| `stat_pts_exp` | Float64 |  |
-| `stat_reb_exp` | Float64 |  |
-| `stat_ast_exp` | Float64 |  |
-| `stat_fg3m_exp` | Float64 |  |
-| `minutes_exp` | Float64 | Expected minutes: the player's minutes for the current team over the summed minutes for that team of every player returned on it (minutes logged for the team by a player since traded away are left out), all before the as-of cut (every logged game when no cut applies; a game sat counts as zero), times 5 x the league's game minutes, so a team's rows sum to 240 in the NBA and 200 in the WNBA. The stat_*_exp lines assume the player plays; this does not. |
-| `pace_proj` | Float64 |  |
+| `player_id` | String | ESPN athlete id (Utf8). |
+| `team_id` | String | ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team. |
+| `stat_pts_exp` | Float64 | Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor. |
+| `stat_reb_exp` | Float64 | Expected rebounds if he plays, on the same basis. |
+| `stat_ast_exp` | Float64 | Expected assists if he plays, on the same basis. |
+| `stat_fg3m_exp` | Float64 | Expected made threes if he plays, on the same basis. |
+| `minutes_exp` | Float64 | Expected minutes: the player's minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 240; a team's rows sum to 240. The stat_*_exp lines assume the player plays; this does not. |
+| `pace_proj` | Float64 | Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet. |
 | `stat_stl_exp` | Float64 |  |
 | `stat_blk_exp` | Float64 |  |
 | `stat_tov_exp` | Float64 |  |
