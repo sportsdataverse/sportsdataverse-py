@@ -25,3 +25,18 @@ columns:
 - name: pace_proj
   type: double
   description: ''
+- name: stat_stl_exp
+  type: double
+  description: ''
+- name: stat_blk_exp
+  type: double
+  description: ''
+- name: stat_tov_exp
+  type: double
+  description: ''
+- name: stat_fgm_exp
+  type: double
+  description: ''
+- name: stat_ftm_exp
+  type: double
+  description: ''

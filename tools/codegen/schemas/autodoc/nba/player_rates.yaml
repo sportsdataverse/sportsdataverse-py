@@ -25,3 +25,18 @@ columns:
 - name: fg3m_per_min
   type: double
   description: ''
+- name: stl_per_min
+  type: double
+  description: ''
+- name: blk_per_min
+  type: double
+  description: ''
+- name: tov_per_min
+  type: double
+  description: ''
+- name: fgm_per_min
+  type: double
+  description: ''
+- name: ftm_per_min
+  type: double
+  description: ''
