@@ -355,21 +355,37 @@ injuries.filter(pl.col("status") == "Out").select("player", "team", "injury")
 
 ### score_shot_xpoints {#score_shot_xpoints}
 
-`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, league_id: 'str' = '00', model: '"Literal[\'zone\', \'location\']"' = 'zone', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
-Score each shot with expected points from the league-average baseline.
+Score each shot with its make chance and expected points.
 
-Joins the per-shot frame to the zone baseline (falling back to the
-within-`shot_zone_range` mean when a zone triple is unmatched) and adds
-`shot_value` (3 for a `3PT` shot else 2), `xpoints = base_fg_pct *
-shot_value`, and `actual_points = shot_made_flag * shot_value`.
+`base_fg_pct` is the shot's make chance. With `model="zone"` (the default) it is the
+league's FG% in the shot's zone triple from `LeagueAverages`, falling back to the
+within-`shot_zone_range` mean when a triple is unmatched. With `model="location"` (the NBA
+only) it is the bundled location model's (`add_shot_make_prob`, on the shot chart's
+`loc_x` / `loc_y` / `action_type` / `shot_type`); a shot it cannot score (no location)
+takes the zone value. Either way the frame gains `shot_value` (3 for a `3PT` shot else 2),
+`xpoints = base_fg_pct * shot_value` and `actual_points = shot_made_flag * shot_value`.
+
+How the two compare, walk-forward by season on the NBA's regular-season play-by-play (fit
+report `tools/models/nba_shot_value/shot_make_nba_holdout.json`): the location model's log
+loss is 3% to 4% below the zone table's on every season from 2018-19, the table built from the
+scored season's own shots, almost all of it at the rim and none on threes. The zone table is
+calibrated to its own season by construction; the location model carries its training seasons'
+level, off by more than a point on 2018-19, 2020-21 and 2022-23 and on 2026-27 so far.
+`shooter_talent` and the shrinkage `k` in `nba_shot_value_constants` are fitted for the
+zone table: with the location model, talent reads as make% above what the shot type and spot
+predict (the type is the scorer's label, written after the play), and `k` fits 60.7
+(`tools/fit_nba_shot_shrinkage_k.py --model location`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (needs `shot_type` + the three zone keys + `shot_made_flag`). |
+| `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (needs `shot_type`, the three zone keys and `shot_made_flag`; the location model also reads `loc_x`, `loc_y` and `action_type`). |
 | `league_avgs` | `DataFrame` |  | The `LeagueAverages` frame (see `xpoints_baseline`). |
+| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League: the booster `model="location"` loads (`SHOT_MAKE_MODELS`). |
+| `model` | `Literal['zone', 'location']` | `'zone'` | `"zone"` or `"location"`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
@@ -382,7 +398,7 @@ No returns table is published for this function: no capture: its input is stats.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | A zone join key has a different dtype on the two frames. |
+| `ValueError` | A zone join key has a different dtype on the two frames, `model` is unknown, `model="location"` for a league with no bundled booster, or a location column is missing. |
 
 **Example**
 
@@ -390,6 +406,7 @@ No returns table is published for this function: no capture: its input is stats.
 import polars as pl
 from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
 scored = score_shot_xpoints(shots, league_avgs)
+located = score_shot_xpoints(shots, league_avgs, model="location")
 
 # Pipeline next step (one line)
 

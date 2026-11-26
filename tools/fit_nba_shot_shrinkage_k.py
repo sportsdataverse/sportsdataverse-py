@@ -3,11 +3,14 @@
 
 Splits each player's shots by within-player row parity, computes raw
 make%-above-expected in each half, and picks k minimizing cross-half MSE of
-the k-regressed first half vs the raw second half. The printed k is
-``TALENT_SHRINKAGE_K["00"]`` (G League reuses it) in
-``sportsdataverse/nba/nba_shot_value_constants.py``. The WNBA entry (``"10"``)
-is a seeded placeholder: no WNBA shot fixture is committed, so this script
-cannot fit it.
+the k-regressed first half vs the raw second half. The k depends on the model
+the expectation comes from: ``--model zone`` (the default model of
+``score_shot_xpoints``) reruns to 70.1, ``TALENT_SHRINKAGE_K["00"]`` (G League
+reuses it) in ``sportsdataverse/nba/nba_shot_value_constants.py``; ``--model
+location`` prints the k for the NBA location model, which is not frozen while
+that model is opt-in.
+The WNBA entry (``"10"``) is a seeded placeholder: no WNBA shot fixture is
+committed, so this script cannot fit it.
 
 Moved verbatim (wrapped in ``main``) from its untracked home,
 ``dev/nba_shot_value/fit_shrinkage_k.py`` (2026-07-08); it reads only the
@@ -15,7 +18,8 @@ committed ``tests/fixtures/nba_shot_value`` captures.
 
 Usage::
 
-    uv run python tools/fit_nba_shot_shrinkage_k.py
+    uv run python tools/fit_nba_shot_shrinkage_k.py --model zone
+    uv run python tools/fit_nba_shot_shrinkage_k.py --model location
 """
 
 from __future__ import annotations
@@ -31,10 +35,12 @@ from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
 FIX = Path(__file__).resolve().parents[1] / "tests" / "fixtures" / "nba_shot_value"
 
 
-def main() -> float:
+def main(model: str = "zone") -> float:
     shots = pl.read_parquet(FIX / "shotchart_2023.parquet")
     la = pl.read_parquet(FIX / "league_averages_2023.parquet")
-    scored = score_shot_xpoints(shots, la).with_columns((pl.int_range(pl.len()).over("player_id") % 2).alias("half"))
+    scored = score_shot_xpoints(shots, la, model=model).with_columns(
+        (pl.int_range(pl.len()).over("player_id") % 2).alias("half")
+    )
 
     def half_stats(h: int) -> pl.DataFrame:
         return (
@@ -65,4 +71,8 @@ def main() -> float:
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--model", choices=["zone", "location"], default="zone")
+    main(ap.parse_args().model)

@@ -6,6 +6,58 @@ description: "WNBA — additional Python functions — Analytics: wnba_game–wn
 ---
 # WNBA — additional Python functions — Analytics: wnba_game–wnba_player
 
+### wnba_game_stints {#wnba_game_stints}
+
+`wnba_game_stints(seasons: 'int | list[int]', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA game stints (league_id='10'). See sportsdataverse.nba.nba_game_stints.nba_game_stints.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per `(season, game_id, team_id, player_id, stint_number)`: `opp_team_id`, `stint_number` (1 = his first in the game), `period`, `clock_in` / `clock_out` (the period clock, seconds left, when the stint began and ended), `seconds` / `minutes` on the floor, `poss` / `opp_poss` (offensive / defensive possessions started), `pts` / `opp_pts` (team points scored / allowed), `plus_minus` and the player's own box in the stint (`nba_box_events`): `points`, `fgm` / `fga`, `fg3m` / `fg3a`, `ftm` / `fta`, `oreb` / `dreb` / `reb`, `ast`, `stl`, `blk`, `tov` and `pf`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `player_id` | Int64 | stats.nba.com player (person) id. |
+| `stint_number` | Int64 | The stint's place among the player's stints in the game, from 1 in game order. A stint is a run of consecutive actions of one period with him on the floor. |
+| `period` | Int64 | Period of the stint (a stint never spans a period end). |
+| `clock_in` | Float64 | Period clock (seconds left) when the stint began: the clock at the action before his first. |
+| `clock_out` | Float64 | Period clock (seconds left) when the stint ended: the clock at his last action. |
+| `seconds` | Float64 | Game-clock seconds of the stint: the clock that ran into each of its actions. |
+| `minutes` | Float64 | Game-clock minutes of the stint (seconds / 60). |
+| `poss` | Int64 | Offensive possessions that started during the stint (each counted on the lineup at the action that starts it). |
+| `opp_poss` | Int64 | Defensive possessions that started during the stint, counted as poss is. |
+| `pts` | Int64 | The team's points during the stint, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts` | Int64 | The opponent's points during the stint, credited as pts is. |
+| `plus_minus` | Int64 | The stint's +/-: pts - opp_pts. |
+| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw, his own, on the stint's actions. |
+| `fgm` | Int64 | Field goals made, his own, on the stint's actions. |
+| `fga` | Int64 | Field goals attempted, his own, on the stint's actions. |
+| `fg3m` | Int64 | Three-pointers made, his own, on the stint's actions. |
+| `fg3a` | Int64 | Three-pointers attempted, his own, on the stint's actions. |
+| `ftm` | Int64 | Free throws made, his own, on the stint's actions. |
+| `fta` | Int64 | Free throws attempted, his own, on the stint's actions. |
+| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
+| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
+| `reb` | Int64 | Total rebounds in the stint: oreb + dreb. |
+| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on, his own, on the stint's actions. |
+| `stl` | Int64 | Steals, his own, on the stint's actions. |
+| `blk` | Int64 | Blocked shots, his own, on the stint's actions. |
+| `tov` | Int64 | Turnovers (a team turnover is no player's), his own, on the stint's actions. |
+| `pf` | Int64 | Personal fouls (technicals are not counted), his own, on the stint's actions. |
+
 ### wnba_game_units {#wnba_game_units}
 
 `wnba_game_units(seasons: 'int | list[int]', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -499,36 +551,3 @@ One row per `(season, team_id, player_id)`: `games` on the floor and `team_games
 | `off_rtg_diff_n` | Int64 | Sample size of off_rtg_diff: the smaller of off_rtg_on_n and off_rtg_off_n. |
 | `def_rtg_diff_n` | Int64 | Sample size of def_rtg_diff: the smaller of def_rtg_on_n and def_rtg_off_n. |
 | `net_rtg_diff_n` | Int64 | Sample size of net_rtg_diff: the smaller of net_rtg_on_n and net_rtg_off_n. |
-
-### wnba_player_props {#wnba_player_props}
-
-`wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '10', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  |  |
-| `game_id` | `str` |  |  |
-| `home_team_id` | `str` |  |  |
-| `away_team_id` | `str` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `as_of_date` | `Union[date, None]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj`. The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the team's minutes, counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | String | Unique player identifier. |
-| `team_id` | String | Unique team identifier. |
-| `stat_pts_exp` | Float64 |  |
-| `stat_reb_exp` | Float64 |  |
-| `stat_ast_exp` | Float64 |  |
-| `stat_fg3m_exp` | Float64 |  |
-| `minutes_exp` | Float64 |  |
-| `pace_proj` | Float64 |  |

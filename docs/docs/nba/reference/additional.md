@@ -252,6 +252,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [add_ctg_shot_zones](additional/analytics.md#add_ctg_shot_zones) | Append CTG's shot-location zone (`ctg_shot_zone`) to an enhanced PBP frame. |
 | [add_play_context](additional/analytics.md#add_play_context) | Build possessions and enrich them with the full CTG play-context surface. |
 | [add_possession_flags](additional/analytics.md#add_possession_flags) | Append `seconds_to_first_shot`, `is_transition` and `is_garbage_time` to possessions. |
+| [add_shot_make_prob](additional/analytics.md#add_shot_make_prob) | Add each field-goal attempt's make chance from the bundled location model. |
 | [add_start_type_detail](additional/analytics.md#add_start_type_detail) | Append the full pbpstats start-type taxonomy to a possession frame. |
 | [add_transition](additional/analytics.md#add_transition) | Flag possessions that started in transition, and time their initial play. |
 | [box_features](additional/analytics.md#box_features) | Aggregate per-player per-100-possession box features over a set of games. |
@@ -262,6 +263,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [flag_heave_possessions](additional/analytics.md#flag_heave_possessions) | Flag CTG's "projected heave possessions" (excluded from CTG stats by default). |
 | [hoopshype_salaries](additional/analytics.md#hoopshype_salaries) | League-wide NBA player salaries from HoopsHype. |
 | [lineup_play_context](additional/analytics.md#lineup_play_context) | Roll possessions up into a per-5-man-lineup Play-Context table. |
+| [load_shot_make_model](additional/analytics.md#load_shot_make_model) | Load the bundled shot-make booster for `league_id` (only `"00"`, the NBA, has one). |
 | [make_prob_by_context](additional/analytics.md#make_prob_by_context) | Marginal FG% tables by defender distance and by shot clock. |
 | [make_prob_joint](additional/analytics.md#make_prob_joint) | Independence-combined defender x shot-clock make probability. |
 | [nba_availability](additional/analytics.md#nba_availability) | Project games-available % for a season (or seasons) from career GP history. |
@@ -349,7 +351,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [prop_distribution](additional/analytics-8.md#prop_distribution) | Distribution family + parameters for a projected stat mean. |
 | [ratings_as_of](additional/analytics-8.md#ratings_as_of) | Fit `model` on every possession dated on or before `asof` and return ratings. |
 | [rotowire_injuries](additional/analytics-8.md#rotowire_injuries) | The current NBA injury report from RotoWire. |
-| [score_shot_xpoints](additional/analytics-8.md#score_shot_xpoints) | Score each shot with expected points from the league-average baseline. |
+| [score_shot_xpoints](additional/analytics-8.md#score_shot_xpoints) | Score each shot with its make chance and expected points. |
 | [shooter_talent](additional/analytics-8.md#shooter_talent) | Regressed shooter true-talent: make%-above-expected, shrunk to the mean. |
 | [shot_selection_quality](additional/analytics-8.md#shot_selection_quality) | Player shot-selection quality: mean expected value vs the league mean. |
 | [shrink_clutch](additional/analytics-8.md#shrink_clutch) | Empirical-Bayes / James-Stein shrinkage of `clutch_delta` toward zero. |

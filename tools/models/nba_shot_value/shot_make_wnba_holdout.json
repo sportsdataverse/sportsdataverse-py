@@ -1,0 +1,1105 @@
+{
+  "league_id": "10",
+  "params": {
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "max_depth": 4,
+    "eta": 0.05,
+    "min_child_weight": 20,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "lambda": 1.0,
+    "tree_method": "hist",
+    "seed": 7,
+    "nthread": 4
+  },
+  "train_seasons_per_fit": 3,
+  "min_level_n": 200,
+  "gates": {
+    "skill": "d_log_loss vs zone_served, 95% game-clustered CI wholly > 0",
+    "max_large_bias": 0.01,
+    "slope_band": [
+      0.9,
+      1.1
+    ]
+  },
+  "seasons": {
+    "2016": {
+      "split": "walk_forward",
+      "train_seasons": [
+        2013,
+        2014,
+        2015
+      ],
+      "shots": 27527,
+      "games": 204,
+      "make_rate": 0.441493806081302,
+      "rounds": 117,
+      "model": {
+        "log_loss": 0.626257686511683,
+        "brier": 0.2182290955559825,
+        "ece": 0.028369661759726307,
+        "large_bias": 0.023955884737484612,
+        "calibration_intercept": -0.11243930319887102,
+        "calibration_slope": 0.9083485632555943
+      },
+      "zone_served": {
+        "log_loss": 0.6630841419087786,
+        "brier": 0.23540129695765538,
+        "ece": 7.845207673737143e-17,
+        "large_bias": 5.551115123125783e-17,
+        "calibration_intercept": -2.1605301982760537e-09,
+        "calibration_slope": 1.0000001624922459
+      },
+      "zone_prior": {
+        "log_loss": 0.6652486707014603,
+        "brier": 0.23601193910065157,
+        "ece": 0.014232139930675748,
+        "large_bias": -0.01214241523987769,
+        "calibration_intercept": 0.05217118908979703,
+        "calibration_slope": 0.8863065468681744
+      },
+      "vs_zone_served": {
+        "games": 204,
+        "shots": 27527,
+        "d_log_loss": 0.03682645539709572,
+        "d_log_loss_lo": 0.028660405037299618,
+        "d_log_loss_hi": 0.04522559484683144,
+        "d_brier": 0.017172201401672894,
+        "d_brier_lo": 0.013467114992001872,
+        "d_brier_hi": 0.02103356163005242,
+        "rel_log_loss": 0.05553813320144517
+      },
+      "vs_zone_prior": {
+        "games": 204,
+        "shots": 27527,
+        "d_log_loss": 0.03899098418977737,
+        "d_log_loss_lo": 0.030773230841191317,
+        "d_log_loss_hi": 0.04721510239401857,
+        "d_brier": 0.017782843544669063,
+        "d_brier_lo": 0.014029101407728468,
+        "d_brier_hi": 0.021552249866235752,
+        "rel_log_loss": 0.05861114182860971
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 204,
+          "shots": 9187,
+          "d_log_loss": 0.0521417473136629,
+          "d_log_loss_lo": 0.04127541876515119,
+          "d_log_loss_hi": 0.06299520108802636,
+          "d_brier": 0.024352410523667874,
+          "d_brier_lo": 0.019601320173266913,
+          "d_brier_hi": 0.02896995808538632,
+          "rel_log_loss": 0.07676150664301075
+        },
+        "2PA 4+ ft": {
+          "games": 204,
+          "shots": 11780,
+          "d_log_loss": 0.04300179367166137,
+          "d_log_loss_lo": 0.031551198154108014,
+          "d_log_loss_hi": 0.054011313161105814,
+          "d_brier": 0.02020624336217445,
+          "d_brier_lo": 0.014841696043851427,
+          "d_brier_hi": 0.02539072134734513,
+          "rel_log_loss": 0.06442482432422454
+        },
+        "3PA": {
+          "games": 204,
+          "shots": 6560,
+          "d_log_loss": 0.004288792026381374,
+          "d_log_loss_lo": -0.0003073987152288959,
+          "d_log_loss_hi": 0.008624242071592103,
+          "d_brier": 0.001668299648856402,
+          "d_brier_lo": -0.0004074345999191031,
+          "d_brier_hi": 0.0036148853350754604,
+          "rel_log_loss": 0.0067803009955888305
+        }
+      }
+    },
+    "2017": {
+      "split": "walk_forward",
+      "train_seasons": [
+        2014,
+        2015,
+        2016
+      ],
+      "shots": 27725,
+      "games": 204,
+      "make_rate": 0.4407213706041479,
+      "rounds": 90,
+      "model": {
+        "log_loss": 0.6269681732691119,
+        "brier": 0.2186089860550528,
+        "ece": 0.021720745524406657,
+        "large_bias": 0.020527206036934864,
+        "calibration_intercept": -0.09555932018829491,
+        "calibration_slope": 0.9228500080026583
+      },
+      "zone_served": {
+        "log_loss": 0.6612673539352626,
+        "brier": 0.23452485655564426,
+        "ece": 7.964774016156669e-18,
+        "large_bias": 5.551115123125783e-17,
+        "calibration_intercept": -1.2303524838573897e-08,
+        "calibration_slope": 1.0000008685413786
+      },
+      "zone_prior": {
+        "log_loss": 0.6616866161478956,
+        "brier": 0.23470163022658222,
+        "ece": 0.0074789670762553115,
+        "large_bias": -0.007410705391052375,
+        "calibration_intercept": 0.031717722606625684,
+        "calibration_slope": 0.9769235701543828
+      },
+      "vs_zone_served": {
+        "games": 204,
+        "shots": 27725,
+        "d_log_loss": 0.03429918066615073,
+        "d_log_loss_lo": 0.027320429479855985,
+        "d_log_loss_hi": 0.04147494279447378,
+        "d_brier": 0.015915870500591463,
+        "d_brier_lo": 0.01274584251867777,
+        "d_brier_hi": 0.019236024587502808,
+        "rel_log_loss": 0.051868855255038926
+      },
+      "vs_zone_prior": {
+        "games": 204,
+        "shots": 27725,
+        "d_log_loss": 0.034718442878783694,
+        "d_log_loss_lo": 0.028131159346091065,
+        "d_log_loss_hi": 0.04166901895593157,
+        "d_brier": 0.01609264417152943,
+        "d_brier_lo": 0.013084597116577088,
+        "d_brier_hi": 0.01929480694100804,
+        "rel_log_loss": 0.052469616328197986
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 204,
+          "shots": 9181,
+          "d_log_loss": 0.054753242438117675,
+          "d_log_loss_lo": 0.04306517367339313,
+          "d_log_loss_hi": 0.06564415869791075,
+          "d_brier": 0.02531963935361505,
+          "d_brier_lo": 0.02034743955184447,
+          "d_brier_hi": 0.03002631678927353,
+          "rel_log_loss": 0.0809275102811866
+        },
+        "2PA 4+ ft": {
+          "games": 204,
+          "shots": 11411,
+          "d_log_loss": 0.037161087297560395,
+          "d_log_loss_lo": 0.027558854171033667,
+          "d_log_loss_hi": 0.04690300065789725,
+          "d_brier": 0.0172697637093241,
+          "d_brier_lo": 0.012736927783407057,
+          "d_brier_hi": 0.02185922738152669,
+          "rel_log_loss": 0.05583836134089903
+        },
+        "3PA": {
+          "games": 204,
+          "shots": 7133,
+          "d_log_loss": 0.003394097573560751,
+          "d_log_loss_lo": 9.143155997524389e-06,
+          "d_log_loss_hi": 0.00687325073938574,
+          "d_brier": 0.0016462395957186733,
+          "d_brier_lo": 5.292339905991789e-05,
+          "d_brier_hi": 0.0032268214398931882,
+          "rel_log_loss": 0.005346894751271168
+        }
+      }
+    },
+    "2018": {
+      "split": "walk_forward",
+      "train_seasons": [
+        2015,
+        2016,
+        2017
+      ],
+      "shots": 27938,
+      "games": 203,
+      "make_rate": 0.4452358794473477,
+      "rounds": 247,
+      "model": {
+        "log_loss": 0.6616733749656781,
+        "brier": 0.2343528381052203,
+        "ece": 0.05275291927935945,
+        "large_bias": 0.022128044340722963,
+        "calibration_intercept": -0.10152797883370765,
+        "calibration_slope": 0.6755714421806845
+      },
+      "zone_served": {
+        "log_loss": 0.6606411784572759,
+        "brier": 0.23418338348904244,
+        "ece": 1.2418379812275805e-20,
+        "large_bias": 0.0,
+        "calibration_intercept": -4.585322892369633e-10,
+        "calibration_slope": 1.000000050436718
+      },
+      "zone_prior": {
+        "log_loss": 0.662893326184842,
+        "brier": 0.23521207819043854,
+        "ece": 0.0226454219401909,
+        "large_bias": -0.022645421940190924,
+        "calibration_intercept": 0.09645747876125012,
+        "calibration_slope": 1.0663659416251432
+      },
+      "vs_zone_served": {
+        "games": 203,
+        "shots": 27938,
+        "d_log_loss": -0.0010321965084021272,
+        "d_log_loss_lo": -0.00468724532025853,
+        "d_log_loss_hi": 0.0028660209905644967,
+        "d_brier": -0.00016945461617788577,
+        "d_brier_lo": -0.0017823370382663685,
+        "d_brier_hi": 0.0015651058322677445,
+        "rel_log_loss": -0.001562416243584005
+      },
+      "vs_zone_prior": {
+        "games": 203,
+        "shots": 27938,
+        "d_log_loss": 0.0012199512191639354,
+        "d_log_loss_lo": -0.002963138534745217,
+        "d_log_loss_hi": 0.005489968927792386,
+        "d_brier": 0.000859240085218181,
+        "d_brier_lo": -0.0009287367050654416,
+        "d_brier_hi": 0.00273519899489531,
+        "rel_log_loss": 0.0018403431909401404
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 203,
+          "shots": 7693,
+          "d_log_loss": 0.02315571157072231,
+          "d_log_loss_lo": 0.014060594581480096,
+          "d_log_loss_hi": 0.0319997211224812,
+          "d_brier": 0.011228195965369966,
+          "d_brier_lo": 0.007452517911758754,
+          "d_brier_hi": 0.014912604819807105,
+          "rel_log_loss": 0.034844225396927234
+        },
+        "2PA 4+ ft": {
+          "games": 203,
+          "shots": 12323,
+          "d_log_loss": -0.012440577347493893,
+          "d_log_loss_lo": -0.017447933136808258,
+          "d_log_loss_hi": -0.007133929652452289,
+          "d_brier": -0.005723559036340574,
+          "d_brier_lo": -0.008168460521093235,
+          "d_brier_hi": -0.003207080347341361,
+          "rel_log_loss": -0.018513633697248993
+        },
+        "3PA": {
+          "games": 203,
+          "shots": 7922,
+          "d_log_loss": -0.00677469837315552,
+          "d_log_loss_lo": -0.011124103874816724,
+          "d_log_loss_hi": -0.0024708161558551606,
+          "d_brier": -0.002597995029480443,
+          "d_brier_lo": -0.004316905183956382,
+          "d_brier_hi": -0.0008520382756903324,
+          "rel_log_loss": -0.010598285936252408
+        }
+      }
+    },
+    "2019": {
+      "split": "walk_forward",
+      "train_seasons": [
+        2016,
+        2017,
+        2018
+      ],
+      "shots": 27978,
+      "games": 204,
+      "make_rate": 0.42433340481807136,
+      "rounds": 35,
+      "model": {
+        "log_loss": 0.6539934230385822,
+        "brier": 0.2310854322712413,
+        "ece": 0.0392358499738979,
+        "large_bias": 0.03444154926251031,
+        "calibration_intercept": -0.1479019606442518,
+        "calibration_slope": 1.0410671516374332
+      },
+      "zone_served": {
+        "log_loss": 0.657264962437747,
+        "brier": 0.23252211510979845,
+        "ece": 3.439239028674756e-17,
+        "large_bias": 0.0,
+        "calibration_intercept": -1.0298971956828032e-08,
+        "calibration_slope": 1.0000007197299166
+      },
+      "zone_prior": {
+        "log_loss": 0.6583936375053488,
+        "brier": 0.23284322464631005,
+        "ece": 0.011197564602831346,
+        "large_bias": 0.011190572912391783,
+        "calibration_intercept": -0.04780817841857492,
+        "calibration_slope": 1.0191034254740998
+      },
+      "vs_zone_served": {
+        "games": 204,
+        "shots": 27978,
+        "d_log_loss": 0.0032715393991647975,
+        "d_log_loss_lo": 0.0007613962706727341,
+        "d_log_loss_hi": 0.00591977167563845,
+        "d_brier": 0.0014366828385571743,
+        "d_brier_lo": 0.000224130425611374,
+        "d_brier_hi": 0.0026930650165626485,
+        "rel_log_loss": 0.0049775046383590885
+      },
+      "vs_zone_prior": {
+        "games": 204,
+        "shots": 27978,
+        "d_log_loss": 0.004400214466766706,
+        "d_log_loss_lo": 0.0018687032934767318,
+        "d_log_loss_hi": 0.007041690825240148,
+        "d_brier": 0.0017577923750687781,
+        "d_brier_lo": 0.0006046602531213648,
+        "d_brier_hi": 0.002919909116844909,
+        "rel_log_loss": 0.006683257881165291
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 204,
+          "shots": 7876,
+          "d_log_loss": 0.030859609063513357,
+          "d_log_loss_lo": 0.025302884089223127,
+          "d_log_loss_hi": 0.03607866631833708,
+          "d_brier": 0.014359712918608974,
+          "d_brier_lo": 0.01170781244881235,
+          "d_brier_hi": 0.016839860271489027,
+          "rel_log_loss": 0.04566582000282889
+        },
+        "2PA 4+ ft": {
+          "games": 204,
+          "shots": 11930,
+          "d_log_loss": -0.010172818912135284,
+          "d_log_loss_lo": -0.01480291165021325,
+          "d_log_loss_hi": -0.005263746893100324,
+          "d_brier": -0.005105746997872335,
+          "d_brier_lo": -0.00736254036531887,
+          "d_brier_hi": -0.002724245455097872,
+          "rel_log_loss": -0.015420408815399262
+        },
+        "3PA": {
+          "games": 204,
+          "shots": 8172,
+          "d_log_loss": -0.0036903355424161245,
+          "d_log_loss_lo": -0.005825256962558691,
+          "d_log_loss_hi": -0.0015350099636376189,
+          "d_brier": -0.0014672081259415979,
+          "d_brier_lo": -0.00246023187779853,
+          "d_brier_hi": -0.0004647391218644471,
+          "rel_log_loss": -0.0058035335796284586
+        }
+      }
+    },
+    "2020": {
+      "split": "walk_forward",
+      "train_seasons": [
+        2017,
+        2018,
+        2019
+      ],
+      "shots": 18006,
+      "games": 132,
+      "make_rate": 0.4462401421748306,
+      "rounds": 162,
+      "model": {
+        "log_loss": 0.657002454115661,
+        "brier": 0.2324547314624776,
+        "ece": 0.05414299544649999,
+        "large_bias": -0.05414296705352323,
+        "calibration_intercept": 0.23456789185286603,
+        "calibration_slope": 1.2682102459568456
+      },
+      "zone_served": {
+        "log_loss": 0.6517397673497811,
+        "brier": 0.2297668887821329,
+        "ece": 3.8357755393719307e-17,
+        "large_bias": 0.0,
+        "calibration_intercept": -1.6919726484755761e-09,
+        "calibration_slope": 1.0000000809968197
+      },
+      "zone_prior": {
+        "log_loss": 0.6568645480633261,
+        "brier": 0.23215119369231146,
+        "ece": 0.031899027288735206,
+        "large_bias": -0.025869067137502366,
+        "calibration_intercept": 0.10983972981589786,
+        "calibration_slope": 1.3081033984375876
+      },
+      "vs_zone_served": {
+        "games": 132,
+        "shots": 18006,
+        "d_log_loss": -0.005262686765879919,
+        "d_log_loss_lo": -0.009728633248257621,
+        "d_log_loss_hi": -0.0007875826188346976,
+        "d_brier": -0.0026878426803446888,
+        "d_brier_lo": -0.004822255472324125,
+        "d_brier_hi": -0.0005879793605381236,
+        "rel_log_loss": -0.0080748283740303
+      },
+      "vs_zone_prior": {
+        "games": 132,
+        "shots": 18006,
+        "d_log_loss": -0.00013790605233509966,
+        "d_log_loss_lo": -0.003915140400060352,
+        "d_log_loss_hi": 0.0036748105164945742,
+        "d_brier": -0.00030353777016616244,
+        "d_brier_lo": -0.002049228391169443,
+        "d_brier_hi": 0.0014409639011950764,
+        "rel_log_loss": -0.00020994595117318558
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 132,
+          "shots": 3984,
+          "d_log_loss": -0.047917571369285664,
+          "d_log_loss_lo": -0.06498806804339,
+          "d_log_loss_hi": -0.03152305298637276,
+          "d_brier": -0.023872656647531718,
+          "d_brier_lo": -0.032045068032874845,
+          "d_brier_hi": -0.01605149580839815,
+          "rel_log_loss": -0.07669341669746313
+        },
+        "2PA 4+ ft": {
+          "games": 132,
+          "shots": 8437,
+          "d_log_loss": 0.009796519442730911,
+          "d_log_loss_lo": 0.005257166001432852,
+          "d_log_loss_hi": 0.014426790262934402,
+          "d_brier": 0.004764781177728268,
+          "d_brier_lo": 0.0026879797662218595,
+          "d_brier_hi": 0.006887351432221514,
+          "rel_log_loss": 0.014606386835620705
+        },
+        "3PA": {
+          "games": 132,
+          "shots": 5585,
+          "d_log_loss": 0.002415475718975751,
+          "d_log_loss_lo": -0.0007674539016473293,
+          "d_log_loss_hi": 0.0051828957089771616,
+          "d_brier": 0.0011657851360763675,
+          "d_brier_lo": 1.923549479198153e-05,
+          "d_brier_hi": 0.0022192640711852884,
+          "rel_log_loss": 0.0037605639965753597
+        }
+      }
+    },
+    "2021": {
+      "split": "walk_forward",
+      "train_seasons": [
+        2018,
+        2019,
+        2020
+      ],
+      "shots": 26269,
+      "games": 192,
+      "make_rate": 0.4344664814039362,
+      "rounds": 102,
+      "model": {
+        "log_loss": 0.6476998834125279,
+        "brier": 0.22797833883637472,
+        "ece": 0.009846627809249968,
+        "large_bias": 0.007468998237024516,
+        "calibration_intercept": -0.032685245258496066,
+        "calibration_slope": 1.0021854329165412
+      },
+      "zone_served": {
+        "log_loss": 0.6578170659144665,
+        "brier": 0.23278629643392057,
+        "ece": 8.262537641867528e-17,
+        "large_bias": 0.0,
+        "calibration_intercept": -9.157713844869138e-09,
+        "calibration_slope": 1.0000006088817035
+      },
+      "zone_prior": {
+        "log_loss": 0.6587902857255747,
+        "brier": 0.23321362303538445,
+        "ece": 0.007127507554300803,
+        "large_bias": 0.00712750755430086,
+        "calibration_intercept": -0.03063598514421412,
+        "calibration_slope": 0.9635480860979458
+      },
+      "vs_zone_served": {
+        "games": 192,
+        "shots": 26269,
+        "d_log_loss": 0.010117182501938708,
+        "d_log_loss_lo": 0.007902670633411055,
+        "d_log_loss_hi": 0.012216012444768212,
+        "d_brier": 0.004807957597545858,
+        "d_brier_lo": 0.0038158782231321226,
+        "d_brier_hi": 0.005762966960955335,
+        "rel_log_loss": 0.015379933154933087
+      },
+      "vs_zone_prior": {
+        "games": 192,
+        "shots": 26269,
+        "d_log_loss": 0.011090402313046682,
+        "d_log_loss_lo": 0.008833144169942379,
+        "d_log_loss_hi": 0.013308130160768723,
+        "d_brier": 0.005235284199009726,
+        "d_brier_lo": 0.004210179444638198,
+        "d_brier_hi": 0.006243975154960476,
+        "rel_log_loss": 0.01683449582264559
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 192,
+          "shots": 7397,
+          "d_log_loss": 0.023275069174318423,
+          "d_log_loss_lo": 0.016938809734767357,
+          "d_log_loss_hi": 0.02916808868837476,
+          "d_brier": 0.010819266608481539,
+          "d_brier_lo": 0.008039403212770926,
+          "d_brier_hi": 0.01344313150013295,
+          "rel_log_loss": 0.03478149329913733
+        },
+        "2PA 4+ ft": {
+          "games": 192,
+          "shots": 10745,
+          "d_log_loss": 0.007953057706510442,
+          "d_log_loss_lo": 0.005396312989373979,
+          "d_log_loss_hi": 0.010454897807716239,
+          "d_brier": 0.0037792514000734843,
+          "d_brier_lo": 0.002565008068661823,
+          "d_brier_hi": 0.004954251112832333,
+          "rel_log_loss": 0.011979212850534765
+        },
+        "3PA": {
+          "games": 192,
+          "shots": 8127,
+          "d_log_loss": 0.0010024579063049,
+          "d_log_loss_lo": -0.0006684117930493155,
+          "d_log_loss_hi": 0.002619518212084951,
+          "d_brier": 0.0006966982568235052,
+          "d_brier_lo": 2.538510094654418e-05,
+          "d_brier_hi": 0.001358403711718409,
+          "rel_log_loss": 0.0015677461322218245
+        }
+      }
+    },
+    "2022": {
+      "split": "walk_forward",
+      "train_seasons": [
+        2019,
+        2020,
+        2021
+      ],
+      "shots": 29374,
+      "games": 216,
+      "make_rate": 0.4420576019609178,
+      "rounds": 127,
+      "model": {
+        "log_loss": 0.6473582920767309,
+        "brier": 0.22777949323309374,
+        "ece": 0.01272713582775816,
+        "large_bias": 0.011316664663532872,
+        "calibration_intercept": -0.049965924872538967,
+        "calibration_slope": 0.9469908373401349
+      },
+      "zone_served": {
+        "log_loss": 0.6559015414373679,
+        "brier": 0.2317088269293969,
+        "ece": 3.2629384392963083e-17,
+        "large_bias": 0.0,
+        "calibration_intercept": -1.4692465253448613e-10,
+        "calibration_slope": 1.000000007982644
+      },
+      "zone_prior": {
+        "log_loss": 0.6565383269599832,
+        "brier": 0.23194955525605007,
+        "ece": 0.005885258866339109,
+        "large_bias": -0.0030466828430876225,
+        "calibration_intercept": 0.013106293632349839,
+        "calibration_slope": 1.0209571485688123
+      },
+      "vs_zone_served": {
+        "games": 216,
+        "shots": 29374,
+        "d_log_loss": 0.008543249360637004,
+        "d_log_loss_lo": 0.006809504231629389,
+        "d_log_loss_hi": 0.010240629986000291,
+        "d_brier": 0.003929333696303196,
+        "d_brier_lo": 0.0031841409382965618,
+        "d_brier_hi": 0.004677304498963684,
+        "rel_log_loss": 0.013025200919508435
+      },
+      "vs_zone_prior": {
+        "games": 216,
+        "shots": 29374,
+        "d_log_loss": 0.009180034883252293,
+        "d_log_loss_lo": 0.007509511680791765,
+        "d_log_loss_hi": 0.010762966805362621,
+        "d_brier": 0.004170062022956375,
+        "d_brier_lo": 0.0034702950171314048,
+        "d_brier_hi": 0.004870017671724466,
+        "rel_log_loss": 0.01398248130578952
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 216,
+          "shots": 8625,
+          "d_log_loss": 0.023946386166137583,
+          "d_log_loss_lo": 0.019220428997352178,
+          "d_log_loss_hi": 0.028956569076868728,
+          "d_brier": 0.011061725599079881,
+          "d_brier_lo": 0.009026243571034424,
+          "d_brier_hi": 0.013197342287895266,
+          "rel_log_loss": 0.03625353668057105
+        },
+        "2PA 4+ ft": {
+          "games": 216,
+          "shots": 11082,
+          "d_log_loss": 0.0034965070183498176,
+          "d_log_loss_lo": 0.0007592271788837079,
+          "d_log_loss_hi": 0.006378309120836172,
+          "d_brier": 0.0016827549733957816,
+          "d_brier_lo": 0.00037576521987072446,
+          "d_brier_hi": 0.003057474330970924,
+          "rel_log_loss": 0.005266520115904641
+        },
+        "3PA": {
+          "games": 216,
+          "shots": 9667,
+          "d_log_loss": 0.0005858627556700178,
+          "d_log_loss_lo": -0.0009234393796194375,
+          "d_log_loss_hi": 0.002146409961798032,
+          "d_brier": 0.00014115796917079425,
+          "d_brier_lo": -0.00048501490611716744,
+          "d_brier_hi": 0.0007883890007330837,
+          "rel_log_loss": 0.0009117170298434704
+        }
+      }
+    },
+    "2023": {
+      "split": "walk_forward",
+      "train_seasons": [
+        2020,
+        2021,
+        2022
+      ],
+      "shots": 32809,
+      "games": 240,
+      "make_rate": 0.44070224633484717,
+      "rounds": 66,
+      "model": {
+        "log_loss": 0.6475574467621278,
+        "brier": 0.2279504368097566,
+        "ece": 0.012055038810393987,
+        "large_bias": 0.00833327898711328,
+        "calibration_intercept": -0.036268281480660816,
+        "calibration_slope": 1.0504361684134218
+      },
+      "zone_served": {
+        "log_loss": 0.6566325085886219,
+        "brier": 0.2321976187224783,
+        "ece": 0.0,
+        "large_bias": 0.0,
+        "calibration_intercept": -1.0107411891562857e-08,
+        "calibration_slope": 1.0000005888528098
+      },
+      "zone_prior": {
+        "log_loss": 0.6578445024434304,
+        "brier": 0.2324038917885136,
+        "ece": 0.004105896012132533,
+        "large_bias": 0.003483362164460213,
+        "calibration_intercept": -0.015019389698935176,
+        "calibration_slope": 0.9651036618194664
+      },
+      "vs_zone_served": {
+        "games": 240,
+        "shots": 32809,
+        "d_log_loss": 0.009075061826494066,
+        "d_log_loss_lo": 0.007609196792207326,
+        "d_log_loss_hi": 0.0104966364484423,
+        "d_brier": 0.0042471819127216925,
+        "d_brier_lo": 0.003575165416801799,
+        "d_brier_hi": 0.0049072878075883146,
+        "rel_log_loss": 0.013820610018227963
+      },
+      "vs_zone_prior": {
+        "games": 240,
+        "shots": 32809,
+        "d_log_loss": 0.010287055681302696,
+        "d_log_loss_lo": 0.008509418742667928,
+        "d_log_loss_hi": 0.012235682807211457,
+        "d_brier": 0.004453454978756949,
+        "d_brier_lo": 0.0037620670317376624,
+        "d_brier_hi": 0.00514823889667014,
+        "rel_log_loss": 0.01563751865842689
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 240,
+          "shots": 9316,
+          "d_log_loss": 0.025244669240893816,
+          "d_log_loss_lo": 0.021318835420794147,
+          "d_log_loss_hi": 0.029315006952232256,
+          "d_brier": 0.011444743982866701,
+          "d_brier_lo": 0.009660447304428561,
+          "d_brier_hi": 0.01329517875859391,
+          "rel_log_loss": 0.03816069916666703
+        },
+        "2PA 4+ ft": {
+          "games": 240,
+          "shots": 12884,
+          "d_log_loss": 0.004932640541833707,
+          "d_log_loss_lo": 0.002456507404178589,
+          "d_log_loss_hi": 0.007426327063780287,
+          "d_brier": 0.0023834076773507607,
+          "d_brier_lo": 0.0011851986435375374,
+          "d_brier_hi": 0.0035889919328878925,
+          "rel_log_loss": 0.007413205019540597
+        },
+        "3PA": {
+          "games": 240,
+          "shots": 10609,
+          "d_log_loss": -9.310735448283592e-05,
+          "d_log_loss_lo": -0.0012941085765247615,
+          "d_log_loss_hi": 0.0011374955528701497,
+          "d_brier": 0.00019028484448228885,
+          "d_brier_lo": -0.00032008706738345953,
+          "d_brier_hi": 0.0006906190537142967,
+          "rel_log_loss": -0.0001450956052045625
+        }
+      }
+    },
+    "2024": {
+      "split": "walk_forward",
+      "train_seasons": [
+        2021,
+        2022,
+        2023
+      ],
+      "shots": 32760,
+      "games": 240,
+      "make_rate": 0.43797313797313797,
+      "rounds": 150,
+      "model": {
+        "log_loss": 0.6444940179197507,
+        "brier": 0.2264825969848769,
+        "ece": 0.007261328436252314,
+        "large_bias": 0.0037794448153294358,
+        "calibration_intercept": -0.016631168487689453,
+        "calibration_slope": 1.0168137407217737
+      },
+      "zone_served": {
+        "log_loss": 0.6541560789861792,
+        "brier": 0.23095484730564492,
+        "ece": 3.89221960861414e-17,
+        "large_bias": 0.0,
+        "calibration_intercept": -6.740610079489285e-09,
+        "calibration_slope": 1.000000378234591
+      },
+      "zone_prior": {
+        "log_loss": 0.6547807225368222,
+        "brier": 0.23123199484374757,
+        "ece": 0.004942248368742384,
+        "large_bias": 0.0009913085428321367,
+        "calibration_intercept": -0.004265792477585891,
+        "calibration_slope": 1.043225609117638
+      },
+      "vs_zone_served": {
+        "games": 240,
+        "shots": 32760,
+        "d_log_loss": 0.00966206106642859,
+        "d_log_loss_lo": 0.008023043288109754,
+        "d_log_loss_hi": 0.01134399028804804,
+        "d_brier": 0.004472250320768022,
+        "d_brier_lo": 0.003727406349436232,
+        "d_brier_hi": 0.005241408081165152,
+        "rel_log_loss": 0.01477026871232779
+      },
+      "vs_zone_prior": {
+        "games": 240,
+        "shots": 32760,
+        "d_log_loss": 0.01028670461707151,
+        "d_log_loss_lo": 0.008682435373132789,
+        "d_log_loss_hi": 0.011761174999125374,
+        "d_brier": 0.004749397858870655,
+        "d_brier_lo": 0.0040008922755764365,
+        "d_brier_hi": 0.005419074122975714,
+        "rel_log_loss": 0.015710151907370833
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 240,
+          "shots": 9280,
+          "d_log_loss": 0.02616490866763778,
+          "d_log_loss_lo": 0.02095850223337197,
+          "d_log_loss_hi": 0.03107169737994604,
+          "d_brier": 0.011915245353984732,
+          "d_brier_lo": 0.009560121964405833,
+          "d_brier_hi": 0.014118275916528493,
+          "rel_log_loss": 0.039643650147687295
+        },
+        "2PA 4+ ft": {
+          "games": 240,
+          "shots": 12518,
+          "d_log_loss": 0.005764911688086349,
+          "d_log_loss_lo": 0.003675779844891192,
+          "d_log_loss_hi": 0.007970652793832397,
+          "d_brier": 0.0027476114417623286,
+          "d_brier_lo": 0.0017311867870390845,
+          "d_brier_hi": 0.003822674244485054,
+          "rel_log_loss": 0.008669661133242822
+        },
+        "3PA": {
+          "games": 240,
+          "shots": 10962,
+          "d_log_loss": 0.00014172628982458095,
+          "d_log_loss_lo": -0.0012718154146723092,
+          "d_log_loss_hi": 0.001523543932182673,
+          "d_brier": 0.0001407447176976168,
+          "d_brier_lo": -0.0004300627336844852,
+          "d_brier_hi": 0.0007050595580494174,
+          "rel_log_loss": 0.00022253288762910314
+        }
+      }
+    },
+    "2025": {
+      "split": "walk_forward",
+      "train_seasons": [
+        2022,
+        2023,
+        2024
+      ],
+      "shots": 38535,
+      "games": 286,
+      "make_rate": 0.43923705722070844,
+      "rounds": 223,
+      "model": {
+        "log_loss": 0.6472956532462841,
+        "brier": 0.2277755797360704,
+        "ece": 0.00620319462497673,
+        "large_bias": -0.004036216985951968,
+        "calibration_intercept": 0.017764865970696854,
+        "calibration_slope": 0.9886246601102764
+      },
+      "zone_served": {
+        "log_loss": 0.6554506179579123,
+        "brier": 0.23165736294405692,
+        "ece": 3.039248134623271e-17,
+        "large_bias": 0.0,
+        "calibration_intercept": -1.1202076117667616e-08,
+        "calibration_slope": 1.0000006371207804
+      },
+      "zone_prior": {
+        "log_loss": 0.6562507333160975,
+        "brier": 0.2318673279129772,
+        "ece": 0.00264064356974325,
+        "large_bias": -0.002583475020807968,
+        "calibration_intercept": 0.011148486199137967,
+        "calibration_slope": 0.9974399570401832
+      },
+      "vs_zone_served": {
+        "games": 286,
+        "shots": 38535,
+        "d_log_loss": 0.008154964711628082,
+        "d_log_loss_lo": 0.006331006772637128,
+        "d_log_loss_hi": 0.009846604916300036,
+        "d_brier": 0.0038817832079864785,
+        "d_brier_lo": 0.003067977974165432,
+        "d_brier_hi": 0.004672153109058586,
+        "rel_log_loss": 0.012441768286122399
+      },
+      "vs_zone_prior": {
+        "games": 286,
+        "shots": 38535,
+        "d_log_loss": 0.008955080069813326,
+        "d_log_loss_lo": 0.0071517970086776485,
+        "d_log_loss_hi": 0.010750756615395308,
+        "d_brier": 0.004091748176906827,
+        "d_brier_lo": 0.003335767905387897,
+        "d_brier_hi": 0.004830598197546293,
+        "rel_log_loss": 0.013645821048553277
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 286,
+          "shots": 10549,
+          "d_log_loss": 0.02235664074157073,
+          "d_log_loss_lo": 0.01723439170429104,
+          "d_log_loss_hi": 0.026958064366283247,
+          "d_brier": 0.010266559393416178,
+          "d_brier_lo": 0.007926334786101035,
+          "d_brier_hi": 0.012351723922475669,
+          "rel_log_loss": 0.03388389810681747
+        },
+        "2PA 4+ ft": {
+          "games": 286,
+          "shots": 14130,
+          "d_log_loss": 0.005395303103870013,
+          "d_log_loss_lo": 0.0030503183085451393,
+          "d_log_loss_hi": 0.007833510777611243,
+          "d_brier": 0.0026358117395072294,
+          "d_brier_lo": 0.0015419344644992553,
+          "d_brier_hi": 0.003777065815002931,
+          "rel_log_loss": 0.008038314146592875
+        },
+        "3PA": {
+          "games": 286,
+          "shots": 13856,
+          "d_log_loss": 0.0001570243304038136,
+          "d_log_loss_lo": -0.0010380708029183495,
+          "d_log_loss_hi": 0.0014381628381967882,
+          "d_brier": 0.00029146658482784126,
+          "d_brier_lo": -0.000178099982445789,
+          "d_brier_hi": 0.0007981141102288748,
+          "rel_log_loss": 0.0002468628738889794
+        }
+      }
+    },
+    "2026": {
+      "split": "holdout",
+      "train_seasons": [
+        2023,
+        2024,
+        2025
+      ],
+      "shots": 45296,
+      "games": 330,
+      "make_rate": 0.4521370540445072,
+      "rounds": 156,
+      "model": {
+        "log_loss": 0.6456927631280794,
+        "brier": 0.22712348409132335,
+        "ece": 0.01036295244543929,
+        "large_bias": -0.009336114961407849,
+        "calibration_intercept": 0.04095331978098846,
+        "calibration_slope": 1.0446001657913946
+      },
+      "zone_served": {
+        "log_loss": 0.6539165810286679,
+        "brier": 0.23088200110649934,
+        "ece": 0.0,
+        "large_bias": 0.0,
+        "calibration_intercept": -1.2430636327394343e-09,
+        "calibration_slope": 1.0000000710234938
+      },
+      "zone_prior": {
+        "log_loss": 0.6546990611573585,
+        "brier": 0.23115824274599428,
+        "ece": 0.00948870258600211,
+        "large_bias": -0.009488702586002096,
+        "calibration_intercept": 0.04092639693737818,
+        "calibration_slope": 1.040338032979147
+      },
+      "vs_zone_served": {
+        "games": 330,
+        "shots": 45296,
+        "d_log_loss": 0.00822381790058853,
+        "d_log_loss_lo": 0.006819260273231016,
+        "d_log_loss_hi": 0.009562686002818257,
+        "d_brier": 0.0037585170151760152,
+        "d_brier_lo": 0.0031280209246286814,
+        "d_brier_hi": 0.004361728649176911,
+        "rel_log_loss": 0.012576249232970583
+      },
+      "vs_zone_prior": {
+        "games": 330,
+        "shots": 45296,
+        "d_log_loss": 0.009006298029279138,
+        "d_log_loss_lo": 0.007635167242797812,
+        "d_log_loss_hi": 0.01038073388427789,
+        "d_brier": 0.004034758654670982,
+        "d_brier_lo": 0.0034507549215431143,
+        "d_brier_hi": 0.0046489771441992015,
+        "rel_log_loss": 0.013756393683164992
+      },
+      "vs_zone_served_by_band": {
+        "rim 0-3 ft": {
+          "games": 330,
+          "shots": 13474,
+          "d_log_loss": 0.02005546589277285,
+          "d_log_loss_lo": 0.015928414200063898,
+          "d_log_loss_hi": 0.02413201163979234,
+          "d_brier": 0.008998128596825302,
+          "d_brier_lo": 0.007085662109579551,
+          "d_brier_hi": 0.010829503485065303,
+          "rel_log_loss": 0.030796519783394104
+        },
+        "2PA 4+ ft": {
+          "games": 330,
+          "shots": 14983,
+          "d_log_loss": 0.005480539949825666,
+          "d_log_loss_lo": 0.0035559661877237725,
+          "d_log_loss_hi": 0.007416934513159985,
+          "d_brier": 0.0026381139081374486,
+          "d_brier_lo": 0.0017106992579444707,
+          "d_brier_hi": 0.003573623085402815,
+          "rel_log_loss": 0.008133267959046255
+        },
+        "3PA": {
+          "games": 330,
+          "shots": 16839,
+          "d_log_loss": 0.001197445104673595,
+          "d_log_loss_lo": 0.00014174964410104695,
+          "d_log_loss_hi": 0.002162826988582847,
+          "d_brier": 0.0005628684197497036,
+          "d_brier_lo": 0.00016338964517046602,
+          "d_brier_hi": 0.0009253248480149943,
+          "rel_log_loss": 0.0018758713539689506
+        }
+      }
+    }
+  },
+  "monitor_gates": [],
+  "shipped": {
+    "artifact": "sportsdataverse/nba/models/wnba_shot_make.ubj",
+    "train_seasons": [
+      2023,
+      2024,
+      2025
+    ],
+    "holdout_season": 2026,
+    "monitor_seasons": [],
+    "rounds": 156,
+    "shot_types": [
+      "Jump Shot",
+      "Pullup Jump shot",
+      "Driving Layup Shot",
+      "Layup Shot",
+      "Cutting Layup Shot",
+      "Running Layup Shot",
+      "Step Back Jump shot",
+      "Driving Floating Jump Shot",
+      "Putback Layup Shot",
+      "Turnaround Jump Shot",
+      "Running Jump Shot",
+      "Driving Finger Roll Layup Shot",
+      "Running Pull-Up Jump Shot",
+      "Fadeaway Jump Shot",
+      "Turnaround Fadeaway shot",
+      "Floating Jump shot",
+      "Driving Floating Bank Jump Shot",
+      "Reverse Layup Shot",
+      "Driving Reverse Layup Shot",
+      "Turnaround Hook Shot",
+      "Hook Shot",
+      "Tip Layup Shot",
+      "Driving Hook Shot",
+      "Running Finger Roll Layup Shot",
+      "Jump Bank Shot",
+      "Turnaround Bank shot"
+    ],
+    "n_train_shots": 104104
+  },
+  "failed_gates": [
+    "walk_forward 2016: gate 2 calibration in the large +0.0240",
+    "walk_forward 2017: gate 2 calibration in the large +0.0205",
+    "walk_forward 2018: gate 1 skill, log-loss gain over zone_served CI lower -0.00469 <= 0",
+    "walk_forward 2018: gate 2 calibration in the large +0.0221",
+    "walk_forward 2018: gate 3 calibration slope 0.676",
+    "walk_forward 2019: gate 2 calibration in the large +0.0344",
+    "walk_forward 2020: gate 1 skill, log-loss gain over zone_served CI lower -0.00973 <= 0",
+    "walk_forward 2020: gate 2 calibration in the large -0.0541",
+    "walk_forward 2020: gate 3 calibration slope 1.268",
+    "walk_forward 2022: gate 2 calibration in the large +0.0113"
+  ],
+  "pending_owner_ruling": []
+}

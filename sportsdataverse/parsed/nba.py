@@ -170,6 +170,7 @@ from sportsdataverse.nba import WalkForwardResult as WalkForwardResult  # noqa: 
 from sportsdataverse.nba import add_ctg_shot_zones as add_ctg_shot_zones  # noqa: F401
 from sportsdataverse.nba import add_play_context as add_play_context  # noqa: F401
 from sportsdataverse.nba import add_possession_flags as add_possession_flags  # noqa: F401
+from sportsdataverse.nba import add_shot_make_prob as add_shot_make_prob  # noqa: F401
 from sportsdataverse.nba import add_start_type_detail as add_start_type_detail  # noqa: F401
 from sportsdataverse.nba import add_transition as add_transition  # noqa: F401
 from sportsdataverse.nba import adjust_efficiency as adjust_efficiency  # noqa: F401
@@ -335,6 +336,7 @@ from sportsdataverse.nba import load_nba_team_crosswalk as load_nba_team_crosswa
 from sportsdataverse.nba import load_nba_team_group_seasons as load_nba_team_group_seasons  # noqa: F401
 from sportsdataverse.nba import load_nba_team_season_stats as load_nba_team_season_stats  # noqa: F401
 from sportsdataverse.nba import load_rapm_ryan_davis as load_rapm_ryan_davis  # noqa: F401
+from sportsdataverse.nba import load_shot_make_model as load_shot_make_model  # noqa: F401
 from sportsdataverse.nba import luck_adjusted_response as luck_adjusted_response  # noqa: F401
 from sportsdataverse.nba import make_prob_by_context as make_prob_by_context  # noqa: F401
 from sportsdataverse.nba import make_prob_joint as make_prob_joint  # noqa: F401
@@ -540,6 +542,7 @@ __all__ = [
     "add_ctg_shot_zones",
     "add_play_context",
     "add_possession_flags",
+    "add_shot_make_prob",
     "add_start_type_detail",
     "add_transition",
     "adjust_efficiency",
@@ -829,6 +832,7 @@ __all__ = [
     "load_nba_team_group_seasons",
     "load_nba_team_season_stats",
     "load_rapm_ryan_davis",
+    "load_shot_make_model",
     "luck_adjusted_response",
     "make_prob_by_context",
     "make_prob_joint",

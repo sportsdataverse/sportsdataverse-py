@@ -6,6 +6,39 @@ description: "WNBA — additional Python functions — Analytics: wnba_player–
 ---
 # WNBA — additional Python functions — Analytics: wnba_player–wnba_team
 
+### wnba_player_props {#wnba_player_props}
+
+`wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '10', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  |  |
+| `game_id` | `str` |  |  |
+| `home_team_id` | `str` |  |  |
+| `away_team_id` | `str` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `as_of_date` | `Union[date, None]` | `None` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj`. The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the team's minutes, counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | Unique player identifier. |
+| `team_id` | String | Unique team identifier. |
+| `stat_pts_exp` | Float64 |  |
+| `stat_reb_exp` | Float64 |  |
+| `stat_ast_exp` | Float64 |  |
+| `stat_fg3m_exp` | Float64 |  |
+| `minutes_exp` | Float64 |  |
+| `pace_proj` | Float64 |  |
+
 ### wnba_player_season_box_rates {#wnba_player_season_box_rates}
 
 `wnba_player_season_box_rates(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

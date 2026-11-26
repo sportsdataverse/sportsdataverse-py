@@ -4,7 +4,11 @@ Five league-agnostic models switched by ``league_id`` (``"00"`` NBA, ``"10"``
 WNBA, ``"20"`` G-League):
 
 1. ``score_shot_xpoints`` — per-shot expected points from the ``LeagueAverages``
-   FG%-by-zone table that ``nba_stats_shotchartdetail`` returns for free.
+   FG%-by-zone table that ``nba_stats_shotchartdetail`` returns for free. For
+   the NBA, ``model="location"`` uses the bundled location model instead
+   (:func:`add_shot_make_prob`: the make chance from the shot's court location,
+   value and shot type, the fields the play-by-play and the shot chart both
+   carry).
 2. ``make_prob_by_context`` / ``make_prob_joint`` — FG% by defender distance and
    shot clock (aggregate buckets, the only form the public API exposes).
 3. ``shooter_talent`` — regressed make%-above-expected per shooter.
@@ -17,12 +21,32 @@ Everything downstream consumes the single scored frame from
 
 from __future__ import annotations
 
-from typing import Union
+import functools
+import json
+from typing import TYPE_CHECKING, Literal, Union
 
+import numpy as np
 import pandas as pd
 import polars as pl
 
 from sportsdataverse.nba.nba_shot_value_constants import ZONE_COLLAPSE, get_shrinkage_k
+
+if TYPE_CHECKING:
+    import xgboost as xgb
+
+#: The bundled shot-make boosters by ``league_id`` (``tools/models/nba_shot_value/train_shot_make.py``).
+#: The WNBA (``"10"``) has none: its booster failed the walk-forward gates on 2016-2020 and 2022
+#: (``tools/models/nba_shot_value/shot_make_wnba_holdout.json``). The G League (``"20"``) has no
+#: play-by-play release to fit on.
+SHOT_MAKE_MODELS: "dict[str, str]" = {"00": "nba_shot_make.ubj"}
+#: The columns the shot-make model reads (play-by-play names; ``x_legacy`` / ``y_legacy`` in tenths of
+#: a foot from the hoop).
+SHOT_MAKE_INPUTS: "list[str]" = ["x_legacy", "y_legacy", "shot_value", "sub_type"]
+#: The design's numeric columns, in order. ``distance_ft`` is the location's distance from the hoop:
+#: the play-by-play's ``shot_distance`` rounds where the shot chart's truncates (they differ on half of
+#: all shots) and codes many corner threes at 0 ft, so neither source's column is read. One indicator
+#: per level in the booster's ``shot_types`` attribute follows.
+SHOT_MAKE_NUMERIC: "list[str]" = ["distance_ft", "x_legacy", "y_legacy", "shot_value"]
 
 _ZONE_KEYS = ["shot_zone_basic", "shot_zone_area", "shot_zone_range"]
 _BASELINE_SCHEMA = {
@@ -38,6 +62,148 @@ _SCORED_EXTRA = {
     "xpoints": pl.Float64,
     "actual_points": pl.Float64,
 }
+
+
+@functools.lru_cache(maxsize=4)
+def load_shot_make_model(league_id: str = "00") -> "xgb.Booster":
+    """Load the bundled shot-make booster for ``league_id`` (only ``"00"``, the NBA, has one).
+
+    Its attributes carry the shot-type levels it was fitted with (``shot_types``, a JSON list),
+    the train / holdout seasons and the fitting script.
+
+    Args:
+        league_id: ``"00"`` NBA.
+
+    Returns:
+        The ``xgboost.Booster``.
+
+    Raises:
+        ValueError: No booster is bundled for ``league_id``, or the booster's feature names are
+            not :data:`SHOT_MAKE_NUMERIC` plus its shot-type levels.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_shot_value import load_shot_make_model
+            booster = load_shot_make_model("00")
+            booster.attr("train_seasons")
+
+    See Also:
+        * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
+    """
+    from importlib.resources import files
+
+    import xgboost as xgb
+
+    if league_id not in SHOT_MAKE_MODELS:
+        raise ValueError(f"no shot-make model for league_id {league_id!r}; bundled: {sorted(SHOT_MAKE_MODELS)}")
+    booster = xgb.Booster()
+    booster.load_model(
+        bytearray(files("sportsdataverse.nba.models").joinpath(SHOT_MAKE_MODELS[league_id]).read_bytes())
+    )
+    if list(booster.feature_names or []) != _shot_make_feature_names(_shot_make_levels(booster)):
+        raise ValueError(f"{SHOT_MAKE_MODELS[league_id]}: feature names do not match the shot-make design")
+    return booster
+
+
+def _shot_make_levels(booster: "xgb.Booster") -> "list[str]":
+    """The shot-type levels a shot-make booster was fitted with (its ``shot_types`` attribute)."""
+    return json.loads(booster.attr("shot_types") or "[]")
+
+
+def _shot_make_feature_names(levels: "list[str]") -> "list[str]":
+    """The shot-make design's column names: :data:`SHOT_MAKE_NUMERIC`, then ``sub_type=<level>``."""
+    return [*SHOT_MAKE_NUMERIC, *(f"sub_type={t}" for t in levels)]
+
+
+def _located(c: str) -> pl.Expr:
+    return pl.col(c).cast(pl.Float64).fill_nan(None)
+
+
+def _shot_make_design(shots: pl.DataFrame, levels: "list[str]") -> np.ndarray:
+    """The shot-make design matrix: the numeric inputs (null as NaN), then one indicator per level.
+
+    A shot type outside ``levels`` (rare, or new to the feed) gets every indicator 0, the trees'
+    "any other type" branch. The fitting script builds its training matrix with this same function.
+    """
+    x, y = _located("x_legacy"), _located("y_legacy")
+    num = shots.select(
+        ((x**2 + y**2).sqrt() / 10).alias("distance_ft"),
+        x,
+        y,
+        pl.col("shot_value").cast(pl.Float64),
+    ).to_numpy()
+    sub = shots.get_column("sub_type").cast(pl.Utf8)
+    ind = np.column_stack([(sub == t).fill_null(False).to_numpy() for t in levels]) if levels else None
+    return num if ind is None else np.hstack([num, ind.astype(np.float64)])
+
+
+def add_shot_make_prob(
+    shots: pl.DataFrame,
+    *,
+    league_id: str = "00",
+    return_as_pandas: bool = False,
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Add each field-goal attempt's make chance from the bundled location model.
+
+    The model reads only what the play-by-play records for a shot: its court location
+    (``x_legacy`` / ``y_legacy``, and its distance from the hoop computed from them), its value
+    and its shot type (``sub_type``, e.g. ``"Driving Layup Shot"``). It was fitted on three
+    regular-season play-by-play release seasons and gated against the zone table walk-forward by
+    season (``tools/models/nba_shot_value/train_shot_make.py``; the fit report sits beside it).
+
+    The make chance sits at the level of the booster's training seasons (2022-23 to 2024-25); the
+    league's make rate moves from season to season, by more than a point in some (see
+    :func:`score_shot_xpoints`). The shot type is the scorer's label, written after the play, so a
+    make chance that reads it already credits some of what the shooter did (a "Running Dunk Shot"
+    goes in about 95% of the time).
+
+    Args:
+        shots: Play-by-play rows (``nba_stats_pbp`` release shape) with ``x_legacy``,
+            ``y_legacy``, ``shot_value`` and ``sub_type``. Other rows may be present.
+        league_id: ``"00"`` NBA (the only league with a booster).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        The input plus ``xfg:Float64``: the make chance of every row with ``shot_value`` 2 or 3
+        and a location; null on every other row (free throws, non-shots, an unlocated attempt).
+        Empty input returns the input with the null column.
+
+    Raises:
+        ValueError: No booster is bundled for ``league_id``, or an input column is missing.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.nba import load_nba_stats_pbp
+            from sportsdataverse.nba.nba_shot_value import add_shot_make_prob
+            pbp = add_shot_make_prob(load_nba_stats_pbp([2025]))
+            pbp.filter(pl.col("xfg").is_not_null()).select("sub_type", "x_legacy", "y_legacy", "xfg").head()
+
+        Pipeline next step (one line)::
+
+            pbp.group_by("team_id").agg((pl.col("xfg") * pl.col("shot_value")).sum().alias("xfg_points"))
+
+    See Also:
+        * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
+    """
+    missing = [c for c in SHOT_MAKE_INPUTS if c not in shots.columns]
+    if missing:
+        raise ValueError(f"add_shot_make_prob needs columns {missing}")
+    booster = load_shot_make_model(league_id)
+    scorable = (
+        pl.col("shot_value").cast(pl.Float64).is_in([2.0, 3.0]).fill_null(False)
+        & _located("x_legacy").is_not_null()
+        & _located("y_legacy").is_not_null()
+    )
+    row = "__shot_make_row"
+    idx = shots.with_row_index(row).filter(scorable)
+    xfg = np.full(shots.height, np.nan)
+    if idx.height:
+        xfg[idx[row].to_numpy()] = booster.inplace_predict(_shot_make_design(idx, _shot_make_levels(booster)))
+    out = shots.with_columns(pl.Series("xfg", xfg, dtype=pl.Float64).fill_nan(None))
+    return out.to_pandas() if return_as_pandas else out
 
 
 def xpoints_baseline(league_avgs: pl.DataFrame) -> pl.DataFrame:
@@ -74,19 +240,39 @@ def score_shot_xpoints(
     shots: pl.DataFrame,
     league_avgs: pl.DataFrame,
     *,
+    league_id: str = "00",
+    model: "Literal['zone', 'location']" = "zone",
     return_as_pandas: bool = False,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
-    """Score each shot with expected points from the league-average baseline.
+    """Score each shot with its make chance and expected points.
 
-    Joins the per-shot frame to the zone baseline (falling back to the
-    within-``shot_zone_range`` mean when a zone triple is unmatched) and adds
-    ``shot_value`` (3 for a ``3PT`` shot else 2), ``xpoints = base_fg_pct *
-    shot_value``, and ``actual_points = shot_made_flag * shot_value``.
+    ``base_fg_pct`` is the shot's make chance. With ``model="zone"`` (the default) it is the
+    league's FG% in the shot's zone triple from ``LeagueAverages``, falling back to the
+    within-``shot_zone_range`` mean when a triple is unmatched. With ``model="location"`` (the NBA
+    only) it is the bundled location model's (:func:`add_shot_make_prob`, on the shot chart's
+    ``loc_x`` / ``loc_y`` / ``action_type`` / ``shot_type``); a shot it cannot score (no location)
+    takes the zone value. Either way the frame gains ``shot_value`` (3 for a ``3PT`` shot else 2),
+    ``xpoints = base_fg_pct * shot_value`` and ``actual_points = shot_made_flag * shot_value``.
+
+    How the two compare, walk-forward by season on the NBA's regular-season play-by-play (fit
+    report ``tools/models/nba_shot_value/shot_make_nba_holdout.json``): the location model's log
+    loss is 3% to 4% below the zone table's on every season from 2018-19, the table built from the
+    scored season's own shots, almost all of it at the rim and none on threes. The zone table is
+    calibrated to its own season by construction; the location model carries its training seasons'
+    level, off by more than a point on 2018-19, 2020-21 and 2022-23 and on 2026-27 so far.
+    ``shooter_talent`` and the shrinkage ``k`` in ``nba_shot_value_constants`` are fitted for the
+    zone table: with the location model, talent reads as make% above what the shot type and spot
+    predict (the type is the scorer's label, written after the play), and ``k`` fits 60.7
+    (``tools/fit_nba_shot_shrinkage_k.py --model location``).
 
     Args:
-        shots: Per-shot ``Shot_Chart_Detail`` frame (needs ``shot_type`` +
-            the three zone keys + ``shot_made_flag``).
+        shots: Per-shot ``Shot_Chart_Detail`` frame (needs ``shot_type``, the
+            three zone keys and ``shot_made_flag``; the location model also
+            reads ``loc_x``, ``loc_y`` and ``action_type``).
         league_avgs: The ``LeagueAverages`` frame (see :func:`xpoints_baseline`).
+        league_id: ``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G-League: the booster
+            ``model="location"`` loads (:data:`SHOT_MAKE_MODELS`).
+        model: ``"zone"`` or ``"location"``.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -95,7 +281,9 @@ def score_shot_xpoints(
         augmented schema with zero rows.
 
     Raises:
-        ValueError: A zone join key has a different dtype on the two frames.
+        ValueError: A zone join key has a different dtype on the two frames,
+            ``model`` is unknown, ``model="location"`` for a league with no
+            bundled booster, or a location column is missing.
 
     Example:
         Quick start::
@@ -103,6 +291,7 @@ def score_shot_xpoints(
             import polars as pl
             from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
             scored = score_shot_xpoints(shots, league_avgs)
+            located = score_shot_xpoints(shots, league_avgs, model="location")
 
         Pipeline next step (one line)::
 
@@ -112,6 +301,10 @@ def score_shot_xpoints(
         * `nba_api <https://github.com/swar/nba_api>`_ -- NBA/WNBA (Python)
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
     """
+    if model not in ("location", "zone"):
+        raise ValueError(f"model must be 'location' or 'zone', got {model!r}")
+    if model == "location" and league_id not in SHOT_MAKE_MODELS:
+        raise ValueError(f"no shot-make model for league_id {league_id!r}; use model='zone'")
     if shots.is_empty():
         out = shots.with_columns([pl.lit(None, dtype=t).alias(c) for c, t in _SCORED_EXTRA.items()])
         return out.to_pandas() if return_as_pandas else out
@@ -126,7 +319,24 @@ def score_shot_xpoints(
     ).join(base.select(*_ZONE_KEYS, "base_fg_pct"), on=_ZONE_KEYS, how="left")
     scored = scored.with_columns(
         pl.col("base_fg_pct").fill_null(pl.col("base_fg_pct").mean().over("shot_zone_range")).alias("base_fg_pct")
-    ).with_columns(
+    )
+    if model == "location":
+        missing = [c for c in ("loc_x", "loc_y", "action_type") if c not in scored.columns]
+        if missing:
+            raise ValueError(f"model='location' needs the shot chart's {missing}")
+        located = add_shot_make_prob(
+            scored.select(
+                pl.col("loc_x").alias("x_legacy"),
+                pl.col("loc_y").alias("y_legacy"),
+                "shot_value",
+                pl.col("action_type").alias("sub_type"),
+            ),
+            league_id=league_id,
+        )
+        scored = scored.with_columns(
+            located.get_column("xfg").fill_null(scored.get_column("base_fg_pct")).alias("base_fg_pct")
+        )
+    scored = scored.with_columns(
         (pl.col("base_fg_pct") * pl.col("shot_value")).alias("xpoints"),
         (pl.col("shot_made_flag").cast(pl.Float64) * pl.col("shot_value")).alias("actual_points"),
     )
@@ -495,7 +705,7 @@ def _fetch_scored(
     if not shot_frames or league_avgs is None:
         return pl.DataFrame(), pl.DataFrame()
     shots = pl.concat(shot_frames, how="vertical_relaxed")
-    return score_shot_xpoints(shots, league_avgs), league_avgs
+    return score_shot_xpoints(shots, league_avgs, league_id=league_id), league_avgs
 
 
 def _pin_shot_ids(sc: pl.DataFrame) -> pl.DataFrame:
@@ -658,5 +868,5 @@ def nba_shot_value_lineups(
         return empty.to_pandas() if return_as_pandas else empty
     if "group_id" in shots.columns:
         shots = shots.with_columns(pl.col("group_id").cast(pl.Utf8))
-    scored = score_shot_xpoints(shots, league_avgs if league_avgs is not None else pl.DataFrame())
+    scored = score_shot_xpoints(shots, league_avgs if league_avgs is not None else pl.DataFrame(), league_id=league_id)
     return scored.to_pandas() if return_as_pandas else scored

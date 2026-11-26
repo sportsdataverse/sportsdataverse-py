@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 288 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 290 | — |
 
 ## ESPN {#espn}
 
@@ -181,6 +181,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`add_ctg_shot_zones`](reference/additional/analytics#add_ctg_shot_zones)
 - [`add_play_context`](reference/additional/analytics#add_play_context)
 - [`add_possession_flags`](reference/additional/analytics#add_possession_flags)
+- [`add_shot_make_prob`](reference/additional/analytics#add_shot_make_prob)
 - [`add_start_type_detail`](reference/additional/analytics#add_start_type_detail)
 - [`add_transition`](reference/additional/analytics#add_transition)
 - [`box_features`](reference/additional/analytics#box_features)
@@ -191,6 +192,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`flag_heave_possessions`](reference/additional/analytics#flag_heave_possessions)
 - [`hoopshype_salaries`](reference/additional/analytics#hoopshype_salaries)
 - [`lineup_play_context`](reference/additional/analytics#lineup_play_context)
+- [`load_shot_make_model`](reference/additional/analytics#load_shot_make_model)
 - [`make_prob_by_context`](reference/additional/analytics#make_prob_by_context)
 - [`make_prob_joint`](reference/additional/analytics#make_prob_joint)
 - [`nba_availability`](reference/additional/analytics#nba_availability)
