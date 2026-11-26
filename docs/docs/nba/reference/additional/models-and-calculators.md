@@ -572,7 +572,7 @@ Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline.
 
 Iterative opponent-adjusted rating -> AdjOffRtg / AdjDefRtg / AdjNet per team-season.
 
-KenPom-style fixed point: initialize `adj_off = raw_off` /
+Iterative fixed point: initialize `adj_off = raw_off` /
 `adj_def = raw_def`, then repeatedly recompute each team's rating from
 its games with the opponent's *current* adjusted rating and a
 home-court adjustment removed, until the largest change is below `tol`.
