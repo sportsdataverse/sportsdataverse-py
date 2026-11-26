@@ -17,6 +17,7 @@ from tools.validation.checks import (
     extraction,
     numeric_parity,
     pbp_integrity,
+    phantom_possessions,
     rate_anomaly,
     r_python_output_parity,
     schema_contract,
@@ -46,6 +47,7 @@ _CHECKS = (
     boxscore_parity,
     boxscore_parity_player,
     pbp_integrity,
+    phantom_possessions,
 )
 
 _LINTERS: dict[str, ModuleType] = {"python": leakage_python, "r": leakage_r}

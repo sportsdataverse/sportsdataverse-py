@@ -25,6 +25,7 @@ import polars as pl
 
 from sportsdataverse._temporal import as_date
 
+from sportsdataverse._common.possessions import PRO_FT_POSSESSION_WEIGHT
 from sportsdataverse._common.ratings import drop_unusable_possession_rows, id_text, iterative_opponent_adjust
 from sportsdataverse.errors import InsufficientInputError
 from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_mbb_team_boxscore
@@ -186,6 +187,10 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
         or any(c not in schedule.columns for c in _SCHED_REQUIRED)
     ):
         return pl.DataFrame(schema=_EFF_SCHEMA)
+    # ponytail: the pros' 0.44, not the college 0.475 (sportsdataverse._common.possessions): the pregame
+    # constants (hfa, margin_sd, em_scale, avg_tempo) are a fixed point fit with this engine at 0.44, and the
+    # 0.475 tempo moves the mean expected total past its 2-point gate. Switch it together with that refit.
+    ft_w = PRO_FT_POSSESSION_WEIGHT
     box = team_box.select(
         id_text(team_box, "game_id"),
         id_text(team_box, "team_id"),
@@ -194,7 +199,7 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
         _turnovers(team_box).alias("tov"),
         pl.col("free_throws_attempted").cast(pl.Float64).alias("fta"),
         pl.col("team_score").cast(pl.Float64).alias("pts"),
-    ).with_columns((pl.col("fga") - pl.col("orb") + pl.col("tov") + 0.44 * pl.col("fta")).alias("team_poss"))
+    ).with_columns((pl.col("fga") - pl.col("orb") + pl.col("tov") + ft_w * pl.col("fta")).alias("team_poss"))
 
     opp = box.select(
         "game_id",

@@ -2674,6 +2674,49 @@ def _prev_real_play(col: str) -> pl.Expr:
     )
 
 
+#: A fumble the recoverer returned at least a yard ("recovered by AU #11 D.Smith at State35 #11 D.Smith
+#: return 34 yards to the State01").
+_FUMBLE_RETURN_RE = r"(?i)\bfumbl.*recovered by.*\breturn(?:s|ed)?\s+(?:for\s+)?[1-9]\d*\s+(?:yds|yards?)\b"
+#: The yard-line number of every "to the <TEAM> NN" spot in a play's text.
+#: A multi-word or hyphenated school ("to the Ole Miss 30", "to the UL-M 30") is one spot too.
+_TO_SPOT_RE = r"(?i)\bto the\s+(?:[A-Za-z&.\-]+\s)*[A-Za-z&.\-]*\d{1,2}\b"
+
+
+def _fumble_return_ends_at_next_snap() -> pl.Expr:
+    """True on a fumble return whose end state is still the fumble spot, by two sources against the field.
+
+    ESPN can leave a returned fumble's end at the spot of the fumble: 401856886's sack-fumble "recovered
+    by AU #11 D.Smith at State35 ... return 34 yards to the State01" kept 4th & 10 at the 35 (EPA -1.47)
+    though Auburn's next snap is 1st & 1 at the 1 (about -7.3). The text alone is not trusted (on fumble
+    returns the stored field beats it more often than not), so the row is repaired only when the
+    recoverer's next snap, in the same half, starts at the number of the text's last spot on either side
+    of the field and the stored end is elsewhere. Kick returns are part (e)'s and touchdowns keep the
+    scoring convention. 2025: 7 rows of the 138 such returns the recoverer snaps after.
+
+    Needs ``text``, ``scoringPlay``, ``type.text``, ``start.*``, ``end.pos_team.id``, ``end.yardsToEndzone``,
+    ``period.number`` and ``half``.
+    """
+    spot = (
+        pl.col("text")
+        .str.extract_all(_TO_SPOT_RE)
+        .list.last()
+        .str.extract(r"(\d{1,2})$", 1)
+        .cast(pl.Int64, strict=False)
+    )
+    nxt = _next_real_play("start.yardsToEndzone").cast(pl.Int64)
+    return (
+        pl.col("text").str.contains(_FUMBLE_RETURN_RE)
+        & (pl.col("text").str.contains(r"(?i)touchdown|nullif|kickoff|punt|free kick|onside") == False)
+        & (pl.col("scoringPlay") == False)
+        & (_next_real_play("start.pos_team.id") == pl.col("end.pos_team.id"))
+        & _next_real_play("start.down").is_between(1, 4)
+        & (_next_real_play("type.text").str.contains(_NOT_A_SNAP_RE) == False)
+        & _in_same_half(_next_real_play)
+        & (nxt != pl.col("end.yardsToEndzone"))
+        & ((nxt == spot) | (nxt == 100 - spot))
+    ).fill_null(False)
+
+
 def _in_same_half(other: Callable[[str], pl.Expr]) -> pl.Expr:
     """The row ``other`` reads is in this row's period, or both are in the same half of regulation (never null).
 
@@ -3562,11 +3605,18 @@ class CFBPlayProcess(object):
                     )
                 ),
                 # EX-3.4-c: ESPN's degenerate end block, read before the repairs below rewrite
-                # end.yardsToEndzone (a declined penalty's start spot, part (b)'s backfill)
-                _end_degenerate=(pl.col("end.down") == 0)
-                .and_(pl.col("end.yardLine") == 0)
-                .and_(pl.col("end.yardsToEndzone") == 0)
-                .fill_null(False),
+                # end.yardsToEndzone (a declined penalty's start spot, part (b)'s backfill).
+                # An end yard line off the field is degenerate too: a snap with an enforced
+                # flag can carry end.yardLine 101 ("4th & 24 at AUB -1"), which the -1 fallback
+                # below turns into 99 to go (401856886's 0-yard rush plus a 13-yard personal
+                # foul to the AU 11: EPA -7.02, where the next snap, 1st & 10 at the 11, gives
+                # +1.7). 13 rows in 2025, 3 of them a snap the same team follows.
+                _end_degenerate=(
+                    (pl.col("end.down") == 0)
+                    .and_(pl.col("end.yardLine") == 0)
+                    .and_(pl.col("end.yardsToEndzone") == 0)
+                    .or_((pl.col("end.yardLine") < 0).or_(pl.col("end.yardLine") > 100))
+                ).fill_null(False),
             )
             .with_columns(
                 pl.col("end.team.id")
@@ -3968,6 +4018,17 @@ class CFBPlayProcess(object):
                 ],
             )
             .drop(["_ex34c", "_end_degenerate"])
+            .with_columns(_fumble_return_ends_at_next_snap().alias("_fum_ret"))
+            .with_columns(
+                *[
+                    pl.when(pl.col("_fum_ret") == True)  # noqa: E712
+                    .then(_next_real_play(f"start.{c}"))
+                    .otherwise(pl.col(f"end.{c}"))
+                    .alias(f"end.{c}")
+                    for c in ("down", "distance", "yardsToEndzone", "yardLine", "yard")
+                ],
+            )
+            .drop("_fum_ret")
             .with_columns(
                 # B3 part (c): the same repair for end states that are PRESENT but
                 # mirrored. ESPN sometimes reports end.yardsToEndzone from the wrong
@@ -8129,15 +8190,19 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 scoring_opp=pl.when(pl.col("start.yardsToEndzone") <= 40).then(True).otherwise(False),
+                # Gate on `rush`, the stuff-rate denominator, not `type.text == "Rush"`: a carry the
+                # feed types as a fumble recovery or a safety is a rush in the denominator, so with the
+                # literal type it could never count as a stuff (401856886: three carries lost 2-6
+                # yards that way). cfbfastR's stuffed_run gates on `rush == 1` too. Kneels stay out.
                 stuffed_run=pl.when(
-                    (pl.col("type.text") == "Rush")
+                    (pl.col("rush") == True)
                     .and_(pl.col("yds_rushed") <= 0)
                     .and_(pl.col("kneel_down").fill_null(False) == False)
                 )
                 .then(True)
                 .otherwise(False),
                 stopped_run=pl.when(
-                    (pl.col("type.text") == "Rush")
+                    (pl.col("rush") == True)
                     .and_(pl.col("yds_rushed") <= 2)
                     .and_(pl.col("kneel_down").fill_null(False) == False)
                 )

@@ -1,0 +1,16 @@
+query PlayerDirectory($tourCode: TourCode!, $active: Boolean) {
+  playerDirectory(tourCode: $tourCode, active: $active) {
+    tourCode
+    players {
+      id
+      isActive
+      firstName
+      lastName
+      shortName
+      displayName
+      country
+      countryFlag
+      playerBio { age education turnedPro }
+    }
+  }
+}

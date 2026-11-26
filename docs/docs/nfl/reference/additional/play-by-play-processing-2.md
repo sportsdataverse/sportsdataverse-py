@@ -368,8 +368,8 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `under_2` | Boolean | Whether the play began with two minutes or less remaining in the half. |
 | `goal_to_go` | Boolean | Binary indicator for whether or not the posteam is in a goal down situation. |
 | `scoring_opp` | Boolean | True when the play starts 40 or fewer yards from the end zone. |
-| `stuffed_run` | Boolean | True on a play ESPN types "Rush" that gained zero or fewer yards. |
-| `stopped_run` | Boolean | True when the rush was stopped at or behind the line of scrimmage. |
+| `stuffed_run` | Boolean | True on a play whose processed type.text is "Rush" that gained zero or fewer yards. |
+| `stopped_run` | Boolean | True on a play whose processed type.text is "Rush" that gained two or fewer yards. |
 | `opportunity_run` | Boolean | True on a rush that gained 4 or more yards. |
 | `highlight_run` | Boolean | True when the rush gained 8 or more yards. |
 | `adj_rush_yardage` | Int64 | Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the 2026-10 line-yards fix cap at 8. |

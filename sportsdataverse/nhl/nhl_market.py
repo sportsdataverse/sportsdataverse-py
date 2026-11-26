@@ -36,13 +36,15 @@ from __future__ import annotations
 
 import json
 import math
-from functools import lru_cache
+from collections.abc import Callable
+from functools import lru_cache, partial
 from importlib.resources import files as _resource_files
 from typing import Literal, Optional, TypeVar, Union, overload
 
 import numpy as np
 import pandas as pd
 import polars as pl
+from scipy.special import gammaln
 from scipy.stats import norm
 
 from sportsdataverse.nhl.nhl_prediction_constants import LeagueConstants, get_constants
@@ -58,6 +60,11 @@ _PREDICT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "home_win_prob": pl.Float64,
     "exp_total": pl.Float64,
     "market_edge": pl.Float64,
+    "home_reg_win_prob": pl.Float64,
+    "reg_tie_prob": pl.Float64,
+    "away_reg_win_prob": pl.Float64,
+    "exp_home_reg_goals": pl.Float64,
+    "exp_away_reg_goals": pl.Float64,
 }
 
 
@@ -248,18 +255,25 @@ def nhl_predict_games(
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
-        A polars (or pandas) DataFrame, one row per game.
+        A polars (or pandas) DataFrame, one row per game. The five regulation columns come from
+        :func:`regulation_goal_means`: the 60-minute score model whose final-score win probability and
+        expected total equal ``home_win_prob`` and ``exp_total``.
 
-        |col_name      |type   |
-        |:-------------|:------|
-        |game_id        |Int64  |
-        |home_team      |String |
-        |away_team      |String |
-        |neutral_site   |Boolean|
-        |exp_margin     |Float64|
-        |home_win_prob  |Float64|
-        |exp_total      |Float64|
-        |market_edge    |Float64|
+        |col_name           |type   |
+        |:------------------|:------|
+        |game_id            |Int64  |
+        |home_team          |String |
+        |away_team          |String |
+        |neutral_site       |Boolean|
+        |exp_margin         |Float64|
+        |home_win_prob      |Float64|
+        |exp_total          |Float64|
+        |market_edge        |Float64|
+        |home_reg_win_prob  |Float64|
+        |reg_tie_prob       |Float64|
+        |away_reg_win_prob  |Float64|
+        |exp_home_reg_goals |Float64|
+        |exp_away_reg_goals |Float64|
 
     Example:
         Quick start::
@@ -313,8 +327,304 @@ def nhl_predict_games(
     else:
         out = out.with_columns(pl.lit(None, dtype=pl.Float64).alias("market_edge"))
 
-    out = out.select(
-        "game_id", "home_team", "away_team", "neutral_site", "exp_margin", "home_win_prob", "exp_total", "market_edge"
+    out = _with_regulation_outcomes(out, league).select(list(_PREDICT_SCHEMA))
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def _with_regulation_outcomes(out: pl.DataFrame, league: str) -> pl.DataFrame:
+    """Append the regulation 3-way and per-team regulation goal means to a prediction frame.
+
+    Rows whose ``home_win_prob`` or ``exp_total`` is missing or non-finite (a team with no rating) get nulls.
+    """
+    p = out["home_win_prob"].cast(pl.Float64).fill_null(float("nan")).to_numpy()
+    total = out["exp_total"].cast(pl.Float64).fill_null(float("nan")).to_numpy()
+    ok = np.isfinite(p) & np.isfinite(total)
+    cols = {name: np.full(out.height, np.nan) for name in _REGULATION_COLUMNS}
+    if ok.any():
+        lam_home, lam_away = regulation_goal_means(p[ok], total[ok], league=league)
+        home, tie, away, _ = _grid_summary(_regulation_grid(lam_home, lam_away, get_constants(league)))
+        for name, values in zip(_REGULATION_COLUMNS, (home, tie, away, lam_home, lam_away), strict=True):
+            cols[name][ok] = values
+    return out.with_columns(pl.Series(name, values).fill_nan(None) for name, values in cols.items())
+
+
+_REGULATION_COLUMNS = (
+    "home_reg_win_prob",
+    "reg_tie_prob",
+    "away_reg_win_prob",
+    "exp_home_reg_goals",
+    "exp_away_reg_goals",
+)
+
+# ponytail: per-side regulation goal cap. P(X > 15) is 3e-5 at the largest regulation mean on the 2023-24 ..
+# 2025-26 holdout (4.68) and 7e-5 at 5; the solver works on this truncated, renormalised grid, so the win
+# probability and total it matches are exact for the grid. Raise the cap if means above ~5 become common.
+_MAX_REG_GOALS = 15
+_GOALS = np.arange(_MAX_REG_GOALS + 1)
+_LOG_FACT = gammaln(_GOALS + 1.0)
+_HOME_AHEAD = np.tril(np.ones((_MAX_REG_GOALS + 1, _MAX_REG_GOALS + 1)), -1)  # [home, away] with home > away
+_REG_TOTAL = _GOALS[:, None] + _GOALS[None, :]
+
+
+def _poisson_pmf(lam: np.ndarray) -> np.ndarray:
+    """Poisson pmf at 0..15 goals for each mean, shape ``(n, 16)``."""
+    log_lam = np.log(np.maximum(lam, 1e-12))[:, None]
+    return np.exp(_GOALS[None, :] * log_lam - lam[:, None] - _LOG_FACT[None, :])
+
+
+def _regulation_grid(lam_home: np.ndarray, lam_away: np.ndarray, const: LeagueConstants) -> np.ndarray:
+    """``P(home = i, away = j)`` after 60 minutes, shape ``(n, 16, 16)``.
+
+    Two independent Poissons with every tied cell scaled by ``1 + reg_draw_inflation``, then renormalised.
+    Independent Poissons put ~16% of NHL games level after regulation; ~22% are (2022-23 .. 2025-26).
+    """
+    grid = _poisson_pmf(lam_home)[:, :, None] * _poisson_pmf(lam_away)[:, None, :]
+    grid[:, _GOALS, _GOALS] *= 1.0 + const.reg_draw_inflation
+    return grid / grid.sum(axis=(1, 2), keepdims=True)
+
+
+def _grid_summary(grid: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """``(P(home ahead), P(tied), P(away ahead), E[regulation goals])`` of a regulation grid."""
+    home = (grid * _HOME_AHEAD).sum(axis=(1, 2))
+    tie = np.einsum("nii->n", grid)
+    away = 1.0 - home - tie
+    return home, tie, away, (grid * _REG_TOTAL).sum(axis=(1, 2))
+
+
+def regulation_goal_means(
+    home_win_prob: np.ndarray, exp_total: np.ndarray, *, league: str = "nhl"
+) -> tuple[np.ndarray, np.ndarray]:
+    """Per-team regulation goal means consistent with a game's win probability and expected total.
+
+    The 60-minute score is a draw-inflated pair of Poissons (see ``reg_draw_inflation``). A game level
+    after regulation is decided by one more goal (overtime or the shootout winner, both of which add
+    exactly one goal to the final score), won by the home side with probability
+    ``P(home ahead) / (P(home ahead) + P(away ahead))``. The two means are solved by bisection so that
+    the model's final-score home win probability equals ``home_win_prob`` and its expected final total
+    equals ``exp_total``. ``exp_total`` is used as given, so the regulation means inherit its centring
+    (``avg_total_goals`` / ``total_scale``). A pair the grid cannot reach (an ``exp_total`` below about 1,
+    say) gets ``NaN`` means rather than the nearest bracket.
+
+    Args:
+        home_win_prob: final-score home win probabilities in (0, 1), e.g. ``nhl_predict_games``'s column.
+        exp_total: expected final-score total goals, same length.
+        league: resolves ``reg_draw_inflation`` via :func:`get_constants`.
+
+    Returns:
+        A ``(home_means, away_means)`` tuple of float arrays.
+
+    Raises:
+        ValueError: if ``league`` has no constants row.
+
+    Example:
+        Quick start::
+
+            import numpy as np
+            from sportsdataverse.nhl.nhl_market import regulation_goal_means
+            regulation_goal_means(np.array([0.55]), np.array([6.1]))
+    """
+    const = get_constants(league)
+    p = np.clip(np.asarray(home_win_prob, dtype=float), 1e-6, 1 - 1e-6)
+    target = np.asarray(exp_total, dtype=float)
+    mu, share = np.maximum(target - 0.25, 0.5), np.full(p.shape, 0.5)
+    for _ in range(8):  # alternate the two monotone 1-D solves; the coupling is weak, so this converges fast
+        share = _bisect(partial(_home_prob_at_share, mu=mu, const=const), p, 1e-4, 1 - 1e-4)
+        mu = _bisect(partial(_total_at_mean, share=share, const=const), target, 0.05, 20.0)
+    lam_home, lam_away = mu * share, mu * (1 - share)
+    reached = (np.abs(_final_home_prob(lam_home, lam_away, const) - p) < 1e-6) & (
+        np.abs(_final_total(lam_home, lam_away, const) - target) < 1e-6
+    )
+    return np.where(reached, lam_home, np.nan), np.where(reached, lam_away, np.nan)
+
+
+def _home_prob_at_share(share: np.ndarray, mu: np.ndarray, const: LeagueConstants) -> np.ndarray:
+    return _final_home_prob(mu * share, mu * (1 - share), const)
+
+
+def _total_at_mean(mu: np.ndarray, share: np.ndarray, const: LeagueConstants) -> np.ndarray:
+    return _final_total(mu * share, mu * (1 - share), const)
+
+
+def _final_home_prob(lam_home: np.ndarray, lam_away: np.ndarray, const: LeagueConstants) -> np.ndarray:
+    """``P(home ahead) + P(tied) * q`` with ``q = P(home ahead) / (P(home ahead) + P(away ahead))``.
+
+    That is ``ahead / (ahead + behind)``, in which the draw inflation and the grid's normalisation cancel, so
+    it needs only the two marginal pmfs (``_grid_summary`` of ``_regulation_grid`` gives the same number).
+    """
+    ph, pa = _poisson_pmf(lam_home), _poisson_pmf(lam_away)
+    ahead = (ph * (np.cumsum(pa, axis=1) - pa)).sum(axis=1)
+    behind = (pa * (np.cumsum(ph, axis=1) - ph)).sum(axis=1)
+    return ahead / (ahead + behind)
+
+
+def _final_total(lam_home: np.ndarray, lam_away: np.ndarray, const: LeagueConstants) -> np.ndarray:
+    """``E[regulation goals] + P(tied)`` of ``_regulation_grid``, from the marginal pmfs."""
+    ph, pa = _poisson_pmf(lam_home), _poisson_pmf(lam_away)
+    theta = const.reg_draw_inflation
+    mass_h, mass_a, tied = ph.sum(axis=1), pa.sum(axis=1), ph * pa
+    norm_ = mass_h * mass_a + theta * tied.sum(axis=1)
+    goals = (ph @ _GOALS) * mass_a + (pa @ _GOALS) * mass_h + 2.0 * theta * (tied @ _GOALS)
+    return (goals + (1.0 + theta) * tied.sum(axis=1)) / norm_
+
+
+def _bisect(
+    f: Callable[[np.ndarray], np.ndarray], target: np.ndarray, lo: float, hi: float, iters: int = 50
+) -> np.ndarray:
+    """Vectorised bisection for an increasing ``f``: the ``x`` in ``[lo, hi]`` with ``f(x) == target``."""
+    lo_a, hi_a = np.full(target.shape, lo), np.full(target.shape, hi)
+    for _ in range(iters):
+        mid = 0.5 * (lo_a + hi_a)
+        below = f(mid) < target
+        lo_a, hi_a = np.where(below, mid, lo_a), np.where(below, hi_a, mid)
+    return 0.5 * (lo_a + hi_a)
+
+
+def _final_score_grid(preds: pl.DataFrame, league: str) -> tuple[pl.Series, np.ndarray, np.ndarray]:
+    """Final-score grid ``P(home = i, away = j)`` and its beyond-regulation part, shape ``(n, 17, 17)``.
+
+    Rows without a finite ``home_win_prob`` / ``exp_total``, or whose pair the grid cannot reach, are dropped;
+    their ``game_id`` is not returned.
+    """
+    size = _MAX_REG_GOALS + 2
+    if preds.is_empty():
+        return pl.Series("game_id", [], dtype=pl.Int64), np.zeros((0, size, size)), np.zeros((0, size, size))
+    preds = preds.filter(pl.col("home_win_prob").is_finite() & pl.col("exp_total").is_finite())
+    const = get_constants(league)
+    lam_home, lam_away = regulation_goal_means(
+        preds["home_win_prob"].to_numpy(), preds["exp_total"].to_numpy(), league=league
+    )
+    reached = np.isfinite(lam_home)
+    preds, lam_home, lam_away = preds.filter(pl.Series(reached)), lam_home[reached], lam_away[reached]
+    reg = _regulation_grid(lam_home, lam_away, const)
+    home, _, away, _ = _grid_summary(reg)
+    q = (home / (home + away))[:, None]
+    ties = np.einsum("nii->ni", reg)
+    beyond = np.zeros((preds.height, size, size))
+    beyond[:, _GOALS + 1, _GOALS] = q * ties
+    beyond[:, _GOALS, _GOALS + 1] = (1.0 - q) * ties
+    final = beyond.copy()
+    final[:, : size - 1, : size - 1] += reg
+    final[:, _GOALS, _GOALS] = 0.0
+    return preds["game_id"], final, beyond
+
+
+def nhl_score_distribution(
+    preds: pl.DataFrame,
+    *,
+    top_n: int = 10,
+    league: str = "nhl",
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Most likely final scores per game, from the regulation score model behind ``nhl_predict_games``.
+
+    A final score counts overtime and shootout wins as one goal, as the NHL scores them. Summed over every
+    scoreline, the home-win probability equals the row's ``home_win_prob`` and the mean total equals its
+    ``exp_total`` (see :func:`regulation_goal_means`).
+
+    Args:
+        preds: a frame with ``game_id``, ``home_win_prob`` and ``exp_total``, e.g. :func:`nhl_predict_games`.
+            Rows where either value is missing are skipped.
+        top_n: how many scorelines to keep per game, most likely first (at least 1).
+        league: resolves ``reg_draw_inflation`` via :func:`get_constants`.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame, ``top_n`` rows per game. ``prob_beyond_regulation`` is the part of
+        ``prob`` from games tied after 60 minutes (a one-goal score only). ``game_id`` keeps the input's
+        dtype (Int64 from :func:`nhl_predict_games`).
+
+        |col_name               |type   |
+        |:----------------------|:------|
+        |game_id                |Int64  |
+        |rank                   |Int64  |
+        |home_goals             |Int64  |
+        |away_goals             |Int64  |
+        |prob                   |Float64|
+        |prob_beyond_regulation |Float64|
+
+    Raises:
+        ValueError: if ``top_n`` is below 1 or ``league`` has no constants row.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.nhl.nhl_market import nhl_score_distribution
+            preds = pl.DataFrame({"game_id": [2025020001], "home_win_prob": [0.55], "exp_total": [6.2]})
+            nhl_score_distribution(preds, top_n=5)
+    """
+    if top_n < 1:
+        raise ValueError(f"top_n must be at least 1, got {top_n}")
+    game_ids, final, beyond = _final_score_grid(preds, league)
+    n, size = final.shape[0], final.shape[1]
+    flat = final.reshape(n, size * size)
+    order = np.argsort(-flat, axis=1, kind="stable")[:, :top_n]
+    k = order.shape[1]
+    out = pl.DataFrame(
+        {
+            "game_id": game_ids.gather(np.repeat(np.arange(n), k)),
+            "rank": pl.Series(np.tile(np.arange(1, k + 1), n), dtype=pl.Int64),
+            "home_goals": pl.Series((order // size).ravel(), dtype=pl.Int64),
+            "away_goals": pl.Series((order % size).ravel(), dtype=pl.Int64),
+            "prob": pl.Series(np.take_along_axis(flat, order, axis=1).ravel(), dtype=pl.Float64),
+            "prob_beyond_regulation": pl.Series(
+                np.take_along_axis(beyond.reshape(n, size * size), order, axis=1).ravel(), dtype=pl.Float64
+            ),
+        }
+    )
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def nhl_total_goals_distribution(
+    preds: pl.DataFrame,
+    *,
+    league: str = "nhl",
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Distribution of the final-score total goals per game, from the same model as :func:`nhl_score_distribution`.
+
+    Args:
+        preds: a frame with ``game_id``, ``home_win_prob`` and ``exp_total``, e.g. :func:`nhl_predict_games`.
+            Rows where either value is missing are skipped.
+        league: resolves ``reg_draw_inflation`` via :func:`get_constants`.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame, one row per game and total from 0 to 32 goals. ``prob_over`` is
+        ``P(total > total_goals)``, the over probability for a line of ``total_goals + 0.5``. Per game the
+        probabilities sum to 1 and their mean is the row's ``exp_total``. ``game_id`` keeps the input's dtype.
+
+        |col_name    |type   |
+        |:-----------|:------|
+        |game_id     |Int64  |
+        |total_goals |Int64  |
+        |prob        |Float64|
+        |prob_over   |Float64|
+
+    Raises:
+        ValueError: if ``league`` has no constants row.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.nhl.nhl_market import nhl_total_goals_distribution
+            preds = pl.DataFrame({"game_id": [2025020001], "home_win_prob": [0.55], "exp_total": [6.2]})
+            totals = nhl_total_goals_distribution(preds)
+            totals.filter(pl.col("total_goals") == 5)  # prob_over == P(over 5.5)
+    """
+    game_ids, final, _ = _final_score_grid(preds, league)
+    n, size = final.shape[0], final.shape[1]
+    cell_total = (np.arange(size)[:, None] + np.arange(size)[None, :]).ravel()
+    probs = final.reshape(n, size * size) @ np.eye(2 * size - 1)[cell_total]  # sum each total's cells
+    width = probs.shape[1]
+    out = pl.DataFrame(
+        {
+            "game_id": game_ids.gather(np.repeat(np.arange(n), width)),
+            "total_goals": pl.Series(np.tile(np.arange(width), n), dtype=pl.Int64),
+            "prob": pl.Series(probs.ravel(), dtype=pl.Float64),
+            "prob_over": pl.Series(np.clip(1.0 - np.cumsum(probs, axis=1), 0.0, 1.0).ravel(), dtype=pl.Float64),
+        }
     )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 

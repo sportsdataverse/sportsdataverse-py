@@ -6,6 +6,7 @@ from typing import Callable, Dict, List, Optional
 
 import polars as pl
 
+from sportsdataverse._common.possessions import PRO_FT_POSSESSION_WEIGHT
 from sportsdataverse.nba.nba_stats import nba_stats_leaguegamelog
 
 # per-100 feature columns (snake-cased leaguegamelog player fields)
@@ -57,7 +58,9 @@ def box_features(
     team_poss = (
         team_logs.join(slot_min, on=["game_id", "team_id"], how="left")
         .with_columns(
-            (pl.col("fga") - pl.col("oreb") + pl.col("tov") + 0.44 * pl.col("fta")).alias("team_poss"),
+            (pl.col("fga") - pl.col("oreb") + pl.col("tov") + PRO_FT_POSSESSION_WEIGHT * pl.col("fta")).alias(
+                "team_poss"
+            ),
             pl.when(pl.col("min") >= 0.9 * pl.col("_slot_min").fill_null(0))
             .then(pl.col("min"))
             .otherwise(pl.col("_slot_min"))
