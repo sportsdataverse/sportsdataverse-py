@@ -127,3 +127,27 @@ def test_lineup_rebound_part_prices_the_published_orb_rate(lg: str) -> None:
     chance = fives["lg_rtg"] / 100 / (1 - lg_tov)
     expected = 100 * chance * (oreb - lg_orb * fives["orb_pct_n"]) / fives["poss"]
     assert (fives["off_orb_pts"] - expected).abs().max() < 1e-9
+
+
+@pytest.mark.parametrize("lg", ["nba", "wnba"])
+def test_team_defense_parts_are_the_opponents_game_prices_summed(lg: str) -> None:
+    """A defensive part is minus the opponents' per-game price, summed over the season, per 100 of their possessions."""
+    rows, counts = _inputs(lg)
+    books = team_game_four_factors(rows, counts=counts)
+    # each game row's offense, keyed by the team that defended it
+    faced = books.join(books.select("game_id", pl.col("team_id").alias("defense_id")), on="game_id").filter(
+        pl.col("team_id") != pl.col("defense_id")
+    )
+    allowed = faced.group_by("season", "defense_id").agg(
+        pl.col("poss").sum().alias("opp_poss_g"),
+        *(pl.col(c).sum() for c in ("shooting_pts", "turnover_pts", "rebounding_pts")),
+        (pl.col("free_throw_pts") + pl.col("residual_pts")).sum().alias("ft"),
+    )
+    rates = _rates(lg).filter(split="all")
+    assert rates.schema["team_id"] == allowed.schema["defense_id"]
+    joined = rates.join(allowed, left_on=["season", "team_id"], right_on=["season", "defense_id"], validate="1:1")
+    assert joined.height == rates.height
+    assert (joined["opp_poss"] == joined["opp_poss_g"]).all()
+    for part, game in (("efg", "shooting_pts"), ("tov", "turnover_pts"), ("orb", "rebounding_pts"), ("ft", "ft")):
+        gap = (joined[f"def_{part}_pts"] + 100 * joined[game] / joined["opp_poss"]).abs().max()
+        assert gap < 1e-9, part
