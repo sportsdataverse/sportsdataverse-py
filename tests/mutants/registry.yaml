@@ -12758,11 +12758,31 @@
   group: cfb-adjustment
   finding: cfb-adjustment-a1
   file: sportsdataverse/cfb/cfb_ratings.py
-  snippet: '    base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)'
+  snippet: '    base, clean = _prepare(plays, _ADJ_REQUIRED, None)'
   mutant: '    base, clean = _prepare(plays, _ADJ_REQUIRED)'
-  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_band_is_the_spread_free_wp
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_plays_are_the_margin_rule
   expected: kill
   note: Falls back to the spread-aware 0.1 <= wp_before <= 0.9 band, so the pregame line picks the plays.
+
+- id: cfb-efficiency-ratings-own-epa-plays
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '    opp = _adjust_games(clean, offense, defense, fill_strength=None)'
+  mutant: '    opp = _adjust_games(base, offense, defense, fill_strength=None)'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_plays_are_the_margin_rule
+  expected: kill
+  note: Nets a team's own EPA over garbage time the strength fit never saw.
+
+- id: cfb-efficiency-ratings-pace-every-play
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '        base.group_by("pos_team_id")'
+  mutant: '        clean.group_by("pos_team_id")'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_plays_are_the_margin_rule
+  expected: kill
+  note: Drops garbage time from games and off_pace too, shrinking the totals tempo input by ~8-10%.
 
 - id: cfb-efficiency-ratings-penalty
   group: cfb-adjustment
@@ -12844,3 +12864,104 @@
   test: tests/nba/test_nba_team_season_rates.py::test_wnba_2025_regular_season_and_playoffs_in_one_read
   expected: kill
   note: Every asked type would carry the first type's games, so the playoffs rows would be the regular season again.
+# --- CFB adjusted EPA: one garbage-time rule for the fit and a team's own EPA (A3) ----------------
+- id: cfb-adjusted-epa-fit-margin-rule
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_adjusted_epa.py
+  snippet: '        base, clean = _prepare(plays, _ADJ_REQUIRED, None)'
+  mutant: '        base, clean = _prepare(plays, _ADJ_REQUIRED, ("wp_before_naive", 0.05, 0.95))'
+  test: tests/cfb/test_cfb_adjusted_epa.py::test_fit_reads_the_score_margin_not_any_win_probability
+  expected: kill
+  note: Puts the season fit back on the naive WP band, which dropped 24% of plays, many within three scores.
+
+- id: cfb-adjusted-epa-own-epa-same-plays
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_adjusted_epa.py
+  snippet: "        base = clean  # a team's own EPA on the same plays as the fit"
+  mutant: '        pass'
+  test: tests/cfb/test_cfb_adjusted_epa.py::test_garbage_time_reaches_neither_the_fit_nor_a_teams_own_epa
+  expected: kill
+  note: Season own EPA back on every play, so blowing out a weak team lowers the rating again.
+
+- id: cfb-adjusted-epa-by-game-own-epa-same-plays
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_adjusted_epa.py
+  snippet: "        base = clean  # each week's own EPA on the same plays the fits use"
+  mutant: '        pass'
+  test: tests/cfb/test_cfb_adjusted_epa.py::test_own_epa_is_the_mean_over_the_kept_plays
+  expected: kill
+  note: The walk-forward per-game EPA would count garbage time the strengths never saw.
+
+# --- Premier Lacrosse League stats API runtime + parsers (pll_*) ----------------------------------
+- id: pll-referer-sent
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_runtime.py
+  snippet: '"Referer": f"{HOST}/",'
+  mutant: '"Referer": "https://example.com/",'
+  test: tests/test_pll.py::test_get_sends_the_referer_and_returns_stamped_data
+  expected: kill
+  note: The proxy answers 403 Origin not allowed to any other Referer.
+
+- id: pll-bool-query-lowercased
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_runtime.py
+  snippet: 'str(v).lower() if isinstance(v, bool) else v'
+  mutant: 'v'
+  test: tests/test_pll.py::test_wire_lowercases_bools_and_keeps_lists
+  expected: kill
+  note: requests would send True as "True"; the site sends true / false.
+
+- id: pll-stamp-skips-route-segments
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_runtime.py
+  snippet: '_NOT_SLUGS = frozenset({"season-stats", "stats"})'
+  mutant: '_NOT_SLUGS = frozenset()'
+  test: tests/test_pll.py::test_stamp
+  expected: kill
+  note: teams/season-stats and players/stats/... would be stamped as a team or player slug.
+
+- id: pll-envelope-required
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_runtime.py
+  snippet: 'if not isinstance(data, dict):'
+  mutant: 'if False:'
+  test: tests/test_pll.py::test_get_refuses_a_body_that_is_not_the_envelope
+  expected: kill
+  note: An error body or a bare list would reach the parsers as an empty answer instead of a failed fetch.
+
+- id: pll-whole-float-id-loses-dot-zero
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_parsers.py
+  snippet: 'return str(int(value)) if math.isfinite(value) and value.is_integer() else str(value)'
+  mutant: 'return str(value)'
+  test: tests/test_pll.py::test_malformed_cells_are_null_not_errors
+  expected: kill
+  note: A float-origin id would stringify as "3009.0" and never join.
+
+- id: pll-away-score-is-visitor
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_parsers.py
+  snippet: '"away_score": g.get("visitorScore")'
+  mutant: '"away_score": g.get("homeScore")'
+  test: tests/test_pll.py::test_schedule_scores_and_start_time
+  expected: kill
+  note: The API calls the away side visitor; reading home twice would still pass a schedule-only check.
+
+- id: pll-leaders-rank-one-based
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_parsers.py
+  snippet: 'enumerate(_l(rows), start=1)'
+  mutant: 'enumerate(_l(rows))'
+  test: tests/test_pll.py::test_leaders_are_long_and_ranked
+  expected: kill
+  note: The documented rank is 1-based.
