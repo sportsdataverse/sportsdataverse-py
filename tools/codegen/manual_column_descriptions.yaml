@@ -82146,6 +82146,165 @@ nhl_total_goals_distribution:
   prob: Probability the final score totals exactly total_goals; a game's rows sum to 1, and their prob-weighted mean of
     total_goals is the row's exp_total.
   prob_over: Probability the total is above total_goals, the over price for a line of total_goals + 0.5.
+pgatour_schedule_years:
+  season: Season year with a published schedule, as pgatour_schedule(year=) takes it (e.g. 2023 for the 2022-2023
+    season).
+  display_season: Season as the site labels it (e.g. "2026", "2022-2023").
+  is_default: True for the season the site shows by default (the current one).
+pgatour_tournaments:
+  tournament_id: PGA TOUR tournament id (tour code + season + event number, e.g. "R2026014").
+  tournament_name: Tournament name (sponsor title as listed).
+  season: Season year the tournament belongs to.
+  display_date: Tournament dates as the site displays them (e.g. "Apr 9 - 12, 2026").
+  tournament_status: Tournament status (e.g. "COMPLETED", "IN_PROGRESS", "NOT_STARTED").
+  round_status: Status of the current round (e.g. "OFFICIAL", "IN_PROGRESS").
+  round_display: Current round as displayed (e.g. "R4").
+  current_round: Current (or last) round number.
+  format_type: Scoring format (e.g. "STROKE_PLAY").
+  scored_level: Depth of scoring the site publishes (e.g. "BASIC", "TOURCAST" for ShotLink events).
+  city: City of the host course.
+  state: Host state or province.
+  country: Country of the host course.
+  timezone: Host time zone (IANA name, e.g. "America/New_York").
+  location: Location as displayed.
+pgatour_past_champions:
+  tournament_id: PGA TOUR tournament id the champions were asked for (the answer does not repeat it).
+  format_type: Tournament scoring format (e.g. "STROKE_PLAY").
+  season: Season of the edition the champion won.
+  display_season: Season as displayed.
+  player_id: Champion's PGA TOUR player id.
+  display_name: Champion's full name.
+  country_code: Champion's country code (e.g. "NIR").
+  total: Champion's total strokes.
+  to_par: Champion's score to par as displayed (e.g. "-12").
+pgatour_hole_by_hole:
+  tournament_id: PGA TOUR tournament id.
+  player_id: PGA TOUR player id.
+  course_id: Course id the player played the round on.
+  course_code: Course code (e.g. "AN").
+  hole_number: Hole number (1-18).
+  sequence_number: Order the player played the hole in (0-based; differs from hole_number on a two-tee start).
+  par: Par of the hole.
+  yardage: Hole yardage for the round.
+  score: Strokes on the hole; null on a hole not yet played.
+  score_status: Score relative to par ("EAGLE", "BIRDIE", "PAR", "BOGEY", "DOUBLE_BOGEY", ...).
+  round_to_par: Player's running score to par for the round after the hole, as displayed (e.g. "-1", "E").
+  front_nine: Player's strokes on holes 1-9 for the round.
+  back_nine: Player's strokes on holes 10-18 for the round.
+  round_total: Player's strokes for the round.
+  round_total_to_par: Player's round score to par as displayed.
+pgatour_leaderboard_stats:
+  tournament_id: PGA TOUR tournament id.
+  stats_type: Stat table (PROBABILITY, STROKES_GAINED or ODDS).
+  player_id: PGA TOUR player id.
+  stat_id: Stat column id (e.g. "win", "top10", "makeCut").
+  stat_title: Stat column heading the site shows (e.g. "Win %").
+  stat_value: Stat value as displayed (e.g. "12.3%").
+  rank: Player's rank on the stat as displayed ("1", "T5").
+  sort_value: Stat value as a number (a probability is a fraction, 0-1).
+pgatour_field:
+  tournament_id: PGA TOUR tournament id.
+  player_id: PGA TOUR player id.
+  first_name: Player's first name.
+  last_name: Player's last name.
+  display_name: Name as the field list shows it (e.g. "McIlroy, Rory").
+  short_name: Short name (e.g. "R. McIlroy").
+  country: Country the player represents.
+  country_code: Country code (e.g. "NIR").
+  amateur: True for an amateur.
+  alternate: True for an alternate (not yet in the field).
+  withdrawn: True for a player who withdrew.
+  status: Field status (e.g. "IN").
+  owgr: Official World Golf Ranking position as displayed.
+  qualifier: Exemption category the player got in under.
+  ranking_points: Ranking points as displayed.
+pgatour_past_results:
+  tournament_id: Tournament id of the edition the API answered with (e.g. "R2025014" for the 2025 Masters).
+  season: Season of that edition (read from tournament_id).
+  position: Finishing position as displayed ("1", "T5", "CUT", "WD").
+  player_id: PGA TOUR player id.
+  first_name: First name (the API can send it empty).
+  last_name: Last name (the API can send it empty).
+  display_name: Player's full name.
+  short_name: Short name (e.g. "R. McIlroy").
+  country: Country the player represents.
+  country_code: Country code (e.g. "NIR").
+  amateur: True for an amateur.
+  total: Total strokes over the event.
+  to_par: Score to par as displayed (e.g. "-11").
+  round_1: Strokes in round 1.
+  round_2: Strokes in round 2.
+  round_3: Strokes in round 3; null when the player missed the cut.
+  round_4: Strokes in round 4; null when the player missed the cut.
+pgatour_course_stats:
+  tournament_id: PGA TOUR tournament id.
+  course_id: Course id (the course_id pgatour_hole_details takes; leading zeros matter, e.g. "014").
+  course_name: Course name as listed.
+  course_code: Course code (e.g. "AN").
+  course_par: Par of the whole course.
+  course_yardage: Course yardage.
+  host_course: True for the host course of a multi-course event.
+  round_number: Round number; null on the all-rounds rows.
+  round_header: Round label ("All Rounds", "Round 1", ...).
+  hole_number: Hole number (1-18).
+  par: Par of the hole.
+  yards: Hole yardage for the tournament.
+  scoring_average: Field's scoring average on the hole.
+  scoring_average_diff: Scoring average minus par (positive plays over par).
+  difficulty_rank: Hole's difficulty rank on the course (1 = hardest).
+  eagles: Eagles (or better) made on the hole.
+  birdies: Birdies made on the hole.
+  pars: Pars made on the hole.
+  bogeys: Bogeys made on the hole.
+  double_bogeys: Double bogeys (or worse) made on the hole.
+pgatour_hole_details:
+  tournament_id: PGA TOUR tournament id.
+  course_id: Course id (leading zeros matter, e.g. "014").
+  hole_number: Hole number (1-18).
+  par: Par of the hole.
+  yards: Hole yardage for the tournament.
+  difficulty_rank: Hole's difficulty rank on the course (1 = hardest).
+  rounds_played: Rounds played on the hole over the tournament.
+  scoring_average_diff: Scoring average minus par (positive plays over par).
+  eagles: Eagles (or better) made on the hole.
+  eagles_pct: Share of rounds with an eagle, as displayed (e.g. "1%").
+  birdies: Birdies made on the hole.
+  birdies_pct: Share of rounds with a birdie, as displayed.
+  pars: Pars made on the hole.
+  pars_pct: Share of rounds with a par, as displayed.
+  bogeys: Bogeys made on the hole.
+  bogeys_pct: Share of rounds with a bogey, as displayed.
+  double_bogeys: Double bogeys (or worse) made on the hole.
+  double_bogeys_pct: Share of rounds with a double bogey or worse, as displayed.
+pgatour_scorecard_stats:
+  tournament_id: PGA TOUR tournament id.
+  round: Round number as a string ("1" .. "4"; "-1" is the whole tournament).
+  round_name: Round label ("Round 1", ..., "All").
+  round_status: Round status (e.g. "OFFICIAL").
+  stat_group: Stat group ("performance", "scoring" or "strokes_gained").
+  stat_id: PGA TOUR stat id of the line, where it has one.
+  stat_name: 'Stat label (e.g. "Birdies", "SG: Total").'
+  stat_value: Player's value for the round as displayed.
+  rank: Player's rank in the field on the stat for the round, as displayed ("1", "T7").
+  year_to_date: Player's season-to-date value of the stat as displayed ("-" when none).
+pgatour_player_results:
+  player_id: PGA TOUR player id.
+  tournament_num: Tournament's permanent number (usually the last three digits of its tournament ids, e.g. "014").
+  tournament_id: Tournament id of the edition (e.g. "R2015009").
+  tournament_name: Tournament name in that edition's season.
+  season: Season of the edition.
+  start_date: Edition start date as displayed (e.g. "3.19.2015").
+  course_name: Course the edition was played on.
+  position: Finishing position as displayed ("1", "T11", "CUT", "DNS").
+  to_par: Score to par as displayed (e.g. "-11").
+  total: Total strokes; null for a match-play event.
+  points: Season points race (FedExCup) points earned, as displayed.
+  points_rank: Points race rank after the event, as displayed.
+  winnings: Prize money as displayed (e.g. "$151,200.00").
+  round_1: Strokes in round 1.
+  round_2: Strokes in round 2.
+  round_3: Strokes in round 3; null for a round not played.
+  round_4: Strokes in round 4; null for a round not played.
 
 pll_schedule:
   game_id: Numeric game id (a STRING); the per-game routes take event_slug, not this.

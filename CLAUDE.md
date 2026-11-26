@@ -205,9 +205,10 @@ sportsdataverse/
   baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
-  lacrosse/   # ESPN lacrosse (league-parameterized: PLL, men's and women's college; probed endpoint allowlist)
+  lacrosse/   # ESPN lacrosse (league-parameterized: PLL, NLL, men's and women's college; probed endpoint allowlist)
               #   + the PLL stats API family pll_* (runtime only; pll_runtime sends the stats site's Referer, no key)
-  golf/       # ESPN golf (league-parameterized: pga, lpga, liv, eur, champions-tour) + golf_espn_parsers (field-of-players leaderboard)
+  golf/       # ESPN golf (league-parameterized: pga, lpga, liv, eur, champions-tour, ntw, tgl, wtgl, men's / women's olympics)
+              #   + golf_espn_parsers (field-of-players leaderboard)
               #   + the PGA TOUR GraphQL family pgatour_* (runtime only; pgatour_runtime posts pgatour_queries/*.graphql)
   football/   # UFL / XFL / CFL ESPN families
   nbagl/      # NBA G League: ESPN wrappers, nbagl_stats (stats.nba.com, LeagueID=20) and engine helpers
@@ -264,8 +265,8 @@ description of that pattern anywhere, it predates 0.1.x.
 
 Total cross-league surface: **127 short names** (from the five ESPN
 endpoint YAMLs in `generate.ESPN_APIS`) emitted across 42 league modules
-= **4,632 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
-lacrosse emits 35, golf 31). The `espn_cdn` family (`cdn.espn.com/core`, shorts
+= **4,647 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
+lacrosse emits 35, golf 46). The `espn_cdn` family (`cdn.espn.com/core`, shorts
 `cdn_playbyplay` / `cdn_boxscore` / `cdn_schedule` / `cdn_scoreboard` /
 `cdn_rankings`) is the one family whose per-league reach was live-probed:
 each endpoint carries an `include_prefixes` allowlist (league prefixes, so

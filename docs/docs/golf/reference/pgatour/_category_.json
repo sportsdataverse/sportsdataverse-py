@@ -1,0 +1,6 @@
+{
+  "label": "PGA TOUR GraphQL API (orchestrator.pgatour.com; runtime only, public frontend key or $PGA_API_KEY)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "golf/reference/pgatour"}
+}

@@ -442,6 +442,17 @@ pgatour:
   stat_details_120_R_2026.json: stat_details
   tour_cup_02671_R_2025.json: tour_cup
   shot_details_R2026006_59095_r4.json: shot_details
+  schedule_years_R.json: schedule_years
+  tournaments_R2026014.json: tournaments
+  past_champions_R2026014.json: past_champions
+  hole_by_hole_R2026014_r4.json: hole_by_hole
+  leaderboard_stats_R2026014_PROBABILITY.json: leaderboard_stats
+  field_R2026014.json: field
+  past_results_R2026014_20250.json: past_results
+  course_stats_R2026014.json: course_stats
+  hole_details_R2026014_014_12.json: hole_details
+  scorecard_stats_R2026014_28237.json: scorecard_stats
+  player_results_28237_R.json: player_results
 
 pll:
   # GET stats.premierlacrosseleague.com/api/... (routes and arguments in tests/fixtures/pll/README.md)
