@@ -12130,6 +12130,77 @@
   expected: kill
   note: A page the origin 500s on halts the nightly capture as BAN-SUSPECT instead of counting one failed contest.
 
+# --- NCAA college baseball pbp: runner clauses in every page format (2026-11-26) -------------------
+- id: bb-runner-clauses-not-cut
+  group: bb-runner-clauses
+  finding: bb-runner-clause-split
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "cuts = [m.start() for m in _RUNNER_START_RE.finditer(piece) if m.start() > 0]"
+  mutant: "cuts = []"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k \"runner_clauses or reconciles or run_on\""
+  expected: kill
+  note: "Run-on runner clauses stay in the batter clause again: 2012-2021 lose ~95% of runs."
+
+- id: bb-then-scored-dropped
+  group: bb-runner-clauses
+  finding: bb-runner-clause-split
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "if _THEN_SCORED_RE.search(c):"
+  mutant: "if False:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "An 'advanced to third, scored on an error' clause counts no run."
+
+- id: bb-lead-runner-scored-dropped
+  group: bb-runner-clauses
+  finding: bb-runner-clause-split
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "if (ps := _SCORED_RE.match(primary)) and out[\"play_type\"] != \"home_run\":"
+  mutant: "if (ps := None):"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A row led by its scoring runner ('Mihos, D. scored on a wild pitch.') counts no run."
+
+- id: bb-fielders-choice-apostrophe
+  group: bb-runner-clauses
+  finding: bb-runner-clause-split
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "if re.search(r\"fielder'?s choice\", low):"
+  mutant: "if \"fielder's choice\" in low:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k run_on_batter_clause"
+  expected: kill
+  note: "2020's 'fielders choice' (no apostrophe) reads as unknown and the batter is not on base."
+
+- id: bb-out-after-advance-dropped
+  group: bb-runner-clauses
+  finding: bb-runner-clause-split
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "elif _OUT_RE.search(c.lower()):  # \"BIRKOFER advanced to third, out at home rf to ss to c.\""
+  mutant: "elif False:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py::test_runner_led_row_and_out_after_advance"
+  expected: kill
+  note: "A runner who advances and is then put out counts no out."
+
+- id: bb-lead-runner-advance-dropped
+  group: bb-runner-clauses
+  finding: bb-runner-clause-split
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "for c in clauses if lead_runner else clauses[1:]:"
+  mutant: "for c in clauses[1:]:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py::test_runner_led_row_and_out_after_advance"
+  expected: kill
+  note: "A row led by a runner's advance drops that runner from runners_advanced."
+
+- id: bb-bare-initial-substitution
+  group: bb-runner-clauses
+  finding: bb-runner-clause-split
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "_SUB_NAME = _NAME  # the same name shapes, bare initials included (\"C Mcguire to p for Smith.\")"
+  mutant: "_SUB_NAME = r\"[A-Z][A-Za-z'.\\-]+(?:\\s+[A-Z][A-Za-z'.\\-]+)*(?:,\\s*[A-Z][A-Za-z'.\\-]*\\.?)?\""
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py::test_bare_initial_substitution_has_no_batter"
+  expected: kill
+  note: "A bare-initial substitution ('B Hughes to p for J Barroqueir.') keeps a batter."
+
 # --- PR #1268: free throws on the lineup at their foul -------------------------------------------
 - id: ft-box-follows-the-foul
   group: ft-foul

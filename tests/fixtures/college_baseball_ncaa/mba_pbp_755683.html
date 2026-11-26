@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<meta name="version" content="feeb32153d9bed558435a4ede24c2ce804f2d071">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+<link rel="shortcut icon" href="/assets/favicon-405088046a5f2bab8eedeacfae7636975c095e9c8decd8c28e3fd0e65c2f51c4.ico" type="image/vnd.microsoft.icon">
+
+<title>NCAA Statistics</title>
+
+<!-- Bootstrap core CSS -->
+
+<!--
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+-->
+<!--
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.bootstrap4.css" crossorigin="anonymous">
+-->
+<link rel="stylesheet" media="all" href="/assets/application-a70fa0b707278f6898e12deee7f85b52f8418d1d2a66acad1fa0fb537057341f.css" />
+
+
+<script src="/assets/application-1cc000a461391d0c0abdb926157f8fc4fdb27fa2d0693f18d19d7fdfbbf92438.js"></script>
+<!--
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+-->
+<!--
+<script src="https://cdn.datatables.net/2.0.0/js/dataTables.bootstrap4.js" crossorigin="anonymous"></script>
+-->
+
+<meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="REDACTED" />
+
+<style>
+.grid {clear: all}
+.grid-item, .name {text-align: center;}
+h1 img {max-height: 33px;}
+
+</style>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+
+<script>(window.BOOMR_mq=window.BOOMR_mq||[]).push(["addVar",{"rua.upush":"false","rua.cpush":"false","rua.upre":"false","rua.cpre":"false","rua.uprl":"false","rua.cprl":"false","rua.cprf":"false","rua.trans":"","rua.cook":"false","rua.ims":"false","rua.ufprl":"false","rua.cfprl":"false","rua.isuxp":"false","rua.texp":"norulematch","rua.ceh":"false","rua.ueh":"false","rua.ieh.st":"0"}]);</script>
+                                <script>!function(e){var n="https://s.go-mpulse.net/boomerang/";if("False"=="True")e.BOOMR_config=e.BOOMR_config||{},e.BOOMR_config.PageParams=e.BOOMR_config.PageParams||{},e.BOOMR_config.PageParams.pci=!0,n="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="EVKJV-AGD2E-W66AE-NT84S-K5LTF",function(){function e(){if(!r){var e=document.createElement("script");e.id="boomr-scr-as",e.src=window.BOOMR.url,e.async=!0,o.appendChild(e),r=!0}}function t(e){r=!0;var n,t,a,i,d=document,O=window;if(window.BOOMR.snippetMethod=e?"if":"i",t=function(e,n){var t=d.createElement("script");t.id=n||"boomr-if-as",t.src=window.BOOMR.url,BOOMR_lstart=(new Date).getTime(),e=e||d.body,e.appendChild(t)},!window.addEventListener&&window.attachEvent&&navigator.userAgent.match(/MSIE [67]\./))return window.BOOMR.snippetMethod="s",void t(o,"boomr-async");a=document.createElement("IFRAME"),a.src="about:blank",a.title="",a.role="presentation",a.loading="eager",i=(a.frameElement||a).style,i.width=0,i.height=0,i.border=0,i.display="none",o.appendChild(a);try{O=a.contentWindow,d=O.document.open()}catch(_){n=document.domain,a.src="javascript:var d=document.open();d.domain='"+n+"';void 0;",O=a.contentWindow,d=O.document.open()}if(n)d._boomrl=function(){this.domain=n,t()},d.write("<bo"+"dy onload='document._boomrl();'>");else if(O._boomrl=function(){t()},O.addEventListener)O.addEventListener("load",O._boomrl,!1);else if(O.attachEvent)O.attachEvent("onload",O._boomrl);d.close()}function a(e){window.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!window.BOOMR||!window.BOOMR.version&&!window.BOOMR.snippetExecuted){window.BOOMR=window.BOOMR||{},window.BOOMR.snippetStart=(new Date).getTime(),window.BOOMR.snippetExecuted=!0,window.BOOMR.snippetVersion=14,window.BOOMR.url=n+"EVKJV-AGD2E-W66AE-NT84S-K5LTF";var i=document.currentScript||document.getElementsByTagName("script")[0],o=i.parentNode,r=!1,d=document.createElement("link");if(d.relList&&"function"==typeof d.relList.supports&&d.relList.supports("preload")&&"as"in d)window.BOOMR.snippetMethod="p",d.href=window.BOOMR.url,d.rel="preload",d.as="script",d.addEventListener("load",e),d.addEventListener("error",function(){t(!0)}),setTimeout(function(){if(!r)t(!0)},3e3),BOOMR_lstart=(new Date).getTime(),o.appendChild(d);else t(!1);if(window.addEventListener)window.addEventListener("load",a,!1);else if(window.attachEvent)window.attachEvent("onload",a)}}(),"".length>0)if(e&&"performance"in e&&e.performance&&"function"==typeof e.performance.setResourceTimingBufferSize)e.performance.setResourceTimingBufferSize();!function(){if(BOOMR=e.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var n=""=="true"?1:0,t="cookiepresent",a="r2w6dvfydmdhu2yhj23a-f-fce01e159-clientnsv4-s.akamaihd.net",i="false"=="true"?2:1,o={"ak.v":"41","ak.cp":"1168236","ak.ai":parseInt("215853",10),"ak.ol":"0","ak.cr":3,"ak.ipv":4,"ak.proto":"h2","ak.rid":"e03c9496","ak.r":51487,"ak.a2":n,"ak.m":"a","ak.n":"essl","ak.cport":41887,"ak.gh":"23.3.12.96","ak.quicv":"","ak.tlsv":"tls1.3","ak.0rtt":"","ak.0rtt.ed":"","ak.csrc":"-","ak.acc":"","ak.t":"1795641014","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==aqHoAG+R85IK3a5mPbp8VklDJ18XawJBzIQ3uWqC51F+mWtsUHtl0PDayxtmP+ZuH9hL+zgYZVnryUiD18JdHhWT0NF6VIx9K700/1WS322+fAi7rUEYviHi6K9dsV41Jrq6z35XCgNkxnjjG56ArypvJ4iERPjo2DQGC+RfH06fCr+2No+e+nvOJoTdvikeVibgibeZlJMidomh70ZCSEeyhQ5N7CdjCcItLlt86jCGmxS6EFm6esYe9IQXX9PS7vn8ZGfePfXVQ1JG2Liim0aLgkrg28Grh6GN7oUQxJ6qlOXuw2ME6wXSNnHFPCz0HtT9n6zIH0pxUhpjLOoFS1ru5y5U10G6hJU49yy06zByQDVyGbBPrbT6r25PHHNdUOMBOp4K3gyqe3oLrOkn03PoLvqXviAJhi79KzEpY84=","ak.pv":"96","ak.dpoabenc":"","ak.tf":i};if(""!==t)o["ak.ruds"]=t;var r={i:!1,av:function(n){var t="http.initiator";if(n&&(!n[t]||"spa_hard"===n[t]))o["ak.feo"]=void 0!==e.aFeoApplied?1:0,BOOMR.addVar(o)},rv:function(){var e=["ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.0rtt.ed","ak.r","ak.acc","ak.t","ak.tf"];BOOMR.removeVar(e)}};BOOMR.plugins.AK={akVars:o,akDNSPreFetchDomain:a,init:function(){if(!r.i){var e=BOOMR.subscribe;e("before_beacon",r.av,null,null),e("onbeacon",r.rv,null,null),r.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script></head>
+
+  <script>
+(function() {
+  var pageLoadedAt = Date.now();
+  var lastSentAt = 0;
+  var SEND_INTERVAL = 3000;
+
+  var movedSinceLastInteraction = false;
+
+  function csrfToken() {
+    var element = document.querySelector('meta[name="csrf-token"]');
+    return element ? element.getAttribute('content') : '';
+  }
+
+  function sendInteraction(type, clickedHref) {
+    var now = Date.now();
+
+    //
+    // Link navigation must not be lost to the normal interaction
+    // throttle. Ordinary interactions remain throttled.
+    //
+    if (!clickedHref && (now - lastSentAt) < SEND_INTERVAL) {
+      return;
+    }
+
+    lastSentAt = now;
+
+    var payload = {
+      type: type,
+      ms_since_page_load: now - pageLoadedAt,
+      moved_before_click: movedSinceLastInteraction,
+      page_path: window.location.pathname,
+      clicked_href: clickedHref || null
+    };
+
+    fetch('/client/event', {
+      method: 'POST',
+      credentials: 'same-origin',
+      keepalive: true,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken()
+      },
+      body: JSON.stringify(payload)
+    }).catch(function() {
+      // Never allow tracking failure to impact the application.
+    });
+
+    movedSinceLastInteraction = false;
+  }
+
+  function clickedHref(event) {
+    var target = event.target;
+
+    if (!target || !target.closest) {
+      return null;
+    }
+
+    var link = target.closest('a');
+
+    if (!link) {
+      return null;
+    }
+
+    var href = link.getAttribute('href');
+
+    if (!href || href.charAt(0) !== '/') {
+      return null;
+    }
+
+    return href;
+  }
+
+  document.addEventListener('mousemove', function() {
+    movedSinceLastInteraction = true;
+  }, {
+    passive: true
+  });
+
+  document.addEventListener('pointerdown', function(event) {
+    sendInteraction(
+      'pointer',
+      clickedHref(event)
+    );
+  }, true);
+
+  document.addEventListener('keydown', function() {
+    sendInteraction('keyboard', null);
+  }, true);
+
+  document.addEventListener('touchstart', function(event) {
+    sendInteraction(
+      'touch',
+      clickedHref(event)
+    );
+  }, true);
+})();
+
+    
+  //initialize tooltip
+  $(document).ready(function() {
+    //$("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+
+  $(document).ready(function() {
+    $( "#org_name" ).autocomplete({
+      source: '/team/search',
+      select: function( event, ui ) {
+        $("#org_id").val(ui.item.vid);
+        $("#id").val(ui.item.vid);
+        $('#sport_btn').click();
+      }
+    });
+  });
+
+  var body = 'body';
+
+  $.ajaxSetup ({
+    // Disable caching of AJAX responses
+    cache: false
+  });
+
+  function changeSport(field){
+    var el = $(field);
+    var tmList = el.parent().next().find('.new-team-year')[0];
+    if (tmList == null){
+      tmList = el.nextAll('.new-team-year')[0];
+    }
+    $.ajax({
+      url: "/game_sport_year_ctls/"+el.val()+"/available_teams",
+      dataType: "script",
+      success: function(data, status){
+        $(tmList).empty();
+        $(tmList).append(("<option value=''>Select team</option>"));
+        $.each(JSON.parse(data), function(k, v){
+          $(tmList).append($("<option></option>")
+              .attr("value", v["id"])
+              .text(v["member_org"]["name_tabular"]));
+        });
+        $(tmList).trigger("chosen:updated");
+      }
+    });
+  }
+
+    function set_process_styles(fld, start_color, end_color){
+       $('#'+fld).effect('highlight', {color: '#99CC99'}, 6000);
+    }
+
+    var downImage = "/assets/down12.gif";
+    var rightImage = "/assets/right12.gif";
+
+    function highlight(div_id){
+      $(div_id).effect('highlight', {color: '#99CC99'}, 6000);
+    }
+
+    function show_hide_rows(attr_val, link_id){
+      $('#'+attr_val).toggle();
+      if ($('#'+attr_val).is(':visible')) {
+        $('#'+link_id).attr('src', downImage);
+      }else{
+        $('#'+link_id).attr('src', rightImage);
+      }
+    }
+
+    function mask(label){
+      $('body').mask(label);
+    }
+    function unmask(){
+      $('body').unmask();
+    }
+
+    var winHeight = "auto";
+    var winWidth = "auto";
+    var maxHeight = 700;
+    var maxWidth = 1400;
+    var minHeight = 100;
+    var minWidth = 200;
+    
+    var modalOptions = {"width": winWidth,
+                        "height": winHeight,
+                        "maxHeight": maxHeight,
+                        "maxWidth": maxWidth,
+                        "minHeight": minHeight,
+                        "minWidth": minWidth};
+
+    function dialog(url, title){
+
+      $("#stats_app_dialog").dialog({modal:true, minWidth:minWidth, minHeight:minHeight, maxWidth:maxWidth, maxHeight:maxHeight, width:winWidth, height:winHeight, title:title, closeOnEscape: false});
+    
+      modalOptions.title = title;
+    
+      $("#stats_app_dialog").dialog("option", modalOptions);
+    
+      $("#stats_app_dialog").html("Loading...");
+      $("#stats_app_dialog").load(url).dialog('open');
+    }
+
+    function addDatePicker(){
+    $('.adddatepicker').each(function(i, obj){
+      $(obj).datepicker({ 
+        showOn: 'both', 
+        buttonImage: '/assets/calendar.gif', 
+        buttonImageOnly: true,
+      });
+    });
+    }
+
+   $(document).ready(function() {
+     addDatePicker();
+     $('.chosen-select').chosen({allow_single_deselect: true, search_contains: true, width: '250px'});
+     $('.chosen-select-wide').chosen({allow_single_deselect: true, search_contains: true, width: '400px'});
+   });
+
+   function setClassInputFields(){
+     addDatePicker();
+     $('.chosen-select').chosen({allow_single_deselect: true, search_contains: true, width: '250px'});
+     $('.chosen-select-wide').chosen({allow_single_deselect: true, search_contains: true, width: '400px'});
+   }
+
+   function isValidDateFormat(dateStr){
+     const regex = /^([1-9]|0[1-9]|1[0-2])\/([1-9]|0[1-9]|[12][0-9]|3[01])\/(19|20)\d{2}$/;
+     if (!regex.test(dateStr)) {
+       return false;
+     }else{
+       return true;
+     }
+   }
+
+  </script>
+
+
+<body style="font-size: .75rem;" onload="if (top != self) { top.location=self.location; }" >
+
+      <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light header-dark-border-color py-0">
+        <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="statistics">
+                          <img alt="NCAA" style="margin-left: 24px; margin-right: 0; margin-top: 6px;" src="/assets/ncaa-fbc4d0406ae731b47babcc3fca53775b5955ef372bf8b8e998ca9a513e468b8f.svg" />
+                          <span class="title" class="dark-blue-font">Statistics</span>
+        </a>
+       </nav>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light header-dark-border-color py-0" style="background-color: var(--color-dark-blue) !important;">
+  <button class="navbar-toggler bg-white" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0 justify-content-center">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle skipMask" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Rankings
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/rankings">National Rankings</a>
+          <a class="dropdown-item" href="/active_career_leaders">Active Career Leaders</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/contests/livestream_scoreboards">Scoreboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/selection_rankings/nitty_gritties">Selection Rankings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/head_coaches">Head Coaches</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/search/players">Players</a>
+      </li>
+     </ul>
+
+    <form onsubmit="mask(&#39;Loading&#39;);" id="change_team_form" style="display:inline;" class="form-inline my-2 my-lg-0" action="/team/index" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="REDACTED" />
+  <div style="display:none;">
+  <input type="submit" name="commit" value="Submit" id="sport_btn" data-disable-with="Submit" />
+  </div>
+    <div id="team_autocomplete" class="ui-widget">
+      <input type="search" name="org_name" id="org_name" style="width:200px; font-size: 12px !important" class="form-control mr-sm-2" placeholder="Team Search" />
+      <input type="hidden" name="org_id" id="org_id" />
+    </div>
+</form>  </div>
+  </nav>
+</nav>
+      </header>
+
+       <div id="stats_app_dialog" style="display:none;">
+        </div>
+
+<div class="card p-1">
+  <div class="card-body application contests p-0">
+    <h3 class="card-title p-0"></h3>
+    <div class="container-fluid p-0">
+      <div class="row align-items-center justify-content-center p-0">
+        <div class="col-sm-12 p-0">
+          <br/>
+
+
+
+<br/>
+
+<style>
+.winner{
+  --display: flex;
+  vertical-align: middle;
+}
+.winner:before{
+  content: '\25BA';
+  --display: flex;
+  --align-items: center;
+  vertical-align: middle;
+}
+div.center {
+  margin: auto;
+  width: 50%;
+  --border: 3px solid green;
+  padding: 10px;
+}
+</style>
+
+   <div class="table-responsive">
+   <table align="center">
+     <tr>
+   <td>
+     <a target="TEAMS_WIN" class="skipMask" href="/teams/13670"><img class="large_logo_image" alt="Morehead St." src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//444.gif" /></a>
+   </td>
+   <td valign="center" class="grey_text d-none d-sm-table-cell" nowrap>
+     <span style="font-size:18px">
+     <a target="TEAMS_WIN" class="skipMask" href="/teams/13670">Morehead St. Eagles</a>
+     </span><br/>
+       
+   </td>
+   <td valign="center" class="">
+   </td>
+   <td valign="center" style="font-size:36px; color: grey">
+     9
+   </td>
+     <td style="padding: 0px 30px 0px 30px"  class="d-none d-md-table-cell">
+       <table style="border-collapse: collapse">
+         <tr>
+           <td class="grey_border_bottom"></td>
+             <td width="20px" nowrap class="grey_text grey_border_bottom" align="right">1</td>
+             <td width="20px" nowrap class="grey_text grey_border_bottom" align="right">2</td>
+             <td width="20px" nowrap class="grey_text grey_border_bottom" align="right">3</td>
+             <td width="20px" nowrap class="grey_text grey_border_bottom" align="right">4</td>
+             <td width="20px" nowrap class="grey_text grey_border_bottom" align="right">5</td>
+             <td width="20px" nowrap class="grey_text grey_border_bottom" align="right">6</td>
+             <td width="20px" nowrap class="grey_text grey_border_bottom" align="right">7</td>
+             <td width="20px" nowrap class="grey_text grey_border_bottom" align="right">8</td>
+             <td width="20px" nowrap class="grey_text grey_border_bottom" align="right">9</td>
+           <td width="20px" align="right" style="font-weight:bold" class="grey_border_bottom">R</td>
+           <td width="20px" align="right" style="font-weight:bold" class="grey_border_bottom">H</td>
+           <td width="20px" align="right" style="font-weight:bold" class="grey_border_bottom">E</td>
+         </tr>
+           <tr>
+             <td>Morehead St.</td>
+               <td class="grey_text" align="right">0</td>
+               <td class="grey_text" align="right">0</td>
+               <td class="grey_text" align="right">0</td>
+               <td class="grey_text" align="right">1</td>
+               <td class="grey_text" align="right">5</td>
+               <td class="grey_text" align="right">0</td>
+               <td class="grey_text" align="right">0</td>
+               <td class="grey_text" align="right">0</td>
+               <td class="grey_text" align="right">0</td>
+             <td align="right" style="font-weight:bold">9</td>
+                <td align="right" style="font-weight:bold">
+                  10
+                </td>
+                <td align="right" style="font-weight:bold">
+                  0
+                </td>
+           </tr>
+           <tr>
+             <td>Mercer</td>
+               <td class="grey_text" align="right">0</td>
+               <td class="grey_text" align="right">0</td>
+               <td class="grey_text" align="right">2</td>
+               <td class="grey_text" align="right">1</td>
+               <td class="grey_text" align="right">6</td>
+               <td class="grey_text" align="right">11</td>
+               <td class="grey_text" align="right">1</td>
+               <td class="grey_text" align="right">1</td>
+               <td class="grey_text" align="right"></td>
+             <td align="right" style="font-weight:bold">22</td>
+                <td align="right" style="font-weight:bold">
+                  22
+                </td>
+                <td align="right" style="font-weight:bold">
+                  0
+                </td>
+           </tr>
+         <tr>
+           <td class="grey_text" colspan="11">02/17/2012</td>
+         </tr>
+         <tr>
+           <td nowrap class="grey_text" colspan="11">Macon, GA</td>
+         </tr>
+         <tr>
+           <td nowrap class="grey_text" colspan="11">Attendance: 524</td>
+         </tr>
+       </table>
+     </td>
+   <td>
+     <a target="TEAMS_WIN" class="skipMask" href="/teams/13658"><img class="large_logo_image" alt="Mercer" src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//406.gif" /></a>
+   </td>
+   <td valign="center" class="grey_text d-none d-sm-table-cell" nowrap>
+     <span style="font-size:18px">
+     <a target="TEAMS_WIN" class="skipMask" href="/teams/13658">Mercer Bears</a>
+     </span><br/>
+       
+   </td>
+   <td valign="center" class="winner">
+   </td>
+   <td valign="center" style="font-size:36px; color: black">
+     22
+   </td>
+     </tr>
+     <tr>
+       <td colspan="10" class="grey_border_bottom grey_border_top">
+         <table cellpadding="10px">
+           <tr>
+             <td style="font-size: 16px;"><a href="/contests/755683/box_score">Box Score</a></td>
+             <td style="font-size: 16px;"><a href="/contests/755683/team_stats">Team Stats</a></td>
+             <td style="font-size: 16px;"><a href="/contests/755683/individual_stats">Individual Stats</a></td>
+             <td style="font-size: 16px;"><a href="/contests/755683/situational_stats">Situational Stats</a></td>
+             <td style="font-size: 16px;">Play By Play</td>
+             <td style="font-size: 16px;"><a href="/contests/755683/officials">Umpires</a></td>
+           </tr>
+         </table>
+       </td>
+     </tr>
+   </table>
+ </div>
+
+
+<br/>
+
+  <div class="row justify-content-md-center w-100">
+  <div class="col p-2" style="max-width: 800px;">
+    <div class="card table-responsive">
+      <div class="card-header">
+         1st Inning
+      </div>
+      <div class="card-body">
+        <table class="table" align="center">
+          <thead>
+            <tr>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Morehead St." src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//444.gif" /><span class='d-none d-sm-block'>Morehead St.</span></div></th>
+	            <th width="10%" align="center">Score</th>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Mercer" src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//406.gif" /><span class='d-none d-sm-block'>Mercer</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+	            <td>PICKENS walked (3-1).</td>
+	            <td>0-0</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BAINER L struck out looking (2-2) PICKENS out at second c to ss, caught stealing.</td>
+	            <td>0-0</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BAINER, E struck out looking (2-2).</td>
+	            <td>0-0</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-0</td>
+              <td>WORKMAN flied out to lf (0-0).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-0</td>
+              <td>BOYD out at first 1b to p (1-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-0</td>
+              <td>GAINES flied out to rf (2-1).</td>
+            </tr>
+          </tbody>
+          <tfoot>
+           <tr class="table-dark">
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+             <td>0-0</td>
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+            </tr>
+          </tfoot>
+       </table>
+     </div>
+     </div>
+  </div>
+</div>
+<div class="row justify-content-md-center w-100">
+  <div class="col p-2" style="max-width: 800px;">
+    <div class="card table-responsive">
+      <div class="card-header">
+         2nd Inning
+      </div>
+      <div class="card-body">
+        <table class="table" align="center">
+          <thead>
+            <tr>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Morehead St." src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//444.gif" /><span class='d-none d-sm-block'>Morehead St.</span></div></th>
+	            <th width="10%" align="center">Score</th>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Mercer" src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//406.gif" /><span class='d-none d-sm-block'>Mercer</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+	            <td>DEEDS struck out looking (1-2).</td>
+	            <td>0-0</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>CLEVELAND lined out to cf (0-0).</td>
+	            <td>0-0</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BEGEMAN struck out swinging (2-2).</td>
+	            <td>0-0</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-0</td>
+              <td>BARRETT grounded out to 3b (1-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-0</td>
+              <td>BACKLUND popped up to ss (0-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-0</td>
+              <td>REID-FOLEY grounded out to 2b (2-0).</td>
+            </tr>
+          </tbody>
+          <tfoot>
+           <tr class="table-dark">
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+             <td>0-0</td>
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+            </tr>
+          </tfoot>
+       </table>
+     </div>
+     </div>
+  </div>
+</div>
+<div class="row justify-content-md-center w-100">
+  <div class="col p-2" style="max-width: 800px;">
+    <div class="card table-responsive">
+      <div class="card-header">
+         3rd Inning
+      </div>
+      <div class="card-body">
+        <table class="table" align="center">
+          <thead>
+            <tr>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Morehead St." src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//444.gif" /><span class='d-none d-sm-block'>Morehead St.</span></div></th>
+	            <th width="10%" align="center">Score</th>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Mercer" src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//406.gif" /><span class='d-none d-sm-block'>Mercer</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+	            <td>GREENWELL struck out swinging (1-2).</td>
+	            <td>0-0</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>ELMORE lined out to lf (2-2).</td>
+	            <td>0-0</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BIRKOFER singled to left field (2-0).</td>
+	            <td>0-0</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>PICKENS doubled to right center (1-0) BIRKOFER advanced to third, out at home rf to ss to c.</td>
+	            <td>0-0</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-0</td>
+              <td>YOUNG singled to left field (0-0).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-0</td>
+              <td>MOORHOUSE hit by pitch (2-2) YOUNG advanced to second.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-0</td>
+              <td>JOHNSON out at first c to 2b, SAC (0-1) MOORHOUSE advanced to second YOUNG advanced to third.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-1</td>
+              <td>WORKMAN singled to right field, RBI (0-1) MOORHOUSE advanced to third YOUNG scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-2</td>
+              <td>BOYD flied out to cf, SF, RBI (1-1) MOORHOUSE scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>0-2</td>
+              <td>GAINES flied out to lf (0-0).</td>
+            </tr>
+          </tbody>
+          <tfoot>
+           <tr class="table-dark">
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+             <td>0-2</td>
+             <td>R: 2, H: 2, E: 0, LOB: 1 </td>
+            </tr>
+          </tfoot>
+       </table>
+     </div>
+     </div>
+  </div>
+</div>
+<div class="row justify-content-md-center w-100">
+  <div class="col p-2" style="max-width: 800px;">
+    <div class="card table-responsive">
+      <div class="card-header">
+         4th Inning
+      </div>
+      <div class="card-body">
+        <table class="table" align="center">
+          <thead>
+            <tr>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Morehead St." src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//444.gif" /><span class='d-none d-sm-block'>Morehead St.</span></div></th>
+	            <th width="10%" align="center">Score</th>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Mercer" src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//406.gif" /><span class='d-none d-sm-block'>Mercer</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+	            <td>BAINER L flied out to rf (2-1).</td>
+	            <td>0-2</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BAINER, E singled to center field (1-0).</td>
+	            <td>0-2</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>DEEDS grounded out to ss (2-2) BAINER, E advanced to second.</td>
+	            <td>0-2</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>CLEVELAND singled to left field, RBI (1-1) BAINER, E scored.</td>
+	            <td>1-2</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BEGEMAN grounded out to 1b unassisted (1-2).</td>
+	            <td>1-2</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>1-2</td>
+              <td>BARRETT singled to left field (0-0).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>1-2</td>
+              <td>BACKLUND popped up to 2b (0-0).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>1-2</td>
+              <td>REID-FOLEY singled to left field (0-1) BARRETT advanced to second.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>1-3</td>
+              <td>YOUNG doubled down the lf line, RBI (0-1) REID-FOLEY advanced to third BARRETT scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>1-3</td>
+              <td>MOORHOUSE struck out swinging (1-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>1-3</td>
+              <td>JOHNSON grounded out to 3b (0-2).</td>
+            </tr>
+          </tbody>
+          <tfoot>
+           <tr class="table-dark">
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+             <td>1-3</td>
+             <td>R: 1, H: 3, E: 0, LOB: 2 </td>
+            </tr>
+          </tfoot>
+       </table>
+     </div>
+     </div>
+  </div>
+</div>
+<div class="row justify-content-md-center w-100">
+  <div class="col p-2" style="max-width: 800px;">
+    <div class="card table-responsive">
+      <div class="card-header">
+         5th Inning
+      </div>
+      <div class="card-body">
+        <table class="table" align="center">
+          <thead>
+            <tr>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Morehead St." src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//444.gif" /><span class='d-none d-sm-block'>Morehead St.</span></div></th>
+	            <th width="10%" align="center">Score</th>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Mercer" src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//406.gif" /><span class='d-none d-sm-block'>Mercer</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+	            <td>GREENWELL flied out to lf (0-0).</td>
+	            <td>1-3</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>ELMORE walked (3-1).</td>
+	            <td>1-3</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BIRKOFER singled to left field (1-1) ELMORE advanced to second.</td>
+	            <td>1-3</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>ELMORE stole third.</td>
+	            <td>1-3</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>PICKENS hit by pitch (2-2) BIRKOFER advanced to second.</td>
+	            <td>1-3</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BAINER L singled to left field, RBI (1-1) PICKENS advanced to second BIRKOFER advanced to third ELMORE scored.</td>
+	            <td>2-3</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>TEASLEY to p for LOVE.</td>
+	            <td>2-3</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BAINER, E homered, 4 RBI (0-1) BAINER L scored PICKENS scored BIRKOFER scored.</td>
+	            <td>6-3</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>DEEDS popped up to 3b (0-0).</td>
+	            <td>6-3</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>CLEVELAND popped up to ss (1-2).</td>
+	            <td>6-3</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-3</td>
+              <td>WORKMAN walked (3-0).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-3</td>
+              <td>BOYD singled to center field (3-2) WORKMAN advanced to second.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-3</td>
+              <td>GAINES singled to shortstop (1-0) BOYD advanced to second WORKMAN advanced to third.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-3</td>
+              <td>BARRETT struck out looking (3-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-4</td>
+              <td>BACKLUND walked, RBI (3-0) GAINES advanced to second BOYD advanced to third WORKMAN scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-4</td>
+              <td>ARIAS to p for SCHNEIDER.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-4</td>
+              <td>REID-FOLEY struck out swinging (3-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-6</td>
+              <td>YOUNG doubled down the lf line, 2 RBI (1-0) BACKLUND advanced to third GAINES scored BOYD scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-7</td>
+              <td>MOORHOUSE singled to third base, RBI (0-2) YOUNG advanced to third BACKLUND scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-9</td>
+              <td>JOHNSON doubled to left field, 2 RBI (0-0) MOORHOUSE scored YOUNG scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-9</td>
+              <td>JOHNSON advanced to third on a balk.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-9</td>
+              <td>WORKMAN struck out swinging, out at first c to 1b (0-2).</td>
+            </tr>
+          </tbody>
+          <tfoot>
+           <tr class="table-dark">
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+             <td>6-9</td>
+             <td>R: 6, H: 5, E: 0, LOB: 1 </td>
+            </tr>
+          </tfoot>
+       </table>
+     </div>
+     </div>
+  </div>
+</div>
+<div class="row justify-content-md-center w-100">
+  <div class="col p-2" style="max-width: 800px;">
+    <div class="card table-responsive">
+      <div class="card-header">
+         6th Inning
+      </div>
+      <div class="card-body">
+        <table class="table" align="center">
+          <thead>
+            <tr>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Morehead St." src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//444.gif" /><span class='d-none d-sm-block'>Morehead St.</span></div></th>
+	            <th width="10%" align="center">Score</th>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Mercer" src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//406.gif" /><span class='d-none d-sm-block'>Mercer</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+	            <td>BEGEMAN grounded out to 1b unassisted (3-2).</td>
+	            <td>6-9</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>GREENWELL doubled to left center (1-1).</td>
+	            <td>6-9</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>ELMORE singled to center field (1-2) GREENWELL advanced to third.</td>
+	            <td>6-9</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>ELMORE stole second.</td>
+	            <td>6-9</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BIRKOFER walked (3-0).</td>
+	            <td>6-9</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>PITTMAN to p for TEASLEY.</td>
+	            <td>6-9</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>PICKENS fouled out to rf (3-1).</td>
+	            <td>6-9</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BROWN to p for PITTMAN.</td>
+	            <td>6-9</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BAINER L popped up to 2b (2-2).</td>
+	            <td>6-9</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-9</td>
+              <td>BOYD doubled to right field (0-1).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-9</td>
+              <td>BOYD advanced to third on a balk.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-11</td>
+              <td>GAINES homered to left field, 2 RBI (2-2) BOYD scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-11</td>
+              <td>BARRETT fouled out to 1b (1-0).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-12</td>
+              <td>BACKLUND homered to left field, RBI (3-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-12</td>
+              <td>SMALLWOOD, B to p for ARIAS.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-12</td>
+              <td>REID-FOLEY hit by pitch (1-0).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-12</td>
+              <td>YOUNG flied out to rf (1-1).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-12</td>
+              <td>BENN pinch hit for MOORHOUSE.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-12</td>
+              <td>BENN walked (3-1) REID-FOLEY advanced to second.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-12</td>
+              <td>BUTTS pinch ran for BENN.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-13</td>
+              <td>JOHNSON doubled down the lf line, RBI (0-1) BUTTS advanced to third REID-FOLEY scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-13</td>
+              <td>WORKMAN walked (3-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-15</td>
+              <td>BOYD singled to center field, 2 RBI (2-2) WORKMAN advanced to second JOHNSON scored BUTTS scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-15</td>
+              <td>GAINES walked (3-2) BOYD advanced to second WORKMAN advanced to third.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-16</td>
+              <td>BARRETT walked, RBI (3-1) GAINES advanced to second BOYD advanced to third WORKMAN scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-16</td>
+              <td>ARNOLD to p for SMALLWOOD, B.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-20</td>
+              <td>BACKLUND homered, 4 RBI (3-2) BARRETT scored GAINES scored BOYD scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-20</td>
+              <td>REID-FOLEY struck out swinging (2-2).</td>
+            </tr>
+          </tbody>
+          <tfoot>
+           <tr class="table-dark">
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+             <td>6-20</td>
+             <td>R: 11, H: 6, E: 0, LOB: 0 </td>
+            </tr>
+          </tfoot>
+       </table>
+     </div>
+     </div>
+  </div>
+</div>
+<div class="row justify-content-md-center w-100">
+  <div class="col p-2" style="max-width: 800px;">
+    <div class="card table-responsive">
+      <div class="card-header">
+         7th Inning
+      </div>
+      <div class="card-body">
+        <table class="table" align="center">
+          <thead>
+            <tr>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Morehead St." src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//444.gif" /><span class='d-none d-sm-block'>Morehead St.</span></div></th>
+	            <th width="10%" align="center">Score</th>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Mercer" src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//406.gif" /><span class='d-none d-sm-block'>Mercer</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+	            <td>CARDWELL to rf for WORKMAN.</td>
+	            <td>6-20</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>GAINES to lf.</td>
+	            <td>6-20</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>MCMILLAN to 1b for BARRETT.</td>
+	            <td>6-20</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BUTTS to cf.</td>
+	            <td>6-20</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BAINER, E walked (3-1).</td>
+	            <td>6-20</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>DEEDS singled to center field (2-1) BAINER, E advanced to second.</td>
+	            <td>6-20</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>CLEVELAND flied out to cf (0-1).</td>
+	            <td>6-20</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BEGEMAN grounded into double play 2b to ss to 1b (0-1) DEEDS out on the play.</td>
+	            <td>6-20</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-20</td>
+              <td>YOUNG hit by pitch (1-0).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-20</td>
+              <td>BUTTS struck out swinging (3-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-20</td>
+              <td>JOHNSON singled to left field (1-0) YOUNG advanced to second.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-20</td>
+              <td>CARDWELL singled to center field (0-0) JOHNSON advanced to second YOUNG advanced to third.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-20</td>
+              <td>BOYD flied out to lf (0-0).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-21</td>
+              <td>GAINES singled to left field, RBI (1-0) CARDWELL advanced to second JOHNSON advanced to third YOUNG scored.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-21</td>
+              <td>MCMILLAN grounded out to 2b (0-1).</td>
+            </tr>
+          </tbody>
+          <tfoot>
+           <tr class="table-dark">
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+             <td>6-21</td>
+             <td>R: 1, H: 3, E: 0, LOB: 3 </td>
+            </tr>
+          </tfoot>
+       </table>
+     </div>
+     </div>
+  </div>
+</div>
+<div class="row justify-content-md-center w-100">
+  <div class="col p-2" style="max-width: 800px;">
+    <div class="card table-responsive">
+      <div class="card-header">
+         8th Inning
+      </div>
+      <div class="card-body">
+        <table class="table" align="center">
+          <thead>
+            <tr>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Morehead St." src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//444.gif" /><span class='d-none d-sm-block'>Morehead St.</span></div></th>
+	            <th width="10%" align="center">Score</th>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Mercer" src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//406.gif" /><span class='d-none d-sm-block'>Mercer</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+	            <td>STILES to c for REID-FOLEY.</td>
+	            <td>6-21</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>HANEY pinch hit for GREENWELL.</td>
+	            <td>6-21</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>HANEY struck out swinging, out at first c to 1b (3-2).</td>
+	            <td>6-21</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>SWEENEY pinch hit for ELMORE.</td>
+	            <td>6-21</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>SWEENEY lined out to cf (1-1).</td>
+	            <td>6-21</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BIRKOFER fouled out to c (0-1).</td>
+	            <td>6-21</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-21</td>
+              <td>DEEDS to cf.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-21</td>
+              <td>HANEY to ss.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-21</td>
+              <td>SWEENEY to 3b.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-21</td>
+              <td>REED to dh for BACKLUND.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-22</td>
+              <td>REED homered to right center, RBI (2-1).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-22</td>
+              <td>STILES singled to center field (3-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-22</td>
+              <td>BULLARD pinch hit for YOUNG.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-22</td>
+              <td>BULLARD singled to center field (0-0) STILES advanced to second.</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-22</td>
+              <td>BUTTS struck out swinging (1-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-22</td>
+              <td>JOHNSON flied out to cf (3-2).</td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td>6-22</td>
+              <td>CARDWELL flied out to cf (3-1).</td>
+            </tr>
+          </tbody>
+          <tfoot>
+           <tr class="table-dark">
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+             <td>6-22</td>
+             <td>R: 1, H: 3, E: 0, LOB: 2 </td>
+            </tr>
+          </tfoot>
+       </table>
+     </div>
+     </div>
+  </div>
+</div>
+<div class="row justify-content-md-center w-100">
+  <div class="col p-2" style="max-width: 800px;">
+    <div class="card table-responsive">
+      <div class="card-header">
+         9th Inning
+      </div>
+      <div class="card-body">
+        <table class="table" align="center">
+          <thead>
+            <tr>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Morehead St." src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//444.gif" /><span class='d-none d-sm-block'>Morehead St.</span></div></th>
+	            <th width="10%" align="center">Score</th>
+	            <th width="40%" align="center"><div class='row'><img class="logo_image" alt="Mercer" src="https://web2.ncaa.org/ncaa_style/img/All_Logos/sm//406.gif" /><span class='d-none d-sm-block'>Mercer</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+	            <td>GAINES to 3b.</td>
+	            <td>6-22</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BULLARD to lf.</td>
+	            <td>6-22</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>MANNING pinch hit for PICKENS.</td>
+	            <td>6-22</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>MANNING struck out swinging (0-2).</td>
+	            <td>6-22</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BAINER L lined out to cf (2-2).</td>
+	            <td>6-22</td>
+              <td></td>
+            </tr>
+            <tr>
+	            <td>BAINER, E grounded out to ss (0-0).</td>
+	            <td>6-22</td>
+              <td></td>
+            </tr>
+          </tbody>
+          <tfoot>
+           <tr class="table-dark">
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+             <td>6-22</td>
+             <td>R: 0, H: 0, E: 0, LOB: 0 </td>
+            </tr>
+          </tfoot>
+       </table>
+     </div>
+     </div>
+  </div>
+</div>
+
+
+
+       </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>&copy; <script>document.write(new Date().getFullYear())</script> NCAA <a href="https://www.ncaa.org/terms-of-service/" title ="Terms and Conditions" target=_blank>Terms and Conditions</a> | <a href="https://www.ncaa.org/privacy-policy/" target=_blank title="Our Privacy Policy">Privacy Policy</a> | <a href="mailto:ncaastats@ncaa.org">Contact Us</a> </footer>
+
+  <!-- /.container -->
+  </body>
+
+  <script charset="utf-8">
+    $(document).ready(function() {
+      $('a.remote[data-toggle="tab"]').on('show.bs.tab', function (e) {
+        var tab_id = '#' + $(this).attr('aria-controls');
+        $(tab_id).html('<br/><br/><p style="text-align: center"><img style="vertical-align:middle; text-align: center" src="/assets/ajax-loader-6913acdbf4be7d6a2908a84bdecd6cad18110f5fc6d5a07cf8c9ce78d9548700.gif" /> Loading... </p><br/><br/>');
+        $.get($(this).data('remote'), function(data){
+          $(tab_id).html(data);
+        });
+      });
+    });
+
+    function skipMask(obj){
+      if (obj.hasClass('chosen-single') || obj.hasClass('skipMask') || obj.hasClass('ui-datepicker-prev') || obj.hasClass('ui-datepicker-next') || obj.hasClass('ui-corner-all') || obj.hasClass('paginate_button') || obj.hasClass('dt-button')){
+        return true;
+      }else{
+        return false;
+      }
+    }
+
+    $(document).ajaxComplete(function(){
+      unmask();
+    });
+/*
+    $("form").on('submit', function(event){
+      if (skipMask($(this))){
+        return;
+      }else{
+        mask('Loading');
+      }
+    });
+    */
+    $(document).on('click', 'a', function(){
+      if (skipMask($(this))){
+        return;
+      }else{
+        mask('Loading');
+      }
+    });
+    $(document).on('click', 'input.green', function(){
+      if (skipMask($(this))){
+        return;
+      }else{
+        mask('Loading');
+      }
+    });
+
+  </script>
+</html>

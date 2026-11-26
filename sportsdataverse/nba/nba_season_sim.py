@@ -173,7 +173,7 @@ HFA_PSEUDO_POSS: dict[str, float] = {"00": 80000.0, "10": 10000.0}
 #:   3.06 per 100 against 5.94 at ``k = lam``), WNBA 1,060 (4.95 against 11.4 before the sim's cap,
 #:   about 10.4 after it, which binds at ``k = lam``). Re-run 2026-11-26:
 #:   the same values; the reports are ``tests/fixtures/nba_prediction/prior_miss_<lg>.json``.
-#: * Gate, pre-registered (ClaudeCowork ``specs/2026-11-26-pro-season-sim-prior-sd-regate-prereg.md``)
+#: * Gate, pre-registered (the thresholds below were fixed before the run)
 #:   and run once, 2026-11-26, 10,000 sims, on seasons no coverage run had scored
 #:   (``tools/models/lifecycle/coverage.py --seasons``): the 80% win band within
 #:   ``max(0.05, 2 SE)`` of its mass (SE clustered by season) at the preseason and in-season cutoffs,
