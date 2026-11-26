@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import copy
 import json
-from typing import Any, Dict, List
+from typing import Any
 
 import polars as pl
 from gen_soccer_common import ROOT, rewrite_schema_dir, write_yaml
@@ -64,8 +64,8 @@ PERIOD = {
 }
 
 
-def _filter(default: str | None, note: str) -> Dict[str, Any]:
-    out: Dict[str, Any] = {
+def _filter(default: str | None, note: str) -> dict[str, Any]:
+    out: dict[str, Any] = {
         "name": "fantasy_filter",
         "query_key": FILTER,
         "type": "str",
@@ -87,7 +87,7 @@ EX_LEAGUE = {**EX, "league_id": 1535462463}
 
 #: short -> wrapper definition. ``fixture`` is the body under tests/fixtures/espn_fantasy that the
 #: parser is checked against; ``view`` is the fixed ``view=`` the wrapper always sends.
-ENDPOINTS: Dict[str, Dict[str, Any]] = {
+ENDPOINTS: dict[str, dict[str, Any]] = {
     "games": {
         "path": "/games",
         "parser": "parse_espn_fantasy_games",
@@ -288,7 +288,7 @@ def _table(parser: str) -> str:
     return parser.removeprefix("parse_espn_fantasy_")  # parse_espn_fantasy_<table>
 
 
-def _check(short: str, d: Dict[str, Any]) -> None:
+def _check(short: str, d: dict[str, Any]) -> None:
     """The fixture parses to exactly the documented columns and dtypes, with at least one row."""
     df = getattr(P, d["parser"])(json.loads((FIXTURES / d["fixture"]).read_text(encoding="utf-8")))
     want = P.SCHEMAS[_table(d["parser"])]
@@ -296,8 +296,8 @@ def _check(short: str, d: Dict[str, Any]) -> None:
         raise SystemExit(f"espn_fantasy/{short}: {d['fixture']} parses to {dict(df.schema)} ({df.height} rows)")
 
 
-def _entry(short: str, d: Dict[str, Any]) -> Dict[str, Any]:
-    out: Dict[str, Any] = {
+def _entry(short: str, d: dict[str, Any]) -> dict[str, Any]:
+    out: dict[str, Any] = {
         "short": short,
         "summary": d["summary"],
         "path": d["path"],
@@ -361,7 +361,7 @@ def main() -> None:
     schema_dir = ROOT / f"tools/codegen/schemas/native/{STEM}"
     rewrite_schema_dir(schema_dir)
     for short, d in ENDPOINTS.items():
-        cols: List[Dict[str, str]] = [
+        cols: list[dict[str, str]] = [
             {"name": c, "type": _type(t), "description": ""} for c, t in P.SCHEMAS[_table(d["parser"])].items()
         ]
         write_yaml(

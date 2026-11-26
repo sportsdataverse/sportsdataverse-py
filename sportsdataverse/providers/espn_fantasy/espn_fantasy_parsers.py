@@ -30,7 +30,8 @@ import json
 import re
 import warnings
 from datetime import datetime, timezone
-from typing import Any, Dict, Iterable, List, Optional, Union
+from typing import Any, TypeAlias
+from collections.abc import Iterable
 
 import pandas as pd
 import polars as pl
@@ -38,7 +39,7 @@ import polars as pl
 from sportsdataverse._codegen_runtime import _pandas_ids
 from sportsdataverse.errors import SchemaDriftWarning
 
-Frame = Union[pl.DataFrame, pd.DataFrame]
+Frame: TypeAlias = pl.DataFrame | pd.DataFrame
 
 __all__ = [
     "SCHEMAS",
@@ -66,7 +67,7 @@ _LEAGUE = {"league_id": N, "season_id": N}
 _PLAYER = {"player_id": N, "full_name": S, "pro_team_id": N, "default_position_id": N}
 
 #: The documented columns of every parser, keyed by the parser's table name.
-SCHEMAS: Dict[str, Dict[str, Any]] = {
+SCHEMAS: dict[str, dict[str, Any]] = {
     "games": {
         "game_id": N,
         "game_abbrev": S,
@@ -289,11 +290,11 @@ SCHEMAS: Dict[str, Dict[str, Any]] = {
 # -- value coercion: a value of the wrong type becomes null, never an exception ---------------------
 
 
-def _d(v: Any) -> Dict[str, Any]:
+def _d(v: Any) -> dict[str, Any]:
     return v if isinstance(v, dict) else {}
 
 
-def _l(v: Any) -> List[Any]:
+def _l(v: Any) -> list[Any]:
     return v if isinstance(v, list) else []
 
 
@@ -301,12 +302,12 @@ _INT_TEXT = re.compile(r"-?[0-9]+", re.ASCII)
 _INT64_MIN, _INT64_MAX = -(2**63), 2**63 - 1
 
 
-def _rows(v: Any) -> List[Dict[str, Any]]:
+def _rows(v: Any) -> list[dict[str, Any]]:
     """The object members of a list; anything else (a scalar row, a non-list) contributes no row."""
     return [x for x in _l(v) if isinstance(x, dict)]
 
 
-def _int(v: Any) -> Optional[int]:
+def _int(v: Any) -> int | None:
     if isinstance(v, bool):
         return None
     if isinstance(v, int):
@@ -320,23 +321,23 @@ def _int(v: Any) -> Optional[int]:
     return v if _INT64_MIN <= v <= _INT64_MAX else None
 
 
-def _num(v: Any) -> Optional[float]:
+def _num(v: Any) -> float | None:
     return float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else None
 
 
-def _str(v: Any) -> Optional[str]:
+def _str(v: Any) -> str | None:
     return v if isinstance(v, str) else None
 
 
-def _bool(v: Any) -> Optional[bool]:
+def _bool(v: Any) -> bool | None:
     return v if isinstance(v, bool) else None
 
 
-def _json(v: Any) -> Optional[str]:
+def _json(v: Any) -> str | None:
     return json.dumps(v, separators=(",", ":"), sort_keys=True) if isinstance(v, (list, dict)) else None
 
 
-def _ms(v: Any) -> Optional[datetime]:
+def _ms(v: Any) -> datetime | None:
     """Epoch milliseconds -> an aware UTC datetime (``0`` and out-of-range values are null)."""
     if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
         return None
@@ -346,7 +347,7 @@ def _ms(v: Any) -> Optional[datetime]:
         return None
 
 
-def _iso(v: Any) -> Optional[datetime]:
+def _iso(v: Any) -> datetime | None:
     if not isinstance(v, str):
         return None
     try:
@@ -379,7 +380,7 @@ _ROW_KEY = {
 }
 
 
-def _frame(name: str, rows: Iterable[Dict[str, Any]], return_as_pandas: bool) -> Frame:
+def _frame(name: str, rows: Iterable[dict[str, Any]], return_as_pandas: bool) -> Frame:
     """Rows -> exactly the documented columns of table ``name``, typed (a zero-row frame when empty).
 
     A row without its :data:`_ROW_KEY` is dropped. A value of the wrong type becomes null, and the
@@ -388,7 +389,7 @@ def _frame(name: str, rows: Iterable[Dict[str, Any]], return_as_pandas: bool) ->
     schema = SCHEMAS[name]
     key = _ROW_KEY[name]
     coerced = []
-    drifted: List[str] = []
+    drifted: list[str] = []
     for r in rows:
         out = {}
         for col, dtype in schema.items():
@@ -410,11 +411,11 @@ def _frame(name: str, rows: Iterable[Dict[str, Any]], return_as_pandas: bool) ->
     return _pandas_ids(df) if return_as_pandas else df
 
 
-def _league_keys(raw: Dict[str, Any]) -> Dict[str, Any]:
+def _league_keys(raw: dict[str, Any]) -> dict[str, Any]:
     return {"league_id": raw.get("id"), "season_id": raw.get("seasonId")}
 
 
-def _player_cols(player: Dict[str, Any]) -> Dict[str, Any]:
+def _player_cols(player: dict[str, Any]) -> dict[str, Any]:
     return {
         "player_id": player.get("id"),
         "full_name": player.get("fullName"),
@@ -495,25 +496,24 @@ def parse_espn_fantasy_seasons(raw: Any, *, return_as_pandas: bool = False) -> F
         See Also:
             * :func:`~sportsdataverse.providers.espn_fantasy.espn_fantasy_seasons` -- the wrapper that fetches this body and parses it
     """
-    rows = []
-    for s in _rows(raw):
-        rows.append(
-            {
-                "game_id": s.get("gameId"),
-                "season_id": s.get("id"),
-                "season_abbrev": s.get("abbrev"),
-                "season_name": s.get("name"),
-                "active": s.get("active"),
-                "display": s.get("display"),
-                "current_scoring_period_id": _d(s.get("currentScoringPeriod")).get("id"),
-                "start_date": _ms(s.get("startDate")),
-                "end_date": _ms(s.get("endDate")),
-            }
-        )
+    rows = [
+        {
+            "game_id": s.get("gameId"),
+            "season_id": s.get("id"),
+            "season_abbrev": s.get("abbrev"),
+            "season_name": s.get("name"),
+            "active": s.get("active"),
+            "display": s.get("display"),
+            "current_scoring_period_id": _d(s.get("currentScoringPeriod")).get("id"),
+            "start_date": _ms(s.get("startDate")),
+            "end_date": _ms(s.get("endDate")),
+        }
+        for s in _rows(raw)
+    ]
     return _frame("seasons", rows, return_as_pandas)
 
 
-def _pro_teams(raw: Any) -> List[Dict[str, Any]]:
+def _pro_teams(raw: Any) -> list[dict[str, Any]]:
     return _rows(_d(_d(raw).get("settings")).get("proTeams"))
 
 
@@ -575,7 +575,7 @@ def parse_espn_fantasy_pro_schedule(raw: Any, *, return_as_pandas: bool = False)
         See Also:
             * :func:`~sportsdataverse.providers.espn_fantasy.espn_fantasy_pro_schedule` -- the wrapper that fetches this body and parses it
     """
-    seen: Dict[Any, Dict[str, Any]] = {}
+    seen: dict[Any, dict[str, Any]] = {}
     for t in _pro_teams(raw):
         for games in _d(t.get("proGamesByScoringPeriod")).values():
             for g in _rows(games):
@@ -616,16 +616,15 @@ def parse_espn_fantasy_players(raw: Any, *, return_as_pandas: bool = False) -> F
         See Also:
             * :func:`~sportsdataverse.providers.espn_fantasy.espn_fantasy_players` -- the wrapper that fetches this body and parses it
     """
-    rows = []
-    for p in _rows(raw):
-        rows.append(
-            {
-                **_player_cols(p),
-                "droppable": p.get("droppable"),
-                "percent_owned": _d(p.get("ownership")).get("percentOwned"),
-                "universe_id": p.get("universeId"),
-            }
-        )
+    rows = [
+        {
+            **_player_cols(p),
+            "droppable": p.get("droppable"),
+            "percent_owned": _d(p.get("ownership")).get("percentOwned"),
+            "universe_id": p.get("universeId"),
+        }
+        for p in _rows(raw)
+    ]
     return _frame("players", rows, return_as_pandas)
 
 
@@ -650,35 +649,34 @@ def parse_espn_fantasy_league_directory(raw: Any, *, return_as_pandas: bool = Fa
         See Also:
             * :func:`~sportsdataverse.providers.espn_fantasy.espn_fantasy_league_directory` -- the wrapper that fetches this body and parses it
     """
-    rows = []
-    for r in _rows(raw):
-        rows.append(
-            {
-                "league_id": r.get("leagueId"),
-                "league_name": r.get("leagueName"),
-                "league_sub_type": r.get("leagueSubType"),
-                "league_default_id": r.get("leagueDefaultId"),
-                "league_size": r.get("leagueSize"),
-                "teams_joined": r.get("teamsJoined"),
-                "full": r.get("full"),
-                "public": r.get("public"),
-                "standard_league": r.get("standardLeague"),
-                "customizable": r.get("customizable"),
-                "draft_type": r.get("draftType"),
-                "draft_date": _ms(r.get("draftDate")),
-                "draft_available_date": _ms(r.get("draftAvailableDate")),
-                "draft_in_progress": r.get("draftInProgress"),
-                "scoring_type": r.get("scoringType"),
-                "experience_type": r.get("experienceType"),
-                "rank_type": r.get("rankType"),
-                "restriction_type": r.get("restrictionType"),
-                "roster_locktime_type": r.get("rosterLocktimeType"),
-                "scoring_item_stat_ids": _json(r.get("scoringItemStatIds")),
-                "universe_ids": _json(r.get("universeIds")),
-                "season_id": r.get("seasonId"),
-                "game_id": r.get("gameId"),
-            }
-        )
+    rows = [
+        {
+            "league_id": r.get("leagueId"),
+            "league_name": r.get("leagueName"),
+            "league_sub_type": r.get("leagueSubType"),
+            "league_default_id": r.get("leagueDefaultId"),
+            "league_size": r.get("leagueSize"),
+            "teams_joined": r.get("teamsJoined"),
+            "full": r.get("full"),
+            "public": r.get("public"),
+            "standard_league": r.get("standardLeague"),
+            "customizable": r.get("customizable"),
+            "draft_type": r.get("draftType"),
+            "draft_date": _ms(r.get("draftDate")),
+            "draft_available_date": _ms(r.get("draftAvailableDate")),
+            "draft_in_progress": r.get("draftInProgress"),
+            "scoring_type": r.get("scoringType"),
+            "experience_type": r.get("experienceType"),
+            "rank_type": r.get("rankType"),
+            "restriction_type": r.get("restrictionType"),
+            "roster_locktime_type": r.get("rosterLocktimeType"),
+            "scoring_item_stat_ids": _json(r.get("scoringItemStatIds")),
+            "universe_ids": _json(r.get("universeIds")),
+            "season_id": r.get("seasonId"),
+            "game_id": r.get("gameId"),
+        }
+        for r in _rows(raw)
+    ]
     return _frame("league_directory", rows, return_as_pandas)
 
 
@@ -869,7 +867,7 @@ def parse_espn_fantasy_league_rosters(raw: Any, *, return_as_pandas: bool = Fals
     return _frame("league_rosters", rows, return_as_pandas)
 
 
-def _sides(m: Dict[str, Any]) -> Iterable[tuple]:
+def _sides(m: dict[str, Any]) -> Iterable[tuple]:
     for side in ("home", "away"):
         if isinstance(m.get(side), dict):
             yield side, m[side]
@@ -1038,7 +1036,7 @@ def parse_espn_fantasy_league_transactions(raw: Any, *, return_as_pandas: bool =
     """
     raw = _d(raw)
     keys = _league_keys(raw)
-    rows = []
+    rows: list[dict[str, Any]] = []
     for t in _rows(raw.get("transactions")):
         base = {
             **keys,
@@ -1053,18 +1051,18 @@ def parse_espn_fantasy_league_transactions(raw: Any, *, return_as_pandas: bool =
             "is_pending": t.get("isPending"),
         }
         items = _rows(t.get("items")) or [{}]
-        for i in items:
-            rows.append(
-                {
-                    **base,
-                    "item_type": i.get("type"),
-                    "player_id": i.get("playerId"),
-                    "from_team_id": i.get("fromTeamId"),
-                    "to_team_id": i.get("toTeamId"),
-                    "from_lineup_slot_id": i.get("fromLineupSlotId"),
-                    "to_lineup_slot_id": i.get("toLineupSlotId"),
-                }
-            )
+        rows.extend(
+            {
+                **base,
+                "item_type": i.get("type"),
+                "player_id": i.get("playerId"),
+                "from_team_id": i.get("fromTeamId"),
+                "to_team_id": i.get("toTeamId"),
+                "from_lineup_slot_id": i.get("fromLineupSlotId"),
+                "to_lineup_slot_id": i.get("toLineupSlotId"),
+            }
+            for i in items
+        )
     return _frame("league_transactions", rows, return_as_pandas)
 
 

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import json
 from http.cookiejar import DefaultCookiePolicy
-from typing import Any, Dict, Optional
+from typing import Any
 
 import requests
 
@@ -48,7 +48,7 @@ def _transport(url: str, **kwargs: Any) -> Any:
     return resp
 
 
-def _build_query(params: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _build_query(params: dict[str, Any] | None) -> dict[str, Any]:
     """The query string the host sees: every param but the filter, which travels as a header.
 
     Codegen calls this too, so a reference page's Example URL is the URL really requested.
@@ -56,7 +56,7 @@ def _build_query(params: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     return {k: v for k, v in (params or {}).items() if k != FILTER_HEADER}
 
 
-def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Any:
+def _get(url: str, params: dict[str, Any] | None = None, **kwargs: Any) -> Any:
     """GET ``url`` with the ``X-Fantasy-Filter`` param moved into the request header.
 
     Args:
