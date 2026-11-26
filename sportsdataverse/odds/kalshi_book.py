@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import math
 import numbers
-from typing import Any, Union
+from typing import Any
 
 import pandas as pd
 import polars as pl
@@ -81,10 +81,10 @@ def _bids(book: Any) -> pl.DataFrame:
 
 
 def kalshi_book_quotes(
-    book: Union[dict, pl.DataFrame, pd.DataFrame],
+    book: dict | pl.DataFrame | pd.DataFrame,
     *,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Bid and ask ladders for both sides of a Kalshi market, asks derived from the opposite bids.
 
     Kalshi's book holds bids only. A NO bid at ``p`` is a YES offer at ``1 - p``, so the
@@ -149,13 +149,13 @@ def kalshi_book_quotes(
 
 
 def kalshi_fill_price(
-    book: Union[dict, pl.DataFrame, pd.DataFrame],
+    book: dict | pl.DataFrame | pd.DataFrame,
     size: float,
     *,
     side: str = "yes",
     action: str = "buy",
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, pd.DataFrame]:
+) -> pl.DataFrame | pd.DataFrame:
     """Average price to buy or sell ``size`` contracts against a Kalshi order book.
 
     Buying walks that side's asks from the cheapest up; selling walks its bids from the

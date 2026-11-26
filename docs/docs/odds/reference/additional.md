@@ -525,7 +525,7 @@ toa_usage()
 
 ### kalshi_book_quotes {#kalshi_book_quotes}
 
-`kalshi_book_quotes(book: 'Union[dict, pl.DataFrame, pd.DataFrame]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`kalshi_book_quotes(book: 'dict | pl.DataFrame | pd.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Bid and ask ladders for both sides of a Kalshi market, asks derived from the opposite bids.
 
@@ -537,7 +537,7 @@ same sizes.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `book` | `Union[dict, DataFrame, DataFrame]` |  | one market's order book: the raw `kalshi_orderbook(ticker, return_parsed=False)` dict, or the parsed frame `kalshi_orderbook(ticker)` returns (`side` / `price` / `size`). |
+| `book` | `dict \| DataFrame \| DataFrame` |  | one market's order book: the raw `kalshi_orderbook(ticker, return_parsed=False)` dict, or the parsed frame `kalshi_orderbook(ticker)` returns (`side` / `price` / `size`). |
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
 
 **Returns**
@@ -575,7 +575,7 @@ quotes.filter(level=1)
 
 ### kalshi_fill_price {#kalshi_fill_price}
 
-`kalshi_fill_price(book: 'Union[dict, pl.DataFrame, pd.DataFrame]', size: 'float', *, side: 'str' = 'yes', action: 'str' = 'buy', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`kalshi_fill_price(book: 'dict | pl.DataFrame | pd.DataFrame', size: 'float', *, side: 'str' = 'yes', action: 'str' = 'buy', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Average price to buy or sell `size` contracts against a Kalshi order book.
 
@@ -588,7 +588,7 @@ Kalshi's trading fee is not included.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `book` | `Union[dict, DataFrame, DataFrame]` |  | one market's order book, raw dict or parsed frame, as for `kalshi_book_quotes`. |
+| `book` | `dict \| DataFrame \| DataFrame` |  | one market's order book, raw dict or parsed frame, as for `kalshi_book_quotes`. |
 | `size` | `float` |  | contracts to fill; must be positive. Kalshi sizes are fixed-point, so a fraction is allowed. |
 | `side` | `str` | `'yes'` | `yes` or `no`. |
 | `action` | `str` | `'buy'` | `buy` (lift the asks) or `sell` (hit the bids). |
