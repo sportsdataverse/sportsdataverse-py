@@ -1,4 +1,4 @@
-"""Fit, gate and bundle the men's and women's college shot-make boosters (the location model of ``mbb_shot_quality``).
+"""Fit and gate the men's and women's college shot-make boosters (the location model of ``mbb_shot_quality``).
 
 Run (the ``mbb_shots`` / ``wbb_shots`` ESPN releases; ``--data-root`` reads a producer checkout's parquet instead,
 the same files)::
@@ -9,8 +9,7 @@ the same files)::
 **The model.** P(make) of a college field-goal attempt from the canonical shot frame
 (``mbb_shot_data``): its basket-relative location (``shot_x`` / ``shot_y``) and distance (``dist_ft``), its
 value (``point_value``) and its coarse type (``shot_type``: ``rim`` / ``jump`` / ``arc3``, the type the current
-model already reads). ``mbb_shot_quality._college_shot_make_design`` builds the matrix the package scores with.
-No player, team or game-state input.
+model already reads); :func:`design` builds the matrix. No player, team or game-state input.
 
 **The comparator** is the model it would replace, ``mbb_shot_quality_model``: the empirical-Bayes make rate of
 the shot's ``shot_zone x shot_type`` cell. Two versions are scored:
@@ -25,7 +24,7 @@ booster's own scores, threes included, are reported as ``model_raw`` / ``raw_vs_
 **Seasons** (named by the year they end; every game, no season-type filter). Only shots with coordinates
 reach the canonical frame, and the release locates a few hundred to 1,700 games a season before 2026 (6,000+
 from 2026): the earlier seasons are a subset of games, not the whole league.
-every season in ``walk`` is scored by a booster fitted on the :data:`TRAIN_SEASONS` seasons before it. The
+Every season in ``walk`` is scored by a booster fitted on the :data:`TRAIN_SEASONS` seasons before it. The
 shipped booster is the walk-forward fit of the ``holdout`` season; ``monitor`` seasons (the one in progress)
 are scored by it and gated as a warning. Early stopping on the last training season, then a refit on all three.
 
@@ -40,10 +39,12 @@ Hyperparameters are the NBA fitter's, fixed a priori (no search). Output (beside
 
 **Outcome (2026-11-26): neither league passes, nothing ships.** The gain over the served table is small
 (men's 0.5% to 1.3%, women's 0.6% to 0.9%) and the calibration does not hold: men's slope 0.80 on 2025 and,
-on the 2026 holdout, slope 1.21 and level -0.0136; women's slope 0.88 on 2024. 2026 is the first season the
-release locates every game (6,000+ against 400 to 1,700 before), so a booster fitted on the located subset of
-earlier seasons meets a different population; the cell table, rebuilt from each season's own shots, does
-not. ``mbb_shot_quality_model`` stays the college model.
+on the 2026 holdout, slope 1.21 and level -0.0136; women's slope 0.88 on 2024 (the women's 2026 holdout passes:
+slope 1.10, level +0.0019). Why is not established. 2026 is the first season the release locates every game
+(6,000+ against 400 to 1,700 before), so the booster may meet a different set of games than it was fitted on;
+but the cell table fitted on the same training seasons (``zone_prior``) stays calibrated on the men's 2026
+(slope 1.00, level -0.0010), and the men's 2025 and women's 2024 failures come before that change.
+``mbb_shot_quality_model`` stays the college model.
 """
 
 from __future__ import annotations
@@ -71,9 +72,6 @@ _spec = importlib.util.spec_from_file_location(
 nba = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(nba)
 
-#: Walk seasons, fixed before the first run by coverage alone: a season is walked when it and each of its three
-#: training seasons hold at least 100 games with located shots in the release (men's 2014-2027 all do; the
-#: women's release has none for 2017-2020).
 #: The design's columns, in order: the canonical frame's location, distance and value, then one indicator per
 #: coarse shot type.
 FEATURES: list[str] = [
@@ -85,6 +83,9 @@ FEATURES: list[str] = [
     "shot_type=jump",
     "shot_type=arc3",
 ]
+#: Walk seasons, fixed before the first run by coverage alone: a season is walked when it and each of its three
+#: training seasons hold at least 100 games with located shots in the release (men's 2014-2027 all do; the
+#: women's release has none for 2017-2020).
 LEAGUES: dict[str, dict[str, Any]] = {
     "mens": {"lg": "mbb", "dir": "mbb", "walk": list(range(2017, 2027)), "holdout": 2026, "monitor": [2027]},
     "womens": {"lg": "wbb", "dir": "wbb", "walk": [2024, 2025, 2026], "holdout": 2026, "monitor": [2027]},
@@ -255,7 +256,8 @@ def train(league: str, data_root: Path | None) -> dict[str, Any]:
         report["seasons"][str(s)] = {"split": "monitor", "train_seasons": sorted(ship_train), **m}
     report["monitor_gates"] = [f for s in cfg["monitor"] for f in nba.gate(f"monitor {s}", report["seasons"][str(s)])]
     shipped.set_attr(holdout_season=str(cfg["holdout"]))
-    report["shipped"] = {
+    report["shipped"] = {  # the candidate: written only if every gate passes (none has)
+        "bundled": False,
         "artifact": f"sportsdataverse/mbb/models/{cfg['lg']}_shot_make.ubj",
         "train_seasons": sorted(ship_train),
         "holdout_season": cfg["holdout"],

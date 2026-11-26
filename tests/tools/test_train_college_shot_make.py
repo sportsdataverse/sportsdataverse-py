@@ -31,7 +31,9 @@ def test_report_gates_re_derive_and_nothing_ships(league):
     for s, m in report["seasons"].items():
         assert max(m["train_seasons"]) < int(s)
         assert m["vs_zone_served_by_band"]["3PA"]["d_log_loss"] == 0  # threes keep the table value
-    assert report["failed_gates"] and not report["owner_accepted"]
+    assert report["failed_gates"] and not report["owner_accepted"] and report["shipped"]["bundled"] is False
+    # the coverage rule on the scored seasons (training-only seasons are not in the report)
+    assert all(m["games"] >= 100 for m in report["seasons"].values())
     assert not list((_ROOT / "sportsdataverse" / "mbb" / "models").glob("*_shot_make.ubj"))
 
 

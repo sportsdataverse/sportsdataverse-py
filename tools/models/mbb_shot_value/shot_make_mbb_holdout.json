@@ -1270,6 +1270,7 @@
     "monitor 2027: gate 3 calibration slope 1.222"
   ],
   "shipped": {
+    "bundled": false,
     "artifact": "sportsdataverse/mbb/models/mbb_shot_make.ubj",
     "train_seasons": [
       2023,
