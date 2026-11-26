@@ -886,7 +886,7 @@ class TestRegistry2026Parity:
 
 
 class TestPlayoffSeeds2026:
-    """2026 CFP selection edge cases (P4 champions, best G6 champion, Notre Dame)."""
+    """2026 CFP selection edge cases (P4 champions, best G6 team, Notre Dame)."""
 
     @staticmethod
     def _seed(rows: list[tuple[str, str, bool]], playoff_seeds: int = 12, season: int = 2026) -> dict:
@@ -913,14 +913,25 @@ class TestPlayoffSeeds2026:
     def _filler(k: int) -> list[tuple[str, str, bool]]:
         return [(f"AL{i:02d}", "Other", False) for i in range(1, k + 1)]
 
-    def test_g6_bid_goes_to_best_g6_champion_not_best_g6_team(self) -> None:
+    def test_g6_bid_goes_to_best_g6_team_champion_or_not(self) -> None:
         # a non-champion Mountain West team outranks the American champion;
-        # only a champion holds the G6 automatic bid (cfbseedR 0.2.0 differs here)
+        # the 2026 protocol gives the bid to the "highest-ranked team" (cfbseedR agrees)
         rows = self._filler(12) + [("MW2", "Mountain West", False), ("AAC1", "American Athletic", True)]
         seeds = self._seed(rows)
-        assert seeds["AAC1"] == 12
-        assert seeds["MW2"] is None
+        assert seeds["MW2"] == 12
+        assert seeds["AAC1"] is None
         assert seeds["AL12"] is None
+
+    def test_g6_title_game_loser_ranked_above_its_champion(self) -> None:
+        # MW2 lost the Mountain West title game to MW1 but is ranked higher
+        rows = self._filler(12) + [("MW2", "Mountain West", False), ("MW1", "Mountain West", True)]
+        seeds_2026 = self._seed(rows, season=2026)
+        assert seeds_2026["MW2"] == 12
+        assert seeds_2026["MW1"] is None
+        # the 2024-2025 rule still guarantees only champions
+        seeds_2025 = self._seed(rows, season=2025)
+        assert seeds_2025["MW1"] == 12
+        assert seeds_2025["MW2"] is None
 
     def test_only_the_best_of_several_g6_champions_is_automatic(self) -> None:
         rows = self._filler(12) + [("SBC1", "Sun Belt", True), ("MAC1", "Mid-American", True)]

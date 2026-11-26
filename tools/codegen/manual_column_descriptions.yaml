@@ -1668,9 +1668,9 @@ cfb_playoff_seeds:
   losses: Losses across all played games.
   pd: Point differential (points for minus points against, via game margins) summed over all played games.
   seed: College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From
-    2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 champion and a Notre Dame ranked within
-    the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions.
-    Automatic qualifiers are capped at the field size.
+    2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 team (champion or not) and a Notre
+    Dame ranked within the field size are selected before at-large teams; before 2026, the five highest-ranked
+    conference champions. Automatic qualifiers are capped at the field size.
   sim: Season or simulation identifier the standings row belongs to.
   sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall version) - conference opponents' summed conference
     wins (ties half) over their summed conference games, one term per conference game played (pooled, as cfbseedR); 0.0 for
