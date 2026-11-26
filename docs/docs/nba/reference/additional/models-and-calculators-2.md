@@ -1116,12 +1116,12 @@ noise variance over the prior variance of a player's coefficient, so it does not
 many seasons are pooled; a longer window shrinks each player less because he has more
 possessions. For recency weighting inside a window use `nba_decay_rapm`.
 
-Gated against Jeremias Engelmann's 8-season RAPM (2019-20 through 2026-27, regular season, posted
-2026-11-02; personal oracle, not redistributed) by `tools/gate_multiseason_rapm.py` on
-2026-11-18: over those 1,687,155 regular-season possessions every one of his 1,224 players
-matches on `player_id`. Spearman against his total is 0.967 for the 488 players with at
+Gated against an external 8-season RAPM (2019-20 through 2026-27, regular season, published
+2026-11-02; an oracle for validation only, not redistributed) by `tools/gate_multiseason_rapm.py` on
+2026-11-18: over those 1,687,155 regular-season possessions every one of its 1,224 players
+matches on `player_id`. Spearman against its total is 0.967 for the 488 players with at
 least 10,000 possessions (0.975 at 30,000, 0.911 over all 1,224), offense 0.953, defense 0.954,
-and the spread is 0.90 of his (std ratio at 10,000 possessions). Per-season decay weights
+and the spread is 0.90 of the oracle's (std ratio at 10,000 possessions). Per-season decay weights
 (0.9 to 0.7 a season) lowered every one of these, so the window is unweighted.
 
 **Parameters**
