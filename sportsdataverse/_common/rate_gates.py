@@ -74,6 +74,12 @@ NCAA_LEVEL: dict[str, str] = {"mens": "mbb", "womens": "wbb"}
 # 750 -> 780 (M 749 -> 776). NBA off_rtg_diff stays 2500 (M 2425 -> 2420); WNBA net_rtg_diff stays never
 # ranked (train M 2333 -> 2437, holdout curve still never near half signal).
 #
+# The college team gates were refitted on 2026-11-26 (--kind team) with the box possession estimate at the
+# college free-throw weight 0.475 (sportsdataverse._common.possessions), closer to the counted possessions
+# the tables' ``_n`` uses than 0.44: MBB off_rtg 270 -> 280 (train M 273), def_rtg 460 -> 450 (M 444),
+# tov_pct 450 -> 460 (M 453); every WBB gate and every other MBB gate is unchanged. Holdout median / worst
+# reliability: MBB 0.492 / 0.430 before and after, WBB 0.503 / 0.412 -> 0.503 / 0.412.
+#
 # Owner ruling (2026-11-17): WNBA on/off net_rtg_diff is never ranked (math.inf), NOT a fitted value.
 # Its train fit (2018-2022) gives M 2333, a gate of 2400, but on the unseen 2023-2025 seasons the span
 # curve never comes near half signal: r -0.04 to 0.37 over 10 bins, and the fitted M lands past twice
@@ -109,7 +115,7 @@ TEAM_MIN_N: dict[str, dict[str, float]] = {
         "opp_ft_rate": 880, "fg3_pct": math.inf, "opp_fg3_pct": math.inf,
     },
     "mbb": {
-        "off_rtg": 270, "def_rtg": 460, "net_rtg": 430, "pace": 4, "efg_pct": 500, "tov_pct": 450,
+        "off_rtg": 280, "def_rtg": 450, "net_rtg": 430, "pace": 4, "efg_pct": 500, "tov_pct": 460,
         "orb_pct": 160, "ft_rate": 530, "opp_efg_pct": 630, "opp_tov_pct": 340, "opp_orb_pct": 330,
         "opp_ft_rate": 450, "fg3_pct": math.inf, "opp_fg3_pct": math.inf,
     },
