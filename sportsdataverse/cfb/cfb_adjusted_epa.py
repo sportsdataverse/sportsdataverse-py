@@ -687,6 +687,77 @@ def _leave_one_game_out(clean: pl.DataFrame, opp: pl.DataFrame, lam: float) -> p
     )
 
 
+# The ledger's value columns, after the id / carried meta columns (`_ledger_frame` names, after the renames).
+_LEDGER_VALUE_COLUMNS = (
+    "team_id",
+    "pos_team",
+    "opponent_id",
+    "site",
+    "off_plays",
+    "def_plays",
+    "raw_off_epa",
+    "raw_def_epa",
+    "raw_net_epa",
+    "off_strength_faced",
+    "def_strength_faced",
+    "schedule_adj",
+    "adj_off_epa",
+    "adj_def_epa",
+    "adj_net_epa",
+    "off_weight",
+    "def_weight",
+    "raw_contribution",
+    "schedule_contribution",
+    "contribution",
+    "net_adj_epa",
+)
+
+
+def _ledger_frame(clean: pl.DataFrame, opp: pl.DataFrame, season: pl.DataFrame) -> pl.DataFrame:
+    """Per team-game ledger columns: site, plays in the fit, the schedule term, weights and contributions."""
+    meta = [c for c in _LEDGER_META if c in clean.columns and c not in opp.columns]
+    games = clean.group_by("game_id").agg(pl.col(c).first().alias(_LEDGER_META[c]) for c in meta)
+    off_n = clean.group_by(["game_id", "pos_team_id"]).agg(off_plays=pl.len(), _hfa=pl.col("hfa").first())
+    def_n = clean.group_by(["game_id", "def_pos_team_id"]).agg(def_plays=pl.len())
+    n_off = pl.col("adj_off_epa").is_not_null().sum().over("pos_team_id")
+    n_def = pl.col("adj_def_epa").is_not_null().sum().over("pos_team_id")
+    return (
+        opp.join(off_n, on=["game_id", "pos_team_id"], how="left")
+        .join(def_n, left_on=["game_id", "pos_team_id"], right_on=["game_id", "def_pos_team_id"], how="left")
+        .join(season, on="pos_team_id", how="left")
+        .join(games, on="game_id", how="left")
+        .with_columns(
+            site=pl.when(pl.col("_hfa") == 1)
+            .then(pl.lit("home"))
+            .when(pl.col("_hfa") == -1)
+            .then(pl.lit("away"))
+            .otherwise(pl.lit("neutral")),
+            def_plays=pl.col("def_plays").fill_null(0),
+            raw_net_epa=pl.col("raw_off_epa") - pl.col("raw_def_epa"),
+            schedule_adj=pl.col("adjmodelOff") - pl.col("adjmodelDef"),
+            adj_net_epa=pl.col("adj_off_epa") - pl.col("adj_def_epa"),
+            off_weight=pl.when(pl.col("adj_off_epa").is_not_null()).then(1.0 / n_off),
+            def_weight=pl.when(pl.col("adj_def_epa").is_not_null()).then(1.0 / n_def),
+        )
+        .with_columns(
+            raw_contribution=(pl.col("off_weight") * pl.col("raw_off_epa")).fill_null(0.0)
+            - (pl.col("def_weight") * pl.col("raw_def_epa")).fill_null(0.0),
+            schedule_contribution=(pl.col("def_weight") * pl.col("adjmodelOff")).fill_null(0.0)
+            - (pl.col("off_weight") * pl.col("adjmodelDef")).fill_null(0.0),
+            contribution=(pl.col("off_weight") * pl.col("adj_off_epa")).fill_null(0.0)
+            - (pl.col("def_weight") * pl.col("adj_def_epa")).fill_null(0.0),
+        )
+        .rename(
+            {
+                "pos_team_id": "team_id",
+                "def_pos_team_id": "opponent_id",
+                "adjmodelOff": "off_strength_faced",
+                "adjmodelDef": "def_strength_faced",
+            }
+        )
+    )
+
+
 @overload
 def cfb_adjusted_epa_ledger(
     plays: pl.DataFrame | pd.DataFrame,
@@ -785,88 +856,13 @@ def cfb_adjusted_epa_ledger(
     opp = _adjust_games(clean, offense, defense, fill_strength=None)
     season = _team_season(opp).select("pos_team_id", "net_adj_epa")
     opp = opp.join(season.select("pos_team_id"), on="pos_team_id", how="semi")
-
-    meta = [c for c in _LEDGER_META if c in clean.columns and c not in opp.columns]
-    games = clean.group_by("game_id").agg(pl.col(c).first().alias(_LEDGER_META[c]) for c in meta)
-    off_n = clean.group_by(["game_id", "pos_team_id"]).agg(off_plays=pl.len(), _hfa=pl.col("hfa").first())
-    def_n = clean.group_by(["game_id", "def_pos_team_id"]).agg(def_plays=pl.len())
-    n_off = pl.col("adj_off_epa").is_not_null().sum().over("pos_team_id")
-    n_def = pl.col("adj_def_epa").is_not_null().sum().over("pos_team_id")
-    ledger = (
-        opp.join(off_n, on=["game_id", "pos_team_id"], how="left")
-        .join(
-            def_n,
-            left_on=["game_id", "pos_team_id"],
-            right_on=["game_id", "def_pos_team_id"],
-            how="left",
-        )
-        .join(season, on="pos_team_id", how="left")
-        .join(games, on="game_id", how="left")
-        .with_columns(
-            site=pl.when(pl.col("_hfa") == 1)
-            .then(pl.lit("home"))
-            .when(pl.col("_hfa") == -1)
-            .then(pl.lit("away"))
-            .otherwise(pl.lit("neutral")),
-            def_plays=pl.col("def_plays").fill_null(0),
-            raw_net_epa=pl.col("raw_off_epa") - pl.col("raw_def_epa"),
-            schedule_adj=pl.col("adjmodelOff") - pl.col("adjmodelDef"),
-            adj_net_epa=pl.col("adj_off_epa") - pl.col("adj_def_epa"),
-            off_weight=pl.when(pl.col("adj_off_epa").is_not_null()).then(1.0 / n_off),
-            def_weight=pl.when(pl.col("adj_def_epa").is_not_null()).then(1.0 / n_def),
-        )
-        .with_columns(
-            raw_contribution=(pl.col("off_weight") * pl.col("raw_off_epa")).fill_null(0.0)
-            - (pl.col("def_weight") * pl.col("raw_def_epa")).fill_null(0.0),
-            schedule_contribution=(pl.col("def_weight") * pl.col("adjmodelOff")).fill_null(0.0)
-            - (pl.col("off_weight") * pl.col("adjmodelDef")).fill_null(0.0),
-            contribution=(pl.col("off_weight") * pl.col("adj_off_epa")).fill_null(0.0)
-            - (pl.col("def_weight") * pl.col("adj_def_epa")).fill_null(0.0),
-        )
-    )
-    cols = [
-        "game_id",
-        *(name for name in _LEDGER_META.values() if name in ledger.columns),
-        "team_id",
-        "pos_team",
-        "opponent_id",
-        "site",
-        "off_plays",
-        "def_plays",
-        "raw_off_epa",
-        "raw_def_epa",
-        "raw_net_epa",
-        "off_strength_faced",
-        "def_strength_faced",
-        "schedule_adj",
-        "adj_off_epa",
-        "adj_def_epa",
-        "adj_net_epa",
-        "off_weight",
-        "def_weight",
-        "raw_contribution",
-        "schedule_contribution",
-        "contribution",
-        "net_adj_epa",
-    ]
+    ledger = _ledger_frame(clean, opp, season)
+    cols = ["game_id", *(n for n in _LEDGER_META.values() if n in ledger.columns), *_LEDGER_VALUE_COLUMNS]
     if influence:
-        ledger = ledger.join(
-            _leave_one_game_out(clean, opp, lam),
-            on=["game_id", "pos_team_id"],
-            how="left",
+        loo = _leave_one_game_out(clean, opp, lam).rename({"pos_team_id": "team_id"})
+        ledger = ledger.join(loo, on=["game_id", "team_id"], how="left").with_columns(
+            game_influence=pl.col("net_adj_epa") - pl.col("loo_net_adj_epa")
         )
-        ledger = ledger.with_columns(game_influence=pl.col("net_adj_epa") - pl.col("loo_net_adj_epa"))
         cols += ["loo_net_adj_epa", "game_influence"]
-    out = (
-        ledger.rename(
-            {
-                "pos_team_id": "team_id",
-                "def_pos_team_id": "opponent_id",
-                "adjmodelOff": "off_strength_faced",
-                "adjmodelDef": "def_strength_faced",
-            }
-        )
-        .select(cols)
-        .sort(["team_id", *(["week"] if "week" in cols else []), "game_id"])
-    )
+    out = ledger.select(cols).sort(["team_id", *(["week"] if "week" in cols else []), "game_id"])
     return out.to_pandas() if return_as_pandas else out
