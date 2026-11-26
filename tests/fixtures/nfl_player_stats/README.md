@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [nflverse `stats_player` weekly release slice](#nflverse-stats_player-weekly-release-slice)
+  - [2024 fumbles-lost slice (captured 2026-11-26)](#2024-fumbles-lost-slice-captured-2026-11-26)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -32,3 +33,18 @@ every branch of that reconciliation:
 
 Re-capture by downloading that asset and re-running the selection documented
 above; no other file depends on the exact rows.
+
+## 2024 fumbles-lost slice (captured 2026-11-26)
+
+| File | Rows | Notes |
+|---|---:|---|
+| `stats_player_week_2024_fumbles_slice.parquet` | 45 | Season 2024, every regular-season week of three players, **raw upstream shape** (150 columns), from <https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2024.parquet> |
+| `rosters_2024_fumbles_slice.parquet` | 3 | Those three players' rows of `load_nfl_rosters([2024])`, as the loader returns them |
+
+The players were chosen so each play type of fumble lost appears: Drake Maye (QB, `00-0039851`; 4 sack + 2
+rushing), Josh Jacobs (RB, `00-0035700`; 3 rushing) and DK Metcalf (WR, `00-0035640`; 2 receiving). The
+loader emits only those three split columns, never a single `fumbles_lost`; `tests/nfl/test_nfl_projection_fumbles.py`
+checks the projection sums them, and that the sum reproduces the release's own `fantasy_points_ppr` every week.
+
+Re-capture: read the asset, keep `season_type == "REG"` rows whose `player_id` is one of the three ids above,
+sort by `player_id, week`; filter `load_nfl_rosters([2024])` on `gsis_id` for the same ids.

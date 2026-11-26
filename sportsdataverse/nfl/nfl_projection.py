@@ -56,8 +56,23 @@ _RATE_SCHEMA_BASE: dict = {
 }
 
 
+# load_nfl_player_stats emits fumbles lost split by play type, never a single
+# fumbles_lost column; their sum is the fumbles_lost the scoring formats charge.
+_FUMBLES_LOST_PARTS = ("sack_fumbles_lost", "rushing_fumbles_lost", "receiving_fumbles_lost")
+
+
 def _col_or_zero(name: str, cols: List[str]) -> pl.Expr:
     return pl.col(name) if name in cols else pl.lit(0.0)
+
+
+def _with_fumbles_lost(weekly: pl.DataFrame) -> pl.DataFrame:
+    """Add ``fumbles_lost`` as the sum of the per-play-type columns when absent."""
+    parts = [c for c in _FUMBLES_LOST_PARTS if c in weekly.columns]
+    if "fumbles_lost" in weekly.columns or not parts:
+        return weekly
+    return weekly.with_columns(
+        pl.sum_horizontal([pl.col(c).cast(pl.Float64).fill_null(0.0) for c in parts]).alias("fumbles_lost")
+    )
 
 
 def season_player_rates(weekly: pl.DataFrame, rosters: pl.DataFrame) -> pl.DataFrame:
@@ -95,6 +110,7 @@ def season_player_rates(weekly: pl.DataFrame, rosters: pl.DataFrame) -> pl.DataF
 
     .. _nflverse: https://nflverse.nflverse.com
     """
+    weekly = _with_fumbles_lost(weekly)
     stats = [c for c in _COUNTING_STATS if c in weekly.columns]
     schema = dict(_RATE_SCHEMA_BASE)
     for c in stats:
