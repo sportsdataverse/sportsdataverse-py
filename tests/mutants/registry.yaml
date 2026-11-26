@@ -12728,11 +12728,21 @@
   group: cfb-adjustment
   finding: cfb-adjustment-a1
   file: sportsdataverse/cfb/cfb_ratings.py
-  snippet: '    base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)'
+  snippet: '    base, clean = _prepare(plays, _ADJ_REQUIRED, None)'
   mutant: '    base, clean = _prepare(plays, _ADJ_REQUIRED)'
-  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_band_is_the_spread_free_wp
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_plays_are_the_margin_rule
   expected: kill
   note: Falls back to the spread-aware 0.1 <= wp_before <= 0.9 band, so the pregame line picks the plays.
+
+- id: cfb-efficiency-ratings-own-epa-plays
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '    opp = _adjust_games(clean, offense, defense, fill_strength=None)'
+  mutant: '    opp = _adjust_games(base, offense, defense, fill_strength=None)'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_plays_are_the_margin_rule
+  expected: kill
+  note: Nets a team's own EPA over garbage time the strength fit never saw.
 
 - id: cfb-efficiency-ratings-penalty
   group: cfb-adjustment

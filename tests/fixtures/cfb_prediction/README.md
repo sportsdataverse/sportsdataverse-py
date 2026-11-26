@@ -20,7 +20,7 @@ oracle + backtest tests; no network needed once committed.
 | File | Rows | Source | Key columns |
 |---|---:|---|---|
 | `results_2023.parquet` | ~3.7k | `load_cfb_schedule([2023])`, completed games (all divisions; filter to FBS via `team_id` membership) | `game_id, season, week, date, home_team_id, away_team_id, home_score, away_score, neutral_site` |
-| `pbp_2023_sample.parquet` | ~135k | `load_cfb_pbp([2023])`, the same FBS-vs-FBS game set as the 2026-07-07 capture (788 of its 793 games are still in the release), down-selected to the model-① columns. Recaptured **2026-11-25** from the reprocessed release to add `wp_before_naive` (the efficiency fit band) | `game_id, week, pos_team, pos_team_id, def_pos_team_id, home, EPA, pass, rush, wp_before, drive_id, drive_result, play_type, neutral_site, wp_before_naive` |
+| `pbp_2023_sample.parquet` | ~135k | `load_cfb_pbp([2023])`, the same FBS-vs-FBS game set as the 2026-07-07 capture (788 of its 793 games are still in the release), down-selected to the model-① columns. Recaptured **2026-11-25** from the reprocessed release to add `wp_before_naive`, then `period` and `pos_score_diff_start` (the efficiency fit's garbage-time rule) | `game_id, week, pos_team, pos_team_id, def_pos_team_id, home, EPA, pass, rush, wp_before, drive_id, drive_result, play_type, neutral_site, wp_before_naive, period, pos_score_diff_start` |
 | `fpi_2023.parquet` | 133 | `espn_cfb_season_powerindex_leaders(season=2023)` (ESPN FPI) | `team_id, team, fpi, fpi_rank` |
 | `fpi_resume_2023.parquet` | 133 | **ESPN FPI resume view** — `https://site.web.api.espn.com/apis/fitt/v3/sports/football/college-football/powerindex?season=2023&seasontype=2` (the `resume` category behind `espn.com/college-football/fpi/_/view/resume`). All **ranks** (1 = best): `avgsosrank`→`fpi_sos_rank` (Strength of Schedule), `accomplishmentrank`→`fpi_sor_rank` (Strength of Record), `gamecontrolrank`→`fpi_gc_rank` (Game Control). `team.id` (ESPN id) → `team_id`. | `team_id, team, fpi_sos_rank, fpi_sor_rank, fpi_gc_rank` |
 | `sp_plus_2023.parquet` | 133 | **CollegeFootballData SP+ exporter** — `https://collegefootballdata.com/exporter/ratings/sp` (Bill Connelly SP+). Team names → `team_id` via `load_cfb_team_info([2023]).school`. | `team_id, team, sp_overall, sp_off, sp_def, sp_special, sp_rank` |
@@ -68,7 +68,8 @@ Massachusetts/UMass→113, Hawai'i→62); all 133 teams resolve in both.
 `cfb_ratings._alias_released_pbp` / `_home_into_pos_team_namespace`, `drive_result` from
 `drive.result`, `neutral_site` from `load_cfb_schedule`, filtered to the previous fixture's
 `game_id` set, sorted by `game_id, game_play_number`, cast to the previous schema plus
-`wp_before_naive` (Float64).
+`wp_before_naive` (Float64). The same day `period` and `pos_score_diff_start` (Int64) were added by
+the same recipe from the same release; the other 15 columns came back identical, row for row.
 
 `ratings_weekly_2024.parquet` (2026-11-25): the published 2024 `cfb_ratings_weekly` snapshots
 (2026-09-27 vintage, all 2,079 rows) with `adj_off_epa`, `adj_def_epa` and `adj_net` rebuilt by the

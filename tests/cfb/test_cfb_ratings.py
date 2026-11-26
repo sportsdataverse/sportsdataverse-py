@@ -51,7 +51,8 @@ _REQUIRED_SCHEMA: dict[str, pl.PolarsDataType] = {
     "pass": pl.Int64,
     "rush": pl.Int64,
     "wp_before": pl.Float64,
-    "wp_before_naive": pl.Float64,
+    "period": pl.Int64,
+    "pos_score_diff_start": pl.Int64,
 }
 
 
@@ -71,7 +72,8 @@ def _mini_plays() -> pl.DataFrame:
                 "pass": 1,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Pass Reception",
             }
@@ -88,7 +90,8 @@ def _mini_plays() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 1,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Rush",
             }
@@ -145,20 +148,29 @@ def test_efficiency_ratings_is_the_adjusted_epa_fit() -> None:
         assert (j[mine] - j[theirs]).abs().max() < 1e-12, mine
 
 
-def test_efficiency_ratings_band_is_the_spread_free_wp() -> None:
-    """The fit band is `_FIT_WP` on `wp_before_naive`; the spread-aware `wp_before` is never read.
+def test_efficiency_ratings_plays_are_the_margin_rule() -> None:
+    """Garbage time by the score margin reaches neither the fit nor a team's own EPA; no WP is read.
 
-    Scrambling `wp_before` must not move a single rating, and pushing plays out
-    of the naive 5-95 band must -- the band that is documented is the band used.
+    On the real 2023 slate: dropping both win-probability columns moves nothing,
+    +3 EPA on every garbage-time play moves nothing (neither the strength fit nor
+    the netted own EPA sees those plays), and pushing competitive plays into
+    garbage time does move the ratings -- the documented rule is the rule used.
     """
     pbp = pl.read_parquet(_FIX_PBP_2023)
     base = efficiency_ratings(pbp).sort("team_id")
-    no_spread = efficiency_ratings(pbp.with_columns(wp_before=pl.lit(0.5))).sort("team_id")
-    assert_frame_equal(base, no_spread)
-    out_of_band = pbp.with_columns(
-        wp_before_naive=pl.when(pl.int_range(pl.len()) % 7 == 0).then(0.99).otherwise(pl.col("wp_before_naive"))
+    assert_frame_equal(base, efficiency_ratings(pbp.drop("wp_before", "wp_before_naive")).sort("team_id"))
+    lim = pl.col("period").replace_strict({1: 43, 2: 37, 3: 27}, default=21, return_dtype=pl.Int64)
+    garbage = pl.col("pos_score_diff_start").abs() > lim
+    assert pbp.filter(garbage & ((pl.col("pass") == 1) | (pl.col("rush") == 1))).height > 1_000
+    juiced = efficiency_ratings(pbp.with_columns(EPA=pl.when(garbage).then(pl.col("EPA") + 3.0).otherwise("EPA")))
+    assert_frame_equal(
+        base.select("team_id", "adj_off_epa", "adj_def_epa", "adj_net"),
+        juiced.sort("team_id").select("team_id", "adj_off_epa", "adj_def_epa", "adj_net"),
     )
-    moved = efficiency_ratings(out_of_band).sort("team_id")
+    blown_out = pbp.with_columns(
+        pos_score_diff_start=pl.when(pl.int_range(pl.len()) % 7 == 0).then(50).otherwise("pos_score_diff_start")
+    )
+    moved = efficiency_ratings(blown_out).sort("team_id")
     assert (moved["adj_net"] - base["adj_net"]).abs().max() > 1e-3
 
 
@@ -197,7 +209,8 @@ def _mini_plays_with_st() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Kickoff",
             }
@@ -214,7 +227,8 @@ def _mini_plays_with_st() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Kickoff",
             }
@@ -233,7 +247,8 @@ def _mini_plays_with_st() -> pl.DataFrame:
                 "pass": 1,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Pass Reception",
             }
@@ -296,7 +311,8 @@ def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Kickoff",
             }
@@ -313,7 +329,8 @@ def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Punt",
             }
@@ -330,7 +347,8 @@ def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Kickoff",
             }
@@ -348,7 +366,8 @@ def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None
                 "pass": 1,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Pass Reception",
             }
@@ -376,7 +395,8 @@ def _mini_drives() -> pl.DataFrame:
                     "pass": 1,
                     "rush": 0,
                     "wp_before": 0.5,
-                    "wp_before_naive": 0.5,
+                    "period": 1,
+                    "pos_score_diff_start": 0,
                     "neutral_site": False,
                     "play_type": "Pass Reception",
                 }
@@ -393,7 +413,8 @@ def _mini_drives() -> pl.DataFrame:
                     "pass": 0,
                     "rush": 1,
                     "wp_before": 0.5,
-                    "wp_before_naive": 0.5,
+                    "period": 1,
+                    "pos_score_diff_start": 0,
                     "neutral_site": False,
                     "play_type": "Rush",
                 }
@@ -500,7 +521,8 @@ def _mini_season_plays() -> pl.DataFrame:
                 "pass": 1,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Pass Reception",
                 "drive_id": f"{game_id}-A",
@@ -517,7 +539,8 @@ def _mini_season_plays() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 1,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Rush",
                 "drive_id": f"{game_id}-B",
@@ -536,7 +559,8 @@ def _mini_season_plays() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Kickoff",
                 "drive_id": f"{game_id}-STA",
@@ -553,7 +577,8 @@ def _mini_season_plays() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
-                "wp_before_naive": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Punt",
                 "drive_id": f"{game_id}-STB",
@@ -719,7 +744,8 @@ def _mini_row(game_id: str, *, offense: str, defense: str, epa: float, is_pass: 
         "pass": 1 if is_pass else 0,
         "rush": 0 if is_pass else 1,
         "wp_before": 0.5,
-        "wp_before_naive": 0.5,
+        "period": 1,
+        "pos_score_diff_start": 0,
         "neutral_site": False,
         "play_type": "Pass Reception" if is_pass else "Rush",
         "drive_id": f"{game_id}-{offense}",

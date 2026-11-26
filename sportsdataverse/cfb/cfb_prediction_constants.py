@@ -19,7 +19,8 @@ class RatingsConfig:
     """Tunable knobs for the CFB ratings engine.
 
     The play filter and the efficiency penalty are not knobs here: they are
-    ``cfb_adjusted_epa``'s (``_FIT_WP``, ``_ADJ_EPA_LAMBDA``), so
+    ``cfb_adjusted_epa``'s (the score-margin garbage-time rule,
+    ``_ADJ_EPA_LAMBDA``), so
     :func:`~sportsdataverse.cfb.cfb_ratings.efficiency_ratings` and
     :func:`~sportsdataverse.cfb.cfb_adjusted_epa` always fit the same model.
 
