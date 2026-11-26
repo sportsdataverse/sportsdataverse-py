@@ -1,6 +1,6 @@
 schema: scoreboard
 kind: dataframe
-description: "Golf: one row per player per event on the scoreboard (position, player status, holes completed, earnings and cup points are null; see the leaderboard)."
+description: "Golf: one row per player per event on the scoreboard (position, player status, playoff flag, holes completed, earnings and cup points are null; see the leaderboard)."
 columns:
 - name: event_id
   type: character
@@ -40,6 +40,12 @@ columns:
   description: ''
 - name: player_status
   type: character
+  description: ''
+- name: player_status_abbr
+  type: character
+  description: ''
+- name: playoff
+  type: logical
   description: ''
 - name: thru
   type: integer
