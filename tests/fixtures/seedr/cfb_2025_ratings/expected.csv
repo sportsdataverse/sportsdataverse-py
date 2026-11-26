@@ -1,0 +1,565 @@
+rating_type,variant,week,game_type,home_team,away_team,neutral,expected,margin_sd
+points,full,16,REG,Navy,Army,1,1.6374028200,16.4509000000
+points,full,100,POST,App State,Georgia Southern,1,0.4057504700,16.4509000000
+points,full,100,POST,Arkansas State,Missouri State,1,-1.3274775864,16.4509000000
+points,full,100,POST,Army,UConn,1,0.1021956596,16.4509000000
+points,full,100,POST,BYU,Georgia Tech,1,9.9654185960,16.4509000000
+points,full,100,POST,Cincinnati,Navy,1,1.8795150368,16.4509000000
+points,full,100,POST,Clemson,Penn State,1,-6.5283520916,16.4509000000
+points,full,100,POST,Delaware,Louisiana,1,-1.0319277856,16.4509000000
+points,full,100,POST,Duke,Arizona State,1,-0.0064852056,16.4509000000
+points,full,100,POST,East Carolina,Pittsburgh,1,-1.1143808724,16.4509000000
+points,full,100,POST,Fresno State,Miami (OH),1,2.5228778284,16.4509000000
+points,full,100,POST,Georgia,Ole Miss,1,2.3405268556,16.4509000000
+points,full,100,POST,Hawai'i,California,0,6.7010603488,16.4509000000
+points,full,100,POST,Houston,LSU,1,-2.4734693192,16.4509000000
+points,full,100,POST,Illinois,Tennessee,1,-1.3340063668,16.4509000000
+points,full,100,POST,Indiana,Alabama,1,14.6853070192,16.4509000000
+points,full,100,POST,Indiana,Miami,1,10.7393718748,16.4509000000
+points,full,100,POST,Indiana,Oregon,1,6.9876294208,16.4509000000
+points,full,100,POST,Jacksonville State,Troy,1,-1.4923741948,16.4509000000
+points,full,100,POST,Louisiana Tech,Coastal Carolina,1,13.7880285540,16.4509000000
+points,full,100,POST,Louisville,Toledo,1,-0.3875404548,16.4509000000
+points,full,100,POST,Minnesota,New Mexico,1,-5.4031402244,16.4509000000
+points,full,100,POST,Mississippi State,Wake Forest,1,-0.8018655952,16.4509000000
+points,full,100,POST,Missouri,Virginia,1,2.3980392148,16.4509000000
+points,full,100,POST,NC State,Memphis,1,-3.5011905424,16.4509000000
+points,full,100,POST,Northwestern,Central Michigan,1,9.9842620400,16.4509000000
+points,full,100,POST,Ohio,UNLV,1,-4.9513737028,16.4509000000
+points,full,100,POST,Ohio State,Miami,1,6.4275189416,16.4509000000
+points,full,100,POST,Oklahoma,Alabama,0,1.2104708148,16.4509000000
+points,full,100,POST,Ole Miss,Miami,1,-4.5107070644,16.4509000000
+points,full,100,POST,Ole Miss,Tulane,0,12.3761423976,16.4509000000
+points,full,100,POST,Oregon,James Madison,0,11.4591319876,16.4509000000
+points,full,100,POST,San Diego State,North Texas,1,-7.7267058548,16.4509000000
+points,full,100,POST,SMU,Arizona,1,-0.7087823828,16.4509000000
+points,full,100,POST,South Florida,Old Dominion,1,9.2659686600,16.4509000000
+points,full,100,POST,Southern Miss,Western Kentucky,1,-2.5186021840,16.4509000000
+points,full,100,POST,TCU,USC,1,-10.4436902868,16.4509000000
+points,full,100,POST,Texas,Michigan,1,0.0332082488,16.4509000000
+points,full,100,POST,Texas A&M,Miami,0,-1.5473719004,16.4509000000
+points,full,100,POST,Texas State,Rice,1,14.3943952776,16.4509000000
+points,full,100,POST,Texas Tech,Oregon,1,3.8990816064,16.4509000000
+points,full,100,POST,Utah,Nebraska,1,16.4462869092,16.4509000000
+points,full,100,POST,Utah State,Washington State,1,-3.8600417740,16.4509000000
+points,full,100,POST,UTSA,Florida International,1,8.2855505392,16.4509000000
+points,full,100,POST,Vanderbilt,Iowa,1,1.3132307524,16.4509000000
+points,full,100,POST,Washington,Boise State,1,5.8029528308,16.4509000000
+points,full,100,POST,Western Michigan,Kennesaw State,1,-1.2341818140,16.4509000000
+points,half,16,REG,Navy,Army,1,1.4226362100,16.6383000000
+points,half,100,POST,App State,Georgia Southern,1,0.3525310350,16.6383000000
+points,half,100,POST,Arkansas State,Missouri State,1,-1.1533616892,16.6383000000
+points,half,100,POST,Army,UConn,1,0.0887913738,16.6383000000
+points,half,100,POST,BYU,Georgia Tech,1,8.6583247380,16.6383000000
+points,half,100,POST,Cincinnati,Navy,1,1.6329922704,16.6383000000
+points,half,100,POST,Clemson,Penn State,1,-5.6720740698,16.6383000000
+points,half,100,POST,Delaware,Louisiana,1,-0.8965770768,16.6383000000
+points,half,100,POST,Duke,Arizona State,1,-0.0056345868,16.6383000000
+points,half,100,POST,East Carolina,Pittsburgh,1,-0.9682153722,16.6383000000
+points,half,100,POST,Fresno State,Miami (OH),1,2.1919696902,16.6383000000
+points,half,100,POST,Georgia,Ole Miss,1,2.0335364118,16.6383000000
+points,half,100,POST,Hawai'i,California,0,6.1337726064,16.6383000000
+points,half,100,POST,Houston,LSU,1,-2.1490417476,16.6383000000
+points,half,100,POST,Illinois,Tennessee,1,-1.1590341354,16.6383000000
+points,half,100,POST,Indiana,Alabama,1,14.2389997020,16.2311000000
+points,half,100,POST,Indiana,Miami,1,9.3307640094,16.6383000000
+points,half,100,POST,Indiana,Oregon,1,6.0711112224,16.6383000000
+points,half,100,POST,Jacksonville State,Troy,1,-1.4470188255,16.2311000000
+points,half,100,POST,Louisiana Tech,Coastal Carolina,1,11.9795498370,16.6383000000
+points,half,100,POST,Louisville,Toledo,1,-0.3367094994,16.6383000000
+points,half,100,POST,Minnesota,New Mexico,1,-4.6944483282,16.6383000000
+points,half,100,POST,Mississippi State,Wake Forest,1,-0.6966905256,16.6383000000
+points,half,100,POST,Missouri,Virginia,1,2.0835052794,16.6383000000
+points,half,100,POST,NC State,Memphis,1,-3.0419640072,16.6383000000
+points,half,100,POST,Northwestern,Central Michigan,1,8.6746966200,16.6383000000
+points,half,100,POST,Ohio,UNLV,1,-4.3019368434,16.6383000000
+points,half,100,POST,Ohio State,Miami,1,5.5844664948,16.6383000000
+points,half,100,POST,Oklahoma,Alabama,0,1.3633450794,16.6383000000
+points,half,100,POST,Ole Miss,Miami,1,-3.9190693482,16.6383000000
+points,half,100,POST,Ole Miss,Tulane,0,11.0644940628,16.6383000000
+points,half,100,POST,Oregon,James Madison,0,10.2677614578,16.6383000000
+points,half,100,POST,San Diego State,North Texas,1,-6.7132481994,16.6383000000
+points,half,100,POST,SMU,Arizona,1,-0.6158163834,16.6383000000
+points,half,100,POST,South Florida,Old Dominion,1,8.0506167300,16.6383000000
+points,half,100,POST,Southern Miss,Western Kentucky,1,-2.1882548520,16.6383000000
+points,half,100,POST,TCU,USC,1,-9.0738648954,16.6383000000
+points,half,100,POST,Texas,Michigan,1,0.0321990030,16.2311000000
+points,half,100,POST,Texas A&M,Miami,0,-1.0327708062,16.6383000000
+points,half,100,POST,Texas State,Rice,1,12.5063837028,16.6383000000
+points,half,100,POST,Texas Tech,Oregon,1,3.3876664992,16.6383000000
+points,half,100,POST,Utah,Nebraska,1,14.2891431426,16.6383000000
+points,half,100,POST,Utah State,Washington State,1,-3.3537472470,16.6383000000
+points,half,100,POST,UTSA,Florida International,1,7.1987931576,16.6383000000
+points,half,100,POST,Vanderbilt,Iowa,1,1.1409835122,16.6383000000
+points,half,100,POST,Washington,Boise State,1,5.0418203274,16.6383000000
+points,half,100,POST,Western Michigan,Kennesaw State,1,-1.1966732775,16.2311000000
+points,quarter,16,REG,Navy,Army,1,1.6837763850,16.9680000000
+points,quarter,100,POST,App State,Georgia Southern,1,0.4172418975,16.9680000000
+points,quarter,100,POST,Arkansas State,Missouri State,1,-1.3650736302,16.9680000000
+points,quarter,100,POST,Army,UConn,1,0.1050899853,16.9680000000
+points,quarter,100,POST,BYU,Georgia Tech,1,10.2476533530,16.9680000000
+points,quarter,100,POST,Cincinnati,Navy,1,1.9327455624,16.9680000000
+points,quarter,100,POST,Clemson,Penn State,1,-6.7132442613,16.9680000000
+points,quarter,100,POST,Delaware,Louisiana,1,-1.0611534408,16.9680000000
+points,quarter,100,POST,Duke,Arizona State,1,-0.0066688758,16.9680000000
+points,quarter,100,POST,East Carolina,Pittsburgh,1,-1.1459417157,16.9680000000
+points,quarter,100,POST,Fresno State,Miami (OH),1,2.5943292987,16.9680000000
+points,quarter,100,POST,Georgia,Ole Miss,1,2.4068138883,16.9680000000
+points,quarter,100,POST,Hawai'i,California,0,6.8235521784,16.9680000000
+points,quarter,100,POST,Houston,LSU,1,-2.5435214706,16.9680000000
+points,quarter,100,POST,Illinois,Tennessee,1,-1.3717873149,16.9680000000
+points,quarter,100,POST,Indiana,Alabama,1,15.1012156956,16.9680000000
+points,quarter,100,POST,Indiana,Miami,1,11.0435260839,16.9680000000
+points,quarter,100,POST,Indiana,Oregon,1,7.1855289744,16.9680000000
+points,quarter,100,POST,Jacksonville State,Troy,1,-1.5346403439,16.9680000000
+points,quarter,100,POST,Louisiana Tech,Coastal Carolina,1,14.1785250345,16.9680000000
+points,quarter,100,POST,Louisville,Toledo,1,-0.3985161489,16.9680000000
+points,quarter,100,POST,Minnesota,New Mexico,1,-5.5561648017,16.9680000000
+points,quarter,100,POST,Mississippi State,Wake Forest,1,-0.8245755636,16.9680000000
+points,quarter,100,POST,Missouri,Virginia,1,2.4659550789,16.9680000000
+points,quarter,100,POST,NC State,Memphis,1,-3.6003492132,16.9680000000
+points,quarter,100,POST,Northwestern,Central Michigan,1,10.2670304700,16.9680000000
+points,quarter,100,POST,Ohio,UNLV,1,-5.0916036129,16.9680000000
+points,quarter,100,POST,Ohio State,Miami,1,6.6095553738,16.9680000000
+points,quarter,100,POST,Oklahoma,Alabama,0,1.1774613789,16.9680000000
+points,quarter,100,POST,Ole Miss,Miami,1,-4.6384566717,16.9680000000
+points,quarter,100,POST,Ole Miss,Tulane,0,12.6593605818,16.9680000000
+points,quarter,100,POST,Oregon,James Madison,0,11.7163791393,16.9680000000
+points,quarter,100,POST,San Diego State,North Texas,1,-7.9455370989,16.9680000000
+points,quarter,100,POST,SMU,Arizona,1,-0.7288561029,16.9680000000
+points,quarter,100,POST,South Florida,Old Dominion,1,9.5283940050,16.9680000000
+points,quarter,100,POST,Southern Miss,Western Kentucky,1,-2.5899325620,16.9680000000
+points,quarter,100,POST,TCU,USC,1,-10.7394703749,16.9680000000
+points,quarter,100,POST,Texas,Michigan,1,0.0341487534,16.9680000000
+points,quarter,100,POST,Texas A&M,Miami,0,-1.6584873447,16.9680000000
+points,quarter,100,POST,Texas State,Rice,1,14.8020649218,16.9680000000
+points,quarter,100,POST,Texas Tech,Oregon,1,4.0095091152,16.9680000000
+points,quarter,100,POST,Utah,Nebraska,1,16.9120690281,16.9680000000
+points,quarter,100,POST,Utah State,Washington State,1,-3.9693636195,16.9680000000
+points,quarter,100,POST,UTSA,Florida International,1,8.5202090556,16.9680000000
+points,quarter,100,POST,Vanderbilt,Iowa,1,1.3504233057,16.9680000000
+points,quarter,100,POST,Washington,Boise State,1,5.9673006669,16.9680000000
+points,quarter,100,POST,Western Michigan,Kennesaw State,1,-1.2691355895,16.9680000000
+points,missing,16,REG,Navy,Army,1,1.6374028200,16.4509000000
+points,missing,100,POST,App State,Georgia Southern,1,-10.5609107500,16.4509000000
+points,missing,100,POST,Arkansas State,Missouri State,1,-1.3274775864,16.4509000000
+points,missing,100,POST,Army,UConn,1,0.1021956596,16.4509000000
+points,missing,100,POST,BYU,Georgia Tech,1,9.9654185960,16.4509000000
+points,missing,100,POST,Cincinnati,Navy,1,1.8795150368,16.4509000000
+points,missing,100,POST,Clemson,Penn State,1,-6.5283520916,16.4509000000
+points,missing,100,POST,Delaware,Louisiana,1,-1.0319277856,16.4509000000
+points,missing,100,POST,Duke,Arizona State,1,-0.0064852056,16.4509000000
+points,missing,100,POST,East Carolina,Pittsburgh,1,-1.1143808724,16.4509000000
+points,missing,100,POST,Fresno State,Miami (OH),1,2.5228778284,16.4509000000
+points,missing,100,POST,Georgia,Ole Miss,1,2.3405268556,16.4509000000
+points,missing,100,POST,Hawai'i,California,0,6.7010603488,16.4509000000
+points,missing,100,POST,Houston,LSU,1,-2.4734693192,16.4509000000
+points,missing,100,POST,Illinois,Tennessee,1,-1.3340063668,16.4509000000
+points,missing,100,POST,Indiana,Alabama,1,14.6853070192,16.4509000000
+points,missing,100,POST,Indiana,Miami,1,10.7393718748,16.4509000000
+points,missing,100,POST,Indiana,Oregon,1,6.9876294208,16.4509000000
+points,missing,100,POST,Jacksonville State,Troy,1,-1.4923741948,16.4509000000
+points,missing,100,POST,Louisiana Tech,Coastal Carolina,1,13.7880285540,16.4509000000
+points,missing,100,POST,Louisville,Toledo,1,-0.3875404548,16.4509000000
+points,missing,100,POST,Minnesota,New Mexico,1,-5.4031402244,16.4509000000
+points,missing,100,POST,Mississippi State,Wake Forest,1,-0.8018655952,16.4509000000
+points,missing,100,POST,Missouri,Virginia,1,2.3980392148,16.4509000000
+points,missing,100,POST,NC State,Memphis,1,-3.5011905424,16.4509000000
+points,missing,100,POST,Northwestern,Central Michigan,1,9.9842620400,16.4509000000
+points,missing,100,POST,Ohio,UNLV,1,-4.9513737028,16.4509000000
+points,missing,100,POST,Ohio State,Miami,1,6.4275189416,16.4509000000
+points,missing,100,POST,Oklahoma,Alabama,0,1.2104708148,16.4509000000
+points,missing,100,POST,Ole Miss,Miami,1,-4.5107070644,16.4509000000
+points,missing,100,POST,Ole Miss,Tulane,0,12.3761423976,16.4509000000
+points,missing,100,POST,Oregon,James Madison,0,11.4591319876,16.4509000000
+points,missing,100,POST,San Diego State,North Texas,1,-7.7267058548,16.4509000000
+points,missing,100,POST,SMU,Arizona,1,-0.7087823828,16.4509000000
+points,missing,100,POST,South Florida,Old Dominion,1,9.2659686600,16.4509000000
+points,missing,100,POST,Southern Miss,Western Kentucky,1,-2.5186021840,16.4509000000
+points,missing,100,POST,TCU,USC,1,-10.4436902868,16.4509000000
+points,missing,100,POST,Texas,Michigan,1,0.0332082488,16.4509000000
+points,missing,100,POST,Texas A&M,Miami,0,-1.5473719004,16.4509000000
+points,missing,100,POST,Texas State,Rice,1,14.3943952776,16.4509000000
+points,missing,100,POST,Texas Tech,Oregon,1,3.8990816064,16.4509000000
+points,missing,100,POST,Utah,Nebraska,1,16.4462869092,16.4509000000
+points,missing,100,POST,Utah State,Washington State,1,-3.8600417740,16.4509000000
+points,missing,100,POST,UTSA,Florida International,1,8.2855505392,16.4509000000
+points,missing,100,POST,Vanderbilt,Iowa,1,1.3132307524,16.4509000000
+points,missing,100,POST,Washington,Boise State,1,5.8029528308,16.4509000000
+points,missing,100,POST,Western Michigan,Kennesaw State,1,-1.2341818140,16.4509000000
+adj_epa,full,16,REG,Navy,Army,1,5.9231169850,17.0386000000
+adj_epa,full,100,POST,App State,Georgia Southern,1,2.0280685085,17.0386000000
+adj_epa,full,100,POST,Arkansas State,Missouri State,1,-1.9203123305,17.0386000000
+adj_epa,full,100,POST,Army,UConn,1,-0.1583599080,17.0386000000
+adj_epa,full,100,POST,BYU,Georgia Tech,1,5.7981952280,17.0386000000
+adj_epa,full,100,POST,Cincinnati,Navy,1,-0.3846875710,17.0386000000
+adj_epa,full,100,POST,Clemson,Penn State,1,-4.8658463085,17.0386000000
+adj_epa,full,100,POST,Delaware,Louisiana,1,-0.3464867160,17.0386000000
+adj_epa,full,100,POST,Duke,Arizona State,1,-7.4080387915,17.0386000000
+adj_epa,full,100,POST,East Carolina,Pittsburgh,1,-3.0784927980,17.0386000000
+adj_epa,full,100,POST,Fresno State,Miami (OH),1,-2.8063737205,17.0386000000
+adj_epa,full,100,POST,Georgia,Ole Miss,1,4.2349368630,17.0386000000
+adj_epa,full,100,POST,Hawai'i,California,0,0.4028282255,17.0386000000
+adj_epa,full,100,POST,Houston,LSU,1,-4.8309694240,17.0386000000
+adj_epa,full,100,POST,Illinois,Tennessee,1,-6.6184717690,17.0386000000
+adj_epa,full,100,POST,Indiana,Alabama,1,5.5656661275,17.0386000000
+adj_epa,full,100,POST,Indiana,Miami,1,5.2538578500,17.0386000000
+adj_epa,full,100,POST,Indiana,Oregon,1,1.7632423215,17.0386000000
+adj_epa,full,100,POST,Jacksonville State,Troy,1,-0.9510028435,17.0386000000
+adj_epa,full,100,POST,Louisiana Tech,Coastal Carolina,1,2.4042725130,17.0386000000
+adj_epa,full,100,POST,Louisville,Toledo,1,-3.7342576050,17.0386000000
+adj_epa,full,100,POST,Minnesota,New Mexico,1,0.2812972050,17.0386000000
+adj_epa,full,100,POST,Mississippi State,Wake Forest,1,-2.4744727855,17.0386000000
+adj_epa,full,100,POST,Missouri,Virginia,1,6.1307907240,17.0386000000
+adj_epa,full,100,POST,NC State,Memphis,1,-1.1213191230,17.0386000000
+adj_epa,full,100,POST,Northwestern,Central Michigan,1,3.4079627695,17.0386000000
+adj_epa,full,100,POST,Ohio,UNLV,1,-2.2900172285,17.0386000000
+adj_epa,full,100,POST,Ohio State,Miami,1,10.0161153465,17.0386000000
+adj_epa,full,100,POST,Oklahoma,Alabama,0,1.6942651820,17.0386000000
+adj_epa,full,100,POST,Ole Miss,Miami,1,-3.9810748175,17.0386000000
+adj_epa,full,100,POST,Ole Miss,Tulane,0,8.7933731630,17.0386000000
+adj_epa,full,100,POST,Oregon,James Madison,0,10.1949972610,17.0386000000
+adj_epa,full,100,POST,San Diego State,North Texas,1,-2.8772685540,17.0386000000
+adj_epa,full,100,POST,SMU,Arizona,1,-1.0788020675,17.0386000000
+adj_epa,full,100,POST,South Florida,Old Dominion,1,7.1316531250,17.0386000000
+adj_epa,full,100,POST,Southern Miss,Western Kentucky,1,3.3928312620,17.0386000000
+adj_epa,full,100,POST,TCU,USC,1,-7.4739724750,17.0386000000
+adj_epa,full,100,POST,Texas,Michigan,1,1.3888243310,17.0386000000
+adj_epa,full,100,POST,Texas A&M,Miami,0,8.0585276250,17.0386000000
+adj_epa,full,100,POST,Texas State,Rice,1,9.9873406765,17.0386000000
+adj_epa,full,100,POST,Texas Tech,Oregon,1,1.8111670305,17.0386000000
+adj_epa,full,100,POST,Utah,Nebraska,1,11.5417681945,17.0386000000
+adj_epa,full,100,POST,Utah State,Washington State,1,-0.3885572680,17.0386000000
+adj_epa,full,100,POST,UTSA,Florida International,1,4.9755869465,17.0386000000
+adj_epa,full,100,POST,Vanderbilt,Iowa,1,5.8031563780,17.0386000000
+adj_epa,full,100,POST,Washington,Boise State,1,5.0731727670,17.0386000000
+adj_epa,full,100,POST,Western Michigan,Kennesaw State,1,2.3381403835,17.0386000000
+adj_epa,half,16,REG,Navy,Army,1,4.5237229170,17.0386000000
+adj_epa,half,100,POST,App State,Georgia Southern,1,1.5489175737,17.0386000000
+adj_epa,half,100,POST,Arkansas State,Missouri State,1,-1.4666198421,17.0386000000
+adj_epa,half,100,POST,Army,UConn,1,-0.1209458376,17.0386000000
+adj_epa,half,100,POST,BYU,Georgia Tech,1,4.4283151416,17.0386000000
+adj_epa,half,100,POST,Cincinnati,Navy,1,-0.2938013862,17.0386000000
+adj_epa,half,100,POST,Clemson,Penn State,1,-3.7162427337,17.0386000000
+adj_epa,half,100,POST,Delaware,Louisiana,1,-0.2646258552,17.0386000000
+adj_epa,half,100,POST,Duke,Arizona State,1,-5.6578174863,17.0386000000
+adj_epa,half,100,POST,East Carolina,Pittsburgh,1,-2.3511688956,17.0386000000
+adj_epa,half,100,POST,Fresno State,Miami (OH),1,-2.1433406001,17.0386000000
+adj_epa,half,100,POST,Georgia,Ole Miss,1,3.2343917886,17.0386000000
+adj_epa,half,100,POST,Hawai'i,California,0,0.9603236611,17.0386000000
+adj_epa,half,100,POST,Houston,LSU,1,-3.6896058528,17.0386000000
+adj_epa,half,100,POST,Illinois,Tennessee,1,-5.0547933618,17.0386000000
+adj_epa,half,100,POST,Indiana,Alabama,1,5.0681368710,17.0386000000
+adj_epa,half,100,POST,Indiana,Miami,1,4.0125827700,17.0386000000
+adj_epa,half,100,POST,Indiana,Oregon,1,1.3466591523,17.0386000000
+adj_epa,half,100,POST,Jacksonville State,Troy,1,-0.8659902454,17.0386000000
+adj_epa,half,100,POST,Louisiana Tech,Coastal Carolina,1,1.8362397186,17.0386000000
+adj_epa,half,100,POST,Louisville,Toledo,1,-2.8520028810,17.0386000000
+adj_epa,half,100,POST,Minnesota,New Mexico,1,0.2148380010,17.0386000000
+adj_epa,half,100,POST,Mississippi State,Wake Forest,1,-1.8898544931,17.0386000000
+adj_epa,half,100,POST,Missouri,Virginia,1,4.6823317128,17.0386000000
+adj_epa,half,100,POST,NC State,Memphis,1,-0.8563965606,17.0386000000
+adj_epa,half,100,POST,Northwestern,Central Michigan,1,2.6027983779,17.0386000000
+adj_epa,half,100,POST,Ohio,UNLV,1,-1.7489783577,17.0386000000
+adj_epa,half,100,POST,Ohio State,Miami,1,7.6497105573,17.0386000000
+adj_epa,half,100,POST,Oklahoma,Alabama,0,1.9466460604,17.0386000000
+adj_epa,half,100,POST,Ole Miss,Miami,1,-3.0405071235,17.0386000000
+adj_epa,half,100,POST,Ole Miss,Tulane,0,7.3685206486,17.0386000000
+adj_epa,half,100,POST,Oregon,James Madison,0,8.4389974042,17.0386000000
+adj_epa,half,100,POST,San Diego State,North Texas,1,-2.1974858388,17.0386000000
+adj_epa,half,100,POST,SMU,Arizona,1,-0.8239245735,17.0386000000
+adj_epa,half,100,POST,South Florida,Old Dominion,1,5.4467306250,17.0386000000
+adj_epa,half,100,POST,Southern Miss,Western Kentucky,1,2.5912418364,17.0386000000
+adj_epa,half,100,POST,TCU,USC,1,-5.7081736950,17.0386000000
+adj_epa,half,100,POST,Texas,Michigan,1,1.2646737404,17.0386000000
+adj_epa,half,100,POST,Texas A&M,Miami,0,6.8072895250,17.0386000000
+adj_epa,half,100,POST,Texas State,Rice,1,7.6277341833,17.0386000000
+adj_epa,half,100,POST,Texas Tech,Oregon,1,1.3832611821,17.0386000000
+adj_epa,half,100,POST,Utah,Nebraska,1,8.8149130629,17.0386000000
+adj_epa,half,100,POST,Utah State,Washington State,1,-0.2967568296,17.0386000000
+adj_epa,half,100,POST,UTSA,Florida International,1,3.8000560773,17.0386000000
+adj_epa,half,100,POST,Vanderbilt,Iowa,1,4.4321041716,17.0386000000
+adj_epa,half,100,POST,Washington,Boise State,1,3.8745862974,17.0386000000
+adj_epa,half,100,POST,Western Michigan,Kennesaw State,1,2.1291279814,17.0386000000
+adj_epa,quarter,16,REG,Navy,Army,1,3.8064994310,17.0386000000
+adj_epa,quarter,100,POST,App State,Georgia Southern,1,1.3033410691,17.0386000000
+adj_epa,quarter,100,POST,Arkansas State,Missouri State,1,-1.2340914103,17.0386000000
+adj_epa,quarter,100,POST,Army,UConn,1,-0.1017702168,17.0386000000
+adj_epa,quarter,100,POST,BYU,Georgia Tech,1,3.7262182888,17.0386000000
+adj_epa,quarter,100,POST,Cincinnati,Navy,1,-0.2472200066,17.0386000000
+adj_epa,quarter,100,POST,Clemson,Penn State,1,-3.1270429491,17.0386000000
+adj_epa,quarter,100,POST,Delaware,Louisiana,1,-0.2226701736,17.0386000000
+adj_epa,quarter,100,POST,Duke,Arizona State,1,-4.7607865109,17.0386000000
+adj_epa,quarter,100,POST,East Carolina,Pittsburgh,1,-1.9783977108,17.0386000000
+adj_epa,quarter,100,POST,Fresno State,Miami (OH),1,-1.8035200043,17.0386000000
+adj_epa,quarter,100,POST,Georgia,Ole Miss,1,2.7215881098,17.0386000000
+adj_epa,quarter,100,POST,Hawai'i,California,0,1.2460536273,17.0386000000
+adj_epa,quarter,100,POST,Houston,LSU,1,-3.1046292704,17.0386000000
+adj_epa,quarter,100,POST,Illinois,Tennessee,1,-4.2533701574,17.0386000000
+adj_epa,quarter,100,POST,Indiana,Alabama,1,3.5767831365,17.0386000000
+adj_epa,quarter,100,POST,Indiana,Miami,1,3.3763991100,17.0386000000
+adj_epa,quarter,100,POST,Indiana,Oregon,1,1.1331501489,17.0386000000
+adj_epa,quarter,100,POST,Jacksonville State,Troy,1,-0.6111633101,17.0386000000
+adj_epa,quarter,100,POST,Louisiana Tech,Coastal Carolina,1,1.5451090998,17.0386000000
+adj_epa,quarter,100,POST,Louisville,Toledo,1,-2.3998258830,17.0386000000
+adj_epa,quarter,100,POST,Minnesota,New Mexico,1,0.1807760430,17.0386000000
+adj_epa,quarter,100,POST,Mississippi State,Wake Forest,1,-1.5902234033,17.0386000000
+adj_epa,quarter,100,POST,Missouri,Virginia,1,3.9399612504,17.0386000000
+adj_epa,quarter,100,POST,NC State,Memphis,1,-0.7206173058,17.0386000000
+adj_epa,quarter,100,POST,Northwestern,Central Michigan,1,2.1901320497,17.0386000000
+adj_epa,quarter,100,POST,Ohio,UNLV,1,-1.4716827811,17.0386000000
+adj_epa,quarter,100,POST,Ohio State,Miami,1,6.4368705639,17.0386000000
+adj_epa,quarter,100,POST,Oklahoma,Alabama,0,2.0759973972,17.0386000000
+adj_epa,quarter,100,POST,Ole Miss,Miami,1,-2.5584433105,17.0386000000
+adj_epa,quarter,100,POST,Ole Miss,Tulane,0,6.6382490898,17.0386000000
+adj_epa,quarter,100,POST,Oregon,James Madison,0,7.5390047806,17.0386000000
+adj_epa,quarter,100,POST,San Diego State,North Texas,1,-1.8490806684,17.0386000000
+adj_epa,quarter,100,POST,SMU,Arizona,1,-0.6932936605,17.0386000000
+adj_epa,quarter,100,POST,South Florida,Old Dominion,1,4.5831668750,17.0386000000
+adj_epa,quarter,100,POST,Southern Miss,Western Kentucky,1,2.1804077652,17.0386000000
+adj_epa,quarter,100,POST,TCU,USC,1,-4.8031588850,17.0386000000
+adj_epa,quarter,100,POST,Texas,Michigan,1,0.8925299026,17.0386000000
+adj_epa,quarter,100,POST,Texas A&M,Miami,0,6.1659995750,17.0386000000
+adj_epa,quarter,100,POST,Texas State,Rice,1,6.4183784819,17.0386000000
+adj_epa,quarter,100,POST,Texas Tech,Oregon,1,1.1639490303,17.0386000000
+adj_epa,quarter,100,POST,Utah,Nebraska,1,7.4173335047,17.0386000000
+adj_epa,quarter,100,POST,Utah State,Washington State,1,-0.2497068728,17.0386000000
+adj_epa,quarter,100,POST,UTSA,Florida International,1,3.1975679239,17.0386000000
+adj_epa,quarter,100,POST,Vanderbilt,Iowa,1,3.7294065788,17.0386000000
+adj_epa,quarter,100,POST,Washington,Boise State,1,3.2602815882,17.0386000000
+adj_epa,quarter,100,POST,Western Michigan,Kennesaw State,1,1.5026091941,17.0386000000
+adj_epa,missing,16,REG,Navy,Army,1,5.9231169850,17.0386000000
+adj_epa,missing,100,POST,App State,Georgia Southern,1,-6.6462045975,17.0386000000
+adj_epa,missing,100,POST,Arkansas State,Missouri State,1,-1.9203123305,17.0386000000
+adj_epa,missing,100,POST,Army,UConn,1,-0.1583599080,17.0386000000
+adj_epa,missing,100,POST,BYU,Georgia Tech,1,5.7981952280,17.0386000000
+adj_epa,missing,100,POST,Cincinnati,Navy,1,-0.3846875710,17.0386000000
+adj_epa,missing,100,POST,Clemson,Penn State,1,-4.8658463085,17.0386000000
+adj_epa,missing,100,POST,Delaware,Louisiana,1,-0.3464867160,17.0386000000
+adj_epa,missing,100,POST,Duke,Arizona State,1,-7.4080387915,17.0386000000
+adj_epa,missing,100,POST,East Carolina,Pittsburgh,1,-3.0784927980,17.0386000000
+adj_epa,missing,100,POST,Fresno State,Miami (OH),1,-2.8063737205,17.0386000000
+adj_epa,missing,100,POST,Georgia,Ole Miss,1,4.2349368630,17.0386000000
+adj_epa,missing,100,POST,Hawai'i,California,0,0.4028282255,17.0386000000
+adj_epa,missing,100,POST,Houston,LSU,1,-4.8309694240,17.0386000000
+adj_epa,missing,100,POST,Illinois,Tennessee,1,-6.6184717690,17.0386000000
+adj_epa,missing,100,POST,Indiana,Alabama,1,5.5656661275,17.0386000000
+adj_epa,missing,100,POST,Indiana,Miami,1,5.2538578500,17.0386000000
+adj_epa,missing,100,POST,Indiana,Oregon,1,1.7632423215,17.0386000000
+adj_epa,missing,100,POST,Jacksonville State,Troy,1,-0.9510028435,17.0386000000
+adj_epa,missing,100,POST,Louisiana Tech,Coastal Carolina,1,2.4042725130,17.0386000000
+adj_epa,missing,100,POST,Louisville,Toledo,1,-3.7342576050,17.0386000000
+adj_epa,missing,100,POST,Minnesota,New Mexico,1,0.2812972050,17.0386000000
+adj_epa,missing,100,POST,Mississippi State,Wake Forest,1,-2.4744727855,17.0386000000
+adj_epa,missing,100,POST,Missouri,Virginia,1,6.1307907240,17.0386000000
+adj_epa,missing,100,POST,NC State,Memphis,1,-1.1213191230,17.0386000000
+adj_epa,missing,100,POST,Northwestern,Central Michigan,1,3.4079627695,17.0386000000
+adj_epa,missing,100,POST,Ohio,UNLV,1,-2.2900172285,17.0386000000
+adj_epa,missing,100,POST,Ohio State,Miami,1,10.0161153465,17.0386000000
+adj_epa,missing,100,POST,Oklahoma,Alabama,0,1.6942651820,17.0386000000
+adj_epa,missing,100,POST,Ole Miss,Miami,1,-3.9810748175,17.0386000000
+adj_epa,missing,100,POST,Ole Miss,Tulane,0,8.7933731630,17.0386000000
+adj_epa,missing,100,POST,Oregon,James Madison,0,10.1949972610,17.0386000000
+adj_epa,missing,100,POST,San Diego State,North Texas,1,-2.8772685540,17.0386000000
+adj_epa,missing,100,POST,SMU,Arizona,1,-1.0788020675,17.0386000000
+adj_epa,missing,100,POST,South Florida,Old Dominion,1,7.1316531250,17.0386000000
+adj_epa,missing,100,POST,Southern Miss,Western Kentucky,1,3.3928312620,17.0386000000
+adj_epa,missing,100,POST,TCU,USC,1,-7.4739724750,17.0386000000
+adj_epa,missing,100,POST,Texas,Michigan,1,1.3888243310,17.0386000000
+adj_epa,missing,100,POST,Texas A&M,Miami,0,8.0585276250,17.0386000000
+adj_epa,missing,100,POST,Texas State,Rice,1,9.9873406765,17.0386000000
+adj_epa,missing,100,POST,Texas Tech,Oregon,1,1.8111670305,17.0386000000
+adj_epa,missing,100,POST,Utah,Nebraska,1,11.5417681945,17.0386000000
+adj_epa,missing,100,POST,Utah State,Washington State,1,-0.3885572680,17.0386000000
+adj_epa,missing,100,POST,UTSA,Florida International,1,4.9755869465,17.0386000000
+adj_epa,missing,100,POST,Vanderbilt,Iowa,1,5.8031563780,17.0386000000
+adj_epa,missing,100,POST,Washington,Boise State,1,5.0731727670,17.0386000000
+adj_epa,missing,100,POST,Western Michigan,Kennesaw State,1,2.3381403835,17.0386000000
+raw_epa,full,16,REG,Navy,Army,1,7.0245310681,17.3931000000
+raw_epa,full,100,POST,App State,Georgia Southern,1,4.0421110912,17.3931000000
+raw_epa,full,100,POST,Arkansas State,Missouri State,1,-1.2104586949,17.3931000000
+raw_epa,full,100,POST,Army,UConn,1,-7.0276525501,17.3931000000
+raw_epa,full,100,POST,BYU,Georgia Tech,1,2.8756132678,17.3931000000
+raw_epa,full,100,POST,Cincinnati,Navy,1,-2.0724559492,17.3931000000
+raw_epa,full,100,POST,Clemson,Penn State,1,-2.0775543698,17.3931000000
+raw_epa,full,100,POST,Delaware,Louisiana,1,1.3863542056,17.3931000000
+raw_epa,full,100,POST,Duke,Arizona State,1,-5.6738658067,17.3931000000
+raw_epa,full,100,POST,East Carolina,Pittsburgh,1,-1.3213233306,17.3931000000
+raw_epa,full,100,POST,Fresno State,Miami (OH),1,-3.6408445801,17.3931000000
+raw_epa,full,100,POST,Georgia,Ole Miss,1,4.2585858679,17.3931000000
+raw_epa,full,100,POST,Hawai'i,California,0,3.7191216799,17.3931000000
+raw_epa,full,100,POST,Houston,LSU,1,-1.2953109806,17.3931000000
+raw_epa,full,100,POST,Illinois,Tennessee,1,-7.4278785672,17.3931000000
+raw_epa,full,100,POST,Indiana,Alabama,1,10.1477819079,17.3931000000
+raw_epa,full,100,POST,Indiana,Miami,1,5.4069270710,17.3931000000
+raw_epa,full,100,POST,Indiana,Oregon,1,1.4266733481,17.3931000000
+raw_epa,full,100,POST,Jacksonville State,Troy,1,1.7521918960,17.3931000000
+raw_epa,full,100,POST,Louisiana Tech,Coastal Carolina,1,3.9419115190,17.3931000000
+raw_epa,full,100,POST,Louisville,Toledo,1,-11.2330171499,17.3931000000
+raw_epa,full,100,POST,Minnesota,New Mexico,1,-1.3848975140,17.3931000000
+raw_epa,full,100,POST,Mississippi State,Wake Forest,1,-9.6468360716,17.3931000000
+raw_epa,full,100,POST,Missouri,Virginia,1,2.8793590462,17.3931000000
+raw_epa,full,100,POST,NC State,Memphis,1,-5.4841837505,17.3931000000
+raw_epa,full,100,POST,Northwestern,Central Michigan,1,-3.3002908939,17.3931000000
+raw_epa,full,100,POST,Ohio,UNLV,1,-0.1468137034,17.3931000000
+raw_epa,full,100,POST,Ohio State,Miami,1,12.4946161249,17.3931000000
+raw_epa,full,100,POST,Oklahoma,Alabama,0,2.9372424636,17.3931000000
+raw_epa,full,100,POST,Ole Miss,Miami,1,-5.4366331747,17.3931000000
+raw_epa,full,100,POST,Ole Miss,Tulane,0,4.4816997325,17.3931000000
+raw_epa,full,100,POST,Oregon,James Madison,0,3.8042861138,17.3931000000
+raw_epa,full,100,POST,San Diego State,North Texas,1,-0.7413519750,17.3931000000
+raw_epa,full,100,POST,SMU,Arizona,1,-0.6938013992,17.3931000000
+raw_epa,full,100,POST,South Florida,Old Dominion,1,4.5297906290,17.3931000000
+raw_epa,full,100,POST,Southern Miss,Western Kentucky,1,4.4220995000,17.3931000000
+raw_epa,full,100,POST,TCU,USC,1,-9.4441998651,17.3931000000
+raw_epa,full,100,POST,Texas,Michigan,1,-2.0755774312,17.3931000000
+raw_epa,full,100,POST,Texas A&M,Miami,0,5.8703950496,17.3931000000
+raw_epa,full,100,POST,Texas State,Rice,1,12.8533784561,17.3931000000
+raw_epa,full,100,POST,Texas Tech,Oregon,1,2.9516213545,17.3931000000
+raw_epa,full,100,POST,Utah,Nebraska,1,11.0417223280,17.3931000000
+raw_epa,full,100,POST,Utah State,Washington State,1,2.0424897220,17.3931000000
+raw_epa,full,100,POST,UTSA,Florida International,1,1.4343730037,17.3931000000
+raw_epa,full,100,POST,Vanderbilt,Iowa,1,5.9893435875,17.3931000000
+raw_epa,full,100,POST,Washington,Boise State,1,4.0184918774,17.3931000000
+raw_epa,full,100,POST,Western Michigan,Kennesaw State,1,3.3892011062,17.3931000000
+raw_epa,half,16,REG,Navy,Army,1,4.6341513876,17.2400000000
+raw_epa,half,100,POST,App State,Georgia Southern,1,2.6666199552,17.2400000000
+raw_epa,half,100,POST,Arkansas State,Missouri State,1,-0.7985513604,17.2400000000
+raw_epa,half,100,POST,Army,UConn,1,-4.6362106596,17.2400000000
+raw_epa,half,100,POST,BYU,Georgia Tech,1,1.8970700088,17.2400000000
+raw_epa,half,100,POST,Cincinnati,Navy,1,-1.3672193232,17.2400000000
+raw_epa,half,100,POST,Clemson,Penn State,1,-1.3705828008,17.2400000000
+raw_epa,half,100,POST,Delaware,Louisiana,1,0.9145913376,17.2400000000
+raw_epa,half,100,POST,Duke,Arizona State,1,-3.7431043932,17.2400000000
+raw_epa,half,100,POST,East Carolina,Pittsburgh,1,-0.8716898376,17.2400000000
+raw_epa,half,100,POST,Fresno State,Miami (OH),1,-2.4019005396,17.2400000000
+raw_epa,half,100,POST,Georgia,Ole Miss,1,2.8094304684,17.2400000000
+raw_epa,half,100,POST,Hawai'i,California,0,3.2620704204,17.2400000000
+raw_epa,half,100,POST,Houston,LSU,1,-0.8545292376,17.2400000000
+raw_epa,half,100,POST,Illinois,Tennessee,1,-4.9002436512,17.2400000000
+raw_epa,half,100,POST,Indiana,Alabama,1,8.7965245404,16.9808000000
+raw_epa,half,100,POST,Indiana,Miami,1,3.5670023160,17.2400000000
+raw_epa,half,100,POST,Indiana,Oregon,1,0.9411902676,17.2400000000
+raw_epa,half,100,POST,Jacksonville State,Troy,1,1.5188736960,16.9808000000
+raw_epa,half,100,POST,Louisiana Tech,Coastal Carolina,1,2.6005173240,17.2400000000
+raw_epa,half,100,POST,Louisville,Toledo,1,-7.4105305404,17.2400000000
+raw_epa,half,100,POST,Minnesota,New Mexico,1,-0.9136303440,17.2400000000
+raw_epa,half,100,POST,Mississippi State,Wake Forest,1,-6.3641114736,17.2400000000
+raw_epa,half,100,POST,Missouri,Virginia,1,1.8995411352,17.2400000000
+raw_epa,half,100,POST,NC State,Memphis,1,-3.6179692980,17.2400000000
+raw_epa,half,100,POST,Northwestern,Central Michigan,1,-2.1772339644,17.2400000000
+raw_epa,half,100,POST,Ohio,UNLV,1,-0.0968544264,17.2400000000
+raw_epa,half,100,POST,Ohio State,Miami,1,8.2428196404,17.2400000000
+raw_epa,half,100,POST,Oklahoma,Alabama,0,2.7462571056,17.2400000000
+raw_epa,half,100,POST,Ole Miss,Miami,1,-3.5865997212,17.2400000000
+raw_epa,half,100,POST,Ole Miss,Tulane,0,3.7651505700,17.2400000000
+raw_epa,half,100,POST,Oregon,James Madison,0,3.3182542248,17.2400000000
+raw_epa,half,100,POST,San Diego State,North Texas,1,-0.4890771000,17.2400000000
+raw_epa,half,100,POST,SMU,Arizona,1,-0.4577075232,17.2400000000
+raw_epa,half,100,POST,South Florida,Old Dominion,1,2.9883468840,17.2400000000
+raw_epa,half,100,POST,Southern Miss,Western Kentucky,1,2.9173020000,17.2400000000
+raw_epa,half,100,POST,TCU,USC,1,-6.2304303996,17.2400000000
+raw_epa,half,100,POST,Texas,Michigan,1,-1.7991978912,16.9808000000
+raw_epa,half,100,POST,Texas A&M,Miami,0,4.6812863616,17.2400000000
+raw_epa,half,100,POST,Texas State,Rice,1,8.4794986356,17.2400000000
+raw_epa,half,100,POST,Texas Tech,Oregon,1,1.9472132820,17.2400000000
+raw_epa,half,100,POST,Utah,Nebraska,1,7.2843314880,17.2400000000
+raw_epa,half,100,POST,Utah State,Washington State,1,1.3474503120,17.2400000000
+raw_epa,half,100,POST,UTSA,Florida International,1,0.9462698052,17.2400000000
+raw_epa,half,100,POST,Vanderbilt,Iowa,1,3.9512281500,17.2400000000
+raw_epa,half,100,POST,Washington,Boise State,1,2.6510381304,17.2400000000
+raw_epa,half,100,POST,Western Michigan,Kennesaw State,1,2.9379021912,16.9808000000
+raw_epa,quarter,16,REG,Navy,Army,1,3.8596054504,17.9308000000
+raw_epa,quarter,100,POST,App State,Georgia Southern,1,2.2209246208,17.9308000000
+raw_epa,quarter,100,POST,Arkansas State,Missouri State,1,-0.6650825416,17.9308000000
+raw_epa,quarter,100,POST,Army,UConn,1,-3.8613205384,17.9308000000
+raw_epa,quarter,100,POST,BYU,Georgia Tech,1,1.5799962352,17.9308000000
+raw_epa,quarter,100,POST,Cincinnati,Navy,1,-1.1387040928,17.9308000000
+raw_epa,quarter,100,POST,Clemson,Penn State,1,-1.1415054032,17.9308000000
+raw_epa,quarter,100,POST,Delaware,Louisiana,1,0.7617277504,17.9308000000
+raw_epa,quarter,100,POST,Duke,Arizona State,1,-3.1174868728,17.9308000000
+raw_epa,quarter,100,POST,East Carolina,Pittsburgh,1,-0.7259967504,17.9308000000
+raw_epa,quarter,100,POST,Fresno State,Miami (OH),1,-2.0004500584,17.9308000000
+raw_epa,quarter,100,POST,Georgia,Ole Miss,1,2.3398659736,17.9308000000
+raw_epa,quarter,100,POST,Hawai'i,California,0,3.1139737816,17.9308000000
+raw_epa,quarter,100,POST,Houston,LSU,1,-0.7117043504,17.9308000000
+raw_epa,quarter,100,POST,Illinois,Tennessee,1,-4.0812234048,17.9308000000
+raw_epa,quarter,100,POST,Indiana,Alabama,1,5.5756653336,17.9308000000
+raw_epa,quarter,100,POST,Indiana,Miami,1,2.9708182640,17.9308000000
+raw_epa,quarter,100,POST,Indiana,Oregon,1,0.7838809704,17.9308000000
+raw_epa,quarter,100,POST,Jacksonville State,Troy,1,0.9627360640,17.9308000000
+raw_epa,quarter,100,POST,Louisiana Tech,Coastal Carolina,1,2.1658702960,17.9308000000
+raw_epa,quarter,100,POST,Louisville,Toledo,1,-6.1719442616,17.9308000000
+raw_epa,quarter,100,POST,Minnesota,New Mexico,1,-0.7609273760,17.9308000000
+raw_epa,quarter,100,POST,Mississippi State,Wake Forest,1,-5.3004222944,17.9308000000
+raw_epa,quarter,100,POST,Missouri,Virginia,1,1.5820543408,17.9308000000
+raw_epa,quarter,100,POST,NC State,Memphis,1,-3.0132666920,17.9308000000
+raw_epa,quarter,100,POST,Northwestern,Central Michigan,1,-1.8133339576,17.9308000000
+raw_epa,quarter,100,POST,Ohio,UNLV,1,-0.0806663056,17.9308000000
+raw_epa,quarter,100,POST,Ohio State,Miami,1,6.8651256616,17.9308000000
+raw_epa,quarter,100,POST,Oklahoma,Alabama,0,2.6843728224,17.9308000000
+raw_epa,quarter,100,POST,Ole Miss,Miami,1,-2.9871401848,17.9308000000
+raw_epa,quarter,100,POST,Ole Miss,Tulane,0,3.5329697800,17.9308000000
+raw_epa,quarter,100,POST,Oregon,James Madison,0,3.1607670992,17.9308000000
+raw_epa,quarter,100,POST,San Diego State,North Texas,1,-0.4073334000,17.9308000000
+raw_epa,quarter,100,POST,SMU,Arizona,1,-0.3812068928,17.9308000000
+raw_epa,quarter,100,POST,South Florida,Old Dominion,1,2.4888785360,17.9308000000
+raw_epa,quarter,100,POST,Southern Miss,Western Kentucky,1,2.4297080000,17.9308000000
+raw_epa,quarter,100,POST,TCU,USC,1,-5.1890844984,17.9308000000
+raw_epa,quarter,100,POST,Texas,Michigan,1,-1.1404191808,17.9308000000
+raw_epa,quarter,100,POST,Texas A&M,Miami,0,4.2959838464,17.9308000000
+raw_epa,quarter,100,POST,Texas State,Rice,1,7.0622464424,17.9308000000
+raw_epa,quarter,100,POST,Texas Tech,Oregon,1,1.6217586280,17.9308000000
+raw_epa,quarter,100,POST,Utah,Nebraska,1,6.0668379520,17.9308000000
+raw_epa,quarter,100,POST,Utah State,Washington State,1,1.1222392480,17.9308000000
+raw_epa,quarter,100,POST,UTSA,Florida International,1,0.7881115208,17.9308000000
+raw_epa,quarter,100,POST,Vanderbilt,Iowa,1,3.2908251000,17.9308000000
+raw_epa,quarter,100,POST,Washington,Boise State,1,2.2079471216,17.9308000000
+raw_epa,quarter,100,POST,Western Michigan,Kennesaw State,1,1.8621853808,17.9308000000
+raw_epa,missing,16,REG,Navy,Army,1,7.0245310681,17.3931000000
+raw_epa,missing,100,POST,App State,Georgia Southern,1,-3.1027531080,17.3931000000
+raw_epa,missing,100,POST,Arkansas State,Missouri State,1,-1.2104586949,17.3931000000
+raw_epa,missing,100,POST,Army,UConn,1,-7.0276525501,17.3931000000
+raw_epa,missing,100,POST,BYU,Georgia Tech,1,2.8756132678,17.3931000000
+raw_epa,missing,100,POST,Cincinnati,Navy,1,-2.0724559492,17.3931000000
+raw_epa,missing,100,POST,Clemson,Penn State,1,-2.0775543698,17.3931000000
+raw_epa,missing,100,POST,Delaware,Louisiana,1,1.3863542056,17.3931000000
+raw_epa,missing,100,POST,Duke,Arizona State,1,-5.6738658067,17.3931000000
+raw_epa,missing,100,POST,East Carolina,Pittsburgh,1,-1.3213233306,17.3931000000
+raw_epa,missing,100,POST,Fresno State,Miami (OH),1,-3.6408445801,17.3931000000
+raw_epa,missing,100,POST,Georgia,Ole Miss,1,4.2585858679,17.3931000000
+raw_epa,missing,100,POST,Hawai'i,California,0,3.7191216799,17.3931000000
+raw_epa,missing,100,POST,Houston,LSU,1,-1.2953109806,17.3931000000
+raw_epa,missing,100,POST,Illinois,Tennessee,1,-7.4278785672,17.3931000000
+raw_epa,missing,100,POST,Indiana,Alabama,1,10.1477819079,17.3931000000
+raw_epa,missing,100,POST,Indiana,Miami,1,5.4069270710,17.3931000000
+raw_epa,missing,100,POST,Indiana,Oregon,1,1.4266733481,17.3931000000
+raw_epa,missing,100,POST,Jacksonville State,Troy,1,1.7521918960,17.3931000000
+raw_epa,missing,100,POST,Louisiana Tech,Coastal Carolina,1,3.9419115190,17.3931000000
+raw_epa,missing,100,POST,Louisville,Toledo,1,-11.2330171499,17.3931000000
+raw_epa,missing,100,POST,Minnesota,New Mexico,1,-1.3848975140,17.3931000000
+raw_epa,missing,100,POST,Mississippi State,Wake Forest,1,-9.6468360716,17.3931000000
+raw_epa,missing,100,POST,Missouri,Virginia,1,2.8793590462,17.3931000000
+raw_epa,missing,100,POST,NC State,Memphis,1,-5.4841837505,17.3931000000
+raw_epa,missing,100,POST,Northwestern,Central Michigan,1,-3.3002908939,17.3931000000
+raw_epa,missing,100,POST,Ohio,UNLV,1,-0.1468137034,17.3931000000
+raw_epa,missing,100,POST,Ohio State,Miami,1,12.4946161249,17.3931000000
+raw_epa,missing,100,POST,Oklahoma,Alabama,0,2.9372424636,17.3931000000
+raw_epa,missing,100,POST,Ole Miss,Miami,1,-5.4366331747,17.3931000000
+raw_epa,missing,100,POST,Ole Miss,Tulane,0,4.4816997325,17.3931000000
+raw_epa,missing,100,POST,Oregon,James Madison,0,3.8042861138,17.3931000000
+raw_epa,missing,100,POST,San Diego State,North Texas,1,-0.7413519750,17.3931000000
+raw_epa,missing,100,POST,SMU,Arizona,1,-0.6938013992,17.3931000000
+raw_epa,missing,100,POST,South Florida,Old Dominion,1,4.5297906290,17.3931000000
+raw_epa,missing,100,POST,Southern Miss,Western Kentucky,1,4.4220995000,17.3931000000
+raw_epa,missing,100,POST,TCU,USC,1,-9.4441998651,17.3931000000
+raw_epa,missing,100,POST,Texas,Michigan,1,-2.0755774312,17.3931000000
+raw_epa,missing,100,POST,Texas A&M,Miami,0,5.8703950496,17.3931000000
+raw_epa,missing,100,POST,Texas State,Rice,1,12.8533784561,17.3931000000
+raw_epa,missing,100,POST,Texas Tech,Oregon,1,2.9516213545,17.3931000000
+raw_epa,missing,100,POST,Utah,Nebraska,1,11.0417223280,17.3931000000
+raw_epa,missing,100,POST,Utah State,Washington State,1,2.0424897220,17.3931000000
+raw_epa,missing,100,POST,UTSA,Florida International,1,1.4343730037,17.3931000000
+raw_epa,missing,100,POST,Vanderbilt,Iowa,1,5.9893435875,17.3931000000
+raw_epa,missing,100,POST,Washington,Boise State,1,4.0184918774,17.3931000000
+raw_epa,missing,100,POST,Western Michigan,Kennesaw State,1,3.3892011062,17.3931000000
