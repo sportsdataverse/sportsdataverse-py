@@ -577,7 +577,7 @@ def _simulate_bracket(
             pl.lit(None, dtype=pl.Float64).alias("result"),
             pl.lit(0 if r == 1 else 1, dtype=pl.Int64).alias("neutral"),
         )
-        games = pl.concat([games, rnd])
+        games = pl.concat([games, rnd], how="diagonal")  # optional input columns (points, conf_game) -> null
         teams, games = _apply_compute_results(compute_results, teams, games, week, rng)
         played = games.filter((pl.col("week") == week) & (pl.col("game_type") == "POST"))
         winners = played.select(
@@ -631,7 +631,10 @@ def cfb_simulations(
             ``sim``, ``week``, ``game_type``, ``home_team``, ``away_team``,
             ``result`` — null = unplayed, ``neutral``). Played results are
             kept as-is. A ``season`` column picks that season's tiebreakers
-            and CFP rule; ``sim``-keyed input uses the current ones.
+            and CFP rule; ``sim``-keyed input uses the current ones. The
+            optional ``home_points``/``away_points``/``conf_game`` columns
+            of :func:`sportsdataverse.cfb.cfb_games_from_schedule` pass
+            through to :func:`sportsdataverse.cfb.cfb_standings`.
         teams: Team table (``team``, ``conference``, plus the optional
             :func:`sportsdataverse.cfb.cfb_standings` columns).
         compute_results: Results generator with the signature
@@ -725,7 +728,7 @@ def cfb_simulations(
         max_week = int(games_all.get_column("week").max())
         generated = _generate_conf_champ_games(interim, games_all, max_week + 1)
         if generated.height > 0:
-            games_all = pl.concat([games_all, generated])
+            games_all = pl.concat([games_all, generated], how="diagonal")  # optional input columns -> null
         cc_weeks = (
             games_all.filter((pl.col("game_type") == "CONF_CHAMP") & pl.col("result").is_null())
             .get_column("week")
