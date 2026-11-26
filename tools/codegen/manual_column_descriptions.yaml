@@ -82035,3 +82035,727 @@ nhl_total_goals_distribution:
   prob: Probability the final score totals exactly total_goals; a game's rows sum to 1, and their prob-weighted mean of
     total_goals is the row's exp_total.
   prob_over: Probability the total is above total_goals, the over price for a line of total_goals + 0.5.
+
+pll_schedule:
+  game_id: Numeric game id (a STRING); the per-game routes take event_slug, not this.
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  event_id: League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020).
+  external_id: External event id (not ESPN's event id; join ESPN on start_time and the team codes).
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  week: Week of the season (0 for the Championship Series).
+  game_number: Game number within the season.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
+  event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
+  period: Period (quarter; 5 and up is overtime).
+  home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
+  home_team_name: Home team name (e.g. Waterdogs).
+  home_team_location: Home team city or region.
+  home_team_location_code: Home team three-letter location code (e.g. PHI).
+  home_team_conference: Home team conference (eastern, western; null for GLG and WLL).
+  away_team_id: Away team code (e.g. WHP; equals ESPN's abbreviation).
+  away_team_name: Away team name (e.g. Whipsnakes).
+  away_team_location: Away team city or region.
+  away_team_location_code: Away team three-letter location code.
+  away_team_conference: Away team conference.
+  home_score: Home team points (a 2-point goal counts 2).
+  away_score: Away team points (the API's visitorScore).
+  venue: Venue (stadium) name.
+  location: City of the game, or the team's city or region.
+  broadcaster: Broadcast and streaming outlets, comma-separated.
+  description: Game description (round labels on Championship Series games; null on most), or the play text.
+  url_streaming: Streaming link.
+pll_glg_schedule:
+  game_id: Numeric game id (a STRING); the per-game routes take event_slug, not this.
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  event_id: League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020).
+  external_id: External event id (not ESPN's event id; join ESPN on start_time and the team codes).
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  week: Week of the season (0 for the Championship Series).
+  game_number: Game number within the season.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
+  event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
+  period: Period (quarter; 5 and up is overtime).
+  home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
+  home_team_name: Home team name (e.g. Waterdogs).
+  home_team_location: Home team city or region.
+  home_team_location_code: Home team three-letter location code (e.g. PHI).
+  home_team_conference: Home team conference (eastern, western; null for GLG and WLL).
+  away_team_id: Away team code (e.g. WHP; equals ESPN's abbreviation).
+  away_team_name: Away team name (e.g. Whipsnakes).
+  away_team_location: Away team city or region.
+  away_team_location_code: Away team three-letter location code.
+  away_team_conference: Away team conference.
+  home_score: Home team points (a 2-point goal counts 2).
+  away_score: Away team points (the API's visitorScore).
+  venue: Venue (stadium) name.
+  location: City of the game, or the team's city or region.
+  broadcaster: Broadcast and streaming outlets, comma-separated.
+  description: Game description (round labels on Championship Series games; null on most), or the play text.
+  url_streaming: Streaming link.
+pll_wll_schedule:
+  game_id: Numeric game id (a STRING); the per-game routes take event_slug, not this.
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  event_id: League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020).
+  external_id: External event id (not ESPN's event id; join ESPN on start_time and the team codes).
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  week: Week of the season (0 for the Championship Series).
+  game_number: Game number within the season.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
+  event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
+  period: Period (quarter; 5 and up is overtime).
+  home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
+  home_team_name: Home team name (e.g. Waterdogs).
+  home_team_location: Home team city or region.
+  home_team_location_code: Home team three-letter location code (e.g. PHI).
+  home_team_conference: Home team conference (eastern, western; null for GLG and WLL).
+  away_team_id: Away team code (e.g. WHP; equals ESPN's abbreviation).
+  away_team_name: Away team name (e.g. Whipsnakes).
+  away_team_location: Away team city or region.
+  away_team_location_code: Away team three-letter location code.
+  away_team_conference: Away team conference.
+  home_score: Home team points (a 2-point goal counts 2).
+  away_score: Away team points (the API's visitorScore).
+  venue: Venue (stadium) name.
+  location: City of the game, or the team's city or region.
+  broadcaster: Broadcast and streaming outlets, comma-separated.
+  description: Game description (round labels on Championship Series games; null on most), or the play text.
+  url_streaming: Streaming link.
+pll_game:
+  game_id: Numeric game id (a STRING); the per-game routes take event_slug, not this.
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  event_id: League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020).
+  external_id: External event id (not ESPN's event id; join ESPN on start_time and the team codes).
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  week: Week of the season (0 for the Championship Series).
+  game_number: Game number within the season.
+  start_time: 'Start time, UTC: a polars Datetime(ms, UTC), whatever the type column of this table says.'
+  event_status: Game status code (3 on final 2021-2026 games; the 2019 games carry 2).
+  period: Period (quarter; 5 and up is overtime).
+  home_team_id: Home team code (e.g. WAT; equals ESPN's abbreviation).
+  home_team_name: Home team name (e.g. Waterdogs).
+  home_team_location: Home team city or region.
+  home_team_location_code: Home team three-letter location code (e.g. PHI).
+  home_team_conference: Home team conference (eastern, western; null for GLG and WLL).
+  away_team_id: Away team code (e.g. WHP; equals ESPN's abbreviation).
+  away_team_name: Away team name (e.g. Whipsnakes).
+  away_team_location: Away team city or region.
+  away_team_location_code: Away team three-letter location code.
+  away_team_conference: Away team conference.
+  home_score: Home team points (a 2-point goal counts 2).
+  away_score: Away team points (the API's visitorScore).
+  venue: Venue (stadium) name.
+  location: City of the game, or the team's city or region.
+  broadcaster: Broadcast and streaming outlets, comma-separated.
+  description: Game description (round labels on Championship Series games; null on most), or the play text.
+  url_streaming: Streaming link.
+  home_period_scores: 'Home team points per period: a list of integers (List(Int64)), one per period played.'
+  away_period_scores: 'Away team points per period: a list of integers (List(Int64)), one per period played.'
+  home_team_wins: Home team wins, as the API reports them on the game.
+  home_team_losses: Home team losses, as the API reports them on the game.
+  home_team_ties: Home team ties.
+  away_team_wins: Away team wins, as the API reports them on the game.
+  away_team_losses: Away team losses, as the API reports them on the game.
+  away_team_ties: Away team ties.
+  pregame_home_win_probability: Home team's pregame win probability (0-1).
+  pregame_away_win_probability: Away team's pregame win probability (0-1).
+pll_play_by_play:
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  play_index: 0-based position of the play in the log (the log is in game order).
+  marker_id: Play marker id (<type>-<sequence>).
+  event_type: 'Play type: faceoff, groundball, shot, goal, turnover, penalty, shotclockexpired, pregame, gameEnd.'
+  period: Period (quarter; 5 and up is overtime).
+  minutes: Clock minutes remaining in the period.
+  seconds: Clock seconds remaining in the period.
+  seconds_passed: Game seconds elapsed at the play, cumulative across periods (720 per quarter).
+  team_id: Team code (e.g. WAT).
+  description: Game description (round labels on Championship Series games; null on most), or the play text.
+  shot_type: 'Shot value: 1_PT, 2_PT (MU on some man-up rows; null when not a shot).'
+  home_score: Home team points (a 2-point goal counts 2). The score after the play on shot and goal rows; other rows carry
+    the final score in the 2026 logs (the running score in 2021), so forward-fill from shot rows.
+  away_score: Away team points (the API's visitorScore). The score after the play on shot and goal rows; other rows carry
+    the final score in the 2026 logs (the running score in 2021), so forward-fill from shot rows.
+  home_win_probability: Home team's win probability after the play (0-1; null on some rows).
+  away_win_probability: Away team's win probability after the play (0-1; null on some rows).
+  penalty_length: Penalty length, seconds.
+  penalty_description: Penalty description.
+  faceoff_winner_id: Player id of the faceoff winner (a STRING).
+  faceoff_loser_id: Player id of the faceoff loser (a STRING).
+  ground_ball_player_id: Player id of the player who picked up the ground ball (a STRING).
+  committed_turnover_id: Player id of the player who committed the turnover (a STRING; null on a team turnover).
+  caused_turnover_id: Player id of the defender who caused the turnover (a STRING).
+  shooter_id: Player id of the shooter (a STRING).
+  goalie_id: Player id of the defending goalie (a STRING).
+  offense_goalie_id: Player id of the shooting team's goalie (a STRING).
+  committed_penalty_id: Player id of the penalised player (a STRING).
+  shot_assist_id: Player id of the assisting player on a goal (a STRING).
+  assist_opportunity_player_id: Player id of the passer on a shot that was a potential assist (a STRING).
+  closest_defender_id: Player id of the closest defender on the shot (a STRING).
+  shot_on_goal: True when the shot was on goal (null where the log has no shot details, e.g. 2021).
+  shot_saved: True when the shot was saved (null where the log has no shot details).
+  save_type: Save kind, clean or messy (null where the log has no shot details).
+pll_player_box:
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  team_id: Team code (e.g. WAT).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  position_name: Position name (Attack, Midfield, Defensive Midfield, Long Stick Midfield, Defense, Faceoff, Goalie).
+  jersey_number: Jersey number (a STRING).
+  points: Points (one_point_goals + 2 x two_point_goals + assists; checked on the captures).
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  two_point_shots: Shots from beyond the arc.
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saa: Scores against per 48 minutes on the field (scores_against / (tof / 2880); checked on the captures).
+  gaa: Scores against per game played (scores_against / games_played).
+  two_pt_gaa: 2-point goals against per game played.
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  assist_opportunities: Passes that led to a shot (a potential assist).
+  total_passes: Passes made, as the league's tracking counts them.
+  touches: Touches (possessions of the ball by the player).
+  games_played: Games played in the season segment (or career, on career leaderboards).
+pll_team_box:
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  team_id: Team code (e.g. WAT).
+  scores: Points scored (a 2-point goal counts 2).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  shots_on_goal_pct: Shots on goal per shot.
+  two_point_shots: Shots from beyond the arc.
+  two_point_shot_pct: Goals per shot from beyond the arc.
+  two_point_shots_on_goal: 2-point shots on goal.
+  two_point_shots_on_goal_pct: 2-point shots on goal per 2-point shot.
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  clears: Successful clears.
+  clear_attempts: Clearing attempts (moving the ball from the defensive to the offensive half).
+  clear_pct: Successful clears per attempt (clears / clear_attempts).
+  ride_attempts: Riding attempts (opponent clears contested).
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  shot_clock_expirations: Shot-clock violations.
+  times_man_up: Man-up (power-play) chances.
+  power_play_goals: Power-play goals.
+  power_play_shots: Power-play shots.
+  power_play_pct: Power-play goals per man-up chance.
+  times_short_handed: Man-down (short-handed) spells.
+  power_play_goals_against: Power-play goals allowed.
+  power_play_goals_against_pct: Power-play goals allowed per opponent man-up chance.
+  man_down_pct: Man-down (penalty kill) success rate.
+  total_passes: Passes made, as the league's tracking counts them.
+  touches: Touches (possessions of the ball by the player).
+  time_in_possesion: Time in possession, seconds (the API's spelling).
+  time_in_possesion_pct: Share of game time in possession (0-1).
+  total_possessions: Team possessions in the game.
+pll_game_insights:
+  event_slug: Game slug, the id every per-game wrapper takes (e.g. 2026-ev-4; the format changes by season).
+  insight_index: 0-based position of the insight in the league's list.
+  title: Headline of the insight (e.g. Save Streak).
+  insight_type: Insight kind (save-streak, faceoff-streak, ...).
+  subject: Player or team the insight is about.
+  detail: Insight text (e.g. 'has made 4 saves in a row').
+  team_id: Team code (e.g. WAT).
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  jersey_number: Jersey number (a STRING).
+  period: Period (quarter; 5 and up is overtime).
+  minutes: Clock minutes remaining in the period.
+  seconds: Clock seconds remaining in the period.
+  primary_image_url: Main image of the insight.
+pll_standings:
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  champ_series: True for the Championship Series table (the request's champ_series).
+  team_id: Team code (e.g. WAT).
+  full_name: Team name (e.g. Waterdogs).
+  location: City of the game, or the team's city or region.
+  location_code: Three-letter location code (e.g. PHI).
+  conference: Conference (eastern or western; null before conferences, 2019-2020).
+  seed: Playoff seed (null until set).
+  conference_seed: Seed within the conference (null until set).
+  wins: Wins in the season or segment.
+  losses: Losses in the season or segment.
+  ties: Ties in the season or segment.
+  scores: Points scored (a 2-point goal counts 2).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  score_diff: Points scored minus points allowed.
+  conference_wins: Wins against conference opponents.
+  conference_losses: Losses against conference opponents.
+  conference_ties: Ties against conference opponents.
+  conference_scores: Points scored against conference opponents.
+  conference_scores_against: Points allowed to conference opponents.
+pll_glg_standings:
+  league: 'League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women).'
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  champ_series: True for the Championship Series table (the request's champ_series).
+  team_id: Team code (e.g. WAT).
+  full_name: Team name (e.g. Waterdogs).
+  location: City of the game, or the team's city or region.
+  location_code: Three-letter location code (e.g. PHI).
+  conference: Conference (eastern or western; null before conferences, 2019-2020).
+  seed: Playoff seed (null until set).
+  conference_seed: Seed within the conference (null until set).
+  wins: Wins in the season or segment.
+  losses: Losses in the season or segment.
+  ties: Ties in the season or segment.
+  scores: Points scored (a 2-point goal counts 2).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  score_diff: Points scored minus points allowed.
+  conference_wins: Wins against conference opponents.
+  conference_losses: Losses against conference opponents.
+  conference_ties: Ties against conference opponents.
+  conference_scores: Points scored against conference opponents.
+  conference_scores_against: Points allowed to conference opponents.
+pll_team_season_stats:
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  team_id: Team code (e.g. WAT).
+  team_slug: Team slug, the id pll_team_stats and pll_team_roster take (e.g. waterdogs).
+  full_name: Team name (e.g. Waterdogs).
+  location: City of the game, or the team's city or region.
+  location_code: Three-letter location code (e.g. PHI).
+  conference: Conference (eastern or western; null before conferences, 2019-2020).
+  games_played: Games played in the season segment (or career, on career leaderboards).
+  scores: Points scored (a 2-point goal counts 2).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  scores_pg: Points scored per game.
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shots_pg: Shots per game.
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  shots_on_goal_pct: Shots on goal per shot.
+  two_point_shots: Shots from beyond the arc.
+  two_point_shot_pct: Goals per shot from beyond the arc.
+  two_point_shots_on_goal: 2-point shots on goal.
+  two_point_shots_on_goal_pct: 2-point shots on goal per 2-point shot.
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saa: Scores against per 48 minutes on the field (scores_against / (tof / 2880); checked on the captures).
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  clears: Successful clears.
+  clear_attempts: Clearing attempts (moving the ball from the defensive to the offensive half).
+  clear_pct: Successful clears per attempt (clears / clear_attempts).
+  rides: Successful rides (opponent clears stopped).
+  ride_attempts: Riding attempts (opponent clears contested).
+  rides_pct: Successful rides per ride attempt.
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  offsides: Offsides violations.
+  shot_clock_expirations: Shot-clock violations.
+  times_man_up: Man-up (power-play) chances.
+  power_play_goals: Power-play goals.
+  power_play_shots: Power-play shots.
+  power_play_pct: Power-play goals per man-up chance.
+  times_short_handed: Man-down (short-handed) spells.
+  short_handed_goals: Short-handed goals.
+  short_handed_shots: Short-handed shots.
+  short_handed_pct: Short-handed goals per man-down chance.
+  power_play_goals_against: Power-play goals allowed.
+  power_play_shots_against: Power-play shots allowed.
+  power_play_goals_against_pct: Power-play goals allowed per opponent man-up chance.
+  short_handed_goals_against: Short-handed goals allowed.
+  short_handed_shots_against: Short-handed shots allowed.
+  short_handed_goals_against_pct: Short-handed goals allowed per man-up chance.
+  man_down_pct: Man-down (penalty kill) success rate.
+  total_passes: Passes made, as the league's tracking counts them.
+  touches: Touches (possessions of the ball by the player).
+pll_team_stats:
+  team_id: Team code (e.g. WAT).
+  team_slug: Team slug, the id pll_team_stats and pll_team_roster take (e.g. waterdogs).
+  full_name: Team name (e.g. Waterdogs).
+  location: City of the game, or the team's city or region.
+  location_code: Three-letter location code (e.g. PHI).
+  conference: Conference (eastern or western; null before conferences, 2019-2020).
+  wins: Wins in the season or segment (the season record, repeated on each segment row).
+  losses: Losses in the season or segment (the season record, repeated on each segment row).
+  ties: Ties in the season or segment (the season record, repeated on each segment row).
+  seed: Playoff seed (null until set).
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  games_played: Games played in the season segment (or career, on career leaderboards).
+  scores: Points scored (a 2-point goal counts 2).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  scores_pg: Points scored per game.
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shots_pg: Shots per game.
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  shots_on_goal_pct: Shots on goal per shot.
+  two_point_shots: Shots from beyond the arc.
+  two_point_shot_pct: Goals per shot from beyond the arc.
+  two_point_shots_on_goal: 2-point shots on goal.
+  two_point_shots_on_goal_pct: 2-point shots on goal per 2-point shot.
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saa: Scores against per 48 minutes on the field (scores_against / (tof / 2880); checked on the captures).
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  clears: Successful clears.
+  clear_attempts: Clearing attempts (moving the ball from the defensive to the offensive half).
+  clear_pct: Successful clears per attempt (clears / clear_attempts).
+  rides: Successful rides (opponent clears stopped).
+  ride_attempts: Riding attempts (opponent clears contested).
+  rides_pct: Successful rides per ride attempt.
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  offsides: Offsides violations.
+  shot_clock_expirations: Shot-clock violations.
+  times_man_up: Man-up (power-play) chances.
+  power_play_goals: Power-play goals.
+  power_play_shots: Power-play shots.
+  power_play_pct: Power-play goals per man-up chance.
+  times_short_handed: Man-down (short-handed) spells.
+  short_handed_goals: Short-handed goals.
+  short_handed_shots: Short-handed shots.
+  short_handed_pct: Short-handed goals per man-down chance.
+  power_play_goals_against: Power-play goals allowed.
+  power_play_shots_against: Power-play shots allowed.
+  power_play_goals_against_pct: Power-play goals allowed per opponent man-up chance.
+  short_handed_goals_against: Short-handed goals allowed.
+  short_handed_shots_against: Short-handed shots allowed.
+  short_handed_goals_against_pct: Short-handed goals allowed per man-up chance.
+  man_down_pct: Man-down (penalty kill) success rate.
+  total_passes: Passes made, as the league's tracking counts them.
+  touches: Touches (possessions of the ball by the player).
+pll_team_roster:
+  team_slug: Team slug, the id pll_team_stats and pll_team_roster take (e.g. waterdogs).
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  last_name_suffix: Name suffix (Jr., III; null or empty when none).
+  nickname: Nickname (null when none).
+  jersey_number: Jersey number (a STRING).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  position_name: Position name (Attack, Midfield, Defensive Midfield, Long Stick Midfield, Defense, Faceoff, Goalie).
+  dob: Date of birth (YYYY-MM-DD).
+  age: Age in years on the day of the request.
+  height: Height (feet and inches, e.g. 6'1).
+  weight: Weight in pounds.
+  handedness: Shooting hand (R, L, or R/L).
+  country: Country of birth.
+  country_code: Country code (ISO 3166-1 alpha-3).
+  hometown: Player's hometown (city, state).
+  high_school: High school the player attended.
+  college: College the player attended.
+  college_year: Final college season (graduation year).
+  club_team: Club (amateur) team.
+  experience: PLL seasons of experience.
+  is_captain: true for a team captain.
+  scratch: true when scratched from the lineup.
+  injury_status: Injury status code (H healthy, Q questionable, IR injured reserve, as observed).
+  injury_description: Injury description (null when healthy).
+  status: Player status (current on a roster; active or retired on career leaderboards).
+  contract_status: Final season under contract (e.g. 2028).
+pll_player_season_stats:
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  jersey_number: Jersey number (a STRING).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  position_name: Position name (Attack, Midfield, Defensive Midfield, Long Stick Midfield, Defense, Faceoff, Goalie).
+  experience: PLL seasons of experience.
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  points: Points (one_point_goals + 2 x two_point_goals + assists; checked on the captures).
+  scoring_points: Points from goals alone (one_point_goals + 2 x two_point_goals).
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  shots_on_goal_pct: Shots on goal per shot.
+  two_point_shots: Shots from beyond the arc.
+  two_point_shot_pct: Goals per shot from beyond the arc.
+  two_point_shots_on_goal: 2-point shots on goal.
+  two_point_shots_on_goal_pct: 2-point shots on goal per 2-point shot.
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saa: Scores against per 48 minutes on the field (scores_against / (tof / 2880); checked on the captures).
+  gaa: Scores against per game played (scores_against / games_played).
+  two_pt_gaa: 2-point goals against per game played.
+  goalie_wins: Wins as the goalie of record.
+  goalie_losses: Losses as the goalie of record.
+  goalie_ties: Ties as the goalie of record.
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  pim_value: Penalty time as minutes (0.5 = a 30-second penalty).
+  power_play_goals: Power-play goals.
+  power_play_shots: Power-play shots.
+  short_handed_goals: Short-handed goals.
+  short_handed_shots: Short-handed shots.
+  short_handed_goals_against: Short-handed goals allowed.
+  power_play_goals_against: Power-play goals allowed.
+  tof: Time on the field, seconds.
+  plus_minus: Plus-minus as the league reports it.
+  shot_turnovers: Shots that ended the possession (the league's tracking count).
+  touches: Touches (possessions of the ball by the player).
+  total_passes: Passes made, as the league's tracking counts them.
+  unassisted_goals: Unassisted goals.
+  assisted_goals: Goals scored off an assist.
+  pass_rate: Passes per touch (total_passes / touches).
+  shot_rate: Shots per touch (shots / touches).
+  goal_rate: Goals per touch (goals / touches).
+  assist_rate: Assists per touch (assists / touches).
+  turnover_rate: Turnovers per touch (turnovers / touches).
+  games_played: Games played in the season segment (or career, on career leaderboards).
+  games_started: Games the player started.
+pll_player_advanced_stats:
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  jersey_number: Jersey number (a STRING).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  position_name: Position name (Attack, Midfield, Defensive Midfield, Long Stick Midfield, Defense, Faceoff, Goalie).
+  experience: PLL seasons of experience.
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  unassisted_goals: Unassisted goals.
+  assisted_goals: Goals scored off an assist.
+  settled_goals: Goals in the settled offense.
+  fastbreak_goals: Goals in transition (fast break).
+  substitution_goals: Goals the league's tracking tags as substitution goals (its label; the API does not define it).
+  doorstep_goals: Goals the league's tracking tags as doorstep goals (in tight to the crease; its label).
+  power_play_goals: Power-play goals.
+  assist_opportunities: Passes that led to a shot (a potential assist).
+  settled_assists: Assists in the settled offense.
+  power_play_assists: Assists on the power play.
+  fastbreak_assists: Assists in transition (fast break).
+  dodge_assists: Assists off a dodge.
+  pnr_assists: Assists off a pick-and-roll.
+  unassisted_shots: Unassisted shots.
+  assisted_shots: Shots taken off a pass that would be an assist if scored.
+  unassisted_shot_pct: Goals per shot on unassisted shots.
+  assisted_shot_pct: Goals per shot on assisted shots.
+  pipe_shots: Shots the league's tracking tags as pipe shots (its label; the API does not define it).
+  lh_shots: Left-handed shots.
+  lh_goals: Left-handed goals.
+  lh_shot_pct: Goals per shot, left-handed.
+  rh_shots: Right-handed shots.
+  rh_goals: Right-handed goals.
+  rh_shot_pct: Goals per shot, right-handed.
+pll_season_leaders:
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  stat: Stat name, snake case (points, save_pct, faceoff_pct, ...).
+  rank: 1-based position in the league's list for the stat (ties are not merged).
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  first_name: Player's first name.
+  last_name: Player's last name.
+  jersey_number: Jersey number (a STRING).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  stat_value: The stat's value.
+pll_career_leaders:
+  stat: Stat name, snake case (points, save_pct, faceoff_pct, ...).
+  rank: 1-based position in the league's list for the stat (ties are not merged).
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  status: Player status (current on a roster; active or retired on career leaderboards).
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  stat_value: The stat's value.
+  games_played: Games played in the season segment (or career, on career leaderboards).
+  seasons_played: PLL seasons played.
+  avg_per_season: Career stat value per season played (stat_value / seasons_played).
+pll_player:
+  player_id: Six-digit league player id (a STRING, e.g. 003009); the column to join players on.
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  last_name_suffix: Name suffix (Jr., III; null or empty when none).
+  nickname: Nickname (null when none).
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  position: 'Position code: A, M, SSDM, LSM, D, FO, G.'
+  position_name: Position name (Attack, Midfield, Defensive Midfield, Long Stick Midfield, Defense, Faceoff, Goalie).
+  jersey_number: Jersey number (a STRING).
+  dob: Date of birth (YYYY-MM-DD).
+  age: Age in years on the day of the request.
+  height: Height (feet and inches, e.g. 6'1).
+  weight: Weight in pounds.
+  handedness: Shooting hand (R, L, or R/L).
+  country: Country of birth.
+  country_code: Country code (ISO 3166-1 alpha-3).
+  hometown: Player's hometown (city, state).
+  high_school: High school the player attended.
+  college: College the player attended.
+  college_year: Final college season (graduation year).
+  club_team: Club (amateur) team.
+  exp_from_year: First professional season.
+  is_captain: true for a team captain.
+  scratch: true when scratched from the lineup.
+  injury_status: Injury status code (H healthy, Q questionable, IR injured reserve, as observed).
+  injury_description: Injury description (null when healthy).
+  status: Player status (current on a roster; active or retired on career leaderboards).
+  contract_status: Final season under contract (e.g. 2028).
+  all_years: 'Seasons the player has a PLL record in: a list of integers (List(Int64)).'
+  bio: Player biography text.
+pll_player_seasons:
+  player_slug: Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers).
+  season: Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out.
+  season_segment: 'Season segment: regular, post (playoffs), champseries (Championship Series) or allstar.'
+  team_id: Team code (e.g. WAT).
+  team_name: Team name (e.g. Waterdogs).
+  points: Points (one_point_goals + 2 x two_point_goals + assists; checked on the captures).
+  scoring_points: Points from goals alone (one_point_goals + 2 x two_point_goals).
+  goals: Goals (1-point plus 2-point; goals = one_point_goals + two_point_goals).
+  one_point_goals: 1-point goals (inside the arc).
+  two_point_goals: 2-point goals (from beyond the arc).
+  assists: Assists credited (passes leading directly to a goal).
+  shots: Shots taken (on and off goal).
+  shot_pct: Goals per shot (goals / shots).
+  shots_on_goal: Shots that were on goal (saved or scored).
+  shots_on_goal_pct: Shots on goal per shot.
+  two_point_shots: Shots from beyond the arc.
+  two_point_shot_pct: Goals per shot from beyond the arc.
+  two_point_shots_on_goal: 2-point shots on goal.
+  two_point_shots_on_goal_pct: 2-point shots on goal per 2-point shot.
+  ground_balls: Ground balls picked up.
+  turnovers: Turnovers committed.
+  caused_turnovers: Caused turnovers (takeaways credited to a defender).
+  faceoffs_won: Faceoffs won by the player or team.
+  faceoffs_lost: Faceoffs lost by the player or team.
+  faceoffs: Faceoffs taken (faceoff_pct = faceoffs_won / faceoffs; won + lost can fall short of it, as in the captures).
+  faceoff_pct: Faceoffs won per faceoff taken (faceoffs_won / faceoffs).
+  saves: Saves made by the goalie (or team).
+  save_pct: Saves per shot on goal faced (saves / (saves + goals_against); checked on the captures).
+  clean_saves: Saves the goalie controlled cleanly (no rebound).
+  messy_saves: Saves that left a rebound.
+  clean_save_pct: Clean saves per save (clean_saves / saves).
+  scores_against: Points allowed (a 2-point goal counts 2).
+  goals_against: Goals allowed (each goal once, whatever its point value).
+  two_point_goals_against: 2-point goals allowed.
+  saa: Scores against per 48 minutes on the field (scores_against / (tof / 2880); checked on the captures).
+  gaa: Scores against per game played (scores_against / games_played).
+  two_pt_gaa: 2-point goals against per game played.
+  goalie_wins: Wins as the goalie of record.
+  goalie_losses: Losses as the goalie of record.
+  goalie_ties: Ties as the goalie of record.
+  num_penalties: Penalties committed.
+  pim: Penalty minutes.
+  pim_value: Penalty time as minutes (0.5 = a 30-second penalty).
+  power_play_goals: Power-play goals.
+  power_play_shots: Power-play shots.
+  short_handed_goals: Short-handed goals.
+  short_handed_shots: Short-handed shots.
+  short_handed_goals_against: Short-handed goals allowed.
+  power_play_goals_against: Power-play goals allowed.
+  tof: Time on the field, seconds.
+  plus_minus: Plus-minus as the league reports it.
+  shot_turnovers: Shots that ended the possession (the league's tracking count).
+  touches: Touches (possessions of the ball by the player).
+  total_passes: Passes made, as the league's tracking counts them.
+  unassisted_goals: Unassisted goals.
+  assisted_goals: Goals scored off an assist.
+  pass_rate: Passes per touch (total_passes / touches).
+  shot_rate: Shots per touch (shots / touches).
+  goal_rate: Goals per touch (goals / touches).
+  assist_rate: Assists per touch (assists / touches).
+  turnover_rate: Turnovers per touch (turnovers / touches).
+  games_played: Games played in the season segment (or career, on career leaderboards).
+  games_started: Games the player started.
