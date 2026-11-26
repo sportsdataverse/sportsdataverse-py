@@ -233,6 +233,7 @@ def test_malformed_field_values_never_raise():
         ({"data": None, "errors": [{"message": "Validation error of type WrongType"}]}, ValueError),
         ({"data": None, "errors": [{"message": "Internal failure"}]}, AssetFetchError),
         ({}, AssetFetchError),  # a 200 with an empty object is unreadable, not an unknown id
+        ({"data": {}}, AssetFetchError),  # no key for the operation: malformed, not an unknown id
     ],
 )
 def test_get_maps_graphql_errors(monkeypatch, answer, error):

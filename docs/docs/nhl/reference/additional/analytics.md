@@ -231,7 +231,7 @@ A polars (or pandas) DataFrame, one row per projected goalie-game. Because saves
 |---|---|---|
 | `season` | Int64 | NHL season id of the game, both years run together (e.g. 20242025 for 2024-25). |
 | `game_id` | Int64 | NHL game id (e.g. 2024020001). |
-| `game_date` | String | Date of the game. |
+| `game_date` | Date | Date of the game. |
 | `player_id` | Int64 | NHL player id of the projected starting goalie. |
 | `team` | String | Abbreviation of the goalie's team (e.g. "NJD"). |
 | `opp_team` | String | Abbreviation of the opponent whose shots the goalie faces (e.g. "BUF"). |

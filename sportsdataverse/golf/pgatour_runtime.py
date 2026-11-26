@@ -244,7 +244,7 @@ def _get(url: str, params: dict | None = None, json: dict | None = None, **kwarg
         NoDataError: the API answers ``null`` for the operation (an unknown id) or says it does not exist.
         ValueError: the API rejects the query or its variables.
         AssetFetchError: a refused key, any other GraphQL error, a transport failure after retries,
-            an answer with no ``data`` object and no ``errors``, or a payload that does not decode.
+            an answer whose ``data`` lacks the operation and has no ``errors``, or a payload that does not decode.
     """
     body = json if isinstance(json, dict) and "query" in json else graphql_body({**(json or {}), **(params or {})})
     field = body["operationName"][0].lower() + body["operationName"][1:]
@@ -261,7 +261,7 @@ def _get(url: str, params: dict | None = None, json: dict | None = None, **kwarg
         errors = answer.get("errors") if isinstance(answer, dict) else None
         if errors:
             raise _graphql_error(field, errors)
-        if not isinstance(data, dict):  # no data object at all (a 200 ``{}``): unreadable, not an unknown id
+        if not isinstance(data, dict) or field not in data:  # no data, or no key for the operation: malformed
             raise AssetFetchError(f"PGA Tour {field}: the answer carries no data ({str(answer)[:80]})")
         raise NoDataError(f"PGA Tour {field} answered null for {body['variables']}")
     return decode_payload(value)

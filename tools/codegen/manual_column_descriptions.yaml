@@ -81970,13 +81970,17 @@ pgatour_shot_details:
   to_y: ShotLink tourcast y coordinate where the shot finished.
   to_z: ShotLink tourcast z (elevation) coordinate where the shot finished.
 nba_player_props:
-  minutes_exp: 'Expected minutes: the player''s share of the minutes logged for the current team before the as-of
-    cut (every logged game when no cut applies; a game sat counts as zero), times the team''s 240 game minutes (5 x 48), so a team''s rows sum to 240. The
-    stat_*_exp lines assume the player plays; this does not.'
+  minutes_exp: 'Expected minutes: the player''s minutes for the current team over the summed minutes for that team
+    of every player returned on it (minutes logged for the team by a player since traded away are left out), all
+    before the as-of cut (every logged game when no cut applies; a game sat counts as zero), times 5 x the league''s
+    game minutes, so a team''s rows sum to 240 in the NBA and 200 in the WNBA. The stat_*_exp lines assume the player
+    plays; this does not.'
 wnba_player_props:
-  minutes_exp: 'Expected minutes: the player''s share of the minutes logged for the current team before the as-of
-    cut (every logged game when no cut applies; a game sat counts as zero), times the team''s 200 game minutes (5 x 40), so a team''s rows sum to 200. The
-    stat_*_exp lines assume the player plays; this does not.'
+  minutes_exp: 'Expected minutes: the player''s minutes for the current team over the summed minutes for that team
+    of every player returned on it (minutes logged for the team by a player since traded away are left out), all
+    before the as-of cut (every logged game when no cut applies; a game sat counts as zero), times 5 x the league''s
+    game minutes, so a team''s rows sum to 240 in the NBA and 200 in the WNBA. The stat_*_exp lines assume the player
+    plays; this does not.'
 nhl_goalie_saves:
   season: NHL season id of the game, both years run together (e.g. 20242025 for 2024-25).
   game_id: NHL game id (e.g. 2024020001).

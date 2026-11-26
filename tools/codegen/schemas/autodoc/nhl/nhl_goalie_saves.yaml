@@ -8,7 +8,7 @@ columns:
   type: integer
   description: ''
 - name: game_date
-  type: character
+  type: date
   description: ''
 - name: player_id
   type: integer
