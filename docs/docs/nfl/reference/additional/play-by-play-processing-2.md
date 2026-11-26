@@ -52,7 +52,7 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `priority` | Boolean | ESPN's priority flag for the play, passed through as sent. |
 | `modified` | String | ESPN's modified timestamp for the play record (ISO 8601, UTC). |
 | `wallclock` | String | ESPN's wallclock -- the real-world time of the play (ISO 8601, UTC). |
-| `teamParticipants` | List | Raw ESPN team-level participants payload carried through from the plays feed (stringified). |
+| `teamParticipants` | List | Raw ESPN team-level participants payload carried through from the plays feed, a list as the live feed sends it, stringified in the release files. |
 | `isPenalty` | Boolean | ESPN's per-play flag that a penalty occurred on the play. |
 | `statYardage` | Int64 | Yardage ESPN credits to the play for statistical purposes. |
 | `isTurnover` | Boolean | ESPN's per-play turnover flag as shipped in the plays feed (broader than the giveaway-based is_turnover derivation). |

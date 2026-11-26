@@ -303,7 +303,7 @@ A polars (or pandas) `DataFrame`, one row per game.
 | `externalIds` | List | Serialized list of external system identifiers (e.g., partner IDs, league IDs) mapped to this game. |
 | `ticketUrl` | String | URL to the official ticket purchasing page for this game. |
 | `ticketVendors` | List | Serialized list of authorized ticket vendors or marketplaces for this game. |
-| `extensions` | List | Serialized JSON or string of additional extension metadata attached to the game record by the NFL Shield API. |
+| `extensions` | List | Additional extension metadata the NFL Shield API attaches to the game record, as the list the API sends. |
 | `version` | Int64 | API response version integer returned by the NFL Shield API for this game record. |
 | `homeTeam_id` | String | NFL Shield team identifier for the home team. |
 | `homeTeam_currentLogo` | String | URL for the home team's current primary logo image as served by the NFL Shield API. |
