@@ -445,6 +445,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`load_mbb_groups`](reference/loaders/other#load_mbb_groups) | [`load_mbb_groups`](https://hoopR.sportsdataverse.org/reference/load_mbb_groups.html) |
 | [`load_mbb_officials`](reference/loaders/other#load_mbb_officials) | [`load_mbb_officials`](https://hoopR.sportsdataverse.org/reference/load_mbb_officials.html) |
 | [`load_mbb_pbp`](reference/loaders/other#load_mbb_pbp) | [`load_mbb_pbp`](https://hoopR.sportsdataverse.org/reference/load_mbb_pbp.html) |
+| [`load_mbb_player_aliases`](reference/loaders/player#load_mbb_player_aliases) | [`load_mbb_player_aliases`](https://hoopR.sportsdataverse.org/reference/load_mbb_player_aliases.html) |
 | [`load_mbb_player_boxscore`](reference/loaders/player#load_mbb_player_boxscore) | [`load_mbb_player_box`](https://hoopR.sportsdataverse.org/reference/load_mbb_player_box.html) |
 | [`load_mbb_player_core`](reference/loaders/player#load_mbb_player_core) | [`load_mbb_player_core`](https://hoopR.sportsdataverse.org/reference/load_mbb_player_core.html) |
 | [`load_mbb_player_crosswalk`](reference/loaders/player#load_mbb_player_crosswalk) | [`load_mbb_player_crosswalk`](https://hoopR.sportsdataverse.org/reference/load_mbb_player_crosswalk.html) |
@@ -456,6 +457,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`load_mbb_schedule_crosswalk`](reference/loaders/other#load_mbb_schedule_crosswalk) | [`load_mbb_schedule_crosswalk`](https://hoopR.sportsdataverse.org/reference/load_mbb_schedule_crosswalk.html) |
 | [`load_mbb_shots`](reference/loaders/other#load_mbb_shots) | [`load_mbb_shots`](https://hoopR.sportsdataverse.org/reference/load_mbb_shots.html) |
 | [`load_mbb_standings`](reference/loaders/other#load_mbb_standings) | [`load_mbb_standings`](https://hoopR.sportsdataverse.org/reference/load_mbb_standings.html) |
+| [`load_mbb_team_aliases`](reference/loaders/team#load_mbb_team_aliases) | [`load_mbb_team_aliases`](https://hoopR.sportsdataverse.org/reference/load_mbb_team_aliases.html) |
 | [`load_mbb_team_boxscore`](reference/loaders/team#load_mbb_team_boxscore) | [`load_mbb_team_box`](https://hoopR.sportsdataverse.org/reference/load_mbb_team_box.html) |
 | [`load_mbb_team_crosswalk`](reference/loaders/team#load_mbb_team_crosswalk) | [`load_mbb_team_crosswalk`](https://hoopR.sportsdataverse.org/reference/load_mbb_team_crosswalk.html) |
 | [`load_mbb_team_group_seasons`](reference/loaders/team#load_mbb_team_group_seasons) | [`load_mbb_team_group_seasons`](https://hoopR.sportsdataverse.org/reference/load_mbb_team_group_seasons.html) |
@@ -477,6 +479,9 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`mbb_schedule_crosswalk`](reference/additional/ids-and-crosswalks#mbb_schedule_crosswalk) | [`mbb_schedule_crosswalk`](https://hoopR.sportsdataverse.org/reference/mbb_schedule_crosswalk.html) |
 | [`mbb_team_crosswalk`](reference/additional/ids-and-crosswalks#mbb_team_crosswalk) | [`mbb_team_crosswalk`](https://hoopR.sportsdataverse.org/reference/mbb_team_crosswalk.html) |
 | [`most_recent_mbb_season`](reference/additional/highlights#most_recent_mbb_season) | [`most_recent_mbb_season`](https://hoopR.sportsdataverse.org/reference/most_recent_mbb_season.html) |
+| [`ncaa_espn_school_seasons`](reference/additional/ids-and-crosswalks#ncaa_espn_school_seasons) | [`load_mbb_ncaa_espn_school_seasons`](https://hoopR.sportsdataverse.org/reference/load_mbb_ncaa_espn_school_seasons.html) |
+| [`ncaa_espn_schools`](reference/additional/ids-and-crosswalks#ncaa_espn_schools) | [`load_mbb_ncaa_espn_schools`](https://hoopR.sportsdataverse.org/reference/load_mbb_ncaa_espn_schools.html) |
+| [`ncaa_espn_team_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_team_crosswalk) | [`load_mbb_ncaa_espn_team_crosswalk`](https://hoopR.sportsdataverse.org/reference/load_mbb_ncaa_espn_team_crosswalk.html) |
 | [`torvik_game_schedule`](reference/torvik#torvik_game_schedule) | [`torvik_game_schedule`](https://hoopR.sportsdataverse.org/reference/torvik_game_schedule.html) |
 | [`torvik_game_stats`](reference/torvik#torvik_game_stats) | [`torvik_game_stats`](https://hoopR.sportsdataverse.org/reference/torvik_game_stats.html) |
 | [`torvik_player_stats`](reference/torvik#torvik_player_stats) | [`torvik_player_stats`](https://hoopR.sportsdataverse.org/reference/torvik_player_stats.html) |

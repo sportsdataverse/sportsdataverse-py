@@ -1118,8 +1118,13 @@ _HIGHLIGHTS_FILE = ROOT / "tools" / "codegen" / "highlights.yaml"
 _COMPANIONS_FILE = ROOT / "tools" / "codegen" / "companions.yaml"
 
 # League prefix -> R package for parity (pwhl is also fastRhockey; otherwise the
-# same mapping used for column descriptions).
-_R_PARITY_PACKAGE = {**_LEAGUE_R_PACKAGE, "pwhl": "fastRhockey"}
+# same mapping used for column descriptions). fastRhockey 1.1 also exports the SIHF,
+# European-league and ESPN college-hockey (mch/wch) wrappers under sdv-py's names.
+_R_PARITY_PACKAGE = {
+    **_LEAGUE_R_PACKAGE,
+    "pwhl": "fastRhockey",
+    **{lg: "fastRhockey" for lg in ("sihf", *_EURO_HOCKEY_HOMES, "mch", "wch")},
+}
 
 # R package -> pkgdown reference base URL (one <fn>.html per function topic).
 _R_PKGDOWN_BASE = {

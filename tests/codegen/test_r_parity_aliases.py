@@ -39,3 +39,19 @@ def test_wehoop_renamed_pairs_resolve():
     assert aliases["wbb"]["load_wbb_team_boxscore"] == "load_wbb_team_box"
     assert aliases["wbb"]["herhoopstats_teams"] == "hhs_teams"
     assert sum(py.startswith("wnba_stats_") for py in aliases["wnba"]) == 103
+
+
+def test_baseballr_and_fastrhockey_renamed_pairs_resolve():
+    """The statsapi / NHL API names sdv-py and baseballr / fastRhockey spell differently (parity delta 2026-11-26)."""
+    aliases = yaml.safe_load((CODEGEN / "r_parity_aliases.yaml").read_text(encoding="utf-8"))
+    assert aliases["mlb"]["mlb_win_probability"] == "mlb_game_wp"
+    assert aliases["mlb"]["mlb_statcast_search"] == "statcast_search"
+    assert aliases["nhl"]["nhl_stats_rest_config"] == "nhl_stats_config"
+    assert aliases["nhl"]["nhl_skater_leaders"] == "nhl_skater_stats_leaders"
+    assert sum(py.startswith("nhl_stats_rest_") for py in aliases["nhl"]) == 21
+
+
+def test_european_and_college_hockey_homes_link_fastrhockey():
+    """fastRhockey 1.1 exports the SIHF, European-league and mch/wch wrappers under sdv-py's names."""
+    for lg in ("sihf", *generate._EURO_HOCKEY_HOMES, "mch", "wch"):
+        assert generate._R_PARITY_PACKAGE[lg] == "fastRhockey"

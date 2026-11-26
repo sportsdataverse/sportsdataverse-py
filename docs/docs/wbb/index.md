@@ -400,6 +400,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wbb_groups`](reference/loaders/other#load_wbb_groups) | [`load_wbb_groups`](https://wehoop.sportsdataverse.org/reference/load_wbb_groups.html) |
 | [`load_wbb_officials`](reference/loaders/other#load_wbb_officials) | [`load_wbb_officials`](https://wehoop.sportsdataverse.org/reference/load_wbb_officials.html) |
 | [`load_wbb_pbp`](reference/loaders/other#load_wbb_pbp) | [`load_wbb_pbp`](https://wehoop.sportsdataverse.org/reference/load_wbb_pbp.html) |
+| [`load_wbb_player_aliases`](reference/loaders/player#load_wbb_player_aliases) | [`load_wbb_player_aliases`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_aliases.html) |
 | [`load_wbb_player_boxscore`](reference/loaders/player#load_wbb_player_boxscore) | [`load_wbb_player_box`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_box.html) |
 | [`load_wbb_player_core`](reference/loaders/player#load_wbb_player_core) | [`load_wbb_player_core`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_core.html) |
 | [`load_wbb_player_crosswalk`](reference/loaders/player#load_wbb_player_crosswalk) | [`load_wbb_player_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_player_crosswalk.html) |
@@ -411,11 +412,15 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wbb_schedule_crosswalk`](reference/loaders/schedule#load_wbb_schedule_crosswalk) | [`load_wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_schedule_crosswalk.html) |
 | [`load_wbb_shots`](reference/loaders/other#load_wbb_shots) | [`load_wbb_shots`](https://wehoop.sportsdataverse.org/reference/load_wbb_shots.html) |
 | [`load_wbb_standings`](reference/loaders/other#load_wbb_standings) | [`load_wbb_standings`](https://wehoop.sportsdataverse.org/reference/load_wbb_standings.html) |
+| [`load_wbb_team_aliases`](reference/loaders/team#load_wbb_team_aliases) | [`load_wbb_team_aliases`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_aliases.html) |
 | [`load_wbb_team_boxscore`](reference/loaders/team#load_wbb_team_boxscore) | [`load_wbb_team_box`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_box.html) |
 | [`load_wbb_team_crosswalk`](reference/loaders/team#load_wbb_team_crosswalk) | [`load_wbb_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_crosswalk.html) |
 | [`load_wbb_team_group_seasons`](reference/loaders/team#load_wbb_team_group_seasons) | [`load_wbb_team_group_seasons`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_group_seasons.html) |
 | [`load_wbb_team_season_stats`](reference/loaders/team#load_wbb_team_season_stats) | [`load_wbb_team_stats`](https://wehoop.sportsdataverse.org/reference/load_wbb_team_stats.html) |
 | [`most_recent_wbb_season`](reference/additional/dates-and-seasons#most_recent_wbb_season) | [`most_recent_wbb_season`](https://wehoop.sportsdataverse.org/reference/most_recent_wbb_season.html) |
+| [`ncaa_espn_school_seasons`](reference/additional/ids-and-crosswalks#ncaa_espn_school_seasons) | [`load_wbb_ncaa_espn_school_seasons`](https://wehoop.sportsdataverse.org/reference/load_wbb_ncaa_espn_school_seasons.html) |
+| [`ncaa_espn_schools`](reference/additional/ids-and-crosswalks#ncaa_espn_schools) | [`load_wbb_ncaa_espn_schools`](https://wehoop.sportsdataverse.org/reference/load_wbb_ncaa_espn_schools.html) |
+| [`ncaa_espn_team_crosswalk`](reference/additional/ids-and-crosswalks#ncaa_espn_team_crosswalk) | [`load_wbb_ncaa_espn_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wbb_ncaa_espn_team_crosswalk.html) |
 | [`wbb_player_crosswalk`](reference/additional/ids-and-crosswalks#wbb_player_crosswalk) | [`wbb_player_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_player_crosswalk.html) |
 | [`wbb_schedule_crosswalk`](reference/additional/ids-and-crosswalks#wbb_schedule_crosswalk) | [`wbb_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_schedule_crosswalk.html) |
 | [`wbb_team_crosswalk`](reference/additional/ids-and-crosswalks#wbb_team_crosswalk) | [`wbb_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/wbb_team_crosswalk.html) |
