@@ -282,7 +282,7 @@ def nba_team_game_possessions(
     seasons: int | list[int],
     *,
     league_id: str = "00",
-    season_type: str = "regular-season",
+    season_type: str | list[str] = "regular-season",
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Per team and game: the possession counts behind :func:`nba_team_season_rates`.
@@ -298,7 +298,8 @@ def nba_team_game_possessions(
             The WNBA season is its calendar year.
         league_id: ``"00"`` NBA or ``"10"`` WNBA.
         season_type: ``"regular-season"`` (default), ``"preseason"``, ``"playoffs"`` or ``"play-in"``, matched to
-            the schedule's ``season_type``.
+            the schedule's ``season_type``, or a list of them (``["regular-season", "playoffs"]``: the
+            season and its postseason, the play-in left out), read from one load of the releases.
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
@@ -307,11 +308,12 @@ def nba_team_game_possessions(
         and ``clutch`` rows. ``team_id`` is the stats.nba.com team id (Int64), ``game_id`` the
         stats.nba.com game id. ``poss`` / ``opp_poss`` are the team's offensive / defensive
         possessions, ``pts`` / ``opp_pts`` their points and ``seconds`` the game clock they used.
-        Empty input returns that schema with zero rows.
+        ``season_type`` is the game's schedule type, so a list's rows of one type add up to that
+        type's :func:`nba_team_season_rates` row. Empty input returns that schema with zero rows.
 
     Raises:
         ValueError: If ``league_id`` is not ``"00"`` or ``"10"``, or ``season_type`` is not one
-            of the four above.
+            of the four above (or names none, as an empty list).
 
     Example:
         Quick start::
@@ -321,7 +323,23 @@ def nba_team_game_possessions(
             games = nba_team_game_possessions(2026).filter(split="all")
             games.group_by("team_id").agg(pl.col("pts").sum() * 100 / pl.col("poss").sum())
     """
-    out = team_game_possessions(_rate_rows(seasons, league_id, season_type))
+    types = [season_type] if isinstance(season_type, str) else list(dict.fromkeys(season_type))
+    if not types:
+        raise ValueError("season_type must name at least one type, got an empty list")
+    for t in types:
+        _check_args(league_id, t)
+    seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
+    load_possessions, load_schedule, offset = _league_loaders(league_id)
+    loader_seasons = [s - offset for s in seasons_list]
+    possessions, schedule = load_possessions(loader_seasons), load_schedule(loader_seasons)
+    out = pl.concat(
+        [
+            team_game_possessions(
+                nba_possession_rate_rows(possessions, schedule, league_id=league_id, season_type=t)
+            ).with_columns(pl.lit(t).alias("season_type"))
+            for t in types
+        ]
+    )
     return out.to_pandas() if return_as_pandas else out
 
 

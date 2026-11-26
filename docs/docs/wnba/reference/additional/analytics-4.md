@@ -194,7 +194,7 @@ One row per `(season, team_id, game_id)`. `team_id` is the stats.nba.com team id
 
 ### wnba_team_game_possessions {#wnba_team_game_possessions}
 
-`wnba_team_game_possessions(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`wnba_team_game_possessions(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str | list[str]' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 WNBA per team and game possession counts (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_game_possessions.
 
@@ -204,12 +204,12 @@ WNBA per team and game possession counts (league_id='10'). See sportsdataverse.n
 |---|---|---|---|
 | `seasons` | `int \| list[int]` |  |  |
 | `league_id` | `str` | `'10'` |  |
-| `season_type` | `str` | `'regular-season'` |  |
+| `season_type` | `str \| list[str]` | `'regular-season'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
 **Returns**
 
-One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `home` or `away` row (neither at a neutral site) and, when it has clutch possessions, `close` and `clutch` rows. `team_id` is the stats.nba.com team id (Int64), `game_id` the stats.nba.com game id. `poss` / `opp_poss` are the team's offensive / defensive possessions, `pts` / `opp_pts` their points and `seconds` the game clock they used. Empty input returns that schema with zero rows.
+One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `home` or `away` row (neither at a neutral site) and, when it has clutch possessions, `close` and `clutch` rows. `team_id` is the stats.nba.com team id (Int64), `game_id` the stats.nba.com game id. `poss` / `opp_poss` are the team's offensive / defensive possessions, `pts` / `opp_pts` their points and `seconds` the game clock they used. `season_type` is the game's schedule type, so a list's rows of one type add up to that type's `nba_team_season_rates` row. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -222,6 +222,7 @@ One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `hom
 | `pts` | Int64 | Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free throws. |
 | `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
 | `seconds` | Float64 | Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60 x (poss + opp_poss) / 2 / summed seconds. |
+| `season_type` | String | The game's stats.wnba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call asked for. Asked for a list, each type's rows add up to that type's season rates. |
 
 ### wnba_team_luck {#wnba_team_luck}
 

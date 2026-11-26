@@ -38205,6 +38205,8 @@ nba_team_game_four_factors:
   team_id: stats.nba.com team id (the 10-digit franchise id).
   turnover_pts: 'Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance.'
 nba_team_game_possessions:
+  season_type: The game's stats.nba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call
+    asked for. Asked for a list, each type's rows add up to that type's season rates.
   game_id: stats.nba.com game id. The game this row's possessions are from.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.
@@ -38634,6 +38636,8 @@ wnba_team_game_four_factors:
   team_id: stats.wnba.com team id.
   turnover_pts: 'Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance.'
 wnba_team_game_possessions:
+  season_type: The game's stats.wnba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call
+    asked for. Asked for a list, each type's rows add up to that type's season rates.
   game_id: stats.wnba.com game id. The game this row's possessions are from.
   opp_poss: Defensive possessions in the split (the opponents' offensive possessions).
   opp_pts: Points allowed on the team's defensive possessions in the split.

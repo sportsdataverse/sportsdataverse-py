@@ -687,7 +687,7 @@ books.filter(team_id=1610612738).select("game_id", "pts_vs_exp", "shooting_pts")
 
 ### nba_team_game_possessions {#nba_team_game_possessions}
 
-`nba_team_game_possessions(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`nba_team_game_possessions(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str | list[str]' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Per team and game: the possession counts behind `nba_team_season_rates`.
 
@@ -703,12 +703,12 @@ WNBA). The definitions are in `sportsdataverse._common.team_season_rates`.
 |---|---|---|---|
 | `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
 | `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`. |
+| `season_type` | `str \| list[str]` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`, matched to the schedule's `season_type`, or a list of them (`["regular-season", "playoffs"]`: the season and its postseason, the play-in left out), read from one load of the releases. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
 
 **Returns**
 
-One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `home` or `away` row (neither at a neutral site) and, when it has clutch possessions, `close` and `clutch` rows. `team_id` is the stats.nba.com team id (Int64), `game_id` the stats.nba.com game id. `poss` / `opp_poss` are the team's offensive / defensive possessions, `pts` / `opp_pts` their points and `seconds` the game clock they used. Empty input returns that schema with zero rows.
+One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `home` or `away` row (neither at a neutral site) and, when it has clutch possessions, `close` and `clutch` rows. `team_id` is the stats.nba.com team id (Int64), `game_id` the stats.nba.com game id. `poss` / `opp_poss` are the team's offensive / defensive possessions, `pts` / `opp_pts` their points and `seconds` the game clock they used. `season_type` is the game's schedule type, so a list's rows of one type add up to that type's `nba_team_season_rates` row. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -721,12 +721,13 @@ One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `hom
 | `pts` | Int64 | Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free throws. |
 | `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
 | `seconds` | Float64 | Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60 x (poss + opp_poss) / 2 / summed seconds. |
+| `season_type` | String | The game's stats.nba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call asked for. Asked for a list, each type's rows add up to that type's season rates. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above. |
+| `ValueError` | If `league_id` is not `"00"` or `"10"`, or `season_type` is not one of the four above (or names none, as an empty list). |
 
 **Example**
 
