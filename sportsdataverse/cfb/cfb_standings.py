@@ -22,11 +22,9 @@ same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
   by ``tiebreaker_depth`` exactly like nflseedR
   (``RANDOM=0 < PRE-SOV=1 < SOS=2 < POINTS=3``).
 * **Record semantics.** Overall W/L/T counts ALL played games. The
-  conference record counts only ``game_type == "REG"`` games between two
-  teams of the same conference, minus any the schedule flags non-conference
-  (an explicit ``conf_game == False``). ``CONF_CHAMP`` games count toward the
-  overall record and decide the conference champion, but NOT the
-  conference record/rank.
+  conference record counts only ``game_type == "REG"`` games between two teams of the same
+  conference, minus any the schedule flags ``conf_game == False``. ``CONF_CHAMP`` games count
+  toward the overall record and decide the conference champion, but NOT the conference record/rank.
 * **SOV/SOS are conference-scoped** (cross-validation ruling — UNLIKE
   nflseedR's overall-REG, games-weighted convention). Both use only
   conference REG games and the opponents' conference win pct:

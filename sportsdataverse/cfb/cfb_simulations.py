@@ -395,7 +395,10 @@ def cfb_simulations(
             ``sim``, ``week``, ``game_type``, ``home_team``, ``away_team``,
             ``result`` — null = unplayed, ``neutral``). Played results are
             kept as-is. A ``season`` column picks that season's tiebreakers
-            and CFP rule; ``sim``-keyed input uses the current ones.
+            and CFP rule; ``sim``-keyed input uses the current ones. The
+            optional ``home_points``/``away_points``/``conf_game`` columns
+            of :func:`sportsdataverse.cfb.cfb_games_from_schedule` pass
+            through to :func:`sportsdataverse.cfb.cfb_standings`.
         teams: Team table (``team``, ``conference``, plus the optional
             :func:`sportsdataverse.cfb.cfb_standings` columns).
         compute_results: Results generator with the signature

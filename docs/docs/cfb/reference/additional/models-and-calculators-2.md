@@ -462,7 +462,7 @@ CFB simplification.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `games` | `FrameLike` |  | One season of games in the engine schema (`season` or `sim`, `week`, `game_type`, `home_team`, `away_team`, `result` — null = unplayed, `neutral`). Played results are kept as-is. A `season` column picks that season's tiebreakers and CFP rule; `sim`-keyed input uses the current ones. |
+| `games` | `FrameLike` |  | One season of games in the engine schema (`season` or `sim`, `week`, `game_type`, `home_team`, `away_team`, `result` — null = unplayed, `neutral`). Played results are kept as-is. A `season` column picks that season's tiebreakers and CFP rule; `sim`-keyed input uses the current ones. The optional `home_points`/`away_points`/`conf_game` columns of `sportsdataverse.cfb.cfb_games_from_schedule` pass through to `sportsdataverse.cfb.cfb_standings`. |
 | `teams` | `FrameLike` |  | Team table (`team`, `conference`, plus the optional `sportsdataverse.cfb.cfb_standings` columns). |
 | `compute_results` | `ComputeResultsFn \| None` | `None` | Results generator with the signature `fn(teams, games, week_num, **kwargs) -> {"teams": ..., "games": ...}` filling `result` for that week's unplayed games only. Defaults to `cfb_compute_results` (dynamic ELO). |
 | `simulations` | `int` | `10000` | Number of simulated seasons (sequential, no chunking). |
