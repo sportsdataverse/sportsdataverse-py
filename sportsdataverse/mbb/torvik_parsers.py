@@ -2,8 +2,8 @@
 
 One generic CSV parser covers every self-describing Torvik file
 (``{year}_team_results.csv``, ``{year}_fffinal.csv``, and their women's
-``/ncaaw`` mirrors): the header row is cleaned to snake_case (janitor-style:
-``%`` -> ``_percent``, leading digits get an ``x`` prefix, duplicates get a
+``/ncaaw`` mirrors): the header row is cleaned to snake_case
+(``%`` -> ``_percent``, leading digits get an ``x`` prefix, duplicates get a
 ``_2``/``_3`` suffix) and the rows are type-inferred. The output keeps the
 ``team`` / ``conf`` columns the basketball crosswalks consume.
 """
@@ -33,7 +33,7 @@ _HTML_MARKERS = ("<!doctype", "<html", "<?xml", "<head", "<body")
 
 
 def _clean_col(name: str) -> str:
-    """janitor::make_clean_names-style cleaner for a single Torvik CSV header."""
+    """Snake-case cleaner for a single Torvik CSV header."""
     s = str(name).strip().replace("%", " percent ")
     # fold a digit-glued capital ("3P", "2p%D") to lowercase so it stays one
     # token ("x3p_percent"), instead of splitting to "x3_p_percent"
