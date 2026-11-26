@@ -360,6 +360,39 @@ def _team_k_miss(prior: PreseasonPrior, lam: float, k_miss: float) -> pl.Expr:
     return pl.when(pl.col("new_team") == True).then(lam).otherwise(k_miss).cast(pl.Float64)  # noqa: E712
 
 
+def _rated_sd(
+    rat: pl.DataFrame, rows: pl.DataFrame, prior: PreseasonPrior | None, lam: float, k_miss: float, s2: float
+) -> pl.DataFrame:
+    """``team_id``, ``adj_net_rtg`` and its error sd (:data:`PRIOR_MISS_POSS`) for :func:`as_of_game_model`."""
+    kk = pl.col("_k_miss") if prior is not None else pl.lit(k_miss)
+
+    def side_var(n: pl.Expr) -> pl.Expr:  # k_miss = lam reduces this to s2 / (n + lam)
+        n = n.fill_null(0)
+        return (lam / (n + lam)) ** 2 * s2 / kk + n * s2 / (n + lam) ** 2
+
+    n_off = rows.group_by(pl.col("offense_team_id").alias("team_id")).len("n_off")
+    n_def = rows.group_by(pl.col("defense_team_id").alias("team_id")).len("n_def")
+    for frame in (n_off, n_def):
+        assert frame.schema["team_id"] == rat.schema["team_id"], "team_id dtype differs across the joins"
+    if prior is not None:
+        assert prior.ratings.schema["team_id"] == rat.schema["team_id"], "team_id dtype differs across the joins"
+        rat = rat.join(
+            prior.ratings.select("team_id", _team_k_miss(prior, lam, k_miss).alias("_k_miss")),
+            on="team_id",
+            how="left",
+            validate="1:1",
+        ).with_columns(pl.col("_k_miss").fill_null(k_miss))
+    return (
+        rat.join(n_off, on="team_id", how="left", validate="1:1")
+        .join(n_def, on="team_id", how="left", validate="1:1")
+        .select(
+            "team_id",
+            "adj_net_rtg",
+            (side_var(pl.col("n_off")) + side_var(pl.col("n_def"))).sqrt().alias("adj_net_rtg_sd"),
+        )
+    )
+
+
 def as_of_game_model(
     rows: pl.DataFrame,
     *,
@@ -434,35 +467,7 @@ def as_of_game_model(
             ]
         )
     s2 = _ridge_s2(rows)
-
-    kk = pl.col("_k_miss") if prior is not None else pl.lit(k_miss)
-
-    def side_var(n: pl.Expr) -> pl.Expr:  # k_miss = lam reduces this to s2 / (n + lam)
-        n = n.fill_null(0)
-        return (lam / (n + lam)) ** 2 * s2 / kk + n * s2 / (n + lam) ** 2
-
-    n_off = rows.group_by(pl.col("offense_team_id").alias("team_id")).len("n_off")
-    n_def = rows.group_by(pl.col("defense_team_id").alias("team_id")).len("n_def")
-    for frame in (n_off, n_def):
-        assert frame.schema["team_id"] == rat.schema["team_id"], "team_id dtype differs across the joins"
-    if prior is not None:
-        assert prior.ratings.schema["team_id"] == rat.schema["team_id"], "team_id dtype differs across the joins"
-        rat = rat.join(
-            prior.ratings.select("team_id", _team_k_miss(prior, lam, k_miss).alias("_k_miss")),
-            on="team_id",
-            how="left",
-            validate="1:1",
-        ).with_columns(pl.col("_k_miss").fill_null(k_miss))
-    ratings = (
-        rat.join(n_off, on="team_id", how="left", validate="1:1")
-        .join(n_def, on="team_id", how="left", validate="1:1")
-        .select(
-            "team_id",
-            "adj_net_rtg",
-            (side_var(pl.col("n_off")) + side_var(pl.col("n_def"))).sqrt().alias("adj_net_rtg_sd"),
-        )
-        .cast(schema)
-    )
+    ratings = _rated_sd(rat, rows, prior, lam, k_miss, s2).cast(schema)
     poss = rows.height / (2.0 * rows.get_column("game_id").n_unique())
     return GameModel(ratings, float(rat.get_column("hfa")[0]), poss, sd, float(np.sqrt(2.0 * s2 / k_miss)))
 
