@@ -83307,6 +83307,9 @@ mbb_tournament_run_players:
   run_id: 'Run key: ''{season}-{tournament_key}-{ESPN team id}'', one team''s games in one tournament.'
 mbb_tournament_run_teams:
   season: Season, named by the year it ends (2025 is 2024-25).
+  tournament_name: The run's tournament name, as on its tournament_runs rows.
+  tournament_kind: 'The run''s tournament kind, as on its tournament_runs rows: ncaa (the NCAA tournament), conference (a
+    conference tournament) or postseason (the NIT, WNIT, CBI, Crown, WBIT and other postseason events).'
   team_id: ESPN team id of the row's team (joins the ESPN schedule and team box scores).
   team_abbreviation: Team abbreviation.
   games: Final games in the run.
@@ -83418,6 +83421,9 @@ wbb_tournament_run_players:
   run_id: 'Run key: ''{season}-{tournament_key}-{ESPN team id}'', one team''s games in one tournament.'
 wbb_tournament_run_teams:
   season: Season, named by the year it ends (2025 is 2024-25).
+  tournament_name: The run's tournament name, as on its tournament_runs rows.
+  tournament_kind: 'The run''s tournament kind, as on its tournament_runs rows: ncaa (the NCAA tournament), conference (a
+    conference tournament) or postseason (the NIT, WNIT, CBI, Crown, WBIT and other postseason events).'
   team_id: ESPN team id of the row's team (joins the ESPN schedule and team box scores).
   team_abbreviation: Team abbreviation.
   games: Final games in the run.

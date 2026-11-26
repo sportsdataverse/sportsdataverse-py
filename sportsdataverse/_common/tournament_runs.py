@@ -90,10 +90,17 @@ RUN_GAMES_SCHEMA: dict[str, pl.DataType] = {
     "run_result": pl.Utf8(),
 }
 
-RUN_TEAMS_SCHEMA: dict[str, pl.DataType] = {
+_RUN_TEAM_TOTALS_SCHEMA: dict[str, pl.DataType] = {
     "season": pl.Int64(),
     "run_id": pl.Utf8(),
     **{k: v for k, v in SERIES_TEAMS_SCHEMA.items() if k not in ("season", "series_id", "opponent_team_id")},
+}
+RUN_TEAMS_SCHEMA: dict[str, pl.DataType] = {
+    "season": pl.Int64(),
+    "run_id": pl.Utf8(),
+    "tournament_name": pl.Utf8(),
+    "tournament_kind": pl.Utf8(),
+    **{k: v for k, v in _RUN_TEAM_TOTALS_SCHEMA.items() if k not in ("season", "run_id")},
 }
 
 RUN_PLAYERS_SCHEMA: dict[str, pl.DataType] = {
@@ -336,8 +343,9 @@ def tournament_run_teams(games: pl.DataFrame, team_box: pl.DataFrame) -> pl.Data
             ``total_rebounds`` and the other box counts.
 
     Returns:
-        :data:`RUN_TEAMS_SCHEMA` rows, one per run with a final game: ``games``, ``wins``,
-        ``losses``, ``pts``, ``opp_pts`` and the summed counts (as
+        :data:`RUN_TEAMS_SCHEMA` rows, one per run with a final game: the run's
+        ``tournament_name`` and ``tournament_kind`` (as on its :func:`tournament_run_games` rows),
+        ``games``, ``wins``, ``losses``, ``pts``, ``opp_pts`` and the summed counts (as
         :func:`~sportsdataverse._common.playoff_series.playoff_series_teams`). A box row listed
         twice counts once.
 
@@ -355,7 +363,16 @@ def tournament_run_teams(games: pl.DataFrame, team_box: pl.DataFrame) -> pl.Data
             runs = tournament_run_games(load_mbb_schedule([2025]))
             teams = tournament_run_teams(runs, load_mbb_team_boxscore([2025]))
     """
-    return team_box_totals(_finals(games), team_box, key="run_id", on=["game_id", "team_id"], schema=RUN_TEAMS_SCHEMA)
+    totals = team_box_totals(
+        _finals(games), team_box, key="run_id", on=["game_id", "team_id"], schema=_RUN_TEAM_TOTALS_SCHEMA
+    )
+    # one tournament per run, so its name and kind are the same on every one of the run's game rows
+    names = games.select("run_id", "tournament_name", "tournament_kind").unique("run_id", keep="first")
+    return (
+        totals.join(names, on="run_id", how="left", validate="m:1", maintain_order="left")
+        .select(list(RUN_TEAMS_SCHEMA))
+        .cast(RUN_TEAMS_SCHEMA)
+    )
 
 
 def tournament_run_players(games: pl.DataFrame, player_box: pl.DataFrame) -> pl.DataFrame:
