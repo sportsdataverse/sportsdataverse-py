@@ -14,15 +14,20 @@ from sportsdataverse.nba.nba_box_logs import _STATS, box_features
 from sportsdataverse.nba.nba_model_validation import RatingsFit
 
 SPM_FEATURES: List[str] = list(_STATS)
-#: :func:`train_spm`'s default ridge penalty (raw per-100 features, minute weights at mean 1). Fitted
-#: by ``tools/fit_adj_rapm_penalty.py spm`` (run 2026-11-26): the grid point minimizing the
-#: player-grouped 5-fold CV error of the minute-weighted fit on each season's own plain RAPM, summed
-#: over the complete regular seasons from 1997 (NBA through 2025-26, WNBA through 2026; 30 each).
-#: NBA picks 30; WNBA picks 100, and its error at 30 is 0.21% above that minimum, so both leagues
-#: share 30. The curve is flat below it (alpha 0 is 0.3% worse in the NBA, 2.8% in the WNBA) and
-#: rises past it (300: +4.4% / +2.2%). The equal-weight fit this replaced used 100. The G League
-#: (``train_spm`` takes no league) is seeded with the shared value, not fitted.
-SPM_ALPHA: float = 30.0
+#: :func:`train_spm`'s default ridge penalty, for its default equal-weight fit: the value every published
+#: ``player_impact`` SPM was trained with.
+SPM_ALPHA: float = 100.0
+#: The penalty for the minute-weighted alternative (``train_spm(..., weight="min",
+#: alpha=SPM_ALPHA_WEIGHTED)``), which is NOT the default and is not published. Fitted by
+#: ``tools/fit_adj_rapm_penalty.py spm`` (run 2026-11-26): the grid point minimizing the player-grouped
+#: 5-fold CV error of the minute-weighted fit on each season's own plain RAPM, summed over the complete
+#: regular seasons from 1997 (NBA through 2025-26, WNBA through 2026; 30 each). NBA picks 30; WNBA picks
+#: 100, and its error at 30 is 0.21% above that minimum, so both leagues share 30. The curve is flat below
+#: it (alpha 0 is 0.3% worse in the NBA, 2.8% in the WNBA) and rises past it (300: +4.4% / +2.2%). The
+#: weighted fit tracks next season's RAPM better (Spearman NBA 0.493 vs 0.358, 2024 -> 2025), but as the
+#: adjusted-RAPM prior it fails the NBA producer's ``r_rapm_adj_min`` publish floor in 11 seasons, so it
+#: stays opt-in (2026-11-26).
+SPM_ALPHA_WEIGHTED: float = 30.0
 
 
 @dataclass(frozen=True)
@@ -56,17 +61,19 @@ def train_spm(
     *,
     feature_names: Optional[List[str]] = None,
     alpha: float = SPM_ALPHA,
-    weight: Optional[str] = "min",
+    weight: Optional[str] = None,
 ) -> SpmCoefficients:
-    """Ridge-fit box features onto ``o_rapm`` and ``d_rapm`` (two regressions), weighted by minutes.
+    """Ridge-fit box features onto ``o_rapm`` and ``d_rapm`` (two regressions).
 
     The two models share the same feature matrix but separate target vectors,
     producing independent offense and defense coefficient vectors.
 
-    Each row is weighted by the player's minutes (``weight``, normalized to mean 1). A player's
-    per-100 rates and his RAPM target are both noisiest when he played little, and a quarter to a
-    half of a season's rows are players under 250 minutes; fit with equal weights they dominate the
-    regression, which then predicts with about a quarter of the target's spread.
+    The default fits every row with the same weight at :data:`SPM_ALPHA`, the fit behind every
+    published ``player_impact`` SPM. ``weight="min", alpha=SPM_ALPHA_WEIGHTED`` is the opt-in
+    minute-weighted alternative. Low-minute players' per-100 rates and RAPM targets are both
+    noisy, so weighting by minutes widens the SPM (its spread about doubles). It is not the default
+    because, as the adjusted-RAPM prior, it fails the NBA producer's publish floor (see
+    :data:`SPM_ALPHA_WEIGHTED`).
 
     Args:
         box_features: Per-player per-100 features.  Must contain ``player_id``
@@ -77,12 +84,12 @@ def train_spm(
         feature_names: Ordered list of feature columns to regress on.
             Defaults to ``SPM_FEATURES`` (= ``_STATS`` from ``nba_box_logs``).
         alpha: Ridge regularization strength (``sklearn.linear_model.Ridge``) on the raw
-            per-100 features with the weights at mean 1. Defaults to :data:`SPM_ALPHA`.
+            per-100 features (with any weights normalized to mean 1). Defaults to
+            :data:`SPM_ALPHA`; pass :data:`SPM_ALPHA_WEIGHTED` with ``weight="min"``.
             Lower values approach OLS; higher values shrink toward zero.
-        weight: The column (of *box_features*, or of *rapm_target* when *box_features* lacks
-            it) holding each row's sample weight, e.g. ``"min"`` (the default) or
-            ``"off_poss"``. ``None`` fits every row with the same weight (the rule before
-            minute weighting).
+        weight: ``None`` (the default) fits every row with the same weight. Otherwise, the
+            column (of *box_features*, or of *rapm_target* when *box_features* lacks it)
+            holding each row's sample weight, e.g. ``"min"`` or ``"off_poss"``.
 
     Returns:
         ``SpmCoefficients`` with offense and defense coefficient vectors,
@@ -99,10 +106,10 @@ def train_spm(
             from sportsdataverse.nba import train_spm
             coef = train_spm(box_feats, rapm_ratings)
 
-        With custom regularization, or the equal-weight fit::
+        With custom regularization, or the minute-weighted alternative::
 
             coef = train_spm(box_feats, rapm_ratings, alpha=50.0)
-            coef_equal = train_spm(box_feats, rapm_ratings, weight=None)
+            coef_weighted = train_spm(box_feats, rapm_ratings, weight="min", alpha=SPM_ALPHA_WEIGHTED)
     """
     names: List[str] = feature_names if feature_names is not None else SPM_FEATURES
     missing_feats = [c for c in names if c not in box_features.columns]

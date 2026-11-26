@@ -688,6 +688,7 @@
   "cfb_playoff_seeds": "analytics-2",
   "cfb_predict_games": "models-and-calculators-2",
   "cfb_ratings": "models-and-calculators-2",
+  "cfb_ratings_compute_results": "models-and-calculators-2",
   "cfb_recruiting_projection": "models-and-calculators-2",
   "cfb_resume": "analytics-2",
   "cfb_returning_production": "analytics-2",

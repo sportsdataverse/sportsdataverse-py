@@ -68,7 +68,7 @@ A polars (or pandas) `DataFrame` stacking every leader list, with a `category` c
 | `play_isScoring` | Boolean | Boolean flag indicating whether this play resulted in a score. |
 | `play_playDescription` | String | Official NFL text description of the play (e.g., '(2:11) J.Allen scrambles right end for 9 yards'). |
 | `play_playState` | String | Status of the play record (e.g., 'FINAL', 'LIVE') in the NFL Shield API at time of capture. |
-| `play_playStats` | Int64 | Serialized or encoded statistical detail for the play outcomes (e.g., yards, player IDs). |
+| `play_playStats` | List | Serialized or encoded statistical detail for the play outcomes (e.g., yards, player IDs). |
 | `play_playType` | String | Text label classifying the play type (e.g., 'PASS', 'RUSH', 'PUNT') from the NFL Shield API. |
 | `play_playTypeCode` | Int64 | Integer code corresponding to the play type classification in the NFL Shield API. |
 | `play_possessionTeamId` | String | NFL Shield team identifier for the team that had possession during this play. |

@@ -31,7 +31,7 @@ A tour's season schedule: one row per tournament (id, dates, course, purse, cham
 | `tournament_id` | String | PGA TOUR tournament id (tour code + season + event number, e.g. "R2026014"); the id the leaderboard, scorecard, tee-times and shot-details wrappers take. |
 | `tournament_name` | String | Tournament's full name, sponsor included (e.g. "Travelers Championship"). |
 | `date` | String | Tournament dates as the site displays them (e.g. "Apr 9 - 12"). |
-| `start_date` | String | Tournament start (UTC). |
+| `start_date` | Datetime | Tournament start (UTC). |
 | `sequence_number` | Int64 | Event's order in the season. |
 | `tournament_status` | String | Tournament status (e.g. "COMPLETED", "IN_PROGRESS", "NOT_STARTED"). |
 | `course_name` | String | Course hosting the event (e.g. "TPC River Highlands"). |
@@ -191,7 +191,7 @@ A tournament's tee times: one row per player per group per round (tee time in UT
 | `round_number` | Int64 | Tournament round the tee times are for (1-4). |
 | `round_status` | String | Round status (e.g. "COMPLETE", "IN_PROGRESS", "UPCOMING"). |
 | `group_number` | Int64 | Tee-time group number within the round. |
-| `tee_time` | String | Group's tee time (UTC). |
+| `tee_time` | Datetime | Group's tee time (UTC). |
 | `start_tee` | Int64 | Starting hole (1, or 10 for a two-tee start). |
 | `back_nine` | Boolean | True when the group starts on the back nine. |
 | `course_id` | String | PGA TOUR course id of the course the group tees off on (e.g. "014"). |

@@ -400,6 +400,76 @@ week3 = cfb_ratings(2023, as_of_date=dt.date(2023, 9, 18))
 ratings_pd = cfb_ratings(2023, return_as_pandas=True)
 ```
 
+### cfb_ratings_compute_results {#cfb_ratings_compute_results}
+
+`cfb_ratings_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, ratings: 'FrameLike', rating_type: 'str' = 'points', scale: 'float | dict[str, float] | None' = None, home_field: 'float | None' = None, margin_sd: 'float | dict[str, float] | None' = None, rng: 'np.random.Generator | None' = None, **kwargs: 'Any') -> 'dict[str, pl.DataFrame]'`
+
+Results generator driven by fixed team ratings (points, adjusted EPA or raw EPA).
+
+An alternative to `cfb_compute_results` (dynamic ELO), with cfbseedR's
+`cfbseedR_ratings_compute_results()` semantics and defaults: each unplayed `week == week_num`
+game gets `Normal(scale * (rating_home - rating_away) + home_field, margin_sd)` (no home field at
+a neutral site), rounded away from zero; a postseason draw of exactly 0 is re-decided by
+`Phi(expected / margin_sd)` with a 1-point margin. Ratings are fixed; `teams` passes through.
+`scale` / `margin_sd` buckets use the smaller `games` of the two teams (unrated or null counts
+skipped), then the bucket with the largest lower bound at or below it (bottom bucket below all;
+top bucket when no count). Defaults: `"adj_epa"` (the scale of `cfb_ratings` `adj_net`)
+reads the modern-era `slope_by_games` / `margin_sd` / `hfa_points` of
+`sportsdataverse.cfb.cfb_prediction_constants.CFB_CONSTANTS`; `"points"` and `"raw_epa"`
+are `_RATINGS_DEFAULTS`, cfbseedR's walk-forward fit (FBS-vs-FBS 2014-2025). In that test the ELO
+formula on CollegeFootballData's pregame ELO had the smallest error (MAE 12.94 vs 13.10 for a
+least-squares points rating); from about six games on the points rating is level with it.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `teams` | `DataFrame` |  | Per-sim team table (`sim`, `team`, `conference`); returned unchanged. |
+| `games` | `DataFrame` |  | Per-sim games table (engine schema; see `sportsdataverse.cfb.cfb_standings`). |
+| `week_num` | `int` |  | The week to fill. |
+| `ratings` | `FrameLike` |  | One row per team: `team`, `rating` (numeric, no nulls) and optionally `games` (non-negative games behind the rating; null = unknown). Polars or pandas. Teams missing from it rate 0 (league average). |
+| `rating_type` | `str` | `'points'` | `"points"` (default), `"adj_epa"` or `"raw_epa"`; picks the defaults. |
+| `scale` | `float \| dict[str, float] \| None` | `None` | Points of margin per rating unit: a number or `{"lo-hi": value}` buckets. `None` uses the default for `rating_type`. |
+| `home_field` | `float \| None` | `None` | Home-field advantage in points for non-neutral games. `None` = default. |
+| `margin_sd` | `float \| dict[str, float] \| None` | `None` | Margin SD in points (at least 0): a number or buckets. `None` = default. |
+| `rng` | `Generator \| None` | `None` | numpy Generator (seeded by `cfb_simulations`). A fresh default generator is created when omitted. |
+
+**Returns**
+
+`{"teams": teams, "games": games}` with `result` (Float64 home margin) filled for this week's previously unplayed games.
+
+| col_name | type | description |
+|---|---|---|
+| `sim` | Int64 | Simulation identifier the game row belongs to (1..n simulated seasons). |
+| `week` | Int64 | Week of the season the game is played in; only games matching the requested week_num are filled. |
+| `game_type` | String | Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship) or POST (postseason/CFP). |
+| `home_team` | String | Team name of the home team in the simulated game (returned games frame). |
+| `away_team` | String | Team name of the away team in the simulated game (returned games frame). |
+| `result` | Float64 | Home-team margin of victory (home score minus away score) - real results are preserved and the target week's unplayed games are filled from the fixed team ratings. |
+| `neutral` | Int64 | Neutral-site flag (1 = neutral site, 0 = true home game; only non-neutral games receive home_field). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | On an unknown `rating_type`, missing `team` / `rating` columns, a null, NaN or duplicated rating, a bad `games` count, malformed or NaN constants, or a negative `margin_sd`. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb.cfb_simulations import cfb_ratings_compute_results
+ratings = pl.DataFrame({"team": ["A", "B"], "rating": [7.0, -7.0], "games": [8, 8]})
+out = cfb_ratings_compute_results(teams, games, 3, ratings=ratings, rating_type="points")
+
+# Simulate a season with it (``cfb_simulations`` passes only ``rng``, so bind the ratings with ``functools.partial``)
+
+import functools
+from sportsdataverse.cfb.cfb_simulations import cfb_ratings_compute_results, cfb_simulations
+cr = functools.partial(cfb_ratings_compute_results, ratings=ratings, rating_type="points")
+sims = cfb_simulations(games, teams, compute_results=cr, seed=1)
+```
+
 ### cfb_recruiting_projection {#cfb_recruiting_projection}
 
 `cfb_recruiting_projection(target_season: 'int', *, division: 'str' = 'fbs', history_seasons: 'list[int] | None' = None, alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

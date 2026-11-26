@@ -38,7 +38,7 @@ columns:
   type: character
   description: ''
 - name: highlights
-  type: integer
+  type: list
   description: ''
 - name: notes_type
   type: character
@@ -170,7 +170,7 @@ columns:
   type: list
   description: ''
 - name: home_records
-  type: character
+  type: list
   description: ''
 - name: away_id
   type: integer
@@ -221,7 +221,7 @@ columns:
   type: list
   description: ''
 - name: away_records
-  type: character
+  type: list
   description: ''
 - name: game_id
   type: integer

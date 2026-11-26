@@ -58,7 +58,7 @@ The subset of `df` with `df[date_col] < cutoff_date`.
 |---|---|---|
 | `game_id` | String | Unique game identifier. |
 | `season` | Int64 | Season year (echoed from arg). |
-| `date` | String | Game date (ISO 8601 datetime string). |
+| `date` | Date | Game date (ISO 8601 datetime string). |
 | `team` | String | Team name. |
 | `opp_team` | String |  |
 | `is_home` | Boolean | Home-team flag. |

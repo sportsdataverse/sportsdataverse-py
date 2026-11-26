@@ -82,8 +82,8 @@ The season's `load_wbb_pbp` frame with `pregame_home_prob` + `home_win_prob` app
 | `end_half_seconds_remaining` | Int64 | Game half seconds remaining at the end of the play (''') |
 | `end_game_seconds_remaining` | Int64 | Game seconds remaining at the end of the play (''') |
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
-| `game_date` | String | Game date (YYYY-MM-DD). |
-| `game_date_time` | String | Game start date/time (ISO 8601). |
+| `game_date` | Date | Game date (YYYY-MM-DD). |
+| `game_date_time` | Datetime | Game start date/time (ISO 8601). |
 | `coordinate_x` | Float64 | X coordinate on the court (half-court layout). |
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
 | `coordinate_x_raw` | Float64 | X coordinate as returned by the API before any adjustment. |
@@ -1110,7 +1110,7 @@ One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is
 |---|---|---|
 | `game_id` | String | Unique game identifier. |
 | `season` | Int64 | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `date` | String | Date in YYYY-MM-DD format. |
+| `date` | Date | Date in YYYY-MM-DD format. |
 | `team_id` | String | Unique team identifier. |
 | `opp_team_id` | String |  |
 | `is_home` | Boolean | Whether the team was home. |

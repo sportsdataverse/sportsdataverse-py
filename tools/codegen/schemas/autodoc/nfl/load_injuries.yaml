@@ -47,5 +47,5 @@ columns:
   type: character
   description: ''
 - name: date_modified
-  type: character
+  type: datetime
   description: ''

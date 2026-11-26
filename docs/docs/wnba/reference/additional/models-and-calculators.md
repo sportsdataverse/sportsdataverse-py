@@ -94,8 +94,8 @@ The season's `load_wnba_pbp` frame (every column preserved) with the two WP colu
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
 | `coordinate_x` | Float64 | X coordinate on the court (half-court layout). |
 | `coordinate_y` | Float64 | Y coordinate on the court (half-court layout). |
-| `game_date` | String | Game date (YYYY-MM-DD). |
-| `game_date_time` | String | Game start date/time (ISO 8601). |
+| `game_date` | Date | Game date (YYYY-MM-DD). |
+| `game_date_time` | Datetime | Game start date/time (ISO 8601). |
 | `athlete_name_1` | String |  |
 | `athlete_name_2` | String |  |
 | `athlete_name_3` | String |  |

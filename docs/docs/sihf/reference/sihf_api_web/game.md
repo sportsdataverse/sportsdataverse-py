@@ -56,11 +56,11 @@ Header of one game: league, phase, teams, final and per-period score and shots, 
 | `away_team_acronym` | String | Away team abbreviation. |
 | `home_score` | Int64 | Final home score. |
 | `away_score` | Int64 | Final away score. |
-| `home_score_by_period` | Int64 | Home goals per period, aligned with period_indicators. |
-| `away_score_by_period` | Int64 | Away goals per period, aligned with period_indicators. |
-| `home_shots_by_period` | Int64 | Home shots on goal per period, aligned with period_indicators. |
-| `away_shots_by_period` | Int64 | Away shots on goal per period, aligned with period_indicators. |
-| `period_indicators` | String | Period labels: "1", "2", "3", then "OT1", ... |
+| `home_score_by_period` | List | Home goals per period, aligned with period_indicators. |
+| `away_score_by_period` | List | Away goals per period, aligned with period_indicators. |
+| `home_shots_by_period` | List | Home shots on goal per period, aligned with period_indicators. |
+| `away_shots_by_period` | List | Away shots on goal per period, aligned with period_indicators. |
+| `period_indicators` | List | Period labels: "1", "2", "3", then "OT1", ... |
 | `venue_name` | String | Name of the arena the game was played in. |
 | `venue_city` | String | City of the arena with its canton code (e.g., 'Davos-Platz GR'). |
 | `spectators` | Int64 | Attendance as SIHF reports it. |
