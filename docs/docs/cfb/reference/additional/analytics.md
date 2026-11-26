@@ -647,7 +647,7 @@ and everything else to `POST`. `result` is the home margin
 
 **Returns**
 
-A polars (or pandas) DataFrame with columns `season`, `week`, `game_type`, `home_team`, `away_team`, `result`, `neutral`, `home_points`, `away_points`, `conf_game` — the `cfb_standings` / `cfb_simulations` input schema. The per-game points columns feed the SEC `capped_scoring_margin` official tiebreaker rung (see `CONFERENCE_TIEBREAKERS`); `cfb_standings` skips that rung when they're absent, so passing this frame straight through is always safe. `conf_game` `False` keeps a same-conference game the schedule marks non-conference out of the conference standings.
+A polars (or pandas) DataFrame with columns `season`, `week`, `game_type`, `home_team`, `away_team`, `result`, `neutral`, `home_points`, `away_points`, `conf_game` — the `cfb_standings` / `cfb_simulations` input schema. The per-game points columns feed the SEC `capped_scoring_margin` official tiebreaker rung (see `CONFERENCE_TIEBREAKERS`); `cfb_standings` skips that rung when they're absent, so passing this frame straight through is always safe.
 
 | col_name | type | description |
 |---|---|---|

@@ -413,32 +413,17 @@ def _validate_games(games: FrameLike) -> pl.DataFrame:
 def _double_games(g: pl.DataFrame) -> pl.DataFrame:
     """Long form: one row per (game, perspective team), played games only."""
     has_pts = "home_points" in g.columns and "away_points" in g.columns
-    _null_f64 = pl.lit(None, dtype=pl.Float64)
     # explicit conf_game False -> not a conference game; null / absent -> derive from the two conferences
     not_conf = (pl.col("conf_game") == False).fill_null(False) if "conf_game" in g.columns else pl.lit(False)  # noqa: E712
-    home = g.select(
-        "sim",
-        "week",
-        "game_type",
-        pl.col("home_team").alias("team"),
-        pl.col("away_team").alias("opp"),
-        pl.col("result"),
-        (pl.col("home_points") if has_pts else _null_f64).alias("pf"),
-        (pl.col("away_points") if has_pts else _null_f64).alias("pa"),
-        not_conf.alias("_not_conf"),
-    )
-    away = g.select(
-        "sim",
-        "week",
-        "game_type",
-        pl.col("away_team").alias("team"),
-        pl.col("home_team").alias("opp"),
-        (-pl.col("result")).alias("result"),
-        (pl.col("away_points") if has_pts else _null_f64).alias("pf"),
-        (pl.col("home_points") if has_pts else _null_f64).alias("pa"),
-        not_conf.alias("_not_conf"),
-    )
-    dg = pl.concat([home, away]).filter(pl.col("result").is_not_null())
+
+    def side(us: str, them: str, sign: int) -> pl.DataFrame:
+        pts = [pl.col(f"{x}_points") if has_pts else pl.lit(None, dtype=pl.Float64) for x in (us, them)]
+        return g.select(
+            "sim", "week", "game_type", pl.col(f"{us}_team").alias("team"), pl.col(f"{them}_team").alias("opp"),
+            (sign * pl.col("result")).alias("result"), pts[0].alias("pf"), pts[1].alias("pa"), not_conf.alias("_not_conf"),
+        )  # fmt: skip
+
+    dg = pl.concat([side("home", "away", 1), side("away", "home", -1)]).filter(pl.col("result").is_not_null())
     return dg.with_columns(
         pl.when(pl.col("result") > 0).then(1.0).when(pl.col("result") < 0).then(0.0).otherwise(0.5).alias("outcome")
     )
@@ -1094,15 +1079,10 @@ def cfb_standings(
             ``home_points``/``away_points`` (per-game scores — feeds the SEC
             capped-scoring-margin rung; :func:`cfb_games_from_schedule`
             emits both). Either optional input absent -> that rung is
-            skipped, not an error. Optional ``conf_game`` (bool, the
-            schedule's conference-game flag, which
-            :func:`cfb_games_from_schedule` carries over): an explicit
-            ``False`` keeps a game between two members of one conference
-            out of the conference record and every conference-game
-            tiebreaker (a non-conference meeting, the Pac-12's 2026 Flex
-            Week); it still counts in the overall record, and so in the Big
-            12 ``total_wins`` rung. Null or absent -> a ``REG`` game between
-            two members counts.
+            skipped, not an error. Optional ``conf_game`` (bool; the
+            schedule's flag, from :func:`cfb_games_from_schedule`): ``False``
+            keeps a same-conference game out of conference play and its
+            tiebreakers (overall record and Big 12 ``total_wins`` keep it).
         teams: Team table with columns ``team`` and ``conference``
             (null or ``"FBS Independents"`` marks an independent), and an
             optional ``division`` column (``"FBS"``/``"FCS"`` or similar —
@@ -1467,9 +1447,7 @@ def cfb_games_from_schedule(schedule: FrameLike, *, return_as_pandas: bool = Fal
         per-game points columns feed the SEC ``capped_scoring_margin``
         official tiebreaker rung (see :data:`CONFERENCE_TIEBREAKERS`);
         :func:`cfb_standings` skips that rung when they're absent, so passing
-        this frame straight through is always safe. ``conf_game`` ``False``
-        keeps a same-conference game the schedule marks non-conference out
-        of the conference standings.
+        this frame straight through is always safe.
 
     Example:
         Loader to standings pipeline::
