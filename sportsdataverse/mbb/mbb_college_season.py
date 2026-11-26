@@ -983,7 +983,7 @@ def _selection_score(base: np.ndarray, t: dict[str, np.ndarray], seen: np.ndarra
     pop = t["pop"]
     score = base[None, :] + w["wab"] * _zscore(t["wab"], pop) + w["quad1_w"] * _zscore(t["q1"], pop)
     if seen is not None:  # the AdjEM the committee sees has moved toward the shifted rating
-        score = score + w["adj_em_z"] * (_zscore(seen, pop) - _zscore(t["em"], pop)[None, :])
+        score = score + w["adj_em_z"] * (_zscore(seen, pop) - t["em_z"][None, :])
     return score
 
 
@@ -1000,10 +1000,11 @@ def _sim_state(
     sos = (col("sos") * g0 + sched["opp_em_left"]) / np.maximum(g0 + sched["d1_left"], 1)
     # standardised on the teams season_bracketology scores, so a sim with nothing left to play
     # reproduces its resume_score exactly
-    pop = _selection_population(res)
+    pop = _selection_population(res, sched["d1_left"])
     base = w["adj_em_z"] * col("adj_em_z") + w["sos"] * _zscore(sos, pop)
     return base, {
         "pop": pop,
+        "em_z": _zscore(em, pop),
         "em": em,
         "eligible": res.get_column("eligible").to_numpy(),
         "pb_neutral": norm.cdf((c.em_scale * (c.bubble_adj_em - em)) / c.margin_sd),
@@ -1215,10 +1216,15 @@ def _zscore(x: np.ndarray, pop: np.ndarray) -> np.ndarray:
     return (x - x[..., pop].mean(axis=-1, keepdims=True)) / (sd + 1e-9)
 
 
-def _selection_population(res: pl.DataFrame) -> np.ndarray:
-    """The teams :func:`season_bracketology` scores: eligible, with every résumé input known."""
+def _selection_population(res: pl.DataFrame, d1_left: np.ndarray) -> np.ndarray:
+    """The teams :func:`season_bracketology` will score at the end of the sim.
+
+    Eligible teams with every résumé input known, plus eligible teams still to play a Division I game
+    (they have a résumé by then). With nothing left to play it is exactly bracketology's population.
+    """
     known = pl.all_horizontal(pl.col(c).is_not_null() for c in ("adj_em_z", "sos", "wab", "quad1_w"))
-    return res.select((pl.col("eligible") == True) & known).to_series().to_numpy()  # noqa: E712
+    eligible = res.get_column("eligible").to_numpy()
+    return eligible & (res.select(known).to_series().to_numpy() | (d1_left > 0))
 
 
 def _sim_table(res: pl.DataFrame, acc: dict[str, np.ndarray], seed_counts: np.ndarray, n_sims: int) -> pl.DataFrame:

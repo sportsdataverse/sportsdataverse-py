@@ -395,7 +395,7 @@ def test_sim_selection_score_is_the_bracketology_resume_score(corpus):
 
     Both standardise on the same teams (eligible, every input known). Scored on different populations
     they differed by up to 0.019, enough to swap two men's teams 0.0008 apart (ESPN 2579 and 2628) between
-    seed lines 8 and 9 once the ratings moved.
+    seed lines 8 and 9 under the ratings at the college free-throw possession weight.
     """
     import importlib
 
@@ -416,12 +416,15 @@ def test_sim_selection_score_is_the_bracketology_resume_score(corpus):
         .with_columns(pl.Series("sim", score))
         .join(br.select("team_id", "resume_score").drop_nulls(), on="team_id")
     )
-    assert j.height == int(t["pop"].sum()) > 300
+    assert j.height == int(t["pop"].sum()) > 300  # observed 351 men / 349 women
     assert (j["sim"] - j["resume_score"]).abs().max() < 1e-9
-    if corpus["lg"] == "mbb":
+    if corpus["lg"] == "mbb":  # the pair that swapped: the sim now orders them as bracketology does
         pair = j.filter(pl.col("team_id").is_in(["2579", "2628"])).sort("team_id")
-        assert pair.height == 2
-        assert (pair["sim"].arg_max(), pair["resume_score"].arg_max()) == (pair["resume_score"].arg_max(),) * 2
+        assert pair.height == 2 and pair["sim"].arg_max() == pair["resume_score"].arg_max()
+    # a rating shift the committee sees moves the score (the AdjEM term is live, not only zero at rest)
+    shift = np.linspace(-3.0, 3.0, em.size)[None, :]
+    moved = cs._selection_score(base, t, em[None, :] + shift)[0] - score
+    assert np.abs(moved[t["pop"]]).max() > 0.05
 
 
 def test_auto_bids_mid_conference_tournaments(corpus):
