@@ -209,7 +209,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_current_impact_context](additional/models-and-calculators-2.md#nba_current_impact_context) | Append `<m>_n`, `<m>_rank` and `<m>_pct` to a `current_impact` table, within each `as_of` date. |
 | [nba_darko](additional/models-and-calculators-2.md#nba_darko) | Project each player's next-season rating via a per-player Kalman filter + aging curve. |
 | [nba_decay_rapm](additional/models-and-calculators-2.md#nba_decay_rapm) | Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`. |
-| [nba_draft_model](additional/models-and-calculators-2.md#nba_draft_model) | Project prospect career value + draft probability from combine measurements. |
+| [nba_draft_model](additional/models-and-calculators-2.md#nba_draft_model) | Project each draft pick's NBA career value from where he was picked. |
 | [nba_expected_turnovers](additional/models-and-calculators-2.md#nba_expected_turnovers) | Expected TOV + residual ball-security skill from Synergy play-type mix. |
 | [nba_four_factor_rapm](additional/models-and-calculators-2.md#nba_four_factor_rapm) | Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design. |
 | [nba_in_game_win_prob](additional/models-and-calculators-2.md#nba_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
@@ -221,10 +221,10 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_player_stats_advanced_context](additional/models-and-calculators-3.md#nba_player_stats_advanced_context) | Replace `player_stats_advanced`'s API ranks of the rated measures with gated producer ranks. |
 | [nba_predict_games](additional/models-and-calculators-3.md#nba_predict_games) | Vectorized pregame predictions for a schedule of games. |
 | [nba_reml_rapm](additional/models-and-calculators-3.md#nba_reml_rapm) | Season impact rating: RAPM shrunk toward a box prior, at a fixed league penalty or one chosen by REML. |
-| [nba_rookie_projection](additional/models-and-calculators-3.md#nba_rookie_projection) | Project rookie/sophomore value by composing draft x aging x availability. |
+| [nba_rookie_projection](additional/models-and-calculators-3.md#nba_rookie_projection) | Project each pick's rookie and second-season value and rookie minutes from his pick. |
 | [nba_spm](additional/models-and-calculators-3.md#nba_spm) | Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM. |
 | [nba_team_ratings](additional/models-and-calculators-3.md#nba_team_ratings) | Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware. |
-| [nba_war](additional/models-and-calculators-3.md#nba_war) | Points-above-replacement -> wins for each player. |
+| [nba_war](additional/models-and-calculators-4.md#nba_war) | Points-above-replacement -> wins for each player. |
 | [ot_adjusted_seconds](additional/models-and-calculators-4.md#ot_adjusted_seconds) | Tag overtime rows and give them the overtime period clock as their seconds remaining. |
 | [player_game_rates](additional/models-and-calculators-4.md#player_game_rates) | True-shooting and usage for every boxed player of one game. |
 | [player_props](additional/models-and-calculators-4.md#player_props) | Per ESPN game x athlete x stat: the closing player-prop line, its prices and the no-vig over probability. |

@@ -1,69 +1,27 @@
-"""Phase 1 oracle gate: draft-model (①) holdout backtest.
+"""Holdout gates for the NBA pick curves (``nba_draft_model`` ①, ``nba_rookie_projection`` ④).
 
-**Debugging record (do not re-lower these floors without re-running this
-investigation):** the initial Task-0.1 corpus (2016-2019 combine classes
-only, ~250 prospects) produced a holdout Spearman of essentially zero
-(-0.02) and an AUC of 0.53 -- no better than noise, and far below the
-design doc's aspirational target of 0.55. Before accepting that as the
-floor, the following was tried and recorded:
+Corpus: ``tests/fixtures/nba_draft/pick_corpus.parquet``, every drafted player
+of classes 2003-2019, with career / rookie / second-season box value and rookie
+minutes (``tools/models/nba_draft/capture_pick_corpus.py``). The curves are fit
+on 2003-2015 (``tools/models/nba_draft/fit_pick_curve.py``). 2016-2019 is the
+holdout. Classes 2020+ are not in the corpus on purpose. 2020-2021 (career) and
+2020-2023 (rookie) were spent as the rebuild's test windows. 2024-2025 is the
+unscored rookie reserve.
 
-1. Verified the *label* is sane: Spearman(-draft_number, career_value) on
-   the full corpus is 0.47 -- draft slot correlates sensibly with realized
-   value, so the label itself is not broken.
-2. Reduced the feature set to the "classic" scouting measurables (height,
-   wingspan_diff, standing vertical, lane agility, three-quarter sprint,
-   body fat) -- no material improvement across several ridge lambdas.
-3. Escalated to xgboost (the design doc's permitted ①-only escalation) --
-   holdout Spearman 0.06-0.08, still not materially better than ridge.
-4. **Expanded the corpus 5x** (2000-2019, 20 combine classes, 1328
-   prospects instead of 266) -- the all-era career-value label was
-   specifically designed to span decades so the corpus wouldn't be capped
-   at ~4 classes (design doc §3.4); the original 4-class fixture undersold
-   that. With `cutoff_year=2015` (train=2000-2015, 1080 prospects;
-   holdout=2016-2019, 248 prospects) holdout Spearman rises to **0.147**
-   and AUC to **0.575** -- both now clearly positive and non-trivial, but
-   still well under the slot-only baseline (Spearman 0.455 on the same
-   holdout, n=177 drafted-with-known-pick players).
+Why pick curves: the combine-measurement models these replace lost to the pick
+on their own holdout. Among the 177 combine attendees with a known pick, career
+value scored Spearman 0.048 vs 0.455 for the pick, and rookie value 0.097 vs
+0.400. Two pre-registered walk-forward rebuilds did not beat the pick by a
+detectable margin. The second added college BPM / RAPM / seasons and
+EuroLeague production, and scored +0.024 on 2020-21 with a 95% class-clustered
+interval of [-0.030, +0.075].
 
-**Conclusion:** this is a genuine, well-powered (1080-row training set)
-finding, not a modeling bug: NBA draft-combine physical measurements alone
-are a weak-but-real predictor of career value, and they do **not** out-predict
-where a player was actually picked (which encodes scouts' full information
-set -- production, tape, medicals, interviews -- combine measurements are
-one input among many). This matches published sports-analytics findings
-that most individual combine drills correlate weakly with NBA career
-outcomes. Per the "floors FROM observed values" rule, the hard gates below
-are calibrated to what a combine-only model can honestly achieve on this
-corpus (weak-but-positive rank correlation, better-than-chance draft
-probability); the slot-baseline and nba_war concurrent-validity comparisons
-are retained as **documented, non-blocking diagnostics** rather than hard
-gates, since requiring a combine-only model to beat the slot-only baseline
-is -- on this evidence -- not an achievable bar without folding in
-production/college-prior features (the `college_prior` hook exists for
-exactly this future extension).
-
-**Leakage fix (post-review):** an earlier revision computed the combine
-`feature_median` imputation values over the FULL frame *before* the
-as-of-class split. Combine columns are 56-92% null, so this leaked the
-holdout-class distribution into every train row's imputed value. Fixed:
-`tools/models/nba_draft/fit_draft_model.py` now computes the median on `train` only
-and bundles it in the artifact; `_load_scored_holdout` below imputes the
-holdout with that stored TRAIN median (mirroring `nba_draft_model._score`).
-The leak was mild -- post-fix observed holdout Spearman **0.1488** (was
-0.147) and AUC **0.578** (was 0.575), both slightly HIGHER than the leaked
-values -- so the floors (0.10, 0.55) still hold with margin and were not
-changed.
-
-**Label-construction overlap (transparency, not a leak in the predictive
-sense):** the box-value LABEL formula (`career_value`) is anchored in
-`tools/models/nba_draft/fit_box_value.py` on the 2016-17..2019-20 `nba_bpm` overlap
-seasons -- which coincide with the draft-model's 2016-2019 HOLDOUT classes.
-This is a label-*definition* choice, not a feature leak: the label's box
-coefficients are frozen from an nba_bpm regression and then applied to all
-eras identically, so no holdout OUTCOME leaks into the train FEATURES. It is
-called out here for full transparency because the anchor-era and holdout-era
-overlap; a future revision could anchor the box formula on a pre-2016 BPM
-proxy to remove the coincidence entirely.
+A curve that is monotone in the pick ranks a class exactly as the pick does.
+The gates assert that the shipped scoring path does that: it ties the
+baseline and never ranks below it. They also assert that the bundled
+constants are what the fitting script produces. On the old artifacts the
+scoring path read combine features that a pick frame does not carry, so every
+prediction collapsed to one value. The tie gate fails there.
 """
 
 from __future__ import annotations
@@ -71,199 +29,126 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import numpy as np
 import polars as pl
+import pytest
 
-from sportsdataverse.nba.nba_aging_curve import nba_aging_curve
-from sportsdataverse.nba.nba_draft_constants import (
-    COMBINE_FEATURES,
-    as_of_class_split,
-    auc,
-    spearman_corr,
-)
+from sportsdataverse.nba.nba_draft_constants import spearman_corr
 from sportsdataverse.nba.nba_draft_model import _load_artifact
-from sportsdataverse.nba.nba_draft_model import _score as _score_draft
+from sportsdataverse.nba.nba_draft_model import _score as score_draft
+from sportsdataverse.nba.nba_rookie_projection import _load_residual_artifact
+from sportsdataverse.nba.nba_rookie_projection import _score as score_rookie
 
-FIXTURE_DIR = "tests/fixtures/nba_draft"
-CUTOFF_YEAR = 2015
-
-RAW_NUMERIC_COLS = [
-    "height_wo_shoes",
-    "weight",
-    "wingspan",
-    "standing_reach",
-    "body_fat_pct",
-    "hand_length",
-    "hand_width",
-    "lane_agility",
-    "three_quarter_sprint",
-    "standing_vertical",
-    "max_vertical",
-    "spot_fifteen_corner_left_pct",
-    "offdrib_fifteen_top_pct",
-]
+CORPUS = "tests/fixtures/nba_draft/pick_corpus.parquet"
+TIE_TOL = 0.005
 
 
-def _load_scored_holdout() -> tuple[pl.DataFrame, pl.DataFrame]:
-    combine = pl.read_parquet(f"{FIXTURE_DIR}/combine_2016_2019.parquet")
-    career = pl.read_parquet(f"{FIXTURE_DIR}/career_values.parquet")
-    outcomes = pl.read_parquet(f"{FIXTURE_DIR}/draft_outcomes.parquet")
-    assert combine.schema["player_id"] == career.schema["player_id"] == outcomes.schema["player_id"] == pl.Utf8
-
-    df = (
-        combine.join(career.select("player_id", "career_value"), on="player_id", how="left")
-        .join(outcomes.select("player_id", "drafted", "draft_number"), on="player_id", how="left")
-        .with_columns(pl.col("career_value").fill_null(0.0), pl.col("drafted").fill_null(False))
-    )
-    df = df.with_columns([pl.col(c).cast(pl.Float64, strict=False) for c in RAW_NUMERIC_COLS if c in df.columns])
-    df = df.with_columns(
-        (pl.col("weight") / (pl.col("height_wo_shoes") ** 2) * 703.0).alias("bmi"),
-        (pl.col("wingspan") - pl.col("height_wo_shoes")).alias("wingspan_diff"),
-    )
-    art = _load_artifact("nba")
-
-    # Impute holdout nulls with the artifact's TRAIN-derived median (never a
-    # median recomputed over the full frame -- that leaks the holdout
-    # distribution back into the split). Mirrors nba_draft_model._score.
-    art_median = art["feature_median"]
-    _, holdout = as_of_class_split(df, cutoff_year=CUTOFF_YEAR)
-    holdout = holdout.with_columns([pl.col(c).fill_null(art_median.get(c, 0.0)) for c in COMBINE_FEATURES])
-
-    import numpy as np
-
-    mu = np.asarray(art["feature_mean"], dtype=float)
-    sd = np.asarray(art["feature_sd"], dtype=float)
-    Xh = (holdout.select(COMBINE_FEATURES).to_numpy() - mu) / sd
-    value_pred = art["value_intercept"] + Xh @ np.asarray(art["value_coef"], dtype=float)
-    logit = art["prob_intercept"] + Xh @ np.asarray(art["prob_coef"], dtype=float)
-    prob_pred = 1.0 / (1.0 + np.exp(-logit))
-
-    pred = holdout.select("player_id", "draft_year").with_columns(
-        pl.Series("proj_career_value", value_pred, dtype=pl.Float64),
-        pl.Series("draft_prob", prob_pred, dtype=pl.Float64),
-    )
-    real = holdout.select("player_id", "career_value", "drafted", "draft_number")
-    return pred, real
+@pytest.fixture(scope="module")
+def corpus() -> pl.DataFrame:
+    return pl.read_parquet(CORPUS)
 
 
-def test_draft_holdout_ranks_realized_value() -> None:
-    pred, real = _load_scored_holdout()
-    s = spearman_corr(pred["proj_career_value"].to_numpy(), real["career_value"].to_numpy())
-    # floor calibrated from the leak-free observed 0.149 (see module docstring
-    # debugging record) -- a margin below the observed value, not an
-    # aspirational number. Do NOT lower further without re-running the debugging
-    # steps above.
-    assert s >= 0.10, f"draft-value holdout Spearman {s:.3f} < 0.10 -- debug features/leakage, do NOT lower gate"
-
-    a = auc(real["drafted"].cast(pl.Int64).to_numpy(), pred["draft_prob"].to_numpy())
-    assert a >= 0.55, f"draft_prob AUC {a:.3f} < 0.55"
+@pytest.fixture(scope="module")
+def holdout(corpus: pl.DataFrame) -> pl.DataFrame:
+    return corpus.filter(pl.col("draft_year").is_between(2016, 2019))
 
 
-def test_draft_holdout_vs_slot_baseline_diagnostic() -> None:
-    """Documented, non-blocking diagnostic (see module docstring).
+def test_corpus_holds_no_reserve_class(corpus: pl.DataFrame) -> None:
+    assert corpus.schema["player_id"] == pl.Utf8
+    assert corpus["draft_year"].min() == 2003 and corpus["draft_year"].max() == 2019
+    assert corpus.group_by("draft_year").len()["len"].min() >= 57  # a full class (forfeited picks aside)
 
-    Combine-only measurements do not beat the slot-only baseline on this
-    corpus (observed: model Spearman 0.149 on all 248 holdout prospects and
-    0.048 on the 177 with a known draft slot, vs slot-baseline Spearman 0.455
-    on those 177). This assertion checks
-    the diagnostic stays in the same ballpark run-to-run (an order-of-magnitude
-    regression check), not that the model beats the baseline -- beating it is
-    not, on this evidence, an achievable bar for a combine-only model.
+
+def test_refit_reproduces_bundled_curves(corpus: pl.DataFrame) -> None:
+    """Lineage: the bundled constants are exactly what fit_pick_curve.py fits on the corpus."""
+    from tools.models.nba_draft.fit_pick_curve import fit_all
+
+    for art, targets in (
+        (_load_artifact(), ["career_value"]),
+        (_load_residual_artifact(), ["rookie_value", "soph_value", "rookie_min"]),
+    ):
+        assert art["kind"] == "pick_curve" and art["training_script"] == "tools/models/nba_draft/fit_pick_curve.py"
+        assert art["train_classes"] == [2003, 2015] and art["holdout_classes"] == [2016, 2019]
+        curves, _ = fit_all(corpus, targets)
+        for t in targets:
+            assert curves[t]["intercept"] == pytest.approx(art["curves"][t]["intercept"], abs=1e-9)
+            assert curves[t]["coef"] == pytest.approx(art["curves"][t]["coef"], abs=1e-9)
+
+
+@pytest.mark.parametrize("target", ["career_value", "rookie_value", "soph_value", "rookie_min"])
+def test_curves_fall_with_the_pick(target: str) -> None:
+    art = _load_artifact() if target == "career_value" else _load_residual_artifact()
+    from tools.models.nba_draft.fit_pick_curve import apply_curve
+
+    grid = apply_curve(art["curves"][target], np.arange(1, 61))
+    assert np.all(np.diff(grid) < 0), f"{target} curve ranks a later pick above an earlier one"
+
+
+def _pick_baseline(frame: pl.DataFrame, target: str) -> float:
+    return spearman_corr(-frame["overall_pick"].to_numpy(), frame[target].to_numpy())
+
+
+def test_draft_value_ties_pick_on_holdout(holdout: pl.DataFrame) -> None:
+    pred = score_draft(holdout.with_columns(pl.lit("x").alias("organization")), _load_artifact())
+    joined = pred.join(holdout.select("player_id", "career_value"), on="player_id")
+    assert joined.height == holdout.height == 240
+    model = spearman_corr(joined["proj_career_value"].to_numpy(), joined["career_value"].to_numpy())
+    base = _pick_baseline(holdout, "career_value")
+    assert base == pytest.approx(0.5709, abs=1e-3), "pick baseline moved: re-check the corpus capture"
+    assert abs(model - base) <= TIE_TOL, f"curve {model:.4f} vs pick {base:.4f}: a pick curve must tie the pick"
+    # projected_pick is the pick order within a class
+    rank = pred.select(pl.col("overall_pick").rank("ordinal").over("draft_year").cast(pl.Int64))["overall_pick"]
+    assert pred["projected_pick"].equals(rank)
+
+
+@pytest.mark.parametrize(
+    "target,col,base_expected",
+    [
+        ("rookie_value", "proj_rookie_value", 0.4768),
+        ("soph_value", "proj_soph_value", 0.5079),
+        ("rookie_min", "proj_rookie_min", 0.6634),
+    ],
+)
+def test_rookie_curves_tie_pick_on_holdout(holdout: pl.DataFrame, target: str, col: str, base_expected: float) -> None:
+    pred = score_rookie(holdout.select("player_id", "draft_year", "overall_pick"), _load_residual_artifact())
+    model = spearman_corr(pred[col].to_numpy(), holdout[target].to_numpy())
+    base = _pick_baseline(holdout, target)
+    assert base == pytest.approx(base_expected, abs=1e-3)
+    assert abs(model - base) <= TIE_TOL, f"{col} {model:.4f} vs pick {base:.4f}"
+
+
+def test_bundled_holdout_metrics_match_recomputed(holdout: pl.DataFrame) -> None:
+    """The artifact's recorded holdout numbers are the ones the gates compute (no hand-typed numbers)."""
+    for art in (_load_artifact(), _load_residual_artifact()):
+        for t, m in art["holdout"].items():
+            assert m["holdout_n"] == holdout.height
+            assert m["holdout_spearman_pick"] == pytest.approx(_pick_baseline(holdout, t), abs=1e-4)
+            assert m["holdout_spearman_curve"] == pytest.approx(m["holdout_spearman_pick"], abs=TIE_TOL)
+
+
+def test_artifacts_are_json_with_no_combine_heads() -> None:
+    for name in ("nba_draft_value.json", "nba_rookie_projection.json"):
+        art = json.loads(Path("sportsdataverse/nba/models", name).read_text(encoding="utf-8"))
+        assert "value_coef" not in art and "rookie_fraction" not in art and art["basis"] == ["log_pick", "pick_over_60"]
+
+
+def test_shipped_scoring_equals_the_fitting_evaluator(holdout: pl.DataFrame) -> None:
+    """The scoring path applies exactly the fitted curve.
+
+    The rank gates cannot see a wrong scale, because any decreasing curve ties
+    the pick. This test does see it.
     """
-    pred, real = _load_scored_holdout()
-    sub = real.filter(pl.col("draft_number").is_not_null())
-    s_slot = spearman_corr(-sub["draft_number"].to_numpy(), sub["career_value"].to_numpy())
-    assert s_slot > 0.3, f"slot baseline Spearman {s_slot:.3f} -- unexpectedly weak, re-check draft_number capture"
+    from tools.models.nba_draft.fit_pick_curve import apply_curve
 
-    joined = pred.join(real, on="player_id", how="inner")
-    s_model = spearman_corr(joined["proj_career_value"].to_numpy(), joined["career_value"].to_numpy())
-    assert s_model > -0.1, f"model Spearman {s_model:.3f} regressed below noise -- debug before shipping"
-
-
-def test_rookie_projection_holdout_ranks_realized_value() -> None:
-    """Phase 4 oracle gate: rookie/sophomore projection (④) holdout backtest.
-
-    **Debugging record (critical bug found and fixed):** the first fit of
-    the composed rookie projection produced a **negative** holdout Spearman
-    (-0.21), even though the underlying draft model (①) alone has a weak
-    *positive* correlation (0.111) with realized rookie value on the same
-    holdout. Root cause: `nba_aging_curve.build_aging_deltas` chained raw
-    box-value-per-100 deltas (an unbounded, often-negative scale -- the box
-    formula's intercept alone is -134) and only shifted the curve so the
-    *peak* equals 1.0, leaving every non-peak age's `rel_value` deeply
-    *negative* (e.g. -14 to -18 at age 19). Every consumer
-    (`nba_career_trajectory`, `nba_rookie_projection`) treats `rel_value` as
-    a **multiplicative ratio** (`value / rel_value(age)`,
-    `rel_value(a)/rel_value(b)`) -- multiplying a positive `proj_career_value`
-    by a *negative* rookie-age ratio silently flipped the sign of every
-    projection. Fixed by min-max normalizing the chained curve to
-    `[floor_frac=0.4, 1.0]` in both `build_aging_deltas` and
-    `tools/models/nba_draft/fit_aging_curve.py`'s quadratic smoother, so every age's
-    ratio stays strictly positive. After that fix (and the later
-    train-only-median leak fix to the draft artifact this composition
-    reuses, which nudged the numbers up), holdout Spearman is **+0.130** --
-    positive and close to the underlying draft model's own value on this
-    holdout (the small per-tier residual correction, now correctly small in
-    magnitude relative to the composed term, no longer dominates or
-    reorders). It does not beat the draft-slot-average baseline (0.389,
-    n=177) -- consistent with Phase 1's finding that combine-only measurements
-    underperform realized draft slot; the same diagnostic-not-hard-gate
-    treatment applies here. `proj_avail_pct` is asserted present and
-    structurally separate from the value columns (schema check), never
-    folded into the value rank.
-    """
-    combine = pl.read_parquet(f"{FIXTURE_DIR}/combine_2016_2019.parquet")
-    rookie = pl.read_parquet(f"{FIXTURE_DIR}/rookie_values.parquet")
-    outcomes = pl.read_parquet(f"{FIXTURE_DIR}/draft_outcomes.parquet")
-
-    combine = combine.with_columns(
-        [pl.col(c).cast(pl.Float64, strict=False) for c in RAW_NUMERIC_COLS if c in combine.columns]
+    pick = holdout["overall_pick"].to_numpy()
+    d = score_draft(holdout.with_columns(pl.lit("x").alias("organization")), _load_artifact())
+    assert np.allclose(
+        d["proj_career_value"].to_numpy(), apply_curve(_load_artifact()["curves"]["career_value"], pick), atol=1e-9
     )
-    combine = combine.with_columns(
-        (pl.col("weight") / (pl.col("height_wo_shoes") ** 2) * 703.0).alias("bmi"),
-        (pl.col("wingspan") - pl.col("height_wo_shoes")).alias("wingspan_diff"),
-    )
-
-    art = _load_artifact("nba")
-    scored = _score_draft(combine, art)
-    _, holdout_scored = as_of_class_split(scored, cutoff_year=CUTOFF_YEAR)
-
-    curve = nba_aging_curve().select("age", "rel_value")
-    rel_rookie = float(curve.filter(pl.col("age") == 19)["rel_value"][0])
-
-    rr_art = json.loads(Path("sportsdataverse/nba/models/nba_rookie_projection.json").read_text())
-    rookie_fraction = rr_art["rookie_fraction"]
-    residual = rr_art["residual"]
-
-    composed = holdout_scored.with_columns(
-        (pl.col("proj_career_value") * rookie_fraction * rel_rookie).alias("composed")
-    )
-    residual_expr = pl.lit(0.0)
-    for tier, val in residual.items():
-        residual_expr = pl.when(pl.col("pro_tier") == tier).then(pl.lit(val)).otherwise(residual_expr)
-    composed = composed.with_columns((pl.col("composed") + residual_expr).alias("proj_rookie_value"))
-    composed = composed.join(rookie.select("player_id", "rookie_value"), on="player_id", how="left").with_columns(
-        pl.col("rookie_value").fill_null(0.0)
-    )
-
-    s = spearman_corr(composed["proj_rookie_value"].to_numpy(), composed["rookie_value"].to_numpy())
-    assert s >= 0.05, f"rookie-projection holdout Spearman {s:.3f} < 0.05 -- debug the aging-curve ratio, do NOT lower"
-
-    # diagnostic (non-blocking, see docstring): draft-slot-average baseline
-    sub = composed.join(outcomes.select("player_id", "draft_number"), on="player_id", how="left").filter(
-        pl.col("draft_number").is_not_null()
-    )
-    sub = sub.with_columns((pl.col("draft_number") / 10).floor().alias("bucket"))
-    bucket_means = sub.group_by("bucket").agg(pl.col("rookie_value").mean().alias("bucket_mean"))
-    sub2 = sub.join(bucket_means, on="bucket")
-    s_baseline = spearman_corr(sub2["bucket_mean"].to_numpy(), sub2["rookie_value"].to_numpy())
-    assert s_baseline > 0.2, f"slot-average baseline Spearman {s_baseline:.3f} -- unexpectedly weak, re-check capture"
-
-
-def test_rookie_projection_schema_separates_availability() -> None:
-    """`proj_avail_pct` must be a separate column, never folded into value."""
-    import importlib
-
-    mod = importlib.import_module("sportsdataverse.nba.nba_rookie_projection")
-    assert set(["proj_rookie_value", "proj_soph_value", "proj_avail_pct", "proj_rookie_min"]).issubset(
-        set(mod._SCHEMA.keys())
-    )
+    r = score_rookie(holdout.select("player_id", "draft_year", "overall_pick"), _load_residual_artifact())
+    for t, col in (
+        ("rookie_value", "proj_rookie_value"),
+        ("soph_value", "proj_soph_value"),
+        ("rookie_min", "proj_rookie_min"),
+    ):
+        assert np.allclose(r[col].to_numpy(), apply_curve(_load_residual_artifact()["curves"][t], pick), atol=1e-9), col

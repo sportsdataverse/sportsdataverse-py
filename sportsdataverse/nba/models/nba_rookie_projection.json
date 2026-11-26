@@ -1,10 +1,59 @@
 {
   "league": "nba",
-  "rookie_fraction": 0.0396391046121466,
-  "residual": {
-    "first_round": 2.80966300035998,
-    "lottery": 3.01793187233726,
-    "second_round": 0.9775905375478956,
-    "undrafted": 0.4356485365471166
-  }
+  "kind": "pick_curve",
+  "model": "rookie_projection",
+  "basis": [
+    "log_pick",
+    "pick_over_60"
+  ],
+  "curves": {
+    "rookie_value": {
+      "intercept": 22.638061305942145,
+      "coef": [
+        -5.52622576181799
+      ]
+    },
+    "soph_value": {
+      "intercept": 36.128438129771965,
+      "coef": [
+        -8.450958315031357,
+        0.5093933660023662
+      ]
+    },
+    "rookie_min": {
+      "intercept": 2319.5469911512146,
+      "coef": [
+        -436.6008153577195,
+        -413.05553479692946
+      ]
+    }
+  },
+  "train_classes": [
+    2003,
+    2015
+  ],
+  "holdout_classes": [
+    2016,
+    2019
+  ],
+  "baseline": "pick rank (Spearman of -overall_pick)",
+  "holdout": {
+    "rookie_value": {
+      "holdout_spearman_curve": 0.4768,
+      "holdout_spearman_pick": 0.4768,
+      "holdout_n": 240
+    },
+    "soph_value": {
+      "holdout_spearman_curve": 0.5079,
+      "holdout_spearman_pick": 0.5079,
+      "holdout_n": 240
+    },
+    "rookie_min": {
+      "holdout_spearman_curve": 0.6634,
+      "holdout_spearman_pick": 0.6634,
+      "holdout_n": 240
+    }
+  },
+  "training_script": "tools/models/nba_draft/fit_pick_curve.py",
+  "corpus": "tests/fixtures/nba_draft/pick_corpus.parquet"
 }

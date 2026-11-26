@@ -1,9 +1,15 @@
-"""Rookie/sophomore projection ④ -- composes ①②③ + a small fitted residual.
+"""Rookie/sophomore projection ④ -- draft pick -> rookie and second-season value (pick curves).
 
-Reuses the draft model (①), aging curve (②), and availability model (③)
-verbatim -- no re-derived features -- and applies a small per-``pro_tier``
-residual correction (fit in ``tools/models/nba_draft/fit_rookie_residual.py``) on top
-of the composed projection.
+Applies the bundled ``nba_rookie_projection.json`` pick curves (fit in
+``tools/models/nba_draft/fit_pick_curve.py`` on draft classes 2003-2015) to
+the picks :func:`sportsdataverse.nba.nba_draft_model.nba_draft_model` returns,
+and reports availability from
+:func:`sportsdataverse.nba.nba_availability.nba_availability` separately.
+
+Each curve is monotone in the pick, so it ranks a class exactly as the pick
+does. It ties the pick baseline by construction. The earlier composition (the
+combine draft model x aging curve + a per-tier residual) lost to the pick on
+its own holdout (Spearman 0.097 vs 0.400 among drafted players).
 """
 
 from __future__ import annotations
@@ -15,47 +21,42 @@ from typing import Literal, Optional, overload
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.nba.nba_aging_curve import nba_aging_curve
+from sportsdataverse.nba._nba_draft_features import FEATURE_SCHEMA
 from sportsdataverse.nba.nba_availability import nba_availability
-from sportsdataverse.nba.nba_draft_constants import get_constants
-from sportsdataverse.nba.nba_draft_model import nba_draft_model
+from sportsdataverse.nba.nba_draft_model import _apply_pick_curve, _check_league, nba_draft_model
 
 __all__ = ["nba_rookie_projection"]
 
 _SCHEMA = {
     "player_id": pl.Utf8,
     "draft_year": pl.Int64,
+    "overall_pick": pl.Int64,
+    "player_name": pl.Utf8,
     "proj_rookie_value": pl.Float64,
     "proj_soph_value": pl.Float64,
     "proj_rookie_min": pl.Float64,
     "proj_avail_pct": pl.Float64,
     "pro_tier": pl.Utf8,
 }
-
-_ROOKIE_AGE = 19.0
-# ponytail: SEEDED PLACEHOLDER, not a fitted constant. These per-tier expected
-# rookie minutes-per-game are hand-set order-of-magnitude values (unlike
-# rookie_fraction/residual, which are fit in tools/models/nba_draft/fit_rookie_residual.py
-# and bundled in nba_rookie_projection.json). They only scale proj_rookie_min
-# (a reported convenience column), never proj_rookie_value/proj_soph_value, so
-# they do not affect any oracle gate. Replace with a fitted mpg-by-tier table
-# (mean realized rookie MPG per pro_tier on the training classes) in
-# fit_rookie_residual.py when proj_rookie_min gets its own gate.
-_EXPECTED_MPG = {"lottery": 28.0, "first_round": 20.0, "second_round": 12.0, "undrafted": 6.0}
+_DEFAULT_AVAIL = 0.75  # reported when nba_availability has no row for the pick (e.g. a future season)
 
 
-def _load_residual_artifact(league: str) -> dict:
-    prefix = get_constants(league).artifact_prefix
-    path = resources.files("sportsdataverse.nba") / "models" / f"{prefix}_rookie_projection.json"
+def _load_residual_artifact(league: str = "nba") -> dict:
+    """Load the bundled rookie pick-curve artifact (``rookie_value`` / ``soph_value`` / ``rookie_min``)."""
+    _check_league(league)
+    path = resources.files("sportsdataverse.nba") / "models" / "nba_rookie_projection.json"
     return dict(json.loads(path.read_text(encoding="utf-8")))
 
 
-def _rel(curve: pl.DataFrame, age: float) -> float:
-    rounded = int(round(age))
-    row = curve.filter(pl.col("age") == rounded)
-    if row.height == 0:
-        return 1.0
-    return float(row["rel_value"][0])
+def _score(board: pl.DataFrame, art: dict) -> pl.DataFrame:
+    """Apply the three rookie curves to a frame carrying ``overall_pick`` (no network)."""
+    c = art["curves"]
+    pick = pl.col("overall_pick")
+    return board.with_columns(
+        _apply_pick_curve(c["rookie_value"], pick).alias("proj_rookie_value"),
+        _apply_pick_curve(c["soph_value"], pick).alias("proj_soph_value"),
+        _apply_pick_curve(c["rookie_min"], pick).clip(0.0, None).alias("proj_rookie_min"),
+    )
 
 
 @overload
@@ -63,6 +64,7 @@ def nba_rookie_projection(
     draft_year: "int | list[int]",
     *,
     league: str = "nba",
+    pre_draft_features: bool = False,
     college_prior: "Optional[pl.DataFrame]" = None,
     return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
@@ -73,6 +75,7 @@ def nba_rookie_projection(
     draft_year: "int | list[int]",
     *,
     league: str = "nba",
+    pre_draft_features: bool = False,
     college_prior: "Optional[pl.DataFrame]" = None,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
@@ -82,35 +85,65 @@ def nba_rookie_projection(
     draft_year: "int | list[int]",
     *,
     league: str = "nba",
+    pre_draft_features: bool = False,
     college_prior: "Optional[pl.DataFrame]" = None,
     return_as_pandas: bool = False,
 ) -> "pl.DataFrame | pd.DataFrame":
-    """Project rookie/sophomore value by composing draft x aging x availability.
+    """Project each pick's rookie and second-season value and rookie minutes from his pick.
 
-    Composition (no re-derived features -- each term is the verbatim public
-    output of ①②③):
+    Three pick curves (``tools/models/nba_draft/fit_pick_curve.py``, fit on
+    draft classes 2003-2015) score the class
+    :func:`sportsdataverse.nba.nba_draft_model.nba_draft_model` returns:
 
-    - ``base = nba_draft_model(...).proj_career_value * rookie_fraction``
-      (``rookie_fraction`` from the bundled residual artifact -- the share of
-      career value realized in a single rookie season).
-    - ``proj_rookie_value = base * rel_value(rookie_age) / rel_value(peak_age)
-      + residual[pro_tier]``; ``proj_soph_value`` uses ``rookie_age + 1``.
-    - ``proj_avail_pct`` from :func:`sportsdataverse.nba.nba_availability.nba_availability`
-      at rookie age -- reported separately, **never** multiplied into the
-      value columns (availability is availability, not skill).
-    - ``proj_rookie_min = games_full_season * proj_avail_pct * expected_mpg(pro_tier)``.
+    - ``proj_rookie_value``: box value of the first NBA season after the
+      draft.
+    - ``proj_soph_value``: box value of the second season.
+    - ``proj_rookie_min``: rookie-season minutes.
+
+    Each curve ranks a class exactly as the pick does, so it ties the pick
+    baseline by construction. On the 2016-2019 holdout Spearman is 0.477 for
+    rookie value and the pick alike. ``proj_avail_pct`` comes from
+    :func:`sportsdataverse.nba.nba_availability.nba_availability` at the debut
+    season. It is reported on its own and never multiplied into the value
+    columns.
 
     Args:
         draft_year: A draft year or list of years.
-        league: ``"nba"``, ``"wnba"``, or ``"gleague"``.
-        college_prior: Optional college-side prior frame, forwarded verbatim
-            to :func:`sportsdataverse.nba.nba_draft_model.nba_draft_model`.
+        league: ``"nba"`` only; the WNBA has
+            :func:`sportsdataverse.wnba.wnba_rookie_projection.wnba_rookie_projection`.
+        pre_draft_features: Attach the pre-draft college and EuroLeague
+            columns, as :func:`~sportsdataverse.nba.nba_draft_model.nba_draft_model`
+            does. They are information only; no curve reads them.
+        college_prior: Optional frame keyed on ``player_id:Utf8``, forwarded
+            to :func:`~sportsdataverse.nba.nba_draft_model.nba_draft_model` as
+            extra columns.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        Frame ``player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64,
-        proj_soph_value:Float64, proj_rookie_min:Float64,
-        proj_avail_pct:Float64, pro_tier:Utf8``. Empty input -> zero-row schema.
+        One row per pick (1-60) of each class.
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |player_id         |String  |
+        |draft_year        |Int64   |
+        |overall_pick      |Int64   |
+        |player_name       |String  |
+        |proj_rookie_value |Float64 |
+        |proj_soph_value   |Float64 |
+        |proj_rookie_min   |Float64 |
+        |proj_avail_pct    |Float64 |
+        |pro_tier          |String  |
+
+        With ``pre_draft_features=True`` it adds the same college and
+        EuroLeague columns as ``nba_draft_model``.
+
+        - ``proj_avail_pct`` falls back to 0.75 when availability has no row
+          for the pick.
+        - An empty or unpublished class returns the zero-row schema.
+
+    Raises:
+        ValueError: ``league`` is not ``"nba"``.
+        SeasonNotFoundError: a draft year before 1996 (the draft release starts there).
 
     Example:
         Quick start::
@@ -119,72 +152,40 @@ def nba_rookie_projection(
             board = nba_rookie_projection(2019)
             print(board.sort("proj_rookie_value", descending=True).head())
 
+        Pipeline next step (one line)::
+
+            board.filter(pl.col("pro_tier") == "lottery")
+
     See Also:
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's college basketball (R)
         * `nba_api <https://github.com/swar/nba_api>`_ -- NBA/WNBA (Python)
     """
-    draft_board = nba_draft_model(draft_year, league=league, college_prior=college_prior)
-    if draft_board.is_empty():
-        out = pl.DataFrame(schema=_SCHEMA)
+    _check_league(league)
+    schema = dict(_SCHEMA, **(FEATURE_SCHEMA if pre_draft_features else {}))
+    board = nba_draft_model(
+        draft_year, league=league, pre_draft_features=pre_draft_features, college_prior=college_prior
+    )
+    if board.is_empty():
+        out = pl.DataFrame(schema=schema)
         return out.to_pandas() if return_as_pandas else out
 
-    art = _load_residual_artifact(league)
-    rookie_fraction = float(art.get("rookie_fraction", 0.1))
-    residual = {str(k): float(v) for k, v in art.get("residual", {}).items()}
-
-    curve = nba_aging_curve(league=league).select("age", "rel_value")
-    # the bundled curve is normalized so its peak rel_value == 1.0 (see
-    # nba_aging_curve.build_aging_deltas), so the peak-centered denominator
-    # is always 1.0 -- no need to re-locate the peak age here.
-    rel_rookie = _rel(curve, _ROOKIE_AGE)
-    rel_soph = _rel(curve, _ROOKIE_AGE + 1)
-    rel_peak = 1.0
-
-    draft_years = [int(y) for y in draft_board["draft_year"].unique().to_list()]
-    if league == "wnba":
-        # WNBA seasons are single-year and were NOT flipped by the NBA
-        # season-end-year migration -- nba_availability(league="wnba") still
-        # takes/returns the season as-is, so draft_year is the season key
-        # directly (unshifted), same as before.
-        avail = nba_availability(draft_years, league=league)
-        avail_map = avail.rename({"season": "draft_year"}) if not avail.is_empty() else None
-    else:
-        # nba_availability now takes/returns the season END year (nba +
-        # gleague); a draft_year (start year, e.g. 2019) debuts the
-        # following season, whose end year is draft_year + 1 (2020).
-        debut_end_years = [y + 1 for y in draft_years]
-        avail = nba_availability(debut_end_years, league=league)
-        # avail.season is the debut END year; map it back to draft_year
-        # (start year) = season - 1 so the join below lines up with
-        # draft_board's start-year draft_year convention.
-        avail_map = avail.with_columns((pl.col("season") - 1).alias("draft_year")) if not avail.is_empty() else None
-
-    out = draft_board.with_columns(
-        (pl.col("proj_career_value") * rookie_fraction * (rel_rookie / rel_peak)).alias("_base_rookie"),
-        (pl.col("proj_career_value") * rookie_fraction * (rel_soph / rel_peak)).alias("_base_soph"),
-    )
-    residual_expr = pl.lit(0.0)
-    for tier, val in residual.items():
-        residual_expr = pl.when(pl.col("pro_tier") == tier).then(pl.lit(val)).otherwise(residual_expr)
-    out = out.with_columns(
-        (pl.col("_base_rookie") + residual_expr).alias("proj_rookie_value"),
-        (pl.col("_base_soph") + residual_expr).alias("proj_soph_value"),
-    )
-
-    if avail_map is not None and not avail_map.is_empty():
-        assert out.schema["player_id"] == avail_map.schema["player_id"]
-        out = out.join(
-            avail_map.select("player_id", "draft_year", "avail_pct"), on=["player_id", "draft_year"], how="left"
+    out = _score(board, _load_residual_artifact(league))
+    # nba_availability takes the season END year: a draft_year (start year) debuts the season ending draft_year + 1.
+    draft_years = [int(y) for y in out["draft_year"].unique().to_list()]
+    avail = nba_availability([y + 1 for y in draft_years], league=league)
+    if avail is not None and not avail.is_empty():
+        avail_map = avail.select(
+            "player_id", (pl.col("season").cast(pl.Int64) - 1).alias("draft_year"), pl.col("avail_pct").cast(pl.Float64)
         )
+        assert out.schema["player_id"] == avail_map.schema["player_id"]
+        out = out.join(avail_map, on=["player_id", "draft_year"], how="left")
     else:
-        out = out.with_columns(pl.lit(None).cast(pl.Float64).alias("avail_pct"))
-    out = out.with_columns(pl.col("avail_pct").fill_null(0.75).alias("proj_avail_pct"))
-
-    expected_mpg_expr = pl.lit(_EXPECTED_MPG["undrafted"])
-    for tier, mpg in _EXPECTED_MPG.items():
-        expected_mpg_expr = pl.when(pl.col("pro_tier") == tier).then(pl.lit(mpg)).otherwise(expected_mpg_expr)
-    games_full_season = float(get_constants(league).games_full_season)
-    out = out.with_columns((games_full_season * pl.col("proj_avail_pct") * expected_mpg_expr).alias("proj_rookie_min"))
-
-    out = out.select(list(_SCHEMA))
+        out = out.with_columns(pl.lit(None, dtype=pl.Float64).alias("avail_pct"))
+    out = out.with_columns(pl.col("avail_pct").fill_null(_DEFAULT_AVAIL).alias("proj_avail_pct"))
+    extra = [
+        c
+        for c in board.columns
+        if c not in _SCHEMA and c not in ("organization", "proj_career_value", "projected_pick")
+    ]
+    out = out.select(*_SCHEMA, *extra).sort("draft_year", "overall_pick")
     return out.to_pandas() if return_as_pandas else out

@@ -1,5 +1,31 @@
 schema: nba_rookie_projection
 kind: dataframe
-columns: []
-unverified: 'no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function
-  works from a residential IP'
+hand_authored: true
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: draft_year
+  type: integer
+  description: ''
+- name: overall_pick
+  type: integer
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: proj_rookie_value
+  type: double
+  description: ''
+- name: proj_soph_value
+  type: double
+  description: ''
+- name: proj_rookie_min
+  type: double
+  description: ''
+- name: proj_avail_pct
+  type: double
+  description: ''
+- name: pro_tier
+  type: character
+  description: ''

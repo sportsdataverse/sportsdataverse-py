@@ -799,42 +799,65 @@ df = nba_decay_rapm(season_poss)  # asof=None
 
 ### nba_draft_model {#nba_draft_model}
 
-`nba_draft_model(draft_year: "'Union[int, list[int]]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+`nba_draft_model(draft_year: "'Union[int, list[int]]'", *, league: 'str' = 'nba', pre_draft_features: 'bool' = False, college_prior: "'Optional[pl.DataFrame]'" = None, gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
-Project prospect career value + draft probability from combine measurements.
+Project each draft pick's NBA career value from where he was picked.
 
-Loads the draft-combine wrappers for `draft_year` (or each year in the
-list), builds the shared combine-feature vector
-(`sportsdataverse.nba.nba_draft_constants.build_combine_features`),
-and applies the bundled ridge (`proj_career_value`) / logistic
-(`draft_prob`) heads fit in `tools/models/nba_draft/fit_draft_model.py`.
+Reads the class from the `nba_stats_draft` release (no stats.nba.com
+call) and applies the bundled pick curve
+`proj_career_value = intercept + b1*log(pick) + b2*(pick/60)`. The curve
+was fit on draft classes 2003-2015 against realized career box value
+(`tools/models/nba_draft/fit_pick_curve.py`).
+
+The curve ranks a class exactly as the pick does. It ties the pick baseline
+by construction (2016-2019 holdout, all 240 picks: Spearman 0.571 for both) and only adds
+a value scale. No pre-draft measurement beat the pick in the rebuild that
+replaced the combine model: combine drills, college BPM / RAPM / seasons,
+and EuroLeague production were all tried.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `draft_year` | `Union[int, list[int]]` |  | A draft year (e.g. `2019`) or list of years. |
-| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"` -- selects the bundled artifact and the combine-wrapper family. |
-| `college_prior` | `Optional[DataFrame]` | `None` | Optional frame keyed on `player_id:Utf8` carrying the college-side MBB/WBB player-value spine's `projected_pick` / `box_bpm` / `archetype` (model ⑤, see design doc §3.5). When present and the bundled artifact has matching feature columns, it is left-joined as an extra feature block. This function **never** imports `sportsdataverse.mbb` -- callers pass the frame in. |
-| `gleague_bridge` | `bool` | `False` | When `True`, left-joins G-League (`league_id="20"`) bulk production (`gleague_pts`/`gleague_gp`/`gleague_min`) for the draft year's season as extra, forward-looking feature columns. Not part of any bundled artifact's scored features today (joining it never changes `proj_career_value`/`draft_prob`); gracefully absent when the G-League bulk call returns no rows -- never raises. |
+| `draft_year` | `Union[int, list[int]]` |  | A draft year (e.g. `2019`) or a list of years. |
+| `league` | `str` | `'nba'` | `"nba"` only. The WNBA has `sportsdataverse.wnba.wnba_draft_model.wnba_draft_model`; any other value raises `ValueError`. |
+| `pre_draft_features` | `bool` | `False` | When `True`, attach the pre-draft college and EuroLeague columns (`college_espn_id` ... `euro_top`, see Returns). They are read from the college player-value spine, the ESPN college bios, college RAPM and the EuroLeague API, and are information only: the curve never reads them. For a board before the draft, see `sportsdataverse.mbb.mbb_draft_projection.mbb_draft_projection`. |
+| `college_prior` | `Optional[DataFrame]` | `None` | Optional frame keyed on `player_id:Utf8`, left-joined as extra columns. It does not change `proj_career_value`. |
+| `gleague_bridge` | `bool` | `False` | When `True`, left-join G-League (`league_id="20"`) `gleague_pts` / `gleague_gp` / `gleague_min` for the draft year's season (live stats.nba.com, best-effort, never raises). It does not change `proj_career_value`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-Frame `player_id:Utf8, draft_year:Int64, proj_career_value:Float64, draft_prob:Float64, projected_pick:Int64, pro_tier:Utf8` — one row per prospect with combine measurements for that class. `projected_pick` is a contiguous 1..N rank within each draft year. Empty/malformed input returns the zero-row schema, never raises.
+One row per pick (1-60) of each class. |col_name |type | |:-----------------|:-------| |player_id |String | |draft_year |Int64 | |overall_pick |Int64 | |player_name |String | |organization |String | |proj_career_value |Float64 | |projected_pick |Int64 | |pro_tier |String | With `pre_draft_features=True` it adds: `college_espn_id`, `college_match` (`"id"` / `"name"`), `col_bpm_last`, `col_obpm_last`, `col_dbpm_last`, `col_min_last`, `col_bpm_career`, `col_min_career`, `col_seasons`, `col_team_adj_em`, `col_rapm_last`, `euro_code`, `euro_min`, `euro_pir40`, `euro_pts40` and `euro_top`. Each is null where the pick has no link to that source. - `projected_pick` equals the pick order (the curve is monotone). - `pro_tier` is `lottery` (1-14), `first_round` (15-30) or `second_round`. - A year with no published class, or an empty `draft_year` list, returns the zero-row schema.
 
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | stats.nba.com person id of the pick (string). |
+| `draft_year` | Int64 | Draft year (the June the class was picked; the 2019 draft is 2019). |
+| `overall_pick` | Int64 | Overall pick number, 1-60. |
+| `player_name` | String | Name of the pick as the draft history publishes it. |
+| `organization` | String | College, club or school the pick was drafted from. |
+| `proj_career_value` | Float64 | Projected career box value (summed post-draft season value above replacement) from the pick curve intercept + b1*log(pick) + b2*(pick/60), fit on draft classes 2003-2015. It ties the pick as a ranking. |
+| `projected_pick` | Int64 | Rank of proj_career_value within the class; equal to the pick order because the curve is monotone. |
+| `pro_tier` | String | Pick band: lottery (1-14), first_round (15-30) or second_round (31-60). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `league` is not `"nba"`. |
+| `SeasonNotFoundError` | A draft year before 1996 (the draft release starts there). |
 
 **Example**
 
 ```python
 from sportsdataverse.nba import nba_draft_model
 board = nba_draft_model(2019)
-print(board.sort("proj_career_value", descending=True).head())
+print(board.select("overall_pick", "player_name", "proj_career_value").head())
 
-# With a college-side prior
+# With the pre-draft college and EuroLeague columns
 
-board = nba_draft_model(2019, college_prior=mbb_prior_df)
+board = nba_draft_model(2019, pre_draft_features=True)
 
 # Pipeline next step (one line)
 
