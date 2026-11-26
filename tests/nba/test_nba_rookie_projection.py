@@ -42,7 +42,7 @@ def test_rookie_projection_schema_and_order(board_2019) -> None:
 def test_availability_is_never_folded_into_value(board_2019) -> None:
     mod, _ = board_2019
     out = mod.nba_rookie_projection(2019)
-    art = mod._load_residual_artifact()
+    art = mod._load_rookie_artifact()
     direct = mod._score(out.select("player_id", "draft_year", "overall_pick"), art)
     assert direct["proj_rookie_value"].equals(out["proj_rookie_value"])
 

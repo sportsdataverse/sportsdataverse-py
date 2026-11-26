@@ -36,7 +36,7 @@ import pytest
 from sportsdataverse.nba.nba_draft_constants import spearman_corr
 from sportsdataverse.nba.nba_draft_model import _load_artifact
 from sportsdataverse.nba.nba_draft_model import _score as score_draft
-from sportsdataverse.nba.nba_rookie_projection import _load_residual_artifact
+from sportsdataverse.nba.nba_rookie_projection import _load_rookie_artifact
 from sportsdataverse.nba.nba_rookie_projection import _score as score_rookie
 
 CORPUS = "tests/fixtures/nba_draft/pick_corpus.parquet"
@@ -57,6 +57,9 @@ def test_corpus_holds_no_reserve_class(corpus: pl.DataFrame) -> None:
     assert corpus.schema["player_id"] == pl.Utf8
     assert corpus["draft_year"].min() == 2003 and corpus["draft_year"].max() == 2019
     assert corpus.group_by("draft_year").len()["len"].min() >= 57  # a full class (forfeited picks aside)
+    # one row per drafted player and per slot: a duplicate would double-weight a pick in the fit
+    assert corpus["player_id"].n_unique() == corpus.height
+    assert corpus.select("draft_year", "overall_pick").is_duplicated().sum() == 0
 
 
 def test_refit_reproduces_bundled_curves(corpus: pl.DataFrame) -> None:
@@ -65,7 +68,7 @@ def test_refit_reproduces_bundled_curves(corpus: pl.DataFrame) -> None:
 
     for art, targets in (
         (_load_artifact(), ["career_value"]),
-        (_load_residual_artifact(), ["rookie_value", "soph_value", "rookie_min"]),
+        (_load_rookie_artifact(), ["rookie_value", "soph_value", "rookie_min"]),
     ):
         assert art["kind"] == "pick_curve" and art["training_script"] == "tools/models/nba_draft/fit_pick_curve.py"
         assert art["train_classes"] == [2003, 2015] and art["holdout_classes"] == [2016, 2019]
@@ -77,7 +80,7 @@ def test_refit_reproduces_bundled_curves(corpus: pl.DataFrame) -> None:
 
 @pytest.mark.parametrize("target", ["career_value", "rookie_value", "soph_value", "rookie_min"])
 def test_curves_fall_with_the_pick(target: str) -> None:
-    art = _load_artifact() if target == "career_value" else _load_residual_artifact()
+    art = _load_artifact() if target == "career_value" else _load_rookie_artifact()
     from tools.models.nba_draft.fit_pick_curve import apply_curve
 
     grid = apply_curve(art["curves"][target], np.arange(1, 61))
@@ -110,7 +113,7 @@ def test_draft_value_ties_pick_on_holdout(holdout: pl.DataFrame) -> None:
     ],
 )
 def test_rookie_curves_tie_pick_on_holdout(holdout: pl.DataFrame, target: str, col: str, base_expected: float) -> None:
-    pred = score_rookie(holdout.select("player_id", "draft_year", "overall_pick"), _load_residual_artifact())
+    pred = score_rookie(holdout.select("player_id", "draft_year", "overall_pick"), _load_rookie_artifact())
     model = spearman_corr(pred[col].to_numpy(), holdout[target].to_numpy())
     base = _pick_baseline(holdout, target)
     assert base == pytest.approx(base_expected, abs=1e-3)
@@ -119,7 +122,7 @@ def test_rookie_curves_tie_pick_on_holdout(holdout: pl.DataFrame, target: str, c
 
 def test_bundled_holdout_metrics_match_recomputed(holdout: pl.DataFrame) -> None:
     """The artifact's recorded holdout numbers are the ones the gates compute (no hand-typed numbers)."""
-    for art in (_load_artifact(), _load_residual_artifact()):
+    for art in (_load_artifact(), _load_rookie_artifact()):
         for t, m in art["holdout"].items():
             assert m["holdout_n"] == holdout.height
             assert m["holdout_spearman_pick"] == pytest.approx(_pick_baseline(holdout, t), abs=1e-4)
@@ -145,10 +148,10 @@ def test_shipped_scoring_equals_the_fitting_evaluator(holdout: pl.DataFrame) -> 
     assert np.allclose(
         d["proj_career_value"].to_numpy(), apply_curve(_load_artifact()["curves"]["career_value"], pick), atol=1e-9
     )
-    r = score_rookie(holdout.select("player_id", "draft_year", "overall_pick"), _load_residual_artifact())
+    r = score_rookie(holdout.select("player_id", "draft_year", "overall_pick"), _load_rookie_artifact())
     for t, col in (
         ("rookie_value", "proj_rookie_value"),
         ("soph_value", "proj_soph_value"),
         ("rookie_min", "proj_rookie_min"),
     ):
-        assert np.allclose(r[col].to_numpy(), apply_curve(_load_residual_artifact()["curves"][t], pick), atol=1e-9), col
+        assert np.allclose(r[col].to_numpy(), apply_curve(_load_rookie_artifact()["curves"][t], pick), atol=1e-9), col

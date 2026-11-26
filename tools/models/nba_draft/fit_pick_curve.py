@@ -93,6 +93,8 @@ def artifact(name: str, curves: dict, metrics: dict) -> dict:
 
 def main() -> None:
     corpus = pl.read_parquet(CORPUS)
+    assert corpus["player_id"].n_unique() == corpus.height, "a player appears twice in the corpus"
+    assert not corpus.select("draft_year", "overall_pick").is_duplicated().any(), "a draft slot appears twice"
     for name, file, targets in (
         ("draft_value", "nba_draft_value.json", ["career_value"]),
         ("rookie_projection", "nba_rookie_projection.json", ["rookie_value", "soph_value", "rookie_min"]),

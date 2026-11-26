@@ -41,7 +41,7 @@ _SCHEMA = {
 _DEFAULT_AVAIL = 0.75  # reported when nba_availability has no row for the pick (e.g. a future season)
 
 
-def _load_residual_artifact(league: str = "nba") -> dict:
+def _load_rookie_artifact(league: str = "nba") -> dict:
     """Load the bundled rookie pick-curve artifact (``rookie_value`` / ``soph_value`` / ``rookie_min``)."""
     _check_league(league)
     path = resources.files("sportsdataverse.nba") / "models" / "nba_rookie_projection.json"
@@ -169,7 +169,7 @@ def nba_rookie_projection(
         out = pl.DataFrame(schema=schema)
         return out.to_pandas() if return_as_pandas else out
 
-    out = _score(board, _load_residual_artifact(league))
+    out = _score(board, _load_rookie_artifact(league))
     # nba_availability takes the season END year: a draft_year (start year) debuts the season ending draft_year + 1.
     draft_years = [int(y) for y in out["draft_year"].unique().to_list()]
     avail = nba_availability([y + 1 for y in draft_years], league=league)
