@@ -113,7 +113,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 | Basketball (International leagues) | [P. LEAGUE+](plg/) | `sportsdataverse.basketball.plg` | P. LEAGUE+ (Taiwan) and Preciser (19): P. LEAGUE+ site (pleagueofficial.com, Taiwan) 11, P. LEAGUE+ vendor API (api.preciser.io, Taiwan) 7, Hand-written wrappers 1 |
 | Basketball (International leagues) | [CBA](cba/) | `sportsdataverse.basketball.cba` | CBA data API (China) (27) |
 | Basketball (International leagues) | [Basketligaen](dbl/) | `sportsdataverse.basketball.dbl` | Basketligaen (Denmark, Sportality) (27): Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality) 25, Hand-written wrappers 2 |
-| Hockey | [NHL](nhl/) | `sportsdataverse.nhl` | ESPN (119), sportsdataverse-data releases (33), NHL Web API (28), NHL EDGE (35), NHL Stats REST (21), NHL Records (50), Fox Sports API (25) |
+| Hockey | [NHL](nhl/) | `sportsdataverse.nhl` | ESPN (119), sportsdataverse-data releases (34), NHL Web API (28), NHL EDGE (35), NHL Stats REST (21), NHL Records (50), Fox Sports API (25) |
 | Hockey | [PWHL](pwhl/) | `sportsdataverse.pwhl` | sportsdataverse-data releases (27), HockeyTech / LeagueStat (25) |
 | Hockey (College hockey) | [Men's college hockey](mch/) | `sportsdataverse.hockey.mch` | ESPN (118): site API (v2) 25, web API (v3) 5, core API (v2) 87, FPI API (fitt v3) 1 |
 | Hockey (College hockey) | [Women's college hockey](wch/) | `sportsdataverse.hockey.wch` | ESPN (118): site API (v2) 25, web API (v3) 5, core API (v2) 87, FPI API (fitt v3) 1 |

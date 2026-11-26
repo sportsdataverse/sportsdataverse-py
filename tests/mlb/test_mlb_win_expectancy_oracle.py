@@ -31,7 +31,10 @@ end-of-PA_i state equals the start-of-PA_{i+1} state. Same-index gives 0.941
 import polars as pl
 
 from sportsdataverse.mlb.mlb_game_state_constants import spearman_corr
-from sportsdataverse.mlb.mlb_win_expectancy import mlb_win_expectancy, mlb_win_probability_added
+import pytest
+
+from sportsdataverse.mlb.mlb_run_expectancy import pbp_base_out_states
+from sportsdataverse.mlb.mlb_win_expectancy import build_we_table, mlb_win_expectancy, mlb_win_probability_added
 
 FIXTURE_DIR = "tests/fixtures/mlb_game_state"
 WE_GAME_ID = "7746"
@@ -79,3 +82,23 @@ def test_wpa_sum_identity_per_game():
     target = chk["home_won"].cast(pl.Float64).map_elements(lambda w: 0.5 if w else -0.5, return_dtype=pl.Float64)
     max_gap = (chk["s"] - target).abs().max()
     assert max_gap <= 0.02, f"max |sum(wpa) - target| = {max_gap:.4f} (floor 0.02)"
+
+
+def test_a_game_listed_twice_in_the_results_counts_once():
+    # results_corpus lists 5028 and 6146 twice (suspended games on two schedule dates): each PA counts once.
+    pbp = pl.read_parquet(f"{FIXTURE_DIR}/pbp_corpus.parquet")
+    results = pl.read_parquet(f"{FIXTURE_DIR}/results_corpus.parquet")
+    assert sorted(results.filter(pl.col("game_id").is_duplicated())["game_id"].unique()) == ["5028", "6146"]
+    states = pbp_base_out_states(pbp)
+    matched = states.join(results.select(pl.col("game_id").unique()), on="game_id", how="semi")
+    assert build_we_table(states, results)["n"].sum() == matched.height
+    we = mlb_win_expectancy(pbp, results)
+    assert not we.select("game_id", "at_bat_index").is_duplicated().any()
+
+
+def test_conflicting_results_for_one_game_raise():
+    pbp = pl.read_parquet(f"{FIXTURE_DIR}/pbp_corpus.parquet").filter(pl.col("game_id") == "5028")
+    results = pl.read_parquet(f"{FIXTURE_DIR}/results_corpus.parquet").filter(pl.col("game_id") == "5028")
+    bad = pl.concat([results.head(1), results.head(1).with_columns(pl.col("home_score") + 1)])
+    with pytest.raises(ValueError, match="5028"):
+        mlb_win_expectancy(pbp, bad)

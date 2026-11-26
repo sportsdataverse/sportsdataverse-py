@@ -111,7 +111,7 @@ Every team's season totals and rates: one row per team (offense, defense, faceof
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `team_id` | String | Team code (e.g. WAT). |
 | `team_slug` | String | Team slug, the id pll_team_stats and pll_team_roster take (e.g. waterdogs). |
@@ -224,7 +224,7 @@ One team's record and stat lines for a season: one row per segment it played (re
 | `losses` | Int64 | Losses in the season or segment (the season record, repeated on each segment row). |
 | `ties` | Int64 | Ties in the season or segment (the season record, repeated on each segment row). |
 | `seed` | Int64 | Playoff seed (null until set). |
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `games_played` | Int64 | Games played in the season segment (or career, on career leaderboards). |
 | `scores` | Int64 | Points scored (a 2-point goal counts 2). |
@@ -323,7 +323,7 @@ One team's roster: one row per player (jersey, position, bio, injury and contrac
 | col_name | type | description |
 |---|---|---|
 | `team_slug` | String | Team slug, the id pll_team_stats and pll_team_roster take (e.g. waterdogs). |
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `player_id` | String | Six-digit league player id (a STRING, e.g. 003009); the column to join players on. |
 | `player_slug` | String | Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers). |

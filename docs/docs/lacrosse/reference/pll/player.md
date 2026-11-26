@@ -103,7 +103,7 @@ Every player's stat line for a season segment: one row per player (scoring, shoo
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `player_id` | String | Six-digit league player id (a STRING, e.g. 003009); the column to join players on. |
 | `player_slug` | String | Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers). |
@@ -209,7 +209,7 @@ Advanced player stats for a season: one row per player (settled, fast-break and 
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `player_id` | String | Six-digit league player id (a STRING, e.g. 003009); the column to join players on. |
 | `player_slug` | String | Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers). |
@@ -350,7 +350,7 @@ One player's stat line for every season and segment he played.
 | col_name | type | description |
 |---|---|---|
 | `player_slug` | String | Player slug, the id pll_player and pll_player_seasons take (e.g. michael-sowers). |
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `team_id` | String | Team code (e.g. WAT). |
 | `team_name` | String | Team name (e.g. Waterdogs). |

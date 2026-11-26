@@ -31,7 +31,7 @@ A season's schedule and results: one row per game (teams, score, UTC start time,
 | `event_id` | String | League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020). |
 | `external_id` | String | External event id (not ESPN's event id; join ESPN on start_time and the team codes). |
 | `league` | String | League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women). |
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `week` | Int64 | Week of the season (0 for the Championship Series). |
 | `game_number` | Int64 | Game number within the season. |
@@ -95,7 +95,7 @@ One game's header: teams and records, score by period, clock, venue, broadcast a
 | `event_id` | String | League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020). |
 | `external_id` | String | External event id (not ESPN's event id; join ESPN on start_time and the team codes). |
 | `league` | String | League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women). |
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `week` | Int64 | Week of the season (0 for the Championship Series). |
 | `game_number` | Int64 | Game number within the season. |
@@ -282,7 +282,7 @@ Standings: one row per team (record, scores for and against, conference record; 
 | col_name | type | description |
 |---|---|---|
 | `league` | String | League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women). |
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `champ_series` | Boolean | True for the Championship Series table (the request's champ_series). |
 | `team_id` | String | Team code (e.g. WAT). |
 | `full_name` | String | Team name (e.g. Waterdogs). |
@@ -340,7 +340,7 @@ A season's leaderboards in long format: one row per stat and ranked player.
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `stat` | String | Stat name, snake case (points, save_pct, faceoff_pct, ...). |
 | `rank` | Int64 | 1-based position in the league's list for the stat (ties are not merged). |
@@ -442,7 +442,7 @@ Global Lacrosse Games (national teams) schedule and results: one row per game, i
 | `event_id` | String | League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020). |
 | `external_id` | String | External event id (not ESPN's event id; join ESPN on start_time and the team codes). |
 | `league` | String | League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women). |
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `week` | Int64 | Week of the season (0 for the Championship Series). |
 | `game_number` | Int64 | Game number within the season. |
@@ -503,7 +503,7 @@ Global Lacrosse Games standings: one row per national team, in the pll_standings
 | col_name | type | description |
 |---|---|---|
 | `league` | String | League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women). |
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `champ_series` | Boolean | True for the Championship Series table (the request's champ_series). |
 | `team_id` | String | Team code (e.g. WAT). |
 | `full_name` | String | Team name (e.g. Waterdogs). |
@@ -563,7 +563,7 @@ Women's Lacrosse League schedule and results: one row per game, in the pll_sched
 | `event_id` | String | League event id (e.g. 2026_game_4; LACROSSE_PLL_2019_... in 2019-2020). |
 | `external_id` | String | External event id (not ESPN's event id; join ESPN on start_time and the team codes). |
 | `league` | String | League code: PLL, WLL, INTLM (Global Lacrosse Games men) or INTLW (women). |
-| `season` | Int64 | Season (from the body, or from the request when the body does not say). |
+| `season` | Int64 | Season (from the body, or from the request when the body does not say); null on every row when neither does, as when the call leaves year out. |
 | `season_segment` | String | Season segment: regular, post (playoffs), champseries (Championship Series) or allstar. |
 | `week` | Int64 | Week of the season (0 for the Championship Series). |
 | `game_number` | Int64 | Game number within the season. |
