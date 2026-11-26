@@ -12886,6 +12886,55 @@
   expected: kill
   note: The API sends season as "2025 Standings"; read as an int it is null on every row.
 
+- id: bb-war-tier-counts-zero-teams
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '        .with_columns(pl.col("players").fill_null(0))'
+  mutant: '        .drop_nulls("players")'
+  test: tests/common/test_war_tiers.py::test_each_team_s_tiers_add_up_to_its_tiered_players
+  expected: kill
+  note: A team with nobody in a tier would drop out of that tier's median instead of counting 0, which lifts the Star median.
+
+- id: bb-war-tier-star-floor
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '"Star": 95.0'
+  mutant: '"Star": 90.0'
+  test: tests/common/test_war_tiers.py::test_tier_shares_are_the_cut_points
+  expected: kill
+  note: A Star floor of 90 makes the top tier a tenth of the league, twice the 5% cut.
+
+- id: bb-war-tier-no-possession-floor
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'TIER_MIN_POSS_SHARE = 0.10'
+  mutant: 'TIER_MIN_POSS_SHARE = 0.0'
+  test: tests/common/test_war_tiers.py::test_only_the_possession_cohort_is_tiered
+  expected: kill
+  note: Without the floor, call-ups with a few possessions and a WAR near 0 are tiered and land in the middle of the ladder.
+
+- id: bb-war-tier-traded-main-team-only
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '            pl.col("team_ids").str.split(",").alias("team_id"),'
+  mutant: '            pl.col("_main").cast(pl.Utf8).implode().alias("team_id"),'
+  test: tests/common/test_war_tiers.py::test_a_traded_player_is_on_every_team_he_played_for
+  expected: kill
+  note: A traded player would sit on his main team only, missing from the roster of every other team he played for.
+
+- id: bb-war-tier-conf-ranked-league-wide
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'by=("season", "conference_id"))'
+  mutant: 'by=("season",))'
+  test: tests/common/test_war_tiers.py::test_the_conference_tier_is_the_ladder_within_each_conference
+  expected: kill
+  note: The conference tier would be the Division I tier again, so a conference's shares would not hold.
 - id: bb-playoff-series-play-in-kept
   group: bb-playoff-series
   finding: bb-d43-playoff-series
