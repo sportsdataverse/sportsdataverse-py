@@ -470,7 +470,7 @@ Belt and (from 2026) Pac-12.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `games` | `FrameLike` |  | Game results with columns `sim` (or `season`), `week`, `game_type` (`REG` \| `CONF_CHAMP` \| `POST`), `home_team`, `away_team`, `result` (home margin: home - away; null = unplayed), optional `neutral` (0/1), and optional `home_points`/`away_points` (per-game scores — feeds the SEC capped-scoring-margin rung; `cfb_games_from_schedule` emits both). Either optional input absent -> that rung is skipped, not an error. |
+| `games` | `FrameLike` |  | Game results with columns `sim` (or `season`), `week`, `game_type` (`REG` \| `CONF_CHAMP` \| `POST`), `home_team`, `away_team`, `result` (home margin: home - away; null = unplayed), optional `neutral` (0/1), and optional `home_points`/`away_points` (per-game scores — feeds the SEC capped-scoring-margin rung; `cfb_games_from_schedule` emits both). Either optional input absent -> that rung is skipped, not an error. Optional `conf_game` (bool; the schedule's flag, from `cfb_games_from_schedule`): `False` keeps a same-conference game out of conference play and its tiebreakers (overall record and Big 12 `total_wins` keep it). |
 | `teams` | `FrameLike` |  | Team table with columns `team` and `conference` (null or `"FBS Independents"` marks an independent), and an optional `division` column (`"FBS"`/`"FCS"` or similar — feeds the Big 12 `total_wins` FCS cap; absent -> the cap degrades to uncapped win totals, noted in `tiebreak_notes`). Optional `conf_division` (in-conference division name: with two or more divisions each division's best eligible team is champion and the champions take the top ranks (1-2 for two divisions); it also feeds the Sun Belt `div_pct` rung) and `postseason_eligible` (bool; an explicit `False` team is ranked behind every eligible one so it cannot hold a championship-game berth, while its games still count). |
 | `tiebreaker_depth` | `str` | `'SOS'` | One of `"RANDOM"`, `"PRE-SOV"`, `"SOS"`, `"POINTS"` — the nflseedR depth ladder. Steps beyond the chosen depth are skipped and remaining ties are broken by coin flip. Gates ONLY the generic fallback cascade; registered official conference procedures (below) always run in full. |
 | `playoff_seeds` | `int \| None` | `None` | If set, adds a `seed` column via `cfb_playoff_seeds` with this field size (the season's CFP selection rule, resolved like the tiebreaker epochs). |
@@ -786,7 +786,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `recent` | Boolean |  |
 | `start_date` | String | Season start timestamp (ISO 8601, UTC). |
 | `broadcast` | String | Broadcast network short name. |
-| `highlights` | Int64 | Game highlight urls. |
+| `highlights` | List | Game highlight urls. |
 | `notes_type` | String |  |
 | `notes_headline` | String |  |
 | `broadcast_market` | String |  |
@@ -830,7 +830,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `home_score` | String | Home-team score after the play. |
 | `home_current_rank` | Int64 | AP or Coaches Poll ranking of the home team at the time of the game (null if unranked). |
 | `home_linescores` | List | Per-period point totals for the home team, stored as an array of quarter/overtime scores. |
-| `home_records` | String | Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
+| `home_records` | List | Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
 | `away_id` | Int64 | Away team referencing id. |
 | `away_uid` | String |  |
 | `away_location` | String |  |
@@ -847,7 +847,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `away_score` | String | Away-team score after the play. |
 | `away_current_rank` | Int64 | AP or Coaches Poll ranking of the away team at the time of the game (null if unranked). |
 | `away_linescores` | List | Per-period point totals for the away team, stored as an array of quarter/overtime scores. |
-| `away_records` | String | Win-loss record of the away team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
+| `away_records` | List | Win-loss record of the away team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `season_type` | Int64 | ESPN season type (2 = regular, 3 = postseason). |

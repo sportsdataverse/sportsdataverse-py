@@ -42,8 +42,19 @@ def test_wnba_shot_value_binds_league_10(monkeypatch):
 
 
 def test_model_functions_reexported_by_reference():
-    assert score_shot_xpoints is nba_score_shot_xpoints
     assert make_prob_by_context is nba_make_prob_by_context
+    assert score_shot_xpoints is not nba_score_shot_xpoints  # bound to the league, see below
+
+
+def test_scorer_and_talent_are_bound_to_league_10(monkeypatch):
+    """The NBA scorer defaults to the NBA's location booster and k: the WNBA's must not."""
+    wnba_mod = importlib.import_module("sportsdataverse.wnba.wnba_shot_value")
+    seen = []
+    monkeypatch.setattr(wnba_mod, "_score_shot_xpoints", lambda *a, **kw: seen.append(kw))
+    monkeypatch.setattr(wnba_mod, "_shooter_talent", lambda *a, **kw: seen.append(kw))
+    wnba_mod.score_shot_xpoints(None, None)
+    wnba_mod.shooter_talent(None)
+    assert [kw["league_id"] for kw in seen] == ["10", "10"]
 
 
 def test_court_geometry_league_differences():

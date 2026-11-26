@@ -6,14 +6,63 @@ description: "College football — additional Python functions — Models and ca
 ---
 # College football — additional Python functions — Models and calculators: cfb_adjusted–fit_field
 
+### cfb_adjusted_epa {#cfb_adjusted_epa}
+
+`cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Season opponent-adjusted per-team EPA from a season's play-by-play.
+
+Fits one ridge of per-play `EPA` on offense-team, defense-team, and
+home-field indicators (every team shrunk toward the league average by its own
+play count) over the pass and rush plays that are not garbage time (the
+score-margin rule, see the module docstring), nets each team's per-game raw
+EPA on those same plays against the opponent's fitted strength, and averages
+to a season figure. In-sample/descriptive (the
+fit uses the whole season); for leak-free per-game values use
+`cfb_adjusted_epa_by_game`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
+| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (a fixed ~43 plays at the default, ~6% of a full season; most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
+| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (`0.1 <= wp_before <= 0.9` band, standardized ridge with the first team id as the reference level, lambda 0.035, own EPA on every play). pre598 reads `wp_before` instead of `period` / `pos_score_diff_start`. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per team (>= 2 valid games): `team_id`, `pos_team`, `valid_games`, `adj_off_epa`, `adj_def_epa`, `off_strength_faced`, `def_strength_faced`, `net_adj_epa` and their `*_rank` columns.
+
+No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or every play is garbage time. |
+
+**Example**
+
+```python
+import sportsdataverse.cfb as cfb
+pbp = cfb.load_cfb_pbp(seasons=[2023])
+cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
+
+# NFL team summaries (the pre-#598 method; reads wp_before)
+
+cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
+```
+
 ### cfb_adjusted_epa_by_game {#cfb_adjusted_epa_by_game}
 
 `cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
 
-For each week `w` the opponent-strength ridge is fit on `_FIT_WP`-band plays
-from **weeks before `w` only**, then that week's games are adjusted with
+For each week `w` the opponent-strength ridge is fit on non-garbage-time
+plays from **weeks before `w` only**, then that week's games are adjusted with
 those as-of strengths -- so the value uses no future information and is valid
 as an in-season power-rating / model feature. Week 1 (no prior) yields null
 adjustments; not-yet-seen opponents fall back to the league baseline (an
@@ -24,7 +73,7 @@ average team), and teams seen on few plays are shrunk most of the way there.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
-| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
+| `ridge_lambda` | `float \| None` | `None` | Ridge penalty, as in `cfb_adjusted_epa` (`None` means 0.075 for `"current"`, 0.035 for `"pre598"`). |
 | `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (see `cfb_adjusted_epa`). pre598 also keeps the old week order: it sorts by `week` alone and does not read `seasonType`, so postseason games that restart at week 1 are fit with (and leak into) the regular season, exactly as before. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
 
@@ -39,7 +88,7 @@ No returns table is published for this function: no capture: it needs play-by-pl
 | Exception | Description |
 |---|---|
 | `KeyError` | If `plays` is missing a required column (incl. `week`, and `seasonType` unless `method="pre598"`). |
-| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or no play falls in the `wp_before_naive` fit band. |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive. (Every play garbage time gives an empty frame; a team-game with no non-garbage play has no row -- none of 38,620 in 2014-2026.) |
 
 **Example**
 
@@ -351,6 +400,76 @@ week3 = cfb_ratings(2023, as_of_date=dt.date(2023, 9, 18))
 ratings_pd = cfb_ratings(2023, return_as_pandas=True)
 ```
 
+### cfb_ratings_compute_results {#cfb_ratings_compute_results}
+
+`cfb_ratings_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, ratings: 'FrameLike', rating_type: 'str' = 'points', scale: 'float | dict[str, float] | None' = None, home_field: 'float | None' = None, margin_sd: 'float | dict[str, float] | None' = None, rng: 'np.random.Generator | None' = None, **kwargs: 'Any') -> 'dict[str, pl.DataFrame]'`
+
+Results generator driven by fixed team ratings (points, adjusted EPA or raw EPA).
+
+An alternative to `cfb_compute_results` (dynamic ELO), with cfbseedR's
+`cfbseedR_ratings_compute_results()` semantics and defaults: each unplayed `week == week_num`
+game gets `Normal(scale * (rating_home - rating_away) + home_field, margin_sd)` (no home field at
+a neutral site), rounded away from zero; a postseason draw of exactly 0 is re-decided by
+`Phi(expected / margin_sd)` with a 1-point margin. Ratings are fixed; `teams` passes through.
+`scale` / `margin_sd` buckets use the smaller `games` of the two teams (unrated or null counts
+skipped), then the bucket with the largest lower bound at or below it (bottom bucket below all;
+top bucket when no count). Defaults: `"adj_epa"` (the scale of `cfb_ratings` `adj_net`)
+reads the modern-era `slope_by_games` / `margin_sd` / `hfa_points` of
+`sportsdataverse.cfb.cfb_prediction_constants.CFB_CONSTANTS`; `"points"` and `"raw_epa"`
+are `_RATINGS_DEFAULTS`, cfbseedR's walk-forward fit (FBS-vs-FBS 2014-2025). In that test the ELO
+formula on CollegeFootballData's pregame ELO had the smallest error (MAE 12.94 vs 13.10 for a
+least-squares points rating); from about six games on the points rating is level with it.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `teams` | `DataFrame` |  | Per-sim team table (`sim`, `team`, `conference`); returned unchanged. |
+| `games` | `DataFrame` |  | Per-sim games table (engine schema; see `sportsdataverse.cfb.cfb_standings`). |
+| `week_num` | `int` |  | The week to fill. |
+| `ratings` | `FrameLike` |  | One row per team: `team`, `rating` (numeric, no nulls) and optionally `games` (non-negative games behind the rating; null = unknown). Polars or pandas. Teams missing from it rate 0 (league average). |
+| `rating_type` | `str` | `'points'` | `"points"` (default), `"adj_epa"` or `"raw_epa"`; picks the defaults. |
+| `scale` | `float \| dict[str, float] \| None` | `None` | Points of margin per rating unit: a number or `{"lo-hi": value}` buckets. `None` uses the default for `rating_type`. |
+| `home_field` | `float \| None` | `None` | Home-field advantage in points for non-neutral games. `None` = default. |
+| `margin_sd` | `float \| dict[str, float] \| None` | `None` | Margin SD in points (at least 0): a number or buckets. `None` = default. |
+| `rng` | `Generator \| None` | `None` | numpy Generator (seeded by `cfb_simulations`). A fresh default generator is created when omitted. |
+
+**Returns**
+
+`{"teams": teams, "games": games}` with `result` (Float64 home margin) filled for this week's previously unplayed games.
+
+| col_name | type | description |
+|---|---|---|
+| `sim` | Int64 | Simulation identifier the game row belongs to (1..n simulated seasons). |
+| `week` | Int64 | Week of the season the game is played in; only games matching the requested week_num are filled. |
+| `game_type` | String | Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship) or POST (postseason/CFP). |
+| `home_team` | String | Team name of the home team in the simulated game (returned games frame). |
+| `away_team` | String | Team name of the away team in the simulated game (returned games frame). |
+| `result` | Float64 | Home-team margin of victory (home score minus away score) - real results are preserved and the target week's unplayed games are filled from the fixed team ratings. |
+| `neutral` | Int64 | Neutral-site flag (1 = neutral site, 0 = true home game; only non-neutral games receive home_field). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | On an unknown `rating_type`, missing `team` / `rating` columns, a null, NaN or duplicated rating, a bad `games` count, malformed or NaN constants, or a negative `margin_sd`. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb.cfb_simulations import cfb_ratings_compute_results
+ratings = pl.DataFrame({"team": ["A", "B"], "rating": [7.0, -7.0], "games": [8, 8]})
+out = cfb_ratings_compute_results(teams, games, 3, ratings=ratings, rating_type="points")
+
+# Simulate a season with it (``cfb_simulations`` passes only ``rng``, so bind the ratings with ``functools.partial``)
+
+import functools
+from sportsdataverse.cfb.cfb_simulations import cfb_ratings_compute_results, cfb_simulations
+cr = functools.partial(cfb_ratings_compute_results, ratings=ratings, rating_type="points")
+sims = cfb_simulations(games, teams, compute_results=cr, seed=1)
+```
+
 ### cfb_recruiting_projection {#cfb_recruiting_projection}
 
 `cfb_recruiting_projection(target_season: 'int', *, division: 'str' = 'fbs', history_seasons: 'list[int] | None' = None, alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -462,7 +581,7 @@ CFB simplification.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `games` | `FrameLike` |  | One season of games in the engine schema (`season` or `sim`, `week`, `game_type`, `home_team`, `away_team`, `result` — null = unplayed, `neutral`). Played results are kept as-is. A `season` column picks that season's tiebreakers and CFP rule; `sim`-keyed input uses the current ones. |
+| `games` | `FrameLike` |  | One season of games in the engine schema (`season` or `sim`, `week`, `game_type`, `home_team`, `away_team`, `result` — null = unplayed, `neutral`). Played results are kept as-is. A `season` column picks that season's tiebreakers and CFP rule; `sim`-keyed input uses the current ones. The optional `home_points`/`away_points`/`conf_game` columns of `sportsdataverse.cfb.cfb_games_from_schedule` pass through to `sportsdataverse.cfb.cfb_standings`. |
 | `teams` | `FrameLike` |  | Team table (`team`, `conference`, plus the optional `sportsdataverse.cfb.cfb_standings` columns). |
 | `compute_results` | `ComputeResultsFn \| None` | `None` | Results generator with the signature `fn(teams, games, week_num, **kwargs) -> {"teams": ..., "games": ...}` filling `result` for that week's unplayed games only. Defaults to `cfb_compute_results` (dynamic ELO). |
 | `simulations` | `int` | `10000` | Number of simulated seasons (sequential, no chunking). |
@@ -549,27 +668,29 @@ One row per team: opponent-adjusted offensive/defensive efficiency.
 
 The same fit as `sportsdataverse.cfb.cfb_adjusted_epa`: one ridge of
 per-play EPA on offense, defense and home-field indicators over the pass
-and rush plays with `0.05 <= wp_before_naive <= 0.95` (the spread-free
+and rush plays that are not garbage time (score margin at the snap above
+43 / 37 / 27 / 21 in Q1-Q4 and overtime, the
+`~sportsdataverse.cfb.cfb_opponent_adjust.flag_garbage_time` rule; no
 win probability, so the pregame line never decides which plays count),
 every team shrunk toward the league average by its own play count
-(`_ADJ_EPA_LAMBDA`). Each team's raw per-game EPA (all pass/rush plays,
-garbage time included) is then netted against the opponent's fitted
-strength and averaged across games -- the R `adjust_epa` statistic and
-scale (a top team nets ~0.30-0.40/play). Through 0.2.0b1 this function fit
-a separate standardized ridge (lambda 0.035) on `0.1 <= wp_before <=
-0.9`, which priced the pregame spread into the fit and predicted next
-week's margins 0.67 points worse.
+(`_ADJ_EPA_LAMBDA`). Each team's raw per-game EPA on those same plays is
+then netted against the opponent's fitted strength and averaged across
+games -- the R `adjust_epa` statistic. `games` and `off_pace` still
+count every pass/rush play. Through 0.2.0b1 this function fit a separate
+standardized ridge (lambda 0.035) on `0.1 <= wp_before <= 0.9`, which
+priced the pregame spread into the fit and predicted next week's margins
+0.67 points worse.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._ADJ_REQUIRED` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `wp_before_naive`). Callers pass an already as-of-date-filtered frame; this function is pure. |
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._ADJ_REQUIRED` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `period`, `pos_score_diff_start`). Callers pass an already as-of-date-filtered frame; this function is pure. |
 | `config` | `RatingsConfig \| None` | `None` | Accepted for signature parity with `fei_ratings`; not read here (the penalty is `cfb_adjusted_epa`'s, so the two entry points cannot disagree). |
 
 **Returns**
 
-A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when no play falls in the fit band.
+A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when every play is garbage time.
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
 

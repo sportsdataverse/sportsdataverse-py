@@ -143,12 +143,15 @@ COURT_ERAS: "dict[str, dict[int, CourtGeometry]]" = {
     },
 }
 
-# ``"00"`` fitted split-half on the committed 2022-23 fixture
-# (tools/fit_nba_shot_shrinkage_k.py, 2026-07-08): cross-half reliability
-# 0.699 raw → 0.707 shrunk. G-League reuses it. ``"10"`` (WNBA) is NOT fitted:
+# Fitted split-half on the committed NBA 2022-23 fixture (tools/fit_nba_shot_shrinkage_k.py),
+# once per model the expectation comes from. ``"00"``: the location model the NBA is scored
+# with by default (``--model location``, 2026-11-25, threes on the zone value), cross-half
+# reliability 0.756 raw → 0.760 shrunk. ``"20"``: the zone table (``--model zone``, the NBA fit
+# of 2026-07-08, 0.699 → 0.707); the G League, scored from the zone table, reuses it (no G
+# League fixture). ``"10"`` (WNBA) is NOT fitted:
 # 60.0 is a SEEDED placeholder, kept until a WNBA shot fixture is captured and
 # the split-half fit is run on it.
-TALENT_SHRINKAGE_K: "dict[str, float]" = {"00": 70.1, "20": 70.1, "10": 60.0}
+TALENT_SHRINKAGE_K: "dict[str, float]" = {"00": 58.1, "20": 70.1, "10": 60.0}
 
 # stats.nba.com ``shot_zone_basic`` → canonical collapsed zone.
 ZONE_COLLAPSE: "dict[str, str]" = {

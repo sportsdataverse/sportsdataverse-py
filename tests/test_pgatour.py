@@ -28,6 +28,17 @@ CASES = [
     ("stat_details", "stat_details_120_R_2026.json", P.STAT_DETAILS_SCHEMA, 500),
     ("tour_cup", "tour_cup_02671_R_2025.json", P.TOUR_CUP_SCHEMA, 200),
     ("shot_details", "shot_details_R2026006_59095_r4.json", P.SHOT_DETAILS_SCHEMA, 50),
+    ("schedule_years", "schedule_years_R.json", P.SCHEDULE_YEARS_SCHEMA, 10),
+    ("tournaments", "tournaments_R2026014.json", P.TOURNAMENTS_SCHEMA, 1),
+    ("past_champions", "past_champions_R2026014.json", P.PAST_CHAMPIONS_SCHEMA, 80),
+    ("hole_by_hole", "hole_by_hole_R2026014_r4.json", P.HOLE_BY_HOLE_SCHEMA, 900),
+    ("leaderboard_stats", "leaderboard_stats_R2026014_PROBABILITY.json", P.LEADERBOARD_STATS_SCHEMA, 250),
+    ("field", "field_R2026014.json", P.FIELD_SCHEMA, 80),
+    ("past_results", "past_results_R2026014_20250.json", P.PAST_RESULTS_SCHEMA, 80),
+    ("course_stats", "course_stats_R2026014.json", P.COURSE_STATS_SCHEMA, 90),
+    ("hole_details", "hole_details_R2026014_014_12.json", P.HOLE_DETAILS_SCHEMA, 1),
+    ("scorecard_stats", "scorecard_stats_R2026014_28237.json", P.SCORECARD_STATS_SCHEMA, 15),
+    ("player_results", "player_results_28237_R.json", P.PLAYER_RESULTS_SCHEMA, 300),
 ]
 
 
@@ -42,6 +53,28 @@ def test_parser_rows_and_schema(short, fixture, schema, min_rows):
     assert df.schema == pl.Schema(schema)
     assert df.height >= min_rows
     assert isinstance(parse(_load(fixture), return_as_pandas=True), pd.DataFrame)
+
+
+NEW_SHORTS = (
+    "schedule_years", "tournaments", "past_champions", "hole_by_hole", "leaderboard_stats", "field",
+    "past_results", "course_stats", "hole_details", "scorecard_stats", "player_results",
+)  # fmt: skip
+
+
+@pytest.mark.parametrize("short, fixture, schema, min_rows", [c for c in CASES if c[0] in NEW_SHORTS])
+def test_every_column_is_read_from_the_fixture(short, fixture, schema, min_rows):
+    # _frame builds the full schema, so a misspelled answer key would only leave a column of nulls
+    raw = _load(fixture)
+    if short == "past_champions":  # the runtime's stamp (test_past_champions_carry_the_asked_tournament)
+        raw = {"tournamentId": "R2026014", **raw}
+    df = getattr(P, f"parse_pgatour_{short}")(raw)
+    assert not [c for c in df.columns if df[c].null_count() == df.height]
+
+
+@pytest.mark.parametrize("short", ["tournaments", "past_champions", "field"])
+@pytest.mark.parametrize("payload", [[{}], {"players": [{}], "pastChampions": [{}]}])
+def test_an_entry_without_an_id_is_no_row(short, payload):
+    assert getattr(P, f"parse_pgatour_{short}")(payload).height == 0
 
 
 @pytest.mark.parametrize("short, fixture, schema, min_rows", CASES)
@@ -118,7 +151,7 @@ def test_every_wrapper_has_a_query_document():
     from sportsdataverse.golf import pgatour
 
     names = [n for n in pgatour.__all__ if n.startswith("pgatour_")]
-    assert len(names) == 10
+    assert len(names) == 21
     for name in names:
         src = inspect.getsource(getattr(pgatour, name))
         assert '"https://orchestrator.pgatour.com/graphql"' in src
@@ -138,6 +171,48 @@ def test_variables_take_the_declared_type():
     for bad in ("last", 2026.7, True):
         with pytest.raises(ValueError):
             rt._variables("statDetails", {"year": bad})
+    assert rt._variables("tournaments", {"ids": "R2026014"}) == {"ids": ["R2026014"]}
+    assert rt._variables("tournaments", {"ids": ("R2026014", "R2026006")}) == {"ids": ["R2026014", "R2026006"]}
+    assert rt._variables("tournaments", {"ids": ["R2026014", None]}) == {"ids": ["R2026014"]}
+    assert rt._variables("holeDetails", {"courseId": "014", "hole": "12"}) == {"courseId": "014", "hole": 12}
+
+
+def test_past_results_year_is_the_five_digit_edition():
+    # a four-digit year is not an API error: it silently answers the CURRENT edition, so it is
+    # sent as the edition value (2025 -> 20250); a five-digit value goes as given
+    for year in (2025, "2025", 20250):
+        assert rt._variables("tournamentPastResults", {"id": "R2026014", "year": year})["year"] == 20250
+    assert rt._variables("statDetails", {"year": 2025}) == {"year": 2025}  # other operations take the year
+    for bad in (25, 202500):
+        with pytest.raises(ValueError):
+            rt._variables("tournamentPastResults", {"year": bad})
+
+
+def _answer(monkeypatch, operation: str, value: dict) -> None:
+    monkeypatch.setattr(rt, "_http_get", lambda url, json=None, headers=None, **kw: {"data": {operation: value}})
+    monkeypatch.setenv(rt.KEY_ENV, "test-key")
+
+
+def test_past_results_for_a_season_without_an_edition_is_no_data(monkeypatch):
+    # live 2026-11-26: year=2040 for R2026014 answered the R2026014 edition, not an error
+    from sportsdataverse.golf import pgatour
+
+    _answer(monkeypatch, "tournamentPastResults", _load("past_results_R2026014_20250.json"))  # the R2025014 edition
+    with pytest.raises(NoDataError, match="no 2040 edition of R2026014"):
+        pgatour.pgatour_past_results(tournament_id="R2026014", year=2040)
+    assert pgatour.pgatour_past_results(tournament_id="R2026014", year=2025)["season"].unique().to_list() == [2025]
+    assert pgatour.pgatour_past_results(tournament_id="R2026014", year=20250).height > 0  # five digits, as given
+    assert pgatour.pgatour_past_results(tournament_id="R2026014").height > 0  # no year: whatever edition answers
+    _answer(monkeypatch, "tournamentPastResults", {"players": []})  # no id to compare: nothing to refuse
+    assert pgatour.pgatour_past_results(tournament_id="R2026014", year=2040).height == 0
+
+
+def test_past_champions_carry_the_asked_tournament(monkeypatch):
+    from sportsdataverse.golf import pgatour
+
+    _answer(monkeypatch, "tournamentOverview", _load("past_champions_R2026014.json"))
+    df = pgatour.pgatour_past_champions(tournament_id="R2026014")
+    assert df["tournament_id"].unique().to_list() == ["R2026014"]
 
 
 def test_graphql_body_wraps_the_document():
@@ -299,3 +374,80 @@ def test_out_of_range_numbers_and_times_never_raise(bad):
         {"rounds": [{"roundInt": bad, "groups": [{"teeTime": bad, "players": [{"id": "1"}]}]}]}
     )
     assert tt.height == 1 and tt["tee_time"][0] is None
+
+
+def test_past_results_reads_the_edition_from_the_answer():
+    df = P.parse_pgatour_past_results(_load("past_results_R2026014_20250.json"))
+    assert df["tournament_id"].unique().to_list() == ["R2025014"] and df["season"].unique().to_list() == [2025]
+    top = df.row(0, named=True)
+    assert (top["player_id"], top["position"], top["total"]) == ("28237", "1", 277)
+    assert top["total"] == sum(top[f"round_{i}"] for i in range(1, 5))
+    cut = df.filter(pl.col("position") == "CUT")
+    assert cut.height > 0 and cut["round_3"].null_count() == cut.height
+
+
+def test_answer_ids_keep_the_tournament_part():
+    # leaderboardStats answers "R2026014-probability", scorecardStats "R2026014-28237"
+    ls = P.parse_pgatour_leaderboard_stats(_load("leaderboard_stats_R2026014_PROBABILITY.json"))
+    ss = P.parse_pgatour_scorecard_stats(_load("scorecard_stats_R2026014_28237.json"))
+    assert ls["tournament_id"].unique().to_list() == ss["tournament_id"].unique().to_list() == ["R2026014"]
+    assert ls.filter(pl.col("stat_id") == "win")["stat_title"].unique().to_list() == ["Win %"]
+    assert ls.group_by("player_id").len()["len"].unique().to_list() == [3]
+    assert set(ss["stat_group"]) == {"scoring"}  # the Masters has no ShotLink: no performance / strokes gained
+
+
+def test_hole_by_hole_rows_sum_to_the_round():
+    df = P.parse_pgatour_hole_by_hole(_load("hole_by_hole_R2026014_r4.json"))
+    per = df.group_by("player_id").agg(pl.col("score").sum(), pl.col("round_total").first(), pl.len())
+    full = per.filter(pl.col("len") == 18)
+    assert full.height > 0 and (full["score"] == full["round_total"]).all()
+    rory = df.filter(pl.col("player_id") == "28237")
+    assert rory["front_nine"][0] + rory["back_nine"][0] == rory["round_total"][0]
+
+
+def test_course_stats_drops_summary_rows_and_ranks_holes():
+    df = P.parse_pgatour_course_stats(_load("course_stats_R2026014.json"))
+    assert df["hole_number"].null_count() == 0
+    every = df.filter(pl.col("round_header") == "All Rounds")
+    assert every.height == 18 and every["round_number"].null_count() == 18
+    assert (every["difficulty_rank"].min(), every["difficulty_rank"].max()) == (1, 18)  # ties share a rank
+
+
+def test_field_appends_alternates():
+    raw = {"id": "R1", "players": [{"id": "1", "alternate": False}], "alternates": [{"id": "2", "alternate": True}]}
+    df = P.parse_pgatour_field(raw)
+    assert df["player_id"].to_list() == ["1", "2"] and df["alternate"].to_list() == [False, True]
+
+
+def test_schedule_years_season_is_the_query_year():
+    df = P.parse_pgatour_schedule_years(_load("schedule_years_R.json"))
+    assert df["season"].null_count() == 0  # split seasons display as "2022-2023" but query as 2023
+    split = df.filter(pl.col("display_season") == "2022-2023")
+    assert split["season"].to_list() == [2023]
+    assert df.filter(pl.col("is_default"))["season"].to_list() == [2026]
+
+
+def test_player_results_match_play_total_is_null():
+    df = P.parse_pgatour_player_results(_load("player_results_28237_R.json"))
+    assert df.filter(pl.col("total") == 0).height == 0
+    rounds = [{"roundNum": 2, "roundScore": "70"}, {"roundNum": 1, "roundScore": "68"}]
+    one = P.parse_pgatour_player_results({"tournaments": [{"tournaments": [{"total": "0", "roundScores": rounds}]}]})
+    assert one.row(0, named=True)["total"] is None
+    assert (one["round_1"][0], one["round_2"][0], one["round_3"][0]) == (68, 70, None)  # by roundNum, not position
+
+
+def test_leaderboard_stats_unhashable_ids_never_raise():
+    raw = {
+        "statIds": [["x"], {"y": 1}],
+        "titles": ["a", "b"],
+        "players": [{"playerId": "1", "stats": [{"statId": ["x"]}]}],
+    }
+    df = P.parse_pgatour_leaderboard_stats(raw)
+    assert df.height == 1 and df.schema == pl.Schema(P.LEADERBOARD_STATS_SCHEMA)
+
+
+def test_positional_rounds_keep_a_null_slot():
+    # a missing round in the list must not shift the later ones down a round
+    assert P._rounds([{"score": "70"}, None, {"score": "72"}], "score") == {
+        "round_1": 70, "round_2": None, "round_3": 72, "round_4": None,
+    }  # fmt: skip

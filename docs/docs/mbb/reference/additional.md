@@ -149,7 +149,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [reset_config](additional/stats-ncaa-org-3.md#reset_config) | Reset the active config to its env-var-derived defaults. |
 | [resolve_possessions](additional/stats-ncaa-org-3.md#resolve_possessions) | Attach a `player_id` to each of the ten on-floor slots. |
 | [right_kind_of_shot](additional/stats-ncaa-org-3.md#right_kind_of_shot) | Whether `pbp_event`'s shot type is compatible with `shot`'s |
-| [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
+| [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | Iterative SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
 | [same_school](additional/stats-ncaa-org-3.md#same_school) | Whether two team-name spellings denote the same school. |
 | [season_slice](additional/stats-ncaa-org-3.md#season_slice) | Cut a POOLED fit's players back to ONE season's participants and exposure. |
 | [select_contains](additional/stats-ncaa-org-3.md#select_contains) | JSoup `root.select(sel + ":contains(text)")`: candidates whose full |
@@ -408,6 +408,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mbb_team_shot_zones](additional/analytics-5.md#mbb_team_shot_zones) | College season shot profile by zone per team, for and allowed: rim / mid / corner 3 / above-the-break 3. |
 | [mbb_team_strength](additional/analytics-5.md#mbb_team_strength) | College team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
 | [mbb_tournament_ineligible](additional/analytics-6.md#mbb_tournament_ineligible) | Division I basketball programs that could not play in the NCAA tournament, per season. |
+| [mbb_tournament_run_players](additional/analytics-6.md#mbb_tournament_run_players) | Each player's totals and per-game line over a run, against the player's regular season. |
+| [mbb_tournament_run_teams](additional/analytics-6.md#mbb_tournament_run_teams) | Each run's record and box totals: the sum of the team's game boxes in the tournament. |
+| [mbb_tournament_runs](additional/analytics-6.md#mbb_tournament_runs) | Every tournament game, once per side, keyed to that team's run, with the run's record after it. |
 | [ncaa_box_events](additional/analytics-6.md#ncaa_box_events) | Each player's box counts per stats.ncaa.org event, the input of the stint and split box. |
 | [ncaa_coach_stints](additional/analytics-6.md#ncaa_coach_stints) | The card coach of each team-season as a whole-season stint, unless the card says the season changed hands. |
 | [ncaa_impact_rows](additional/analytics-6.md#ncaa_impact_rows) | Map the stats.ncaa.org pbp and possessions onto the game-impact row frame. |
@@ -423,14 +426,14 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [ncaa_team_box_count_rows](additional/analytics-6.md#ncaa_team_box_count_rows) | Map `ncaa_{mbb,wbb}_team_box` rows onto the four-factor count frame. |
 | [ncaa_team_coaches](additional/analytics-6.md#ncaa_team_coaches) | Every team-season's head coach from a raw-repo tree of stats.ncaa.org roster pages. |
 | [ncaa_team_game_counts](additional/analytics-6.md#ncaa_team_game_counts) | Each team's shots, free throws, rebounds and turnovers per game, whole and with garbage time split out. |
-| [order_lineup](additional/analytics-6.md#order_lineup) | Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order. |
-| [pos_class_to_score](additional/analytics-6.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
-| [project_bracket](additional/analytics-6.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
-| [regress_shot_quality](additional/analytics-6.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
-| [strength_of_schedule](additional/analytics-6.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
-| [test_positional_aware_filter](additional/analytics-6.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
-| [using_roster_pos](additional/analytics-6.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
-| [weighted_avg](additional/analytics-6.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
+| [order_lineup](additional/analytics-7.md#order_lineup) | Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order. |
+| [pos_class_to_score](additional/analytics-7.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
+| [project_bracket](additional/analytics-7.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
+| [regress_shot_quality](additional/analytics-7.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
+| [strength_of_schedule](additional/analytics-7.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
+| [test_positional_aware_filter](additional/analytics-7.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
+| [using_roster_pos](additional/analytics-7.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
+| [weighted_avg](additional/analytics-7.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 
 ## IDs and crosswalks
 

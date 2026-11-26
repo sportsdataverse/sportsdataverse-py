@@ -167,7 +167,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `headshot_alt` | String | Alternative-text label for the headshot. |
 | `flag_href` | String | URL of the SVG or PNG flag image representing the athlete's country of birth. |
 | `flag_alt` | String | Alt-text string for the athlete's country-of-birth flag image, typically the country name. |
-| `flag_rel` | String | Relationship descriptor for the athlete's country-of-birth flag link (e.g., "flag"). |
+| `flag_rel` | List | Relationship descriptor for the athlete's country-of-birth flag link (e.g., "flag"). |
 | `experience_years` | Int64 | Experience years. |
 | `experience_display_value` | String | Experience display value. |
 | `experience_abbreviation` | String | Experience abbreviation. |
@@ -498,7 +498,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `tournament_id` | Int64 | ESPN tournament identifier. |
 | `start_date` | String | Start date (YYYY-MM-DD). |
 | `broadcast` | String | Broadcast information string. |
-| `highlights` | String |  |
+| `highlights` | List |  |
 | `notes_type` | String | Notes type. |
 | `notes_headline` | String | Notes headline. |
 | `broadcast_market` | String | Broadcast market label (e.g. 'national', 'home'). |
@@ -538,7 +538,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `home_winner` | Boolean | Home team's winner. |
 | `home_current_rank` | Int64 | Current AP/coaches poll ranking of the home team at the time of the game. |
 | `home_linescores` | List | Points scored by the home team in each period or half of the game. |
-| `home_records` | String | Win-loss record string for the home team at the time of the game. |
+| `home_records` | List | Win-loss record string for the home team at the time of the game. |
 | `away_id` | Int64 | Unique identifier for away. |
 | `away_uid` | String | Away team's uid. |
 | `away_location` | String | Away team's location. |
@@ -556,7 +556,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `away_winner` | Boolean | Away team's winner. |
 | `away_current_rank` | Int64 | Current AP/coaches poll ranking of the away team at the time of the game. |
 | `away_linescores` | List | Points scored by the away team in each period or half of the game. |
-| `away_records` | String | Win-loss record string for the away team at the time of the game. |
+| `away_records` | List | Win-loss record string for the away team at the time of the game. |
 | `game_id` | Int64 | Unique game identifier. |
 | `season` | Int64 | Season as its 4-digit ending year (integer; 2026 = 2025-26). A 'YYYY-YY' string is not accepted. |
 | `season_type` | Int64 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
@@ -841,7 +841,7 @@ Polars dataframe of the women's college basketball teams, one row per team, with
 | `team_is_active` | Boolean | TRUE if the team is currently active. |
 | `team_is_all_star` | Boolean | TRUE if the row represents an All-Star team. |
 | `team_location` | String | Team city or location string. |
-| `team_logos` | Int64 |  |
+| `team_logos` | List |  |
 | `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_nickname` | String | Team nickname. |
 | `team_short_display_name` | String | Short team display name (e.g. 'Aces'). |

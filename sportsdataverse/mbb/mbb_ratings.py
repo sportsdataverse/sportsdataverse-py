@@ -5,9 +5,8 @@ Faithful port of hoop-explorer's ``RatingUtils``
 ``src/utils/stats/RatingUtils.ts``, 2260 LOC). Task 2.2 (Phase 2) ported
 :func:`build_o_rtg` -- the ``buildORtg`` static method
 (``RatingUtils.ts:398``) -- which derives an individual player's offensive
-rating (points produced per 100 individual possessions, adapted from
-`basketball-reference.com's NBA box-score method
-<https://www.basketball-reference.com/about/ratings.html>`_) plus the
+rating (points produced per 100 individual possessions, from box-score
+points produced over individual possessions) plus the
 "Adj Rtg+" (SoS + usage adjusted efficiency above replacement) used
 downstream as a RAPM prior (Phase 3). Task 2.3 adds the defensive
 counterpart :func:`build_d_rtg` (``buildDRtg``), the Net-Points breakdown

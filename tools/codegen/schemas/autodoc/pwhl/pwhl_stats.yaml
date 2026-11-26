@@ -260,7 +260,7 @@ columns:
   type: character
   description: ''
 - name: team_breakdown
-  type: integer
+  type: list
   description: ''
 - name: is_total
   type: double

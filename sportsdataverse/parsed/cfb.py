@@ -368,6 +368,7 @@ from sportsdataverse.cfb import cfb_player_havoc as cfb_player_havoc  # noqa: F4
 from sportsdataverse.cfb import cfb_playoff_seeds as cfb_playoff_seeds  # noqa: F401
 from sportsdataverse.cfb import cfb_predict_games as cfb_predict_games  # noqa: F401
 from sportsdataverse.cfb import cfb_ratings as cfb_ratings  # noqa: F401
+from sportsdataverse.cfb import cfb_ratings_compute_results as cfb_ratings_compute_results  # noqa: F401
 from sportsdataverse.cfb import cfb_recruiting_projection as cfb_recruiting_projection  # noqa: F401
 from sportsdataverse.cfb import cfb_resume as cfb_resume  # noqa: F401
 from sportsdataverse.cfb import cfb_returning_production as cfb_returning_production  # noqa: F401
@@ -562,6 +563,7 @@ __all__ = [
     "cfb_playoff_seeds",
     "cfb_predict_games",
     "cfb_ratings",
+    "cfb_ratings_compute_results",
     "cfb_recruiting_projection",
     "cfb_resume",
     "cfb_returning_production",

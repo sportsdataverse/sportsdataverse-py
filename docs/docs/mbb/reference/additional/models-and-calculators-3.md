@@ -409,7 +409,7 @@ One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is
 |---|---|---|
 | `game_id` | String | Unique game identifier. |
 | `season` | Int64 | Season year. |
-| `date` | String | Date in YYYY-MM-DD format. |
+| `date` | Date | Date in YYYY-MM-DD format. |
 | `team_id` | String | Unique team identifier. |
 | `opp_team_id` | String |  |
 | `is_home` | Boolean | Whether the team was home. |

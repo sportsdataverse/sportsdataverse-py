@@ -147,7 +147,8 @@ def test_nba_player_props_realized_gate(monkeypatch) -> None:
 
 
 def test_nba_player_props_orchestrator(monkeypatch) -> None:
-    logs = _mini_logs()
+    # the NBA shrinks rates toward a starter-split tier and pools last regular season
+    logs = _mini_logs().with_columns(pl.lit(False).alias("starter"), pl.lit(2).alias("season_type"))
     ratings = pl.DataFrame(
         {
             "team_id": ["A", "B"],
@@ -230,10 +231,26 @@ def test_load_player_logs_without_game_date_raises_value_error(monkeypatch, leag
 
 @BOX_LOADERS
 def test_load_player_logs_with_game_date_returns_the_logs(monkeypatch, league_id, loader_module, loader_name):
-    """A well-formed box passes the game_date guard: every row, the nine log columns, game_date a Date."""
+    """A well-formed box passes the game_date guard: every row, the log columns, game_date a Date.
+
+    This box has none of the optional columns, so the five extra stats, starter and season_type are null.
+    """
     box = _stub_box_loader(monkeypatch, loader_module, loader_name, with_game_date=True)
     logs = importlib.import_module("sportsdataverse.nba.nba_player_props")._load_player_logs(2024, league_id)
-    assert logs.columns == ["game_id", "game_date", "player_id", "team_id", "minutes", "pts", "reb", "ast", "fg3m"]
+    optional = ["stl", "blk", "tov", "fgm", "ftm", "starter", "season_type"]
+    assert logs.columns == [
+        "game_id",
+        "game_date",
+        "player_id",
+        "team_id",
+        "minutes",
+        "pts",
+        "reb",
+        "ast",
+        "fg3m",
+        *optional,
+    ]
+    assert all(logs[c].null_count() == logs.height for c in optional)
     assert logs.schema["game_date"] == pl.Date
     assert logs.height == box.height
     assert logs["game_date"].to_list() == box["game_date"].to_list()

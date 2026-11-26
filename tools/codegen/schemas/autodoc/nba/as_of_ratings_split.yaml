@@ -8,7 +8,7 @@ columns:
   type: integer
   description: ''
 - name: date
-  type: character
+  type: date
   description: ''
 - name: team_id
   type: character

@@ -1,0 +1,48 @@
+sim,week,game_type,home_team,away_team,result,neutral
+1,16,REG,Navy,Army,,1
+1,100,POST,App State,Georgia Southern,,1
+1,100,POST,Arkansas State,Missouri State,,1
+1,100,POST,Army,UConn,,1
+1,100,POST,BYU,Georgia Tech,,1
+1,100,POST,Cincinnati,Navy,,1
+1,100,POST,Clemson,Penn State,,1
+1,100,POST,Delaware,Louisiana,,1
+1,100,POST,Duke,Arizona State,,1
+1,100,POST,East Carolina,Pittsburgh,,1
+1,100,POST,Fresno State,Miami (OH),,1
+1,100,POST,Georgia,Ole Miss,,1
+1,100,POST,Hawai'i,California,,0
+1,100,POST,Houston,LSU,,1
+1,100,POST,Illinois,Tennessee,,1
+1,100,POST,Indiana,Alabama,,1
+1,100,POST,Indiana,Miami,,1
+1,100,POST,Indiana,Oregon,,1
+1,100,POST,Jacksonville State,Troy,,1
+1,100,POST,Louisiana Tech,Coastal Carolina,,1
+1,100,POST,Louisville,Toledo,,1
+1,100,POST,Minnesota,New Mexico,,1
+1,100,POST,Mississippi State,Wake Forest,,1
+1,100,POST,Missouri,Virginia,,1
+1,100,POST,NC State,Memphis,,1
+1,100,POST,Northwestern,Central Michigan,,1
+1,100,POST,Ohio,UNLV,,1
+1,100,POST,Ohio State,Miami,,1
+1,100,POST,Oklahoma,Alabama,,0
+1,100,POST,Ole Miss,Miami,,1
+1,100,POST,Ole Miss,Tulane,,0
+1,100,POST,Oregon,James Madison,,0
+1,100,POST,San Diego State,North Texas,,1
+1,100,POST,SMU,Arizona,,1
+1,100,POST,South Florida,Old Dominion,,1
+1,100,POST,Southern Miss,Western Kentucky,,1
+1,100,POST,TCU,USC,,1
+1,100,POST,Texas,Michigan,,1
+1,100,POST,Texas A&M,Miami,,0
+1,100,POST,Texas State,Rice,,1
+1,100,POST,Texas Tech,Oregon,,1
+1,100,POST,Utah,Nebraska,,1
+1,100,POST,Utah State,Washington State,,1
+1,100,POST,UTSA,Florida International,,1
+1,100,POST,Vanderbilt,Iowa,,1
+1,100,POST,Washington,Boise State,,1
+1,100,POST,Western Michigan,Kennesaw State,,1

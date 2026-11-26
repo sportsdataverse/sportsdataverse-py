@@ -17,7 +17,7 @@ description: "sdv-py College football: endpoint references, dataset loaders and 
 | [247Sports Recruit Database](#247sports-recruit-database) | `247sports.com`, `ipa.247sports.com` | 47 | none |
 | [Yahoo Sports Shangrila](#yahoo-sports-shangrila) | `graphite-secure.sports.yahoo.com` | 7 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 29 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 110 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 111 | — |
 
 ## ESPN {#espn}
 
@@ -90,7 +90,7 @@ description: "sdv-py College football: endpoint references, dataset loaders and 
 - [`calculate_win_probability`](reference/additional/models-and-calculators#calculate_win_probability)
 - [`calculate_wpa`](reference/additional/models-and-calculators#calculate_wpa)
 - [`calculate_xpass`](reference/additional/models-and-calculators#calculate_xpass)
-- [`cfb_adjusted_epa`](reference/additional/models-and-calculators#cfb_adjusted_epa)
+- [`cfb_adjusted_epa`](reference/additional/models-and-calculators-2#cfb_adjusted_epa)
 - [`cfb_adjusted_epa_by_game`](reference/additional/models-and-calculators-2#cfb_adjusted_epa_by_game)
 - [`cfb_compute_results`](reference/additional/models-and-calculators-2#cfb_compute_results)
 - [`cfb_draft_projection`](reference/additional/models-and-calculators-2#cfb_draft_projection)
@@ -98,6 +98,7 @@ description: "sdv-py College football: endpoint references, dataset loaders and 
 - [`cfb_kickoff_out_of_bounds_spot_expr`](reference/additional/models-and-calculators-2#cfb_kickoff_out_of_bounds_spot_expr)
 - [`cfb_predict_games`](reference/additional/models-and-calculators-2#cfb_predict_games)
 - [`cfb_ratings`](reference/additional/models-and-calculators-2#cfb_ratings)
+- [`cfb_ratings_compute_results`](reference/additional/models-and-calculators-2#cfb_ratings_compute_results)
 - [`cfb_recruiting_projection`](reference/additional/models-and-calculators-2#cfb_recruiting_projection)
 - [`cfb_roster_talent`](reference/additional/models-and-calculators-2#cfb_roster_talent)
 - [`cfb_simulations`](reference/additional/models-and-calculators-2#cfb_simulations)

@@ -105,6 +105,18 @@ def _game_rows(box: pl.DataFrame, ratings: pl.DataFrame) -> tuple[pl.DataFrame, 
     return player_games, team_games
 
 
+def _conferences(seasons: list[int], league: str) -> pl.DataFrame:
+    """``season``, ``team_id``, ``conference_id`` (Utf8) of each Division I team, from the schedule release."""
+    from sportsdataverse.mbb.mbb_college_season import college_teams, normalize_college_schedule
+
+    if league == "womens":
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_schedule as load_schedule
+    else:
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule as load_schedule
+    teams = college_teams(normalize_college_schedule(load_schedule(seasons)))
+    return teams.select(pl.col("season").cast(pl.Int64), pl.col("team_id").cast(pl.Utf8), "conference_id")
+
+
 def _box(box: pl.DataFrame, ratings: pl.DataFrame) -> pl.DataFrame:
     """:func:`~sportsdataverse._common.player_war.box_seasons` of the rows :func:`_game_rows` counts (D1 teams)."""
     d1 = ratings.filter(_D1).select(pl.col("season").cast(pl.Int64), pl.col("team_id").cast(pl.Utf8))
@@ -127,7 +139,7 @@ def mbb_player_war(
 
     Box BPM is anchored to the team and centred on Division I, so 0 is an average D1 player.
     ``vorp`` is points per 100 team possessions above a replacement player over one team's
-    season of possessions (Basketball-Reference's VORP scale); ``war`` is wins above replacement
+    season of possessions (so a full season of possessions at ``R + 1`` per 100 is a VORP of 1); ``war`` is wins above replacement
     against an average D1 schedule. A replacement-level player has 0, and a season's ``war``
     adds up to the D1 teams' wins minus those of a team of replacement players. The replacement
     level and points per win are fitted per league
@@ -143,12 +155,14 @@ def mbb_player_war(
         One row per ``(season, player_id)`` (ESPN ids, String) of a D1 team -- one with 10 or
         more games in :func:`~sportsdataverse.mbb.mbb_team_ratings.mbb_team_ratings`, box BPM's
         own centring set, so a season is empty until its teams reach 10 games: ``player_name``,
-        ``team_id`` (the team he played most possessions for), ``teams``, ``min``, ``poss``
+        ``team_id`` (the team he played most possessions for), ``teams``, ``team_ids``, ``conference_id``
+        (``team_id``'s, from the schedule release), ``min``, ``poss``
         (minutes / 40 * the team's adjusted tempo), ``rating`` (anchored box BPM, per 100),
         ``vorp`` and ``war`` with ``war_lo`` / ``war_hi`` (a nominal 90% interval from a bootstrap
         over each team-season's games: the sampling uncertainty of the team side and the playing
         time, not of box BPM itself), with ``_rank`` (1 = most), ``_pct`` and ``_n`` (possessions) for
-        ``vorp`` and ``war`` among every player of the season. Sorted by season and ``war``.
+        ``vorp`` and ``war`` among every player of the season, and ``war_tier`` (across Division I) and
+        ``war_tier_conf`` (within his conference). Sorted by season and ``war``.
         Empty input returns that schema with zero rows.
 
     Raises:
@@ -180,5 +194,6 @@ def mbb_player_war(
         team_games=team_games,
         player_games=player_games,
         box=_box(box, ratings),
+        conferences=_conferences(seasons_list, league),
     )
     return out.to_pandas() if return_as_pandas else out

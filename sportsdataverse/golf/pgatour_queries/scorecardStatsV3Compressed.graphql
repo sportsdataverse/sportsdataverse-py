@@ -1,0 +1,6 @@
+query ScorecardStatsV3Compressed($id: ID!, $playerId: ID!) {
+  scorecardStatsV3Compressed(id: $id, playerId: $playerId) {
+    id
+    payload
+  }
+}

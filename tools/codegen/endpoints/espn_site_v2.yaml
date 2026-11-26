@@ -40,6 +40,9 @@ endpoints:
   returns_schema: scoreboard
   example_args:
     dates: '20240115'
+  league_example_args:
+    lacrosse:
+      dates: '20260801'
 # Golf only. The tournament leaderboard lives at /golf/leaderboard with the league as a
 # query param (``/golf/{league}/leaderboard`` is 404), so the slug travels as ``league=``
 # (``league_query``). It carries what the scoreboard lacks: the displayed position (``T5``)
@@ -76,6 +79,9 @@ endpoints:
   # when section=None, the same dict the espn_cdn game pages document.
   docstring:
     parsed_doc: a dict of ``polars.DataFrame``s keyed by summary section
+  league_example_args:
+    lacrosse:
+      event_id: '401867221'
 # Base calendar works (current-season week labels/dates). The /calendar/{offseason,
 # regular-season,postseason,ondays} sub-paths 404 at ESPN for every league/season
 # (verified nfl/cfb/nhl) -- removed so we don't ship endpoints that always raise
@@ -123,6 +129,9 @@ endpoints:
   scope: universal
   path: /{sport}/{league}/groups
   parser: parse_groups
+  league_example_args:
+    golf:  # the team shorts answer only for the team match-play leagues
+      league: tgl
 - short: statistics_league
   returns_schema: statistics_league
   scope: universal
@@ -143,6 +152,9 @@ endpoints:
     default: 1000
   parser: parse_teams
   returns_schema: teams
+  league_example_args:
+    golf:  # the team shorts answer only for the team match-play leagues
+      league: tgl
 - short: team
   returns_schema: team
   scope: universal
@@ -154,6 +166,9 @@ endpoints:
   parser: parse_single_entity
   example_args:
     team_id: '4'
+  league_example_args:
+    lacrosse:
+      team_id: '122896'
 - short: team_roster
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/roster
@@ -188,6 +203,9 @@ endpoints:
   returns_schema: team_schedule
   example_args:
     team_id: '4'
+  league_example_args:
+    lacrosse:
+      team_id: '122896'
 - short: team_record
   summary: >-
     Deprecated: ESPN answers this team route with an empty object.
@@ -354,8 +372,14 @@ endpoints:
     type: str
   parser: parse_standings
   returns_schema: standings
+  league_example_args:
+    golf:  # the team shorts answer only for the team match-play leagues
+      league: tgl
 - short: rankings
   returns_schema: rankings
   scope: ncaa
   path: /{sport}/{league}/rankings
   parser: parse_rankings
+  league_example_args:
+    lacrosse:
+      league: 'mens-college-lacrosse'

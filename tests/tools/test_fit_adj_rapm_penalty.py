@@ -9,6 +9,7 @@ fitter's ridge is checked against :func:`nba_adj_rapm` on the committed 2025 WNB
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 from pathlib import Path
 
@@ -16,7 +17,12 @@ import numpy as np
 import polars as pl
 import pytest
 
-from sportsdataverse.nba.nba_adj_rapm import ADJ_RAPM_PENALTY, ADJ_RAPM_PRIOR_SCALE, nba_adj_rapm
+from sportsdataverse.nba.nba_adj_rapm import (
+    ADJ_RAPM_PENALTY,
+    ADJ_RAPM_PRIOR_SCALE,
+    ADJ_RAPM_PRIOR_SCALE_WEIGHTED,
+    nba_adj_rapm,
+)
 from sportsdataverse.nba.nba_player_factor_rapm import nba_factor_rapm_rows
 from sportsdataverse.nba.nba_rapm import RAPM_PENALTY, build_rapm_design
 
@@ -29,8 +35,8 @@ _FX = _ROOT / "tests" / "fixtures"
 _LEAGUE_ID = {"nba": "00", "wnba": "10"}
 
 
-def _pooled(league: str, k: float) -> pl.DataFrame:
-    cv = pl.read_parquet(_FX / "bb_adj_rapm_penalty" / "cv_sse.parquet")
+def _pooled(league: str, k: float, name: str = "cv_sse.parquet") -> pl.DataFrame:
+    cv = pl.read_parquet(_FX / "bb_adj_rapm_penalty" / name)
     train = list(fit.LEAGUES[league][1])
     return (
         cv.filter((pl.col("league") == league) & (pl.col("k") == k) & pl.col("season").is_in(train))
@@ -41,18 +47,38 @@ def _pooled(league: str, k: float) -> pl.DataFrame:
 
 
 @pytest.mark.parametrize("league", ["nba", "wnba"])
-def test_the_frozen_penalty_and_scale_are_the_pooled_cv_minimum(league) -> None:
+def test_the_shipped_penalty_and_scale_are_the_equal_weight_cv_minimum(league) -> None:
+    """The published configuration (#1150): on the equal-weight prior's corpus, scale 2 and the frozen penalty."""
     lid = _LEAGUE_ID[league]
     k = ADJ_RAPM_PRIOR_SCALE[lid]
-    assert k == fit.CHOSEN_SCALE == 2.0
+    assert k == 2.0
+    p = _pooled(league, k, "cv_sse_equal.parquet")
+    assert (p["seasons"] == 30).all()
+    assert p.sort("sse")["alpha"][0] == pytest.approx(ADJ_RAPM_PENALTY[lid], rel=1e-12)
+    assert _pooled(league, 0.0, "cv_sse_equal.parquet").sort("sse")["alpha"][0] == pytest.approx(
+        RAPM_PENALTY[lid], rel=1e-12
+    )
+    # the prior-scale evidence: at its own best penalty, k = 2 beats the unscaled prior on held-out games
+    assert p["sse"].min() < _pooled(league, 1.0, "cv_sse_equal.parquet")["sse"].min()
+    picks = {"nba": 3162.2776601683795, "wnba": 2275.8459260747886}  # k = 1, observed 2026-11-09
+    assert _pooled(league, 1.0, "cv_sse_equal.parquet").sort("sse")["alpha"][0] == pytest.approx(
+        picks[league], rel=1e-12
+    )
+
+
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_the_frozen_penalty_and_scale_are_the_pooled_cv_minimum(league) -> None:
+    lid = _LEAGUE_ID[league]
+    k = ADJ_RAPM_PRIOR_SCALE_WEIGHTED[lid]  # the fixture is the minute-weighted prior's refit
+    assert k == fit.CHOSEN_SCALE == 1.5
     p = _pooled(league, k)
     assert (p["seasons"] == 30).all()
     assert p.sort("sse")["alpha"][0] == pytest.approx(ADJ_RAPM_PENALTY[lid], rel=1e-12)
     # k = 0 is plain RAPM: its pooled pick is #1121's frozen value
     assert _pooled(league, 0.0).sort("sse")["alpha"][0] == pytest.approx(RAPM_PENALTY[lid], rel=1e-12)
-    # the prior-scale evidence: at its own best penalty, k = 2 beats the unscaled prior on held-out games
+    # the prior-scale evidence: at its own best penalty, k = 1.5 beats the unscaled prior on held-out games
     assert p["sse"].min() < _pooled(league, 1.0)["sse"].min()
-    picks = {"nba": 3162.2776601683795, "wnba": 2275.8459260747886}  # k = 1, observed 2026-11-09
+    picks = {"nba": 3727.593720314938, "wnba": 2682.6957952797247}  # k = 1, observed 2026-11-25
     assert _pooled(league, 1.0).sort("sse")["alpha"][0] == pytest.approx(picks[league], rel=1e-12)
 
 
@@ -77,10 +103,32 @@ def test_the_fitters_ridge_is_nba_adj_rapm() -> None:
     games = rows.drop_nulls([f"{s}_player_{i}" for s in ("off", "def") for i in range(1, 6)])["game_id"]
     res = fit.season_curves(X, Y, games.rank("dense").to_numpy())
     a = int(np.argmin(np.abs(fit.GRID - ADJ_RAPM_PENALTY["10"])))
-    kc = fit.PRIOR_SCALES.index(2.0)
-    beta = 2.0 * pm + res["coef"][kc, :, a]
+    k = ADJ_RAPM_PRIOR_SCALE["10"]
+    kc = fit.PRIOR_SCALES.index(k)
+    beta = k * pm + res["coef"][kc, :, a]
     out = nba_adj_rapm(rows, prior, league_id="10", n_samples=2, seed=0)  # the league's frozen alpha and scale
     want = pl.DataFrame({"player_id": np.asarray(pids, dtype=np.int64), "o": 100 * beta[:P], "d": -100 * beta[P:]})
     j = out.join(want, on="player_id")
     assert j.height == P
     assert (j["o_adj_rapm"] - j["o"]).abs().max() < 1e-8 and (j["d_adj_rapm"] - j["d"]).abs().max() < 1e-8
+
+
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_the_refit_keeps_the_spread_and_does_not_lose_held_out_games(league) -> None:
+    """``report.json`` (``report --baseline``): the level and the paired comparison behind the frozen scale.
+
+    Adjusted RAPM shrinks toward a prior, so its spread must stay near plain RAPM's: every season's ratio
+    (off_poss >= 300) sits in the band observed 2026-11-25 (NBA 0.85-1.58, WNBA 0.83-1.39), a too-wide prior
+    fails it. Against the equal-weight prior at its #1150 scale 2, on the same held-out games, the refit is
+    not worse by more than two standard errors (NBA +0.22 bp, SE 0.17; WNBA -0.41, SE 0.22). Never widened
+    to let a change pass.
+    """
+    rep = json.loads((_FX / "bb_adj_rapm_penalty" / "report.json").read_text())[league]
+    assert rep["scale"] == ADJ_RAPM_PRIOR_SCALE_WEIGHTED[_LEAGUE_ID[league]]
+    assert rep["frozen"] == pytest.approx(ADJ_RAPM_PENALTY[_LEAGUE_ID[league]], rel=1e-12)
+    ratios = [s["sd_adj_after"] / s["sd_rapm"] for s in rep["seasons"]]
+    assert len(ratios) == 30 and 0.8 <= min(ratios) and max(ratios) <= 1.6, (min(ratios), max(ratios))
+    base = rep["vs_baseline"]
+    assert base["baseline_frozen"] == pytest.approx(ADJ_RAPM_PENALTY[_LEAGUE_ID[league]], rel=1e-12)
+    mean, se, n = base["heldout_mse_bp"]
+    assert n == 30 and mean < 2 * se, (mean, se)

@@ -1,10 +1,10 @@
 ---
-title: "Women's college basketball — additional Python functions — Analytics: wbb_team–weighted_avg"
-sidebar_label: "Analytics: wbb_team–weighted_avg"
+title: "Women's college basketball — additional Python functions — Analytics: wbb_team"
+sidebar_label: "Analytics: wbb_team"
 sidebar_position: 15
-description: "Women's college basketball — additional Python functions — Analytics: wbb_team–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Analytics: wbb_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Women's college basketball — additional Python functions — Analytics: wbb_team–weighted_avg
+# Women's college basketball — additional Python functions — Analytics: wbb_team
 
 ### wbb_team_season_rates {#wbb_team_season_rates}
 
@@ -116,16 +116,16 @@ One row per `(season, team_id, split)`: `games`, `poss`, `opp_poss`, `pts`, `opp
 | `lg_rtg` | Float64 | Points per 100 possessions of the season's league-average offense (all teams, all split), the zero the factor points are measured from. |
 | `off_efg_pts` | Float64 | Offensive shooting (eFG%) points per 100 possessions against the league average: the part of off_rtg - lg_rtg the shooting (eFG%) factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
 | `off_tov_pts` | Float64 | Offensive turnovers points per 100 possessions against the league average: the part of off_rtg - lg_rtg the turnovers factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
-| `off_orb_pts` | Float64 | Offensive offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
-| `off_ft_pts` | Float64 | Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor's. |
+| `off_orb_pts` | Float64 | Offensive rebounding points per 100 possessions against the league average: the part of off_rtg - lg_rtg the offensive rebounding factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `off_ft_pts` | Float64 | Offensive free throws points per 100 possessions against the league average: the part of off_rtg - lg_rtg the free throws factor explains, at fixed linear prices from the season's league counts (factor_points). The four off_*_pts add up to off_rtg - lg_rtg and, with the four def_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possession count's distance from the box estimate, which weights a free-throw attempt 0.44, less the league's average gap per FGA), so its sign can differ from the free-throw factor's. |
 | `def_efg_pts` | Float64 | Defensive shooting (eFG%) points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
 | `def_tov_pts` | Float64 | Defensive turnovers points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
-| `def_orb_pts` | Float64 | Defensive offensive rebounding points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
-| `def_ft_pts` | Float64 | Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possessions free-throw trips used), so its sign can differ from the free-throw factor's. |
+| `def_orb_pts` | Float64 | Defensive rebounding points (the opponents' offensive rebounding) per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `def_ft_pts` | Float64 | Defensive free throws points per 100 defensive possessions against the league average, positive is better for the team: the part of lg_rtg - def_rtg it explains (factor_points). The four def_*_pts add up to lg_rtg - def_rtg and, with the four off_*_pts, to net_rtg exactly. The free-throw part is the remainder of the other three: the free throws' price plus the possessions and points the box estimate does not explain (on the pros, the possession count's distance from the box estimate, which weights a free-throw attempt 0.44, less the league's average gap per FGA), so its sign can differ from the free-throw factor's. |
 | `efg_pts` | Float64 | Net shooting (eFG%) points per 100: off_efg_pts + def_efg_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
 | `tov_pts` | Float64 | Net turnovers points per 100: off_tov_pts + def_tov_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
 | `orb_pts` | Float64 | Net offensive rebounding points per 100: off_orb_pts + def_orb_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
-| `ft_pts` | Float64 | Net free throws points per 100: off_ft_pts + def_ft_pts. The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
+| `ft_pts` | Float64 | Net free throws points per 100: off_ft_pts + def_ft_pts, the remainder parts, so more than the free throws (see off_ft_pts). The four (efg_pts, tov_pts, orb_pts, ft_pts) add up to net_rtg exactly. Null where the row has no four-factor counts (college clutch). |
 
 **Example**
 
@@ -418,58 +418,4 @@ One row per `(season, team_id)`: `games`, `wins`, `losses`, `poss`, `opp_poss`, 
 ```python
 from sportsdataverse.wbb import wbb_team_strength
 wbb_team_strength(2025).sort("adj_net_rtg_rank").head()
-```
-
-### weighted_avg {#weighted_avg}
-
-`weighted_avg(mutable_acc: 'LineupStatSet', obj: 'LineupStatSet') -> 'None'`
-
-Merge `obj` into `mutable_acc` with possession weighting.
-
-Faithful port of `LineupUtils.weightedAvg` (`LineupUtils.ts:645`).
-Mutates `mutable_acc` in place (matching the upstream mutable-state
-contract) and returns `None`. Each call accumulates a **weighted
-sum**, not a weighted average -- the companion `completeWeightedAvg`
-(upstream `LineupUtils.ts:752`, not yet ported) divides by the
-accumulated weight totals to finish the average. The per-field weight
-used at each merge step is derived from `obj`'s *own* totals (e.g.
-that single lineup's `total_off_fga`), not from any running total on
-`mutable_acc` -- callers accumulating many lineups must call
-`weighted_avg` once per lineup so every lineup contributes its own
-weight.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `mutable_acc` | `LineupStatSet` |  | The running accumulator (`LineupStatSet`). Mutated in place; fields absent from the accumulator are initialized to `{"value": 0.0}` (plus `old_value` / `override` when `obj`'s field carries a luck-adjustment `override` marker) before `obj`'s contribution is added. |
-| `obj` | `LineupStatSet` |  | The per-lineup `LineupStatSet` document to merge in. |
-
-**Returns**
-
-None. `mutable_acc` is mutated in place.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `NotImplementedError` | If `obj` carries a `game_info` key -- that merge branch is deliberately deferred (see module docstring). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_lineup_stats import weighted_avg
-
-acc: dict = {}
-weighted_avg(acc, lineup_a)
-weighted_avg(acc, lineup_b)
-print(acc["off_poss"]["value"])  # plain sum (SUM_FIELDS)
-
-# Two-lineup possession-weighted merge
-
-acc = {}
-for lineup in three_lineups:
-    weighted_avg(acc, lineup)
-# acc now holds weighted SUMS; complete_weighted_avg (not yet
-# ported) is required to turn these into rate-stat averages.
 ```

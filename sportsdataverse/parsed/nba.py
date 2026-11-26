@@ -170,6 +170,7 @@ from sportsdataverse.nba import WalkForwardResult as WalkForwardResult  # noqa: 
 from sportsdataverse.nba import add_ctg_shot_zones as add_ctg_shot_zones  # noqa: F401
 from sportsdataverse.nba import add_play_context as add_play_context  # noqa: F401
 from sportsdataverse.nba import add_possession_flags as add_possession_flags  # noqa: F401
+from sportsdataverse.nba import add_shot_make_prob as add_shot_make_prob  # noqa: F401
 from sportsdataverse.nba import add_start_type_detail as add_start_type_detail  # noqa: F401
 from sportsdataverse.nba import add_transition as add_transition  # noqa: F401
 from sportsdataverse.nba import adjust_efficiency as adjust_efficiency  # noqa: F401
@@ -335,6 +336,7 @@ from sportsdataverse.nba import load_nba_team_crosswalk as load_nba_team_crosswa
 from sportsdataverse.nba import load_nba_team_group_seasons as load_nba_team_group_seasons  # noqa: F401
 from sportsdataverse.nba import load_nba_team_season_stats as load_nba_team_season_stats  # noqa: F401
 from sportsdataverse.nba import load_rapm_ryan_davis as load_rapm_ryan_davis  # noqa: F401
+from sportsdataverse.nba import load_shot_make_model as load_shot_make_model  # noqa: F401
 from sportsdataverse.nba import luck_adjusted_response as luck_adjusted_response  # noqa: F401
 from sportsdataverse.nba import make_prob_by_context as make_prob_by_context  # noqa: F401
 from sportsdataverse.nba import make_prob_joint as make_prob_joint  # noqa: F401
@@ -406,6 +408,9 @@ from sportsdataverse.nba import nba_player_shot_zones as nba_player_shot_zones  
 from sportsdataverse.nba import nba_player_stats_advanced_context as nba_player_stats_advanced_context  # noqa: F401
 from sportsdataverse.nba import nba_player_war as nba_player_war  # noqa: F401
 from sportsdataverse.nba import nba_player_wowy as nba_player_wowy  # noqa: F401
+from sportsdataverse.nba import nba_playoff_series as nba_playoff_series  # noqa: F401
+from sportsdataverse.nba import nba_playoff_series_players as nba_playoff_series_players  # noqa: F401
+from sportsdataverse.nba import nba_playoff_series_teams as nba_playoff_series_teams  # noqa: F401
 from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
 from sportsdataverse.nba import nba_possession_rate_rows as nba_possession_rate_rows  # noqa: F401
 from sportsdataverse.nba import nba_predict_games as nba_predict_games  # noqa: F401
@@ -540,6 +545,7 @@ __all__ = [
     "add_ctg_shot_zones",
     "add_play_context",
     "add_possession_flags",
+    "add_shot_make_prob",
     "add_start_type_detail",
     "add_transition",
     "adjust_efficiency",
@@ -829,6 +835,7 @@ __all__ = [
     "load_nba_team_group_seasons",
     "load_nba_team_season_stats",
     "load_rapm_ryan_davis",
+    "load_shot_make_model",
     "luck_adjusted_response",
     "make_prob_by_context",
     "make_prob_joint",
@@ -900,6 +907,9 @@ __all__ = [
     "nba_player_stats_advanced_context",
     "nba_player_war",
     "nba_player_wowy",
+    "nba_playoff_series",
+    "nba_playoff_series_players",
+    "nba_playoff_series_teams",
     "nba_playtype_ratings",
     "nba_possession_rate_rows",
     "nba_predict_games",

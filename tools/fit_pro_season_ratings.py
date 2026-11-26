@@ -8,7 +8,7 @@ comment citing this script -- never tuned ad hoc.
 game after it. Two ratings sources exist:
 
 * ``box``: the existing :func:`sportsdataverse.nba.nba_team_ratings.nba_team_ratings` estimator
-  (box-score possessions, the KenPom-style fixed point, ``adjust_efficiency`` /
+  (box-score possessions, the iterative fixed point, ``adjust_efficiency`` /
   ``adjust_pace``) scored through :func:`sportsdataverse.nba.nba_game_predict.nba_predict_games`
   with its shipped ``hfa`` / ``margin_sd``. Here the box counts are summed from the same
   possession rows, so both sources see the same games.

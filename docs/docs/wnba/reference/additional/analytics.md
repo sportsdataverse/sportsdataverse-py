@@ -74,26 +74,25 @@ joint = make_prob_joint(t["defender"], t["shot_clock"], 0.47)
 
 ### score_shot_xpoints {#score_shot_xpoints}
 
-`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Score each shot with expected points from the league-average baseline.
+Score WNBA shots with expected points from the `LeagueAverages` zone table.
 
-Joins the per-shot frame to the zone baseline (falling back to the
-within-`shot_zone_range` mean when a zone triple is unmatched) and adds
-`shot_value` (3 for a `3PT` shot else 2), `xpoints = base_fg_pct *
-shot_value`, and `actual_points = shot_made_flag * shot_value`.
+`sportsdataverse.nba.nba_shot_value.score_shot_xpoints` bound to `league_id="10"`. The
+WNBA has no location booster (its fit failed the walk-forward gates), so every shot is scored
+from its zone triple.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (needs `shot_type` + the three zone keys + `shot_made_flag`). |
-| `league_avgs` | `DataFrame` |  | The `LeagueAverages` frame (see `xpoints_baseline`). |
+| `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (`shot_type`, the three zone keys, `shot_made_flag`). |
+| `league_avgs` | `DataFrame` |  | The `LeagueAverages` frame. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-The input `shots` plus `shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, actual_points:Float64`. Empty input returns the augmented schema with zero rows.
+The input plus `shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, actual_points:Float64`.
 
 No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.
 
@@ -106,52 +105,37 @@ No returns table is published for this function: no capture: its input is the sh
 **Example**
 
 ```python
-import polars as pl
-from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
+from sportsdataverse.wnba import score_shot_xpoints
 scored = score_shot_xpoints(shots, league_avgs)
-
-# Pipeline next step (one line)
-
-scored.group_by("player_id").agg(pl.col("xpoints").sum())
 ```
 
 ### shooter_talent {#shooter_talent}
 
-`shooter_talent(scored_shots: 'pl.DataFrame', *, league_id: 'str' = '00', min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+`shooter_talent(scored_shots: 'pl.DataFrame', *, min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Regressed shooter true-talent: make%-above-expected, shrunk to the mean.
+Regressed WNBA shooter talent: make%-above-expected, shrunk by the WNBA's `k`.
 
-Aggregates `score_shot_xpoints` output per shooter and regresses the
-raw over-expected rate toward zero by `n/(n+k)` (`k =
-get_shrinkage_k(league_id)`, fitted split-half). **As-of leakage
-boundary:** to score a shooter's talent for shots after date *D*, pass
-only that shooter's shots before *D* -- this function does not enforce the
-cut itself.
+`sportsdataverse.nba.nba_shot_value.shooter_talent` bound to `league_id="10"`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `shot_made_flag`, `base_fg_pct`, `xpoints`, `actual_points`). |
-| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
-| `min_attempts` | `int` | `50` | Drop shooters with fewer attempts (unstable estimate). |
+| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output. |
+| `min_attempts` | `int` | `50` | Drop shooters with fewer attempts. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-One row per `player_id`: `player_id:Int64, n_att:Int64, actual_makes:Int64, exp_makes:Float64, points_above_expected:Float64, raw_above_pct:Float64, talent_pct:Float64`. Empty input returns the zero-row schema.
+One row per `player_id`: `player_id:Int64, n_att:Int64, actual_makes:Int64, exp_makes:Float64, points_above_expected:Float64, raw_above_pct:Float64, talent_pct:Float64`.
 
 No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.
 
 **Example**
 
 ```python
-from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, shooter_talent
+from sportsdataverse.wnba import score_shot_xpoints, shooter_talent
 talent = shooter_talent(score_shot_xpoints(shots, league_avgs))
-
-# Pipeline next step (one line)
-
-talent.sort("talent_pct", descending=True).head(15)
 ```
 
 ### shot_selection_quality {#shot_selection_quality}

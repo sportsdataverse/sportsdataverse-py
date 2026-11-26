@@ -109,7 +109,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `headshot_alt` | String |  |
 | `flag_href` | String |  |
 | `flag_alt` | String |  |
-| `flag_rel` | String |  |
+| `flag_rel` | List |  |
 | `experience_years` | Int64 | Years of experience. |
 | `experience_display_value` | String |  |
 | `experience_abbreviation` | String |  |
@@ -336,7 +336,7 @@ Polars dataframe of the college football teams, one row per team, with the colum
 | `team_is_active` | Boolean |  |
 | `team_is_all_star` | Boolean |  |
 | `team_location` | String | Team location / school name. |
-| `team_logos` | Int64 |  |
+| `team_logos` | List |  |
 | `team_name` | String | Team nickname. |
 | `team_nickname` | String | Team nickname label. |
 | `team_short_display_name` | String | Short team display name. |

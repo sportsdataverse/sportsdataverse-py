@@ -11,7 +11,7 @@ columns:
   type: character
   description: ''
 - name: date
-  type: character
+  type: date
   description: ''
 - name: time
   type: character
@@ -41,10 +41,10 @@ columns:
   type: integer
   description: ''
 - name: score_per_period_home
-  type: integer
+  type: list
   description: ''
 - name: score_per_period_away
-  type: integer
+  type: list
   description: ''
 - name: decision
   type: character

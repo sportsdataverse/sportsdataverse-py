@@ -7,7 +7,8 @@ calibration gate therefore tests the model's true INVARIANT — join integrity
 + 2/3 value assignment — via self-calibration (a baseline built from the same
 shots must net to ~0), and separately bounds the elite-fixture over-
 performance. Observed at gate authorship (2026-07-08): self-calibration
-0.00007, league ratio 1.053, split-half reliability 0.699 raw → 0.707 shrunk.
+0.00007, league ratio 1.053, split-half reliability 0.699 raw → 0.707 shrunk on the
+zone table; on the NBA's default location model (2026-11-25) ratio 1.057, 0.756 → 0.760.
 NEVER loosen a gate to pass — debug the model.
 """
 
@@ -52,7 +53,7 @@ def test_self_calibration_invariant(shot_value_corpus):
         .agg(pl.len().alias("fga"), pl.col("shot_made_flag").sum().alias("fgm"))
         .with_columns((pl.col("fgm") / pl.col("fga")).alias("fg_pct"))
     )
-    scored = score_shot_xpoints(shots, own)
+    scored = score_shot_xpoints(shots, own, model="zone")
     assert scored.height >= 40_000, f"corpus truncated (n={scored.height}) — gate would pass vacuously"
     assert scored.filter(pl.col("base_fg_pct").is_null()).height == 0, "unmatched zones after fallback"
     err = points_calibration_error(scored["xpoints"].to_numpy(), scored["actual_points"].to_numpy())
@@ -73,7 +74,8 @@ def test_value_assignment_integrity(shot_value_corpus):
 def test_league_baseline_overperformance_bounded(shot_value_corpus):
     """Applying the LEAGUE baseline, the elite fixture scores 0-10% above it
     (these are above-average shooters; the model applies the baseline
-    correctly, they simply beat it). Observed ratio 1.053."""
+    correctly, they simply beat it). Observed ratio 1.057 on the location model
+    (1.053 on the zone table)."""
     scored = score_shot_xpoints(shot_value_corpus["shots"], shot_value_corpus["league_avgs"])
     assert scored.height >= 40_000, f"corpus truncated (n={scored.height})"
     ratio = float(scored["actual_points"].sum() / scored["xpoints"].sum())
@@ -134,7 +136,7 @@ def test_defender_context_plausible_and_joint_ordered(shot_value_corpus):
 
 def test_shrunk_reliability_beats_raw(shot_value_corpus):
     """Shrinking with the fitted k does not reduce cross-half reliability
-    (observed 0.699 raw → 0.707 shrunk). If it regresses, refit k -- do not
+    (observed 0.756 raw → 0.760 shrunk on the location model). If it regresses, refit k -- do not
     loosen. As-of note: talent is regression-to-mean, no leakage here (both
     halves are the same season, split by parity for the reliability check)."""
     scored = score_shot_xpoints(shot_value_corpus["shots"], shot_value_corpus["league_avgs"]).with_columns(
@@ -159,7 +161,7 @@ def test_shrunk_reliability_beats_raw(shot_value_corpus):
     r_raw = split_half_reliability(r1, r2)
     r_shrunk = split_half_reliability(shrunk, r2)
     assert r_shrunk >= r_raw, "shrinkage reduced cross-half reliability — refit k, do not loosen"
-    assert r_shrunk >= 0.40, "reliability floor (observed 0.707 at fit time; refit if it regresses)"
+    assert r_shrunk >= 0.40, "reliability floor (observed 0.760 at fit time; refit if it regresses)"
 
 
 # ---------------------------------------------------------------------------

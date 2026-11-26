@@ -487,7 +487,7 @@ uv add --dev some-package           # add dev-only dep
 One package per primary league (`cfb/ mbb/ mlb/ nba/ nfl/ nhl/ wbb/ wnba/ pwhl/ nbagl/ odds/`), the
 cross-sport sources under `providers/` (`cbs/ fox/ yahoo/ espn_content/ thesportsdb/`), the HockeyTech core
 (`hockeytech/`) and its 19 league families under `hockey/`, `baseball/` (college
-baseball + softball), `soccer/` (+ `mls/`, `nwsl/`), `cricket/`, `lacrosse/`, `golf/` (+ the PGA TOUR GraphQL `pgatour_*`), `football/`
+baseball + softball), `soccer/` (+ `mls/`, `nwsl/`), `cricket/`, `lacrosse/` (+ the PLL stats API `pll_*`), `golf/` (+ the PGA TOUR GraphQL `pgatour_*`), `football/`
 (UFL/XFL/CFL + the `sources/` adapters), `scrape/` (`espn/ ncaa/ stats/`),
 `registry/`, `validation/`, `wexp/`, `parsed/` (DEPRECATED generated aliases) and
 `sdv_docs/` (the MCP server, which must never import `sportsdataverse`). `basketball/` holds
@@ -500,7 +500,7 @@ EuroLeague, the international families and the ESPN side leagues (`nbl/ fiba/ ol
 
 Each `<league>/<prefix>_espn_ext.py` is **codegen output** (~5,700 lines) written by
 `build_live()` from the five ESPN endpoint YAMLs — 127 short names across 42
-league modules, 4,632 wrappers. Never hand-edit one; edit the YAML and regenerate.
+league modules, 4,647 wrappers. Never hand-edit one; edit the YAML and regenerate.
 
 ## Parser Layer
 

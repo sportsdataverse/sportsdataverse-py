@@ -29,7 +29,7 @@ columns:
   type: character
   description: ''
 - name: birth_date
-  type: character
+  type: date
   description: ''
 - name: height
   type: double

@@ -157,7 +157,7 @@ A pandas copy of `pbp_df` plus: * `two_pt_wp` -- `prob_2pt * wp(pts=2) + (1 - pr
 | `priority` | Boolean | `TRUE` if ESPN flags the play as a priority highlight. |
 | `modified` | String | ISO timestamp the play record was last modified. |
 | `wallclock` | String | Real-world ISO timestamp of the play. |
-| `teamParticipants` | String | Raw ESPN team-level participants payload carried through from the plays feed (stringified). |
+| `teamParticipants` | String | Raw ESPN team-level participants payload carried through from the plays feed, a list as the live feed sends it, stringified in the release files. |
 | `isPenalty` | Boolean | ESPN's per-play flag that a penalty occurred on the play. |
 | `statYardage` | Int64 | Yardage ESPN credits to the play for statistical purposes. |
 | `isTurnover` | Boolean | ESPN's per-play turnover flag as shipped in the plays feed (broader than the giveaway-based is_turnover derivation). |

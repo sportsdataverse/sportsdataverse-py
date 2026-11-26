@@ -1,0 +1,25 @@
+query PlayerProfileTournamentResults($playerId: ID!, $tourCode: TourCode) {
+  playerProfileTournamentResults(playerId: $playerId, tourCode: $tourCode) {
+    playerId
+    tournaments {
+      tournamentNum
+      tournaments {
+        tournamentId
+        tournamentName
+        year
+        startDate
+        courseName
+        position
+        toPar
+        total
+        points
+        pointsRank
+        winnings
+        roundScores {
+          roundNum
+          roundScore
+        }
+      }
+    }
+  }
+}

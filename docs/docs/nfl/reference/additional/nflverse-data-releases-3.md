@@ -349,7 +349,7 @@ Polars dataframe containing NFL trade information.
 |---|---|---|
 | `trade_id` | Int64 | ID of Trade |
 | `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `trade_date` | String | Exact date that trade occurred |
+| `trade_date` | Date | Exact date that trade occurred |
 | `gave` | String | Team that gave pick/player in row |
 | `received` | String | Team that received pick/player in row |
 | `pick_season` | Int64 | Draft in which traded pick was in |

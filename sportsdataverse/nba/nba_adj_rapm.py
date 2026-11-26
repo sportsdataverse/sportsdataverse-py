@@ -32,17 +32,31 @@ from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, _possessions_leagu
 #: 0.072 -> 0.110 (+0.038, SE 0.016), against plain RAPM's 0.155 / 0.073 and SPM's 0.129 / 0.062;
 #: year-over-year Spearman of adjusted RAPM itself rises 0.470 -> 0.530 (NBA, +0.060, SE 0.006) and
 #: 0.446 -> 0.519 (WNBA, +0.073, SE 0.009). The G League (``"20"``) is seeded with the NBA value.
+#: The minute-weighted SPM prior's refit (2026-11-25, :data:`ADJ_RAPM_PRIOR_SCALE_WEIGHTED`) picks the
+#: same two penalties.
 ADJ_RAPM_PENALTY: dict[str, float] = {"00": 3727.593720314938, "10": 2682.6957952797247}
 ADJ_RAPM_PENALTY["20"] = ADJ_RAPM_PENALTY["00"]
-#: The multiplier on the SPM prior per league id. SPM is a ridge fit to shrunk RAPM (sd about 0.6 per
-#: 100 against RAPM's 1.8), so the prior is too narrow: on the same held-out games, scaling it by 2
-#: lowers the pooled error by 1.34 basis points against the unscaled prior (NBA, SE 0.10 over 30
+#: The multiplier on the SPM prior per league id, for the default (equal-weight) SPM prior: the value
+#: every published ``player_impact`` adjusted RAPM was fit with. SPM is a ridge fit to shrunk RAPM (sd
+#: about 0.6 per 100 against RAPM's 1.8), so the prior is too narrow: on the same held-out games, scaling
+#: it by 2 lowers the pooled error by 1.34 basis points against the unscaled prior (NBA, SE 0.10 over 30
 #: seasons; WNBA 1.89, SE 0.22) and is where next-season R^2 and Spearman peak on the grid 0 to 4
 #: (NBA R^2 0.181 at 1, 0.196 at 2, 0.186 at 4; WNBA 0.098, 0.110, 0.097). Held-out game error keeps
 #: falling past 2 (NBA minimum at 3, WNBA at 4 or beyond), so 2 is the conservative end of the range
 #: both criteria favour. ``nba_adj_rapm(..., prior_scale=1.0)`` fits the prior as given.
 ADJ_RAPM_PRIOR_SCALE: dict[str, float] = {"00": 2.0, "10": 2.0}
 ADJ_RAPM_PRIOR_SCALE["20"] = ADJ_RAPM_PRIOR_SCALE["00"]
+#: The prior scale for the opt-in minute-weighted SPM prior (``train_spm(..., weight="min",
+#: alpha=SPM_ALPHA_WEIGHTED)``); pass it as ``nba_adj_rapm(..., prior_scale=...)``. It is NOT the
+#: default and is not published. On the grid 0 to 4, scored on the same held-out games, 1.5 lowers the
+#: pooled error against the unscaled prior by 0.31 basis points (NBA, SE 0.13 over 30 seasons; WNBA
+#: 1.08, SE 0.18), and next-season R^2 and Spearman peak at 1 to 1.5. The weighted prior is about twice
+#: as wide as the equal-weight one. At 1.5 it pulls adjusted RAPM far enough from plain RAPM that the
+#: NBA producer's ``r_rapm_adj_min`` floor (0.75) fails in 11 of 30 seasons (minimum 0.477, 2019). Scale
+#: 1.0 with a possession-weighted gate was rejected on unseen data: playoff prediction error is worse
+#: than at 1.5 in both leagues (2026-11-26).
+ADJ_RAPM_PRIOR_SCALE_WEIGHTED: dict[str, float] = {"00": 1.5, "10": 1.5}
+ADJ_RAPM_PRIOR_SCALE_WEIGHTED["20"] = ADJ_RAPM_PRIOR_SCALE_WEIGHTED["00"]
 
 
 def _fit_prior_ridge(
