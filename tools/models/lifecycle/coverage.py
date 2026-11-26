@@ -299,7 +299,7 @@ def report(rows: pl.DataFrame, league: str) -> dict[str, Any]:
     out: dict[str, Any] = {"league": league, "cutoffs": {}}
     for cut in ("preseason", "in_season"):
         if rows.filter(pl.col("cutoff") == cut).is_empty():  # e.g. NBA 2012 alone: no in-season cutoff
-            out["cutoffs"][cut] = {"reading": "TOO_FEW_SEASONS", "tolerance": None}
+            out["cutoffs"][cut] = {"reading": "TOO_FEW_SEASONS", "tolerance": None, "reason": f"no {cut} cutoff"}
             continue
         entry: dict[str, Any] = {}
         for arm in ("shift", "fixed"):
