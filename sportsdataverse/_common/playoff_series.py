@@ -116,6 +116,14 @@ SERIES_PLAYERS_SCHEMA: dict[str, pl.DataType] = {
 }
 
 
+#: Playoff-format changes, by the season (named by its end year) each one starts.
+#: NBA: the first round went from best-of-five to best-of-seven in 2002-03.
+NBA_FIRST_ROUND_BEST_OF_SEVEN_FROM = 2003
+#: WNBA Finals: best-of-three through 2004, best-of-five from 2005, best-of-seven from 2025.
+WNBA_FINALS_BEST_OF_FIVE_FROM = 2005
+WNBA_FINALS_BEST_OF_SEVEN_FROM = 2025
+
+
 def wins_to_clinch(league: str, season: int, *, final: bool) -> int | None:
     """Wins that settle a series, where the format is fixed for the round; None where it varies.
 
@@ -140,10 +148,12 @@ def wins_to_clinch(league: str, season: int, *, final: bool) -> int | None:
             wins_to_clinch("wnba", 2024, final=True)  # 3: the Finals were best-of-five
     """
     if league == "nba":
-        return 4 if (season >= 2003 or final) else None
+        return 4 if (season >= NBA_FIRST_ROUND_BEST_OF_SEVEN_FROM or final) else None
     if not final:
         return None
-    return 2 if season <= 2004 else 3 if season <= 2024 else 4
+    if season < WNBA_FINALS_BEST_OF_FIVE_FROM:
+        return 2
+    return 3 if season < WNBA_FINALS_BEST_OF_SEVEN_FROM else 4
 
 
 def _game_number() -> pl.Expr:
