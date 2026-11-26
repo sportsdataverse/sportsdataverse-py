@@ -1,0 +1,39 @@
+schema: pll_season_leaders
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: season_segment
+  type: character
+  description: ''
+- name: stat
+  type: character
+  description: ''
+- name: rank
+  type: integer
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: jersey_number
+  type: character
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: team_name
+  type: character
+  description: ''
+- name: stat_value
+  type: double
+  description: ''

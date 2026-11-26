@@ -242,6 +242,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.basketball.genius.genius_runtime",
         "sportsdataverse.basketball.atrium.atrium_runtime",
         "sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime",
+        "sportsdataverse.lacrosse.pll_runtime",
         "sportsdataverse.basketball.feb.feb_runtime",
         "sportsdataverse.basketball.scb.scb_runtime",
         "sportsdataverse.basketball.lba.lba_runtime",
@@ -3113,6 +3114,7 @@ FLAT_APIS = [
     ("sleeper", "nfl"),
     ("f1", "f1"),  # Jolpica F1 (Ergast-compatible)
     ("pgatour", "golf"),  # PGA TOUR GraphQL (orchestrator.pgatour.com), runtime only
+    ("pll", "lacrosse"),  # Premier Lacrosse League stats API (stats.premierlacrosseleague.com), runtime only
     # wave-2 intake families (espn-content, thesportsdb, football-data.co.uk, openligadb,
     # polymarket, kalshi)
     ("espn_content", "espn_content"),
@@ -3838,6 +3840,7 @@ _FLAT_API_DOC = {
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
     "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
     "pgatour": "PGA TOUR GraphQL API (orchestrator.pgatour.com; runtime only, public frontend key or $PGA_API_KEY)",
+    "pll": "Premier Lacrosse League stats API (stats.premierlacrosseleague.com; runtime only, no key, the site's Referer)",
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
     "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",
