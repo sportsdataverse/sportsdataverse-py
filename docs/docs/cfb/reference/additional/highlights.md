@@ -786,7 +786,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `recent` | Boolean |  |
 | `start_date` | String | Season start timestamp (ISO 8601, UTC). |
 | `broadcast` | String | Broadcast network short name. |
-| `highlights` | Int64 | Game highlight urls. |
+| `highlights` | List | Game highlight urls. |
 | `notes_type` | String |  |
 | `notes_headline` | String |  |
 | `broadcast_market` | String |  |
@@ -830,7 +830,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `home_score` | String | Home-team score after the play. |
 | `home_current_rank` | Int64 | AP or Coaches Poll ranking of the home team at the time of the game (null if unranked). |
 | `home_linescores` | List | Per-period point totals for the home team, stored as an array of quarter/overtime scores. |
-| `home_records` | String | Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
+| `home_records` | List | Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
 | `away_id` | Int64 | Away team referencing id. |
 | `away_uid` | String |  |
 | `away_location` | String |  |
@@ -847,7 +847,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `away_score` | String | Away-team score after the play. |
 | `away_current_rank` | Int64 | AP or Coaches Poll ranking of the away team at the time of the game (null if unranked). |
 | `away_linescores` | List | Per-period point totals for the away team, stored as an array of quarter/overtime scores. |
-| `away_records` | String | Win-loss record of the away team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
+| `away_records` | List | Win-loss record of the away team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `season_type` | Int64 | ESPN season type (2 = regular, 3 = postseason). |

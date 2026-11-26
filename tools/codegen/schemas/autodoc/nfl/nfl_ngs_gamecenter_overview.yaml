@@ -29,7 +29,7 @@ columns:
   type: character
   description: ''
 - name: zones
-  type: integer
+  type: list
   description: ''
 - name: passYards
   type: integer

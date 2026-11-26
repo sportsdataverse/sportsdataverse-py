@@ -47,7 +47,7 @@ columns:
   type: integer
   description: ''
 - name: highlight_play_playStats
-  type: integer
+  type: list
   description: ''
 - name: highlight_play_playId
   type: integer
@@ -125,7 +125,7 @@ columns:
   type: logical
   description: ''
 - name: highlight_players
-  type: integer
+  type: list
   description: ''
 - name: highlight_season
   type: integer

@@ -790,7 +790,7 @@ Polars dataframe of season rosters for the requested seasons (`pandas.DataFrame`
 | `full_name` | String | Full name as per NFL.com |
 | `first_name` | String | First name of player |
 | `last_name` | String | Last name of player |
-| `birth_date` | String | Player birth date (sourced from NFL. Other sources may differ) |
+| `birth_date` | Date | Player birth date (sourced from NFL. Other sources may differ) |
 | `height` | Float64 | Official height, in inches |
 | `weight` | Int64 | Official weight, in pounds |
 | `college` | String | Official college (usually the last one attended) |

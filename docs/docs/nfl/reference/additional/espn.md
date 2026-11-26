@@ -613,7 +613,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `recent` | Boolean |  |
 | `start_date` | String |  |
 | `broadcast` | String |  |
-| `highlights` | String |  |
+| `highlights` | List |  |
 | `notes_type` | String |  |
 | `notes_headline` | String |  |
 | `broadcast_market` | String |  |
@@ -653,7 +653,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `home_score` | String | The number of points the home team scored. Is NA for games which haven't yet been played. |
 | `home_current_rank` | Int64 | Always null. The NFL has no poll, so ESPN ships no curatedRank; kept so the column set matches the college schedules. |
 | `home_linescores` | List | Comma-separated or serialized quarter-by-quarter score totals for the home team. |
-| `home_records` | String | Serialized win-loss-tie record(s) for the home team (e.g., overall, home, away, conference). |
+| `home_records` | List | Serialized win-loss-tie record(s) for the home team (e.g., overall, home, away, conference). |
 | `away_id` | Int64 |  |
 | `away_uid` | String |  |
 | `away_location` | String |  |
@@ -669,7 +669,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `away_score` | String | The number of points the away team scored. Is NA for games which haven't yet been played. |
 | `away_current_rank` | Int64 | Always null. The NFL has no poll, so ESPN ships no curatedRank; kept so the column set matches the college schedules. |
 | `away_linescores` | List | Comma-separated or serialized quarter-by-quarter score totals for the away team. |
-| `away_records` | String | Serialized win-loss-tie record(s) for the away team (e.g., overall, home, away, conference). |
+| `away_records` | List | Serialized win-loss-tie record(s) for the away team (e.g., overall, home, away, conference). |
 | `game_id` | Int64 | Ten digit identifier for NFL game. |
 | `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `season_type` | Int64 | REG or POST indicating if the timeframe belongs to regular or post season. |
@@ -721,7 +721,7 @@ Polars dataframe of the NFL teams, one row per team, with the columns in the ret
 | `team_is_active` | Boolean |  |
 | `team_is_all_star` | Boolean |  |
 | `team_location` | String |  |
-| `team_logos` | Int64 |  |
+| `team_logos` | List |  |
 | `team_name` | String |  |
 | `team_nickname` | String |  |
 | `team_short_display_name` | String |  |

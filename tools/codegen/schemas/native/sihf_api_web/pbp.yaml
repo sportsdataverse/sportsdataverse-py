@@ -68,10 +68,10 @@ columns:
   type: integer
   description: ''
 - name: plus_player_ids
-  type: integer
+  type: list
   description: ''
 - name: minus_player_ids
-  type: integer
+  type: list
   description: ''
 - name: penalty_id
   type: integer

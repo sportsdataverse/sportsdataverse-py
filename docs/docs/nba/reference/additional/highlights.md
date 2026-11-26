@@ -532,7 +532,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `recent` | Boolean | Recent. |
 | `start_date` | String | Start date (YYYY-MM-DD). |
 | `broadcast` | String | Broadcast information string. |
-| `highlights` | Int64 |  |
+| `highlights` | List |  |
 | `notes_type` | String | Notes type. |
 | `notes_headline` | String | Notes headline. |
 | `broadcast_market` | String | Broadcast market label (e.g. 'national', 'home'). |
@@ -570,7 +570,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `home_score` | String | Home team score at the time of the play. |
 | `home_winner` | Boolean | Home team's winner. |
 | `home_linescores` | List | Period-by-period point totals for the home team, stored as a list of integer scores. |
-| `home_records` | String | Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference). |
+| `home_records` | List | Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference). |
 | `away_id` | Int64 | Unique identifier for away. |
 | `away_uid` | String | Away team's uid. |
 | `away_location` | String | Away team's location. |
@@ -586,7 +586,7 @@ Polars dataframe containing schedule dates for the requested season. A day with 
 | `away_score` | String | Away team score at the time of the play. |
 | `away_winner` | Boolean | Away team's winner. |
 | `away_linescores` | List | Period-by-period point totals for the away team, stored as a list of integer scores. |
-| `away_records` | String | Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference). |
+| `away_records` | List | Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference). |
 | `game_id` | Int64 | Unique game identifier. |
 | `season` | Int64 | Season year. |
 | `season_type` | Int64 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
@@ -638,7 +638,7 @@ Polars dataframe of the NBA teams, one row per team, with the columns in the ret
 | `team_is_active` | Boolean | TRUE if the team is currently active. |
 | `team_is_all_star` | Boolean | TRUE if the row represents an All-Star team. |
 | `team_location` | String | Team city or location string. |
-| `team_logos` | Int64 |  |
+| `team_logos` | List |  |
 | `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_nickname` | String | Team nickname. |
 | `team_short_display_name` | String | Short team display name (e.g. 'Aces'). |
