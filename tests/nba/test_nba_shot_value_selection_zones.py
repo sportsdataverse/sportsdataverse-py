@@ -39,7 +39,7 @@ def test_selection_quality_rim_beats_midrange():
     # player 1: 60 rim (xev 0.64*2=1.28); player 2: 60 mid (xev 0.40*2=0.80)
     rim = _make_shots(1, "Restricted Area", "Center(C)", "Less Than 8 ft.", "2PT Field Goal", 60, 40)
     mid = _make_shots(2, "Mid-Range", "Center(C)", "16-24 ft.", "2PT Field Goal", 60, 20)
-    scored = score_shot_xpoints(pl.concat([rim, mid]), _league_avgs())
+    scored = score_shot_xpoints(pl.concat([rim, mid]), _league_avgs(), model="zone")
     sel = shot_selection_quality(scored, min_attempts=50)
     p1 = sel.filter(pl.col("player_id") == 1).row(0, named=True)
     p2 = sel.filter(pl.col("player_id") == 2).row(0, named=True)
@@ -54,7 +54,7 @@ def test_zone_map_collapses_corners():
     rim = _make_shots(1, "Restricted Area", "Center(C)", "Less Than 8 ft.", "2PT Field Goal", 3, 2)
     lc = _make_shots(1, "Left Corner 3", "Left Side(L)", "24+ ft.", "3PT Field Goal", 1, 1)
     rc = _make_shots(1, "Right Corner 3", "Right Side(R)", "24+ ft.", "3PT Field Goal", 1, 0)
-    scored = score_shot_xpoints(pl.concat([rim, lc, rc]), _league_avgs())
+    scored = score_shot_xpoints(pl.concat([rim, lc, rc]), _league_avgs(), model="zone")
     zmap = zone_value_map(scored)
     zones = set(zmap["zone"].to_list())
     assert "corner_3" in zones and "Left Corner 3" not in zones

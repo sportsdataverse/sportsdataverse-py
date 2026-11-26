@@ -74,38 +74,25 @@ joint = make_prob_joint(t["defender"], t["shot_clock"], 0.47)
 
 ### score_shot_xpoints {#score_shot_xpoints}
 
-`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, league_id: 'str' = '00', model: "Literal['zone', 'location']" = 'zone', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Score each shot with its make chance and expected points.
+Score WNBA shots with expected points from the `LeagueAverages` zone table.
 
-`base_fg_pct` is the shot's make chance: with `model="zone"` (the default) the league's FG%
-in its zone triple from `LeagueAverages` (unmatched: the `shot_zone_range` mean); with
-`model="location"` (NBA only) `add_shot_make_prob` on `loc_x` / `loc_y` /
-`action_type` / `shot_type`, the zone value where a shot has no location. The frame gains
-`shot_value` (3 for `3PT` else 2), `xpoints = base_fg_pct * shot_value` and
-`actual_points = shot_made_flag * shot_value`.
-
-Walk-forward on the NBA's play-by-play (`tools/models/nba_shot_value/shot_make_nba_holdout.json`)
-the location model's log loss is 3% to 4% under the zone table's on every season from 2018-19,
-nearly all at the rim, none on threes; but it carries its training seasons' level (off by more
-than a point on 2018-19, 2020-21, 2022-23 and 2026-27 so far), where the zone table is its own
-season's. `shooter_talent`'s `k` is the zone table's; the location model's fits 60.7
-(`tools/fit_nba_shot_shrinkage_k.py --model location`), and its talent is make% above what the
-spot and the scorer's after-the-play shot type predict.
+`sportsdataverse.nba.nba_shot_value.score_shot_xpoints` bound to `league_id="10"`. The
+WNBA has no location booster (its fit failed the walk-forward gates), so every shot is scored
+from its zone triple.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (needs `shot_type`, the three zone keys and `shot_made_flag`; the location model also reads `loc_x`, `loc_y` and `action_type`). |
-| `league_avgs` | `DataFrame` |  | The `LeagueAverages` frame (see `xpoints_baseline`). |
-| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League (the booster to load). |
-| `model` | `Literal['zone', 'location']` | `'zone'` | `"zone"` or `"location"`. |
+| `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (`shot_type`, the three zone keys, `shot_made_flag`). |
+| `league_avgs` | `DataFrame` |  | The `LeagueAverages` frame. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-The input `shots` plus `shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, actual_points:Float64`. Empty input returns the augmented schema with zero rows.
+The input plus `shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, actual_points:Float64`.
 
 No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.
 
@@ -113,58 +100,42 @@ No returns table is published for this function: no capture: its input is the sh
 
 | Exception | Description |
 |---|---|
-| `ValueError` | A zone join key's dtype differs between the frames, `model` is unknown, or `model="location"` lacks a booster for `league_id` or a location column. |
+| `ValueError` | A zone join key has a different dtype on the two frames. |
 
 **Example**
 
 ```python
-import polars as pl
-from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
+from sportsdataverse.wnba import score_shot_xpoints
 scored = score_shot_xpoints(shots, league_avgs)
-located = score_shot_xpoints(shots, league_avgs, model="location")
-
-# Pipeline next step (one line)
-
-scored.group_by("player_id").agg(pl.col("xpoints").sum())
 ```
 
 ### shooter_talent {#shooter_talent}
 
-`shooter_talent(scored_shots: 'pl.DataFrame', *, league_id: 'str' = '00', min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+`shooter_talent(scored_shots: 'pl.DataFrame', *, min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Regressed shooter true-talent: make%-above-expected, shrunk to the mean.
+Regressed WNBA shooter talent: make%-above-expected, shrunk by the WNBA's `k`.
 
-Aggregates `score_shot_xpoints` output per shooter and regresses the
-raw over-expected rate toward zero by `n/(n+k)` (`k =
-get_shrinkage_k(league_id)`, fitted split-half). **As-of leakage
-boundary:** to score a shooter's talent for shots after date *D*, pass
-only that shooter's shots before *D* -- this function does not enforce the
-cut itself.
+`sportsdataverse.nba.nba_shot_value.shooter_talent` bound to `league_id="10"`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `shot_made_flag`, `base_fg_pct`, `xpoints`, `actual_points`). |
-| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
-| `min_attempts` | `int` | `50` | Drop shooters with fewer attempts (unstable estimate). |
+| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output. |
+| `min_attempts` | `int` | `50` | Drop shooters with fewer attempts. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-One row per `player_id`: `player_id:Int64, n_att:Int64, actual_makes:Int64, exp_makes:Float64, points_above_expected:Float64, raw_above_pct:Float64, talent_pct:Float64`. Empty input returns the zero-row schema.
+One row per `player_id`: `player_id:Int64, n_att:Int64, actual_makes:Int64, exp_makes:Float64, points_above_expected:Float64, raw_above_pct:Float64, talent_pct:Float64`.
 
 No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.
 
 **Example**
 
 ```python
-from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, shooter_talent
+from sportsdataverse.wnba import score_shot_xpoints, shooter_talent
 talent = shooter_talent(score_shot_xpoints(shots, league_avgs))
-
-# Pipeline next step (one line)
-
-talent.sort("talent_pct", descending=True).head(15)
 ```
 
 ### shot_selection_quality {#shot_selection_quality}
@@ -982,3 +953,55 @@ One row per `(season, game_id, team_id, player_id)`: `opp_team_id`, `minutes` an
 | `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
+
+### wnba_game_stints {#wnba_game_stints}
+
+`wnba_game_stints(seasons: 'int | list[int]', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA game stints (league_id='10'). See sportsdataverse.nba.nba_game_stints.nba_game_stints.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per `(season, game_id, team_id, player_id, stint_number)`: `opp_team_id`, `stint_number` (1 = his first in the game), `period`, `clock_in` / `clock_out` (the period clock, seconds left, when the stint began and ended), `seconds` / `minutes` on the floor, `poss` / `opp_poss` (offensive / defensive possessions started), `pts` / `opp_pts` (team points scored / allowed), `plus_minus` and the player's own box in the stint (`nba_box_events`): `points`, `fgm` / `fga`, `fg3m` / `fg3a`, `ftm` / `fta`, `oreb` / `dreb` / `reb`, `ast`, `stl`, `blk`, `tov` and `pf`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `player_id` | Int64 | stats.nba.com player (person) id. |
+| `stint_number` | Int64 | The stint's place among the player's stints in the game, from 1 in game order. A stint is a run of consecutive actions of one period with him on the floor. |
+| `period` | Int64 | Period of the stint (a stint never spans a period end). |
+| `clock_in` | Float64 | Period clock (seconds left) when the stint began: the clock at the action before his first. |
+| `clock_out` | Float64 | Period clock (seconds left) when the stint ended: the clock at his last action. |
+| `seconds` | Float64 | Game-clock seconds of the stint: the clock that ran into each of its actions. |
+| `minutes` | Float64 | Game-clock minutes of the stint (seconds / 60). |
+| `poss` | Int64 | Offensive possessions that started during the stint (each counted on the lineup at the action that starts it). |
+| `opp_poss` | Int64 | Defensive possessions that started during the stint, counted as poss is. |
+| `pts` | Int64 | The team's points during the stint, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts` | Int64 | The opponent's points during the stint, credited as pts is. |
+| `plus_minus` | Int64 | The stint's +/-: pts - opp_pts. |
+| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw, his own, on the stint's actions. |
+| `fgm` | Int64 | Field goals made, his own, on the stint's actions. |
+| `fga` | Int64 | Field goals attempted, his own, on the stint's actions. |
+| `fg3m` | Int64 | Three-pointers made, his own, on the stint's actions. |
+| `fg3a` | Int64 | Three-pointers attempted, his own, on the stint's actions. |
+| `ftm` | Int64 | Free throws made, his own, on the stint's actions. |
+| `fta` | Int64 | Free throws attempted, his own, on the stint's actions. |
+| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
+| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
+| `reb` | Int64 | Total rebounds in the stint: oreb + dreb. |
+| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on, his own, on the stint's actions. |
+| `stl` | Int64 | Steals, his own, on the stint's actions. |
+| `blk` | Int64 | Blocked shots, his own, on the stint's actions. |
+| `tov` | Int64 | Turnovers (a team turnover is no player's), his own, on the stint's actions. |
+| `pf` | Int64 | Personal fouls (technicals are not counted), his own, on the stint's actions. |

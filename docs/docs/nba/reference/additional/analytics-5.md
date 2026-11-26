@@ -816,7 +816,8 @@ nba_season_standings(load_nba_stats_schedules(2025)).filter(pl.col("seed") <= 10
 One-call shot-value spine: fetch, score, and run all five models.
 
 Fetches each player's `shotchartdetail`, scores per-shot expected points
-from the free `LeagueAverages` zone table, and returns the scored shots
+(`score_shot_xpoints`: the location model for the NBA, the
+`LeagueAverages` zone table elsewhere), and returns the scored shots
 plus shooter talent, selection quality, and zone-value maps (and the
 defender/shot-clock context tables when `include_context=True`).
 

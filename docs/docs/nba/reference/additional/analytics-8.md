@@ -355,24 +355,19 @@ injuries.filter(pl.col("status") == "Out").select("player", "team", "injury")
 
 ### score_shot_xpoints {#score_shot_xpoints}
 
-`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, league_id: 'str' = '00', model: "Literal['zone', 'location']" = 'zone', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, league_id: 'str' = '00', model: "Literal['zone', 'location'] | None" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Score each shot with its make chance and expected points.
 
-`base_fg_pct` is the shot's make chance: with `model="zone"` (the default) the league's FG%
-in its zone triple from `LeagueAverages` (unmatched: the `shot_zone_range` mean); with
-`model="location"` (NBA only) `add_shot_make_prob` on `loc_x` / `loc_y` /
-`action_type` / `shot_type`, the zone value where a shot has no location. The frame gains
-`shot_value` (3 for `3PT` else 2), `xpoints = base_fg_pct * shot_value` and
-`actual_points = shot_made_flag * shot_value`.
+`base_fg_pct` is the make chance: `model="location"` (NBA default) is `add_shot_make_prob`
+on `loc_x` / `loc_y` / `action_type` / `shot_type` for twos, the zone value for threes and
+unlocated shots; `model="zone"` (WNBA / G League default, no booster) is the `LeagueAverages`
+zone-triple FG% (unmatched: the `shot_zone_range` mean). Adds `shot_value` (3 for `3PT` else
+2), `xpoints = base_fg_pct * shot_value`, `actual_points = shot_made_flag * shot_value`.
 
-Walk-forward on the NBA's play-by-play (`tools/models/nba_shot_value/shot_make_nba_holdout.json`)
-the location model's log loss is 3% to 4% under the zone table's on every season from 2018-19,
-nearly all at the rim, none on threes; but it carries its training seasons' level (off by more
-than a point on 2018-19, 2020-21, 2022-23 and 2026-27 so far), where the zone table is its own
-season's. `shooter_talent`'s `k` is the zone table's; the location model's fits 60.7
-(`tools/fit_nba_shot_shrinkage_k.py --model location`), and its talent is make% above what the
-spot and the scorer's after-the-play shot type predict.
+Walk-forward (`tools/models/nba_shot_value/shot_make_nba_holdout.json`) its log loss is 3% to 4%
+under the zone table's every season since 2018-19, nearly all at the rim; its level misses by over
+a point on 2018-19, 2020-21 and 2022-23 (owner-accepted).
 
 **Parameters**
 
@@ -381,7 +376,7 @@ spot and the scorer's after-the-play shot type predict.
 | `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (needs `shot_type`, the three zone keys and `shot_made_flag`; the location model also reads `loc_x`, `loc_y` and `action_type`). |
 | `league_avgs` | `DataFrame` |  | The `LeagueAverages` frame (see `xpoints_baseline`). |
 | `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League (the booster to load). |
-| `model` | `Literal['zone', 'location']` | `'zone'` | `"zone"` or `"location"`. |
+| `model` | `Literal['zone', 'location'] \| None` | `None` | `"location"`, `"zone"` or `None` (location where a booster ships). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**

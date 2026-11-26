@@ -36,21 +36,24 @@ are picked by early stopping on the last training season, then the booster is re
 2. calibration in the large: ``|mean(p) - mean(y)|`` at most :data:`MAX_LARGE_BIAS`;
 3. calibration slope (logistic, ``y`` on ``logit(p)``) inside :data:`SLOPE_BAND`.
 
-**Outcome (2026-11-25).** NBA (walk 2019-2026, shipped booster trained 2023-2025): the log-loss gain over
-the served zone table is 3.0% to 3.9% every season, every interval wholly above 0, every slope in the band,
-and every gate passes on the 2026 holdout (3.0%; rim 9.6%, two-pointers from 4 ft 1.2%, threes 0.0%). The
-gain is at the rim (9% to 11% every season); on threes it is nil, and below the zone table on 2019 (-0.23%)
-and on the 2027 monitor season so far (-0.19%), both intervals wholly below 0. Gate 2 failed on 2019,
-2021 and 2023 (:data:`PENDING_OWNER_RULING`) and warns on the 2027 monitor season (+0.0109, 261 games).
-WNBA (walk 2016-2026): fails 2016-2020 (the feed recoded its shot types around 2018, and 2020 is the
-bubble: slopes 0.68 to 1.27, no skill in 2018 and 2020) and gate 2 in 2022; 2021-2026 gain 1.2% to 1.5%.
-No WNBA booster ships; its report is kept as the record. A season-level shift from the zone table's
-totals was tried after the first run and dropped: it made the bias larger in 6 of the 13 seasons it scored
-(both NBA seasons among them) and turned no failing season into a pass.
+**Threes keep the zone value.** The booster gains nothing on threes (and was below the zone table on
+2019 and the 2027 monitor season), so ``score_shot_xpoints`` scores a three with its zone value (owner
+ruling 2026-11-25), and the gates score the model the same way: threes on ``zone_served``. The booster's
+own scores, threes included, are reported as ``model_raw`` / ``raw_vs_zone_served``.
 
-**Never loosen a gate to make a refit pass**: argue the change in its PR. A failure the owner has not ruled
-on is listed in :data:`PENDING_OWNER_RULING` with its exact value, so any other failure, or this one
-moving, still stops the run.
+**Outcome (2026-11-25, as served).** NBA (walk 2019-2026, shipped booster trained 2023-2025): the log-loss
+gain over the served zone table is 3.0% to 4.0% every season, every interval wholly above 0, every slope in
+the band, and every gate passes on the 2026 holdout (3.0%; rim 9.6%, two-pointers from 4 ft 1.2%) and on
+the 2027 monitor season so far. Gate 2 misses 2019 (+0.0109), 2021 (-0.0154) and 2023 (-0.0112): the
+owner accepted them (:data:`OWNER_ACCEPTED`). WNBA (walk 2016-2026): fails 2016-2020 (the feed recoded its
+shot types around 2018, and 2020 is the bubble) and gate 2 in 2022; 2021-2026 gain 1.2% to 1.5%. No WNBA
+booster ships; its report is kept as the record. A season-level shift from the zone table's totals was
+tried after the first run and dropped: it made the bias larger in 6 of the 13 seasons it scored (both
+NBA seasons among them) and turned no failing season into a pass.
+
+**Never loosen a gate to make a refit pass**: argue the change in its PR. An accepted failure is listed
+in :data:`OWNER_ACCEPTED` with its exact value, so any other failure, or an accepted one moving, still
+stops the run.
 
 Hyperparameters are fixed a priori (no search). Outputs (beside this script): ``shot_make_<lg>_holdout.json``
 (the report: every season's metrics, gates and the shipped fit), ``shot_make_<lg>_importance.json``
@@ -104,18 +107,17 @@ LEAGUES: dict[str, dict[str, Any]] = {
     },
 }
 TRAIN_SEASONS = 3
-#: Gate failures awaiting the owner's ruling, by league: the exact failure lines of the run that saved the
-#: booster. The booster is saved only when every failure is listed here, and the report lists them under
-#: ``pending_owner_ruling``. They are not passes. NBA gate 2 (|bias| <= 0.01): 2019 +0.0142, 2021 -0.0178,
-#: 2023 -0.0107; skill and slope pass on every season and every gate passes on the 2026 holdout. The zone
-#: table fitted on the same training seasons misses 2021 and 2023 as well (-0.0120, -0.0134: the league's
-#: make rate moved), but not 2019 (-0.0034): that miss is the location model's own. The 2027 monitor season
-#: warns too (+0.0109, ``monitor_gates``). Accept, or drop the booster.
-PENDING_OWNER_RULING: dict[str, tuple[str, ...]] = {
+#: Owner-accepted gate failures (owner ruling of 2026-11-25, relayed by the coordinator), by league: the
+#: exact failure lines of the run that saved the booster. The booster is saved only when every failure is
+#: listed here, and the report lists them under ``owner_accepted``. They are not passes. NBA gate 2
+#: (|bias| <= 0.01) as served (threes on the zone value): 2019 +0.0109, 2021 -0.0154, 2023 -0.0112. The
+#: zone table fitted on the same training seasons misses 2021 and 2023 as well (-0.0120, -0.0134: the
+#: league's make rate moved), but not 2019 (-0.0034).
+OWNER_ACCEPTED: dict[str, tuple[str, ...]] = {
     "00": (
-        "walk_forward 2019: gate 2 calibration in the large +0.0142",
-        "walk_forward 2021: gate 2 calibration in the large -0.0178",
-        "walk_forward 2023: gate 2 calibration in the large -0.0107",
+        "walk_forward 2019: gate 2 calibration in the large +0.0109",
+        "walk_forward 2021: gate 2 calibration in the large -0.0154",
+        "walk_forward 2023: gate 2 calibration in the large -0.0112",
     ),
 }
 MIN_LEVEL_N = 200
@@ -351,9 +353,13 @@ def _band(shots: pl.DataFrame) -> np.ndarray:
 def season_metrics(test: pl.DataFrame, train: pl.DataFrame, booster: xgb.Booster, seed: int) -> dict[str, Any]:
     y = test["y"].to_numpy().astype(float)
     g = test["game_id"].to_numpy()
+    raw, served = predict(booster, test), zone_predict(test, test)
+    three = test["shot_value"].to_numpy() == 3
     p = {
-        "model": predict(booster, test),
-        "zone_served": zone_predict(test, test),
+        # as score_shot_xpoints serves it: threes take the zone value (owner ruling 2026-11-25)
+        "model": np.where(three, served, raw),
+        "model_raw": raw,
+        "zone_served": served,
         "zone_prior": zone_predict(train, test),
     }
     band = _band(test)
@@ -365,6 +371,7 @@ def season_metrics(test: pl.DataFrame, train: pl.DataFrame, booster: xgb.Booster
         **{f"{k}": score(y, v) for k, v in p.items()},
         "vs_zone_served": paired(y, p["zone_served"], p["model"], g, seed),
         "vs_zone_prior": paired(y, p["zone_prior"], p["model"], g, seed + 1),
+        "raw_vs_zone_served": paired(y, p["zone_served"], p["model_raw"], g, seed + 3),
         "vs_zone_served_by_band": {
             b: paired(y[band == b], p["zone_served"][band == b], p["model"][band == b], g[band == b], seed + 2)
             for b in ("rim 0-3 ft", "2PA 4+ ft", "3PA")
@@ -489,12 +496,12 @@ def train(league_id: str, data_root: Path | None, *, fixture: bool = False) -> d
         "n_train_shots": int(sum(f.height for f in ship_train.values())),
     }
     report["failed_gates"] = failed
-    pending = PENDING_OWNER_RULING.get(league_id, ())
-    report["pending_owner_ruling"] = [f for f in failed if f in pending]
+    accepted = OWNER_ACCEPTED.get(league_id, ())
+    report["owner_accepted"] = [f for f in failed if f in accepted]
     (HERE / f"shot_make_{cfg['lg']}_holdout.json").write_text(
         json.dumps(report, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
-    if [f for f in failed if f not in pending]:
+    if [f for f in failed if f not in accepted]:
         raise SystemExit("gates failed:\n" + "\n".join(failed))
     if cfg["artifact"] != SHOT_MAKE_MODELS.get(league_id):
         raise SystemExit(

@@ -1,4 +1,4 @@
-"""``tools/fit_nba_shot_shrinkage_k.py`` reruns to the frozen zone-table k on the committed fixture."""
+"""``tools/fit_nba_shot_shrinkage_k.py`` reruns to the frozen shrinkage constants on the committed fixture."""
 
 from __future__ import annotations
 
@@ -15,11 +15,10 @@ fit_k = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(fit_k)
 
 
-def test_zone_k_is_the_frozen_constant():
-    assert fit_k.main("zone") == pytest.approx(TALENT_SHRINKAGE_K["00"], abs=0.05)
-    assert TALENT_SHRINKAGE_K["20"] == TALENT_SHRINKAGE_K["00"]  # the G League reuses the NBA fit
+def test_nba_k_is_the_location_model_fit():
+    assert fit_k.main("location") == pytest.approx(TALENT_SHRINKAGE_K["00"], abs=0.05)
 
 
-def test_location_k_is_the_one_the_docs_quote():
-    """Not frozen while the location model is opt-in (``score_shot_xpoints`` and the lineage page quote it)."""
-    assert fit_k.main("location") == pytest.approx(60.7, abs=0.05)
+def test_g_league_k_is_the_zone_table_fit():
+    """The G League is scored from the zone table and reuses the NBA fixture's zone fit."""
+    assert fit_k.main("zone") == pytest.approx(TALENT_SHRINKAGE_K["20"], abs=0.05)

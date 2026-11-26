@@ -1,4 +1,4 @@
-"""The bundled NBA shot-make booster and the opt-in location model of ``score_shot_xpoints``.
+"""The bundled NBA shot-make booster and the location model, ``score_shot_xpoints``'s NBA default.
 
 Fixtures (``tests/fixtures/nba_shot_make``, README there): ``nba_fga_2026.parquet``, the field goals of the
 first 20 regular-season games of the 2025-26 play-by-play release (the booster's holdout season), and
@@ -139,42 +139,53 @@ def test_shot_chart_maps_onto_the_play_by_play():
     assert (j["loc_x"] == j["x_legacy"]).all() and (j["loc_y"] == j["y_legacy"]).all()
     assert (j["action_type"] == j["sub_type"]).all()
     assert (j["shot_distance"] != j["shot_distance_right"]).any()
-    by_chart = score_shot_xpoints(j.select(chart.columns), la, model="location")["base_fg_pct"]
-    by_pbp = add_shot_make_prob(j.select("x_legacy", "y_legacy", "shot_value", "sub_type"))["xfg"]
+    twos = j.filter(pl.col("shot_value") == 2)
+    by_chart = score_shot_xpoints(twos.select(chart.columns), la)["base_fg_pct"]
+    by_pbp = add_shot_make_prob(twos.select("x_legacy", "y_legacy", "shot_value", "sub_type"))["xfg"]
     np.testing.assert_allclose(by_chart.to_numpy(), by_pbp.to_numpy())
 
 
 def test_shot_chart_location_scoring_differs_from_zone_and_fits_better():
-    """The location model must change the make chances (not a silent fall-through to the zone table:
-    mean |difference| 0.054) and fit the 2022-23 shots better than that season's own zone table (log
-    loss 0.6397 vs 0.6610). 2022-23 is a training season of the booster, so this checks the scoring
-    path, not out-of-sample skill (the fit report holds that)."""
+    """The NBA default is the location model on twos (not a silent fall-through to the zone table:
+    mean |difference| on twos 0.073) and the zone value on threes (owner ruling 2026-11-25), and it
+    fits the 2022-23 shots better than that season's own zone table (log loss 0.6400 vs 0.6610).
+    2022-23 is a training season of the booster, so this checks the scoring path, not out-of-sample
+    skill (the fit report holds that)."""
     shots, la = _chart()
-    loc = score_shot_xpoints(shots, la, model="location")
-    zone = score_shot_xpoints(shots, la)
+    loc = score_shot_xpoints(shots, la)
+    zone = score_shot_xpoints(shots, la, model="zone")
     assert loc.columns == zone.columns
     y = loc["shot_made_flag"].cast(pl.Float64).to_numpy()
     p_loc, p_zone = loc["base_fg_pct"].to_numpy(), zone["base_fg_pct"].to_numpy()
-    assert np.abs(p_loc - p_zone).mean() > 0.04
+    three = (loc["shot_value"] == 3).to_numpy()
+    assert three.sum() > 10_000
+    np.testing.assert_array_equal(p_loc[three], p_zone[three])
+    assert np.abs(p_loc - p_zone)[~three].mean() > 0.06
     assert _ll(y, p_loc) < _ll(y, p_zone) - 0.015
     np.testing.assert_allclose(loc["xpoints"].to_numpy(), p_loc * loc["shot_value"].to_numpy())
 
 
-def test_default_is_the_zone_table_in_every_league():
+def test_default_is_location_for_the_nba_and_zone_elsewhere():
     shots, la = _chart()
     shots = shots.head(50)
     zone = score_shot_xpoints(shots, la, model="zone")["base_fg_pct"]
-    for league_id in ("00", "10", "20"):
+    assert score_shot_xpoints(shots, la)["base_fg_pct"].equals(
+        score_shot_xpoints(shots, la, model="location")["base_fg_pct"]
+    )
+    assert not score_shot_xpoints(shots, la)["base_fg_pct"].equals(zone)
+    for league_id in ("10", "20"):
         assert score_shot_xpoints(shots, la, league_id=league_id)["base_fg_pct"].equals(zone)
 
 
 def test_an_unlocated_chart_shot_takes_the_zone_value():
     shots, la = _chart()
-    shots = shots.head(6).with_columns(
-        pl.when(pl.int_range(pl.len()) < 2).then(None).otherwise(pl.col("loc_x")).alias("loc_x")
+    shots = (
+        shots.filter(pl.col("shot_type").str.starts_with("2"))
+        .head(6)
+        .with_columns(pl.when(pl.int_range(pl.len()) < 2).then(None).otherwise(pl.col("loc_x")).alias("loc_x"))
     )
     loc = score_shot_xpoints(shots, la, model="location")["base_fg_pct"]
-    zone = score_shot_xpoints(shots, la)["base_fg_pct"]
+    zone = score_shot_xpoints(shots, la, model="zone")["base_fg_pct"]
     assert loc.head(2).equals(zone.head(2))
     assert not loc.tail(4).equals(zone.tail(4))
 

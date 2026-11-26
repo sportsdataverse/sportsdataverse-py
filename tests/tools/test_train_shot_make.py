@@ -5,7 +5,7 @@ location (the release has no zone columns) to score the zone table it replaces. 
 here on the committed 2022-23 shot chart, which carries the feed's own zones. The fit reports
 (``shot_make_<lg>_holdout.json``) must describe the bundled boosters exactly, their gate lines must be
 re-derivable from their season metrics, and a failure must be one the owner was asked to rule on, line for
-line (``PENDING_OWNER_RULING``).
+line (``OWNER_ACCEPTED``).
 """
 
 from __future__ import annotations
@@ -91,8 +91,8 @@ def test_fit_report_describes_the_bundled_booster(league_id):
     assert [f for s, m in monitor for f in tsm.gate(f"monitor {s}", m)] == report["monitor_gates"]
     assert report["gates"]["max_large_bias"] == tsm.MAX_LARGE_BIAS
     assert tuple(report["gates"]["slope_band"]) == tsm.SLOPE_BAND
-    # every failure is one the owner is asked to rule on, line for line (values included)
-    assert report["failed_gates"] == report["pending_owner_ruling"] == list(tsm.PENDING_OWNER_RULING.get(league_id, ()))
+    # every failure is one the owner accepted, line for line (values included)
+    assert report["failed_gates"] == report["owner_accepted"] == list(tsm.OWNER_ACCEPTED.get(league_id, ()))
     shipped = report["shipped"]
     path = tsm.MODELS / SHOT_MAKE_MODELS[league_id]
     assert shipped["sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
@@ -117,14 +117,16 @@ def test_fit_report_describes_the_bundled_booster(league_id):
 
 
 def test_quoted_figures_are_the_report_s():
-    """The figures the docstrings and the changelog quote: 3.0% to 3.9% on every NBA walk-forward season,
-    3.0% on the 2026 holdout, gate 2 missed by more than a point on 2019, 2021, 2023 and the 2027 monitor."""
+    """The figures the docstrings and the changelog quote, as served (threes on the zone value): 3.0% to
+    4.0% on every NBA walk-forward season, 3.0% on the 2026 holdout, gate 2 missed by more than a point
+    on 2019, 2021 and 2023 only, and threes exactly the zone table."""
     report = json.loads((tsm.HERE / "shot_make_nba_holdout.json").read_text(encoding="utf-8"))
     rel = {int(s): m["vs_zone_served"]["rel_log_loss"] for s, m in report["seasons"].items() if m["split"] != "monitor"}
-    assert 0.0295 <= min(rel.values()) and max(rel.values()) < 0.0395
+    assert 0.0295 <= min(rel.values()) and max(rel.values()) < 0.0400
     assert round(rel[2026], 3) == 0.030
     off = sorted(int(s) for s, m in report["seasons"].items() if abs(m["model"]["large_bias"]) > 0.01)
-    assert off == [2019, 2021, 2023, 2027]
+    assert off == [2019, 2021, 2023]
+    assert all(m["vs_zone_served_by_band"]["3PA"]["d_log_loss"] == 0 for m in report["seasons"].values())
 
 
 def test_wnba_report_records_why_it_is_not_shipped():

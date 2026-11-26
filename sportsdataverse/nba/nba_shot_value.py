@@ -3,12 +3,13 @@
 Five league-agnostic models switched by ``league_id`` (``"00"`` NBA, ``"10"``
 WNBA, ``"20"`` G-League):
 
-1. ``score_shot_xpoints`` — per-shot expected points from the ``LeagueAverages``
-   FG%-by-zone table that ``nba_stats_shotchartdetail`` returns for free. For
-   the NBA, ``model="location"`` uses the bundled location model instead
-   (:func:`add_shot_make_prob`: the make chance from the shot's court location,
-   value and shot type, the fields the play-by-play and the shot chart both
-   carry).
+1. ``score_shot_xpoints`` — per-shot expected points. The NBA's default is the
+   bundled location model on twos (:func:`add_shot_make_prob`: the make chance
+   from the shot's court location, value and shot type, the fields the
+   play-by-play and the shot chart both carry), with threes on the zone table.
+   The WNBA and the G League have no booster and use the ``LeagueAverages``
+   FG%-by-zone table that ``nba_stats_shotchartdetail`` returns for free
+   (``model="zone"`` picks it in any league).
 2. ``make_prob_by_context`` / ``make_prob_joint`` — FG% by defender distance and
    shot clock (aggregate buckets, the only form the public API exposes).
 3. ``shooter_talent`` — regressed make%-above-expected per shooter.
@@ -241,25 +242,20 @@ def score_shot_xpoints(
     league_avgs: pl.DataFrame,
     *,
     league_id: str = "00",
-    model: Literal["zone", "location"] = "zone",
+    model: Literal["zone", "location"] | None = None,
     return_as_pandas: bool = False,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Score each shot with its make chance and expected points.
 
-    ``base_fg_pct`` is the shot's make chance: with ``model="zone"`` (the default) the league's FG%
-    in its zone triple from ``LeagueAverages`` (unmatched: the ``shot_zone_range`` mean); with
-    ``model="location"`` (NBA only) :func:`add_shot_make_prob` on ``loc_x`` / ``loc_y`` /
-    ``action_type`` / ``shot_type``, the zone value where a shot has no location. The frame gains
-    ``shot_value`` (3 for ``3PT`` else 2), ``xpoints = base_fg_pct * shot_value`` and
-    ``actual_points = shot_made_flag * shot_value``.
+    ``base_fg_pct`` is the make chance: ``model="location"`` (NBA default) is :func:`add_shot_make_prob`
+    on ``loc_x`` / ``loc_y`` / ``action_type`` / ``shot_type`` for twos, the zone value for threes and
+    unlocated shots; ``model="zone"`` (WNBA / G League default, no booster) is the ``LeagueAverages``
+    zone-triple FG% (unmatched: the ``shot_zone_range`` mean). Adds ``shot_value`` (3 for ``3PT`` else
+    2), ``xpoints = base_fg_pct * shot_value``, ``actual_points = shot_made_flag * shot_value``.
 
-    Walk-forward on the NBA's play-by-play (``tools/models/nba_shot_value/shot_make_nba_holdout.json``)
-    the location model's log loss is 3% to 4% under the zone table's on every season from 2018-19,
-    nearly all at the rim, none on threes; but it carries its training seasons' level (off by more
-    than a point on 2018-19, 2020-21, 2022-23 and 2026-27 so far), where the zone table is its own
-    season's. ``shooter_talent``'s ``k`` is the zone table's; the location model's fits 60.7
-    (``tools/fit_nba_shot_shrinkage_k.py --model location``), and its talent is make% above what the
-    spot and the scorer's after-the-play shot type predict.
+    Walk-forward (``tools/models/nba_shot_value/shot_make_nba_holdout.json``) its log loss is 3% to 4%
+    under the zone table's every season since 2018-19, nearly all at the rim; its level misses by over
+    a point on 2018-19, 2020-21 and 2022-23 (owner-accepted).
 
     Args:
         shots: Per-shot ``Shot_Chart_Detail`` frame (needs ``shot_type``, the
@@ -267,7 +263,7 @@ def score_shot_xpoints(
             reads ``loc_x``, ``loc_y`` and ``action_type``).
         league_avgs: The ``LeagueAverages`` frame (see :func:`xpoints_baseline`).
         league_id: ``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G-League (the booster to load).
-        model: ``"zone"`` or ``"location"``.
+        model: ``"location"``, ``"zone"`` or ``None`` (location where a booster ships).
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -295,6 +291,8 @@ def score_shot_xpoints(
         * `nba_api <https://github.com/swar/nba_api>`_ -- NBA/WNBA (Python)
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
     """
+    if model is None:
+        model = "location" if league_id in SHOT_MAKE_MODELS else "zone"
     if model not in ("location", "zone"):
         raise ValueError(f"model must be 'location' or 'zone', got {model!r}")
     if model == "location" and league_id not in SHOT_MAKE_MODELS:
@@ -328,7 +326,10 @@ def score_shot_xpoints(
             league_id=league_id,
         )
         scored = scored.with_columns(
-            located.get_column("xfg").fill_null(scored.get_column("base_fg_pct")).alias("base_fg_pct")
+            pl.when(pl.col("shot_value") == 3)
+            .then(pl.col("base_fg_pct"))
+            .otherwise(located.get_column("xfg").fill_null(scored.get_column("base_fg_pct")))
+            .alias("base_fg_pct")
         )
     scored = scored.with_columns(
         (pl.col("base_fg_pct") * pl.col("shot_value")).alias("xpoints"),
@@ -723,7 +724,8 @@ def nba_shot_value(
     """One-call shot-value spine: fetch, score, and run all five models.
 
     Fetches each player's ``shotchartdetail``, scores per-shot expected points
-    from the free ``LeagueAverages`` zone table, and returns the scored shots
+    (:func:`score_shot_xpoints`: the location model for the NBA, the
+    ``LeagueAverages`` zone table elsewhere), and returns the scored shots
     plus shooter talent, selection quality, and zone-value maps (and the
     defender/shot-clock context tables when ``include_context=True``).
 

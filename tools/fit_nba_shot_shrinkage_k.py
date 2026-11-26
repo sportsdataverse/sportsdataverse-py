@@ -4,11 +4,11 @@
 Splits each player's shots by within-player row parity, computes raw
 make%-above-expected in each half, and picks k minimizing cross-half MSE of
 the k-regressed first half vs the raw second half. The k depends on the model
-the expectation comes from: ``--model zone`` (the default model of
-``score_shot_xpoints``) reruns to 70.1, ``TALENT_SHRINKAGE_K["00"]`` (G League
-reuses it) in ``sportsdataverse/nba/nba_shot_value_constants.py``; ``--model
-location`` prints the k for the NBA location model, which is not frozen while
-that model is opt-in.
+the expectation comes from: ``--model location`` (the NBA's default model in
+``score_shot_xpoints``, threes on the zone value) reruns to 58.1,
+``TALENT_SHRINKAGE_K["00"]``; ``--model zone`` reruns to 70.1, ``["20"]`` (the
+G League, scored from the zone table, reuses the NBA fit). Both are in
+``sportsdataverse/nba/nba_shot_value_constants.py``.
 The WNBA entry (``"10"``) is a seeded placeholder: no WNBA shot fixture is
 committed, so this script cannot fit it.
 
@@ -18,8 +18,8 @@ committed ``tests/fixtures/nba_shot_value`` captures.
 
 Usage::
 
-    uv run python tools/fit_nba_shot_shrinkage_k.py --model zone
     uv run python tools/fit_nba_shot_shrinkage_k.py --model location
+    uv run python tools/fit_nba_shot_shrinkage_k.py --model zone
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
 FIX = Path(__file__).resolve().parents[1] / "tests" / "fixtures" / "nba_shot_value"
 
 
-def main(model: str = "zone") -> float:
+def main(model: str = "location") -> float:
     shots = pl.read_parquet(FIX / "shotchart_2023.parquet")
     la = pl.read_parquet(FIX / "league_averages_2023.parquet")
     scored = score_shot_xpoints(shots, la, model=model).with_columns(
@@ -74,5 +74,5 @@ if __name__ == "__main__":
     import argparse
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", choices=["zone", "location"], default="zone")
+    ap.add_argument("--model", choices=["location", "zone"], default="location")
     main(ap.parse_args().model)
