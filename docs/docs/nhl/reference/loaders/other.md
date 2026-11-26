@@ -365,6 +365,38 @@ Release: [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 load_nhl_player_boxscores(seasons=2010)
 ```
 
+## load_nhl_pregame_snapshots
+
+Release: [nhl_pregame_snapshots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pregame_snapshots) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pregame_snapshots/nhl_pregame_snapshots_{season}.parquet`
+
+:::caution[Coverage]
+Pregame state captured every 30 minutes on game days (probable goalies with ESPN's Expected / Confirmed status, and the ESPN injury list), one row per state interval. Read it as of a decision time t with pregame_state_as_of (valid_from <= t < valid_to, null valid_to = still current), never past it: a row whose valid_from is after t was not known at t. Capture began 2026-11-25 (season 2027) and cannot be backfilled.
+:::
+
+### Returns {#load_nhl_pregame_snapshots-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int32 | NHL season, the ENDING year (2027 = 2026-27). |
+| `game_date` | String | ET game date (YYYY-MM-DD) of the game the state belongs to. |
+| `game_id` | Int64 | NHL game id, bridged from the ESPN event by ET date and both team abbreviations; null when the bridge fails. |
+| `espn_event_id` | Int64 | ESPN event id of the game. |
+| `start_time_utc` | Datetime(time_unit='us', time_zone='UTC') | Scheduled puck drop (UTC) as ESPN lists it; subtract a lead (e.g. 3 hours) to get a decision time. |
+| `team_id` | Int64 | NHL team id of the team the state belongs to. |
+| `team_abbr` | String | NHL team abbreviation (NJD, TBL, SJS, LAK where ESPN writes NJ, TB, SJ, LA). |
+| `kind` | String | 'probable_goalie' (the listed starting goalie) or 'injury' (a player on the ESPN injury list). |
+| `player_id` | Int64 | NHL player id, matched by folded name against the season roster, then any season's when the name is unique league-wide; null when ambiguous or unknown. |
+| `espn_athlete_id` | Int64 | ESPN athlete id; always present, also where player_id is null. |
+| `player_name` | String | Player name as ESPN lists it. |
+| `status` | String | For a goalie, ESPN's 'Expected' or 'Confirmed'; for an injury, ESPN's status ('Out', 'Day-To-Day', 'Injured Reserve', 'Suspension', ...). |
+| `valid_from` | Datetime(time_unit='us', time_zone='UTC') | First capture (UTC) that showed this state; the state was not known before it. |
+| `valid_to` | Datetime(time_unit='us', time_zone='UTC') | First capture (UTC) that no longer showed this state; null while it is still current. The interval is half-open: valid_from <= t < valid_to. |
+| `source` | String | 'espn_scoreboard' (probable goalies) or 'espn_injuries' (the league injury list). |
+
+```python
+load_nhl_pregame_snapshots(seasons=2027)
+```
+
 ## load_nhl_rosters
 
 Release: [nhl_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_rosters/rosters_{season}.parquet`

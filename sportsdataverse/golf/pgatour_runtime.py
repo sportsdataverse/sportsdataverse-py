@@ -31,7 +31,7 @@ from pathlib import Path
 from typing import Any
 
 from sportsdataverse._codegen_runtime import _get as _http_get
-from sportsdataverse._codegen_runtime import _integral, _wire_text
+from sportsdataverse._codegen_runtime import _integral, _no_content_is_empty, _no_content_transport, _wire_text
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError
 
@@ -236,7 +236,12 @@ _RETRY = frozenset({429, 500, 502, 503, 504})
 
 def _send(body: dict[str, Any], headers: dict[str, str], **kwargs: Any) -> Any:
     return _http_get(
-        GRAPHQL_URL, json=body, headers={"x-api-key": api_key(), **headers}, retry_statuses=_RETRY, **kwargs
+        GRAPHQL_URL,
+        json=body,
+        headers={"x-api-key": api_key(), **headers},
+        retry_statuses=_RETRY,
+        transport=_no_content_transport(),
+        **kwargs,
     )
 
 
@@ -251,16 +256,18 @@ def _post(body: dict[str, Any], headers: dict[str, str], **kwargs: Any) -> Any:
     return _send(body, headers, **kwargs)
 
 
+@_no_content_is_empty
 def _get(url: str, params: dict | None = None, json: dict | None = None, **kwargs: Any) -> Any:
     """POST the GraphQL request ``json`` (built by :func:`graphql_body`) to ``url``.
 
-    Returns the operation's ``data`` field (a dict), with a compressed ``payload`` decoded.
+    Returns the operation's ``data`` field (a dict), with a compressed ``payload`` decoded; ``{}`` when
+    the API answers 204 / 205 (no content).
 
     Raises:
         NoDataError: the API answers ``null`` for the operation (an unknown id) or says it does not exist.
         ValueError: the API rejects the query or its variables.
         AssetFetchError: a refused key, any other GraphQL error, a transport failure after retries,
-            or a payload that does not decode.
+            an answer whose ``data`` lacks the operation and has no ``errors``, or a payload that does not decode.
     """
     body = json if isinstance(json, dict) and "query" in json else graphql_body({**(json or {}), **(params or {})})
     field = body["operationName"][0].lower() + body["operationName"][1:]
@@ -277,5 +284,7 @@ def _get(url: str, params: dict | None = None, json: dict | None = None, **kwarg
         errors = answer.get("errors") if isinstance(answer, dict) else None
         if errors:
             raise _graphql_error(field, errors)
+        if not isinstance(data, dict) or field not in data:  # no data, or no key for the operation: malformed
+            raise AssetFetchError(f"PGA Tour {field}: the answer carries no data ({str(answer)[:80]})")
         raise NoDataError(f"PGA Tour {field} answered null for {body['variables']}")
     return decode_payload(value)
