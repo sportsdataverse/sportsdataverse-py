@@ -1098,9 +1098,11 @@ def cfb_standings(
             schedule's conference-game flag, which
             :func:`cfb_games_from_schedule` carries over): an explicit
             ``False`` keeps a game between two members of one conference
-            out of the conference record and every tiebreaker (a
-            non-conference meeting, the Pac-12's 2026 Flex Week); null or
-            absent -> a ``REG`` game between two members counts.
+            out of the conference record and every conference-game
+            tiebreaker (a non-conference meeting, the Pac-12's 2026 Flex
+            Week); it still counts in the overall record, and so in the Big
+            12 ``total_wins`` rung. Null or absent -> a ``REG`` game between
+            two members counts.
         teams: Team table with columns ``team`` and ``conference``
             (null or ``"FBS Independents"`` marks an independent), and an
             optional ``division`` column (``"FBS"``/``"FCS"`` or similar —
