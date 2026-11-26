@@ -29,7 +29,7 @@ design. Usage::
 
     uv run python tools/models/lifecycle/signs.py fold_2022.json fold_2023.json ... --out signs.json
 
-Design: ClaudeCowork ``specs/2026-11-25-model-lifecycle-checks-design.md`` (c).
+Design: the sign-stability check, rule (c) of the lifecycle checks.
 """
 
 from __future__ import annotations

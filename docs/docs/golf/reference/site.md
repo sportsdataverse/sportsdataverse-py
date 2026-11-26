@@ -43,8 +43,10 @@ ESPN endpoint.
 | `sort_order` | Int64 | Leaderboard order (1 = leader). Players tied on score keep distinct values here. |
 | `position` | String | Displayed position, with a "T" prefix for a tie (e.g. "1", "T3"). Null for a player off the board (missed cut, withdrawn) and on the scoreboard. |
 | `position_is_tie` | Boolean | True when the position is shared. Null for a player off the board and on the scoreboard. |
-| `player_status` | String | Player status name (e.g. "STATUS_FINISH", "STATUS_CUT", "STATUS_WD", "STATUS_IN_PROGRESS"). Null on the scoreboard. |
-| `thru` | Int64 | Hole the player last completed in the current round (18 when the round is done). Null on the scoreboard. |
+| `player_status` | String | Player status name (e.g. "STATUS_FINISH", "STATUS_CUT", "STATUS_IN_PROGRESS"). ESPN files a withdrawal and a disqualification under "STATUS_CUT" too; player_status_abbr separates them. Null on the scoreboard. |
+| `player_status_abbr` | String | Player status as ESPN abbreviates it ("F" finished, "CUT" missed cut, "WD" withdrawn, "DQ" disqualified). Null on the scoreboard. |
+| `playoff` | Boolean | True for a player who was in the event's playoff, False otherwise. Null on the scoreboard. |
+| `thru` | Int64 | Holes completed in the current round (18 when the round is done), whatever hole the round started on. 18 for a playoff player (playoff holes are not a round). Null on the scoreboard. |
 | `to_par` | Int64 | Total score relative to par as an integer ("E" is 0, "-12" is -12); null when no score is posted. |
 | `to_par_display` | String | Total score relative to par as ESPN displays it (e.g. "-12", "E", "+3"). |
 | `total_strokes` | Int64 | Total strokes over the rounds played. On the scoreboard it is summed from round_1 to round_4. |
@@ -105,8 +107,10 @@ Tournament leaderboard: the full field of one golf event (the current one when `
 | `sort_order` | Int64 | Leaderboard order (1 = leader). Players tied on score keep distinct values here. |
 | `position` | String | Displayed position, with a "T" prefix for a tie (e.g. "1", "T3"). Null for a player off the board (missed cut, withdrawn) and on the scoreboard. |
 | `position_is_tie` | Boolean | True when the position is shared. Null for a player off the board and on the scoreboard. |
-| `player_status` | String | Player status name (e.g. "STATUS_FINISH", "STATUS_CUT", "STATUS_WD", "STATUS_IN_PROGRESS"). Null on the scoreboard. |
-| `thru` | Int64 | Hole the player last completed in the current round (18 when the round is done). Null on the scoreboard. |
+| `player_status` | String | Player status name (e.g. "STATUS_FINISH", "STATUS_CUT", "STATUS_IN_PROGRESS"). ESPN files a withdrawal and a disqualification under "STATUS_CUT" too; player_status_abbr separates them. Null on the scoreboard. |
+| `player_status_abbr` | String | Player status as ESPN abbreviates it ("F" finished, "CUT" missed cut, "WD" withdrawn, "DQ" disqualified). Null on the scoreboard. |
+| `playoff` | Boolean | True for a player who was in the event's playoff, False otherwise. Null on the scoreboard. |
+| `thru` | Int64 | Holes completed in the current round (18 when the round is done), whatever hole the round started on. 18 for a playoff player (playoff holes are not a round). Null on the scoreboard. |
 | `to_par` | Int64 | Total score relative to par as an integer ("E" is 0, "-12" is -12); null when no score is posted. |
 | `to_par_display` | String | Total score relative to par as ESPN displays it (e.g. "-12", "E", "+3"). |
 | `total_strokes` | Int64 | Total strokes over the rounds played. On the scoreboard it is summed from round_1 to round_4. |

@@ -136,7 +136,7 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 
 ## Python ↔ R parity
 
-Each `sportsdataverse` function and its equivalent in the sister R package, [`baseballr`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
+Each `sportsdataverse` function and its equivalent in the sister R package, [`baseballr`](https://billpetti.github.io/baseballr). Same-named where possible; the R column links the package's pkgdown reference.
 
 | `sportsdataverse.mlb` (Python) | `baseballr` (R) |
 |---|---|
@@ -237,40 +237,64 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ba
 | [`load_ncaa_baseball_schedule`](reference/loaders/ncaa#load_ncaa_baseball_schedule) | [`load_ncaa_baseball_schedule`](https://billpetti.github.io/baseballr/reference/load_ncaa_baseball_schedule.html) |
 | [`load_ncaa_baseball_team_group_seasons`](reference/loaders/ncaa#load_ncaa_baseball_team_group_seasons) | [`load_ncaa_baseball_team_group_seasons`](https://billpetti.github.io/baseballr/reference/load_ncaa_baseball_team_group_seasons.html) |
 | [`load_ncaa_baseball_teams`](reference/loaders/ncaa#load_ncaa_baseball_teams) | [`load_ncaa_baseball_teams`](https://billpetti.github.io/baseballr/reference/load_ncaa_baseball_teams.html) |
+| [`mlb_all_star_ballot`](reference/mlb_api/all#mlb_all_star_ballot) | [`mlb_all_star_ballots`](https://billpetti.github.io/baseballr/reference/mlb_all_star_ballots.html) |
 | [`mlb_all_star_final_vote`](reference/mlb_api/all#mlb_all_star_final_vote) | [`mlb_all_star_final_vote`](https://billpetti.github.io/baseballr/reference/mlb_all_star_final_vote.html) |
 | [`mlb_all_star_write_ins`](reference/mlb_api/all#mlb_all_star_write_ins) | [`mlb_all_star_write_ins`](https://billpetti.github.io/baseballr/reference/mlb_all_star_write_ins.html) |
 | [`mlb_attendance`](reference/additional/mlb-stats-api#mlb_attendance) | [`mlb_attendance`](https://billpetti.github.io/baseballr/reference/mlb_attendance.html) |
+| [`mlb_award_recipients`](reference/mlb_api/other-2#mlb_award_recipients) | [`mlb_awards_recipient`](https://billpetti.github.io/baseballr/reference/mlb_awards_recipient.html) |
 | [`mlb_awards`](reference/mlb_api/other-2#mlb_awards) | [`mlb_awards`](https://billpetti.github.io/baseballr/reference/mlb_awards.html) |
 | [`mlb_conferences`](reference/mlb_api/other-2#mlb_conferences) | [`mlb_conferences`](https://billpetti.github.io/baseballr/reference/mlb_conferences.html) |
+| [`mlb_datacasters`](reference/mlb_api/other-2#mlb_datacasters) | [`mlb_jobs_datacasters`](https://billpetti.github.io/baseballr/reference/mlb_jobs_datacasters.html) |
 | [`mlb_divisions`](reference/additional/mlb-stats-api#mlb_divisions) | [`mlb_divisions`](https://billpetti.github.io/baseballr/reference/mlb_divisions.html) |
 | [`mlb_draft`](reference/mlb_api/draft#mlb_draft) | [`mlb_draft`](https://billpetti.github.io/baseballr/reference/mlb_draft.html) |
 | [`mlb_draft_latest`](reference/mlb_api/draft#mlb_draft_latest) | [`mlb_draft_latest`](https://billpetti.github.io/baseballr/reference/mlb_draft_latest.html) |
 | [`mlb_draft_prospects`](reference/additional/mlb-stats-api#mlb_draft_prospects) | [`mlb_draft_prospects`](https://billpetti.github.io/baseballr/reference/mlb_draft_prospects.html) |
+| [`mlb_free_agents`](reference/mlb_api/other-2#mlb_free_agents) | [`mlb_people_free_agents`](https://billpetti.github.io/baseballr/reference/mlb_people_free_agents.html) |
 | [`mlb_game_changes`](reference/mlb_api/game#mlb_game_changes) | [`mlb_game_changes`](https://billpetti.github.io/baseballr/reference/mlb_game_changes.html) |
 | [`mlb_game_content`](reference/mlb_api/game#mlb_game_content) | [`mlb_game_content`](https://billpetti.github.io/baseballr/reference/mlb_game_content.html) |
 | [`mlb_game_context_metrics`](reference/mlb_api/game#mlb_game_context_metrics) | [`mlb_game_context_metrics`](https://billpetti.github.io/baseballr/reference/mlb_game_context_metrics.html) |
 | [`mlb_game_pace`](reference/mlb_api/game#mlb_game_pace) | [`mlb_game_pace`](https://billpetti.github.io/baseballr/reference/mlb_game_pace.html) |
+| [`mlb_high_low`](reference/mlb_api/other-2#mlb_high_low) | [`mlb_high_low_stats`](https://billpetti.github.io/baseballr/reference/mlb_high_low_stats.html) |
+| [`mlb_home_run_derby`](reference/mlb_api/home#mlb_home_run_derby) | [`mlb_homerun_derby`](https://billpetti.github.io/baseballr/reference/mlb_homerun_derby.html) |
+| [`mlb_home_run_derby_bracket`](reference/mlb_api/home#mlb_home_run_derby_bracket) | [`mlb_homerun_derby_bracket`](https://billpetti.github.io/baseballr/reference/mlb_homerun_derby_bracket.html) |
+| [`mlb_home_run_derby_pool`](reference/mlb_api/home#mlb_home_run_derby_pool) | [`mlb_homerun_derby_players`](https://billpetti.github.io/baseballr/reference/mlb_homerun_derby_players.html) |
 | [`mlb_jobs`](reference/mlb_api/other-2#mlb_jobs) | [`mlb_jobs`](https://billpetti.github.io/baseballr/reference/mlb_jobs.html) |
+| [`mlb_leagues`](reference/mlb_api/other#mlb_leagues) | [`mlb_league`](https://billpetti.github.io/baseballr/reference/mlb_league.html) |
+| [`mlb_linescore`](reference/mlb_api/other#mlb_linescore) | [`mlb_game_linescore`](https://billpetti.github.io/baseballr/reference/mlb_game_linescore.html) |
+| [`mlb_official_scorers`](reference/mlb_api/other-2#mlb_official_scorers) | [`mlb_jobs_official_scorers`](https://billpetti.github.io/baseballr/reference/mlb_jobs_official_scorers.html) |
 | [`mlb_pbp`](reference/mlb_api/other#mlb_pbp) | [`mlb_pbp`](https://billpetti.github.io/baseballr/reference/mlb_pbp.html) |
 | [`mlb_pbp_diff`](reference/additional/mlb-stats-api#mlb_pbp_diff) | [`mlb_pbp_diff`](https://billpetti.github.io/baseballr/reference/mlb_pbp_diff.html) |
 | [`mlb_people`](reference/mlb_api/other#mlb_people) | [`mlb_people`](https://billpetti.github.io/baseballr/reference/mlb_people.html) |
+| [`mlb_person_game_stats`](reference/mlb_api/other#mlb_person_game_stats) | [`mlb_player_game_stats`](https://billpetti.github.io/baseballr/reference/mlb_player_game_stats.html) |
 | [`mlb_schedule`](reference/additional/mlb-stats-api#mlb_schedule) | [`mlb_schedule`](https://billpetti.github.io/baseballr/reference/mlb_schedule.html) |
 | [`mlb_schedule_postseason`](reference/mlb_api/schedule#mlb_schedule_postseason) | [`mlb_schedule_postseason`](https://billpetti.github.io/baseballr/reference/mlb_schedule_postseason.html) |
 | [`mlb_schedule_postseason_series`](reference/mlb_api/schedule#mlb_schedule_postseason_series) | [`mlb_schedule_postseason_series`](https://billpetti.github.io/baseballr/reference/mlb_schedule_postseason_series.html) |
+| [`mlb_schedule_tied`](reference/mlb_api/schedule#mlb_schedule_tied) | [`mlb_schedule_games_tied`](https://billpetti.github.io/baseballr/reference/mlb_schedule_games_tied.html) |
 | [`mlb_seasons`](reference/additional/mlb-stats-api#mlb_seasons) | [`mlb_seasons`](https://billpetti.github.io/baseballr/reference/mlb_seasons.html) |
 | [`mlb_seasons_all`](reference/mlb_api/other-2#mlb_seasons_all) | [`mlb_seasons_all`](https://billpetti.github.io/baseballr/reference/mlb_seasons_all.html) |
+| [`mlb_sport`](reference/mlb_api/other-2#mlb_sport) | [`mlb_sports_info`](https://billpetti.github.io/baseballr/reference/mlb_sports_info.html) |
+| [`mlb_sport_players`](reference/mlb_api/other#mlb_sport_players) | [`mlb_sports_players`](https://billpetti.github.io/baseballr/reference/mlb_sports_players.html) |
 | [`mlb_sports`](reference/mlb_api/other#mlb_sports) | [`mlb_sports`](https://billpetti.github.io/baseballr/reference/mlb_sports.html) |
 | [`mlb_standings`](reference/additional/mlb-stats-api#mlb_standings) | [`mlb_standings`](https://billpetti.github.io/baseballr/reference/mlb_standings.html) |
+| [`mlb_statcast_search`](reference/additional/baseball-savant-statcast#mlb_statcast_search) | [`statcast_search`](https://billpetti.github.io/baseballr/reference/statcast_search.html) |
+| [`mlb_statcast_search_minors`](reference/additional/baseball-savant-statcast#mlb_statcast_search_minors) | [`statcast_search_minors`](https://billpetti.github.io/baseballr/reference/statcast_search_minors.html) |
+| [`mlb_statcast_search_wbc`](reference/additional/baseball-savant-statcast#mlb_statcast_search_wbc) | [`statcast_search_wbc`](https://billpetti.github.io/baseballr/reference/statcast_search_wbc.html) |
 | [`mlb_stats`](reference/additional/mlb-stats-api#mlb_stats) | [`mlb_stats`](https://billpetti.github.io/baseballr/reference/mlb_stats.html) |
 | [`mlb_stats_leaders`](reference/additional/mlb-stats-api#mlb_stats_leaders) | [`mlb_stats_leaders`](https://billpetti.github.io/baseballr/reference/mlb_stats_leaders.html) |
+| [`mlb_team`](reference/mlb_api/team#mlb_team) | [`mlb_team_info`](https://billpetti.github.io/baseballr/reference/mlb_team_info.html) |
 | [`mlb_team_affiliates`](reference/mlb_api/team#mlb_team_affiliates) | [`mlb_team_affiliates`](https://billpetti.github.io/baseballr/reference/mlb_team_affiliates.html) |
 | [`mlb_team_alumni`](reference/mlb_api/team#mlb_team_alumni) | [`mlb_team_alumni`](https://billpetti.github.io/baseballr/reference/mlb_team_alumni.html) |
 | [`mlb_team_coaches`](reference/mlb_api/team#mlb_team_coaches) | [`mlb_team_coaches`](https://billpetti.github.io/baseballr/reference/mlb_team_coaches.html) |
 | [`mlb_team_leaders`](reference/additional/mlb-stats-api#mlb_team_leaders) | [`mlb_team_leaders`](https://billpetti.github.io/baseballr/reference/mlb_team_leaders.html) |
 | [`mlb_team_personnel`](reference/mlb_api/team#mlb_team_personnel) | [`mlb_team_personnel`](https://billpetti.github.io/baseballr/reference/mlb_team_personnel.html) |
+| [`mlb_team_roster`](reference/mlb_api/team#mlb_team_roster) | [`mlb_rosters`](https://billpetti.github.io/baseballr/reference/mlb_rosters.html) |
+| [`mlb_team_roster_type`](reference/mlb_api/team#mlb_team_roster_type) | [`mlb_rosters`](https://billpetti.github.io/baseballr/reference/mlb_rosters.html) |
 | [`mlb_team_stats`](reference/additional/mlb-stats-api#mlb_team_stats) | [`mlb_team_stats`](https://billpetti.github.io/baseballr/reference/mlb_team_stats.html) |
 | [`mlb_teams`](reference/additional/mlb-stats-api#mlb_teams) | [`mlb_teams`](https://billpetti.github.io/baseballr/reference/mlb_teams.html) |
+| [`mlb_teams_history`](reference/mlb_api/team#mlb_teams_history) | [`mlb_team_history`](https://billpetti.github.io/baseballr/reference/mlb_team_history.html) |
 | [`mlb_teams_stats`](reference/mlb_api/team#mlb_teams_stats) | [`mlb_teams_stats`](https://billpetti.github.io/baseballr/reference/mlb_teams_stats.html) |
 | [`mlb_teams_stats_leaders`](reference/mlb_api/team#mlb_teams_stats_leaders) | [`mlb_teams_stats_leaders`](https://billpetti.github.io/baseballr/reference/mlb_teams_stats_leaders.html) |
+| [`mlb_umpires`](reference/mlb_api/other-2#mlb_umpires) | [`mlb_jobs_umpires`](https://billpetti.github.io/baseballr/reference/mlb_jobs_umpires.html) |
 | [`mlb_venues`](reference/mlb_api/other#mlb_venues) | [`mlb_venues`](https://billpetti.github.io/baseballr/reference/mlb_venues.html) |
+| [`mlb_win_probability`](reference/mlb_api/other#mlb_win_probability) | [`mlb_game_wp`](https://billpetti.github.io/baseballr/reference/mlb_game_wp.html) |
 | [`most_recent_mlb_season`](reference/additional/dates-and-seasons#most_recent_mlb_season) | [`most_recent_mlb_season`](https://billpetti.github.io/baseballr/reference/most_recent_mlb_season.html) |

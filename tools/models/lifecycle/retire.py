@@ -43,8 +43,8 @@ Usage::
     uv run python tools/models/lifecycle/retire.py --check-ledger
     uv run python tools/models/lifecycle/retire.py --league nba --model pro_season_sim --records seasons.json
 
-``seasons.json`` is a list of :func:`season_record` dicts. Design: ClaudeCowork
-``specs/2026-11-25-model-lifecycle-checks-design.md`` (b).
+``seasons.json`` is a list of :func:`season_record` dicts. Design: the retire rule, rule (b) of the
+lifecycle checks, as stated above.
 """
 
 from __future__ import annotations
@@ -187,8 +187,7 @@ def retire_status(
     the evidence) turns the margin trigger off unless ``tied``; the result says so in ``margin_trigger``. The
     rule's constants (97.5% bounds, two seasons, the adoption margin) are the spec's, with the
     margin trigger moved to 1.96 SE by the owner on 2026-11-25, and are never loosened to keep a
-    model (ClaudeCowork specs/2026-11-25-model-lifecycle-checks-design.md,
-    section (b)).
+    model (lifecycle-check rule (b)).
 
     ``tied`` (a ``baseline_tied`` row) runs the margin trigger only, at ``|adoption_margin|`` or 0.
     ``reserved`` (the row's ``reserved_seasons``) are seasons another study holds back.

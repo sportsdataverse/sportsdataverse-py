@@ -7,8 +7,11 @@ player per event from either golf payload that carries the field:
 * the Site v2 ``scoreboard`` (``/golf/{league}/scoreboard``): order, to-par and
   round strokes only;
 * the ``leaderboard`` (``/golf/leaderboard?league=``): adds the displayed position
-  (``T5``), tie flag, player status (``STATUS_CUT``, ``STATUS_WD``), holes completed in
-  the current round, total strokes, earnings and cup points.
+  (``T5``), tie flag, player status, holes completed in the current round, whether the
+  player was in a playoff, total strokes, earnings and cup points.
+
+ESPN files a withdrawal and a disqualification under ``STATUS_CUT``, the missed-cut status:
+only ``player_status_abbr`` (``"WD"``, ``"DQ"``, ``"CUT"``, ``"F"``) tells them apart.
 
 Columns the payload does not carry are null. Event and player ids are strings.
 """
@@ -38,6 +41,8 @@ GOLF_LEADERBOARD_SCHEMA: dict[str, Any] = {
     "position": pl.String,
     "position_is_tie": pl.Boolean,
     "player_status": pl.String,
+    "player_status_abbr": pl.String,
+    "playoff": pl.Boolean,
     "thru": pl.Int64,
     "to_par": pl.Int64,
     "to_par_display": pl.String,
@@ -89,6 +94,23 @@ def _stat(statistics: Any, name: str) -> Any:
     return None
 
 
+def _thru(status: dict, in_playoff: bool) -> Any:
+    """Holes completed in the current round.
+
+    ESPN's ``thru`` is holes completed; ``hole`` is the last hole played, which differs on a split-tee start
+    (started on 10, finished on 9). Rows without ``thru`` (a missed cut, a mid-round WD) get it from ``hole``
+    and ``startHole``. A playoff player's ``thru`` describes the playoff, which is not a round: he finished
+    regulation, so 18."""
+    if in_playoff:
+        return 18
+    if "thru" in status:
+        return status["thru"]
+    hole, start = status.get("hole"), status.get("startHole")
+    if isinstance(hole, int) and isinstance(start, int) and 1 <= start <= 18:
+        return (hole - start) % 18 + 1
+    return hole
+
+
 def _dict(value: Any) -> dict:
     """``value`` when it is a dict, else ``{}`` -- a malformed node never raises."""
     return value if isinstance(value, dict) else {}
@@ -110,6 +132,8 @@ def _player_row(event: dict, comp: dict) -> dict[str, Any]:
         played = [v for k, v in rounds.items() if not k.endswith("_to_par") and v is not None]
         strokes = sum(played) if played else None
     player_id = comp.get("id") or athlete.get("id")
+    in_playoff = status.get("playoff") is True
+    thru = _thru(status, in_playoff)
     return {
         "event_id": str(event["id"]) if event.get("id") is not None else None,
         "event_name": event.get("name"),
@@ -124,7 +148,9 @@ def _player_row(event: dict, comp: dict) -> dict[str, Any]:
         "position": shown if on_board else None,
         "position_is_tie": position.get("isTie") if on_board else None,
         "player_status": _dict(status.get("type")).get("name"),
-        "thru": status.get("hole") if status else None,
+        "player_status_abbr": _dict(status.get("type")).get("shortDetail"),
+        "playoff": in_playoff if status else None,
+        "thru": thru,
         "to_par": _to_par(to_par_display),
         "to_par_display": to_par_display if isinstance(to_par_display, str) else None,
         "total_strokes": int(strokes) if isinstance(strokes, (int, float)) and strokes > 0 else None,
@@ -179,8 +205,8 @@ def parse_golf_scoreboard(
 ) -> pl.DataFrame | pd.DataFrame:
     """The ``espn_golf_scoreboard`` parser: :func:`parse_golf_leaderboard` over the scoreboard's field.
 
-    The scoreboard carries no displayed position, player status, holes completed, total
-    strokes, earnings or cup points: those columns are null (``total_strokes`` is summed
+    The scoreboard carries no displayed position, player status, playoff flag, holes completed,
+    total strokes, earnings or cup points: those columns are null (``total_strokes`` is summed
     from the played rounds). Use ``espn_golf_leaderboard`` for them.
 
     Args:

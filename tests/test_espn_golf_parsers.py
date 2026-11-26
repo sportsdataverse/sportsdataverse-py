@@ -161,3 +161,85 @@ def test_leaderboard_wrapper_sends_league_as_a_query_param(monkeypatch):
     assert seen["params"]["league"] == "lpga"
     assert seen["params"]["event"] == "401835177"
     assert df.height == 91  # parsed through parse_golf_leaderboard
+
+
+# Real captures of the off-board and playoff cases (tests/fixtures/espn/golf/README.md).
+
+
+def _row(df: pl.DataFrame, name: str) -> dict:
+    hit = df.filter(pl.col("player_name") == name)
+    assert hit.height == 1, name
+    return hit.row(0, named=True)
+
+
+def test_withdrawal_and_disqualification_are_told_apart_from_a_missed_cut():
+    # 2024 Genesis Invitational: Woods withdrew six holes into round 2, Spieth was disqualified after it
+    df = parse_golf_leaderboard(_load("pga", "leaderboard_401580335"))
+    assert df.height == 70
+    # ESPN files all three under the missed-cut status name ...
+    assert df.filter(pl.col("player_status") == "STATUS_CUT").height == 19
+    # ... and only the abbreviation separates them
+    assert dict(df.group_by("player_status_abbr").len().iter_rows()) == {"F": 51, "CUT": 17, "WD": 1, "DQ": 1}
+    woods, spieth = _row(df, "Tiger Woods"), _row(df, "Jordan Spieth")
+    assert (woods["player_id"], woods["player_status_abbr"]) == ("462", "WD")
+    assert (spieth["player_id"], spieth["player_status_abbr"]) == ("5467", "DQ")
+    # a mid-round withdrawal keeps the partial round's strokes; Woods's row has no thru, so it comes from hole
+    assert (woods["round_1"], woods["round_2"], woods["round_3"], woods["thru"]) == (72, 24, None, 6)
+    assert (spieth["round_1"], spieth["round_2"], spieth["round_3"], spieth["total_strokes"]) == (66, 73, None, 139)
+    for row in (woods, spieth):
+        assert row["position"] is None and row["position_is_tie"] is None
+        assert row["earnings"] == 0.0 and row["playoff"] is False
+
+
+def test_liv_withdrawals_on_a_no_cut_event():
+    # 2024 LIV Golf Houston: no cut, so every STATUS_CUT row is a withdrawal
+    df = parse_golf_leaderboard(_load("liv", "leaderboard_401614919"))
+    assert df.height == 54
+    off = df.filter(pl.col("player_status") == "STATUS_CUT")
+    assert sorted(off["player_name"].to_list()) == ["Jon Rahm", "Louis Oosthuizen"]
+    assert off["player_status_abbr"].to_list() == ["WD", "WD"]
+    rahm = _row(df, "Jon Rahm")
+    assert (rahm["round_1"], rahm["round_2"], rahm["round_3"]) == (69, 48, None)  # withdrew during round 2
+    assert df.filter(pl.col("player_status_abbr") == "F")["thru"].to_list() == [18] * 52
+
+
+def test_liv_playoff_flags_its_players_and_is_not_a_round():
+    # 2024 LIV Golf Hong Kong: Ancer beat Casey and Smith in a three-man playoff after 54 holes at -13
+    df = parse_golf_leaderboard(_load("liv", "leaderboard_401614916"))
+    playoff = df.filter(pl.col("playoff") == True).sort("sort_order")
+    assert playoff["player_name"].to_list() == ["Abraham Ancer", "Paul Casey", "Cameron Smith"]
+    assert playoff["position"].to_list() == ["1", "2", "2"]
+    assert playoff["total_strokes"].to_list() == [197, 197, 197]
+    assert playoff["round_4"].null_count() == 3  # the playoff line ESPN files as period 4 is dropped
+    assert playoff["thru"].to_list() == [18] * 3  # ESPN's thru (0) describes the playoff, not a round
+    rest = df.filter(pl.col("playoff") == False)
+    assert rest.height == 51 and rest["thru"].to_list() == [18] * 51
+    assert df["round_4"].null_count() == df.height  # a 54-hole event
+
+
+def test_pga_playoff_and_split_tee_thru():
+    # 2024 Sony Open: Murray won a playoff with An and Bradley; the field went off both tees
+    df = parse_golf_leaderboard(_load("pga", "leaderboard_401580330"))
+    playoff = df.filter(pl.col("playoff") == True).sort("sort_order")
+    assert playoff["player_name"].to_list() == ["Grayson Murray", "Byeong Hun An", "Keegan Bradley"]
+    assert playoff["total_strokes"].to_list() == [263, 263, 263]  # the period-5 playoff line is not counted
+    assert playoff.select([f"round_{i}" for i in range(1, 5)]).null_count().sum_horizontal().item() == 0
+    # Hardy started round 4 on the 10th and finished on the 9th: he completed 18 holes, not 9
+    hardy = _row(df, "Nick Hardy")
+    assert (hardy["player_status_abbr"], hardy["thru"]) == ("F", 18)
+    finishers = df.filter(pl.col("player_status_abbr") == "F")
+    assert finishers["thru"].to_list() == [18] * finishers.height  # playoff players too
+    alexander = _row(df, "Tyson Alexander")  # withdrew before round 4
+    assert (alexander["player_status_abbr"], alexander["thru"], alexander["round_4"]) == ("WD", 0, None)
+
+
+def test_thru_without_espn_thru_counts_from_the_start_hole():
+    # a split-tee row without thru (shape of a mid-round WD): started on 10, last played 15 -> 6 holes
+    status = {"hole": 15, "startHole": 10, "type": {"name": "STATUS_CUT", "shortDetail": "WD"}}
+    assert parse_golf_leaderboard(_player(status=status)).row(0, named=True)["thru"] == 6
+
+
+def test_scoreboard_rows_leave_the_leaderboard_only_columns_null():
+    df = parse_golf_scoreboard(_load("pga", "scoreboard"))
+    for col in ("player_status", "player_status_abbr", "playoff", "thru"):
+        assert df[col].null_count() == df.height, col

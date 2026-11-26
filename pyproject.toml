@@ -1063,6 +1063,7 @@ files = [
     "sportsdataverse/wexp/features.py",
     "sportsdataverse/wexp/market.py",
     "sportsdataverse/odds/market_join.py",
+    "sportsdataverse/odds/kalshi_book.py",
     "sportsdataverse/wexp/scoring.py",
     "sportsdataverse/wexp/store.py",
     "sportsdataverse/wexp/oracle_market.py",
