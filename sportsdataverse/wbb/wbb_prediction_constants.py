@@ -4,7 +4,7 @@ Thin shim over :mod:`sportsdataverse.mbb.mbb_prediction_constants` -- the
 metric functions and the leakage split are league-agnostic and re-exported
 **by reference**; the women's fitted constants live in the shared
 ``LEAGUE_CONSTANTS["womens"]`` entry (fitted on the WBB 2024 as-of backtest
-via ``dev/mbb_prediction/fit_pregame.py`` with ``PRED_LEAGUE=womens``).
+via ``tools/models/mbb_prediction/fit_pregame.py --league womens``).
 
 Example:
     Quick start::
