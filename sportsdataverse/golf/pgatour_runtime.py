@@ -231,7 +231,8 @@ def _post(body: dict[str, Any], headers: dict[str, str], **kwargs: Any) -> Any:
 def _get(url: str, params: dict | None = None, json: dict | None = None, **kwargs: Any) -> Any:
     """POST the GraphQL request ``json`` (built by :func:`graphql_body`) to ``url``.
 
-    Returns the operation's ``data`` field (a dict), with a compressed ``payload`` decoded.
+    Returns the operation's ``data`` field (a dict), with a compressed ``payload`` decoded; ``{}`` when
+    the API answers no content (a 204, or a 2xx empty object).
 
     Raises:
         NoDataError: the API answers ``null`` for the operation (an unknown id) or says it does not exist.
@@ -248,6 +249,8 @@ def _get(url: str, params: dict | None = None, json: dict | None = None, **kwarg
     }
     headers.update(kwargs.pop("headers", None) or {})
     answer = _post(body, headers, **kwargs)
+    if answer == {}:  # a 204/205 or a 2xx empty object: the transport's deliberate nothing (it warned)
+        return {}
     data = answer.get("data") if isinstance(answer, dict) else None
     value = data.get(field) if isinstance(data, dict) else None
     if value is None:
