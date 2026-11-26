@@ -12875,6 +12875,17 @@
   expected: kill
   note: The SummaryRow entries (out / in / total) would become rows with a null hole number.
 
+- id: pgatour-past-results-other-edition-is-no-data
+  group: pgatour
+  finding: pgatour-graphql-followups
+  file: sportsdataverse/golf/pgatour_runtime.py
+  snippet: '        if answered and _TOURNAMENT_ID.match(answered) and answered[1:5] != season:'
+  mutant: '        if False:'
+  test: tests/test_pgatour.py::test_past_results_for_a_season_without_an_edition_is_no_data
+  expected: kill
+  note: A season with no edition answers the current one; it would come back as that season's results.
+
+# --- Premier Lacrosse League stats API runtime + parsers (pll_*) ----------------------------------
 - id: pll-referer-sent
   group: pll
   finding: pll-stats-api

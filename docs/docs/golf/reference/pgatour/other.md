@@ -47,13 +47,13 @@ A tour's season schedule: one row per tournament (id, dates, course, purse, cham
 | `standing_heading` | String | Season points race the event counts toward (e.g. "FEDEXCUP"). |
 | `standing_value` | String | Points on offer to the winner as displayed (e.g. "500 pts"). |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_schedule-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -106,13 +106,13 @@ One tournament's leaderboard: position, total to par, strokes, holes completed, 
 | `fedexcup_official` | String | Player's official FedExCup rank going into the event, as displayed. |
 | `fedexcup_projected` | String | Player's FedExCup rank projected from this leaderboard, as displayed. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_leaderboard-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -153,13 +153,13 @@ One player's scorecard for a tournament: one row per hole per round (par, yardag
 | `score_status` | String | Result on the hole (e.g. "BIRDIE", "PAR", "BOGEY", "EAGLE", "DOUBLE_BOGEY"). |
 | `round_to_par` | String | Running score to par for the round after this hole, as displayed. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_scorecard-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -201,13 +201,13 @@ A tournament's tee times: one row per player per group per round (tee time in UT
 | `country` | String | Player's country code. |
 | `amateur` | Boolean | True for an amateur. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_tee_times-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -244,13 +244,13 @@ Every stat a tour publishes: category, sub-category, stat id and title. The stat
 | `stat_id` | String | PGA TOUR stat id (e.g. "02675" for SG Total); the id pgatour_stat_details takes. |
 | `stat_title` | String | Stat's display name (e.g. "Approaches from 50-125 yards"). |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_stat_catalog-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -295,13 +295,13 @@ One stat's season table, long form: one row per player per stat column (rank, co
 | `stat_name` | String | The stat table's column (e.g. "Avg", "Total Strokes", "Total Rounds"). |
 | `stat_value` | String | That column's value as displayed (e.g. "68.619", "5,293"). |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_stat_details-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -347,13 +347,13 @@ A season-long points race (the FedExCup by default): one row per player with off
 | `points_projected` | String | Points projected from live results, as displayed. |
 | `points_event` | String | Points earned at the current event, as displayed. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_tour_cup-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -408,13 +408,13 @@ ShotLink shot tracking for one player's round: one row per stroke with descripti
 | `to_y` | Float64 | ShotLink tourcast y coordinate where the shot finished. |
 | `to_z` | Float64 | ShotLink tourcast z (elevation) coordinate where the shot finished. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_shot_details-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -446,13 +446,13 @@ The seasons a tour has a published schedule for: one row per season, the current
 | `display_season` | String | Season as the site labels it (e.g. "2026", "2022-2023"). |
 | `is_default` | Boolean | True for the season the site shows by default (the current one). |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_schedule_years-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -496,13 +496,13 @@ Tournament headers: one row per tournament id (name, dates, status, current roun
 | `timezone` | String | Host time zone (IANA name, e.g. "America/New_York"). |
 | `location` | String | Location as displayed. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_tournaments-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -530,6 +530,7 @@ Every past champion of a tournament: one row per edition (season, winner, total 
 
 | col_name | type | description |
 |---|---|---|
+| `tournament_id` | String | PGA TOUR tournament id the champions were asked for (the answer does not repeat it). |
 | `format_type` | String | Tournament scoring format (e.g. "STROKE_PLAY"). |
 | `season` | Int64 | Season of the edition the champion won. |
 | `display_season` | String | Season as displayed. |
@@ -539,13 +540,13 @@ Every past champion of a tournament: one row per edition (season, winner, total 
 | `total` | Int64 | Champion's total strokes. |
 | `to_par` | String | Champion's score to par as displayed (e.g. "-12"). |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_past_champions-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -590,13 +591,13 @@ Hole-by-hole scores of one round for the whole field: one row per player per hol
 | `round_total` | Int64 | Player's strokes for the round. |
 | `round_total_to_par` | String | Player's round score to par as displayed. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_hole_by_hole-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -634,13 +635,13 @@ A tournament's leaderboard stat table, long form: one row per player per stat (w
 | `rank` | String | Player's rank on the stat as displayed ("1", "T5"). |
 | `sort_value` | Float64 | Stat value as a number (a probability is a fraction, 0-1). |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_leaderboard_stats-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -685,13 +686,13 @@ A tournament's field: one row per entered player, then the alternates (status, w
 | `qualifier` | String | Exemption category the player got in under. |
 | `ranking_points` | String | Ranking points as displayed. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_field-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -738,13 +739,13 @@ One edition's final leaderboard: one row per player (position, total, score to p
 | `round_3` | Int64 | Strokes in round 3; null when the player missed the cut. |
 | `round_4` | Int64 | Strokes in round 4; null when the player missed the cut. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_past_results-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -793,13 +794,13 @@ Hole difficulty for every course of a tournament: one row per hole per round (sc
 | `bogeys` | Int64 | Bogeys made on the hole. |
 | `double_bogeys` | Int64 | Double bogeys (or worse) made on the hole. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_course_stats-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -848,13 +849,13 @@ One hole of one course over a tournament: one row (par, yardage, difficulty rank
 | `double_bogeys` | Int64 | Double bogeys (or worse) made on the hole. |
 | `double_bogeys_pct` | String | Share of rounds with a double bogey or worse, as displayed. |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_hole_details-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 
@@ -894,13 +895,13 @@ One player's stat lines for a tournament: one row per stat per round (performanc
 | `rank` | String | Player's rank in the field on the stat for the round, as displayed ("1", "T7"). |
 | `year_to_date` | String | Player's season-to-date value of the stat as displayed ("-" when none). |
 
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+**`return_parsed=False`** — the operation's answer (`dict`), its compressed `payload` decoded; `pgatour_past_champions` adds the `tournamentId` it was asked for, which the answer does not repeat.
 
 ### Raises {#pgatour_scorecard_stats-raises}
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or `pgatour_past_results` was asked for a season the tournament has no edition in. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode. |
 

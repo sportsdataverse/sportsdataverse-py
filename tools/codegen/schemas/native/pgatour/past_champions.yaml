@@ -1,6 +1,9 @@
 schema: pgatour_past_champions
 kind: dataframe
 columns:
+- name: tournament_id
+  type: character
+  description: ''
 - name: format_type
   type: character
   description: ''

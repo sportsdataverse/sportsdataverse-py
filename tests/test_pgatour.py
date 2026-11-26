@@ -64,7 +64,10 @@ NEW_SHORTS = (
 @pytest.mark.parametrize("short, fixture, schema, min_rows", [c for c in CASES if c[0] in NEW_SHORTS])
 def test_every_column_is_read_from_the_fixture(short, fixture, schema, min_rows):
     # _frame builds the full schema, so a misspelled answer key would only leave a column of nulls
-    df = getattr(P, f"parse_pgatour_{short}")(_load(fixture))
+    raw = _load(fixture)
+    if short == "past_champions":  # the runtime's stamp (test_past_champions_carry_the_asked_tournament)
+        raw = {"tournamentId": "R2026014", **raw}
+    df = getattr(P, f"parse_pgatour_{short}")(raw)
     assert not [c for c in df.columns if df[c].null_count() == df.height]
 
 
@@ -183,6 +186,33 @@ def test_past_results_year_is_the_five_digit_edition():
     for bad in (25, 202500):
         with pytest.raises(ValueError):
             rt._variables("tournamentPastResults", {"year": bad})
+
+
+def _answer(monkeypatch, operation: str, value: dict) -> None:
+    monkeypatch.setattr(rt, "_http_get", lambda url, json=None, headers=None, **kw: {"data": {operation: value}})
+    monkeypatch.setenv(rt.KEY_ENV, "test-key")
+
+
+def test_past_results_for_a_season_without_an_edition_is_no_data(monkeypatch):
+    # live 2026-11-26: year=2040 for R2026014 answered the R2026014 edition, not an error
+    from sportsdataverse.golf import pgatour
+
+    _answer(monkeypatch, "tournamentPastResults", _load("past_results_R2026014_20250.json"))  # the R2025014 edition
+    with pytest.raises(NoDataError, match="no 2040 edition of R2026014"):
+        pgatour.pgatour_past_results(tournament_id="R2026014", year=2040)
+    assert pgatour.pgatour_past_results(tournament_id="R2026014", year=2025)["season"].unique().to_list() == [2025]
+    assert pgatour.pgatour_past_results(tournament_id="R2026014", year=20250).height > 0  # five digits, as given
+    assert pgatour.pgatour_past_results(tournament_id="R2026014").height > 0  # no year: whatever edition answers
+    _answer(monkeypatch, "tournamentPastResults", {"players": []})  # no id to compare: nothing to refuse
+    assert pgatour.pgatour_past_results(tournament_id="R2026014", year=2040).height == 0
+
+
+def test_past_champions_carry_the_asked_tournament(monkeypatch):
+    from sportsdataverse.golf import pgatour
+
+    _answer(monkeypatch, "tournamentOverview", _load("past_champions_R2026014.json"))
+    df = pgatour.pgatour_past_champions(tournament_id="R2026014")
+    assert df["tournament_id"].unique().to_list() == ["R2026014"]
 
 
 def test_graphql_body_wraps_the_document():

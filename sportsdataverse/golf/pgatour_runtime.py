@@ -141,6 +141,14 @@ _LIST_VARS = frozenset({"ids"})
 #: ``tournamentPastResults(year:)`` names an edition by its five-digit season (``20250`` is 2025): a
 #: four-digit year is not an error to the API, it silently answers the current edition instead.
 _EDITION_YEAR_OPS = frozenset({"tournamentPastResults"})
+#: Answers that do not repeat the tournament id they were asked for: it is stamped in as ``tournamentId``.
+_STAMP_TOURNAMENT_OPS = frozenset({"tournamentOverview"})
+#: A tournament id: tour code, four-digit season, event number (``R2026014``).
+_TOURNAMENT_ID = re.compile(r"[A-Z]\d{4}")
+
+
+def _str_or_none(value: Any) -> str | None:
+    return str(value) if value not in (None, "") else None
 
 
 def _whole(value: Any) -> int | None:
@@ -261,10 +269,12 @@ def _get(url: str, params: dict | None = None, json: dict | None = None, **kwarg
     """POST the GraphQL request ``json`` (built by :func:`graphql_body`) to ``url``.
 
     Returns the operation's ``data`` field (a dict), with a compressed ``payload`` decoded; ``{}`` when
-    the API answers 204 / 205 (no content).
+    the API answers 204 / 205 (no content). A ``tournamentOverview`` answer, which does not repeat its
+    tournament, gets the requested one stamped in as ``tournamentId``.
 
     Raises:
-        NoDataError: the API answers ``null`` for the operation (an unknown id) or says it does not exist.
+        NoDataError: the API answers ``null`` for the operation (an unknown id) or says it does not exist, or
+            ``tournamentPastResults`` answers another edition than the season asked for (it has none for it).
         ValueError: the API rejects the query or its variables.
         AssetFetchError: a refused key, any other GraphQL error, a transport failure after retries,
             an answer whose ``data`` lacks the operation and has no ``errors``, or a payload that does not decode.
@@ -287,4 +297,15 @@ def _get(url: str, params: dict | None = None, json: dict | None = None, **kwarg
         if not isinstance(data, dict) or field not in data:  # no data, or no key for the operation: malformed
             raise AssetFetchError(f"PGA Tour {field}: the answer carries no data ({str(answer)[:80]})")
         raise NoDataError(f"PGA Tour {field} answered null for {body['variables']}")
-    return decode_payload(value)
+    value = decode_payload(value)
+    variables = body.get("variables") or {}
+    year = variables.get("year")
+    if field in _EDITION_YEAR_OPS and isinstance(year, int) and year >= 10000 and isinstance(value, dict):
+        # A season the tournament has no edition for is not an error to the API: it answers the current one.
+        season = str(year // 10)
+        answered = _str_or_none(value.get("id"))
+        if answered and _TOURNAMENT_ID.match(answered) and answered[1:5] != season:
+            raise NoDataError(f"PGA Tour {field}: no {season} edition of {variables.get('id')} (answered {answered})")
+    if field in _STAMP_TOURNAMENT_OPS and isinstance(value, dict) and "tournamentId" in variables:
+        value = {"tournamentId": variables["tournamentId"], **value}
+    return value

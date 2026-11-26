@@ -82057,6 +82057,7 @@ pgatour_tournaments:
   timezone: Host time zone (IANA name, e.g. "America/New_York").
   location: Location as displayed.
 pgatour_past_champions:
+  tournament_id: PGA TOUR tournament id the champions were asked for (the answer does not repeat it).
   format_type: Tournament scoring format (e.g. "STROKE_PLAY").
   season: Season of the edition the champion won.
   display_season: Season as displayed.

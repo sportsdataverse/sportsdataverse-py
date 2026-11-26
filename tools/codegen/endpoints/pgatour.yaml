@@ -13,9 +13,13 @@ docstring:
   - 'Tour codes: ``R`` PGA TOUR, ``S`` PGA TOUR Champions, ``H`` Korn Ferry Tour. Tournament
     ids are the tour code, the season and the event number (``R2026014`` is the 2026 Masters):
     read them from ``pgatour_schedule``.'
+  raw_doc: 'the operation''s answer (``dict``), its compressed ``payload`` decoded;
+    ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer
+    does not repeat'
   raises:
   - 'sportsdataverse.errors.NoDataError: the API answered null for the request (an unknown
-    tournament, player or stat id).'
+    tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the
+    tournament has no edition in.'
   - 'ValueError: the API rejected the query variables, or a variable is not of its type (a year that is
     not a season).'
   - 'sportsdataverse.errors.AssetFetchError: any other GraphQL error, or a compressed payload

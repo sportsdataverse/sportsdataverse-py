@@ -77,15 +77,15 @@ def pgatour_schedule(
     Args:
         tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
         year: Season year, e.g. 2026; omitted, the current season.
-        return_parsed: parse the payload through parse_pgatour_schedule -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_schedule -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -143,15 +143,15 @@ def pgatour_leaderboard(
 
     Args:
         tournament_id: Tournament id (tournament_id in pgatour_schedule), e.g. R2026014.
-        return_parsed: parse the payload through parse_pgatour_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -210,15 +210,15 @@ def pgatour_scorecard(
     Args:
         tournament_id: Tournament id, e.g. R2026014.
         player_id: PGA TOUR player id (player_id in pgatour_leaderboard), e.g. 28237.
-        return_parsed: parse the payload through parse_pgatour_scorecard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_scorecard -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -276,15 +276,15 @@ def pgatour_tee_times(
 
     Args:
         tournament_id: Tournament id, e.g. R2026014.
-        return_parsed: parse the payload through parse_pgatour_tee_times -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_tee_times -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -341,15 +341,15 @@ def pgatour_player(
 
     Args:
         player_id: PGA TOUR player id, e.g. 28237.
-        return_parsed: parse the payload through parse_pgatour_player -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_player -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -408,15 +408,15 @@ def pgatour_player_directory(
     Args:
         tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
         active: True for active players only; omitted, every player in the directory.
-        return_parsed: parse the payload through parse_pgatour_player_directory -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_player_directory -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -476,15 +476,15 @@ def pgatour_stat_catalog(
     Args:
         tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
         year: Season year; omitted, the current season.
-        return_parsed: parse the payload through parse_pgatour_stat_catalog -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_stat_catalog -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -546,15 +546,15 @@ def pgatour_stat_details(
         stat_id: Stat id (stat_id in pgatour_stat_catalog), as a string (leading zeros matter), e.g. '120' (scoring average) or '02675' (SG Total).
         tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
         year: Season year; omitted, the current season.
-        return_parsed: parse the payload through parse_pgatour_stat_details -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_stat_details -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -617,15 +617,15 @@ def pgatour_tour_cup(
         tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
         cup_id: Points race id, as a string (leading zeros matter); 02671 (the default) is the FedExCup, 02698 the FedExCup Fall.
         year: Season year; omitted, the current season.
-        return_parsed: parse the payload through parse_pgatour_tour_cup -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_tour_cup -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -688,15 +688,15 @@ def pgatour_shot_details(
         tournament_id: Tournament id, e.g. R2026006.
         player_id: PGA TOUR player id, e.g. 59095.
         round: Round number (1-4).
-        return_parsed: parse the payload through parse_pgatour_shot_details -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_shot_details -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -755,15 +755,15 @@ def pgatour_schedule_years(
 
     Args:
         tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
-        return_parsed: parse the payload through parse_pgatour_schedule_years -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_schedule_years -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -820,15 +820,15 @@ def pgatour_tournaments(
 
     Args:
         tournament_ids: Tournament id, or a list of them (tournament_id in pgatour_schedule), e.g. R2026014.
-        return_parsed: parse the payload through parse_pgatour_tournaments -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_tournaments -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -885,15 +885,15 @@ def pgatour_past_champions(
 
     Args:
         tournament_id: Tournament id, e.g. R2026014.
-        return_parsed: parse the payload through parse_pgatour_past_champions -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_past_champions -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -952,15 +952,15 @@ def pgatour_hole_by_hole(
     Args:
         tournament_id: Tournament id, e.g. R2026014.
         round: Round number (1-4); omitted, the current round.
-        return_parsed: parse the payload through parse_pgatour_hole_by_hole -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_hole_by_hole -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -1020,15 +1020,15 @@ def pgatour_leaderboard_stats(
     Args:
         tournament_id: Tournament id, e.g. R2026014.
         stats_type: PROBABILITY (win, top 10 and make-cut chances), STROKES_GAINED or ODDS. An event without that table answers no rows.
-        return_parsed: parse the payload through parse_pgatour_leaderboard_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_leaderboard_stats -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -1088,15 +1088,15 @@ def pgatour_field(
     Args:
         tournament_id: Tournament id, e.g. R2026014.
         include_withdrawn: True to keep players who withdrew.
-        return_parsed: parse the payload through parse_pgatour_field -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_field -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -1156,15 +1156,15 @@ def pgatour_past_results(
     Args:
         tournament_id: Tournament id of any edition, e.g. R2026014.
         year: Edition season, e.g. 2025 (sent as the API's five-digit 20250; a five-digit value is sent as given). Omitted, the edition in tournament_id.
-        return_parsed: parse the payload through parse_pgatour_past_results -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_past_results -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -1222,15 +1222,15 @@ def pgatour_course_stats(
 
     Args:
         tournament_id: Tournament id, e.g. R2026014.
-        return_parsed: parse the payload through parse_pgatour_course_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_course_stats -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -1291,15 +1291,15 @@ def pgatour_hole_details(
         tournament_id: Tournament id, e.g. R2026014.
         course_id: Course id as a string (course_id in pgatour_course_stats; leading zeros matter), e.g. '014'.
         hole: Hole number (1-18).
-        return_parsed: parse the payload through parse_pgatour_hole_details -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_hole_details -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -1360,15 +1360,15 @@ def pgatour_scorecard_stats(
     Args:
         tournament_id: Tournament id, e.g. R2026014.
         player_id: PGA TOUR player id, e.g. 28237.
-        return_parsed: parse the payload through parse_pgatour_scorecard_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_scorecard_stats -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 
@@ -1428,15 +1428,15 @@ def pgatour_player_results(
     Args:
         player_id: PGA TOUR player id, e.g. 28237.
         tour_code: Tour code (R PGA TOUR, S PGA TOUR Champions, H Korn Ferry Tour).
-        return_parsed: parse the payload through parse_pgatour_player_results -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_pgatour_player_results -> polars DataFrame (default True). Pass return_parsed=False for the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A polars/pandas DataFrame by default; the operation's answer (``dict``), its compressed ``payload`` decoded; ``pgatour_past_champions`` adds the ``tournamentId`` it was asked for, which the answer does not repeat when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API answered null for the request (an unknown tournament, player or stat id), or ``pgatour_past_results`` was asked for a season the tournament has no edition in.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The API rejected the query variables, or a variable is not of its type (a year that is not a season).
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other GraphQL error, or a compressed payload that does not decode.
 

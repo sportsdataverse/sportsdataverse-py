@@ -102,7 +102,7 @@ TOURNAMENTS_SCHEMA = {
     "state": S, "country": S, "timezone": S, "location": S,
 }  # fmt: skip
 PAST_CHAMPIONS_SCHEMA = {
-    "format_type": S, "season": INT, "display_season": S, "player_id": S, "display_name": S, "country_code": S,
+    "tournament_id": S, "format_type": S, "season": INT, "display_season": S, "player_id": S, "display_name": S, "country_code": S,
     "total": INT, "to_par": S,
 }  # fmt: skip
 HOLE_BY_HOLE_SCHEMA = {
@@ -688,7 +688,8 @@ def parse_pgatour_tournaments(raw: Any, return_as_pandas: bool = False) -> pl.Da
 def parse_pgatour_past_champions(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """One row per past champion of a tournament, newest edition first.
 
-    The answer does not repeat the tournament id; it is the one the wrapper was given.
+    The answer does not repeat the tournament id; ``tournament_id`` is the one the wrapper was given
+    (the runtime stamps it in as ``tournamentId``), null on an answer without that stamp.
 
     Args:
         raw: The ``tournamentOverview`` answer.
@@ -704,9 +705,10 @@ def parse_pgatour_past_champions(raw: Any, return_as_pandas: bool = False) -> pl
             parse_pgatour_past_champions(pgatour_past_champions(tournament_id="R2026014", return_parsed=False))
     """
     raw = _d(raw)
+    tid = _str(raw.get("tournamentId"))
     rows = [
         {
-            "format_type": raw.get("formatType"), "season": _int(c.get("year")),
+            "tournament_id": tid, "format_type": raw.get("formatType"), "season": _int(c.get("year")),
             "display_season": _str(c.get("displaySeason")), "player_id": _str(c.get("playerId")),
             "display_name": c.get("displayName"), "country_code": c.get("countryCode"), "total": _int(c.get("total")),
             "to_par": _str(c.get("score")),
