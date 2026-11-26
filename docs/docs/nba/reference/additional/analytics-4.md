@@ -418,9 +418,12 @@ pos = nba_player_positions("2023-24", fetch=stub)
 
 Per-player expected prop lines + team pace projection for a matchup.
 
-Loads the season's box logs and team ratings (games strictly before `as_of_date`), computes
-`player_rates` (NBA: shrunk toward a tier prior that also pools last regular season), and
-projects each line onto mean minutes and the pace factor `exp_poss / avg_pace`, two teams only.
+Loads the season's player box logs + team ratings, keeps only games played
+strictly before `as_of_date` (both inputs), computes per-minute
+`player_rates`, and projects each player's line onto their mean
+minutes and the matchup's pace factor (`exp_poss / avg_pace`). Only the
+two teams in the matchup are returned. NBA rates are shrunk toward a tier prior
+that also pools the previous regular season (one more box-log read).
 
 **Parameters**
 
@@ -436,33 +439,23 @@ projects each line onto mean minutes and the pace factor `exp_poss / avg_pace`, 
 
 **Returns**
 
-One row per player on either team: `player_id, team_id`, `stat_<stat>_exp` and `stat_<stat>_recent_exp` for the nine stats (null if the logs lack one), `recent_weight, minutes_exp, pace_proj`. `team_id` is his latest team (All-Star games left out). Lines assume he plays (rate x mean minutes when playing x pace); the recent line and weight feed the `prob_over` mixture (weight 0 with <= 10 earlier games, null outside the NBA). `minutes_exp` is his share of his team's logged minutes x `5 * game_minutes`. A team with no game before the cut has no rows and the league pace; empty input gives that schema.
+One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, stat_stl_exp, stat_blk_exp, stat_tov_exp, stat_fgm_exp, stat_ftm_exp, minutes_exp, pace_proj` (a stat the box logs lack comes back null). `team_id` is his team in his latest game before the cut with positive minutes, exhibition (All-Star) games left out, so a traded player projects for his new team. The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the minutes logged for the team by the players it now projects (a traded player's minutes stay with his latest team), counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
 | `player_id` | String | ESPN athlete id (Utf8). |
 | `team_id` | String | ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team. |
-| `stat_pts_exp` | Float64 | Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor. |
+| `stat_pts_exp` | Float64 | Expected points if he plays, per-minute rate (shrunk toward his minutes-and-role tier's) x mean minutes when playing x the pace factor. |
 | `stat_reb_exp` | Float64 | Expected rebounds if he plays, on the same basis. |
 | `stat_ast_exp` | Float64 | Expected assists if he plays, on the same basis. |
 | `stat_fg3m_exp` | Float64 | Expected made threes if he plays, on the same basis. |
 | `minutes_exp` | Float64 | Expected minutes: the player's minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 240; a team's rows sum to 240. The stat_*_exp lines assume the player plays; this does not. |
 | `pace_proj` | Float64 | Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet. |
-| `stat_stl_exp` | Float64 |  |
-| `stat_blk_exp` | Float64 |  |
-| `stat_tov_exp` | Float64 |  |
-| `stat_fgm_exp` | Float64 |  |
-| `stat_ftm_exp` | Float64 |  |
-| `stat_pts_recent_exp` | Float64 | Expected points if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
-| `stat_reb_recent_exp` | Float64 | Expected rebounds if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
-| `stat_ast_recent_exp` | Float64 | Expected assists if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
-| `stat_fg3m_recent_exp` | Float64 | Expected made threes if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
-| `stat_stl_recent_exp` | Float64 | Expected steals if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
-| `stat_blk_recent_exp` | Float64 | Expected blocks if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
-| `stat_tov_recent_exp` | Float64 | Expected turnovers if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
-| `stat_fgm_recent_exp` | Float64 | Expected field goals made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
-| `stat_ftm_recent_exp` | Float64 | Expected free throws made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
-| `recent_weight` | Float64 | Weight on the recent line in the prop mixture, logistic(a + b x \|last-10 minus season mean minutes\| / his season minutes SD); 0 with 10 or fewer earlier games, where the two windows coincide. |
+| `stat_stl_exp` | Float64 | Expected steals if he plays, on the same basis; null when the box logs carry no steals. |
+| `stat_blk_exp` | Float64 | Expected blocks if he plays, on the same basis; null when the box logs carry no blocks. |
+| `stat_tov_exp` | Float64 | Expected turnovers if he plays, on the same basis; null when the box logs carry no turnovers. |
+| `stat_fgm_exp` | Float64 | Expected made field goals if he plays, on the same basis; null when the box logs carry none. |
+| `stat_ftm_exp` | Float64 | Expected made free throws if he plays, on the same basis; null when the box logs carry none. |
 
 **Raises**
 

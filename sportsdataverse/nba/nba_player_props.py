@@ -673,10 +673,12 @@ def nba_player_props(
     if as_of_date is not None:
         # Strict `<`: the target game's own line (and every later one) never feeds its projection.
         logs = logs.filter(pl.col("game_date") < as_of_date)
-    # ESPN's All-Star teams play one game each: an exhibition team is no one's latest team, and its
-    # minutes are no team's. ponytail: the share-of-max rule nba_team_ratings ranks by, not an id list.
-    team_games = pl.col("game_id").n_unique().over("team_id")
-    logs = logs.filter(team_games >= 0.5 * team_games.max())
+    # ESPN's All-Star teams: an exhibition team is no one's latest team, and its minutes are no team's.
+    # It is a team every one of whose players also logs for another team; an expansion team's first
+    # game (one game, its own players) is kept. ponytail: a roster rule, not a per-league id list.
+    # (two steps: a window nested inside another window's group is evaluated within that group)
+    logs = logs.with_columns((pl.col("team_id").n_unique().over("player_id") > 1).alias("_on_other_team"))
+    logs = logs.filter(~pl.col("_on_other_team").all().over("team_id")).drop("_on_other_team")
     ratings = _load_ratings(season, league_id, as_of_date=as_of_date)
     prior = _prior_season_logs(season, league_id, as_of_date)
     # date order: team_id is a traded player's latest
