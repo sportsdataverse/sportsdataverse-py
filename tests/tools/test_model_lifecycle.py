@@ -66,6 +66,10 @@ def test_ledger_lifecycle_fields_are_consistent() -> None:
         (lambda r: r.update(adoption_margin=float("nan")), "finite"),
         (lambda r: r.update(reserved_seasons=[2026, 2022]), "sorted and unique"),
         (lambda r: r.update(reserved_seasons="2026"), "list of integer seasons"),
+        (
+            lambda r: r.update(status="baseline_tied", baseline=None, primary_metric=None, adoption_margin=None),
+            "baseline_tied without a baseline",
+        ),
     ],
 )
 def test_check_ledger_catches_each_bad_row(edit, needle: str) -> None:  # type: ignore[no-untyped-def]
@@ -106,6 +110,13 @@ def test_baseline_tied_never_retires_on_a_tie_only_on_a_loss_beyond_the_margin()
     assert retire.retire_status(worse, -0.04, holdout_end=2019, tied=True)["status"] == "KEEP"
     edge = [_rec(2020, retire.Z * 0.01 - 1e-12, 0.01)]  # lower bound just under 0
     assert retire.retire_status(edge, None, holdout_end=2019, tied=True)["status"] == "KEEP"
+    # the pick curves rank exactly as the pick: Spearman diff 0 with SE 0 is a valid record for a tied row only
+    exact = [_rec(2020, 0.0, 0.0), _rec(2021, 0.0, 0.0)]
+    assert retire.retire_status(exact, None, holdout_end=2019, tied=True)["status"] == "KEEP"
+    with pytest.raises(ValueError, match="se > 0"):
+        retire.retire_status(exact, None, holdout_end=2019)
+    with pytest.raises(ValueError, match="se > 0"):
+        retire.retire_status([_rec(2020, 0.01, 0.0)], None, holdout_end=2019, tied=True)
 
 
 def test_reserved_seasons_are_refused(capsys, tmp_path: Path) -> None:  # type: ignore[no-untyped-def]
@@ -125,8 +136,13 @@ def test_reserved_seasons_are_refused(capsys, tmp_path: Path) -> None:  # type: 
     assert cov.reserved_seasons("wnba") == row["reserved_seasons"]
     assert cov.reserved_seasons("wnba") == sorted(s for s, why in cov.EXCLUDED["wnba"].items() if "reserved" in why)
     assert cov.reserved_seasons("nba") == []
+
+    def never(*args, **kwargs):  # type: ignore[no-untyped-def]
+        raise AssertionError("a reserved season reached the simulation")
+
     with pytest.MonkeyPatch.context() as mp:
         mp.setattr(cov, "reserved_seasons", lambda league: [2010])
+        mp.setattr(cov, "run_season", never)
         with pytest.raises(SystemExit):
             cov.main(["--league", "wnba", "--seasons", "2010"])
     assert "reserved in the ledger" in capsys.readouterr().err

@@ -82,6 +82,8 @@ def check_ledger(ledger: Mapping[str, Any]) -> list[str]:
             continue
         if row["status"] not in STATUSES:
             problems.append(f"{name}: status {row['status']!r} not in {STATUSES}")
+        if row["status"] == "baseline_tied" and row["baseline"] is None:
+            problems.append(f"{name}: baseline_tied without a baseline (the rule needs one to score it)")
         if row["status"] == "retired" and not row.get("retired_reason"):
             problems.append(f"{name}: retired without retired_reason")
         if not isinstance(row["lifecycle_note"], str) or not row["lifecycle_note"].strip():
@@ -152,10 +154,15 @@ def season_record(season: int, diff: np.ndarray, cluster: np.ndarray) -> dict[st
     }
 
 
-def _check_record(r: Mapping[str, Any]) -> None:
-    """A season record is finite, has a positive SE and an upper bound that is ``diff + Z * se``."""
+def _check_record(r: Mapping[str, Any], *, tied: bool = False) -> None:
+    """A season record is finite, has a positive SE and an upper bound that is ``diff + Z * se``.
+
+    ``tied``: a ``baseline_tied`` model can tie exactly (ranks identical to the baseline's, so
+    ``diff == 0`` and ``se == 0``); that one zero-SE record is accepted.
+    """
     diff, se, upper = (float(r[k]) for k in ("diff", "se", "upper"))
-    if not all(math.isfinite(v) for v in (diff, se, upper)) or se <= 0:
+    exact_tie = tied and diff == 0.0 and se == 0.0
+    if not all(math.isfinite(v) for v in (diff, se, upper)) or (se <= 0 and not exact_tie):
         raise ValueError(
             f"season {r['season']}: diff / se / upper must be finite with se > 0, got {diff}, {se}, {upper}"
         )
@@ -177,7 +184,7 @@ def retire_status(
 
     ``holdout_end`` is the last holdout season: a record on or before it raises, since the rule
     scores only seasons the fit and its holdout never saw. ``adoption_margin`` None (not stated in
-    the evidence) turns the margin trigger off; the result says so in ``margin_trigger``. The
+    the evidence) turns the margin trigger off unless ``tied``; the result says so in ``margin_trigger``. The
     rule's constants (97.5% bounds, two seasons, the adoption margin) are the spec's, with the
     margin trigger moved to 1.96 SE by the owner on 2026-11-25, and are never loosened to keep a
     model (ClaudeCowork specs/2026-11-25-model-lifecycle-checks-design.md,
@@ -200,7 +207,7 @@ def retire_status(
     if held:
         raise ValueError(f"seasons {held} are reserved (ledger reserved_seasons); they are not scored")
     for r in recs:
-        _check_record(r)
+        _check_record(r, tied=tied)
     fails = [r["upper"] >= 0.0 for r in recs]
     reasons = [
         f"{a['season']} and {b['season']} both fail to beat the baseline (upper bounds {a['upper']:.4g}, {b['upper']:.4g})"
