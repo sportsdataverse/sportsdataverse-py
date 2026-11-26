@@ -450,10 +450,12 @@ Three pick curves (`tools/models/nba_draft/fit_pick_curve.py`, fit on
 draft classes 2003-2015) score the class
 `sportsdataverse.nba.nba_draft_model.nba_draft_model` returns:
 
-- `proj_rookie_value`: box value of the first NBA season after the
-  draft.
-- `proj_soph_value`: box value of the second season.
-- `proj_rookie_min`: rookie-season minutes.
+- `proj_rookie_value`: box value of the first NBA season the pick
+  played (the corpus labels the first and second seasons played, so a
+  pick stashed or injured in year one is labelled from his first season
+  on the floor; `proj_avail_pct` is still for `draft_year + 1`).
+- `proj_soph_value`: box value of the second season played.
+- `proj_rookie_min`: minutes in the first season played.
 
 Each curve ranks a class exactly as the pick does, so it ties the pick
 baseline by construction. On the 2016-2019 holdout Spearman is 0.477 for
@@ -482,9 +484,9 @@ One row per pick (1-60) of each class. |col_name |type | |:-----------------|:--
 | `draft_year` | Int64 | Draft year (the June the class was picked). |
 | `overall_pick` | Int64 | Overall pick number, 1-60. |
 | `player_name` | String | Name of the pick as the draft history publishes it. |
-| `proj_rookie_value` | Float64 | Projected box value of the first NBA season after the draft, from a pick curve fit on draft classes 2003-2015. |
-| `proj_soph_value` | Float64 | Projected box value of the second NBA season after the draft, from a pick curve. |
-| `proj_rookie_min` | Float64 | Projected rookie-season minutes from a pick curve (floored at 0). |
+| `proj_rookie_value` | Float64 | Projected box value of the first NBA season the pick plays (not necessarily the season after the draft), from a pick curve fit on draft classes 2003-2015. |
+| `proj_soph_value` | Float64 | Projected box value of the second NBA season the pick plays, from a pick curve. |
+| `proj_rookie_min` | Float64 | Projected minutes in the first NBA season the pick plays, from a pick curve (floored at 0). |
 | `proj_avail_pct` | Float64 | Projected share of games available in the debut season, from nba_availability; 0.75 when it has no row for the pick. Never folded into the value columns. |
 | `pro_tier` | String | Pick band: lottery (1-14), first_round (15-30) or second_round (31-60). |
 
