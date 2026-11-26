@@ -5,6 +5,7 @@
 - [NBA draft/projection oracle corpus (T3.4)](#nba-draftprojection-oracle-corpus-t34)
   - [Files](#files)
   - [Fitted box-value formula (Task 0.3)](#fitted-box-value-formula-task-03)
+  - [Pick-curve corpus (2026-11-26)](#pick-curve-corpus-2026-11-26)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -128,3 +129,37 @@ Per-100 rates use a **per-player estimated-possessions proxy**
 `playercareerstats` season totals carry no team-pace context. This is a
 documented approximation; it is sufficient for the rank-based (Spearman)
 oracle gates this label serves.
+
+## Pick-curve corpus (2026-11-26)
+
+`nba_draft_model` and `nba_rookie_projection` now apply pick curves. Both
+fixtures below come from `tools/models/nba_draft/capture_pick_corpus.py`
+(GitHub release assets plus the EuroLeague API; no stats.nba.com call).
+
+- **`pick_corpus.parquet`** (1,017 rows): every drafted player of draft
+  classes 2003-2019, from the `nba_stats_draft` release. That release stamps
+  a draft with the END year of the season it opens, and the capture shifts it
+  back.
+  - Columns: `player_id:Utf8`, `draft_year`, `overall_pick`, `player_name`,
+    and `career_value`, `rookie_value`, `soph_value`, `rookie_min`.
+  - The labels are the box-value formula above, applied to the
+    `nba_stats_player_season_stats` release (regular season, totals, base),
+    seasons after the draft only. A pick who never played gets 0.
+  - It is the same formula as `career_values.parquet` /
+    `rookie_values.parquet`. The values differ slightly, because the season
+    source is the league-wide release rather than per-player career totals.
+  - Classes 2020+ are left out on purpose. 2020-2021 (career) and
+    2020-2023 (rookie) were spent as the rebuild's test windows, and
+    2024-2025 is the unscored rookie reserve.
+  - `tools/models/nba_draft/fit_pick_curve.py` fits on 2003-2015 and holds
+    out 2016-2019.
+- **`pre_draft_2019/`**: each pre-draft source the optional
+  `pre_draft_features=True` columns read, cut to the rows the 2019 picks can
+  match.
+  - Sources: `core` (ESPN college bios), `value` (college player-value
+    spine), `ratings`, `crosswalk` (ESPN to NCAA ids), `rapm` (college
+    RAPM), `euro_stats` (EuroLeague / EuroCup season stats, tagged
+    `_comp` / `_start`).
+  - Also: `draft_raw.parquet` (the 2019 class as the release publishes it)
+    and `expected.parquet` (the live output the replay test must
+    reproduce).

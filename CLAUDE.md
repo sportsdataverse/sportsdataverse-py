@@ -1208,7 +1208,9 @@ code at the source; never blanket-ignore a category.
   only. A field with no evidence stays null and the note gives the reason; never type a number the evidence does not
   state. `retire.py --check-ledger` (run by `tests/tools/test_model_lifecycle.py`) enforces this. After each completed
   season past a model's holdout, score it once against its baseline with `tools/models/lifecycle/retire.py`. Only the
-  owner sets `status: retired`. Season sims also get `coverage.py`, refit-per-season models get `signs.py`. Rules:
+  owner sets `status: retired`. A `baseline_tied` row (ties its baseline by construction) gets the margin trigger only;
+  a row's `reserved_seasons` are never scored. Season sims also get `coverage.py`, refit-per-season models get
+  `signs.py`. Rules:
   `docs/docs/architecture/model-lineage.md#lifecycle-baseline-retire-rule-coverage-sign-stability`.
 - **Cache invalidation when modifying loaders.** The `@cached_loader`
   decorator hashes `(qualified_name, args, sorted_kwargs)` — it does NOT

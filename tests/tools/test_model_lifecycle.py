@@ -64,6 +64,12 @@ def test_ledger_lifecycle_fields_are_consistent() -> None:
         (lambda r: r.update(lifecycle_note=" "), "lifecycle_note"),
         (lambda r: r.update(baseline=None, adoption_margin=None), "both set or both null"),
         (lambda r: r.update(adoption_margin=float("nan")), "finite"),
+        (lambda r: r.update(reserved_seasons=[2026, 2022]), "sorted and unique"),
+        (lambda r: r.update(reserved_seasons="2026"), "list of integer seasons"),
+        (
+            lambda r: r.update(status="baseline_tied", baseline=None, primary_metric=None, adoption_margin=None),
+            "baseline_tied without a baseline",
+        ),
     ],
 )
 def test_check_ledger_catches_each_bad_row(edit, needle: str) -> None:  # type: ignore[no-untyped-def]
@@ -72,6 +78,74 @@ def test_check_ledger_catches_each_bad_row(edit, needle: str) -> None:  # type: 
     edit(row)
     problems = retire.check_ledger(ledger)
     assert len(problems) == 1 and needle in problems[0], problems
+
+
+def test_baseline_tied_is_a_ledger_status_with_the_margin_trigger_only(capsys) -> None:  # type: ignore[no-untyped-def]
+    """The draft / rookie pick curves ship as ``baseline_tied``: the check accepts it and the CLI passes it on."""
+    ledger = _ledger()
+    tied = {(r["league"], r["model"]) for r in ledger["models"] if r["status"] == "baseline_tied"}
+    assert tied >= {("nba", "draft_value"), ("nba", "rookie_projection")}
+    assert retire.check_ledger(ledger) == []
+    assert retire.main(["--league", "nba", "--model", "draft_value"]) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["ledger_status"] == "baseline_tied" and out["status"] == "UNSCORED"
+    assert out["margin_trigger"] == "on, margin only (baseline_tied)"
+
+
+def _rec(season: int, diff: float, se: float) -> dict:
+    return {"season": season, "diff": diff, "se": se, "upper": diff + retire.Z * se}
+
+
+def test_baseline_tied_never_retires_on_a_tie_only_on_a_loss_beyond_the_margin() -> None:
+    """A tie by construction (diff 0 every season) retires an active row after two seasons, never a tied one."""
+    ties = [_rec(2020, 0.0, 0.01), _rec(2021, 0.0, 0.01)]
+    assert retire.retire_status(ties, None, holdout_end=2019)["status"] == "RETIRE-candidate"
+    tied = retire.retire_status(ties, None, holdout_end=2019, tied=True)
+    assert tied["status"] == "KEEP" and tied["reasons"] == []
+    # one season worse than the baseline at 1.96 SE (lower bound above the margin, 0 when none is stated)
+    worse = [*ties, _rec(2022, 0.05, 0.01)]
+    out = retire.retire_status(worse, None, holdout_end=2019, tied=True)
+    assert out["status"] == "RETIRE-candidate" and len(out["reasons"]) == 1 and "2022" in out["reasons"][0]
+    # inside a stated margin it stays
+    assert retire.retire_status(worse, -0.04, holdout_end=2019, tied=True)["status"] == "KEEP"
+    edge = [_rec(2020, retire.Z * 0.01 - 1e-12, 0.01)]  # lower bound just under 0
+    assert retire.retire_status(edge, None, holdout_end=2019, tied=True)["status"] == "KEEP"
+    # the pick curves rank exactly as the pick: Spearman diff 0 with SE 0 is a valid record for a tied row only
+    exact = [_rec(2020, 0.0, 0.0), _rec(2021, 0.0, 0.0)]
+    assert retire.retire_status(exact, None, holdout_end=2019, tied=True)["status"] == "KEEP"
+    with pytest.raises(ValueError, match="se > 0"):
+        retire.retire_status(exact, None, holdout_end=2019)
+    with pytest.raises(ValueError, match="se > 0"):
+        retire.retire_status([_rec(2020, 0.01, 0.0)], None, holdout_end=2019, tied=True)
+
+
+def test_reserved_seasons_are_refused(capsys, tmp_path: Path) -> None:  # type: ignore[no-untyped-def]
+    """WNBA 2022, 2023 and 2026 are held back by the sim-vs-market spec: the rule and coverage.py refuse them."""
+    row = retire.ledger_row(_ledger(), "wnba", "pro_season_sim")
+    assert row["reserved_seasons"] == [2022, 2023, 2026]
+    with pytest.raises(ValueError, match="reserved"):
+        retire.retire_status([_rec(2026, -0.01, 0.01)], -0.00129, holdout_end=2025, reserved=row["reserved_seasons"])
+    assert (
+        retire.retire_status([_rec(2027, -0.03, 0.01)], -0.00129, holdout_end=2025, reserved=[2026])["status"] == "KEEP"
+    )
+    records = tmp_path / "seasons.json"
+    records.write_text(json.dumps([_rec(2026, -0.01, 0.01)]), encoding="utf-8")
+    with pytest.raises(ValueError, match="reserved"):
+        retire.main(["--league", "wnba", "--model", "pro_season_sim", "--records", str(records)])
+    # coverage.py reads the same list, and it matches the seasons its own table marks reserved
+    assert cov.reserved_seasons("wnba") == row["reserved_seasons"]
+    assert cov.reserved_seasons("wnba") == sorted(s for s, why in cov.EXCLUDED["wnba"].items() if "reserved" in why)
+    assert cov.reserved_seasons("nba") == []
+
+    def never(*args, **kwargs):  # type: ignore[no-untyped-def]
+        raise AssertionError("a reserved season reached the simulation")
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(cov, "reserved_seasons", lambda league: [2010])
+        mp.setattr(cov, "run_season", never)
+        with pytest.raises(SystemExit):
+            cov.main(["--league", "wnba", "--seasons", "2010"])
+    assert "reserved in the ledger" in capsys.readouterr().err
 
 
 @pytest.fixture(scope="module")

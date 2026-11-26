@@ -35,7 +35,7 @@ _SCHEMA = {
 }
 
 _ROOKIE_AGE = 22.0  # WNBA draftees are typically 4-year college seniors
-# ponytail: SEEDED PLACEHOLDER (see nba_rookie_projection._EXPECTED_MPG) --
+# ponytail: SEEDED PLACEHOLDER --
 # hand-set per-tier rookie MPG, scales only the reported proj_rookie_min, never
 # a value column or an oracle gate. Fit from realized WNBA rookie MPG per tier
 # in the Phase-5 women's re-fit when proj_rookie_min gets its own gate.

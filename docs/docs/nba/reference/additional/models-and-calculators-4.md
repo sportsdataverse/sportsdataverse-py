@@ -1,10 +1,73 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: ot_adjusted–wp_variants"
-sidebar_label: "Models and calculators: ot_adjusted–wp_variants"
+title: "NBA — additional Python functions — Models and calculators: nba_war–wp_variants"
+sidebar_label: "Models and calculators: nba_war–wp_variants"
 sidebar_position: 14
-description: "NBA — additional Python functions — Models and calculators: ot_adjusted–wp_variants — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_war–wp_variants — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: ot_adjusted–wp_variants
+# NBA — additional Python functions — Models and calculators: nba_war–wp_variants
+
+### nba_war {#nba_war}
+
+`nba_war(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, replacement_level: 'float', pts_per_win: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Points-above-replacement -> wins for each player.
+
+`war_i = (rating_i - replacement_level) * poss_i / 100 / pts_per_win`.
+
+`poss_i` counts each possession once, as a team's net rating per 100 does: a game is about
+100 possessions a side, not 200. A net rating per 100 (`rapm = o_rapm + d_rapm`) spends
+`o_rapm` over the offensive possessions and `d_rapm` over the defensive ones, so its
+points are about `rapm * (off_poss + def_poss) / 2 / 100`: pass `(off_poss + def_poss) / 2`,
+never the sum. The sum doubles every WAR. The 2025-26 NBA `player_impact` release was built
+with the sum: its league WAR totals 1,582 against the 791 the halved possessions give, and a
+team's summed WAR rose 1.55 per win (0.78 halved, under 1 as a shrunken rating's should).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | Per-player rating frame with `player_id` and `rating_col` (e.g. `nba_rapm`'s `rapm` column renamed, a `nba_ratings_panel` row filtered to one date, or `nba_bpm`'s `bpm` column). |
+| `poss` | `DataFrame` |  | Per-player possession-count frame with `player_id` and `poss_col`: the possessions the rating is per 100 of, each counted once (`(off_poss + def_poss) / 2` from `nba_rapm`; see above). |
+| `replacement_level` | `float` |  | Per-100-possession rating of a replacement-level player. No built-in default — calibrate via `calibrate_replacement_level`. |
+| `pts_per_win` | `float` |  | Points of season point-margin per marginal win. No built-in default — calibrate via `calibrate_pts_per_win`. |
+| `rating_col` | `str` | `'rating'` | Column in `ratings` to score. |
+| `poss_col` | `str` | `'poss'` | Column in `poss` giving the possessions played, each counted once. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+Frame with `WAR_SCHEMA` columns (`player_id`, `war`). Empty (that schema) when either input is empty.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | Unique player identifier. |
+| `war` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If both inputs are non-empty but share no `player_id` (a probable id-source or dtype mismatch, not a normal empty case). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_war import nba_war
+war = nba_war(rapm_df.rename({"rapm": "rating"}), poss_df,
+               replacement_level=-2.0, pts_per_win=250.0)
+print(war.sort("war", descending=True).head())
+
+# Derive both required kwargs from real data first
+
+from sportsdataverse.nba.nba_war import (
+    calibrate_pts_per_win, calibrate_replacement_level, nba_war,
+)
+pts_per_win = calibrate_pts_per_win(team_standings)
+repl = calibrate_replacement_level(
+    ratings, poss, pts_per_win=pts_per_win, target_total_war=300.0,
+)
+war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
+```
 
 ### ot_adjusted_seconds {#ot_adjusted_seconds}
 

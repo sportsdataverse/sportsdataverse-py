@@ -31,7 +31,7 @@ def build_aging_deltas(season_values: pl.DataFrame, *, min_minutes: float = 500.
     into a level curve starting from the lowest observed age.
 
     **Normalization (load-bearing):** every consumer of this curve
-    (:func:`nba_career_trajectory`, :func:`sportsdataverse.nba.nba_rookie_projection.nba_rookie_projection`)
+    (:func:`nba_career_trajectory`; ``nba_rookie_projection`` no longer reads it, since it scores pick curves)
     treats ``rel_value`` as a **multiplicative ratio** -- ``value /
     rel_value(age)`` and ``rel_value(a) / rel_value(b)`` -- so the published
     curve must stay strictly positive and bounded near the conventional

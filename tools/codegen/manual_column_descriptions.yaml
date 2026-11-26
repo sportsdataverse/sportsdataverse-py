@@ -16831,6 +16831,15 @@ mjhl_season_id:
   season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
     "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
     next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+nba_draft_model:
+  player_id: "stats.nba.com person id of the pick (string)."
+  draft_year: "Draft year (the June the class was picked; the 2019 draft is 2019)."
+  overall_pick: "Overall pick number, 1-60."
+  player_name: "Name of the pick as the draft history publishes it."
+  organization: "College, club or school the pick was drafted from."
+  proj_career_value: "Projected career box value (summed post-draft season value above replacement) from the pick curve intercept + b1*log(pick) + b2*(pick/60), fit on draft classes 2003-2015. It ties the pick as a ranking."
+  projected_pick: "Rank of proj_career_value within the class; equal to the pick order because the curve is monotone."
+  pro_tier: "Pick band: lottery (1-14), first_round (15-30) or second_round (31-60)."
 nba_injury_report:
   report_datetime: US Eastern time the league published this report, read from the PDF title (a slot before 2025-12-22 09:00 named HH is the HH:30 snapshot).
   game_date: Date of the game the row's player status applies to.
@@ -16844,6 +16853,16 @@ nba_injury_report:
   reason: Reason for the status (e.g. "Injury/Illness - Right Calf; Strain", "G League - Two-Way"), or "NOT YET SUBMITTED" when the team has not filed.
   category: 2018-19 layout only - the reason's category (e.g. "Injury/Illness", "G League Team"); null afterwards.
   previous_status: 2018-19 layout only - the status on the previous report; null afterwards.
+nba_rookie_projection:
+  player_id: "stats.nba.com person id of the pick (string)."
+  draft_year: "Draft year (the June the class was picked)."
+  overall_pick: "Overall pick number, 1-60."
+  player_name: "Name of the pick as the draft history publishes it."
+  proj_rookie_value: "Projected box value of the first NBA season the pick plays (not necessarily the season after the draft), from a pick curve fit on draft classes 2003-2015."
+  proj_soph_value: "Projected box value of the second NBA season the pick plays, from a pick curve."
+  proj_rookie_min: "Projected minutes in the first NBA season the pick plays, from a pick curve (floored at 0)."
+  proj_avail_pct: "Projected share of games available in the debut season, from nba_availability; 0.75 when it has no row for the pick. Never folded into the value columns."
+  pro_tier: "Pick band: lottery (1-14), first_round (15-30) or second_round (31-60)."
 nojhl_season_id:
   game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
     (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season

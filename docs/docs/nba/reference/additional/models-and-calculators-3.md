@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_player–nba_war"
-sidebar_label: "Models and calculators: nba_player–nba_war"
+title: "NBA — additional Python functions — Models and calculators: nba_player–nba_team"
+sidebar_label: "Models and calculators: nba_player–nba_team"
 sidebar_position: 13
-description: "NBA — additional Python functions — Models and calculators: nba_player–nba_war — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_player–nba_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_player–nba_war
+# NBA — additional Python functions — Models and calculators: nba_player–nba_team
 
 ### nba_player_impact_context {#nba_player_impact_context}
 
@@ -442,44 +442,72 @@ print(rating.sort("reml_rapm", descending=True).head())
 
 ### nba_rookie_projection {#nba_rookie_projection}
 
-`nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
+`nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', pre_draft_features: 'bool' = False, college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
-Project rookie/sophomore value by composing draft x aging x availability.
+Project each pick's rookie and second-season value and rookie minutes from his pick.
 
-Composition (no re-derived features -- each term is the verbatim public
-output of ①②③):
+Three pick curves (`tools/models/nba_draft/fit_pick_curve.py`, fit on
+draft classes 2003-2015) score the class
+`sportsdataverse.nba.nba_draft_model.nba_draft_model` returns:
 
-- `base = nba_draft_model(...).proj_career_value * rookie_fraction`
-  (`rookie_fraction` from the bundled residual artifact -- the share of
-  career value realized in a single rookie season).
-- `proj_rookie_value = base * rel_value(rookie_age) / rel_value(peak_age)
-  + residual[pro_tier]`; `proj_soph_value` uses `rookie_age + 1`.
-- `proj_avail_pct` from `sportsdataverse.nba.nba_availability.nba_availability`
-  at rookie age -- reported separately, **never** multiplied into the
-  value columns (availability is availability, not skill).
-- `proj_rookie_min = games_full_season * proj_avail_pct * expected_mpg(pro_tier)`.
+- `proj_rookie_value`: box value of the first NBA season the pick
+  played (the corpus labels the first and second seasons played, so a
+  pick stashed or injured in year one is labelled from his first season
+  on the floor; `proj_avail_pct` is still for `draft_year + 1`).
+- `proj_soph_value`: box value of the second season played.
+- `proj_rookie_min`: minutes in the first season played.
+
+Each curve ranks a class exactly as the pick does, so it ties the pick
+baseline by construction. On the 2016-2019 holdout Spearman is 0.477 for
+rookie value and the pick alike. `proj_avail_pct` comes from
+`sportsdataverse.nba.nba_availability.nba_availability` at the debut
+season. It is reported on its own and never multiplied into the value
+columns.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `draft_year` | `int \| list[int]` |  | A draft year or list of years. |
-| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
-| `college_prior` | `Optional[DataFrame]` | `None` | Optional college-side prior frame, forwarded verbatim to `sportsdataverse.nba.nba_draft_model.nba_draft_model`. |
+| `league` | `str` | `'nba'` | `"nba"` only; the WNBA has `sportsdataverse.wnba.wnba_rookie_projection.wnba_rookie_projection`. |
+| `pre_draft_features` | `bool` | `False` | Attach the pre-draft college and EuroLeague columns, as `~sportsdataverse.nba.nba_draft_model.nba_draft_model` does. They are information only; no curve reads them. |
+| `college_prior` | `Optional[DataFrame]` | `None` | Optional frame keyed on `player_id:Utf8`, forwarded to `~sportsdataverse.nba.nba_draft_model.nba_draft_model` as extra columns. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-Frame `player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64, proj_soph_value:Float64, proj_rookie_min:Float64, proj_avail_pct:Float64, pro_tier:Utf8`. Empty input -> zero-row schema.
+One row per pick (1-60) of each class. |col_name |type | |:-----------------|:-------| |player_id |String | |draft_year |Int64 | |overall_pick |Int64 | |player_name |String | |proj_rookie_value |Float64 | |proj_soph_value |Float64 | |proj_rookie_min |Float64 | |proj_avail_pct |Float64 | |pro_tier |String | With `pre_draft_features=True` it adds the same college and EuroLeague columns as `nba_draft_model`. - `proj_avail_pct` falls back to 0.75 when availability has no row for the pick. - An empty or unpublished class returns the zero-row schema.
 
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+| col_name | type | description |
+|---|---|---|
+| `player_id` | String | stats.nba.com person id of the pick (string). |
+| `draft_year` | Int64 | Draft year (the June the class was picked). |
+| `overall_pick` | Int64 | Overall pick number, 1-60. |
+| `player_name` | String | Name of the pick as the draft history publishes it. |
+| `proj_rookie_value` | Float64 | Projected box value of the first NBA season the pick plays (not necessarily the season after the draft), from a pick curve fit on draft classes 2003-2015. |
+| `proj_soph_value` | Float64 | Projected box value of the second NBA season the pick plays, from a pick curve. |
+| `proj_rookie_min` | Float64 | Projected minutes in the first NBA season the pick plays, from a pick curve (floored at 0). |
+| `proj_avail_pct` | Float64 | Projected share of games available in the debut season, from nba_availability; 0.75 when it has no row for the pick. Never folded into the value columns. |
+| `pro_tier` | String | Pick band: lottery (1-14), first_round (15-30) or second_round (31-60). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `league` is not `"nba"`. |
+| `SeasonNotFoundError` | A draft year before 1996 (the draft release starts there). |
 
 **Example**
 
 ```python
+import polars as pl
 from sportsdataverse.nba import nba_rookie_projection
 board = nba_rookie_projection(2019)
 print(board.sort("proj_rookie_value", descending=True).head())
+
+# Pipeline next step (one line)
+
+board.filter(pl.col("pro_tier") == "lottery")
 ```
 
 ### nba_spm {#nba_spm}
@@ -606,67 +634,4 @@ ratings = nba_team_ratings(2024, as_of_date=dt.date(2024, 1, 15))
 # WNBA / G-League via ``league_id``
 
 wnba_ratings = nba_team_ratings(2024, league_id="10")
-```
-
-### nba_war {#nba_war}
-
-`nba_war(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, replacement_level: 'float', pts_per_win: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Points-above-replacement -> wins for each player.
-
-`war_i = (rating_i - replacement_level) * poss_i / 100 / pts_per_win`.
-
-`poss_i` counts each possession once, as a team's net rating per 100 does: a game is about
-100 possessions a side, not 200. A net rating per 100 (`rapm = o_rapm + d_rapm`) spends
-`o_rapm` over the offensive possessions and `d_rapm` over the defensive ones, so its
-points are about `rapm * (off_poss + def_poss) / 2 / 100`: pass `(off_poss + def_poss) / 2`,
-never the sum. The sum doubles every WAR. The 2025-26 NBA `player_impact` release was built
-with the sum: its league WAR totals 1,582 against the 791 the halved possessions give, and a
-team's summed WAR rose 1.55 per win (0.78 halved, under 1 as a shrunken rating's should).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `ratings` | `DataFrame` |  | Per-player rating frame with `player_id` and `rating_col` (e.g. `nba_rapm`'s `rapm` column renamed, a `nba_ratings_panel` row filtered to one date, or `nba_bpm`'s `bpm` column). |
-| `poss` | `DataFrame` |  | Per-player possession-count frame with `player_id` and `poss_col`: the possessions the rating is per 100 of, each counted once (`(off_poss + def_poss) / 2` from `nba_rapm`; see above). |
-| `replacement_level` | `float` |  | Per-100-possession rating of a replacement-level player. No built-in default — calibrate via `calibrate_replacement_level`. |
-| `pts_per_win` | `float` |  | Points of season point-margin per marginal win. No built-in default — calibrate via `calibrate_pts_per_win`. |
-| `rating_col` | `str` | `'rating'` | Column in `ratings` to score. |
-| `poss_col` | `str` | `'poss'` | Column in `poss` giving the possessions played, each counted once. |
-| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-
-**Returns**
-
-Frame with `WAR_SCHEMA` columns (`player_id`, `war`). Empty (that schema) when either input is empty.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | Int64 | Unique player identifier. |
-| `war` | Float64 |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If both inputs are non-empty but share no `player_id` (a probable id-source or dtype mismatch, not a normal empty case). |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_war import nba_war
-war = nba_war(rapm_df.rename({"rapm": "rating"}), poss_df,
-               replacement_level=-2.0, pts_per_win=250.0)
-print(war.sort("war", descending=True).head())
-
-# Derive both required kwargs from real data first
-
-from sportsdataverse.nba.nba_war import (
-    calibrate_pts_per_win, calibrate_replacement_level, nba_war,
-)
-pts_per_win = calibrate_pts_per_win(team_standings)
-repl = calibrate_replacement_level(
-    ratings, poss, pts_per_win=pts_per_win, target_total_war=300.0,
-)
-war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
 ```

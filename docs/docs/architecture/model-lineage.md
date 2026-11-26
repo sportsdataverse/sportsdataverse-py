@@ -176,8 +176,11 @@ fields below.
 Each `model_ledger.json` row (schema 1.1) carries `baseline` (the model it was
 shown to beat or tie on held-out data), `primary_metric` (that comparison's metric
 and SE clustering), `adoption_margin` (its paired `model - baseline` difference,
-negative = better), `status` (`active` or `retired`) and `lifecycle_note` (the
-evidence, or why a field is null). Fill them from committed evidence only; a field
+negative = better), `status` (`active`, `baseline_tied` or `retired`; `baseline_tied` marks a
+model that ties its baseline by construction) and `lifecycle_note` (the
+evidence, or why a field is null). An optional `reserved_seasons` list names seasons another
+study holds back (WNBA 2022, 2023 and 2026 for the sim-vs-market spec); the retire rule and
+`coverage.py` refuse to score them. Fill them from committed evidence only; a field
 the evidence does not hold stays null with the reason in the note.
 `uv run python tools/models/lifecycle/retire.py --check-ledger` checks them, and
 `tests/tools/test_model_lifecycle.py` runs that check.
@@ -193,7 +196,9 @@ an owner decision:
   baseline by more than the adoption margin's magnitude (`abs(adoption_margin)`;
   the ledger stores a gain as negative) at 1.96 SE (its lower 97.5% bound above
   it), make it a RETIRE-candidate. The latest
-  season failing alone is WATCH; before any season is scored it is UNSCORED. The rule
+  season failing alone is WATCH; before any season is scored it is UNSCORED. A
+  `baseline_tied` row ties every season by construction, so for it only the margin
+  trigger runs (a margin of 0 when the ledger states none) and it is never WATCH. The rule
   runs only on a row with both a `baseline` and `holdout_seasons`. Retiring is the owner's call: `status: retired`
   with `retired_reason`, one release of warning through
   `sportsdataverse/_deprecation.py`, then the function returns the baseline. A

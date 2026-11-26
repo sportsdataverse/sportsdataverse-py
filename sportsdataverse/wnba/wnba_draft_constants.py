@@ -23,9 +23,9 @@ the NBA-side combine-measurement regression. It falls back to
 meaningful, honest, and correctly-scoped signal (draft position is a
 real, pre-career-value, non-leaking feature) -- just not a physical-testing
 regression. Should stats.wnba.com begin publishing combine breakdowns, a
-future revision would need a new combine-feature fit script analogous to
-``tools/models/nba_draft/fit_draft_model.py`` (the NBA core), not the slot-only one
-below.
+future revision would need a combine-feature fit script of its own, not the
+slot-only one below (the NBA side no longer has one either: its models are pick
+curves, ``tools/models/nba_draft/fit_pick_curve.py``).
 
 **Phase 5 re-fit (2026-07-11, genuine WNBA data, replacing the T3.4 seeds):**
 ``dev/wnba_draft/`` captures the real WNBA draft-history + career corpus

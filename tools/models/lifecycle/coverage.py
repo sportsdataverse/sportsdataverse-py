@@ -341,6 +341,12 @@ def report(rows: pl.DataFrame, league: str) -> dict[str, Any]:
     return out
 
 
+def reserved_seasons(league: str) -> list[int]:
+    """The ledger's ``reserved_seasons`` for ``league``/``pro_season_sim`` (seasons another study holds back)."""
+    ledger = json.loads(retire.LEDGER.read_text(encoding="utf-8"))
+    return [int(s) for s in retire.ledger_row(ledger, league, "pro_season_sim").get("reserved_seasons", [])]
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--league", choices=sorted(_LEAGUE_ID), required=True)
@@ -355,6 +361,9 @@ def main(argv: list[str] | None = None) -> int:
     bad = sorted(set(seasons) & set(EXCLUDED[args.league]))
     if bad:
         ap.error(f"excluded seasons {bad}: {[EXCLUDED[args.league][s] for s in bad]}")
+    held = sorted(set(seasons) & set(reserved_seasons(args.league)))
+    if held:
+        ap.error(f"seasons {held} are reserved in the ledger (pro_season_sim reserved_seasons); they are not scored")
     if not args.near_holdout and set(seasons) & set(near):
         ap.error(f"seasons {sorted(set(seasons) & set(near))} are near-holdout ({near}); pass --near-holdout")
     print(f"{args.league}: seasons {seasons}; excluded {EXCLUDED[args.league]}", flush=True)
