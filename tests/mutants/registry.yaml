@@ -12191,6 +12191,16 @@
   expected: kill
   note: "A row led by a runner's advance drops that runner from runners_advanced."
 
+- id: bb-bare-initial-substitution
+  group: bb-runner-clauses
+  finding: bb-runner-clause-split
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "_SUB_NAME = _NAME  # the same name shapes, bare initials included (\"C Mcguire to p for Smith.\")"
+  mutant: "_SUB_NAME = r\"[A-Z][A-Za-z'.\\-]+(?:\\s+[A-Z][A-Za-z'.\\-]+)*(?:,\\s*[A-Z][A-Za-z'.\\-]*\\.?)?\""
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py::test_bare_initial_substitution_has_no_batter"
+  expected: kill
+  note: "A bare-initial substitution ('B Hughes to p for J Barroqueir.') keeps a batter."
+
 # --- PR #1268: free throws on the lineup at their foul -------------------------------------------
 - id: ft-box-follows-the-foul
   group: ft-foul
