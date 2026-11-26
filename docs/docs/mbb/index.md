@@ -16,7 +16,7 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
 | [Bart Torvik T-Rank](#bart-torvik-t-rank) | `barttorvik.com` | 5 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 398 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 401 | — |
 
 ## ESPN {#espn}
 
@@ -253,6 +253,9 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`mbb_team_shot_zones`](reference/additional/analytics-5#mbb_team_shot_zones)
 - [`mbb_team_strength`](reference/additional/analytics-5#mbb_team_strength)
 - [`mbb_tournament_ineligible`](reference/additional/analytics-6#mbb_tournament_ineligible)
+- [`mbb_tournament_run_players`](reference/additional/analytics-6#mbb_tournament_run_players)
+- [`mbb_tournament_run_teams`](reference/additional/analytics-6#mbb_tournament_run_teams)
+- [`mbb_tournament_runs`](reference/additional/analytics-6#mbb_tournament_runs)
 - [`ncaa_box_events`](reference/additional/analytics-6#ncaa_box_events)
 - [`ncaa_coach_stints`](reference/additional/analytics-6#ncaa_coach_stints)
 - [`ncaa_impact_rows`](reference/additional/analytics-6#ncaa_impact_rows)
@@ -268,14 +271,14 @@ description: "sdv-py Men's college basketball: endpoint references, dataset load
 - [`ncaa_team_box_count_rows`](reference/additional/analytics-6#ncaa_team_box_count_rows)
 - [`ncaa_team_coaches`](reference/additional/analytics-6#ncaa_team_coaches)
 - [`ncaa_team_game_counts`](reference/additional/analytics-6#ncaa_team_game_counts)
-- [`order_lineup`](reference/additional/analytics-6#order_lineup)
-- [`pos_class_to_score`](reference/additional/analytics-6#pos_class_to_score)
-- [`project_bracket`](reference/additional/analytics-6#project_bracket)
-- [`regress_shot_quality`](reference/additional/analytics-6#regress_shot_quality)
-- [`strength_of_schedule`](reference/additional/analytics-6#strength_of_schedule)
-- [`test_positional_aware_filter`](reference/additional/analytics-6#test_positional_aware_filter)
-- [`using_roster_pos`](reference/additional/analytics-6#using_roster_pos)
-- [`weighted_avg`](reference/additional/analytics-6#weighted_avg)
+- [`order_lineup`](reference/additional/analytics-7#order_lineup)
+- [`pos_class_to_score`](reference/additional/analytics-7#pos_class_to_score)
+- [`project_bracket`](reference/additional/analytics-7#project_bracket)
+- [`regress_shot_quality`](reference/additional/analytics-7#regress_shot_quality)
+- [`strength_of_schedule`](reference/additional/analytics-7#strength_of_schedule)
+- [`test_positional_aware_filter`](reference/additional/analytics-7#test_positional_aware_filter)
+- [`using_roster_pos`](reference/additional/analytics-7#using_roster_pos)
+- [`weighted_avg`](reference/additional/analytics-7#weighted_avg)
 
 ### Dates and seasons {#dates-and-seasons}
 

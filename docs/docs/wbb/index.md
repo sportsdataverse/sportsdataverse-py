@@ -15,7 +15,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 | [Bart Torvik Women's T-Rank](#bart-torvik-women-s-t-rank) | `barttorvik.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
 | [Her Hoop Stats](#her-hoop-stats) | `herhoopstats.com` | 5 | subscription |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 362 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 365 | — |
 
 ## ESPN {#espn}
 
@@ -248,7 +248,10 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`wbb_team_season_rates`](reference/additional/analytics-5#wbb_team_season_rates)
 - [`wbb_team_shot_zones`](reference/additional/analytics-5#wbb_team_shot_zones)
 - [`wbb_team_strength`](reference/additional/analytics-5#wbb_team_strength)
-- [`weighted_avg`](reference/additional/analytics-5#weighted_avg)
+- [`wbb_tournament_run_players`](reference/additional/analytics-5#wbb_tournament_run_players)
+- [`wbb_tournament_run_teams`](reference/additional/analytics-6#wbb_tournament_run_teams)
+- [`wbb_tournament_runs`](reference/additional/analytics-6#wbb_tournament_runs)
+- [`weighted_avg`](reference/additional/analytics-6#weighted_avg)
 
 ### Dates and seasons {#dates-and-seasons}
 

@@ -1,10 +1,10 @@
 ---
-title: "Men's college basketball — additional Python functions — Analytics: mbb_tournament–weighted_avg"
-sidebar_label: "Analytics: mbb_tournament–weighted_avg"
+title: "Men's college basketball — additional Python functions — Analytics: mbb_tournament–ncaa_team"
+sidebar_label: "Analytics: mbb_tournament–ncaa_team"
 sidebar_position: 18
-description: "Men's college basketball — additional Python functions — Analytics: mbb_tournament–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Men's college basketball — additional Python functions — Analytics: mbb_tournament–ncaa_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Men's college basketball — additional Python functions — Analytics: mbb_tournament–weighted_avg
+# Men's college basketball — additional Python functions — Analytics: mbb_tournament–ncaa_team
 
 ### mbb_tournament_ineligible {#mbb_tournament_ineligible}
 
@@ -56,6 +56,215 @@ barred = mbb_tournament_ineligible([2023], league="mens")
 # Pipeline next step (one line)
 
 barred.filter(pl.col("reason") == "reclassifying").get_column("team").to_list()
+```
+
+### mbb_tournament_run_players {#mbb_tournament_run_players}
+
+`mbb_tournament_run_players(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Each player's totals and per-game line over a run, against the player's regular season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per player who played in a final game of the run, keyed `(season, run_id, team_id, athlete_id)`: the columns of `sportsdataverse.nba.nba_playoff_series.nba_playoff_series_players` (totals, `<stat>_pg`, `ts_pct`, `reg_games` / `reg_<stat>_pg` / `reg_ts_pct` and the shift `<stat>_pg_diff` / `ts_pct_diff`). The regular season leaves out the conference tournament games.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `run_id` | String | Run key: '{season}-{tournament_key}-{ESPN team id}', one team's games in one tournament. |
+| `team_id` | Int64 | ESPN team id of the player's team in the run. |
+| `athlete_id` | Int64 | ESPN athlete id. |
+| `athlete_display_name` | String | The player's name. |
+| `games` | Int64 | Run games played (not marked did-not-play, with minutes or any box count). |
+| `min` | Float64 | Total minutes in the run. |
+| `pts` | Int64 | Total points in the run: the sum of the player's ESPN game boxes. |
+| `fgm` | Int64 | Total field goals made in the run: the sum of the player's ESPN game boxes. |
+| `fga` | Int64 | Total field goals attempted in the run: the sum of the player's ESPN game boxes. |
+| `fg3m` | Int64 | Total three-pointers made in the run: the sum of the player's ESPN game boxes. |
+| `fg3a` | Int64 | Total three-pointers attempted in the run: the sum of the player's ESPN game boxes. |
+| `ftm` | Int64 | Total free throws made in the run: the sum of the player's ESPN game boxes. |
+| `fta` | Int64 | Total free throws attempted in the run: the sum of the player's ESPN game boxes. |
+| `oreb` | Int64 | Total offensive rebounds in the run: the sum of the player's ESPN game boxes. |
+| `dreb` | Int64 | Total defensive rebounds in the run: the sum of the player's ESPN game boxes. |
+| `reb` | Int64 | Total total rebounds in the run: the sum of the player's ESPN game boxes. |
+| `ast` | Int64 | Total assists in the run: the sum of the player's ESPN game boxes. |
+| `stl` | Int64 | Total steals in the run: the sum of the player's ESPN game boxes. |
+| `blk` | Int64 | Total blocks in the run: the sum of the player's ESPN game boxes. |
+| `tov` | Int64 | Total turnovers in the run: the sum of the player's ESPN game boxes. |
+| `pf` | Int64 | Total personal fouls in the run: the sum of the player's ESPN game boxes. |
+| `min_pg` | Float64 | Minutes per run game played. |
+| `pts_pg` | Float64 | Points per run game played. |
+| `reb_pg` | Float64 | Total rebounds per run game played. |
+| `ast_pg` | Float64 | Assists per run game played. |
+| `stl_pg` | Float64 | Steals per run game played. |
+| `blk_pg` | Float64 | Blocks per run game played. |
+| `tov_pg` | Float64 | Turnovers per run game played. |
+| `fg3m_pg` | Float64 | Three-pointers made per run game played. |
+| `ts_pct` | Float64 | True shooting in the run: PTS / (2 * (FGA + 0.44 * FTA)); null with no attempts. |
+| `reg_games` | Int64 | Regular-season games played, without the conference-tournament games (every team the player played for); null with none. |
+| `reg_min_pg` | Float64 | Minutes per regular-season game played. |
+| `reg_pts_pg` | Float64 | Points per regular-season game played. |
+| `reg_reb_pg` | Float64 | Total rebounds per regular-season game played. |
+| `reg_ast_pg` | Float64 | Assists per regular-season game played. |
+| `reg_stl_pg` | Float64 | Steals per regular-season game played. |
+| `reg_blk_pg` | Float64 | Blocks per regular-season game played. |
+| `reg_tov_pg` | Float64 | Turnovers per regular-season game played. |
+| `reg_fg3m_pg` | Float64 | Three-pointers made per regular-season game played. |
+| `reg_ts_pct` | Float64 | True shooting over the player's regular season. |
+| `min_pg_diff` | Float64 | min_pg - reg_min_pg: the run against the player's regular season (positive is up). |
+| `pts_pg_diff` | Float64 | pts_pg - reg_pts_pg: the run against the player's regular season (positive is up). |
+| `reb_pg_diff` | Float64 | reb_pg - reg_reb_pg: the run against the player's regular season (positive is up). |
+| `ast_pg_diff` | Float64 | ast_pg - reg_ast_pg: the run against the player's regular season (positive is up). |
+| `stl_pg_diff` | Float64 | stl_pg - reg_stl_pg: the run against the player's regular season (positive is up). |
+| `blk_pg_diff` | Float64 | blk_pg - reg_blk_pg: the run against the player's regular season (positive is up). |
+| `tov_pg_diff` | Float64 | tov_pg - reg_tov_pg: the run against the player's regular season (positive is up). |
+| `fg3m_pg_diff` | Float64 | fg3m_pg - reg_fg3m_pg: the run against the player's regular season (positive is up). |
+| `ts_pct_diff` | Float64 | ts_pct - reg_ts_pct. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_tournament_runs import mbb_tournament_run_players
+mbb_tournament_run_players(2025).sort("pts_pg_diff", descending=True).head()
+```
+
+### mbb_tournament_run_teams {#mbb_tournament_run_teams}
+
+`mbb_tournament_run_teams(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Each run's record and box totals: the sum of the team's game boxes in the tournament.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per run with a final game, keyed `(season, run_id, team_id)` with `team_abbreviation`: `games`, `wins`, `losses`, `pts`, `opp_pts` and the summed counts `fgm`, `fga`, `fg3m`, `fg3a`, `ftm`, `fta`, `oreb`, `dreb`, `reb`, `ast`, `stl`, `blk`, `tov`, `pf`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `run_id` | String | Run key: '{season}-{tournament_key}-{ESPN team id}', one team's games in one tournament. |
+| `team_id` | Int64 | ESPN team id. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `games` | Int64 | Final games in the run. |
+| `wins` | Int64 | Run wins. |
+| `losses` | Int64 | Run losses. |
+| `opp_pts` | Int64 | Opponent points over the run's final games. |
+| `pts` | Int64 | Total points over the run's final games: the sum of the team's ESPN game boxes. |
+| `fgm` | Int64 | Total field goals made over the run's final games: the sum of the team's ESPN game boxes. |
+| `fga` | Int64 | Total field goals attempted over the run's final games: the sum of the team's ESPN game boxes. |
+| `fg3m` | Int64 | Total three-pointers made over the run's final games: the sum of the team's ESPN game boxes. |
+| `fg3a` | Int64 | Total three-pointers attempted over the run's final games: the sum of the team's ESPN game boxes. |
+| `ftm` | Int64 | Total free throws made over the run's final games: the sum of the team's ESPN game boxes. |
+| `fta` | Int64 | Total free throws attempted over the run's final games: the sum of the team's ESPN game boxes. |
+| `oreb` | Int64 | Total offensive rebounds over the run's final games: the sum of the team's ESPN game boxes. |
+| `dreb` | Int64 | Total defensive rebounds over the run's final games: the sum of the team's ESPN game boxes. |
+| `reb` | Int64 | Total total rebounds over the run's final games: the sum of the team's ESPN game boxes. |
+| `ast` | Int64 | Total assists over the run's final games: the sum of the team's ESPN game boxes. |
+| `stl` | Int64 | Total steals over the run's final games: the sum of the team's ESPN game boxes. |
+| `blk` | Int64 | Total blocks over the run's final games: the sum of the team's ESPN game boxes. |
+| `tov` | Int64 | Total turnovers over the run's final games: the sum of the team's ESPN game boxes. |
+| `pf` | Int64 | Total personal fouls over the run's final games: the sum of the team's ESPN game boxes. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"`. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_tournament_runs import mbb_tournament_run_teams
+mbb_tournament_run_teams(2025).sort("wins", descending=True).head()
+```
+
+### mbb_tournament_runs {#mbb_tournament_runs}
+
+`mbb_tournament_runs(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Every tournament game, once per side, keyed to that team's run, with the run's record after it.
+
+A run is one team's games in one tournament. The games are the postseason (ESPN
+`season_type` 3: the NCAA tournament from the First Four, the NIT / WNIT, the CBI, the
+Crown, the WBIT ...) and the conference tournaments (a `tournament_id` with a conference
+group, from mid-February). `run_id` is `"{season}-{tournament_key}-{team_id}"`;
+`tournament_key` is ESPN's `tournament_id`, or the headline's event name where the id is
+missing (older seasons). A conference tournament ESPN did not tag is not a run.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (`sportsdataverse.wbb.wbb_tournament_runs.wbb_tournament_runs`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+Two rows per tournament game (one per side): `season`, `run_id`, `tournament_key`, `tournament_id`, `tournament_name` (the event name most of its headlines carry), `tournament_kind` (`ncaa`, `conference` or `postseason`), `conference_id`, `round_name`, `game_number` (by tip-off), `game_id`, `game_date`, `completed`, `home_away` (`neutral` at a neutral site), the team's and the opponent's id, abbreviation, display name and score, `winner_team_id`, `wins` / `losses` (after the game), `run_games` and `run_result` (`champion`: won the tournament's last listed game, once final; `eliminated`: lost its last listed game; else `alive`).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `run_id` | String | Run key: '{season}-{tournament_key}-{ESPN team id}', one team's games in one tournament. |
+| `tournament_key` | String | The tournament: ESPN's tournament_id as text, or the headline's event name as a slug where the id is missing (older seasons). |
+| `tournament_id` | Int64 | ESPN tournament id (22 is the NCAA tournament); an untagged game takes the id of the tagged tournament of its season with the same event name, else null. |
+| `tournament_name` | String | The event name most of the tournament's game headlines carry (the text before ' - '). |
+| `tournament_kind` | String | ncaa (ESPN tournament 22, First Four onward), conference (a conference tournament: a tagged regular-season tournament with a conference group, from February 15) or postseason (the NIT, WNIT, CBI, Crown, WBIT and other postseason events). |
+| `conference_id` | Int64 | ESPN group id of the conference, for a conference tournament; null otherwise. |
+| `round_name` | String | The rest of the game headline after the event name (for example 'East Region - 1st Round', 'Final'), without a trailing site. |
+| `game_number` | Int64 | Game number within the run, by tip-off. |
+| `game_id` | Int64 | ESPN game id. |
+| `game_date` | String | Game date (US). |
+| `completed` | Boolean | True when the game is final. |
+| `home_away` | String | home or away, or neutral at a neutral site. |
+| `team_id` | Int64 | The run's team: ESPN team id. |
+| `team_abbreviation` | String | The team's abbreviation. |
+| `team_display_name` | String | The team's display name. |
+| `team_score` | Int64 | The team's points (null before tip-off). |
+| `opponent_team_id` | Int64 | The opponent's ESPN team id. |
+| `opponent_abbreviation` | String | The opponent's abbreviation. |
+| `opponent_display_name` | String | The opponent's display name. |
+| `opponent_score` | Int64 | The opponent's points (null before tip-off). |
+| `winner_team_id` | Int64 | The game winner's ESPN team id; null until the game is final. |
+| `wins` | Int64 | The run's wins after this game. |
+| `losses` | Int64 | The run's losses after this game. |
+| `run_games` | Int64 | Games listed in the run (played and scheduled); the same on every row of the run. |
+| `run_result` | String | champion (won the tournament's last listed game, by tip-off, once final), eliminated (lost its last listed game) or alive; the same on every row of the run. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not `"mens"` or `"womens"` (checked before any load). |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_tournament_runs import mbb_tournament_runs
+runs = mbb_tournament_runs(2025)
+runs.filter((runs["tournament_kind"] == "ncaa") & (runs["run_result"] == "champion"))
 ```
 
 ### ncaa_box_events {#ncaa_box_events}
@@ -1149,309 +1358,4 @@ One row per `(season, game_id, team_id, family, split)`: family `all` (split `al
 from sportsdataverse.mbb.mbb_loaders import load_ncaa_mbb_pbp
 from sportsdataverse.mbb.mbb_situational import ncaa_team_game_counts
 ncaa_team_game_counts(load_ncaa_mbb_pbp(2026)).filter(split="not_garbage_time").head()
-```
-
-### order_lineup {#order_lineup}
-
-`order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'`
-
-Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
-
-Faithful port of `PositionUtils.orderLineup` (`PositionUtils.ts:696-761`).
-Greedily fits each player (in input order) to their best-scoring slot via
-`_fit_player` (dominated by `pos_class_to_score` on the
-player's `posClass`, tie-broken by their raw `posConfidences`),
-evicting and recursively re-fitting any player displaced along the way,
-then applies `apply_relative_positional_overrides` (keyed on
-`team_season`) as a final hand-tuned correction pass.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_codes_and_ids` | `list[dict[str, str]]` |  | The lineup membership, each a `{"code": ..., "id": ...}` dict. Order does not affect the final result (the slot-fitting algorithm is order-invariant by construction -- displaced players are always re-fit). |
-| `players_by_id` | `dict[str, dict[str, Any]]` |  | Per-player positional info keyed by `id`, each a `{"posConfidences": [pg, sg, sf, pf, c], "posClass": "..."}` dict (the tradPosList-ordered raw confidence scores plus the classifier's `ID_TO_POSITION`-keyed class label). |
-| `team_season` | `str` |  | Key into `RELATIVE_POSITION_FIXES` for the final override pass. |
-
-**Returns**
-
-A 5-element list of `{"code": ..., "id": ...}` dicts in PG/SG/SF/PF/C order.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import order_lineup
-players_by_id = {
-    "Cowan, Anthony": {"posConfidences": [60, 40, 10, 0, 0], "posClass": "s-PG"},
-    "Ayala, Eric": {"posConfidences": [40, 60, 10, 0, 0], "posClass": "CG"},
-}
-order_lineup(
-    [{"code": "AnCowan", "id": "Cowan, Anthony"},
-     {"code": "ErAyala", "id": "Ayala, Eric"}],
-    players_by_id, "",
-)
-```
-
-### pos_class_to_score {#pos_class_to_score}
-
-`pos_class_to_score(pos_class: 'str') -> 'int'`
-
-Ordinal "positional weight" for a position class, PG=1000..C=8000.
-
-Faithful port of `PositionUtils.posClassToScore` (`PositionUtils.ts:629-654`,
-a literal `switch`). Unmapped classes default to `4000` (the TS
-default-case comment notes "won't happen").
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pos_class` | `str` |  | A position-class code (e.g. `"PG"`, `"WF"`, `"C"`). |
-
-**Returns**
-
-The class's ordinal score.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import pos_class_to_score
-pos_class_to_score("WF")
-```
-
-### project_bracket {#project_bracket}
-
-`project_bracket(resume: 'pl.DataFrame', auto_bids: 'set[str]', *, league: 'str' = 'mens', field_size: 'int' = 68) -> 'pl.DataFrame'`
-
-Select and seed a tournament field from a per-team résumé frame.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `resume` | `DataFrame` |  | One row per (season, team_id) with `adj_em_z, sos, wab, quad1_w` (the ratings + strength-of-schedule outputs joined). |
-| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid teams (see `~sportsdataverse.mbb.mbb_college_season.conference_auto_bids`); always in the field. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (kept for shim parity; the blend is league-agnostic). |
-| `field_size` | `int` | `68` | Tournament field size (68). |
-
-**Returns**
-
-One row per input team: `season, team_id, resume_score, projected_seed` (1-16, null outside the field; in a 68-team field the last four at-large teams and the four worst auto-bids share First Four slots, so every line has four slots), `at_large_prob` (logistic in `resume_score` centred on the selection cutoff -- every selected at-large clears 0.5), `auto_bid`, `at_large_rank` (1 = the best résumé without an auto-bid; null for auto-bids), `bid` (exactly `field_size` true).
-
-No returns table is published for this function: no capture: it needs a resume frame (strength of schedule joined with the ratings' adj_em_z) that no package function returns.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_bracketology import project_bracket
-field = project_bracket(resume, auto_bids)
-```
-
-### regress_shot_quality {#regress_shot_quality}
-
-`regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'`
-
-Shrink a small-sample shot-quality stat toward its positional average.
-
-Faithful port of `PositionUtils.regressShotQuality`
-(`PositionUtils.ts:216-258`). Only the three relative shot-quality
-features (`calc_three_relative` / `calc_rim_relative` /
-`calc_mid_relative`) are regressed; any other `feat` passes `stat`
-through unchanged. A player is regressed toward the positional average
-whenever the relevant shot volume is below `max(0.25 * total_fga, 15)`
-(i.e. under 25% of their attempts come from that zone, floored at 15
-attempts). A `center` (`pos == 4`) who took 0-2 threes and made none is
-left at `0` to avoid widespread changes.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `stat` | `float` |  | The raw (unregressed) feature value. |
-| `pos` | `int` |  | Position index (`0=pg` ... `4=c`). |
-| `feat` | `str` |  | Feature field name (only the three relative shot-quality keys trigger regression; anything else is a passthrough). |
-| `player` | `dict[str, Any]` |  | The player stat dict; reads `total_off_fga` and the per-feature volume field (`total_off_{3p,2pmid,2prim}_attempts`), each shaped `{"value": N}`. |
-
-**Returns**
-
-The regressed feature value (or `stat` unchanged when the feature is not regressed, volume is sufficient, or the center-3s carve-out fires).
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `KeyError` | If `player` lacks `total_off_fga` (faithful to the TS, which throws on the same missing field). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_positions import regress_shot_quality
-player = {"total_off_fga": {"value": 25},
-          "total_off_3p_attempts": {"value": 1}}
-regress_shot_quality(-15.5, 2, "misc_feature", player)
-
-# Low-volume shrink toward the positional average
-
-regress_shot_quality(100, 3, "calc_rim_relative",
-    {"total_off_fga": {"value": 25},
-     "total_off_2prim_attempts": {"value": 8}})
-```
-
-### strength_of_schedule {#strength_of_schedule}
-
-`strength_of_schedule(results: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
-
-Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `results` | `DataFrame` |  | Completed games with `game_id, season, home_team_id, away_team_id, home_score, away_score, neutral_site`. |
-| `ratings` | `DataFrame` |  | One row per team with `season, team_id, adj_em, rank` (the `mbb_team_ratings` output). Team-id dtype must match `results`. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (quad thresholds, HFA, bubble EM). |
-
-**Returns**
-
-One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins`. `sos` is the mean opponent `adj_em` (rank 1 = hardest schedule); quads follow the NET venue-adjusted opponent-rank thresholds; `quality_wins` is Quad-1 + Quad-2 wins; `wab` is actual wins minus a bubble-quality team's expected wins against the same schedule. Empty input returns the schema with zero rows.
-
-No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If the team-id dtypes of `results` and `ratings` disagree. |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
-resume = strength_of_schedule(results, ratings)
-```
-
-### test_positional_aware_filter {#test_positional_aware_filter}
-
-`test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'`
-
-Check a positional-aware filter (from `build_positional_aware_filter`)
-
-against a sorted (`order_lineup`-ordered) lineup array.
-
-Faithful port of `PositionUtils.testPositionalAwareFilter`
-(`PositionUtils.ts:831-858`). A fragment matches if any of its
-position-restricted slots (or, when `pos` is empty, any slot at all)
-has a `code`/`id` containing the fragment's filter text
-(case-insensitive substring match). Every positive fragment must match
-(vacuously true if there are none); no negative fragment may match
-(vacuously true if there are none).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `sorted_to_test` | `list[dict[str, str]]` |  | The ordered lineup, each a `{"id": ..., "code": ...}` dict (as returned by `order_lineup`). |
-| `pve_frags` | `list[dict[str, Any]]` |  | Positive-filter fragments (must ALL match). |
-| `nve_frags` | `list[dict[str, Any]]` |  | Negative-filter fragments (NONE may match). |
-
-**Returns**
-
-Whether the lineup satisfies both the positive and negative filters.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
-lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
-test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
-```
-
-### using_roster_pos {#using_roster_pos}
-
-`using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'`
-
-Reconcile a stats-derived position class against roster metadata.
-
-Faithful port of `PositionUtils.usingRosterPos` (`PositionUtils.ts:583-626`).
-When the classifier landed on an "unsure" bucket (`"G?"`/`"F/C?"`),
-roster info narrows it (a roster `"C"` always wins outright); otherwise
-an obviously-wrong stats classification is compromised toward the
-roster-implied side, gated by `pos_class_to_score` thresholds.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pos_class` | `str` |  | The stats-derived position class. |
-| `roster_pos` | `str \| None` |  | The roster-reported position (`"G"`/`"F"`/`"C"`), or `None`/`""` when unknown. `if (rosterPos)` (ts:587) is a plain JS truthiness check on a string -- `""` and `None` behave identically (both mean "no correction"), so `if not roster_pos` is the faithful Python mirror, not an `is None` landmine. |
-
-**Returns**
-
-A `(position, info)` tuple. `info` is `None` when no correction/explanation applies (matches the TS `undefined`), else a human-readable note on why the position was adjusted.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_positions import using_roster_pos
-using_roster_pos("G?", "C")
-```
-
-### weighted_avg {#weighted_avg}
-
-`weighted_avg(mutable_acc: 'LineupStatSet', obj: 'LineupStatSet') -> 'None'`
-
-Merge `obj` into `mutable_acc` with possession weighting.
-
-Faithful port of `LineupUtils.weightedAvg` (`LineupUtils.ts:645`).
-Mutates `mutable_acc` in place (matching the upstream mutable-state
-contract) and returns `None`. Each call accumulates a **weighted
-sum**, not a weighted average -- the companion `completeWeightedAvg`
-(upstream `LineupUtils.ts:752`, not yet ported) divides by the
-accumulated weight totals to finish the average. The per-field weight
-used at each merge step is derived from `obj`'s *own* totals (e.g.
-that single lineup's `total_off_fga`), not from any running total on
-`mutable_acc` -- callers accumulating many lineups must call
-`weighted_avg` once per lineup so every lineup contributes its own
-weight.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `mutable_acc` | `LineupStatSet` |  | The running accumulator (`LineupStatSet`). Mutated in place; fields absent from the accumulator are initialized to `{"value": 0.0}` (plus `old_value` / `override` when `obj`'s field carries a luck-adjustment `override` marker) before `obj`'s contribution is added. |
-| `obj` | `LineupStatSet` |  | The per-lineup `LineupStatSet` document to merge in. |
-
-**Returns**
-
-None. `mutable_acc` is mutated in place.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `NotImplementedError` | If `obj` carries a `game_info` key -- that merge branch is deliberately deferred (see module docstring). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_lineup_stats import weighted_avg
-
-acc: dict = {}
-weighted_avg(acc, lineup_a)
-weighted_avg(acc, lineup_b)
-print(acc["off_poss"]["value"])  # plain sum (SUM_FIELDS)
-
-# Two-lineup possession-weighted merge
-
-acc = {}
-for lineup in three_lineups:
-    weighted_avg(acc, lineup)
-# acc now holds weighted SUMS; complete_weighted_avg (not yet
-# ported) is required to turn these into rate-stat averages.
 ```
