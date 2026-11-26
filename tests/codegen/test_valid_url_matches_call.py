@@ -46,7 +46,8 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
             kwargs["return_parsed"] = False
         fn = getattr(mod, v.fn_name)
         if getattr(v, "body_kind", "query") != "query":  # POST body endpoint: no fetchable URL, a curl example instead
-            assert not v.valid_url and v.curl_example and v.curl_example in v.docstring, v.fn_name
+            # the wrapper's runtime __doc__, not the escaped source text (a GraphQL query's ``\n`` is doubled there)
+            assert not v.valid_url and v.curl_example and v.curl_example in (fn.__doc__ or ""), v.fn_name
             checked += 1
             continue
         if not v.valid_url:  # only when the example omits a required argument
@@ -98,7 +99,14 @@ def test_core_child_resource_fills_every_path_token():
     assert by["espn_nba_game_team"].valid_url == f"{base}/competitors/15"
 
 
-@pytest.mark.parametrize("prefix", sorted(p for p, lg in _LEAGUES.items() if "universal" in lg.scopes))
+# A league whose ``endpoints:`` allowlist leaves ``summary`` out (golf: no probe saw it answer) gets no
+# summary wrapper; every other universal-scope league must have one.
+@pytest.mark.parametrize(
+    "prefix",
+    sorted(
+        p for p, lg in _LEAGUES.items() if "universal" in lg.scopes and (not lg.endpoints or "summary" in lg.endpoints)
+    ),
+)
 def test_summary_documents_a_dict_of_section_frames(prefix):
     views, _ = _espn_views(prefix)
     summary = [v for v in views if v.short == "summary"]
@@ -106,6 +114,14 @@ def test_summary_documents_a_dict_of_section_frames(prefix):
     for v in summary:
         assert v.parsed_doc_md == "a dict of `polars.DataFrame`s keyed by summary section", v.fn_name
         assert "keyed by summary section by default" in v.docstring, v.fn_name
+
+
+def test_a_league_whose_allowlist_drops_summary_has_no_summary_wrapper():
+    """The other half of the parametrize above: an excluded league really has no summary wrapper."""
+    for prefix, lg in sorted(_LEAGUES.items()):
+        if "universal" in lg.scopes and lg.endpoints and "summary" not in lg.endpoints:
+            views, _ = _espn_views(prefix)
+            assert not [v.fn_name for v in views if v.short == "summary"], prefix
 
 
 def test_body_curl_examples_show_the_wire_season():
