@@ -99,7 +99,7 @@ spot and the scorer's after-the-play shot type predict.
 |---|---|---|---|
 | `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (needs `shot_type`, the three zone keys and `shot_made_flag`; the location model also reads `loc_x`, `loc_y` and `action_type`). |
 | `league_avgs` | `DataFrame` |  | The `LeagueAverages` frame (see `xpoints_baseline`). |
-| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League: the booster `model="location"` loads (`SHOT_MAKE_MODELS`). |
+| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League (the booster to load). |
 | `model` | `Literal['zone', 'location']` | `'zone'` | `"zone"` or `"location"`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
@@ -113,7 +113,7 @@ No returns table is published for this function: no capture: its input is the sh
 
 | Exception | Description |
 |---|---|
-| `ValueError` | A zone join key has a different dtype on the two frames, `model` is unknown, `model="location"` for a league with no bundled booster, or a location column is missing. |
+| `ValueError` | A zone join key's dtype differs between the frames, `model` is unknown, or `model="location"` lacks a booster for `league_id` or a location column. |
 
 **Example**
 
