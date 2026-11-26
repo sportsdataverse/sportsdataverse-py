@@ -1,0 +1,49 @@
+{
+  "league": "nba",
+  "train": [
+    2018,
+    2019,
+    2022,
+    2023
+  ],
+  "truth_lambda": 1.0,
+  "by_season": {
+    "2018": {
+      "teams": 30,
+      "mean_miss2": 11.7882,
+      "mean_noise": 3.407,
+      "v": 8.7877,
+      "s2_prior": 13353.21,
+      "shipped_preseason_sd": 5.7778
+    },
+    "2019": {
+      "teams": 30,
+      "mean_miss2": 11.5518,
+      "mean_noise": 3.3489,
+      "v": 8.6013,
+      "s2_prior": 13592.7,
+      "shipped_preseason_sd": 5.8294
+    },
+    "2022": {
+      "teams": 30,
+      "mean_miss2": 14.5778,
+      "mean_noise": 3.5073,
+      "v": 11.5732,
+      "s2_prior": 14146.41,
+      "shipped_preseason_sd": 5.9469
+    },
+    "2023": {
+      "teams": 30,
+      "mean_miss2": 11.4881,
+      "mean_noise": 3.4498,
+      "v": 8.4345,
+      "s2_prior": 14128.43,
+      "shipped_preseason_sd": 5.9432
+    }
+  },
+  "mean_v": 9.3492,
+  "mean_s2_prior": 13805.19,
+  "preseason_sd_fit": 3.0576,
+  "pick": 2950.0,
+  "ridge_penalty": 800.0
+}

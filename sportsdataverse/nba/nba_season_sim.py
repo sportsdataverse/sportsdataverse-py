@@ -170,10 +170,27 @@ HFA_PSEUDO_POSS: dict[str, float] = {"00": 80000.0, "10": 10000.0}
 #: * Fit by ``tools/fit_pro_rating_sd.py`` on the SIM_CONSTANTS train seasons (NBA 2018 2019 2022
 #:   2023, WNBA 2018 2019 2021): per returning team the final rating minus the prior, its own
 #:   sampling variance taken out, the within-season centring undone. NBA 2,950 (preseason net sd
-#:   3.06 per 100 against 5.94 at ``k = lam``), WNBA 1,060 (4.95 against 11.4). Re-run 2026-11-26:
-#:   the same values.
-#: * Gate: GATE_PENDING.
-PRIOR_MISS_POSS: dict[str, float] = {"00": 2950.0, "10": 1060.0}
+#:   3.06 per 100 against 5.94 at ``k = lam``), WNBA 1,060 (4.95 against 11.4 before the sim's cap,
+#:   about 10.4 after it, which binds at ``k = lam``). Re-run 2026-11-26:
+#:   the same values; the reports are ``tests/fixtures/nba_prediction/prior_miss_<lg>.json``.
+#: * Gate, pre-registered (ClaudeCowork ``specs/2026-11-26-pro-season-sim-prior-sd-regate-prereg.md``)
+#:   and run once, 2026-11-26, 10,000 sims, on seasons no coverage run had scored
+#:   (``tools/models/lifecycle/coverage.py --seasons``): the 80% win band within
+#:   ``max(0.05, 2 SE)`` of its mass (SE clustered by season) at the preseason and in-season cutoffs,
+#:   and the no-op check passing.
+#: * WNBA, 1998 1999 2003-2009 (2000-2002 have 16 teams, more than the seeding table holds): PASS,
+#:   shipped. Preseason 0.845 against a mass of 0.839 (SE 0.042), in-season 0.871 against 0.844
+#:   (SE 0.039), the draw widening the preseason band 1.60x. At ``k = lam`` the same seasons cover
+#:   0.991 against 0.825 preseason.
+#: * NBA, 1998 2000-2009: FAIL at the preseason, so the NBA keeps ``k = lam``. Preseason 0.704
+#:   against 0.823 (SE 0.023, tolerance 0.05): too narrow, where ``k = lam`` is too wide (0.929
+#:   against 0.815). In-season passed, 0.790 against 0.827. Not retuned; these seasons are spent for
+#:   this question.
+#: * An expansion team (``new_team``) keeps ``k = lam`` in both leagues (:func:`_team_k_miss`): the
+#:   fit left them out, since their prior is a quantile default. Set after the gate, on review; the
+#:   gate's ``shift`` arm had applied ``k`` to them too (5 of its 116 WNBA team-seasons), which this
+#:   only widens.
+PRIOR_MISS_POSS: dict[str, float] = {"00": SIM_CONSTANTS["00"][0], "10": 1060.0}
 
 _SEEDS = 15
 
@@ -332,6 +349,17 @@ def preseason_prior(
     return PreseasonPrior(ratings, float(final.get_column("hfa")[0]), poss, _ridge_s2(prev_rows), identified)
 
 
+def _team_k_miss(prior: PreseasonPrior, lam: float, k_miss: float) -> pl.Expr:
+    """Per-team prior-miss pseudo-count: ``k_miss``, but ``lam`` for an expansion team.
+
+    :data:`PRIOR_MISS_POSS` was fit on returning teams only (``tools/fit_pro_rating_sd.py``); an
+    expansion team's prior is a quantile default, not a regressed rating, so it keeps the posterior.
+    """
+    if "new_team" not in prior.ratings.columns:
+        return pl.lit(k_miss, dtype=pl.Float64)
+    return pl.when(pl.col("new_team") == True).then(lam).otherwise(k_miss).cast(pl.Float64)  # noqa: E712
+
+
 def as_of_game_model(
     rows: pl.DataFrame,
     *,
@@ -384,7 +412,7 @@ def as_of_game_model(
         ratings = prior.ratings.select(
             "team_id",
             (pl.col("off_dev") - pl.col("def_dev")).alias("adj_net_rtg"),
-            pl.lit(prior_sd).alias("adj_net_rtg_sd"),
+            (2.0 * prior.s2 / _team_k_miss(prior, lam, k_miss)).sqrt().alias("adj_net_rtg_sd"),
         ).cast(schema)
         return GameModel(ratings, prior.hfa, prior.poss, sd, prior_sd)
     rat = possession_ridge_ratings(
@@ -407,14 +435,24 @@ def as_of_game_model(
         )
     s2 = _ridge_s2(rows)
 
+    kk = pl.col("_k_miss") if prior is not None else pl.lit(k_miss)
+
     def side_var(n: pl.Expr) -> pl.Expr:  # k_miss = lam reduces this to s2 / (n + lam)
         n = n.fill_null(0)
-        return (lam / (n + lam)) ** 2 * s2 / k_miss + n * s2 / (n + lam) ** 2
+        return (lam / (n + lam)) ** 2 * s2 / kk + n * s2 / (n + lam) ** 2
 
     n_off = rows.group_by(pl.col("offense_team_id").alias("team_id")).len("n_off")
     n_def = rows.group_by(pl.col("defense_team_id").alias("team_id")).len("n_def")
     for frame in (n_off, n_def):
         assert frame.schema["team_id"] == rat.schema["team_id"], "team_id dtype differs across the joins"
+    if prior is not None:
+        assert prior.ratings.schema["team_id"] == rat.schema["team_id"], "team_id dtype differs across the joins"
+        rat = rat.join(
+            prior.ratings.select("team_id", _team_k_miss(prior, lam, k_miss).alias("_k_miss")),
+            on="team_id",
+            how="left",
+            validate="1:1",
+        ).with_columns(pl.col("_k_miss").fill_null(k_miss))
     ratings = (
         rat.join(n_off, on="team_id", how="left", validate="1:1")
         .join(n_def, on="team_id", how="left", validate="1:1")

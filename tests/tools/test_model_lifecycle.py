@@ -253,11 +253,31 @@ def test_coverage_end_to_end_on_the_2025_26_fixture() -> None:
     assert (rows["mass_80"] >= 0.8).all()
     rep = cov.report(rows, "nba")
     assert rep["noop_check"]["status"] == "PASS"
-    # observed 1.98 at PRIOR_MISS_POSS (3.49 at the penalty, the shipped-before form)
-    assert rep["noop_check"]["width_ratio"] > 1.8
+    # observed 3.49: the NBA keeps k = lam (PRIOR_MISS_POSS failed its NBA gate; 1.98 at k = 2950)
+    assert rep["noop_check"]["width_ratio"] > 3
     # one season is one cluster: no SE is quoted and no OK/WATCH is read
     assert rep["cutoffs"]["preseason"]["shift"]["80"]["diff_se_cr1_season"] is None
     assert rep["reading"] == "TOO_FEW_SEASONS"
+
+
+def test_shipped_path_reads_prior_miss_poss() -> None:
+    """``_load_inputs`` (the path the sim and coverage.py use) applies PRIOR_MISS_POSS and passes ``prior_poss`` on.
+
+    The NBA keeps ``k = lam``, so its default and penalty-sd models match; a patched NBA ``k`` must
+    move the default model's preseason sd by ``sqrt(lam / k)`` and leave the override alone.
+    """
+    cut = cov.dt.date(2025, 10, 21)
+    lam = cov.sim.SIM_CONSTANTS["00"][0]
+    with pytest.MonkeyPatch.context() as mp:
+        _fixture_loaders(mp)
+        shipped = cov.sim._load_inputs(2026, cut, "00", cup="never")[1]
+        penalty = cov.sim._load_inputs(2026, cut, "00", cup="never", prior_poss=lam)[1]
+        assert shipped.prior_sd == penalty.prior_sd
+        mp.setitem(cov.sim.PRIOR_MISS_POSS, "00", 4 * lam)
+        moved = cov.sim._load_inputs(2026, cut, "00", cup="never")[1]
+        held = cov.sim._load_inputs(2026, cut, "00", cup="never", prior_poss=lam)[1]
+    assert moved.prior_sd == pytest.approx(penalty.prior_sd / 2)
+    assert held.prior_sd == penalty.prior_sd
 
 
 def test_noop_check_catches_a_disabled_rating_draw() -> None:

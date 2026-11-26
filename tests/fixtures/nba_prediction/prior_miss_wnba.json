@@ -1,0 +1,40 @@
+{
+  "league": "wnba",
+  "train": [
+    2018,
+    2019,
+    2021
+  ],
+  "truth_lambda": 1.0,
+  "by_season": {
+    "2018": {
+      "teams": 12,
+      "mean_miss2": 29.2984,
+      "mean_noise": 9.8003,
+      "v": 22.1616,
+      "s2_prior": 12692.2,
+      "shipped_preseason_sd": 11.266
+    },
+    "2019": {
+      "teams": 12,
+      "mean_miss2": 37.4847,
+      "mean_noise": 9.7851,
+      "v": 31.1073,
+      "s2_prior": 13072.36,
+      "shipped_preseason_sd": 11.4334
+    },
+    "2021": {
+      "teams": 12,
+      "mean_miss2": 28.0724,
+      "mean_noise": 10.446,
+      "v": 20.1785,
+      "s2_prior": 13196.45,
+      "shipped_preseason_sd": 11.4876
+    }
+  },
+  "mean_v": 24.4825,
+  "mean_s2_prior": 12987.0,
+  "preseason_sd_fit": 4.948,
+  "pick": 1060.0,
+  "ridge_penalty": 200.0
+}

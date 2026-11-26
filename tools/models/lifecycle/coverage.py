@@ -85,12 +85,12 @@ _IN_SEASON = {"nba": (12, 1), "wnba": (6, 15)}
 #: A scored season must be outside all of them (``tests/tools/test_model_lifecycle.py``).
 PATH_FITS: dict[str, dict[str, list[int]]] = {
     "nba": {
-        "SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS train": [2018, 2019, 2022, 2023],
+        "SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS / PRIOR_MISS_POSS train": [2018, 2019, 2022, 2023],
         "REST_TRAVEL_CONSTANTS fit": [2018, 2019, 2022, 2023, 2024, 2025, 2026],
         "team_strength.RIDGE_LAMBDA CV": [2022, 2023, 2024, 2025, 2026],
     },
     "wnba": {
-        "SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS train": [2018, 2019, 2021],
+        "SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS / PRIOR_MISS_POSS train": [2018, 2019, 2021],
         "team_strength.RIDGE_LAMBDA CV": [2021, 2022, 2023, 2024, 2025],
     },
 }
