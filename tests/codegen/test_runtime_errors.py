@@ -562,6 +562,8 @@ _KWARGS: Dict[str, Callable[[], Dict[str, Any]]] = {
     "fiba_runtime": lambda: {"params": {"comp": 208182}},
     "ibba_runtime": lambda: {"params": {"cYear": 2026}},
     "ibba_segev_runtime": lambda: {"params": {"method": "getGameInfo", "game_id": 1}},
+    # a GraphQL getter: the wrapper's flat body names its operation (pgatour_schedule's example)
+    "pgatour_runtime": lambda: {"json": {"operation": "schedule", "tourCode": "R", "year": "2026"}},
 }
 _HTML_IS_DATA = {"kenpom_runtime"}  # its pages are the payload
 _KNOWN: Dict[Tuple[str, str], str] = {}  # task 4.1b closed nflpro (A-M4) and pff_api's 204 (A-L69)
@@ -605,6 +607,10 @@ def _seed_bleague(mod: Any, monkeypatch: Any) -> None:
     )
 
 
+def _seed_pgatour(mod: Any, monkeypatch: Any) -> None:  # an env key skips reading the site's key
+    monkeypatch.setenv(mod.KEY_ENV, "seeded-key")
+
+
 def _seed_fiba(mod: Any, monkeypatch: Any) -> None:  # the game page URL is built from two GDAP lookups
     monkeypatch.setattr(
         mod, "_page_url", lambda game_id, comp: f"{mod.SITE_URL}/en/history/x/{comp}/games/{game_id}-A-B"
@@ -622,6 +628,7 @@ _SEED: Dict[str, Tuple[Callable[[Any, Any], None], str]] = {
     "lkl_runtime": (_seed_lkl, "https://lkl.lt/rungtynes/11446"),
     "vhl_runtime": (_seed_vhl, "https://www.vhlru.ru/en/calendar/"),
     "fiba_runtime": (_seed_fiba, "https://digital-api.fiba.basketball/hapi/getGdapCompetitionById"),
+    "pgatour_runtime": (_seed_pgatour, "https://www.pgatour.com/"),
     "bleague_runtime": (_seed_bleague, "https://b-league.s3.amazonaws.com/web_json/v2_genius_contexts/504734/latestid"),
 }
 

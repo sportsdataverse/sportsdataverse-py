@@ -232,6 +232,8 @@ def test_malformed_field_values_never_raise():
         ({"data": {"player": None}}, NoDataError),
         ({"data": None, "errors": [{"message": "Validation error of type WrongType"}]}, ValueError),
         ({"data": None, "errors": [{"message": "Internal failure"}]}, AssetFetchError),
+        ({}, AssetFetchError),  # a 200 with an empty object is unreadable, not an unknown id
+        ({"data": {}}, AssetFetchError),  # no key for the operation: malformed, not an unknown id
     ],
 )
 def test_get_maps_graphql_errors(monkeypatch, answer, error):
@@ -239,6 +241,16 @@ def test_get_maps_graphql_errors(monkeypatch, answer, error):
     monkeypatch.setenv(rt.KEY_ENV, "test-key")
     with pytest.raises(error):
         rt._get(rt.GRAPHQL_URL, json=rt.graphql_body({"operation": "player", "id": "1"}))
+
+
+def test_a_204_is_an_empty_answer(monkeypatch):
+    class _Resp:
+        status_code = 204
+        text = ""
+
+    monkeypatch.setattr("sportsdataverse._codegen_runtime.download", lambda **k: _Resp())
+    monkeypatch.setenv(rt.KEY_ENV, "test-key")
+    assert rt._get(rt.GRAPHQL_URL, json=rt.graphql_body({"operation": "player", "id": "1"})) == {}
 
 
 def test_site_key_is_read_from_the_app_bundle(monkeypatch):

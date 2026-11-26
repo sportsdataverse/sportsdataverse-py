@@ -12723,6 +12723,27 @@
   expected: kill
   note: The leaderboard payload is not in leaderboard order; unsorted, row 0 is not the leader.
 
+# --- CFB efficiency ratings on the adjusted-EPA fit (A1/A2) ---------------------------------------
+- id: cfb-efficiency-ratings-fit-band
+  group: cfb-adjustment
+  finding: cfb-adjustment-a1
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '    base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)'
+  mutant: '    base, clean = _prepare(plays, _ADJ_REQUIRED)'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_band_is_the_spread_free_wp
+  expected: kill
+  note: Falls back to the spread-aware 0.1 <= wp_before <= 0.9 band, so the pregame line picks the plays.
+
+- id: cfb-efficiency-ratings-penalty
+  group: cfb-adjustment
+  finding: cfb-adjustment-a1
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '    offense, defense, _intercept = _fit_team_strengths(clean, _ADJ_EPA_LAMBDA)'
+  mutant: '    offense, defense, _intercept = _fit_team_strengths(clean, 0.035)'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_is_the_adjusted_epa_fit
+  expected: kill
+  note: A second penalty would let the ratings engine and cfb_adjusted_epa disagree again.
+
 # --- PGA TOUR GraphQL runtime + parsers (pgatour_*) ----------------------------------------------
 - id: pgatour-key-from-the-prod-block
   group: pgatour
