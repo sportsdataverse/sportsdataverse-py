@@ -1,0 +1,24 @@
+query Field($id: ID!, $includeWithdrawn: Boolean) {
+  field(id: $id, includeWithdrawn: $includeWithdrawn) {
+    id
+    players { ...FieldPlayer }
+    alternates { ...FieldPlayer }
+  }
+}
+
+fragment FieldPlayer on PlayerField {
+  id
+  firstName
+  lastName
+  displayName
+  shortName
+  country
+  countryFlag
+  amateur
+  alternate
+  withdrawn
+  status
+  owgr
+  qualifier
+  rankingPoints
+}

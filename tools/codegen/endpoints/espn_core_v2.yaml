@@ -1098,6 +1098,9 @@ endpoints:
     default: 1
   parser: parse_teams
   returns_schema: teams
+  league_example_args:
+    golf:  # the team shorts answer only for the team match-play leagues
+      league: tgl
 - short: team_core
   returns_schema: team_core
   scope: universal

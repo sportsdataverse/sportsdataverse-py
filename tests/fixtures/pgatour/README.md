@@ -24,7 +24,23 @@ runtime getter returns it. For a `*Compressed*` operation, that means the base64
 | `stat_details_120_R_2026.json` | `statDetails` | `{"tourCode": "R", "statId": "120", "year": 2026}` (scoring average) |
 | `tour_cup_02671_R_2025.json` | `tourCupCombined` | `{"tourCode": "R", "id": "02671", "year": 2025}` (FedExCup) |
 | `shot_details_R2026006_59095_r4.json` | `shotDetailsV4Compressed` | `{"tournamentId": "R2026006", "playerId": "59095", "round": 4, "includeRadar": false}` |
+| `schedule_years_R.json` | `scheduleYears` | `{"tourCode": "R"}` |
+| `tournaments_R2026014.json` | `tournaments` | `{"ids": ["R2026014"]}` |
+| `past_champions_R2026014.json` | `tournamentOverview` | `{"tournamentId": "R2026014"}` |
+| `hole_by_hole_R2026014_r4.json` | `leaderboardHoleByHole` | `{"tournamentId": "R2026014", "round": 4}` |
+| `leaderboard_stats_R2026014_PROBABILITY.json` | `leaderboardStats` | `{"id": "R2026014", "statsType": "PROBABILITY"}` |
+| `field_R2026014.json` | `field` | `{"id": "R2026014", "includeWithdrawn": true}` |
+| `past_results_R2026014_20250.json` | `tournamentPastResults` | `{"id": "R2026014", "year": 20250}` (the 2025 edition, `R2025014`) |
+| `course_stats_R2026014.json` | `courseStats` | `{"tournamentId": "R2026014"}` |
+| `hole_details_R2026014_014_12.json` | `holeDetails` | `{"tournamentId": "R2026014", "courseId": "014", "hole": 12}` |
+| `scorecard_stats_R2026014_28237.json` | `scorecardStatsV3Compressed` | `{"id": "R2026014", "playerId": "28237"}` |
+| `player_results_28237_R.json` | `playerProfileTournamentResults` | `{"playerId": "28237", "tourCode": "R"}` |
 
 The leaderboard, scorecard and tee-times captures come from full-selection documents. Their selection is
 `{ id payload }`, the same as the shipped document. The 2026 FedExCup (`02671`, `year: 2026`) answered with an empty
 player list on the capture date, so the fixture is the 2025 race.
+
+The eleven captures from `schedule_years` down were sent with the shipped documents. `tournamentPastResults` takes
+an edition as its five-digit `availableSeasons[].year` (`20250`): `year: 2025` answered the current (2026) edition, not
+an error, which is why the runtime sends a four-digit year as `year * 10`. The Masters has no ShotLink data, so its
+`leaderboardStats` `STROKES_GAINED` table is empty and `scorecardStatsV3Compressed` carries the scoring group only.

@@ -1,0 +1,18 @@
+query LeaderboardStats($id: ID!, $statsType: LeaderboardStatsType) {
+  leaderboardStats(id: $id, statsType: $statsType) {
+    id
+    type
+    statIds
+    titles
+    players {
+      playerId
+      stats {
+        statId
+        value
+        rank
+        sortValue
+        color
+      }
+    }
+  }
+}
