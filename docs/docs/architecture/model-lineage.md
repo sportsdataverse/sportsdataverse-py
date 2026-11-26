@@ -187,8 +187,9 @@ an owner decision:
 - **Retire rule** (`tools/models/lifecycle/retire.py`). After each completed season
   past the holdout, score the model once against its baseline (same metric,
   paired, same clustering, no refit). Two consecutive seasons whose upper 97.5%
-  bound of `model - baseline` is at or above 0, or one season worse at its point
-  estimate by more than the adoption margin, make it a RETIRE-candidate. The latest
+  bound of `model - baseline` is at or above 0, or one season worse than the
+  baseline by more than the adoption margin at 1.96 SE (its lower 97.5% bound
+  above the margin), make it a RETIRE-candidate. The latest
   season failing alone is WATCH; before any season is scored it is UNSCORED. The rule
   runs only on a row with both a `baseline` and `holdout_seasons`. Retiring is the owner's call: `status: retired`
   with `retired_reason`, one release of warning through
@@ -197,8 +198,10 @@ an owner decision:
 - **Win-total coverage** (`tools/models/lifecycle/coverage.py`) for the NBA / WNBA
   season sim: realized wins against the sim's 50 / 80 / 95% intervals at the
   preseason and an in-season cutoff, on seasons outside the fit, clustered by
-  season. NBA 2024-2026 sit inside the rest-and-travel fit, so they are scored only
-  with `--near-holdout` and labelled. It also checks that the rating draw widens the
+  season. Only seasons outside every fit on the sim's path count (NBA and WNBA
+  2010-2017); NBA 2024-2026 and WNBA 2024-2025 sit inside the rest-and-travel fit or
+  the ridge penalty's cross-validation, so they are scored only with `--near-holdout`
+  and labelled. It also checks that the rating draw widens the
   preseason 80% intervals at least 1.5 times; if it doesn't, that is a bug.
 - **Sign stability** (`tools/models/lifecycle/signs.py`) for a model refit per
   season: a coefficient whose sign flips between folds with both estimates more

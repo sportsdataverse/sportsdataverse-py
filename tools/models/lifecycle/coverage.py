@@ -78,23 +78,38 @@ _LEAGUE_ID = {"nba": "00", "wnba": "10"}
 #: The in-season cutoff: the first game day on or after this (month, day).
 _IN_SEASON = {"nba": (12, 1), "wnba": (6, 15)}
 
+#: Every fit on the shipped path and the seasons it read (END years), from the constants' comments.
+#: A scored season must be outside all of them (``tests/tools/test_model_lifecycle.py``).
+PATH_FITS: dict[str, dict[str, list[int]]] = {
+    "nba": {
+        "SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS train": [2018, 2019, 2022, 2023],
+        "REST_TRAVEL_CONSTANTS fit": [2018, 2019, 2022, 2023, 2024, 2025, 2026],
+        "team_strength.RIDGE_LAMBDA CV": [2022, 2023, 2024, 2025, 2026],
+    },
+    "wnba": {
+        "SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS train": [2018, 2019, 2021],
+        "team_strength.RIDGE_LAMBDA CV": [2021, 2022, 2023, 2024, 2025],
+    },
+}
+
 #: Seasons scored, by END year, and the ones left out with the reason. Only seasons outside every
 #: fit the shipped path uses count: the SIM_CONSTANTS / PRIOR_CONSTANTS / HFA_PSEUDO_POSS comments
 #: in nba_season_sim.py name the train seasons (NBA 2018 2019 2022 2023, WNBA 2018 2019 2021), the
 #: WNBA seasons the 2026-11-02 sim-vs-market spec reserves (2022 2023 2026), and the NBA
-#: REST_TRAVEL_CONSTANTS (nba_rest_travel.py) are a fit on 2018 2019 2022-2026, so NBA 2024-2026
-#: are in-sample for the rest-and-travel term (:data:`NEAR_HOLDOUT`; the WNBA has no such term).
+#: REST_TRAVEL_CONSTANTS (nba_rest_travel.py) are a fit on 2018 2019 2022-2026, and the preseason
+#: prior's final-rating penalty (``team_strength.RIDGE_LAMBDA``) was chosen by CV on NBA 2022-2026 and
+#: WNBA 2021-2025, so NBA 2024-2026 and WNBA 2024-2025 are near-holdout (:data:`NEAR_HOLDOUT`).
 #: Every season here is in the ``{nba,wnba}_stats_possessions`` and ``_schedules`` releases
 #: (checked 2026-11-25), and so is the season before it, which the preseason prior reads.
 SEASONS: dict[str, list[int]] = {
-    "nba": [2011, 2012, 2013, 2014, 2015, 2016, 2017],
-    "wnba": [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2024, 2025],
+    "nba": [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017],
+    "wnba": [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017],
 }
 #: Seasons outside the sim's own fit but inside another fit on its path, scored only with
 #: ``--near-holdout`` and then labelled so in the report.
 NEAR_HOLDOUT: dict[str, dict[int, str]] = {
-    "nba": {s: "in the REST_TRAVEL_CONSTANTS fit (2018 2019 2022-2026)" for s in (2024, 2025, 2026)},
-    "wnba": {},
+    "nba": {s: "in the REST_TRAVEL_CONSTANTS fit and the RIDGE_LAMBDA CV (2022-2026)" for s in (2024, 2025, 2026)},
+    "wnba": {s: "in the RIDGE_LAMBDA CV (2021-2025)" for s in (2024, 2025)},
 }
 EXCLUDED: dict[str, dict[int, str]] = {
     "nba": {

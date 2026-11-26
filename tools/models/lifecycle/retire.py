@@ -16,8 +16,10 @@ clustering, no refit. One :func:`season_record` per season, in loss orientation 
 higher-is-better metric pass ``baseline - model``). Then :func:`retire_status`:
 
 * **RETIRE-candidate** if two consecutive scored seasons fail to beat the baseline (the upper 97.5%
-  bound of ``model - baseline`` is >= 0), or one season is worse than the baseline at its point
-  estimate by more than ``|adoption_margin|``;
+  bound of ``model - baseline`` is >= 0), or one season is worse than the baseline by more than
+  ``|adoption_margin|`` at 1.96 SE (its lower 97.5% bound ``diff - Z * se`` above the margin; the
+  owner's 2026-11-25 change to the spec's point-estimate trigger, which a model adopted on a tie
+  would trip on noise alone in about one season in four);
 * **WATCH** if the latest season fails and neither trigger holds;
 * **KEEP** otherwise; **UNSCORED** before any season past the holdout is scored.
 
@@ -157,9 +159,10 @@ def retire_status(
 
     ``holdout_end`` is the last holdout season: a record on or before it raises, since the rule
     scores only seasons the fit and its holdout never saw. ``adoption_margin`` None (not stated in
-    the evidence) turns the point-estimate trigger off; the result says so in ``point_trigger``.
-    The rule's constants (97.5% bound, two seasons, the adoption margin) are the spec's and are
-    never loosened to keep a model (ClaudeCowork specs/2026-11-25-model-lifecycle-checks-design.md,
+    the evidence) turns the margin trigger off; the result says so in ``margin_trigger``. The
+    rule's constants (97.5% bounds, two seasons, the adoption margin) are the spec's, with the
+    margin trigger moved to 1.96 SE by the owner on 2026-11-25, and are never loosened to keep a
+    model (ClaudeCowork specs/2026-11-25-model-lifecycle-checks-design.md,
     section (b)).
 
     Raises:
@@ -182,9 +185,10 @@ def retire_status(
     if adoption_margin is not None:
         bar = abs(float(adoption_margin))
         reasons += [
-            f"{r['season']}: worse than the baseline by {r['diff']:.4g} at its point estimate, beyond the adoption margin {bar:.4g}"
+            f"{r['season']}: worse than the baseline by {r['diff']:.4g}, beyond the adoption margin {bar:.4g} "
+            f"at 1.96 SE (lower bound {r['diff'] - Z * r['se']:.4g})"
             for r in recs
-            if r["diff"] > bar
+            if r["diff"] - Z * float(r["se"]) > bar
         ]
     if not recs:
         status = "UNSCORED"
@@ -198,7 +202,7 @@ def retire_status(
         "status": status,
         "reasons": reasons,
         "scored_seasons": seasons,
-        "point_trigger": "off (no adoption_margin in the ledger)" if adoption_margin is None else "on",
+        "margin_trigger": "off (no adoption_margin in the ledger)" if adoption_margin is None else "on",
     }
 
 

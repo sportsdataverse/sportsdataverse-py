@@ -20,7 +20,12 @@ its own: the owner reads a real flip on a shipped model as a WATCH at its next r
 (``retire.py`` takes no flip input; the flip is quoted beside that season's record).
 
 Input: one JSON per fold, ``{"fold_season": int, "coef": {name: estimate}, "coef_se": {name: se}}``
-(``intercept`` is skipped). Usage::
+(``intercept`` is skipped). A one-hot design can gain a column once a category first appears in the
+training seasons, so a coefficient is classified over the folds that have it (``absent_folds`` lists
+the rest) and is ``too_few_folds`` when fewer than two have it. On walk-forward folds (nested
+``train_seasons``) a column can only appear, never drop out; one that drops out raises.
+``design_changes`` names the folds whose column set changed, where a flip may come from the
+design. Usage::
 
     uv run python tools/models/lifecycle/signs.py fold_2022.json fold_2023.json ... --out signs.json
 
@@ -70,17 +75,33 @@ def sign_table(folds: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     if len(set(seasons)) != len(seasons):
         raise ValueError(f"duplicate fold seasons {seasons}")
     names = sorted({k for f in folds for k in f["coef"]} - {"intercept"})
+    order = sorted(folds, key=lambda f: int(f["fold_season"]))
+    trains = [set(f.get("train_seasons") or []) for f in order]
+    nested = all(trains) and all(a <= b for a, b in zip(trains, trains[1:], strict=False))
+    # a fold whose column set differs from the previous fold's: with every level one-hot and an
+    # unpenalized intercept, a new level moves its siblings, so a flip across it may be the design
+    changes = {
+        str(int(b["fold_season"])): sorted(set(b["coef"]) ^ set(a["coef"]))
+        for a, b in zip(order, order[1:], strict=False)
+        if set(b["coef"]) != set(a["coef"])
+    }
     table: dict[str, Any] = {}
     for name in names:
-        missing = [int(f["fold_season"]) for f in folds if name not in f["coef"]]
-        if missing:
-            raise ValueError(f"{name} is not in folds {missing}: a fixed design has every coefficient in every fold")
-        by_fold = {int(f["fold_season"]): (float(f["coef"][name]), _se(f, name)) for f in folds}
-        table[name] = {"by_fold": {str(k): {"est": e, "se": s} for k, (e, s) in by_fold.items()}, **classify(by_fold)}
+        absent = sorted(int(f["fold_season"]) for f in folds if name not in f["coef"])
+        present = [int(f["fold_season"]) for f in folds if name in f["coef"]]
+        if nested and absent and max(absent) > min(present):
+            raise ValueError(f"{name} drops out of a later nested fold ({absent}): a design bug, not a new level")
+        by_fold = {int(f["fold_season"]): (float(f["coef"][name]), _se(f, name)) for f in folds if name in f["coef"]}
+        cls = classify(by_fold) if len(by_fold) >= 2 else {"class": "too_few_folds", "real_flip_folds": []}
+        table[name] = {
+            "by_fold": {str(k): {"est": e, "se": s} for k, (e, s) in by_fold.items()},
+            "absent_folds": absent,
+            **cls,
+        }
     counts: dict[str, int] = {}
     for entry in table.values():
         counts[entry["class"]] = counts.get(entry["class"], 0) + 1
-    return {"folds": sorted(seasons), "counts": counts, "coefficients": table}
+    return {"folds": sorted(seasons), "counts": counts, "design_changes": changes, "coefficients": table}
 
 
 def _se(fold: Mapping[str, Any], name: str) -> float | None:

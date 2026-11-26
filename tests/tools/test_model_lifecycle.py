@@ -113,8 +113,15 @@ def test_retire_rule_on_real_season_records(rated_prior_diffs: pl.DataFrame) -> 
     out = retire.retire_status(worse, -0.07942, holdout_end=2023)
     assert out["status"] == "RETIRE-candidate"
     assert sum("both fail" in x for x in out["reasons"]) == 2  # 2024-25 and 2025-26
-    beyond = sum(w["diff"] > 0.07942 for w in worse)
-    assert beyond >= 1 and sum("adoption margin" in x for x in out["reasons"]) == beyond
+    # the margin trigger needs the loss beyond the margin at 1.96 SE, not just at the point estimate
+    beyond = sum(w["diff"] - retire.Z * w["se"] > 0.07942 for w in worse)
+    assert sum(w["diff"] > 0.07942 for w in worse) > beyond
+    assert sum("adoption margin" in x for x in out["reasons"]) == beyond
+    sure = [w | {"diff": 0.2, "upper": 0.2 + retire.Z * w["se"]} for w in worse[:1]]
+    assert "adoption margin" in retire.retire_status(sure, -0.07942, holdout_end=2023)["reasons"][0]
+    d = 0.07942 + retire.Z * worse[0]["se"] - 1e-12  # just inside the bar
+    edge = [worse[0] | {"diff": d, "upper": d + retire.Z * worse[0]["se"]}]
+    assert retire.retire_status(edge, -0.07942, holdout_end=2023)["status"] == "WATCH"  # exactly at the bar
 
     def failing(r: dict, upper: float) -> dict:  # the bound at ``upper``, the SE kept
         return r | {"diff": upper - retire.Z * r["se"], "upper": upper}
@@ -125,7 +132,7 @@ def test_retire_rule_on_real_season_records(rated_prior_diffs: pl.DataFrame) -> 
         "status": "WATCH",
         "reasons": [],
         "scored_seasons": [2024, 2025, 2026],
-        "point_trigger": "off (no adoption_margin in the ledger)",
+        "margin_trigger": "off (no adoption_margin in the ledger)",
     }
     # two fails that are not consecutive: WATCH, not RETIRE
     gap = [failing(recs[0], 0.001), recs[1], failing(recs[2], 0.001)]
@@ -186,8 +193,18 @@ def test_sign_classes() -> None:
     assert t["b"]["class"] == "noise_flip"
     assert t["c"] == t["c"] | {"class": "real_flip", "real_flip_folds": [[2022, 2023]]}
     assert t["d"]["class"] == "unclassified"  # no SE: real and noise cannot be told apart
-    with pytest.raises(ValueError, match="every fold"):
-        signs.sign_table([folds[0], {"fold_season": 2024, "coef": {"a": 1.0}}])
+    # a column first seen in a later fold is classified over the folds that have it
+    grown = signs.sign_table([*folds, {"fold_season": 2024, "coef": {"a": 0.6, "e": 1.0}, "coef_se": {"a": 0.1}}])
+    g = grown["coefficients"]
+    assert g["a"]["class"] == "stable" and g["a"]["absent_folds"] == []
+    assert g["b"]["absent_folds"] == [2024] and g["b"]["class"] == "noise_flip"
+    assert g["e"] == g["e"] | {"class": "too_few_folds", "absent_folds": [2022, 2023]}
+    assert grown["design_changes"] == {"2024": ["b", "c", "d", "e"]}
+    # walk-forward folds (nested train seasons): a column may appear, never drop out
+    nested = [f | {"train_seasons": list(range(2019, int(f["fold_season"])))} for f in folds]
+    later = {"fold_season": 2024, "train_seasons": list(range(2019, 2024)), "coef": {"a": 0.6}, "coef_se": {"a": 0.1}}
+    with pytest.raises(ValueError, match="drops out of a later nested fold"):
+        signs.sign_table([*nested, later])
     # an unusable SE is no SE
     for se in (float("nan"), 0.0):
         bad = [folds[0], folds[1] | {"coef_se": {"c": se}}]
@@ -311,3 +328,12 @@ def test_readings_and_their_precedence() -> None:
     assert cov.reading(s80 | {"diff_se_cr1_season": None}) == "TOO_FEW_SEASONS"
     readings = {rep["cutoffs"][c]["reading"] for c in ("preseason", "in_season")}
     assert rep["reading"] == ("WATCH" if "WATCH" in readings else "OK")
+
+
+def test_scored_seasons_are_outside_every_fit_on_the_path() -> None:
+    for lg in ("nba", "wnba"):
+        fitted = set().union(*cov.PATH_FITS[lg].values())
+        assert not set(cov.SEASONS[lg]) & fitted, lg
+        assert set(cov.NEAR_HOLDOUT[lg]) <= fitted, lg  # near-holdout means inside some fit
+        assert not set(cov.SEASONS[lg]) & set(cov.EXCLUDED[lg]), lg
+        assert len(cov.SEASONS[lg]) >= cov.MIN_CLUSTERS, lg
