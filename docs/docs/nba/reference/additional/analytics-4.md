@@ -439,7 +439,7 @@ that also pools the previous regular season (one more box-log read).
 
 **Returns**
 
-One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, stat_stl_exp, stat_blk_exp, stat_tov_exp, stat_fgm_exp, stat_ftm_exp, minutes_exp, pace_proj` (a stat the box logs lack comes back null). The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the team's minutes, counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
+One row per player on either team: `player_id, team_id`, `stat_<stat>_exp` and `stat_<stat>_recent_exp` for pts, reb, ast, fg3m, stl, blk, tov, fgm, ftm (null for a stat the box logs lack), `recent_weight, minutes_exp, pace_proj`. The lines assume the player plays (per-minute rate x mean minutes when playing x pace factor); the recent line and weight feed the `prob_over` mixture (weight 0 with <= 10 earlier games; both null outside the NBA). `minutes_exp` is his share of the team's minutes (a game sat counts zero), summing to `5 * game_minutes` per team (240 NBA, 200 WNBA). A team with no game before the cut has no rows and the league pace. Empty input: that schema.
 
 | col_name | type | description |
 |---|---|---|
@@ -456,6 +456,16 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 | `stat_tov_exp` | Float64 |  |
 | `stat_fgm_exp` | Float64 |  |
 | `stat_ftm_exp` | Float64 |  |
+| `stat_pts_recent_exp` | Float64 | Expected points if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
+| `stat_reb_recent_exp` | Float64 | Expected rebounds if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
+| `stat_ast_recent_exp` | Float64 | Expected assists if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
+| `stat_fg3m_recent_exp` | Float64 | Expected made threes if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
+| `stat_stl_recent_exp` | Float64 | Expected steals if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
+| `stat_blk_recent_exp` | Float64 | Expected blocks if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
+| `stat_tov_recent_exp` | Float64 | Expected turnovers if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
+| `stat_fgm_recent_exp` | Float64 | Expected field goals made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
+| `stat_ftm_recent_exp` | Float64 | Expected free throws made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. |
+| `recent_weight` | Float64 | Weight on the recent line in the prop mixture, logistic(a + b x \|last-10 minus season mean minutes\| / his season minutes SD); 0 with 10 or fewer earlier games, where the two windows coincide. |
 
 **Raises**
 

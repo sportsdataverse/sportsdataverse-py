@@ -18,6 +18,13 @@ minutes-and-role tier (``minutes_pg`` in [0,12), [12,20), [20,28), 28+, split by
 The tier rate pools this season's games before the cut and the whole previous regular season, so a
 player's first games lean on his tier and a long sample on himself.
 
+Recent-window mixture: in the NBA a player with more than 10 earlier games also gets a "recent" line
+from his last 10 games (rates shrunk toward the same tier prior, his last-10 mean minutes), and the
+predictive becomes ``(1 - w) F(season line) + w F(recent line)`` with ``w = logistic(a + b |dmin| / sd)``:
+``dmin`` is last-10 minus season mean minutes and ``sd`` his season minutes SD, so the recent line
+weighs more when his role has moved (a trade, a promotion, a teammate's injury). It was fitted and
+tested on regular-season games; in the playoffs the last-10 window can include playoff games.
+
 Fitted-constant note: the Normal points SD law and the count dispersions are per league
 (``pts_sd_a/pts_sd_b/count_dispersion/stat_dispersion`` in
 :data:`~sportsdataverse.nba.nba_prediction_constants.LEAGUE_CONSTANTS`), fitted from each
@@ -101,11 +108,31 @@ def _tier_totals(played: pl.DataFrame, stats: list[str]) -> pl.DataFrame:
     )
 
 
+def _join_tier_prior(
+    totals: pl.DataFrame, df: pl.DataFrame, prior_logs: pl.DataFrame | None, present: list[str], league_id: str | None
+) -> pl.DataFrame:
+    """Join each player's season tier and the pooled ``_prior_<stat>`` tier rates onto ``totals``."""
+    frames = {"box_logs": df} if prior_logs is None else {"box_logs": df, "prior_logs": _played(prior_logs)}
+    for name, frame in frames.items():
+        if not _carried(frame, "starter"):  # all-null would tier everyone as bench
+            raise ValueError(f"player_rates: rate shrinkage (league_id={league_id!r}) needs a starter column in {name}")
+    tiered = {name: _tier_totals(frame, present) for name, frame in frames.items()}
+    prior = (
+        pl.concat([t.drop("player_id", "_mpg", "_ss") for t in tiered.values()])
+        .group_by("_tier")
+        .agg(*[(pl.col(f"_{s}").sum() / pl.col(f"_min_{s}").sum()).alias(f"_prior_{s}") for s in present])
+    )
+    return totals.join(tiered["box_logs"].select("player_id", "_tier"), on="player_id").join(
+        prior, on="_tier", how="left"
+    )
+
+
 def player_rates(
     box_logs: pl.DataFrame,
     *,
     prior_logs: pl.DataFrame | None = None,
     league_id: str | None = None,
+    recent_games: int | None = None,
 ) -> pl.DataFrame:
     """Per-player per-minute rate stats from box logs, shrunk toward a tier prior in the NBA.
 
@@ -132,6 +159,9 @@ def player_rates(
             never enter a player's own totals.
         league_id: ``None`` (default) for raw rates; ``"00"`` / ``"10"`` / ``"20"`` for that
             league's fitted shrinkage. Only the NBA has one, so WNBA and G-League stay raw.
+        recent_games: When set, each player's own totals (``games``, ``minutes_pg`` and the
+            rates) cover only his last ``recent_games`` played rows by ``game_date``, while his
+            tier and the tier rates still come from all of ``box_logs`` (needs ``game_date``).
 
     Returns:
         One row per player: ``player_id, team_id, games, minutes_pg``, then
@@ -145,7 +175,8 @@ def player_rates(
 
     Raises:
         ValueError: Shrinkage is on and ``box_logs`` or ``prior_logs`` has no ``starter``
-            value on any played row (the tiers split on it).
+            value on any played row (the tiers split on it); or ``recent_games`` is set and
+            ``box_logs`` has no ``game_date``.
 
     Example:
         Quick start::
@@ -162,7 +193,13 @@ def player_rates(
     df = _played(box_logs)
     k = get_constants(league_id).rate_prior_minutes if league_id is not None else {}
     present = [s for s in _STATS if _carried(df, s)]  # an all-null stat gets no rate, not 0
-    totals = df.group_by("player_id").agg(
+    own = df
+    if recent_games is not None:
+        if "game_date" not in df.columns:
+            raise ValueError("player_rates: recent_games needs a game_date column to order the games")
+        sort = ["game_date", "game_id"] if "game_id" in df.columns else ["game_date"]
+        own = df.sort(sort).group_by("player_id", maintain_order=True).tail(recent_games)
+    totals = own.group_by("player_id").agg(
         pl.col("team_id").last(),
         pl.len().alias("games"),
         pl.col("minutes").mean().alias("minutes_pg"),
@@ -170,21 +207,7 @@ def player_rates(
         *[pl.col(s).sum().alias(f"_{s}") for s in present],
     )
     if k:
-        frames = {"box_logs": df} if prior_logs is None else {"box_logs": df, "prior_logs": _played(prior_logs)}
-        for name, frame in frames.items():
-            if not _carried(frame, "starter"):  # all-null would tier everyone as bench
-                raise ValueError(
-                    f"player_rates: rate shrinkage (league_id={league_id!r}) needs a starter column in {name}"
-                )
-        tiered = {name: _tier_totals(frame, present) for name, frame in frames.items()}
-        prior = (
-            pl.concat([t.drop("player_id", "_mpg", "_ss") for t in tiered.values()])
-            .group_by("_tier")
-            .agg(*[(pl.col(f"_{s}").sum() / pl.col(f"_min_{s}").sum()).alias(f"_prior_{s}") for s in present])
-        )
-        totals = totals.join(tiered["box_logs"].select("player_id", "_tier"), on="player_id").join(
-            prior, on="_tier", how="left"
-        )
+        totals = _join_tier_prior(totals, df, prior_logs, present, league_id)
 
     def rate(s: str) -> pl.Expr:
         ks = float(k.get(s, 0.0))
@@ -230,39 +253,79 @@ def project_player_line(rate_row: dict[str, Any], exp_minutes: float, pace_facto
     return {f"exp_{s}": float(rate_row[f"{s}_per_min"] * m) for s in _STATS if rate_row.get(f"{s}_per_min") is not None}
 
 
-def prop_distribution(exp_value: float, stat: str, *, league_id: str = "00") -> tuple[str, dict[str, float]]:
+def prop_distribution(
+    exp_value: float,
+    stat: str,
+    *,
+    league_id: str = "00",
+    recent_value: float | None = None,
+    recent_weight: float | None = None,
+) -> tuple[str, dict[str, Any]]:
     """Distribution family + parameters for a projected stat mean.
 
     Points -> Normal ``(mu, sd)`` with ``sd = a + b*sqrt(mu)``; counts
     (reb/ast/fg3m, and stl/blk/tov/fgm/ftm where the league has their fit) ->
     Negative-Binomial ``(r, p)`` matching mean ``mu`` and variance
-    ``dispersion*mu`` (Poisson if dispersion <= 1).
+    ``dispersion*mu`` (Poisson if dispersion <= 1). With a positive
+    ``recent_weight`` it is the two-component mixture
+    ``(1 - w) F(exp_value) + w F(recent_value)`` of :func:`nba_player_props`; its
+    points components use the mixture's own SD law (``recent_mixture`` in
+    :data:`~sportsdataverse.nba.nba_prediction_constants.LEAGUE_CONSTANTS`).
 
     Args:
-        exp_value: Projected mean of the stat.
+        exp_value: Projected mean of the stat (``stat_<stat>_exp``).
         stat: One of ``"pts"``, ``"reb"``, ``"ast"``, ``"fg3m"``, ``"stl"``, ``"blk"``,
             ``"tov"``, ``"fgm"``, ``"ftm"``.
         league_id: ``"00"`` NBA / ``"10"`` WNBA / ``"20"`` G-League; selects that
             league's fitted SD law and dispersion.
+        recent_value: The recent-window mean (``stat_<stat>_recent_exp``).
+        recent_weight: The mixture weight (``recent_weight``); ``None`` or ``0`` gives the
+            single distribution.
 
     Returns:
         ``(family, params)`` where family is ``"normal"``, ``"nbinom"`` or
-        ``"poisson"``.
+        ``"poisson"``; or ``"mixture"`` with params ``{"weights": [1 - w, w],
+        "components": [(family, params), (family, params)]}``.
 
     Raises:
         ValueError: ``stat`` is one of stl/blk/tov/fgm/ftm and the league has no fitted
-            dispersion for it (only the NBA has one).
+            dispersion for it (only the NBA has one); or ``recent_weight`` is positive and
+            the league has no fitted mixture or ``recent_value`` is missing.
 
     Example:
         Quick start::
 
             from sportsdataverse.nba.nba_player_props import prop_distribution
             fam, par = prop_distribution(24.0, "pts")
+
+        A player whose last 10 games run hotter than his season::
+
+            fam, par = prop_distribution(24.0, "pts", recent_value=28.0, recent_weight=0.4)
     """
-    mu = max(float(exp_value), 1e-6)
     c = get_constants(league_id)
+    if recent_weight:
+        mix = c.recent_mixture
+        if not mix or recent_value is None:
+            raise ValueError(
+                f"prop_distribution: a recent_weight needs a recent_value and a fitted mixture (league_id={league_id!r})"
+            )
+        law = (mix["pts_sd_a"], mix["pts_sd_b"])
+        w = float(recent_weight)
+        if not 0.0 <= w <= 1.0:  # also rejects NaN
+            raise ValueError(f"prop_distribution: recent_weight must be in [0, 1], got {recent_weight!r}")
+        return "mixture", {
+            "weights": [1.0 - w, w],
+            "components": [_single(v, stat, c, league_id, law) for v in (exp_value, recent_value)],
+        }
+    return _single(exp_value, stat, c, league_id, (c.pts_sd_a, c.pts_sd_b))
+
+
+def _single(
+    exp_value: float, stat: str, c: Any, league_id: str, pts_law: tuple[float, float]
+) -> tuple[str, dict[str, float]]:
+    mu = max(float(exp_value), 1e-6)
     if stat == "pts":
-        return "normal", {"mu": mu, "sd": c.pts_sd_a + c.pts_sd_b * math.sqrt(mu)}
+        return "normal", {"mu": mu, "sd": pts_law[0] + pts_law[1] * math.sqrt(mu)}
     if stat in _STATS and stat not in _COUNT_STATS:
         if stat not in c.stat_dispersion:
             raise ValueError(f"prop_distribution: league_id={league_id!r} has no fitted dispersion for {stat!r}")
@@ -277,7 +340,15 @@ def prop_distribution(exp_value: float, stat: str, *, league_id: str = "00") -> 
     return "nbinom", {"r": r, "p": p}
 
 
-def prob_over(exp_value: float, line: float, stat: str, *, league_id: str = "00") -> float:
+def prob_over(
+    exp_value: float,
+    line: float,
+    stat: str,
+    *,
+    league_id: str = "00",
+    recent_value: float | None = None,
+    recent_weight: float | None = None,
+) -> float:
     """Probability a stat finishes strictly above ``line``.
 
     Args:
@@ -286,6 +357,8 @@ def prob_over(exp_value: float, line: float, stat: str, *, league_id: str = "00"
         stat: A :func:`prop_distribution` stat (``"pts"`` ... ``"ftm"``).
         league_id: ``"00"`` NBA / ``"10"`` WNBA / ``"20"`` G-League (passed to
             :func:`prop_distribution`).
+        recent_value: The recent-window mean, for the mixture (see :func:`prop_distribution`).
+        recent_weight: The mixture weight; ``None`` or ``0`` prices the single distribution.
 
     Returns:
         ``P(stat > line)`` in ``[0, 1]``.
@@ -295,8 +368,20 @@ def prob_over(exp_value: float, line: float, stat: str, *, league_id: str = "00"
 
             from sportsdataverse.nba.nba_player_props import prob_over
             prob_over(24.0, 22.5, "pts")
+
+        Priced as the recent-window mixture (the ``nba_player_props`` columns)::
+
+            prob_over(24.0, 22.5, "pts", recent_value=28.0, recent_weight=0.4)
     """
-    fam, par = prop_distribution(exp_value, stat, league_id=league_id)
+    fam, par = prop_distribution(
+        exp_value, stat, league_id=league_id, recent_value=recent_value, recent_weight=recent_weight
+    )
+    if fam == "mixture":
+        return float(sum(w * _sf(f, p, line) for w, (f, p) in zip(par["weights"], par["components"], strict=True)))
+    return _sf(fam, par, line)
+
+
+def _sf(fam: str, par: dict[str, float], line: float) -> float:
     if fam == "normal":
         return float(1.0 - st.norm.cdf(line, loc=par["mu"], scale=par["sd"]))
     floor_line = int(np.floor(line))
@@ -416,6 +501,37 @@ def _prior_season_logs(season: int, league_id: str, as_of_date: dt.date | None) 
     return prior
 
 
+def _with_recent(
+    rates: pl.DataFrame, logs: pl.DataFrame, prior: pl.DataFrame | None, league_id: str, pace_factor: float
+) -> pl.DataFrame:
+    """Add ``stat_<stat>_recent_exp`` and ``recent_weight`` (null where the league has no fitted mixture)."""
+    mix = get_constants(league_id).recent_mixture
+    if not mix:
+        nulls = [*(f"stat_{s}_recent_exp" for s in _STATS), "recent_weight"]
+        return rates.with_columns(pl.lit(None, dtype=pl.Float64).alias(c) for c in nulls)
+    n = int(mix["games"])
+    recent = player_rates(logs, prior_logs=prior, league_id=league_id, recent_games=n).join(
+        _played(logs).group_by("player_id").agg(pl.col("minutes").std().alias("_sd")), on="player_id", how="left"
+    )
+    recent = recent.select(
+        "player_id",
+        *[(pl.col(f"{s}_per_min") * pl.col("minutes_pg") * pace_factor).alias(f"stat_{s}_recent_exp") for s in _STATS],
+        pl.col("minutes_pg").alias("_mpg_recent"),
+        "_sd",
+    )
+    sd = (
+        pl.when(pl.col("_sd").is_finite())
+        .then(pl.max_horizontal("_sd", pl.lit(mix["sd_floor"])))
+        .otherwise(pl.lit(mix["sd_fallback"]))
+    )
+    w = 1.0 / (1.0 + (-(mix["a"] + mix["b"] * (pl.col("_mpg_recent") - pl.col("minutes_pg")).abs() / sd)).exp())
+    return (
+        rates.join(recent, on="player_id", how="left")
+        .with_columns(pl.when(pl.col("games") > n).then(w).otherwise(0.0).alias("recent_weight"))
+        .drop("_mpg_recent", "_sd")
+    )
+
+
 _PROPS_SCHEMA = {
     "player_id": pl.Utf8,
     "team_id": pl.Utf8,
@@ -424,6 +540,8 @@ _PROPS_SCHEMA = {
     "stat_ast_exp": pl.Float64,
     "stat_fg3m_exp": pl.Float64,
     **{f"stat_{s}_exp": pl.Float64 for s in _STATS[4:]},
+    **{f"stat_{s}_recent_exp": pl.Float64 for s in _STATS},
+    "recent_weight": pl.Float64,
     "minutes_exp": pl.Float64,
     "pace_proj": pl.Float64,
 }
@@ -516,17 +634,14 @@ def nba_player_props(
         return_as_pandas: Return a pandas frame instead of polars.
 
     Returns:
-        One row per player on either team: ``player_id, team_id, stat_pts_exp,
-        stat_reb_exp, stat_ast_exp, stat_fg3m_exp, stat_stl_exp, stat_blk_exp,
-        stat_tov_exp, stat_fgm_exp, stat_ftm_exp, minutes_exp, pace_proj`` (a stat
-        the box logs lack comes back null). The ``stat_*_exp`` lines assume the
-        player plays (per-minute rate x mean minutes when playing x pace
-        factor). ``minutes_exp`` is the
-        player's share of the team's minutes, counting a game sat as zero, so
-        it sums to ``5 * game_minutes`` per team: 200 in the WNBA, 240 in the
-        NBA. A team with no game before the cut has no player rows, and its
-        pace is the league average. Empty input returns that schema with zero
-        rows.
+        One row per player on either team: ``player_id, team_id``, ``stat_<stat>_exp`` and
+        ``stat_<stat>_recent_exp`` for pts, reb, ast, fg3m, stl, blk, tov, fgm, ftm (null for a
+        stat the box logs lack), ``recent_weight, minutes_exp, pace_proj``. The lines assume
+        the player plays (per-minute rate x mean minutes when playing x pace factor); the recent
+        line and weight feed the :func:`prob_over` mixture (weight 0 with <= 10 earlier games;
+        both null outside the NBA). ``minutes_exp`` is his share of the team's minutes (a game
+        sat counts zero), summing to ``5 * game_minutes`` per team (240 NBA, 200 WNBA). A team
+        with no game before the cut has no rows and the league pace. Empty input: that schema.
 
     Raises:
         ValueError: The box logs carry no ``game_date`` (the as-of cut cannot be applied), or
@@ -563,7 +678,8 @@ def nba_player_props(
         # Strict `<`: the target game's own line (and every later one) never feeds its projection.
         logs = logs.filter(pl.col("game_date") < as_of_date)
     ratings = _load_ratings(season, league_id, as_of_date=as_of_date)
-    rates = player_rates(logs, prior_logs=_prior_season_logs(season, league_id, as_of_date), league_id=league_id)
+    prior = _prior_season_logs(season, league_id, as_of_date)
+    rates = player_rates(logs, prior_logs=prior, league_id=league_id)
     if rates.height == 0 or ratings.height == 0:
         out = pl.DataFrame(schema=_PROPS_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
@@ -573,6 +689,7 @@ def nba_player_props(
     rates = rates.filter(pl.col("team_id").is_in([home_team_id, away_team_id]))
     out = (
         _expected_minutes(rates, logs, league_id)
+        .pipe(_with_recent, logs, prior, league_id, pace_factor)
         .with_columns(
             *[(pl.col(f"{s}_per_min") * pl.col("minutes_pg") * pace_factor).alias(f"stat_{s}_exp") for s in _STATS],
             pl.lit(pace_proj, dtype=pl.Float64).alias("pace_proj"),

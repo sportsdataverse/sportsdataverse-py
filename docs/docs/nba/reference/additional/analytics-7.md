@@ -705,7 +705,7 @@ print(onoff.sort("diff_transition_freq", descending=True).head())
 
 ### player_rates {#player_rates}
 
-`player_rates(box_logs: 'pl.DataFrame', *, prior_logs: 'pl.DataFrame | None' = None, league_id: 'str | None' = None) -> 'pl.DataFrame'`
+`player_rates(box_logs: 'pl.DataFrame', *, prior_logs: 'pl.DataFrame | None' = None, league_id: 'str | None' = None, recent_games: 'int | None' = None) -> 'pl.DataFrame'`
 
 Per-player per-minute rate stats from box logs, shrunk toward a tier prior in the NBA.
 
@@ -730,6 +730,7 @@ regular season as `prior_logs` so a player's first games have a prior.
 | `box_logs` | `DataFrame` |  | Per-player-per-game frame with `player_id, team_id, minutes` and the stats `pts, reb, ast, fg3m`; `stl, blk, tov, fgm, ftm` are optional (a stat missing from the frame, or null on every played row, gets a null rate). Shrinkage also needs `starter`. |
 | `prior_logs` | `DataFrame \| None` | `None` | Earlier games (same columns), pooled into the tier rates only; they never enter a player's own totals. |
 | `league_id` | `str \| None` | `None` | `None` (default) for raw rates; `"00"` / `"10"` / `"20"` for that league's fitted shrinkage. Only the NBA has one, so WNBA and G-League stay raw. |
+| `recent_games` | `int \| None` | `None` | When set, each player's own totals (`games`, `minutes_pg` and the rates) cover only his last `recent_games` played rows by `game_date`, while his tier and the tier rates still come from all of `box_logs` (needs `game_date`). |
 
 **Returns**
 
@@ -755,7 +756,7 @@ One row per player: `player_id, team_id, games, minutes_pg`, then `pts_per_min, 
 
 | Exception | Description |
 |---|---|
-| `ValueError` | Shrinkage is on and `box_logs` or `prior_logs` has no `starter` value on any played row (the tiers split on it). |
+| `ValueError` | Shrinkage is on and `box_logs` or `prior_logs` has no `starter` value on any played row (the tiers split on it); or `recent_games` is set and `box_logs` has no `game_date`. |
 
 **Example**
 

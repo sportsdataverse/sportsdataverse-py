@@ -164,7 +164,7 @@ print(df.shape)
 
 ### prob_over {#prob_over}
 
-`prob_over(exp_value: 'float', line: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'float'`
+`prob_over(exp_value: 'float', line: 'float', stat: 'str', *, league_id: 'str' = '00', recent_value: 'float | None' = None, recent_weight: 'float | None' = None) -> 'float'`
 
 Probability a stat finishes strictly above `line`.
 
@@ -176,6 +176,8 @@ Probability a stat finishes strictly above `line`.
 | `line` | `float` |  | The prop line. |
 | `stat` | `str` |  | A `prop_distribution` stat (`"pts"` ... `"ftm"`). |
 | `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League (passed to `prop_distribution`). |
+| `recent_value` | `float \| None` | `None` | The recent-window mean, for the mixture (see `prop_distribution`). |
+| `recent_weight` | `float \| None` | `None` | The mixture weight; `None` or `0` prices the single distribution. |
 
 **Returns**
 
@@ -186,6 +188,10 @@ Probability a stat finishes strictly above `line`.
 ```python
 from sportsdataverse.nba.nba_player_props import prob_over
 prob_over(24.0, 22.5, "pts")
+
+# Priced as the recent-window mixture (the ``nba_player_props`` columns)
+
+prob_over(24.0, 22.5, "pts", recent_value=28.0, recent_weight=0.4)
 ```
 
 ### project_player_line {#project_player_line}
@@ -219,38 +225,48 @@ line = project_player_line(r, exp_minutes=32.0, pace_factor=1.02)
 
 ### prop_distribution {#prop_distribution}
 
-`prop_distribution(exp_value: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'tuple[str, dict[str, float]]'`
+`prop_distribution(exp_value: 'float', stat: 'str', *, league_id: 'str' = '00', recent_value: 'float | None' = None, recent_weight: 'float | None' = None) -> 'tuple[str, dict[str, Any]]'`
 
 Distribution family + parameters for a projected stat mean.
 
 Points -> Normal `(mu, sd)` with `sd = a + b*sqrt(mu)`; counts
 (reb/ast/fg3m, and stl/blk/tov/fgm/ftm where the league has their fit) ->
 Negative-Binomial `(r, p)` matching mean `mu` and variance
-`dispersion*mu` (Poisson if dispersion <= 1).
+`dispersion*mu` (Poisson if dispersion <= 1). With a positive
+`recent_weight` it is the two-component mixture
+`(1 - w) F(exp_value) + w F(recent_value)` of `nba_player_props`; its
+points components use the mixture's own SD law (`recent_mixture` in
+`~sportsdataverse.nba.nba_prediction_constants.LEAGUE_CONSTANTS`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `exp_value` | `float` |  | Projected mean of the stat. |
+| `exp_value` | `float` |  | Projected mean of the stat (`stat_<stat>_exp`). |
 | `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`, `"stl"`, `"blk"`, `"tov"`, `"fgm"`, `"ftm"`. |
 | `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League; selects that league's fitted SD law and dispersion. |
+| `recent_value` | `float \| None` | `None` | The recent-window mean (`stat_<stat>_recent_exp`). |
+| `recent_weight` | `float \| None` | `None` | The mixture weight (`recent_weight`); `None` or `0` gives the single distribution. |
 
 **Returns**
 
-`(family, params)` where family is `"normal"`, `"nbinom"` or `"poisson"`.
+`(family, params)` where family is `"normal"`, `"nbinom"` or `"poisson"`; or `"mixture"` with params `{"weights": [1 - w, w], "components": [(family, params), (family, params)]}`.
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | `stat` is one of stl/blk/tov/fgm/ftm and the league has no fitted dispersion for it (only the NBA has one). |
+| `ValueError` | `stat` is one of stl/blk/tov/fgm/ftm and the league has no fitted dispersion for it (only the NBA has one); or `recent_weight` is positive and the league has no fitted mixture or `recent_value` is missing. |
 
 **Example**
 
 ```python
 from sportsdataverse.nba.nba_player_props import prop_distribution
 fam, par = prop_distribution(24.0, "pts")
+
+# A player whose last 10 games run hotter than his season
+
+fam, par = prop_distribution(24.0, "pts", recent_value=28.0, recent_weight=0.4)
 ```
 
 ### ratings_as_of {#ratings_as_of}

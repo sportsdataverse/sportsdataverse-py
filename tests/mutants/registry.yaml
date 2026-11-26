@@ -12853,3 +12853,43 @@
   test: tests/nba/test_nba_player_props_asof.py
   expected: kill
   note: The prior frame is cut at the as-of date too; the as-of corpus serves the same season as "last season", so uncut, the target game's own line reaches the tier prior (own-line probe red).
+
+# --- NBA props recent-window mixture: (1 - w) F(season line) + w F(last-10 line) --------------------------
+# Killers: tests/nba/test_nba_player_props_recent_mixture.py on the committed real Boston / New York 2023-24 and
+# 2024-25 release rows (plain-Python oracle, and a paired-CRPS gate on the rows with a positive weight).
+- id: nba-props-recent-weight-zero
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '.then(w).otherwise(0.0).alias("recent_weight")'
+  mutant: '.then(0.0).otherwise(0.0).alias("recent_weight")'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k "oracle or beats"
+  expected: kill
+  note: The mixture off -- every player prices from his season line alone, however far his role has moved.
+- id: nba-props-recent-window-ignored
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: 'own = df.sort(sort).group_by("player_id", maintain_order=True).tail(recent_games)'
+  mutant: 'own = df'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k "oracle or beats"
+  expected: kill
+  note: The "recent" line would be the season line again, so the mixture could not move the price.
+- id: nba-props-recent-mixture-single-sd-law
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        law = (mix["pts_sd_a"], mix["pts_sd_b"])'
+  mutant: '        law = (c.pts_sd_a, c.pts_sd_b)'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k weighted_components
+  expected: kill
+  note: The components would keep the single points SD law, the width that failed E2's coverage rule.
+- id: nba-props-recent-cutoff-at-ten
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: 'pl.when(pl.col("games") > n)'
+  mutant: 'pl.when(pl.col("games") >= n)'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k eleventh
+  expected: kill
+  note: At 10 earlier games the windows coincide; a weight there would only swap in the mixture's SD law.
