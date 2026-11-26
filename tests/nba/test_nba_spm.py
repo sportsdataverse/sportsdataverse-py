@@ -273,3 +273,50 @@ def test_nba_spm_live_season_smoke():
     )
     out = nba_spm(bf, train_spm(bf, target))
     assert set(out.columns) == {"player_id", "ospm", "dspm", "spm", "min", "gp"}
+
+
+def test_train_spm_weight_is_a_row_count() -> None:
+    """A row at twice the minutes fits as that row twice; ``weight=None`` is the equal-weight rule."""
+    rng = np.random.default_rng(7)
+    n = 60
+    bf = pl.DataFrame(
+        {"player_id": np.arange(n), **{f: rng.normal(0, 1, n) for f in SPM_FEATURES}, "gp": np.full(n, 10)}
+    ).with_columns(min=pl.Series(np.where(np.arange(n) < 10, 400.0, 200.0)))
+    target = pl.DataFrame({"player_id": np.arange(n), "o_rapm": rng.normal(0, 2, n), "d_rapm": rng.normal(0, 1, n)})
+    weighted = train_spm(bf, target, alpha=5.0)
+    # the 400-minute rows duplicated, every row at the same minutes
+    dup = pl.concat([bf, bf.head(10).with_columns(pl.col("player_id") + 1000)]).with_columns(pl.lit(200.0).alias("min"))
+    dup_t = pl.concat([target, target.head(10).with_columns(pl.col("player_id") + 1000)])
+    # Ridge's penalty is not rescaled by the row count, so the duplicated fit's weights sum to 70 against 60:
+    # scale the penalty by the same ratio
+    stacked = train_spm(dup, dup_t, alpha=5.0 * 70 / 60)
+    np.testing.assert_allclose(weighted.o_coef, stacked.o_coef, rtol=1e-8, atol=1e-10)
+    np.testing.assert_allclose(weighted.d_intercept, stacked.d_intercept, rtol=1e-8)
+    equal = train_spm(bf, target, alpha=5.0, weight=None)
+    assert not np.allclose(weighted.o_coef, equal.o_coef)
+    assert np.allclose(equal.o_coef, train_spm(bf.with_columns(pl.lit(1.0).alias("min")), target, alpha=5.0).o_coef)
+    # the weight can come from the target frame
+    via_target = train_spm(
+        bf.drop("min").with_columns(pl.lit(1.0).alias("x")),
+        target.join(bf.select("player_id", "min"), on="player_id"),
+        alpha=5.0,
+    )
+    np.testing.assert_allclose(weighted.o_coef, via_target.o_coef, rtol=1e-10)
+
+
+def test_train_spm_rejects_a_bad_weight() -> None:
+    n = 10
+    bf = pl.DataFrame(
+        {
+            "player_id": range(n),
+            **{f: np.arange(n, dtype=float) for f in SPM_FEATURES},
+            "min": np.full(n, 100.0),
+            "gp": [5] * n,
+        }
+    )
+    target = pl.DataFrame({"player_id": range(n), "o_rapm": np.zeros(n), "d_rapm": np.zeros(n)})
+    with pytest.raises(ValueError, match="neither"):
+        train_spm(bf, target, weight="poss")
+    for bad in (-1.0, float("nan"), 0.0):
+        with pytest.raises(ValueError, match="finite, non-negative"):
+            train_spm(bf.with_columns(pl.lit(bad).alias("min")), target)
