@@ -331,7 +331,7 @@ def _ts(pts: pl.Expr, fga: pl.Expr, fta: pl.Expr) -> pl.Expr:
 
 
 def playoff_series_players(games: pl.DataFrame, player_box: pl.DataFrame) -> pl.DataFrame:
-    """Each player's series totals and per-game line, against his regular season per game.
+    """Each player's series totals and per-game line, against the player's regular season per game.
 
     Args:
         games: :func:`playoff_series_games` output.
@@ -342,7 +342,7 @@ def playoff_series_players(games: pl.DataFrame, player_box: pl.DataFrame) -> pl.
 
     Returns:
         :data:`SERIES_PLAYERS_SCHEMA` rows, one per player who played in a final game of the
-        series. ``games`` and the totals count the games he played (minutes above zero);
+        series. ``games`` and the totals count the games played (minutes above zero);
         ``<stat>_pg`` divides by those games, ``reg_<stat>_pg`` is the same over his regular
         season (every team he played for; null with no regular-season game) and
         ``<stat>_pg_diff`` is series minus regular season. ``ts_pct`` is true shooting,

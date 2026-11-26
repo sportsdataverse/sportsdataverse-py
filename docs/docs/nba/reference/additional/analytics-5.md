@@ -240,7 +240,7 @@ games.filter(games["round"] == 4).select("game_number", "home_score", "away_scor
 
 `nba_playoff_series_players(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
-Each player's totals and per-game line in each playoff series, against his regular season.
+Each player's totals and per-game line in each playoff series, against the player's regular season.
 
 **Parameters**
 
@@ -252,7 +252,7 @@ Each player's totals and per-game line in each playoff series, against his regul
 
 **Returns**
 
-One row per player who played (minutes above zero) in a final game of the series, keyed `(season, series_id, team_id, athlete_id)` with `athlete_display_name`: `games`, `min` and the summed counts as `nba_playoff_series_teams`; `<stat>_pg` per game for `min`, `pts`, `reb`, `ast`, `stl`, `blk`, `tov` and `fg3m`, plus `ts_pct` (`PTS / (2 * (FGA + 0.44 * FTA))`); `reg_games` and `reg_<stat>_pg` / `reg_ts_pct` over his regular season (every team he played for; null with none); and `<stat>_pg_diff` / `ts_pct_diff`, series minus regular season.
+One row per player who played (minutes above zero) in a final game of the series, keyed `(season, series_id, team_id, athlete_id)` with `athlete_display_name`: `games`, `min` and the summed counts as `nba_playoff_series_teams`; `<stat>_pg` per game for `min`, `pts`, `reb`, `ast`, `stl`, `blk`, `tov` and `fg3m`, plus `ts_pct` (`PTS / (2 * (FGA + 0.44 * FTA))`); `reg_games` and `reg_<stat>_pg` / `reg_ts_pct` over the player's regular season (every team played for; null with none); and `<stat>_pg_diff` / `ts_pct_diff`, series minus regular season.
 
 | col_name | type | description |
 |---|---|---|
@@ -261,23 +261,23 @@ One row per player who played (minutes above zero) in a final game of the series
 | `team_id` | Int64 | ESPN team id of the player's team in the series. |
 | `athlete_id` | Int64 | ESPN athlete id. |
 | `athlete_display_name` | String | The player's name. |
-| `games` | Int64 | Series games he played (minutes above zero). |
+| `games` | Int64 | Series games played (minutes above zero). |
 | `min` | Float64 | Total minutes in the series. |
-| `pts` | Int64 | Total points in the series: the sum of his ESPN game boxes. |
-| `fgm` | Int64 | Total field goals made in the series: the sum of his ESPN game boxes. |
-| `fga` | Int64 | Total field goals attempted in the series: the sum of his ESPN game boxes. |
-| `fg3m` | Int64 | Total three-pointers made in the series: the sum of his ESPN game boxes. |
-| `fg3a` | Int64 | Total three-pointers attempted in the series: the sum of his ESPN game boxes. |
-| `ftm` | Int64 | Total free throws made in the series: the sum of his ESPN game boxes. |
-| `fta` | Int64 | Total free throws attempted in the series: the sum of his ESPN game boxes. |
-| `oreb` | Int64 | Total offensive rebounds in the series: the sum of his ESPN game boxes. |
-| `dreb` | Int64 | Total defensive rebounds in the series: the sum of his ESPN game boxes. |
-| `reb` | Int64 | Total total rebounds in the series: the sum of his ESPN game boxes. |
-| `ast` | Int64 | Total assists in the series: the sum of his ESPN game boxes. |
-| `stl` | Int64 | Total steals in the series: the sum of his ESPN game boxes. |
-| `blk` | Int64 | Total blocks in the series: the sum of his ESPN game boxes. |
-| `tov` | Int64 | Total turnovers in the series: the sum of his ESPN game boxes. |
-| `pf` | Int64 | Total personal fouls in the series: the sum of his ESPN game boxes. |
+| `pts` | Int64 | Total points in the series: the sum of the player's ESPN game boxes. |
+| `fgm` | Int64 | Total field goals made in the series: the sum of the player's ESPN game boxes. |
+| `fga` | Int64 | Total field goals attempted in the series: the sum of the player's ESPN game boxes. |
+| `fg3m` | Int64 | Total three-pointers made in the series: the sum of the player's ESPN game boxes. |
+| `fg3a` | Int64 | Total three-pointers attempted in the series: the sum of the player's ESPN game boxes. |
+| `ftm` | Int64 | Total free throws made in the series: the sum of the player's ESPN game boxes. |
+| `fta` | Int64 | Total free throws attempted in the series: the sum of the player's ESPN game boxes. |
+| `oreb` | Int64 | Total offensive rebounds in the series: the sum of the player's ESPN game boxes. |
+| `dreb` | Int64 | Total defensive rebounds in the series: the sum of the player's ESPN game boxes. |
+| `reb` | Int64 | Total total rebounds in the series: the sum of the player's ESPN game boxes. |
+| `ast` | Int64 | Total assists in the series: the sum of the player's ESPN game boxes. |
+| `stl` | Int64 | Total steals in the series: the sum of the player's ESPN game boxes. |
+| `blk` | Int64 | Total blocks in the series: the sum of the player's ESPN game boxes. |
+| `tov` | Int64 | Total turnovers in the series: the sum of the player's ESPN game boxes. |
+| `pf` | Int64 | Total personal fouls in the series: the sum of the player's ESPN game boxes. |
 | `min_pg` | Float64 | Minutes per series game played. |
 | `pts_pg` | Float64 | Points per series game played. |
 | `reb_pg` | Float64 | Total rebounds per series game played. |
@@ -287,7 +287,7 @@ One row per player who played (minutes above zero) in a final game of the series
 | `tov_pg` | Float64 | Turnovers per series game played. |
 | `fg3m_pg` | Float64 | Three-pointers made per series game played. |
 | `ts_pct` | Float64 | True shooting in the series: PTS / (2 * (FGA + 0.44 * FTA)); null with no attempts. |
-| `reg_games` | Int64 | Regular-season games he played (every team he played for that season); null with none. |
+| `reg_games` | Int64 | Regular-season games played (every team the player played for that season); null with none. |
 | `reg_min_pg` | Float64 | Minutes per regular-season game played. |
 | `reg_pts_pg` | Float64 | Points per regular-season game played. |
 | `reg_reb_pg` | Float64 | Total rebounds per regular-season game played. |
@@ -296,15 +296,15 @@ One row per player who played (minutes above zero) in a final game of the series
 | `reg_blk_pg` | Float64 | Blocks per regular-season game played. |
 | `reg_tov_pg` | Float64 | Turnovers per regular-season game played. |
 | `reg_fg3m_pg` | Float64 | Three-pointers made per regular-season game played. |
-| `reg_ts_pct` | Float64 | True shooting over his regular season. |
-| `min_pg_diff` | Float64 | min_pg - reg_min_pg: the series against his regular season (positive is up). |
-| `pts_pg_diff` | Float64 | pts_pg - reg_pts_pg: the series against his regular season (positive is up). |
-| `reb_pg_diff` | Float64 | reb_pg - reg_reb_pg: the series against his regular season (positive is up). |
-| `ast_pg_diff` | Float64 | ast_pg - reg_ast_pg: the series against his regular season (positive is up). |
-| `stl_pg_diff` | Float64 | stl_pg - reg_stl_pg: the series against his regular season (positive is up). |
-| `blk_pg_diff` | Float64 | blk_pg - reg_blk_pg: the series against his regular season (positive is up). |
-| `tov_pg_diff` | Float64 | tov_pg - reg_tov_pg: the series against his regular season (positive is up). |
-| `fg3m_pg_diff` | Float64 | fg3m_pg - reg_fg3m_pg: the series against his regular season (positive is up). |
+| `reg_ts_pct` | Float64 | True shooting over the player's regular season. |
+| `min_pg_diff` | Float64 | min_pg - reg_min_pg: the series against the player's regular season (positive is up). |
+| `pts_pg_diff` | Float64 | pts_pg - reg_pts_pg: the series against the player's regular season (positive is up). |
+| `reb_pg_diff` | Float64 | reb_pg - reg_reb_pg: the series against the player's regular season (positive is up). |
+| `ast_pg_diff` | Float64 | ast_pg - reg_ast_pg: the series against the player's regular season (positive is up). |
+| `stl_pg_diff` | Float64 | stl_pg - reg_stl_pg: the series against the player's regular season (positive is up). |
+| `blk_pg_diff` | Float64 | blk_pg - reg_blk_pg: the series against the player's regular season (positive is up). |
+| `tov_pg_diff` | Float64 | tov_pg - reg_tov_pg: the series against the player's regular season (positive is up). |
+| `fg3m_pg_diff` | Float64 | fg3m_pg - reg_fg3m_pg: the series against the player's regular season (positive is up). |
 | `ts_pct_diff` | Float64 | ts_pct - reg_ts_pct. |
 
 **Raises**

@@ -124,7 +124,7 @@ def nba_playoff_series_teams(
 def nba_playoff_series_players(
     seasons: int | list[int], *, league_id: str = "00", return_as_pandas: bool = False
 ) -> pl.DataFrame | pd.DataFrame:
-    """Each player's totals and per-game line in each playoff series, against his regular season.
+    """Each player's totals and per-game line in each playoff series, against the player's regular season.
 
     Args:
         seasons: A season or list of seasons, named by the year it ends (``2025`` is 2024-25).
@@ -137,7 +137,7 @@ def nba_playoff_series_players(
         ``min`` and the summed counts as :func:`nba_playoff_series_teams`; ``<stat>_pg`` per
         game for ``min``, ``pts``, ``reb``, ``ast``, ``stl``, ``blk``, ``tov`` and ``fg3m``,
         plus ``ts_pct`` (``PTS / (2 * (FGA + 0.44 * FTA))``); ``reg_games`` and ``reg_<stat>_pg``
-        / ``reg_ts_pct`` over his regular season (every team he played for; null with none);
+        / ``reg_ts_pct`` over the player's regular season (every team played for; null with none);
         and ``<stat>_pg_diff`` / ``ts_pct_diff``, series minus regular season.
 
     Raises:

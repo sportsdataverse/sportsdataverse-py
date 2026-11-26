@@ -306,7 +306,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_player_war](additional/analytics-5.md#nba_player_war) | WAR and VORP per player-season, from our BPM, RAPM and BOBAN (regular season). |
 | [nba_player_wowy](additional/analytics-5.md#nba_player_wowy) | WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
 | [nba_playoff_series](additional/analytics-5.md#nba_playoff_series) | Every postseason game keyed to its series, with the series score after it. |
-| [nba_playoff_series_players](additional/analytics-5.md#nba_playoff_series_players) | Each player's totals and per-game line in each playoff series, against his regular season. |
+| [nba_playoff_series_players](additional/analytics-5.md#nba_playoff_series_players) | Each player's totals and per-game line in each playoff series, against the player's regular season. |
 | [nba_playoff_series_teams](additional/analytics-5.md#nba_playoff_series_teams) | Each team's record and box totals in each playoff series: the sum of its game boxes. |
 | [nba_playtype_ratings](additional/analytics-5.md#nba_playtype_ratings) | Season play-type-adjusted offensive/defensive team ratings. |
 | [nba_possession_rate_rows](additional/analytics-5.md#nba_possession_rate_rows) | Map `nba_stats_possessions` rows onto the team-season-rates possession frame. |
