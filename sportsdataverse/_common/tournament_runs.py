@@ -369,7 +369,7 @@ def tournament_run_teams(games: pl.DataFrame, team_box: pl.DataFrame) -> pl.Data
     # one tournament per run, so its name and kind are the same on every one of the run's game rows
     names = games.select("run_id", "tournament_name", "tournament_kind").unique("run_id", keep="first")
     return (
-        totals.join(names, on="run_id", how="left", maintain_order="left")
+        totals.join(names, on="run_id", how="left", validate="m:1", maintain_order="left")
         .select(list(RUN_TEAMS_SCHEMA))
         .cast(RUN_TEAMS_SCHEMA)
     )

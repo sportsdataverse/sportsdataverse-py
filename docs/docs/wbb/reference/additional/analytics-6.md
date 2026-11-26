@@ -98,7 +98,7 @@ Each women's run's record and box totals. Delegates to `mbb_tournament_run_teams
 
 **Returns**
 
-One row per run with a final game: the run's tournament name and kind, the W-L, points for and against and the summed counts.
+One row per run with a final game: the run's `tournament_name` and `tournament_kind` (`ncaa`, `conference` or `postseason`), the W-L, points for and against and the summed counts.
 
 | col_name | type | description |
 |---|---|---|
