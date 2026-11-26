@@ -62,13 +62,16 @@ season's players with at least the games gate of
 the split-half reliability of a per-game line passes 0.5 within two games). A player with no box line has
 null values and ``_n`` 0.
 
-**Tiers.** ``war_tier`` places a player on a five-step depth ladder by his ``war_pct`` within the
-league-season (:data:`WAR_TIERS`): the top 5% ``Star`` (``war_pct`` 95 or more), the next 15%
-``Starter`` (80 to 95), the next 30% ``Rotation`` (50 to 80), the next 30% ``Bench`` (20 to 50) and the
-rest ``Fringe``, each share to within a player at its floors. The cohort is ``war_pct``'s: every
-player of the season with possessions, so a 10-possession call-up counts in the denominator and sits at
-the bottom. A player with no ``war_pct``
-(under :data:`MIN_COHORT_PLAYERS` in the season) has no tier. :func:`roster_tier_shape` gives the
+**Tiers.** ``war_tier`` places a player on a five-step depth ladder by his WAR percentile within the
+league-season's *tier cohort* (:func:`war_tiers`, :data:`WAR_TIERS`): ``Star`` 95 or more (about the top
+5%), ``Starter`` 80 to under 95 (the next 15%), ``Rotation`` 50 to under 80 (30%), ``Bench`` 20 to under 50
+(30%) and ``Fringe`` under 20 (the last 20%), each share to within a player at its floors. The tier cohort
+is the players on the floor for at least :data:`TIER_MIN_POSS_SHARE` (a tenth) of the season's
+possessions per team. WAR counts playing time, so without the floor a deep call-up with a few possessions
+and a WAR near 0 would rank above a rotation player with negative WAR and fill the middle tiers. A player
+under the floor has no tier, as does every player of a season whose cohort is under
+:data:`MIN_COHORT_PLAYERS`. The percentile is the ``_pct`` formula, ``100 * (n + 1 - rank) / (n + 1)``
+among the cohort, not ``war_pct`` (which ranks every player). :func:`roster_tier_shape` gives the
 league's median roster: the median number of players per team in each tier, a player counted on the
 team he played most possessions for (``team_id``).
 
@@ -106,6 +109,7 @@ __all__ = [
     "PTS_PER_WIN",
     "REPLACEMENT_LEVEL",
     "REPLACEMENT_SHARE",
+    "TIER_MIN_POSS_SHARE",
     "WAR_TIERS",
     "box_seasons",
     "player_war",
@@ -116,6 +120,7 @@ __all__ = [
     "replacement_win_pct",
     "roster_tier_shape",
     "season_rows",
+    "war_tiers",
 ]
 
 #: The replacement pool: the players who together played the league's least-used share of
@@ -156,11 +161,20 @@ PTS_PER_WIN: dict[str, float] = {"nba": 31.56, "wnba": 31.31, "mbb": 38.91, "wbb
 #: Per-game column -> the box count it averages over the games he played.
 PER_GAME: dict[str, str] = {"pts_pg": "pts", "reb_pg": "reb", "ast_pg": "ast"}
 
-#: The depth ladder, best first: tier -> the lowest ``war_pct`` it takes (a player is in the first
-#: tier he clears). Fixed floors, not fitted: over a league-season they hold about the top 5%, then 15%,
-#: 30%, 30% and the last 20% (to within a player at each floor; a season of ten players has no Star, its best
-#: ``war_pct`` being 100 * 10 / 11), a ladder that reads the same in every league and season.
+#: The depth ladder, best first: tier -> the lowest tier-cohort WAR percentile it takes (a player is in the
+#: first tier he clears; a floor is inclusive). Fixed floors, not fitted: over a league-season they hold
+#: about the top 5%, then 15%, 30%, 30% and the last 20% (to within a player at each floor; a cohort of ten
+#: has no Star, its best percentile being 100 * 10 / 11), a ladder that reads the same in every league and
+#: season.
 WAR_TIERS: dict[str, float] = {"Star": 95.0, "Starter": 80.0, "Rotation": 50.0, "Bench": 20.0, "Fringe": 0.0}
+
+#: The tier cohort's floor: on-court possessions of at least this share of the season's possessions per
+#: team (on-court possessions / 5 / teams), about 4.8 minutes a game over a full season. A share rather
+#: than a count, so the live season's cohort grows with it from opening night. A convention, not fitted:
+#: it keeps every regular rotation player and leaves out the call-ups whose WAR is near 0 because they
+#: barely played (2024-25 fixtures: NBA 400 of 569 players at 812 on-court possessions or more, MBB 3,714 of
+#: 5,130 at 227).
+TIER_MIN_POSS_SHARE = 0.10
 
 #: Bootstrap replicates behind ``war_lo`` / ``war_hi``, and the interval's percentiles.
 N_BOOT = 1000
@@ -463,7 +477,7 @@ def player_war(
         the team he played most possessions for and ``teams`` how many he played for. ``war`` and
         ``vorp`` carry ``_rank`` (1 = most), ``_pct`` and ``_n`` (possessions) among every
         player of the season, null under :data:`MIN_COHORT_PLAYERS`; ``war_tier`` is his
-        :data:`WAR_TIERS` step by ``war_pct`` (null with it); ``war_lo`` / ``war_hi`` are
+        :data:`WAR_TIERS` step in the tier cohort (:func:`war_tiers`; null under its floor); ``war_lo`` / ``war_hi`` are
         the 90% interval of :func:`war_interval`. ``pts_pg`` / ``reb_pg`` / ``ast_pg`` (module
         docstring) carry ``_rank`` (1 = most), ``_pct`` and ``_n`` (games) among the players over the
         games gate. Stints on a team without ``net`` are dropped.
@@ -507,20 +521,56 @@ def player_war(
         out.pipe(attach_ranks, ["vorp", "war"], min_cohort=MIN_COHORT_PLAYERS, by=("season",))
         .pipe(attach_sample_sizes, {"vorp": pl.col("poss"), "war": pl.col("poss")})
         .pipe(_attach_per_game, box, league)
-        .with_columns(_war_tier())
+        .pipe(war_tiers)
         .select(list(schema))
         .cast(schema)
         .sort(["season", "war", "player_id"], descending=[False, True, False], nulls_last=True)
     )
 
 
-def _war_tier() -> pl.Expr:
-    """``war_tier``: the first :data:`WAR_TIERS` step whose floor ``war_pct`` clears; null when it is null."""
-    pct = pl.col("war_pct")
+def _war_tier(pct: pl.Expr) -> pl.Expr:
+    """``war_tier``: the first :data:`WAR_TIERS` step whose (inclusive) floor ``pct`` clears; null when it is null."""
     expr = pl.when(pct.is_null()).then(pl.lit(None, pl.Utf8))
     for tier, floor in WAR_TIERS.items():
         expr = expr.when(pct >= floor).then(pl.lit(tier))
     return expr.alias("war_tier")
+
+
+def war_tiers(war: pl.DataFrame) -> pl.DataFrame:
+    """``war`` with ``war_tier``: each player's :data:`WAR_TIERS` step within his season's tier cohort.
+
+    The cohort is the season's players with ``poss`` at least :data:`TIER_MIN_POSS_SHARE` of the season's
+    possessions per team (``sum(poss) / 5 / teams`` over ``war``'s own rows, so pass whole league-seasons).
+    Their ``war`` is ranked within the season (ties averaged) and the percentile
+    ``100 * (n + 1 - rank) / (n + 1)`` picks the tier. Under the floor, with a null or non-finite ``war``,
+    or in a season whose cohort is under :data:`MIN_COHORT_PLAYERS`, a player has no tier (null).
+
+    Args:
+        war: :func:`player_war` rows: ``season``, ``team_id``, ``poss`` and ``war``.
+
+    Returns:
+        ``war`` with ``war_tier`` (Utf8) added or replaced; nothing else changes.
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If ``war`` lacks ``season``, ``team_id``, ``poss`` or
+            ``war``.
+
+    See Also:
+        :func:`roster_tier_shape`: the league's median roster on this ladder.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse._common.player_war import war_tiers
+            from sportsdataverse.nba.nba_player_war import nba_player_war
+            war_tiers(nba_player_war(2026)).group_by("war_tier").len()
+    """
+    lg_team_poss = pl.col("poss").sum().over("season") / 5 / pl.col("team_id").n_unique().over("season")
+    cohort = war.with_columns(
+        pl.when(pl.col("poss") >= TIER_MIN_POSS_SHARE * lg_team_poss).then(pl.col("war")).alias("_tier_war")
+    )
+    ranked = attach_ranks(cohort, ["_tier_war"], min_cohort=MIN_COHORT_PLAYERS, by=("season",))
+    return ranked.with_columns(_war_tier(pl.col("_tier_war_pct"))).drop("_tier_war", "_tier_war_rank", "_tier_war_pct")
 
 
 def _team_tier_counts(war: pl.DataFrame) -> pl.DataFrame:
@@ -530,8 +580,15 @@ def _team_tier_counts(war: pl.DataFrame) -> pl.DataFrame:
     """
     tiered = war.filter(pl.col("war_tier").is_not_null() & pl.col("team_id").is_not_null())
     teams = tiered.select("season", "team_id").unique()
-    tiers = pl.DataFrame({"war_tier": list(WAR_TIERS), "tier_order": range(1, len(WAR_TIERS) + 1)}).cast(
-        {"tier_order": pl.Int64}
+    floors = list(WAR_TIERS.values())
+    tiers = pl.DataFrame(
+        {
+            "war_tier": list(WAR_TIERS),
+            "tier_order": list(range(1, len(WAR_TIERS) + 1)),
+            "pct_floor": floors,
+            "pct_ceiling": [None, *floors[:-1]],
+        },
+        schema={"war_tier": pl.Utf8, "tier_order": pl.Int64, "pct_floor": pl.Float64, "pct_ceiling": pl.Float64},
     )
     counts = tiered.group_by("season", "team_id", "war_tier").agg(pl.len().cast(pl.Int64).alias("players"))
     return (
@@ -549,13 +606,21 @@ def roster_tier_shape(war: pl.DataFrame) -> pl.DataFrame:
     five tiers need not add up to the median roster.
 
     Args:
-        war: :func:`player_war` rows (any seasons of one league).
+        war: :func:`player_war` rows (any seasons of one league), with ``war_tier``.
 
     Returns:
-        ``season`` (Int64), ``war_tier`` (Utf8), ``tier_order`` (Int64, 1 = ``Star``),
-        ``players_median`` (Float64: the median over teams of the players in that tier), ``players_mean``
-        (Float64) and ``teams`` (Int64: the teams with a tiered player). Sorted by season and tier. An
-        input with no tiered player returns that schema with zero rows.
+        ``season`` (Int64), ``war_tier`` (Utf8), ``tier_order`` (Int64, 1 = ``Star``), ``pct_floor`` /
+        ``pct_ceiling`` (Float64: the tier's band of the tier-cohort WAR percentile, floor inclusive,
+        ceiling exclusive, null ceiling for ``Star``; :data:`WAR_TIERS`), ``players_median`` (Float64:
+        the median over teams of the players in that tier), ``players_mean`` (Float64) and ``teams``
+        (Int64: the teams with a tiered player). Sorted by season and tier. An input with no tiered
+        player returns that schema with zero rows.
+
+    Raises:
+        polars.exceptions.ColumnNotFoundError: If ``war`` lacks ``season``, ``team_id`` or ``war_tier``.
+
+    See Also:
+        :func:`war_tiers`: the tier cohort and the cut points behind ``war_tier``.
 
     Example:
         Quick start::
@@ -566,7 +631,7 @@ def roster_tier_shape(war: pl.DataFrame) -> pl.DataFrame:
     """
     return (
         _team_tier_counts(war)
-        .group_by("season", "war_tier", "tier_order")
+        .group_by("season", "war_tier", "tier_order", "pct_floor", "pct_ceiling")
         .agg(
             pl.col("players").median().cast(pl.Float64).alias("players_median"),
             pl.col("players").mean().cast(pl.Float64).alias("players_mean"),

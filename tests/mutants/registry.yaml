@@ -12803,3 +12803,13 @@
   test: tests/common/test_war_tiers.py::test_tier_shares_are_the_cut_points
   expected: kill
   note: A Star floor of 90 makes the top tier a tenth of the league, twice the 5% cut.
+
+- id: bb-war-tier-no-possession-floor
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'TIER_MIN_POSS_SHARE = 0.10'
+  mutant: 'TIER_MIN_POSS_SHARE = 0.0'
+  test: tests/common/test_war_tiers.py::test_only_the_possession_cohort_is_tiered
+  expected: kill
+  note: Without the floor, call-ups with a few possessions and a WAR near 0 are tiered and land in the middle of the ladder.
