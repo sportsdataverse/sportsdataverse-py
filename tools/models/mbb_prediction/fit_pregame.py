@@ -22,13 +22,17 @@ files against each other, paired, with SEs clustered by (season, week).
 ``--ft-weight`` overrides the engine's free-throw possession weight (0.44 today). The 2026-11-26 refit at
 the college 0.475 (``--ft-weight 0.475``) gave hfa 2.9291 / 2.6427, em_scale 0.5816 / 0.6278, margin_sd
 11.2203 / 12.1722, avg_tempo 70.3014 / 72.4083, bubble_adj_em 20.191 / 27.265 (men / women); it passed its
-2025-2026 pregame gate but did not ship (``mbb_team_ratings.raw_game_efficiency``).
+2025-2026 pregame gate but did not ship (``mbb_team_ratings.raw_game_efficiency``). Its paired score was
+``--score 2025 2026`` once as shipped and once with ``--ft-weight 0.475 --constants '{...}'`` (the refit
+values), then ``--compare``. ``--keep-zero-turnover-games`` turns off the engine's later zero-turnover game
+drop, which the men's shipped constants predate: with it they reproduce to 4 dp.
 
 Usage::
 
     uv run python tools/models/mbb_prediction/fit_pregame.py --league mens
     uv run python tools/models/mbb_prediction/fit_pregame.py --league womens --score 2025 2026 --out wbb.parquet
     uv run python tools/models/mbb_prediction/fit_pregame.py --league mens --ft-weight 0.475
+    uv run python tools/models/mbb_prediction/fit_pregame.py --league mens --keep-zero-turnover-games
     uv run python tools/models/mbb_prediction/fit_pregame.py --compare old.parquet new.parquet
 """
 
@@ -262,16 +266,26 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--ft-weight", type=float, default=None, help="override the engine's FT possession weight")
     ap.add_argument("--score", type=int, nargs="+", default=None, help="write these seasons' weekly predictions")
     ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument("--constants", type=json.loads, default=None, help="score with these constants, a JSON object")
+    ap.add_argument(
+        "--keep-zero-turnover-games", action="store_true", help="the engine before its zero-turnover game drop"
+    )
     ap.add_argument("--compare", type=Path, nargs=2, default=None, metavar=("OLD", "NEW"))
     args = ap.parse_args(argv)
     if args.compare:
         res = compare(*(pl.read_parquet(p) for p in args.compare))
         print(json.dumps(res, indent=2, default=lambda v: v.item() if hasattr(v, "item") else str(v)))
         return 0
+    if args.keep_zero_turnover_games:
+        tr._drop_zero_turnover_games = lambda paired: paired
     if args.ft_weight is not None:
-        # the engine reads this module global at call time; fail loudly if it stops doing so
-        assert "PRO_FT_POSSESSION_WEIGHT" in tr.raw_game_efficiency.__code__.co_names, "--ft-weight would be a no-op"
-        tr.PRO_FT_POSSESSION_WEIGHT = args.ft_weight
+        results, box = _fixtures(args.league)
+        before = tr.raw_game_efficiency(results, box)["poss"].mean()
+        tr.PRO_FT_POSSESSION_WEIGHT = args.ft_weight  # the engine reads this module global at call time
+        if args.ft_weight != 0.44 and tr.raw_game_efficiency(results, box)["poss"].mean() == before:
+            raise RuntimeError("--ft-weight did not change the engine's possessions")
+    if args.constants:
+        _set(args.league, **args.constants)
     if args.score:
         frame = score(args.score, args.league)
         frame.write_parquet(args.out)

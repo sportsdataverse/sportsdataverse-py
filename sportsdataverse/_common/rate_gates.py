@@ -78,7 +78,7 @@ NCAA_LEVEL: dict[str, str] = {"mens": "mbb", "womens": "wbb"}
 # college free-throw weight 0.475 (sportsdataverse._common.possessions), closer to the counted possessions
 # the tables' ``_n`` uses than 0.44: MBB off_rtg 270 -> 280 (train M 273), def_rtg 460 -> 450 (M 444),
 # tov_pct 450 -> 460 (M 453); every WBB gate and every other MBB gate is unchanged. Holdout median / worst
-# reliability: MBB 0.492 / 0.430 before and after, WBB 0.503 / 0.412 -> 0.503 / 0.412.
+# reliability: MBB 0.4919 / 0.4301 before and after, WBB median 0.5029 -> 0.5026, worst 0.4116.
 #
 # Owner ruling (2026-11-17): WNBA on/off net_rtg_diff is never ranked (math.inf), NOT a fitted value.
 # Its train fit (2018-2022) gives M 2333, a gate of 2400, but on the unseen 2023-2025 seasons the span
