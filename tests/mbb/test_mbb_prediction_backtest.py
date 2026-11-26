@@ -41,7 +41,7 @@ _OPTIONAL_FIXTURES = (
 
 # A game enters the backtest only when both teams have this many prior games at
 # the as-of date (data sufficiency for the in-season engine, mirrors
-# dev/mbb_prediction/fit_pregame.py).
+# tools/models/mbb_prediction/fit_pregame.py, its MIN_PRIOR_GAMES).
 _MIN_PRIOR_GAMES = 8
 
 

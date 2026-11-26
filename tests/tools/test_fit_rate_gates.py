@@ -204,3 +204,17 @@ def test_gate_lookups() -> None:
     assert fit.fit_m([(10.0, 0.05, 50), (20.0, 0.08, 50), (40.0, 0.1, 50)]) == math.inf  # no extrapolated gate
     with pytest.raises(KeyError, match="no sample gates"):
         team_gates("nbagl", ["off_rtg"])
+
+
+def test_team_games_weigh_a_college_free_throw_0_475(tmp_path: Path) -> None:
+    """The college team curves count possessions at the college weight, not the pros' 0.44."""
+    box = pl.read_parquet(GATES / "mbb_team_box_2025_six_games.parquet")
+    box.write_parquet(tmp_path / "mbb_team_box_2025.parquet")  # the tool's --data cache name
+    t = fit.team_games("mbb", range(2025, 2026), tmp_path)
+    assert t.height == 12
+    own = pl.col("fga") - pl.col("oreb") + pl.col("tov")
+    for w, hit in ((0.475, True), (0.44, False)):
+        est = 0.5 * (
+            own + w * pl.col("fta") + pl.col("o_fga") - pl.col("o_oreb") + pl.col("o_tov") + w * pl.col("o_fta")
+        )
+        assert ((t["poss"] - t.select(est).to_series()).abs().max() < 1e-9) is hit, w
