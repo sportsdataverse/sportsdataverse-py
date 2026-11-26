@@ -24,6 +24,22 @@ It is the `cv_sse.parquet` that `tools/fit_adj_rapm_penalty.py report` wrote on 
 
 Nothing is synthetic or edited. Rezipped at zstd level 19.
 
+The SPM prior's own fit (`tools/fit_adj_rapm_penalty.py spm`, run 2026-11-25 on the same inputs):
+
+- `spm_cv.parquet`: one row per league, regular season 1997-2026, and `train_spm` penalty (`alpha`, the
+  9 points of `SPM_ALPHAS`): `sse` is the player-grouped 5-fold CV error of the minute-weighted
+  `train_spm` on that season's own plain RAPM (offense plus defense squared error, each held-out row
+  weighted by its minutes over the training rows' mean); `n` is the season's player count.
+- `spm_rows_2024_2025.parquet`: four of the seasons' training rows that stage wrote (NBA 2023-24 and
+  2024-25, WNBA 2024 and 2025; 1,479 rows). Columns: `league`, `season`, then `box_features`
+  (`player_id`, the 11 per-100 rates, `min`, `gp`) joined to `nba_rapm` (`o_rapm`, `d_rapm`, `rapm`,
+  `off_poss`, `def_poss`).
+
+`tests/tools/test_fit_adj_rapm_penalty_spm.py` re-derives `nba_spm.SPM_ALPHA` from `spm_cv.parquet`,
+re-runs the CV on a committed season to match its row, and gates the weighting: trained on 2024 and
+scored on 2025's box line, the default fit's Spearman and spread against 2025's own plain RAPM sit
+above floors that the equal-weight fit it replaced misses.
+
 `tests/tools/test_fit_adj_rapm_penalty.py` checks four things:
 
 - Summed over the training seasons at `k = 2`, the minimum is `nba_adj_rapm.ADJ_RAPM_PENALTY` (NBA

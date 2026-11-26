@@ -14,6 +14,13 @@ own width, is scored on the same held-out games as the penalty.
 
 Stages:
 
+* ``spm`` (same inputs as ``curves``) fits the prior's own penalty first. Per league and regular season
+  it writes the SPM training rows (``box_features`` joined to that season's plain RAPM) and the
+  player-grouped 5-fold CV error of :func:`~sportsdataverse.nba.nba_spm.train_spm` (minute-weighted) at
+  every :data:`SPM_ALPHAS` point, then prints the pooled pick and writes ``spm_cv.parquet``, which
+  ``tests/fixtures/bb_adj_rapm_penalty`` commits so a test re-derives
+  :data:`~sportsdataverse.nba.nba_spm.SPM_ALPHA`. Run it before ``curves``: the prior is
+  ``train_spm`` at its defaults.
 * ``curves`` (network: the possessions / schedule release assets; the leaguegamelog captures of the
   -raw stores, a local checkout or an ``http(s)://`` base) writes one ``.npz`` per league and season
   (regular season): the grouped-CV SSE per fold, ``k`` and grid point, the leave-one-possession-out
@@ -27,6 +34,7 @@ Stages:
 
 Usage::
 
+    uv run --frozen python tools/fit_adj_rapm_penalty.py spm OUT_DIR --nba-raw DIR --wnba-raw DIR
     uv run --frozen python tools/fit_adj_rapm_penalty.py curves OUT_DIR --nba-raw DIR --wnba-raw DIR
     uv run --frozen python tools/fit_adj_rapm_penalty.py report OUT_DIR
 """
@@ -43,7 +51,7 @@ import numpy as np
 import polars as pl
 from scipy.sparse import csr_matrix
 from scipy.stats import spearmanr
-from sklearn.model_selection import GroupKFold
+from sklearn.model_selection import GroupKFold, KFold
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fit_rapm_penalty import FOLDS, GRID, SEASON_TYPES, _rows  # noqa: E402
@@ -63,6 +71,9 @@ LEAGUES = {
     "nba": (range(1997, 2027), range(1997, 2027), "00", 2000, 300),
     "wnba": (range(1997, 2027), range(1997, 2027), "10", 1000, 300),
 }
+#: ``train_spm`` penalties the ``spm`` stage scores (raw per-100 features, minute weights at mean 1).
+SPM_ALPHAS = (0.0, 0.1, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0)
+SPM_FOLDS = 5
 _CHUNK = 20_000
 _RETRIES = 4
 
@@ -235,6 +246,70 @@ def curves(out: Path, raw: dict[str, str]) -> None:
             )
 
 
+def spm_cv(rows: pl.DataFrame, alphas=SPM_ALPHAS) -> np.ndarray:
+    """Player-grouped CV error of minute-weighted ``train_spm`` per penalty, on one season's own target.
+
+    ``rows`` is one row per player (``box_features`` joined to the season's plain RAPM), so a plain
+    ``KFold`` over rows is grouped by player. The error is the held-out squared error of the offense
+    and defense predictions, each row weighted by its minutes over the training rows' mean minutes.
+    """
+    sse = np.zeros(len(alphas))
+    for tr, te in KFold(SPM_FOLDS, shuffle=True, random_state=0).split(np.arange(rows.height)):
+        train, test = rows[tr], rows[te]
+        w = (test["min"] / train["min"].mean()).to_numpy()
+        for k, a in enumerate(alphas):
+            pred = nba_spm(test, train_spm(train, train.select("player_id", "o_rapm", "d_rapm"), alpha=a))
+            assert (pred["player_id"] == test["player_id"]).all()
+            err = (test["o_rapm"] - pred["ospm"]) ** 2 + (test["d_rapm"] - pred["dspm"]) ** 2
+            sse[k] += float((w * err.to_numpy()).sum())
+    return sse
+
+
+def spm(out: Path, raw: dict[str, str]) -> None:
+    """Write each season's SPM training rows (skipping those written), then the pooled CV per penalty."""
+    out.mkdir(parents=True, exist_ok=True)
+    recs = []
+    for league, (seasons, train, lid, *_) in LEAGUES.items():
+        for season in seasons:
+            f = out / f"{league}_{season}_spm_rows.parquet"
+            if not f.exists():
+                t0 = time.time()
+                poss, sched = _with_retry(_rows, league, season)
+                poss = poss.with_columns(pl.col("game_id").cast(pl.Utf8))
+                games = sched.filter(pl.col("season_type") == SEASON_TYPES["rs"]).select(
+                    pl.col("game_id").cast(pl.Utf8).unique()
+                )
+                part = poss.join(games, on="game_id", how="semi").drop_nulls(["game_id", "points"])
+                rapm = nba_rapm(part, league_id=lid)
+                logs = _logs(league, season, "Regular Season", raw[league])
+                bf = box_features(logs["player"], logs["team"])
+                assert bf.schema["player_id"] == rapm.schema["player_id"] == pl.Int64
+                rows = bf.join(
+                    rapm.select("player_id", "o_rapm", "d_rapm", "rapm", "off_poss", "def_poss"), on="player_id"
+                )
+                rows.write_parquet(f)
+                print(
+                    f"{league} {season}: {rows.height} SPM rows ({bf.height} box) {time.time() - t0:.0f}s", flush=True
+                )
+            rows = pl.read_parquet(f)
+            sse = spm_cv(rows)
+            recs.append(
+                {"league": league, "season": season, "alpha": list(SPM_ALPHAS), "sse": sse.tolist(), "n": rows.height}
+            )
+    cv = pl.DataFrame(recs).explode("alpha", "sse")
+    cv.write_parquet(out / "spm_cv.parquet")
+    for league, (_, train, *_) in LEAGUES.items():
+        pooled = (
+            cv.filter((pl.col("league") == league) & pl.col("season").is_in(list(train)))
+            .group_by("alpha")
+            .agg(pl.col("sse").sum())
+            .sort("alpha")
+        )
+        best = pooled.sort("sse")["alpha"][0]
+        rel = (pooled["sse"] / pooled["sse"].min()).round(5).to_list()
+        print(f"== {league}: pooled SPM penalty pick {best:g}; error / min per penalty {dict(zip(SPM_ALPHAS, rel))}")
+
+
 def _pick(curve: np.ndarray) -> float:
     return float(GRID[int(np.argmin(curve))])
 
@@ -381,7 +456,7 @@ def report(out: Path) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="fit_adj_rapm_penalty")
-    ap.add_argument("stage", choices=["curves", "report"])
+    ap.add_argument("stage", choices=["spm", "curves", "report"])
     ap.add_argument("out", type=Path)
     ap.add_argument(
         "--nba-raw", default="https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json"
@@ -390,12 +465,14 @@ def main(argv: list[str] | None = None) -> int:
         "--wnba-raw",
         default="https://raw.githubusercontent.com/sportsdataverse/wehoop-wnba-stats-raw/main/wnba_stats/json",
     )
-    ap.add_argument("--league", choices=list(LEAGUES), default=None, help="curves for one league only")
+    ap.add_argument("--league", choices=list(LEAGUES), default=None, help="spm / curves for one league only")
     a = ap.parse_args(argv)
-    if a.stage == "curves":
-        if a.league:
-            for other in [lg for lg in LEAGUES if lg != a.league]:
-                LEAGUES.pop(other)
+    if a.league and a.stage != "report":
+        for other in [lg for lg in LEAGUES if lg != a.league]:
+            LEAGUES.pop(other)
+    if a.stage == "spm":
+        spm(a.out, {"nba": a.nba_raw, "wnba": a.wnba_raw})
+    elif a.stage == "curves":
         curves(a.out, {"nba": a.nba_raw, "wnba": a.wnba_raw})
     else:
         report(a.out)

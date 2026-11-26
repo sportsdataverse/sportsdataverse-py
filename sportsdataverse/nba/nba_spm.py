@@ -14,6 +14,14 @@ from sportsdataverse.nba.nba_box_logs import _STATS, box_features
 from sportsdataverse.nba.nba_model_validation import RatingsFit
 
 SPM_FEATURES: List[str] = list(_STATS)
+#: :func:`train_spm`'s default ridge penalty (raw per-100 features, minute weights at mean 1). Fitted
+#: by ``tools/fit_adj_rapm_penalty.py spm`` (run 2026-11-25): the grid point minimizing the
+#: player-grouped 5-fold CV error of the minute-weighted fit on each season's own plain RAPM, summed
+#: over the complete regular seasons from 1997 (NBA through 2025-26, WNBA through 2026; 30 each).
+#: NBA picks 30; WNBA picks 100, and its error at 30 is 0.08% above that minimum, so both leagues
+#: share 30. The curve is flat below it (alpha 0 is 0.3% worse in the NBA, 2.6% in the WNBA) and
+#: rises past it (300: +4.4% / +2.3%). The equal-weight fit this replaced used 100.
+SPM_ALPHA: float = 30.0
 
 
 @dataclass(frozen=True)
@@ -46,12 +54,18 @@ def train_spm(
     rapm_target: pl.DataFrame,
     *,
     feature_names: Optional[List[str]] = None,
-    alpha: float = 100.0,
+    alpha: float = SPM_ALPHA,
+    weight: Optional[str] = "min",
 ) -> SpmCoefficients:
-    """Ridge-fit box features onto ``o_rapm`` and ``d_rapm`` (two regressions).
+    """Ridge-fit box features onto ``o_rapm`` and ``d_rapm`` (two regressions), weighted by minutes.
 
     The two models share the same feature matrix but separate target vectors,
     producing independent offense and defense coefficient vectors.
+
+    Each row is weighted by the player's minutes (``weight``, normalized to mean 1). A player's
+    per-100 rates and his RAPM target are both noisiest when he played little, and a quarter to a
+    half of a season's rows are players under 250 minutes; fit with equal weights they dominate the
+    regression, which then predicts with about a quarter of the target's spread.
 
     Args:
         box_features: Per-player per-100 features.  Must contain ``player_id``
@@ -61,16 +75,22 @@ def train_spm(
             ``player_id`` appears in *box_features* are used (inner join).
         feature_names: Ordered list of feature columns to regress on.
             Defaults to ``SPM_FEATURES`` (= ``_STATS`` from ``nba_box_logs``).
-        alpha: Ridge regularization strength (``sklearn.linear_model.Ridge``).
+        alpha: Ridge regularization strength (``sklearn.linear_model.Ridge``) on the raw
+            per-100 features with the weights at mean 1. Defaults to :data:`SPM_ALPHA`.
             Lower values approach OLS; higher values shrink toward zero.
+        weight: The column (of *box_features*, or of *rapm_target* when *box_features* lacks
+            it) holding each row's sample weight, e.g. ``"min"`` (the default) or
+            ``"off_poss"``. ``None`` fits every row with the same weight (the rule before
+            minute weighting).
 
     Returns:
         ``SpmCoefficients`` with offense and defense coefficient vectors,
         intercepts, and the ordered ``feature_names``.
 
     Raises:
-        ValueError: If *feature_names* lists a column absent from *box_features*
-            or *rapm_target* is missing required columns.
+        ValueError: If *feature_names* lists a column absent from *box_features*,
+            *rapm_target* is missing required columns, or the *weight* column is
+            missing, negative, non-finite or sums to zero over the joined rows.
 
     Example:
         Fit on pooled multi-season features + RAPM::
@@ -78,9 +98,10 @@ def train_spm(
             from sportsdataverse.nba import train_spm
             coef = train_spm(box_feats, rapm_ratings)
 
-        With custom regularization::
+        With custom regularization, or the equal-weight fit::
 
             coef = train_spm(box_feats, rapm_ratings, alpha=50.0)
+            coef_equal = train_spm(box_feats, rapm_ratings, weight=None)
     """
     names: List[str] = feature_names if feature_names is not None else SPM_FEATURES
     missing_feats = [c for c in names if c not in box_features.columns]
@@ -90,16 +111,23 @@ def train_spm(
     missing_target = [c for c in required_target if c not in rapm_target.columns]
     if missing_target:
         raise ValueError(f"rapm_target is missing required columns: {missing_target}")
-    joined = box_features.join(
-        rapm_target.select(["player_id", "o_rapm", "d_rapm"]),
-        on="player_id",
-        how="inner",
-    )
+    target_cols = ["player_id", "o_rapm", "d_rapm"]
+    if weight is not None and weight not in box_features.columns:
+        if weight not in rapm_target.columns:
+            raise ValueError(f"weight column {weight!r} is in neither box_features nor rapm_target")
+        target_cols.append(weight)
+    joined = box_features.join(rapm_target.select(target_cols), on="player_id", how="inner")
     X = _feature_matrix(joined, names)
     o_y = joined["o_rapm"].to_numpy().astype(np.float64)
     d_y = joined["d_rapm"].to_numpy().astype(np.float64)
-    o_model = Ridge(alpha=alpha).fit(X, o_y)
-    d_model = Ridge(alpha=alpha).fit(X, d_y)
+    w = None
+    if weight is not None:
+        w = joined[weight].cast(pl.Float64).fill_null(np.nan).to_numpy()
+        if not (np.isfinite(w).all() and (w >= 0).all() and w.sum() > 0):
+            raise ValueError(f"weight column {weight!r} must be finite, non-negative and not all zero")
+        w = w / w.mean()
+    o_model = Ridge(alpha=alpha).fit(X, o_y, sample_weight=w)
+    d_model = Ridge(alpha=alpha).fit(X, d_y, sample_weight=w)
     return SpmCoefficients(
         o_coef=np.asarray(o_model.coef_, dtype=np.float64),
         d_coef=np.asarray(d_model.coef_, dtype=np.float64),
