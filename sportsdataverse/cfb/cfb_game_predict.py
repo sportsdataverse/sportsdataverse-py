@@ -50,13 +50,14 @@ _PREDICT_COLUMNS = [
 
 #: Spread of `adj_net` the fitted constants assume. MEASURED on the 2014-2023
 #: corpus the 2026-11-25 refit ran against (n=11,348 as-of team-games): sd
-#: 0.1704, printed by `cfb_higher_models.fit_pregame` (cfbfastR-cfb-data) as
-#: `adj_net_sd`. The ratings narrowed when `efficiency_ratings` moved onto the
-#: `cfb_adjusted_epa` fit; the 2026-09-27 fit measured 0.2633 on the old engine. Not estimated from memory -- a first draft of
+#: 0.2259, printed by `cfb_higher_models.fit_pregame` (cfbfastR-cfb-data) as
+#: `adj_net_sd`. `efficiency_ratings` moved onto the `cfb_adjusted_epa` fit with
+#: the score-margin garbage-time rule; the 2026-09-27 fit measured 0.2633 on the
+#: old engine and #1296's naive-WP-band engine 0.1704. Not estimated from memory -- a first draft of
 #: this line guessed 0.1049, which would have made the gate fire at 2.5x on
 #: correct data. A mis-calibrated guard is worse than none: it teaches readers
 #: to ignore it.
-_FITTED_ADJ_NET_SD = 0.1704
+_FITTED_ADJ_NET_SD = 0.2259
 #: Tolerance before the ratings are considered to have moved out from under the
 #: constants. 1.6x is wide enough for ordinary season-to-season variation and
 #: far tighter than the ~1.9x drift that silently invalidated the previous fit.
