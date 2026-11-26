@@ -23,7 +23,8 @@ same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
   (``RANDOM=0 < PRE-SOV=1 < SOS=2 < POINTS=3``).
 * **Record semantics.** Overall W/L/T counts ALL played games. The
   conference record counts only ``game_type == "REG"`` games between two
-  teams of the same conference. ``CONF_CHAMP`` games count toward the
+  teams of the same conference, minus any the schedule flags non-conference
+  (an explicit ``conf_game == False``). ``CONF_CHAMP`` games count toward the
   overall record and decide the conference champion, but NOT the
   conference record/rank.
 * **SOV/SOS are conference-scoped** (cross-validation ruling — UNLIKE
@@ -403,6 +404,9 @@ def _validate_games(games: FrameLike) -> pl.DataFrame:
     if "home_points" in g.columns and "away_points" in g.columns:
         # optional per-game points (SEC capped-scoring-margin tiebreaker input)
         cols += [pl.col("home_points").cast(pl.Float64), pl.col("away_points").cast(pl.Float64)]
+    if "conf_game" in g.columns:
+        # optional schedule flag: an explicit False keeps a same-conference game out of conference play
+        cols.append(pl.col("conf_game").cast(pl.Boolean))
     return g.select(cols)
 
 
@@ -410,6 +414,8 @@ def _double_games(g: pl.DataFrame) -> pl.DataFrame:
     """Long form: one row per (game, perspective team), played games only."""
     has_pts = "home_points" in g.columns and "away_points" in g.columns
     _null_f64 = pl.lit(None, dtype=pl.Float64)
+    # explicit conf_game False -> not a conference game; null / absent -> derive from the two conferences
+    not_conf = (pl.col("conf_game") == False).fill_null(False) if "conf_game" in g.columns else pl.lit(False)  # noqa: E712
     home = g.select(
         "sim",
         "week",
@@ -419,6 +425,7 @@ def _double_games(g: pl.DataFrame) -> pl.DataFrame:
         pl.col("result"),
         (pl.col("home_points") if has_pts else _null_f64).alias("pf"),
         (pl.col("away_points") if has_pts else _null_f64).alias("pa"),
+        not_conf.alias("_not_conf"),
     )
     away = g.select(
         "sim",
@@ -429,6 +436,7 @@ def _double_games(g: pl.DataFrame) -> pl.DataFrame:
         (-pl.col("result")).alias("result"),
         (pl.col("away_points") if has_pts else _null_f64).alias("pf"),
         (pl.col("home_points") if has_pts else _null_f64).alias("pa"),
+        not_conf.alias("_not_conf"),
     )
     dg = pl.concat([home, away]).filter(pl.col("result").is_not_null())
     return dg.with_columns(
@@ -455,7 +463,9 @@ def _standings_base(g: pl.DataFrame, t: pl.DataFrame) -> tuple[pl.DataFrame, pl.
         dg_reg.join(t.rename({"conference": "team_conf"}), on="team", how="left")
         .join(t.rename({"team": "opp", "conference": "opp_conf"}), on="opp", how="left")
         .filter(
-            (pl.col("team_conf") == pl.col("opp_conf")) & (_is_independent("team_conf") == False)  # noqa: E712
+            (pl.col("team_conf") == pl.col("opp_conf"))
+            & (_is_independent("team_conf") == False)  # noqa: E712
+            & (pl.col("_not_conf") == False)  # noqa: E712
         )
     )
     conf = dgc.group_by("sim", "team").agg(
@@ -1084,7 +1094,13 @@ def cfb_standings(
             ``home_points``/``away_points`` (per-game scores — feeds the SEC
             capped-scoring-margin rung; :func:`cfb_games_from_schedule`
             emits both). Either optional input absent -> that rung is
-            skipped, not an error.
+            skipped, not an error. Optional ``conf_game`` (bool, the
+            schedule's conference-game flag, which
+            :func:`cfb_games_from_schedule` carries over): an explicit
+            ``False`` keeps a game between two members of one conference
+            out of the conference record and every tiebreaker (a
+            non-conference meeting, the Pac-12's 2026 Flex Week); null or
+            absent -> a ``REG`` game between two members counts.
         teams: Team table with columns ``team`` and ``conference``
             (null or ``"FBS Independents"`` marks an independent), and an
             optional ``division`` column (``"FBS"``/``"FCS"`` or similar —
@@ -1430,25 +1446,28 @@ def cfb_games_from_schedule(schedule: FrameLike, *, return_as_pandas: bool = Fal
     championship (but not the CFP / national championship) are
     ``CONF_CHAMP``; otherwise ``season_type == "regular"`` maps to ``REG``
     and everything else to ``POST``. ``result`` is the home margin
-    (``home_points - away_points``; null when either score is missing) and
-    ``neutral`` comes from ``neutral_site``.
+    (``home_points - away_points``; null when either score is missing),
+    ``neutral`` comes from ``neutral_site`` and ``conf_game`` from
+    ``conference_game`` (null when the schedule has no such column).
 
     Args:
         schedule: Output of :func:`sportsdataverse.cfb.load_cfb_schedule`
             (needs ``season``, ``week``, ``season_type``, ``home_team``,
             ``away_team``, ``home_points``, ``away_points``, ``neutral_site``
-            and optionally ``notes``).
+            and optionally ``notes`` and ``conference_game``).
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame with columns ``season``, ``week``,
         ``game_type``, ``home_team``, ``away_team``, ``result``, ``neutral``,
-        ``home_points``, ``away_points`` — the :func:`cfb_standings` /
-        :func:`cfb_simulations` input schema. The trailing per-game points
-        columns feed the SEC ``capped_scoring_margin`` official tiebreaker
-        rung (see :data:`CONFERENCE_TIEBREAKERS`); :func:`cfb_standings`
-        skips that rung when they're absent, so passing this frame straight
-        through is always safe.
+        ``home_points``, ``away_points``, ``conf_game`` — the
+        :func:`cfb_standings` / :func:`cfb_simulations` input schema. The
+        per-game points columns feed the SEC ``capped_scoring_margin``
+        official tiebreaker rung (see :data:`CONFERENCE_TIEBREAKERS`);
+        :func:`cfb_standings` skips that rung when they're absent, so passing
+        this frame straight through is always safe. ``conf_game`` ``False``
+        keeps a same-conference game the schedule marks non-conference out
+        of the conference standings.
 
     Example:
         Loader to standings pipeline::
@@ -1494,5 +1513,8 @@ def cfb_games_from_schedule(schedule: FrameLike, *, return_as_pandas: bool = Fal
         pl.col("neutral_site").cast(pl.Int64).fill_null(0).alias("neutral"),
         pl.col("home_points").cast(pl.Float64),
         pl.col("away_points").cast(pl.Float64),
+        (pl.col("conference_game") if "conference_game" in s.columns else pl.lit(None))
+        .cast(pl.Boolean)
+        .alias("conf_game"),
     )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

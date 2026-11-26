@@ -450,7 +450,9 @@ class TestGamesFromSchedule:
             "neutral",
             "home_points",
             "away_points",
+            "conf_game",
         ]
+        assert games["conf_game"].to_list() == [None] * 4  # no conference_game column on this schedule
         assert games["game_type"].to_list() == ["REG", "CONF_CHAMP", "POST", "POST"]
         assert games["result"].to_list() == [14.0, -3.0, None, 15.0]
         assert games["neutral"].to_list() == [0, 1, 1, 1]
@@ -477,6 +479,34 @@ class TestGamesFromSchedule:
         st = cfb_standings(games, teams)
         assert isinstance(st, pl.DataFrame)
         assert {r["team"]: r["wins"] for r in st.iter_rows(named=True)} == {"H": 2, "A": 0}
+
+    def test_non_conference_meeting_of_conference_members_stays_out_of_standings(self) -> None:
+        # Real 2025 rows: NC State and Virginia (both ACC) met in week 2 as a non-conference
+        # game (conference_game False in the schedule); Virginia and Florida State met later
+        # as an ACC game. Same check as cfbseedR's test-games-from-schedule.R.
+        sched = pl.DataFrame(
+            {
+                "season": [2025, 2025],
+                "week": [2, 6],
+                "season_type": ["regular", "regular"],
+                "home_team": ["NC State", "Virginia"],
+                "away_team": ["Virginia", "Florida State"],
+                "home_points": [35, 46],
+                "away_points": [31, 38],
+                "neutral_site": [False, False],
+                "conference_game": [False, True],
+                "notes": [None, None],
+            }
+        )
+        games = cfb_games_from_schedule(sched)
+        assert games["conf_game"].to_list() == [False, True]
+        teams = pl.DataFrame({"team": ["NC State", "Virginia", "Florida State"], "conference": ["ACC"] * 3})
+        row = {r["team"]: r for r in cfb_standings(games, teams).iter_rows(named=True)}
+        assert (row["NC State"]["conf_games"], row["NC State"]["wins"]) == (0, 1)
+        assert (row["Virginia"]["conf_games"], row["Virginia"]["conf_wins"], row["Virginia"]["losses"]) == (1, 1, 1)
+        # without the flag both games count as ACC games for Virginia
+        st0 = cfb_standings(games.drop("conf_game"), teams)
+        assert st0.filter(pl.col("team") == "Virginia")["conf_games"].item() == 2
 
 
 def _conf_games(rows: list[tuple[str, str, float]], sim: int = 2024) -> pl.DataFrame:
