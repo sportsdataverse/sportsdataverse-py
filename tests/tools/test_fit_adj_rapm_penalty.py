@@ -35,14 +35,34 @@ _FX = _ROOT / "tests" / "fixtures"
 _LEAGUE_ID = {"nba": "00", "wnba": "10"}
 
 
-def _pooled(league: str, k: float) -> pl.DataFrame:
-    cv = pl.read_parquet(_FX / "bb_adj_rapm_penalty" / "cv_sse.parquet")
+def _pooled(league: str, k: float, name: str = "cv_sse.parquet") -> pl.DataFrame:
+    cv = pl.read_parquet(_FX / "bb_adj_rapm_penalty" / name)
     train = list(fit.LEAGUES[league][1])
     return (
         cv.filter((pl.col("league") == league) & (pl.col("k") == k) & pl.col("season").is_in(train))
         .group_by("alpha")
         .agg(pl.col("sse").sum(), pl.len().alias("seasons"))
         .sort("alpha")
+    )
+
+
+@pytest.mark.parametrize("league", ["nba", "wnba"])
+def test_the_shipped_penalty_and_scale_are_the_equal_weight_cv_minimum(league) -> None:
+    """The published configuration (#1150): on the equal-weight prior's corpus, scale 2 and the frozen penalty."""
+    lid = _LEAGUE_ID[league]
+    k = ADJ_RAPM_PRIOR_SCALE[lid]
+    assert k == 2.0
+    p = _pooled(league, k, "cv_sse_equal.parquet")
+    assert (p["seasons"] == 30).all()
+    assert p.sort("sse")["alpha"][0] == pytest.approx(ADJ_RAPM_PENALTY[lid], rel=1e-12)
+    assert _pooled(league, 0.0, "cv_sse_equal.parquet").sort("sse")["alpha"][0] == pytest.approx(
+        RAPM_PENALTY[lid], rel=1e-12
+    )
+    # the prior-scale evidence: at its own best penalty, k = 2 beats the unscaled prior on held-out games
+    assert p["sse"].min() < _pooled(league, 1.0, "cv_sse_equal.parquet")["sse"].min()
+    picks = {"nba": 3162.2776601683795, "wnba": 2275.8459260747886}  # k = 1, observed 2026-11-09
+    assert _pooled(league, 1.0, "cv_sse_equal.parquet").sort("sse")["alpha"][0] == pytest.approx(
+        picks[league], rel=1e-12
     )
 
 

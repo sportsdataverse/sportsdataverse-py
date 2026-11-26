@@ -48,10 +48,15 @@ rows arrive):
 
 `tests/tools/test_fit_adj_rapm_penalty_spm.py` re-derives `nba_spm.SPM_ALPHA_WEIGHTED` from `spm_cv.parquet`,
 re-runs the CV on a committed season to match its row, and gates the weighting: trained on 2024 and
-scored on 2025's box line, the default fit's Spearman and spread against 2025's own plain RAPM sit
-above floors that the equal-weight fit it replaced misses.
+scored on 2025's box line, the weighted fit's Spearman and spread against 2025's own plain RAPM sit
+above floors that the equal-weight default misses.
 
-`tests/tools/test_fit_adj_rapm_penalty.py` checks five things:
+`cv_sse_equal.parquet` is the 2026-11-09 corpus, the same table for the equal-weight SPM prior (#1150). That is the
+published configuration, and `train_spm`'s default. It is restored unchanged from before #1309 so the shipped
+`ADJ_RAPM_PRIOR_SCALE` (2) and `ADJ_RAPM_PENALTY` keep their own gate:
+`test_the_shipped_penalty_and_scale_are_the_equal_weight_cv_minimum` re-derives both from it.
+
+`tests/tools/test_fit_adj_rapm_penalty.py` checks five things on the weighted corpus:
 
 - Summed over the training seasons at `k = 1.5` (`ADJ_RAPM_PRIOR_SCALE_WEIGHTED`), the minimum is
   `nba_adj_rapm.ADJ_RAPM_PENALTY` (NBA 3,728, WNBA 2,683).

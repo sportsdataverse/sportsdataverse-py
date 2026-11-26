@@ -2,7 +2,8 @@
 
 ``tests/fixtures/bb_adj_rapm_penalty/spm_cv.parquet`` is the pooled player-grouped CV error the ``spm`` stage
 wrote from every season, and ``spm_rows_2024_2025.parquet`` four of the seasons' training rows it read (README
-there). The gate trains on one season and scores the next: the equal-weight fit it replaced fails it.
+there). These are the minute-weighted alternative (``weight="min"``), not ``train_spm``'s equal-weight default.
+The gate trains on one season and scores the next: the equal-weight default fails it.
 """
 
 from __future__ import annotations
@@ -56,7 +57,7 @@ def test_spm_alpha_is_the_pooled_cv_minimum() -> None:
     assert wnba.filter(pl.col("alpha") == SPM_ALPHA_WEIGHTED)["sse"][0] / wnba["sse"].min() < 1.003
 
 
-def test_the_cv_fixture_is_the_shipped_fit() -> None:
+def test_the_cv_fixture_is_the_weighted_fit() -> None:
     """``spm_cv`` (minute-weighted ``train_spm``) re-run on a committed season reproduces its fixture row."""
     cv = pl.read_parquet(_FX / "spm_cv.parquet").filter((pl.col("league") == "wnba") & (pl.col("season") == 2025))
     np.testing.assert_allclose(fit.spm_cv(_rows("wnba", 2025)), cv.sort("alpha")["sse"].to_numpy(), rtol=1e-9)
