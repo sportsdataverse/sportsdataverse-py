@@ -17,7 +17,12 @@ import numpy as np
 import polars as pl
 import pytest
 
-from sportsdataverse.nba.nba_adj_rapm import ADJ_RAPM_PENALTY, ADJ_RAPM_PRIOR_SCALE, nba_adj_rapm
+from sportsdataverse.nba.nba_adj_rapm import (
+    ADJ_RAPM_PENALTY,
+    ADJ_RAPM_PRIOR_SCALE,
+    ADJ_RAPM_PRIOR_SCALE_WEIGHTED,
+    nba_adj_rapm,
+)
 from sportsdataverse.nba.nba_player_factor_rapm import nba_factor_rapm_rows
 from sportsdataverse.nba.nba_rapm import RAPM_PENALTY, build_rapm_design
 
@@ -44,7 +49,7 @@ def _pooled(league: str, k: float) -> pl.DataFrame:
 @pytest.mark.parametrize("league", ["nba", "wnba"])
 def test_the_frozen_penalty_and_scale_are_the_pooled_cv_minimum(league) -> None:
     lid = _LEAGUE_ID[league]
-    k = ADJ_RAPM_PRIOR_SCALE[lid]
+    k = ADJ_RAPM_PRIOR_SCALE_WEIGHTED[lid]  # the fixture is the minute-weighted prior's refit
     assert k == fit.CHOSEN_SCALE == 1.5
     p = _pooled(league, k)
     assert (p["seasons"] == 30).all()
@@ -99,7 +104,7 @@ def test_the_refit_keeps_the_spread_and_does_not_lose_held_out_games(league) -> 
     to let a change pass.
     """
     rep = json.loads((_FX / "bb_adj_rapm_penalty" / "report.json").read_text())[league]
-    assert rep["scale"] == ADJ_RAPM_PRIOR_SCALE[_LEAGUE_ID[league]]
+    assert rep["scale"] == ADJ_RAPM_PRIOR_SCALE_WEIGHTED[_LEAGUE_ID[league]]
     assert rep["frozen"] == pytest.approx(ADJ_RAPM_PENALTY[_LEAGUE_ID[league]], rel=1e-12)
     ratios = [s["sd_adj_after"] / s["sd_rapm"] for s in rep["seasons"]]
     assert len(ratios) == 30 and 0.8 <= min(ratios) and max(ratios) <= 1.6, (min(ratios), max(ratios))

@@ -14,9 +14,12 @@ its end year), prior scale (`k`, the 8 values of `tools/fit_adj_rapm_penalty.py`
 grid penalty (`alpha`, the 71 points of `tools/fit_rapm_penalty.py`'s `GRID`). `sse` is the squared
 error of the held-out games' points, summed over the ten folds.
 
-It is the `cv_sse.parquet` that `tools/fit_adj_rapm_penalty.py report` wrote on 2026-11-25, after
-`train_spm` weighted its rows by minutes (the 2026-11-09 corpus had the equal-weight prior). The `spm`
-and `curves` stages behind it read:
+It is the `cv_sse.parquet` that `tools/fit_adj_rapm_penalty.py report` wrote on 2026-11-25 for the
+minute-weighted SPM prior (`train_spm(..., weight="min")`; the 2026-11-09 corpus had the equal-weight
+prior). That prior is the **unshipped alternative**: `train_spm` defaults to the published equal-weight
+fit, with `ADJ_RAPM_PRIOR_SCALE` 2. The weighted one is kept as `SPM_ALPHA_WEIGHTED` /
+`ADJ_RAPM_PRIOR_SCALE_WEIGHTED`, because as the prior it fails the NBA producer's `r_rapm_adj_min` floor
+(2026-11-26). The `spm` and `curves` stages behind it read:
 
 - the `nba_stats_possessions` / `wnba_stats_possessions` and `_schedules` release assets (1997-2026
   both);
@@ -43,14 +46,14 @@ rows arrive):
   (`player_id`, the 11 per-100 rates, `min`, `gp`) joined to `nba_rapm` (`o_rapm`, `d_rapm`, `rapm`,
   `off_poss`, `def_poss`).
 
-`tests/tools/test_fit_adj_rapm_penalty_spm.py` re-derives `nba_spm.SPM_ALPHA` from `spm_cv.parquet`,
+`tests/tools/test_fit_adj_rapm_penalty_spm.py` re-derives `nba_spm.SPM_ALPHA_WEIGHTED` from `spm_cv.parquet`,
 re-runs the CV on a committed season to match its row, and gates the weighting: trained on 2024 and
 scored on 2025's box line, the default fit's Spearman and spread against 2025's own plain RAPM sit
 above floors that the equal-weight fit it replaced misses.
 
 `tests/tools/test_fit_adj_rapm_penalty.py` checks five things:
 
-- Summed over the training seasons at `k = 1.5` (`ADJ_RAPM_PRIOR_SCALE`), the minimum is
+- Summed over the training seasons at `k = 1.5` (`ADJ_RAPM_PRIOR_SCALE_WEIGHTED`), the minimum is
   `nba_adj_rapm.ADJ_RAPM_PENALTY` (NBA 3,728, WNBA 2,683).
 - At `k = 1` the minimum is the same two values.
 - The pooled error at `k = 1.5` is below the error at `k = 1` (the prior-scale evidence).

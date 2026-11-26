@@ -16,7 +16,7 @@ import polars as pl
 import pytest
 from scipy.stats import spearmanr
 
-from sportsdataverse.nba.nba_spm import SPM_ALPHA, nba_spm, train_spm
+from sportsdataverse.nba.nba_spm import SPM_ALPHA_WEIGHTED, nba_spm, train_spm
 
 _ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(_ROOT / "tools"))  # the fitter imports fit_rapm_penalty as a sibling
@@ -25,7 +25,7 @@ fit = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(fit)  # type: ignore[union-attr]
 _FX = _ROOT / "tests" / "fixtures" / "bb_adj_rapm_penalty"
 #: league -> (off_poss floor of the scored players, Spearman floor, spread-ratio floor), 2024 -> 2025.
-#: Observed 2026-11-25 (minute-weighted at SPM_ALPHA / the equal-weight alpha-100 rule it replaced): NBA Spearman
+#: Observed 2026-11-25 (minute-weighted at SPM_ALPHA_WEIGHTED / the equal-weight alpha-100 default): NBA Spearman
 #: 0.493 / 0.358, spread ratio 0.537 / 0.216; WNBA 0.706 / 0.603, 0.491 / 0.315. The floors sit just under the first
 #: and are never lowered to let a change pass; a spread above the target's own (ratio 1) fails as too wide.
 _GATE = {"nba": (1000, 0.48, 0.52), "wnba": (500, 0.69, 0.47)}
@@ -50,10 +50,10 @@ def _pooled(league: str) -> pl.DataFrame:
 def test_spm_alpha_is_the_pooled_cv_minimum() -> None:
     nba, wnba = _pooled("nba"), _pooled("wnba")
     assert (nba["seasons"] == 30).all() and (wnba["seasons"] == 30).all()
-    assert nba.sort("sse")["alpha"][0] == SPM_ALPHA
+    assert nba.sort("sse")["alpha"][0] == SPM_ALPHA_WEIGHTED
     # the WNBA's own pick is 100; at the shared value its error is within 0.3% of that minimum (0.21%, 2026-11-26)
     assert wnba.sort("sse")["alpha"][0] == 100.0
-    assert wnba.filter(pl.col("alpha") == SPM_ALPHA)["sse"][0] / wnba["sse"].min() < 1.003
+    assert wnba.filter(pl.col("alpha") == SPM_ALPHA_WEIGHTED)["sse"][0] / wnba["sse"].min() < 1.003
 
 
 def test_the_cv_fixture_is_the_shipped_fit() -> None:
@@ -76,11 +76,11 @@ def _next_season(league: str, **kw) -> tuple[float, float]:
 def test_minute_weighting_tracks_next_season_rapm(league) -> None:
     """Trained on 2024, scored on 2025's box line against 2025's own plain RAPM.
 
-    2025 is in no training row; its target is one of the 30 seasons pooled to choose ``SPM_ALPHA``.
+    2025 is in no training row; its target is one of the 30 seasons pooled to choose ``SPM_ALPHA_WEIGHTED``.
     """
     _, rho_floor, ratio_floor = _GATE[league]
-    rho, ratio = _next_season(league)  # train_spm's defaults: minute weights at SPM_ALPHA
-    old_rho, old_ratio = _next_season(league, weight=None, alpha=100.0)  # the rule it replaced
+    rho, ratio = _next_season(league, weight="min", alpha=SPM_ALPHA_WEIGHTED)  # the weighted alternative
+    old_rho, old_ratio = _next_season(league)  # train_spm's defaults: the published equal-weight fit
     assert rho >= rho_floor and ratio_floor <= ratio <= 1.0, (rho, ratio)
     assert rho - old_rho >= 0.08 and ratio >= 1.4 * old_ratio, (rho, old_rho, ratio, old_ratio)
 
