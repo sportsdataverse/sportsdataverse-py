@@ -821,12 +821,7 @@ def _simulate_season_draws(
     season_games: int | None = None,
     cup: CupInputs | None = None,
 ) -> tuple[pl.DataFrame, CupDraws | None, tuple[list[int], np.ndarray]]:
-    """:func:`_simulate_season` plus ``(team_ids, total_wins)``: each team's simulated wins, ``(n_sims, n_teams)``.
-
-    The columns of ``total_wins`` follow ``team_ids`` (sorted), not the frame's row order. The
-    win-total coverage check (``tools/models/lifecycle/coverage.py``) reads the draws to score
-    each interval at its own discrete mass.
-    """
+    """:func:`_simulate_season` plus ``(team_ids, total_wins)``: wins per draw, columns in sorted ``team_ids``."""
     if cup is not None:
         if league_id != "00":
             raise ValueError("cup is NBA only")
