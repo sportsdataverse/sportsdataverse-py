@@ -97,6 +97,13 @@ def test_curves_refuses_an_out_fit_under_another_prior_rule(tmp_path) -> None:
         fit.curves(unstamped, {}, "weighted")
 
 
+def test_curves_resumes_an_out_stamped_with_its_own_rule(tmp_path, monkeypatch) -> None:
+    (tmp_path / "curves_config.json").write_text('{"prior_rule": "equal", "weight": null, "alpha": 100.0}')
+    (tmp_path / "nba_1997_rs.npz").write_bytes(b"")
+    monkeypatch.setattr(fit, "LEAGUES", {})  # no season to fit: only the stamp check runs
+    fit.curves(tmp_path, {}, "equal")
+
+
 def test_spm_cv_folds_do_not_depend_on_row_order() -> None:
     rows = _rows("wnba", 2025)
     np.testing.assert_allclose(fit.spm_cv(rows.reverse()), fit.spm_cv(rows), rtol=1e-12)

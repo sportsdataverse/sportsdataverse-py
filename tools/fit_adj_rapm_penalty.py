@@ -80,7 +80,8 @@ SPM_ALPHAS = (0.0, 0.1, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0)
 SPM_FOLDS = 5
 #: ``train_spm`` keywords of the prior ``curves`` chains: ``weighted`` is the shipped default; ``equal`` is the
 #: equal-weight alpha-100 fit before minute weighting, run into a second OUT for ``report --baseline``. ``curves``
-#: records the rule it ran in ``OUT/curves_config.json`` and refuses to resume an OUT written under another one.
+#: records the rule it ran in ``OUT/curves_config.json`` and refuses to resume an OUT written under another one (or an
+#: unstamped OUT from before the stamp: rerun into a fresh OUT, or write the stamp by hand once the rule is confirmed).
 PRIOR_RULES: dict[str, dict] = {
     "weighted": {"weight": "min", "alpha": SPM_ALPHA},
     "equal": {"weight": None, "alpha": 100.0},
@@ -490,6 +491,10 @@ def _league_report(out: Path, league: str, baseline: Path | None = None) -> dict
 
 
 def report(out: Path, baseline: Path | None = None) -> None:
+    for d, rule in ((out, "weighted"), (baseline, "equal")):
+        stamp = d / "curves_config.json" if d else None
+        if stamp and stamp.exists() and json.loads(stamp.read_text())["prior_rule"] != rule:
+            raise SystemExit(f"{d} holds curves fit under another prior rule than {rule!r}")
     res = {lg: _league_report(out, lg, baseline) for lg in LEAGUES}
     (out / "report.json").write_text(json.dumps(res, indent=1))
     sse = [
