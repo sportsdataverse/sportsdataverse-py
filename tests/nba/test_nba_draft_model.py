@@ -53,7 +53,11 @@ def test_schema_and_season_shift(draft_2019) -> None:
     assert out.filter(pl.col("overall_pick") == 1)["player_name"].item() == "Zion Williamson"
     assert out["proj_career_value"].is_sorted(descending=True)
     tiers = out.group_by("pro_tier").len().sort("pro_tier")
-    assert dict(zip(tiers["pro_tier"], tiers["len"])) == {"first_round": 16, "lottery": 14, "second_round": 30}
+    assert dict(zip(tiers["pro_tier"], tiers["len"], strict=True)) == {
+        "first_round": 16,
+        "lottery": 14,
+        "second_round": 30,
+    }
 
 
 def test_return_as_pandas(draft_2019) -> None:

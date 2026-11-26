@@ -150,6 +150,7 @@ def nba_rookie_projection(
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba import nba_rookie_projection
             board = nba_rookie_projection(2019)
             print(board.sort("proj_rookie_value", descending=True).head())
@@ -177,13 +178,16 @@ def nba_rookie_projection(
     avail = nba_availability([y + 1 for y in draft_years], league=league)
     if avail is not None and not avail.is_empty():
         avail_map = avail.select(
-            "player_id", (pl.col("season").cast(pl.Int64) - 1).alias("draft_year"), pl.col("avail_pct").cast(pl.Float64)
+            "player_id",
+            (pl.col("season").cast(pl.Int64) - 1).alias("draft_year"),
+            pl.col("avail_pct").cast(pl.Float64).alias("_avail_pct"),
         )
         assert out.schema["player_id"] == avail_map.schema["player_id"]
         out = out.join(avail_map, on=["player_id", "draft_year"], how="left")
     else:
-        out = out.with_columns(pl.lit(None, dtype=pl.Float64).alias("avail_pct"))
-    out = out.with_columns(pl.col("avail_pct").fill_null(_DEFAULT_AVAIL).alias("proj_avail_pct"))
+        out = out.with_columns(pl.lit(None, dtype=pl.Float64).alias("_avail_pct"))
+    # a private name, so a caller's own ``avail_pct`` column (via college_prior) never collides
+    out = out.with_columns(pl.col("_avail_pct").fill_null(_DEFAULT_AVAIL).alias("proj_avail_pct"))
     extra = [
         c
         for c in board.columns

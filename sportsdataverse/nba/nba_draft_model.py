@@ -136,6 +136,28 @@ def _score(picks: pl.DataFrame, art: dict) -> pl.DataFrame:
     return out.select(list(_SCHEMA))
 
 
+def _add_columns(
+    out: pl.DataFrame,
+    years: list[int],
+    pre_draft_features: bool,
+    college_prior: "Optional[pl.DataFrame]",
+    gleague_bridge: bool,
+) -> pl.DataFrame:
+    """The optional information columns of :func:`nba_draft_model`; none of them moves the value."""
+    if pre_draft_features:
+        feats = _features.pre_draft_features(out.select("player_id", "draft_year", "overall_pick", "player_name"))
+        out = out.join(feats.select("player_id", *FEATURE_SCHEMA), on="player_id", how="left")
+    if college_prior is not None and not college_prior.is_empty():
+        assert out.schema["player_id"] == college_prior.schema.get("player_id", pl.Utf8)
+        out = out.join(college_prior, on="player_id", how="left", suffix="_prior")
+    if gleague_bridge:
+        bridge = _fetch_gleague_bridge(years)
+        if not bridge.is_empty():
+            assert out.schema["player_id"] == bridge.schema["player_id"]
+            out = out.join(bridge, on=["player_id", "draft_year"], how="left")
+    return out
+
+
 def _fetch_gleague_bridge(draft_years: list[int]) -> pl.DataFrame:
     """G-League (``league_id="20"``) production for each draft year's season, best-effort."""
     frames = []
@@ -194,36 +216,27 @@ def nba_draft_model(
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Project each draft pick's NBA career value from where he was picked.
 
-    Reads the class from the ``nba_stats_draft`` release (no stats.nba.com
-    call) and applies the bundled pick curve
-    ``proj_career_value = intercept + b1*log(pick) + b2*(pick/60)``. The curve
-    was fit on draft classes 2003-2015 against realized career box value
-    (``tools/models/nba_draft/fit_pick_curve.py``).
-
-    The curve ranks a class exactly as the pick does. It ties the pick baseline
-    by construction (2016-2019 holdout, all 240 picks: Spearman 0.571 for both) and only adds
-    a value scale. No pre-draft measurement beat the pick in the rebuild that
-    replaced the combine model: combine drills, college BPM / RAPM / seasons,
-    and EuroLeague production were all tried.
+    Reads the class from the ``nba_stats_draft`` release (no stats.nba.com call) and applies the
+    bundled pick curve ``proj_career_value = intercept + b1*log(pick) + b2*(pick/60)``, fit on
+    classes 2003-2015 against realized career box value (``tools/models/nba_draft/fit_pick_curve.py``).
+    It ranks a class exactly as the pick does, so it ties the pick baseline by construction (2016-2019
+    holdout, 240 picks: Spearman 0.571 for both) and only adds a value scale. No pre-draft measurement
+    (combine drills, college BPM / RAPM / seasons, EuroLeague production) beat the pick.
 
     Args:
         draft_year: A draft year (e.g. ``2019``) or a list of years.
         league: ``"nba"`` only. The WNBA has
             :func:`sportsdataverse.wnba.wnba_draft_model.wnba_draft_model`;
             any other value raises ``ValueError``.
-        pre_draft_features: When ``True``, attach the pre-draft college and
-            EuroLeague columns (``college_espn_id`` ... ``euro_top``, see
-            Returns). They are read from the college player-value spine, the
-            ESPN college bios, college RAPM and the EuroLeague API, and are
-            information only: the curve never reads them. For a board before the draft,
-            see :func:`sportsdataverse.mbb.mbb_draft_projection.mbb_draft_projection`.
+        pre_draft_features: When ``True``, attach the pre-draft college and EuroLeague columns
+            (``college_espn_id`` ... ``euro_top``, see Returns) from the college player-value spine,
+            the ESPN college bios, college RAPM and the EuroLeague API. Information only: the curve
+            never reads them. Before the draft, see :func:`sportsdataverse.mbb.mbb_draft_projection.mbb_draft_projection`.
         college_prior: Optional frame keyed on ``player_id:Utf8``, left-joined
             as extra columns. It does not change ``proj_career_value``.
-        gleague_bridge: When ``True``, left-join G-League
-            (``league_id="20"``) ``gleague_pts`` / ``gleague_gp`` /
-            ``gleague_min`` for the draft year's season (live stats.nba.com,
-            best-effort, never raises). It does not change
-            ``proj_career_value``.
+        gleague_bridge: When ``True``, left-join G-League (``league_id="20"``) ``gleague_pts`` /
+            ``gleague_gp`` / ``gleague_min`` for the draft year's season (live stats.nba.com,
+            best-effort, never raises). It does not change ``proj_career_value``.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -261,6 +274,7 @@ def nba_draft_model(
     Example:
         Quick start::
 
+            import polars as pl
             from sportsdataverse.nba import nba_draft_model
             board = nba_draft_model(2019)
             print(board.select("overall_pick", "player_name", "proj_career_value").head())
@@ -278,24 +292,14 @@ def nba_draft_model(
             * `nba_api <https://github.com/swar/nba_api>`_ -- NBA/WNBA (Python)
     """
     _check_league(league)
-    years = [draft_year] if isinstance(draft_year, int) else [int(y) for y in draft_year]
+    # one load per year: a repeated year would duplicate every pick
+    years = list(dict.fromkeys([draft_year] if isinstance(draft_year, int) else [int(y) for y in draft_year]))
     schema = dict(_SCHEMA, **(FEATURE_SCHEMA if pre_draft_features else {}))
     picks = _picks(years) if years else pl.DataFrame()
     if picks.is_empty():
         out = pl.DataFrame(schema=schema)
         return out.to_pandas() if return_as_pandas else out
 
-    out = _score(picks, _load_artifact(league))
-    if pre_draft_features:
-        feats = _features.pre_draft_features(out.select("player_id", "draft_year", "overall_pick", "player_name"))
-        out = out.join(feats.select("player_id", *FEATURE_SCHEMA), on="player_id", how="left")
-    if college_prior is not None and not college_prior.is_empty():
-        assert out.schema["player_id"] == college_prior.schema.get("player_id", pl.Utf8)
-        out = out.join(college_prior, on="player_id", how="left", suffix="_prior")
-    if gleague_bridge:
-        bridge = _fetch_gleague_bridge(years)
-        if not bridge.is_empty():
-            assert out.schema["player_id"] == bridge.schema["player_id"]
-            out = out.join(bridge, on=["player_id", "draft_year"], how="left")
+    out = _add_columns(_score(picks, _load_artifact(league)), years, pre_draft_features, college_prior, gleague_bridge)
     out = out.sort("draft_year", "overall_pick")
     return out.to_pandas() if return_as_pandas else out

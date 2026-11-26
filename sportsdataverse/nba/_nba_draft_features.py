@@ -26,7 +26,8 @@ carries the outcome.
 
 from __future__ import annotations
 
-from typing import Callable, Optional
+import warnings
+from collections.abc import Callable
 
 import polars as pl
 
@@ -83,21 +84,14 @@ def _safe(fn: Callable[[], pl.DataFrame]) -> pl.DataFrame:
     """
     try:
         out = fn()
-    except (SportsDataverseError, OSError):  # descriptive columns: a missing source leaves them null
+    except (SportsDataverseError, OSError) as exc:  # descriptive columns: a missing source leaves them null
+        warnings.warn(f"pre-draft source unavailable, its columns stay null: {exc!r}", stacklevel=2)
         return pl.DataFrame()
     return out if isinstance(out, pl.DataFrame) else pl.DataFrame()
 
 
-def _college(picks: pl.DataFrame, loaders: dict) -> pl.DataFrame:
-    years = sorted(picks["draft_year"].unique().to_list())
-    cseasons = _seasons(years, COLLEGE_YEARS, VALUE_FIRST_SEASON)
-    if not cseasons:
-        return pl.DataFrame()
-    core = _safe(lambda: loaders["core"](seasons=cseasons))
-    pv = _safe(lambda: loaders["value"](seasons=cseasons))
-    if pv.is_empty():
-        return pl.DataFrame()
-
+def _college_link(picks: pl.DataFrame, core: pl.DataFrame, pv: pl.DataFrame) -> pl.DataFrame:
+    """Each pick's college ESPN id: by draft slot and bio name first, else by a unique name in his draft season."""
     id_key = pl.DataFrame(schema={"player_id": pl.Utf8, "espn_id": pl.Utf8})
     if not core.is_empty() and "draft_selection" in core.columns:
         bios = (
@@ -113,11 +107,10 @@ def _college(picks: pl.DataFrame, loaders: dict) -> pl.DataFrame:
         cand = picks.join(bios, on=["draft_year", "overall_pick"], how="inner")
         ok = [
             jaro_winkler(normalize_name(a), normalize_name(b)) >= 0.85
-            for a, b in zip(cand["player_name"].to_list(), cand["_bio_name"].to_list())
+            for a, b in zip(cand["player_name"].to_list(), cand["_bio_name"].to_list(), strict=True)
         ]
         id_key = cand.filter(pl.Series(ok, dtype=pl.Boolean)).unique(["player_id"]).select("player_id", "espn_id")
 
-    pv = pv.with_columns(pl.col("player_id").cast(pl.Utf8).alias("espn_id"), _nkey("player").alias("nkey"))
     cand = picks.with_columns(_nkey("player_name").alias("nkey")).join(
         pv.select("espn_id", "nkey", pl.col("season").cast(pl.Int64).alias("draft_year")),
         on=["nkey", "draft_year"],
@@ -131,6 +124,56 @@ def _college(picks: pl.DataFrame, loaders: dict) -> pl.DataFrame:
         pl.coalesce("espn_id", "_name_id").alias("college_espn_id"),
         pl.when(pl.col("espn_id").is_not_null()).then(pl.lit("id")).otherwise(pl.lit("name")).alias("college_match"),
     )
+    return link
+
+
+def _college_rapm(out: pl.DataFrame, picks: pl.DataFrame, loaders: dict, years: list[int]) -> pl.DataFrame:
+    """``out`` plus ``col_rapm_last``: the last pre-draft college RAPM through the id crosswalk."""
+    rseasons = _seasons(years, COLLEGE_YEARS, RAPM_FIRST_SEASON)
+    if not rseasons:
+        return out
+    cw = _safe(lambda: loaders["crosswalk"](seasons=rseasons))
+    rapm = _safe(lambda: loaders["rapm"](seasons=rseasons))
+    if cw.is_empty() or rapm.is_empty():
+        return out
+    cw = (
+        cw.select(
+            pl.col("espn_athlete_id").cast(pl.Utf8).alias("college_espn_id"),
+            pl.col("season").cast(pl.Int64),
+            pl.col("ncaa_player_id").cast(pl.Utf8),
+        )
+        .drop_nulls("ncaa_player_id")
+        .unique(["college_espn_id", "season"])
+    )
+    r = rapm.select(
+        pl.col("player_id").cast(pl.Utf8).alias("ncaa_player_id"), pl.col("season").cast(pl.Int64), "rapm_net"
+    )
+    rap = (
+        out.select("player_id", "college_espn_id")
+        .join(picks.select("player_id", "draft_year"), on="player_id")
+        .join(cw, on="college_espn_id")
+        .filter(pl.col("season").is_between(pl.col("draft_year") - COLLEGE_YEARS + 1, pl.col("draft_year")))
+        .join(r, on=["ncaa_player_id", "season"])
+        .sort("season")
+        .group_by("player_id")
+        .agg(pl.col("rapm_net").last().alias("col_rapm_last"))
+    )
+    out = out.join(rap, on="player_id", how="left")
+    return out
+
+
+def _college(picks: pl.DataFrame, loaders: dict) -> pl.DataFrame:
+    years = sorted(picks["draft_year"].unique().to_list())
+    cseasons = _seasons(years, COLLEGE_YEARS, VALUE_FIRST_SEASON)
+    if not cseasons:
+        return pl.DataFrame()
+    core = _safe(lambda: loaders["core"](seasons=cseasons))
+    pv = _safe(lambda: loaders["value"](seasons=cseasons))
+    if pv.is_empty():
+        return pl.DataFrame()
+
+    pv = pv.with_columns(pl.col("player_id").cast(pl.Utf8).alias("espn_id"), _nkey("player").alias("nkey"))
+    link = _college_link(picks, core, pv)
     if link.is_empty():
         return pl.DataFrame()
 
@@ -148,7 +191,9 @@ def _college(picks: pl.DataFrame, loaders: dict) -> pl.DataFrame:
             ),
             on="college_espn_id",
         )
-        .filter(pl.col("season") <= pl.col("draft_year"))
+        .filter(
+            pl.col("season").is_between(pl.col("draft_year") - COLLEGE_YEARS + 1, pl.col("draft_year"))
+        )  # this pick's own lookback, whatever else was requested
         .sort("season")
     )
     last = hist.group_by("player_id").agg(
@@ -179,35 +224,7 @@ def _college(picks: pl.DataFrame, loaders: dict) -> pl.DataFrame:
         )
     out = link.join(last.drop("_team", "_season"), on="player_id", how="left")
 
-    rseasons = _seasons(years, COLLEGE_YEARS, RAPM_FIRST_SEASON)
-    if rseasons:
-        cw = _safe(lambda: loaders["crosswalk"](seasons=rseasons))
-        rapm = _safe(lambda: loaders["rapm"](seasons=rseasons))
-        if not cw.is_empty() and not rapm.is_empty():
-            cw = (
-                cw.select(
-                    pl.col("espn_athlete_id").cast(pl.Utf8).alias("college_espn_id"),
-                    pl.col("season").cast(pl.Int64),
-                    pl.col("ncaa_player_id").cast(pl.Utf8),
-                )
-                .drop_nulls("ncaa_player_id")
-                .unique(["college_espn_id", "season"])
-            )
-            r = rapm.select(
-                pl.col("player_id").cast(pl.Utf8).alias("ncaa_player_id"), pl.col("season").cast(pl.Int64), "rapm_net"
-            )
-            rap = (
-                out.select("player_id", "college_espn_id")
-                .join(picks.select("player_id", "draft_year"), on="player_id")
-                .join(cw, on="college_espn_id")
-                .filter(pl.col("season") <= pl.col("draft_year"))
-                .join(r, on=["ncaa_player_id", "season"])
-                .sort("season")
-                .group_by("player_id")
-                .agg(pl.col("rapm_net").last().alias("col_rapm_last"))
-            )
-            out = out.join(rap, on="player_id", how="left")
-    return out
+    return _college_rapm(out, picks, loaders, years)
 
 
 def _euro(picks: pl.DataFrame, loaders: dict) -> pl.DataFrame:
@@ -276,7 +293,7 @@ def _default_loaders() -> dict:
     }
 
 
-def pre_draft_features(picks: pl.DataFrame, loaders: Optional[dict] = None) -> pl.DataFrame:
+def pre_draft_features(picks: pl.DataFrame, loaders: dict | None = None) -> pl.DataFrame:
     """Left-join the pre-draft college and EuroLeague columns onto ``picks``.
 
     Args:

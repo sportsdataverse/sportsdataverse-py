@@ -72,7 +72,7 @@ def season_values(seasons: list[int]) -> pl.DataFrame:
     )
     k = get_constants("nba")
     val = pl.lit(k.box_value_coef[0])
-    for f, c in zip(BOX_VALUE_FEATURES, k.box_value_coef[1:]):
+    for f, c in zip(BOX_VALUE_FEATURES, k.box_value_coef[1:], strict=True):
         val = val + pl.col(f).fill_null(0.0) * c
     return rates.select(
         pl.col("player_id").cast(pl.Int64).cast(pl.Utf8),
@@ -84,8 +84,12 @@ def season_values(seasons: list[int]) -> pl.DataFrame:
 
 def corpus() -> pl.DataFrame:
     picks = draft_picks(list(range(FIRST_CLASS, LAST_CLASS + 1)))
-    sv = season_values(list(range(FIRST_CLASS, 2026)))  # through the 2025-26 season
+    want = list(range(FIRST_CLASS, 2026))  # through the 2025-26 season
+    sv = season_values(want)
     assert picks.schema["player_id"] == sv.schema["player_id"] == pl.Utf8
+    # a skipped season asset would shift every later season into "rookie" / "soph" and shrink careers
+    missing = sorted(set(want) - set(sv["season"].unique().to_list()))
+    assert not missing, f"season assets missing from the capture: {missing}"
     post = (
         sv.join(picks.select("player_id", "draft_year"), on="player_id")
         .filter(pl.col("season") > pl.col("draft_year"))
