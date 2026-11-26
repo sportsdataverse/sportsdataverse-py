@@ -9,7 +9,7 @@
 
 # `cfb_2025_title_ties` — real 2025 ACC and SEC conference games
 
-These are the real 2025 regular-season conference games for the ACC (69) and
+These are the real 2025 regular-season conference games for the ACC (68) and
 the SEC (64), with final scores. Both leagues finished with a multi-team tie
 for a title-game berth that the order-of-finish descent rung has to handle:
 
@@ -32,8 +32,9 @@ background.
   sportsdataverse-data `cfb_schedules` release.
 - **Build:** run through cfbseedR's `cfb_games_from_schedule()`, keep
   completed `REG` games where both teams are in the same conference (ACC or
-  SEC), and keep `home_points`/`away_points` for the SEC's capped scoring
-  margin rung.
+  SEC) and the schedule's `conference_game` flag is set (this drops the
+  week-2 NC State-Virginia meeting, a non-conference game), and keep
+  `home_points`/`away_points` for the SEC's capped scoring margin rung.
 - **Files:** `games.csv` holds the game rows (with `season`, so the 2024-2025
   ACC policy epoch applies). `teams.csv` holds the 33 teams and their
   conferences.
