@@ -48,7 +48,7 @@ def test_baseballr_and_fastrhockey_renamed_pairs_resolve():
     assert aliases["mlb"]["mlb_statcast_search"] == "statcast_search"
     assert aliases["nhl"]["nhl_stats_rest_config"] == "nhl_stats_config"
     assert aliases["nhl"]["nhl_skater_leaders"] == "nhl_skater_stats_leaders"
-    assert sum(py.startswith("nhl_stats_rest_") for py in aliases["nhl"]) == 20
+    assert sum(py.startswith("nhl_stats_rest_") for py in aliases["nhl"]) == 19
 
 
 def test_european_and_college_hockey_homes_link_fastrhockey():

@@ -13,7 +13,8 @@ artifact (``tools/codegen/r_exports.yaml``) that ``generate.py`` reads instead -
 keeping the offline ``--check`` deterministic, exactly like
 ``r_column_descriptions.yaml``.
 
-Run (``git fetch`` each R repo first so ``origin/HEAD`` is current):
+Run (``git fetch`` each R repo first; fetch does not move an existing ``origin/HEAD``, so after
+a default-branch rename also run ``git remote set-head origin --auto``):
     uv run python tools/codegen/build_r_exports.py                   # re-mine every package
     uv run python tools/codegen/build_r_exports.py hoopR             # re-mine only the named package(s)
     uv run python tools/codegen/build_r_exports.py --ref main hoopR  # mine another ref

@@ -250,13 +250,11 @@ nhl:
   # (sdv-py says nhl_stats_rest_* where fastRhockey says nhl_stats_*); each pair checked against both
   # sources' endpoint paths (2026-11-26). Not aliased, because the R default call returns other data:
   # nhl_web_pbp (nhl_game_pbp parses and adds shifts + xG unless raw = TRUE) and
-  # nhl_stats_rest_component_season (nhl_stats_misc defaults to endpoint = "glossary").
+  # nhl_stats_rest_component_season (nhl_stats_misc defaults to endpoint = "glossary"),
+  # nhl_club_schedule_month / _week (nhl_club_schedule defaults to view = "season"), and
+  # nhl_stats_rest_shiftcharts (nhl_game_shifts returns per-player records only with detailed = TRUE).
   nhl_boxscore: nhl_game_boxscore
-  # needs view = "month" (nhl_club_schedule defaults to view = "season")
-  nhl_club_schedule_month: nhl_club_schedule
   nhl_club_schedule_season: nhl_club_schedule
-  # needs view = "week"
-  nhl_club_schedule_week: nhl_club_schedule
   nhl_club_stats: nhl_teams_stats
   nhl_draft_picks: nhl_draft_year
   nhl_draft_picks_now: nhl_draft
@@ -289,7 +287,6 @@ nhl:
   nhl_stats_rest_ping: nhl_stats_ping
   nhl_stats_rest_players: nhl_stats_players
   nhl_stats_rest_season: nhl_stats_seasons
-  nhl_stats_rest_shiftcharts: nhl_game_shifts
   nhl_stats_rest_skater_report: nhl_stats_skaters
   nhl_stats_rest_team: nhl_stats_team_listing
   nhl_stats_rest_team_by_id: nhl_stats_team_listing

@@ -303,9 +303,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`load_nhl_three_stars`](reference/loaders/other#load_nhl_three_stars) | [`load_nhl_three_stars`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_three_stars.html) |
 | [`most_recent_nhl_season`](reference/additional/dates-and-seasons#most_recent_nhl_season) | [`most_recent_nhl_season`](https://fastRhockey.sportsdataverse.org/reference/most_recent_nhl_season.html) |
 | [`nhl_boxscore`](reference/nhl_api_web/other#nhl_boxscore) | [`nhl_game_boxscore`](https://fastRhockey.sportsdataverse.org/reference/nhl_game_boxscore.html) |
-| [`nhl_club_schedule_month`](reference/nhl_api_web/club#nhl_club_schedule_month) | [`nhl_club_schedule`](https://fastRhockey.sportsdataverse.org/reference/nhl_club_schedule.html) |
 | [`nhl_club_schedule_season`](reference/nhl_api_web/club#nhl_club_schedule_season) | [`nhl_club_schedule`](https://fastRhockey.sportsdataverse.org/reference/nhl_club_schedule.html) |
-| [`nhl_club_schedule_week`](reference/nhl_api_web/club#nhl_club_schedule_week) | [`nhl_club_schedule`](https://fastRhockey.sportsdataverse.org/reference/nhl_club_schedule.html) |
 | [`nhl_club_stats`](reference/nhl_api_web/club#nhl_club_stats) | [`nhl_teams_stats`](https://fastRhockey.sportsdataverse.org/reference/nhl_teams_stats.html) |
 | [`nhl_club_stats_season`](reference/nhl_api_web/club#nhl_club_stats_season) | [`nhl_club_stats_season`](https://fastRhockey.sportsdataverse.org/reference/nhl_club_stats_season.html) |
 | [`nhl_draft_picks`](reference/nhl_api_web/draft#nhl_draft_picks) | [`nhl_draft_year`](https://fastRhockey.sportsdataverse.org/reference/nhl_draft_year.html) |
@@ -393,7 +391,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`nhl_stats_rest_ping`](reference/nhl_stats_rest#nhl_stats_rest_ping) | [`nhl_stats_ping`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_ping.html) |
 | [`nhl_stats_rest_players`](reference/nhl_stats_rest#nhl_stats_rest_players) | [`nhl_stats_players`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_players.html) |
 | [`nhl_stats_rest_season`](reference/nhl_stats_rest#nhl_stats_rest_season) | [`nhl_stats_seasons`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_seasons.html) |
-| [`nhl_stats_rest_shiftcharts`](reference/nhl_stats_rest#nhl_stats_rest_shiftcharts) | [`nhl_game_shifts`](https://fastRhockey.sportsdataverse.org/reference/nhl_game_shifts.html) |
 | [`nhl_stats_rest_skater_report`](reference/nhl_stats_rest#nhl_stats_rest_skater_report) | [`nhl_stats_skaters`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_skaters.html) |
 | [`nhl_stats_rest_team`](reference/nhl_stats_rest#nhl_stats_rest_team) | [`nhl_stats_team_listing`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_team_listing.html) |
 | [`nhl_stats_rest_team_by_id`](reference/nhl_stats_rest#nhl_stats_rest_team_by_id) | [`nhl_stats_team_listing`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_team_listing.html) |
