@@ -73,6 +73,9 @@ columns:
 - name: war_n
   type: integer
   description: ''
+- name: war_tier
+  type: character
+  description: ''
 - name: pts_pg
   type: double
   description: ''

@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_player–nba_situational"
-sidebar_label: "Analytics: nba_player–nba_situational"
+title: "NBA — additional Python functions — Analytics: nba_player–nba_situation"
+sidebar_label: "Analytics: nba_player–nba_situation"
 sidebar_position: 19
-description: "NBA — additional Python functions — Analytics: nba_player–nba_situational — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_player–nba_situation — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_player–nba_situational
+# NBA — additional Python functions — Analytics: nba_player–nba_situation
 
 ### nba_player_war {#nba_player_war}
 
@@ -61,6 +61,7 @@ One row per `(season, player_id)` (stats.nba.com ids, Int64): `player_name`, `te
 | `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
 | `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
 | `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
+| `war_tier` | String | Depth-ladder tier by war_pct within the season: Star (top 5%, war_pct 95 or more), Starter (80 to 95), Rotation (50 to 80), Bench (20 to 50), Fringe (the rest). Fixed shares of every player of the season with possessions; null when war_pct is null. |
 | `pts_pg` | Float64 | Points per game he played (minutes over 0), from the regular-season stats game logs. |
 | `reb_pg` | Float64 | Rebounds per game he played (minutes over 0), from the regular-season stats game logs. |
 | `ast_pg` | Float64 | Assists per game he played (minutes over 0), from the regular-season stats game logs. |
@@ -942,65 +943,4 @@ from sportsdataverse.nba import nba_loaders as L
 from sportsdataverse.nba.nba_situational import nba_situation_rows
 rows = nba_situation_rows(L.load_nba_stats_possessions(2025), L.load_nba_stats_pbp(2025),
                           L.load_nba_stats_schedules(2025))
-```
-
-### nba_situational_lineup {#nba_situational_lineup}
-
-`nba_situational_lineup(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', top_n: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Five-man unit splits by situation: the team splits over the possessions each unit started.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `season_type` | `str` | `'regular-season'` | `"regular-season"` (default), `"preseason"`, `"playoffs"` or `"play-in"`. |
-| `top_n` | `int \| None` | `None` | As `nba_situational_team`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, lineup_id, family, split)`: `lineup_id` is the five player ids sorted and joined with `-` (BB-D4's id), `player_1..5` the same ids, then the columns of `nba_situational_team`. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `lineup_id` | String | The five player ids of the unit on the floor as the possession starts, sorted and joined with '-' (BB-D4's id). |
-| `player_1` | Int64 | Player 1 of the unit, in lineup_id order. |
-| `player_2` | Int64 | Player 2 of the unit, in lineup_id order. |
-| `player_3` | Int64 | Player 3 of the unit, in lineup_id order. |
-| `player_4` | Int64 | Player 4 of the unit, in lineup_id order. |
-| `player_5` | Int64 | Player 5 of the unit, in lineup_id order. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
-| `games` | Int64 | Games with at least one possession in the split (does not add up across a family). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id`, `season_type` or `top_n` is invalid. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_situational import nba_situational_lineup
-units = nba_situational_lineup(2026).filter(split="transition")
-units.sort("poss", descending=True).head()
 ```

@@ -77973,6 +77973,8 @@ nba_player_war:
   war_pct: 'Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
   vorp_n: 'Sample size of vorp: on-court possessions, rounded.'
   war_n: 'Sample size of war: on-court possessions, rounded.'
+  war_tier: 'Depth-ladder tier by war_pct within the season: Star (top 5%, war_pct 95 or more), Starter (80 to 95), Rotation (50 to 80), Bench
+    (20 to 50), Fringe (the rest). Fixed shares of every player of the season with possessions; null when war_pct is null.'
   pts_pg: 'Points per game he played (minutes over 0), from the regular-season stats game logs.'
   reb_pg: 'Rebounds per game he played (minutes over 0), from the regular-season stats game logs.'
   ast_pg: 'Assists per game he played (minutes over 0), from the regular-season stats game logs.'
@@ -78022,6 +78024,8 @@ wnba_player_war:
   war_pct: 'Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
   vorp_n: 'Sample size of vorp: on-court possessions, rounded.'
   war_n: 'Sample size of war: on-court possessions, rounded.'
+  war_tier: 'Depth-ladder tier by war_pct within the season: Star (top 5%, war_pct 95 or more), Starter (80 to 95), Rotation (50 to 80), Bench
+    (20 to 50), Fringe (the rest). Fixed shares of every player of the season with possessions; null when war_pct is null.'
   pts_pg: 'Points per game he played (minutes over 0), from the regular-season stats game logs.'
   reb_pg: 'Rebounds per game he played (minutes over 0), from the regular-season stats game logs.'
   ast_pg: 'Assists per game he played (minutes over 0), from the regular-season stats game logs.'
@@ -78062,6 +78066,8 @@ mbb_player_war:
   war_pct: 'Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
   vorp_n: 'Sample size of vorp: on-court possessions, rounded.'
   war_n: 'Sample size of war: on-court possessions, rounded.'
+  war_tier: 'Depth-ladder tier by war_pct within the season: Star (top 5%, war_pct 95 or more), Starter (80 to 95), Rotation (50 to 80), Bench
+    (20 to 50), Fringe (the rest). Fixed shares of every player of the season with possessions; null when war_pct is null.'
   pts_pg: 'Points per game he played (minutes over 0), from the ESPN box rows of his Division I games.'
   reb_pg: 'Rebounds per game he played (minutes over 0), from the ESPN box rows of his Division I games.'
   ast_pg: 'Assists per game he played (minutes over 0), from the ESPN box rows of his Division I games.'
@@ -78102,6 +78108,8 @@ wbb_player_war:
   war_pct: 'Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null.'
   vorp_n: 'Sample size of vorp: on-court possessions, rounded.'
   war_n: 'Sample size of war: on-court possessions, rounded.'
+  war_tier: 'Depth-ladder tier by war_pct within the season: Star (top 5%, war_pct 95 or more), Starter (80 to 95), Rotation (50 to 80), Bench
+    (20 to 50), Fringe (the rest). Fixed shares of every player of the season with possessions; null when war_pct is null.'
   pts_pg: 'Points per game he played (minutes over 0), from the ESPN box rows of his Division I games.'
   reb_pg: 'Rebounds per game he played (minutes over 0), from the ESPN box rows of his Division I games.'
   ast_pg: 'Assists per game he played (minutes over 0), from the ESPN box rows of his Division I games.'

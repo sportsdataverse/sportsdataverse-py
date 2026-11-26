@@ -53,6 +53,7 @@ One row per `(season, player_id)` (ESPN ids, String) of a D1 team -- one with 10
 | `war_pct` | Float64 | Percentile of war within the season: 100 * (n + 1 - rank) / (n + 1), n the players ranked; null when the rank is null. |
 | `vorp_n` | Int64 | Sample size of vorp: on-court possessions, rounded. |
 | `war_n` | Int64 | Sample size of war: on-court possessions, rounded. |
+| `war_tier` | String | Depth-ladder tier by war_pct within the season: Star (top 5%, war_pct 95 or more), Starter (80 to 95), Rotation (50 to 80), Bench (20 to 50), Fringe (the rest). Fixed shares of every player of the season with possessions; null when war_pct is null. |
 | `pts_pg` | Float64 | Points per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
 | `reb_pg` | Float64 | Rebounds per game he played (minutes over 0), from the ESPN box rows of his Division I games. |
 | `ast_pg` | Float64 | Assists per game he played (minutes over 0), from the ESPN box rows of his Division I games. |

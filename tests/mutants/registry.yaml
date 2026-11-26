@@ -12783,3 +12783,23 @@
   test: tests/test_pgatour.py::test_tour_cup_season_is_read_from_the_title
   expected: kill
   note: The API sends season as "2025 Standings"; read as an int it is null on every row.
+
+- id: bb-war-tier-counts-zero-teams
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '        .with_columns(pl.col("players").fill_null(0))'
+  mutant: '        .drop_nulls("players")'
+  test: tests/common/test_war_tiers.py::test_each_team_s_tiers_add_up_to_its_tiered_players
+  expected: kill
+  note: A team with nobody in a tier would drop out of that tier's median instead of counting 0, which lifts the Star median.
+
+- id: bb-war-tier-star-floor
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '"Star": 95.0'
+  mutant: '"Star": 90.0'
+  test: tests/common/test_war_tiers.py::test_tier_shares_are_the_cut_points
+  expected: kill
+  note: A Star floor of 90 makes the top tier a tenth of the league, twice the 5% cut.
