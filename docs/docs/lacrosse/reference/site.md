@@ -15,7 +15,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/scoreboard`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/scoreboard?dates=20240115&limit=500](https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/scoreboard?dates=20240115&limit=500)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/scoreboard?dates=20260801&limit=500](https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/scoreboard?dates=20260801&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -95,7 +95,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_scoreboard-example}
 
 ```python
-espn_lacrosse_scoreboard(league='pll', dates='20240115')
+espn_lacrosse_scoreboard(league='pll', dates='20260801')
 ```
 
 ## espn_lacrosse_summary
@@ -104,7 +104,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/summary`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/summary](https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/summary)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/summary?event=401867221](https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/summary?event=401867221)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -381,7 +381,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_summary-example}
 
 ```python
-espn_lacrosse_summary(league='pll')
+espn_lacrosse_summary(league='pll', event_id='401867221')
 ```
 
 ## espn_lacrosse_news
@@ -566,7 +566,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/{team_id}`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/4](https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/4)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/122896](https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/122896)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -633,7 +633,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_team-example}
 
 ```python
-espn_lacrosse_team(league='pll', team_id='4')
+espn_lacrosse_team(league='pll', team_id='122896')
 ```
 
 ## espn_lacrosse_team_schedule
@@ -642,7 +642,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/{team_id}/schedule`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/4/schedule](https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/4/schedule)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/122896/schedule](https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/teams/122896/schedule)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -682,7 +682,7 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_team_schedule-example}
 
 ```python
-espn_lacrosse_team_schedule(league='pll', team_id='4')
+espn_lacrosse_team_schedule(league='pll', team_id='122896')
 ```
 
 ## espn_lacrosse_standings
@@ -759,7 +759,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/rankings`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/rankings](https://site.api.espn.com/apis/site/v2/sports/lacrosse/pll/rankings)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/lacrosse/mens-college-lacrosse/rankings](https://site.api.espn.com/apis/site/v2/sports/lacrosse/mens-college-lacrosse/rankings)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -809,5 +809,5 @@ ESPN endpoint.
 ### Example {#espn_lacrosse_rankings-example}
 
 ```python
-espn_lacrosse_rankings(league='pll')
+espn_lacrosse_rankings(league='mens-college-lacrosse')
 ```

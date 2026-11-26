@@ -438,18 +438,18 @@ two teams in the matchup are returned.
 
 **Returns**
 
-One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj`. The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the team's minutes, counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
+One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, minutes_exp, pace_proj`. `team_id` is his team in his latest game before the cut with positive minutes, exhibition (All-Star) games left out, so a traded player projects for his new team. The `stat_*_exp` lines assume the player plays (per-minute rate x mean minutes when playing x pace factor). `minutes_exp` is the player's share of the minutes logged for the team by the players it now projects (a traded player's minutes stay with his latest team), counting a game sat as zero, so it sums to `5 * game_minutes` per team: 200 in the WNBA, 240 in the NBA. A team with no game before the cut has no player rows, and its pace is the league average. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | String | Unique player identifier. |
-| `team_id` | String | Unique team identifier. |
-| `stat_pts_exp` | Float64 |  |
-| `stat_reb_exp` | Float64 |  |
-| `stat_ast_exp` | Float64 |  |
-| `stat_fg3m_exp` | Float64 |  |
-| `minutes_exp` | Float64 | Expected minutes: the player's minutes for the current team over the summed minutes for that team of every player returned on it (minutes logged for the team by a player since traded away are left out), all before the as-of cut (every logged game when no cut applies; a game sat counts as zero), times 5 x the league's game minutes, so a team's rows sum to 240 in the NBA and 200 in the WNBA. The stat_*_exp lines assume the player plays; this does not. |
-| `pace_proj` | Float64 |  |
+| `player_id` | String | ESPN athlete id (Utf8). |
+| `team_id` | String | ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team. |
+| `stat_pts_exp` | Float64 | Expected points if he plays, per-minute rate x mean minutes when playing x the pace factor. |
+| `stat_reb_exp` | Float64 | Expected rebounds if he plays, on the same basis. |
+| `stat_ast_exp` | Float64 | Expected assists if he plays, on the same basis. |
+| `stat_fg3m_exp` | Float64 | Expected made threes if he plays, on the same basis. |
+| `minutes_exp` | Float64 | Expected minutes: the player's minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 240; a team's rows sum to 240. The stat_*_exp lines assume the player plays; this does not. |
+| `pace_proj` | Float64 | Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet. |
 
 **Raises**
 

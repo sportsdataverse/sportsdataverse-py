@@ -18,30 +18,41 @@ from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, _possessions_leagu
 
 #: The adjusted-RAPM ridge penalty per league id, one value for every season and season type (as
 #: :data:`~sportsdataverse.nba.nba_rapm.RAPM_PENALTY` is for plain RAPM, #1121). Fitted by
-#: ``tools/fit_adj_rapm_penalty.py`` (run 2026-11-09): the grid point (steps of x1.18) minimizing the
-#: game-grouped 10-fold CV error summed over the complete regular seasons from 1997 (NBA through
-#: 2025-26, WNBA through 2026; 30 each), on the prior-residualized problem at the frozen prior scale
-#: below. The prior is the previous season's SPM (RS + playoffs by minutes), trained on that season's
-#: plain RAPM, as the ``player_impact`` producers chain it. Until this was frozen each fit took
-#: RidgeCV's per-season pick over ``DEFAULT_RAPM_ALPHAS``, which flipped between 1,931 and 5,179
-#: (WNBA 2004: 13,895). The spread then collapsed in those seasons (WNBA 2004 sd 0.68 per 100
-#: against plain RAPM's 1.50, 2002 0.94 / 1.62) and ran past plain RAPM's in the 1,931 ones (NBA
-#: 2009 2.39 / 1.91). At the frozen values it is 0.85 to 1.10 times plain RAPM's in every NBA season
-#: and 0.83 to 1.18 in every WNBA one (off_poss >= 300). Next-season fit to plain RAPM rises: R^2 of
-#: a line fit the pair before, NBA 0.154 -> 0.196 (paired +0.041, SE 0.012 over 28 pairs), WNBA
-#: 0.072 -> 0.110 (+0.038, SE 0.016), against plain RAPM's 0.155 / 0.073 and SPM's 0.129 / 0.062;
-#: year-over-year Spearman of adjusted RAPM itself rises 0.470 -> 0.530 (NBA, +0.060, SE 0.006) and
-#: 0.446 -> 0.519 (WNBA, +0.073, SE 0.009). The G League (``"20"``) is seeded with the NBA value.
+#: ``tools/fit_adj_rapm_penalty.py`` (refit 2026-11-25 for the minute-weighted SPM prior; first fit
+#: 2026-11-09, #1150): the grid point (steps of x1.18) minimizing the game-grouped 10-fold CV error
+#: summed over the complete regular seasons from 1997 (NBA through 2025-26, WNBA through 2026; 30
+#: each), on the prior-residualized problem at the frozen prior scale below. The prior is the
+#: previous season's SPM (RS + playoffs by minutes), trained on that season's plain RAPM by
+#: :func:`~sportsdataverse.nba.nba_spm.train_spm` at its defaults, as the ``player_impact`` producers
+#: chain it. The refit picks the same two values the equal-weight prior did. Before #1150 each fit
+#: took RidgeCV's per-season pick over ``DEFAULT_RAPM_ALPHAS``, which flipped between 1,931 and 5,179
+#: (WNBA 2004: 13,895) and collapsed the spread in those seasons (WNBA 2004 sd 0.68 per 100 against
+#: plain RAPM's 1.50). At the frozen values the spread is 0.85 to 1.58 times plain RAPM's in every
+#: NBA season and 0.83 to 1.39 in every WNBA one (off_poss >= 300). Next-season fit to plain RAPM (R^2
+#: of a line fit the pair before): NBA 0.198, WNBA 0.107, against plain RAPM's 0.156 / 0.073 and the
+#: SPM prior's own 0.168 / 0.093 (0.129 / 0.062 before minute weighting); the #1150 constants with the
+#: equal-weight prior read 0.197 / 0.110. Paired season by season against that configuration (the
+#: equal-weight prior at scale 2, ``report --baseline``, same held-out games): held-out error NBA
+#: +0.22 bp (SE 0.17; lower in 14 of 30 seasons), WNBA -0.41 (SE 0.22; 20 of 30); next-season
+#: Spearman NBA +0.004 (SE 0.003), WNBA -0.010 (SE 0.004); R^2 +0.001 (0.003) / -0.003 (0.004). So
+#: adjusted RAPM is about where it was, the WNBA's next-season rank slightly lower (accepted by the
+#: owner, 2026-11-25); the gain is in
+#: the SPM prior itself. (Year-over-year Spearman of adjusted RAPM rises, 0.530 -> 0.581 NBA, 0.519 ->
+#: 0.549 WNBA, but a wider prior raises that by itself; it is stability, not accuracy.) The G League
+#: (``"20"``) is seeded with the NBA value.
 ADJ_RAPM_PENALTY: dict[str, float] = {"00": 3727.593720314938, "10": 2682.6957952797247}
 ADJ_RAPM_PENALTY["20"] = ADJ_RAPM_PENALTY["00"]
-#: The multiplier on the SPM prior per league id. SPM is a ridge fit to shrunk RAPM (sd about 0.6 per
-#: 100 against RAPM's 1.8), so the prior is too narrow: on the same held-out games, scaling it by 2
-#: lowers the pooled error by 1.34 basis points against the unscaled prior (NBA, SE 0.10 over 30
-#: seasons; WNBA 1.89, SE 0.22) and is where next-season R^2 and Spearman peak on the grid 0 to 4
-#: (NBA R^2 0.181 at 1, 0.196 at 2, 0.186 at 4; WNBA 0.098, 0.110, 0.097). Held-out game error keeps
-#: falling past 2 (NBA minimum at 3, WNBA at 4 or beyond), so 2 is the conservative end of the range
-#: both criteria favour. ``nba_adj_rapm(..., prior_scale=1.0)`` fits the prior as given.
-ADJ_RAPM_PRIOR_SCALE: dict[str, float] = {"00": 2.0, "10": 2.0}
+#: The multiplier on the SPM prior per league id. SPM is a ridge fit to shrunk RAPM, so the prior is
+#: narrower than the ratings it shrinks toward (minute-weighted SPM sd about 0.6 of plain RAPM's at
+#: off_poss >= 300). On the grid 0 to 4, scored on the same held-out games, 1.5 lowers the pooled
+#: error against the unscaled prior by 0.31 basis points (NBA, SE 0.13 over 30 seasons; WNBA 1.08,
+#: SE 0.18), and next-season R^2 and Spearman peak at 1 to 1.5 (NBA R^2 0.198 at 1, 0.198 at 1.5,
+#: 0.192 at 2; WNBA 0.107, 0.107, 0.101). NBA held-out error is lowest at 1.5 and rises at 2 (+0.22
+#: bp against 1, SE 0.28); WNBA's keeps falling to 2 (-1.52, SE 0.37). 1.5 is where both criteria
+#: meet in both leagues. The equal-weight prior was about half as wide and was scaled by 2 (#1150);
+#: at 2 the weighted prior would put NBA 2000's spread at 3.5 per 100 (off_poss >= 500).
+#: ``nba_adj_rapm(..., prior_scale=1.0)`` fits the prior as given.
+ADJ_RAPM_PRIOR_SCALE: dict[str, float] = {"00": 1.5, "10": 1.5}
 ADJ_RAPM_PRIOR_SCALE["20"] = ADJ_RAPM_PRIOR_SCALE["00"]
 
 

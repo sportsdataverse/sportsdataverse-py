@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import datetime as dt
 import sys
+from pathlib import Path
 
 import pandas as pd
 import polars as pl
@@ -25,6 +26,7 @@ from polars.testing import assert_frame_equal
 # fully-qualified string key sidesteps attribute traversal entirely, so
 # `monkeypatch.setattr(_cfb_ratings_mod, "load_cfb_pbp", ...)` below patches
 # the real submodule's namespace (the one `cfb_ratings()` actually reads from).
+from sportsdataverse.cfb.cfb_adjusted_epa import cfb_adjusted_epa
 from sportsdataverse.cfb.cfb_prediction_constants import spearman_corr
 from sportsdataverse.cfb.cfb_ratings import cfb_ratings, efficiency_ratings, fei_ratings, special_teams_ratings
 
@@ -49,6 +51,8 @@ _REQUIRED_SCHEMA: dict[str, pl.PolarsDataType] = {
     "pass": pl.Int64,
     "rush": pl.Int64,
     "wp_before": pl.Float64,
+    "period": pl.Int64,
+    "pos_score_diff_start": pl.Int64,
 }
 
 
@@ -68,6 +72,8 @@ def _mini_plays() -> pl.DataFrame:
                 "pass": 1,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Pass Reception",
             }
@@ -84,6 +90,8 @@ def _mini_plays() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 1,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Rush",
             }
@@ -101,27 +109,71 @@ def test_efficiency_ratings_orders_teams() -> None:
 
 
 def test_efficiency_ratings_reference_team_present_and_netted() -> None:
-    # "A" sorts first among {"A", "B"} so the ridge drops it from the DESIGN as
-    # the reference level on both sides. Its effect is 0 by construction and
-    # lives in the intercept, so `dropped_level_ridge` emits it at the intercept
-    # rather than omitting it.
-    #
-    # This previously asserted `b["adj_net"] == 0.0`: with the reference team
-    # missing from the strength tables, B -- whose every opponent is A -- had no
-    # opponent strength for any game and fell through to a league-neutral 0.0.
-    # That 0.0 was the signature of the missing row, not a rating. B now nets a
-    # real value from its own -0.30/play offense.
+    # Every team gets its own offense and defense indicator (no dropped reference
+    # level since the move onto `cfb_adjusted_epa`'s `_fit_team_strengths`), so
+    # both teams carry a fitted strength and net a real value from their own
+    # games. An earlier engine dropped "A" as the reference level and left B --
+    # whose every opponent is A -- at a league-neutral 0.0.
     out = efficiency_ratings(_mini_plays())
     assert set(out["team_id"].to_list()) == {"A", "B"}
     a = out.filter(pl.col("team_id") == "A").row(0, named=True)
     b = out.filter(pl.col("team_id") == "B").row(0, named=True)
     assert a["adj_net"] > 0.0  # A's +0.30/play offense nets positive vs B
     assert b["adj_net"] < 0.0  # B's -0.30/play offense nets negative -- not 0.0
-    # Magnitudes are NOT symmetric even though the fixture is (+0.30 / -0.30):
-    # under this parameterization the reference team sits at the intercept and is
-    # therefore unpenalized, while B's coefficient is shrunk toward it. The
-    # ordering is what carries meaning here, not the ratio.
     assert a["adj_net"] > b["adj_net"]
+
+
+_FIX_PBP_2023 = Path(__file__).resolve().parents[1] / "fixtures" / "cfb_prediction" / "pbp_2023_sample.parquet"
+
+
+def test_efficiency_ratings_is_the_adjusted_epa_fit() -> None:
+    """The ratings engine and `cfb_adjusted_epa` are one fit, so they cannot disagree.
+
+    Until 2026-11-25 `efficiency_ratings` fit its own standardized ridge
+    (lambda 0.035) on the spread-aware `0.1 <= wp_before <= 0.9` band; on this
+    real 2023 slate its `adj_net` differed from `net_adj_epa` by up to 0.083
+    (mean 0.029) per play.
+    """
+    pbp = pl.read_parquet(_FIX_PBP_2023)
+    eff = efficiency_ratings(pbp)
+    ref = cfb_adjusted_epa(pbp)
+    assert eff.schema["team_id"] == ref.schema["team_id"] == pl.Utf8
+    j = eff.join(ref, on="team_id", how="inner", suffix="_ref")
+    assert j.height == ref.height >= 130, (j.height, ref.height)
+    for mine, theirs in (
+        ("adj_off_epa", "adj_off_epa_ref"),
+        ("adj_def_epa", "adj_def_epa_ref"),
+        ("adj_net", "net_adj_epa"),
+    ):
+        assert (j[mine] - j[theirs]).abs().max() < 1e-12, mine
+
+
+def test_efficiency_ratings_plays_are_the_margin_rule() -> None:
+    """Garbage time by the score margin reaches neither the fit nor a team's own EPA; no WP is read.
+
+    On the real 2023 slate: dropping both win-probability columns moves nothing,
+    +3 EPA on every garbage-time play moves nothing (neither the strength fit nor
+    the netted own EPA sees those plays), and pushing competitive plays into
+    garbage time does move the ratings -- the documented rule is the rule used.
+    """
+    pbp = pl.read_parquet(_FIX_PBP_2023)
+    base = efficiency_ratings(pbp).sort("team_id")
+    assert_frame_equal(base, efficiency_ratings(pbp.drop("wp_before", "wp_before_naive")).sort("team_id"))
+    lim = pl.col("period").replace_strict({1: 43, 2: 37, 3: 27}, default=21, return_dtype=pl.Int64)
+    garbage = pl.col("pos_score_diff_start").abs() > lim
+    assert pbp.filter(garbage & ((pl.col("pass") == 1) | (pl.col("rush") == 1))).height > 1_000
+    juiced = efficiency_ratings(pbp.with_columns(EPA=pl.when(garbage).then(pl.col("EPA") + 3.0).otherwise("EPA")))
+    assert_frame_equal(
+        base.select("team_id", "adj_off_epa", "adj_def_epa", "adj_net"),
+        juiced.sort("team_id").select("team_id", "adj_off_epa", "adj_def_epa", "adj_net"),
+    )
+    blown_out = pbp.with_columns(
+        pos_score_diff_start=pl.when(pl.int_range(pl.len()) % 7 == 0).then(50).otherwise("pos_score_diff_start")
+    )
+    moved = efficiency_ratings(blown_out).sort("team_id")
+    assert (moved["adj_net"] - base["adj_net"]).abs().max() > 1e-3
+    # `games` and `off_pace` (the totals tempo input) still count every pass/rush play
+    assert_frame_equal(base.select("team_id", "games", "off_pace"), moved.select("team_id", "games", "off_pace"))
 
 
 def test_efficiency_ratings_empty_input_returns_documented_schema() -> None:
@@ -159,6 +211,8 @@ def _mini_plays_with_st() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Kickoff",
             }
@@ -175,6 +229,8 @@ def _mini_plays_with_st() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Kickoff",
             }
@@ -193,6 +249,8 @@ def _mini_plays_with_st() -> pl.DataFrame:
                 "pass": 1,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Pass Reception",
             }
@@ -255,6 +313,8 @@ def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Kickoff",
             }
@@ -271,6 +331,8 @@ def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Punt",
             }
@@ -287,6 +349,8 @@ def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Kickoff",
             }
@@ -304,6 +368,8 @@ def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None
                 "pass": 1,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Pass Reception",
             }
@@ -331,6 +397,8 @@ def _mini_drives() -> pl.DataFrame:
                     "pass": 1,
                     "rush": 0,
                     "wp_before": 0.5,
+                    "period": 1,
+                    "pos_score_diff_start": 0,
                     "neutral_site": False,
                     "play_type": "Pass Reception",
                 }
@@ -347,6 +415,8 @@ def _mini_drives() -> pl.DataFrame:
                     "pass": 0,
                     "rush": 1,
                     "wp_before": 0.5,
+                    "period": 1,
+                    "pos_score_diff_start": 0,
                     "neutral_site": False,
                     "play_type": "Rush",
                 }
@@ -453,6 +523,8 @@ def _mini_season_plays() -> pl.DataFrame:
                 "pass": 1,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Pass Reception",
                 "drive_id": f"{game_id}-A",
@@ -469,6 +541,8 @@ def _mini_season_plays() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 1,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Rush",
                 "drive_id": f"{game_id}-B",
@@ -487,6 +561,8 @@ def _mini_season_plays() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Kickoff",
                 "drive_id": f"{game_id}-STA",
@@ -503,6 +579,8 @@ def _mini_season_plays() -> pl.DataFrame:
                 "pass": 0,
                 "rush": 0,
                 "wp_before": 0.5,
+                "period": 1,
+                "pos_score_diff_start": 0,
                 "neutral_site": False,
                 "play_type": "Punt",
                 "drive_id": f"{game_id}-STB",
@@ -668,6 +746,8 @@ def _mini_row(game_id: str, *, offense: str, defense: str, epa: float, is_pass: 
         "pass": 1 if is_pass else 0,
         "rush": 0 if is_pass else 1,
         "wp_before": 0.5,
+        "period": 1,
+        "pos_score_diff_start": 0,
         "neutral_site": False,
         "play_type": "Pass Reception" if is_pass else "Rush",
         "drive_id": f"{game_id}-{offense}",

@@ -113,7 +113,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 | Basketball (International leagues) | [P. LEAGUE+](plg/) | `sportsdataverse.basketball.plg` | P. LEAGUE+ (Taiwan) and Preciser (19): P. LEAGUE+ site (pleagueofficial.com, Taiwan) 11, P. LEAGUE+ vendor API (api.preciser.io, Taiwan) 7, Hand-written wrappers 1 |
 | Basketball (International leagues) | [CBA](cba/) | `sportsdataverse.basketball.cba` | CBA data API (China) (27) |
 | Basketball (International leagues) | [Basketligaen](dbl/) | `sportsdataverse.basketball.dbl` | Basketligaen (Denmark, Sportality) (27): Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality) 25, Hand-written wrappers 2 |
-| Hockey | [NHL](nhl/) | `sportsdataverse.nhl` | ESPN (119), sportsdataverse-data releases (33), NHL Web API (28), NHL EDGE (35), NHL Stats REST (21), NHL Records (50), Fox Sports API (25) |
+| Hockey | [NHL](nhl/) | `sportsdataverse.nhl` | ESPN (119), sportsdataverse-data releases (34), NHL Web API (28), NHL EDGE (35), NHL Stats REST (21), NHL Records (50), Fox Sports API (25) |
 | Hockey | [PWHL](pwhl/) | `sportsdataverse.pwhl` | sportsdataverse-data releases (27), HockeyTech / LeagueStat (25) |
 | Hockey (College hockey) | [Men's college hockey](mch/) | `sportsdataverse.hockey.mch` | ESPN (118): site API (v2) 25, web API (v3) 5, core API (v2) 87, FPI API (fitt v3) 1 |
 | Hockey (College hockey) | [Women's college hockey](wch/) | `sportsdataverse.hockey.wch` | ESPN (118): site API (v2) 25, web API (v3) 5, core API (v2) 87, FPI API (fitt v3) 1 |
@@ -166,7 +166,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 | Soccer (Leagues) | [FIFA Women's World Cup](wwc/) | `sportsdataverse.soccer.wwc` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
 | Soccer (Leagues) | [FIFA World Cup](wc/) | `sportsdataverse.soccer.wc` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
 | More sports & sources (Cricket) | [Cricket](cricket/) | `sportsdataverse.cricket` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
-| More sports & sources (Lacrosse) | [Lacrosse](lacrosse/) | `sportsdataverse.lacrosse` | ESPN (35): site API (v2) 10, core API (v2) 25 |
+| More sports & sources (Lacrosse) | [Lacrosse](lacrosse/) | `sportsdataverse.lacrosse` | ESPN (35), Premier Lacrosse League stats API (19) |
 | More sports & sources (Golf) | [Golf](golf/) | `sportsdataverse.golf` | ESPN (31), PGA TOUR GraphQL API (10) |
 | More sports & sources (Betting & prediction markets) | [Betting odds](odds/) | `sportsdataverse.odds` | The Odds API (11), Polymarket (14), Kalshi (9) |
 | More sports & sources (Cross-sport providers) | [CBS Sports](cbs/) | `sportsdataverse.providers.cbs` | CBS Sports NAPI (82) |

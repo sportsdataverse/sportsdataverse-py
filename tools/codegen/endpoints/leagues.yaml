@@ -57,7 +57,9 @@ leagues:
   # ``endpoints`` allowlists the shorts a live probe (2026-11-25, real event and team ids) saw return
   # data for at least one of the three. College-only: rankings, season_week_rankings. PLL-only: draft,
   # teams_site, standings, franchises, franchise. season_group_teams answers for pll and the women,
-  # season_group_children for the men (checked with each league's own group id). ---
+  # season_group_children for the men (checked with each league's own group id). The examples carry those
+  # probed ids (``league_example_args: lacrosse`` in espn_site_v2 / espn_core_v2; the college-only routes name
+  # a college league), and tests/test_espn_live.py runs every one. ---
   - prefix: lacrosse
     sport: lacrosse
     league: pll
