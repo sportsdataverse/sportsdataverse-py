@@ -41,6 +41,12 @@ columns:
 - name: player_status
   type: character
   description: ''
+- name: player_status_abbr
+  type: character
+  description: ''
+- name: playoff
+  type: logical
+  description: ''
 - name: thru
   type: integer
   description: ''
