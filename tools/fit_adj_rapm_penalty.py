@@ -61,6 +61,7 @@ from fit_rapm_penalty import FOLDS, GRID, SEASON_TYPES, _rows  # noqa: E402
 
 from sportsdataverse.nba import box_features, nba_box_logs, nba_raw_store_season_frame, nba_spm, train_spm  # noqa: E402
 from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design, nba_rapm  # noqa: E402
+from sportsdataverse.nba.nba_spm import SPM_ALPHA  # noqa: E402
 
 #: Prior scales scored (``k = 1``: the prior as fit; ``k = 0``: no prior, plain RAPM).
 PRIOR_SCALES = (0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0)
@@ -78,8 +79,12 @@ LEAGUES = {
 SPM_ALPHAS = (0.0, 0.1, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0)
 SPM_FOLDS = 5
 #: ``train_spm`` keywords of the prior ``curves`` chains: ``weighted`` is the shipped default; ``equal`` is the
-#: equal-weight alpha-100 fit before minute weighting, run into a second OUT for ``report --baseline``.
-PRIOR_RULES: dict[str, dict] = {"weighted": {}, "equal": {"weight": None, "alpha": 100.0}}
+#: equal-weight alpha-100 fit before minute weighting, run into a second OUT for ``report --baseline``. ``curves``
+#: records the rule it ran in ``OUT/curves_config.json`` and refuses to resume an OUT written under another one.
+PRIOR_RULES: dict[str, dict] = {
+    "weighted": {"weight": "min", "alpha": SPM_ALPHA},
+    "equal": {"weight": None, "alpha": 100.0},
+}
 #: The prior scale the ``equal`` rule shipped with (#1150), the baseline ``report --baseline`` pairs against.
 BASELINE_SCALE = 2.0
 _CHUNK = 20_000
@@ -191,8 +196,20 @@ def season_curves(X: csr_matrix, Y: np.ndarray, games: np.ndarray, grid: np.ndar
 
 
 def curves(out: Path, raw: dict[str, str], prior_rule: str = "weighted") -> None:
-    """One ``.npz`` per league and regular season (skipping those written), carrying the prior forward."""
+    """One ``.npz`` per league and regular season (skipping those written), carrying the prior forward.
+
+    Seasons are reused only from an OUT whose ``curves_config.json`` matches this run's prior rule and its
+    ``train_spm`` keywords; an OUT written under another rule, or with curves and no record, raises.
+    """
     out.mkdir(parents=True, exist_ok=True)
+    cfg = {"prior_rule": prior_rule, **PRIOR_RULES[prior_rule]}
+    stamp = out / "curves_config.json"
+    if stamp.exists():
+        if (old := json.loads(stamp.read_text())) != cfg:
+            raise SystemExit(f"{out} holds curves fit under {old}, not {cfg}: use another OUT")
+    elif any(out.glob("*_rs.npz")):
+        raise SystemExit(f"{out} holds curves with no recorded prior rule: use another OUT")
+    stamp.write_text(json.dumps(cfg))
     for league, (seasons, _, lid, *_) in LEAGUES.items():
         prior: pl.DataFrame | None = None
         for season in seasons:
