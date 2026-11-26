@@ -395,7 +395,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/{team_id}/schedule`
 
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/4/schedule](https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/4/schedule)
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/golf/tgl/teams/130349/schedule](https://site.api.espn.com/apis/site/v2/sports/golf/tgl/teams/130349/schedule)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -435,7 +435,7 @@ ESPN endpoint.
 ### Example {#espn_golf_team_schedule-example}
 
 ```python
-espn_golf_team_schedule(league='pga', team_id='4')
+espn_golf_team_schedule(league='tgl', team_id='130349')
 ```
 
 ## espn_golf_standings

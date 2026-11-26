@@ -650,6 +650,7 @@ def parse_pgatour_schedule_years(raw: Any, return_as_pandas: bool = False) -> pl
     rows = [
         {"season": _int(y.get("queryValue")), "display_season": _str(y.get("displayValue")), "is_default": y.get("default")}
         for y in _l(_d(raw).get("years"))
+        if _int(y.get("queryValue")) is not None
     ]  # fmt: skip
     return _frame(rows, SCHEDULE_YEARS_SCHEMA, return_as_pandas)
 
