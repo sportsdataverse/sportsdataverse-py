@@ -675,6 +675,11 @@ class _ServerErrorAnswer(RuntimeError):
     """One clean HTTP 5xx on this proxy: rotated on, and counted per fetch like _TermsAcceptError."""
 
 
+def _is_server_error(status: int, text: str) -> bool:
+    """Is this a 5xx the origin itself sent (no ban marker, no challenge)? The same from every proxy."""
+    return status >= 500 and _ban_check(text) == "clean" and not _is_challenge(text)
+
+
 class _TermsGateError(AssetFetchError):
     """stats.ncaa.org served its Terms gate and it could not be passed. A fresh
     proxy/browser does not get past it, so the fetch layer never rotates on it."""
@@ -1021,7 +1026,7 @@ class _PlaywrightTransport:
                 if self.relaunch_backoff:  # same settle as a rotation relaunch (patchright EPIPE)
                     time.sleep(self.relaunch_backoff)
                 raise _SessionDeniedError(f"Akamai denied this browser session (HTTP 403 Access Denied): {url}")
-            if not _browser_response_unsolved(text) or (status >= 500 and not _is_challenge(text)):
+            if not _browser_response_unsolved(text) or _is_server_error(status, text):
                 # A short 5xx page is the origin's answer, not a stub; re-solving cannot change it
                 # (2026-11-26: a 643-byte HTTP 500 read as "bm-verify not passed" swept 200 proxies).
                 return status, text
@@ -1243,7 +1248,7 @@ class NcaaFetcher:
             proxies = {"http": proxy, "https": proxy} if proxy else {}
             try:
                 status, text = transport(url, proxies, headers)
-                if status >= 500 and _ban_check(text) == "clean" and not _is_challenge(text):
+                if _is_server_error(status, text):
                     raise _ServerErrorAnswer(f"stats.ncaa.org answered HTTP {status}: {url}")
             except (ImportError, _TermsGateError):
                 # A missing optional dependency is a SETUP error, not a transport

@@ -12104,7 +12104,7 @@
   group: ncaa-5xx-fails-fast
   finding: ncaa-5xx-pool-sweep
   file: sportsdataverse/mbb/mbb_ncaa_fetch.py
-  snippet: 'if not _browser_response_unsolved(text) or (status >= 500 and not _is_challenge(text)):'
+  snippet: 'if not _browser_response_unsolved(text) or _is_server_error(status, text):'
   mutant: 'if not _browser_response_unsolved(text):'
   test: tests/mbb/test_mbb_ncaa_fetch.py::test_a_server_error_page_is_an_answer_not_a_challenge
   expected: kill
