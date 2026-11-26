@@ -296,7 +296,7 @@ def opponent_adjust(
 ) -> pl.DataFrame:
     """Iterative opponent adjustment on a generic ``(team, opp, value)`` frame.
 
-    KenPom/GameOnPaper-style fixed point: each team's offensive level is its
+    Iterative fixed point: each team's offensive level is its
     mean value after removing the opponent-defense effect, and vice versa,
     iterated to convergence. League-agnostic -- no CFB column names inside.
 

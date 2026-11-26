@@ -14,7 +14,7 @@ columns:
   type: integer
   description: ''
 - name: tee_time
-  type: character
+  type: datetime
   description: ''
 - name: start_tee
   type: integer

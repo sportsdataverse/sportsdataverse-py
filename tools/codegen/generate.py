@@ -242,6 +242,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.basketball.genius.genius_runtime",
         "sportsdataverse.basketball.atrium.atrium_runtime",
         "sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime",
+        "sportsdataverse.lacrosse.pll_runtime",
         "sportsdataverse.basketball.feb.feb_runtime",
         "sportsdataverse.basketball.scb.scb_runtime",
         "sportsdataverse.basketball.lba.lba_runtime",
@@ -1463,7 +1464,9 @@ class _EndpointView:
 
         # The route's own getter (``getter:``) as (module, call name); default the family's ``_get``.
         route_module, self.getter_name = route_getter or (getter_module, "_get")
-        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module, route_module)
+        # a league-param family's example may name its own league (a college-only route): the URL follows it
+        example_league = str(ep.example_args.get("league", league.league)) if league.league_param else league.league
+        self.example_url = _example_request(ep_host, ep, league.sport, example_league, getter_module, route_module)
         # A body endpoint (``body: form|json``) has no fetchable URL: the query string carries only the
         # ``in: query`` params and the rest travels in the body, so show a curl request instead.
         self.body_kind = ep.body
@@ -2668,7 +2671,22 @@ def _desc_lookup(schema_name: str) -> dict:
 
 
 def _pl_to_doc_type(pl_type: str) -> str:
+    """The house doc type (``integer``, ``date``, ``list``...) for a polars or pandas dtype string.
+
+    Containers first: ``List(Int64)`` is a ``list``, not its inner ``integer``. ``Datetime``
+    before ``Date`` (one contains the other). ``Duration`` and ``Time`` fall through to ``character``.
+    """
     s = pl_type.lower()
+    if s.startswith(("list", "array")):
+        return "list"
+    if s.startswith("datetime"):
+        return "datetime"
+    if s.startswith("date"):
+        return "date"
+    if s.startswith(("struct", "enum", "categorical", "category")):
+        return "character"  # before the substring tests: "points" / "print" contain "int"
+    if s.startswith("decimal"):
+        return "double"
     if "int" in s:
         return "integer"
     if "float" in s:
@@ -3111,6 +3129,7 @@ FLAT_APIS = [
     ("sleeper", "nfl"),
     ("f1", "f1"),  # Jolpica F1 (Ergast-compatible)
     ("pgatour", "golf"),  # PGA TOUR GraphQL (orchestrator.pgatour.com), runtime only
+    ("pll", "lacrosse"),  # Premier Lacrosse League stats API (stats.premierlacrosseleague.com), runtime only
     # wave-2 intake families (espn-content, thesportsdb, football-data.co.uk, openligadb,
     # polymarket, kalshi)
     ("espn_content", "espn_content"),
@@ -3836,6 +3855,7 @@ _FLAT_API_DOC = {
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
     "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
     "pgatour": "PGA TOUR GraphQL API (orchestrator.pgatour.com; runtime only, public frontend key or $PGA_API_KEY)",
+    "pll": "Premier Lacrosse League stats API (stats.premierlacrosseleague.com; runtime only, no key, the site's Referer)",
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
     "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",
@@ -5214,9 +5234,8 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
     (``home_team_score``, ``tournament_id``) and ships all-null placeholders, so a
     single frame is never the whole schema. Committed columns keep their order
     and genuinely new ones append. A committed type survives when the fresh
-    column is entirely null (a dtype inferred from no values is noise) or when
-    committed says ``list`` -- :func:`_pl_to_doc_type` folds ``List(Int64)`` to
-    ``integer``, so that "change" is the mapper, not the data. A committed polars
+    column is entirely null (a dtype inferred from no values is noise) or when it
+    says ``list`` or ``date`` and a pandas capture reads the column as ``object``. A committed polars
     dtype (``Int32``) survives a capture the mapper folds to the same family
     (``integer``), so a pinned width is not widened back to ``Int64`` on render.
     Any other dtype change is real and wins.
@@ -5241,7 +5260,8 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
             # The committed type in its polars form (``double`` -> ``Float64``, ``Int32`` as is), then folded the way
             # the fresh capture was: ``Int32`` matches ``integer``, but ``double`` never matches ``character``.
             f["type"] in (c["type"], _pl_to_doc_type(_doc_dtype(c["type"])))
-            or c["type"] == "list"
+            # a pandas list or ``datetime.date`` column is dtype ``object``, which maps to ``character``
+            or (c["type"] in ("list", "date") and f["type"] == "character")
             or all_null(c["name"])
         )
         if keep and f["type"] != c["type"]:
@@ -5270,22 +5290,24 @@ def _resolve_autodoc_arg(value, memo: dict):
 
 
 class _CallTimeout(BaseException):
-    """Raised by :func:`_call_with_timeout`. A ``BaseException`` on purpose: the HTTP layer
-    (``dl_utils.download``) retries on any ``Exception``, which would swallow a plain
-    ``TimeoutError`` and retry the stalled call with no alarm left."""
+    """Raised by :func:`_call_with_timeout`. A ``BaseException`` on purpose: the alarm raises it
+    inside the call, and the HTTP layer (``dl_utils.download``) retries on any ``Exception``, which
+    would swallow a plain ``TimeoutError`` and retry the stalled call with no alarm left."""
 
 
 def _call_with_timeout(thunk, seconds: float):
     """``thunk()``, raising :class:`_CallTimeout` after ``seconds`` (0 = no limit).
 
     stats.nba.com stalls rather than failing on a datacenter IP; one such call must not
-    hang the whole capture run. Needs SIGALRM and the main thread; elsewhere (Windows, a
-    worker thread) the call simply runs unbounded."""
+    hang the whole capture run. SIGALRM interrupts the call on the main thread; elsewhere
+    (Windows, a worker thread) :func:`_call_in_thread` stops waiting for it."""
     import signal
     import threading
 
-    if not seconds or not hasattr(signal, "SIGALRM") or threading.current_thread() is not threading.main_thread():
+    if not seconds:
         return thunk()
+    if not hasattr(signal, "SIGALRM") or threading.current_thread() is not threading.main_thread():
+        return _call_in_thread(thunk, seconds)
 
     def _alarm(*_):
         raise _CallTimeout(f"no answer within {seconds:g}s (SDV_AUTODOC_CALL_TIMEOUT)")
@@ -5297,6 +5319,36 @@ def _call_with_timeout(thunk, seconds: float):
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)
         signal.signal(signal.SIGALRM, old)
+
+
+def _call_in_thread(thunk, seconds: float):
+    """``thunk()`` on a daemon thread, raising :class:`_CallTimeout` if it has not returned in ``seconds`` (> 0).
+
+    The fallback where SIGALRM cannot interrupt the call. Its exception, if any, is re-raised here. A call
+    that times out is not stopped: it keeps running, and its result is dropped."""
+    import threading
+
+    box: list = []
+
+    def run() -> None:
+        try:
+            box.append((True, thunk()))
+        except BaseException as e:  # noqa: BLE001 -- handed back to the caller as is
+            box.append((False, e))
+
+    # ponytail: a stalled call is abandoned, not killed; it holds its thread and socket until it
+    # returns or the process exits, and later calls run beside it (a second request to a host that
+    # is stalling, a ``$call`` input it may still memoize). Fine for one capture run; a subprocess
+    # per call if that bites.
+    worker = threading.Thread(target=run, name="autodoc-call", daemon=True)
+    worker.start()
+    worker.join(seconds)
+    if not box:
+        raise _CallTimeout(f"no answer within {seconds:g}s (SDV_AUTODOC_CALL_TIMEOUT)")
+    ok, value = box[0]
+    if ok:
+        return value
+    raise value
 
 
 def _returns_a_frame(annotation) -> bool:
@@ -5386,7 +5438,8 @@ def refresh_autodoc_schemas() -> int:
                 continue  # not a frame function: never call it blind (it may write files or clear a cache)
             try:
                 df = _call_with_timeout(
-                    lambda: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}), timeout
+                    lambda obj=obj, kwargs=kwargs: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}),
+                    timeout,
                 )
             except (Exception, _CallTimeout) as e:  # noqa: BLE001 -- a live call of any public fn; every skip is reported
                 msg = str(e).splitlines()[0][:120] if str(e) else type(e).__name__
@@ -5444,7 +5497,7 @@ def refresh_autodoc_schemas() -> int:
         + (f", {pruned} pruned" if pruned else "")
         + (f", {kept_stale} kept (in scope, capture failed)" if kept_stale else "")
         + (f", {cols_retained} columns retained (absent from capture)" if cols_retained else "")
-        + (f", {types_preserved} types preserved (all-null or list)" if types_preserved else "")
+        + (f", {types_preserved} types preserved (no type evidence)" if types_preserved else "")
         + (f", {hand_kept} hand_authored kept" if hand_kept else "")
     )
     if skip_reasons:

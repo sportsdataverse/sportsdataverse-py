@@ -86,5 +86,5 @@ columns:
   type: logical
   description: ''
 - name: date_pulled
-  type: character
+  type: datetime
   description: ''

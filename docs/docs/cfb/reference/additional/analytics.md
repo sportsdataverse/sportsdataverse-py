@@ -152,7 +152,7 @@ The frame with the canonical column(s) appended. Returned unchanged when `source
 | `priority` | Boolean | `TRUE` if ESPN flags the play as a priority highlight. |
 | `modified` | String | ISO timestamp the play record was last modified. |
 | `wallclock` | String | Real-world ISO timestamp of the play. |
-| `teamParticipants` | String | Raw ESPN team-level participants payload carried through from the plays feed (stringified). |
+| `teamParticipants` | String | Raw ESPN team-level participants payload carried through from the plays feed, a list as the live feed sends it, stringified in the release files. |
 | `isPenalty` | Boolean | ESPN's per-play flag that a penalty occurred on the play. |
 | `statYardage` | Int64 | Yardage ESPN credits to the play for statistical purposes. |
 | `isTurnover` | Boolean | ESPN's per-play turnover flag as shipped in the plays feed (broader than the giveaway-based is_turnover derivation). |
@@ -634,19 +634,20 @@ Derives `game_type` heuristically: games whose `notes` mention a
 championship (but not the CFP / national championship) are
 `CONF_CHAMP`; otherwise `season_type == "regular"` maps to `REG`
 and everything else to `POST`. `result` is the home margin
-(`home_points - away_points`; null when either score is missing) and
-`neutral` comes from `neutral_site`.
+(`home_points - away_points`; null when either score is missing),
+`neutral` comes from `neutral_site` and `conf_game` from
+`conference_game` (null when the schedule has no such column).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `schedule` | `FrameLike` |  | Output of `sportsdataverse.cfb.load_cfb_schedule` (needs `season`, `week`, `season_type`, `home_team`, `away_team`, `home_points`, `away_points`, `neutral_site` and optionally `notes`). |
+| `schedule` | `FrameLike` |  | Output of `sportsdataverse.cfb.load_cfb_schedule` (needs `season`, `week`, `season_type`, `home_team`, `away_team`, `home_points`, `away_points`, `neutral_site` and optionally `notes` and `conference_game`). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-A polars (or pandas) DataFrame with columns `season`, `week`, `game_type`, `home_team`, `away_team`, `result`, `neutral`, `home_points`, `away_points` — the `cfb_standings` / `cfb_simulations` input schema. The trailing per-game points columns feed the SEC `capped_scoring_margin` official tiebreaker rung (see `CONFERENCE_TIEBREAKERS`); `cfb_standings` skips that rung when they're absent, so passing this frame straight through is always safe.
+A polars (or pandas) DataFrame with columns `season`, `week`, `game_type`, `home_team`, `away_team`, `result`, `neutral`, `home_points`, `away_points`, `conf_game` — the `cfb_standings` / `cfb_simulations` input schema. The per-game points columns feed the SEC `capped_scoring_margin` official tiebreaker rung (see `CONFERENCE_TIEBREAKERS`); `cfb_standings` skips that rung when they're absent, so passing this frame straight through is always safe.
 
 | col_name | type | description |
 |---|---|---|
@@ -659,6 +660,7 @@ A polars (or pandas) DataFrame with columns `season`, `week`, `game_type`, `home
 | `neutral` | Int64 | Neutral-site flag derived from the schedule's neutral_site column (1 = neutral site, 0 = home game). |
 | `home_points` | Float64 | Home team's final score, passed through from the schedule frame; null when missing (unplayed game). Feeds the SEC capped_scoring_margin official conference tiebreaker rung in cfb_standings - the rung is skipped when absent. |
 | `away_points` | Float64 | Away team's final score, passed through from the schedule frame; null when missing (unplayed game). Feeds the SEC capped_scoring_margin official conference tiebreaker rung in cfb_standings - the rung is skipped when absent. |
+| `conf_game` | Boolean | The schedule's conference_game flag, passed through (null when the schedule has none). False keeps a game between two members of one conference out of the conference standings in cfb_standings (a non-conference meeting, the Pac-12's 2026 Flex Week). |
 
 **Example**
 

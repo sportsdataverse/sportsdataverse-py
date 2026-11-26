@@ -408,6 +408,9 @@ from sportsdataverse.nba import nba_player_shot_zones as nba_player_shot_zones  
 from sportsdataverse.nba import nba_player_stats_advanced_context as nba_player_stats_advanced_context  # noqa: F401
 from sportsdataverse.nba import nba_player_war as nba_player_war  # noqa: F401
 from sportsdataverse.nba import nba_player_wowy as nba_player_wowy  # noqa: F401
+from sportsdataverse.nba import nba_playoff_series as nba_playoff_series  # noqa: F401
+from sportsdataverse.nba import nba_playoff_series_players as nba_playoff_series_players  # noqa: F401
+from sportsdataverse.nba import nba_playoff_series_teams as nba_playoff_series_teams  # noqa: F401
 from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
 from sportsdataverse.nba import nba_possession_rate_rows as nba_possession_rate_rows  # noqa: F401
 from sportsdataverse.nba import nba_predict_games as nba_predict_games  # noqa: F401
@@ -904,6 +907,9 @@ __all__ = [
     "nba_player_stats_advanced_context",
     "nba_player_war",
     "nba_player_wowy",
+    "nba_playoff_series",
+    "nba_playoff_series_players",
+    "nba_playoff_series_teams",
     "nba_playtype_ratings",
     "nba_possession_rate_rows",
     "nba_predict_games",

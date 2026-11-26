@@ -1,0 +1,27 @@
+query HoleDetails($tournamentId: ID!, $courseId: ID!, $hole: Int!) {
+  holeDetails(tournamentId: $tournamentId, courseId: $courseId, hole: $hole) {
+    tournamentId
+    courseId
+    holeNum
+    holeInfo {
+      par
+      yards
+      rank
+      rounds
+      scoringAverageDiff
+    }
+    statsSummary {
+      scoringAverage
+      eagles
+      eaglesPercent
+      birdies
+      birdiesPercent
+      pars
+      parsPercent
+      bogeys
+      bogeysPercent
+      doubleBogeys
+      doubleBogeysPercent
+    }
+  }
+}

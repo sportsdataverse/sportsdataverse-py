@@ -1,0 +1,24 @@
+query LeaderboardHoleByHole($tournamentId: ID!, $round: Int) {
+  leaderboardHoleByHole(tournamentId: $tournamentId, round: $round) {
+    tournamentId
+    currentRound
+    playerData {
+      playerId
+      courseId
+      courseCode
+      out
+      in
+      total
+      totalToPar
+      scores {
+        holeNumber
+        sequenceNumber
+        par
+        yardage
+        score
+        roundScore
+        status
+      }
+    }
+  }
+}

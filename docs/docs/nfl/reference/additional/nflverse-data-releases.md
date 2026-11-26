@@ -102,8 +102,8 @@ Polars dataframe containing historical contracts available.
 | `draft_overall` | Int64 |  |
 | `draft_team` | String | Team that drafted player |
 | `cols` | Float64 | Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context. |
-| `season_history` | Float64 | List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus, option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus, other_bonus), money in millions of dollars and a final 'Total' row per nflreadr. |
-| `contract_history` | Int64 | List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status, year_signed, yrs, total, apy, guarantees, amount_earned, percent_earned, effective_apy), with money fields in millions of dollars. |
+| `season_history` | List | List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus, option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus, other_bonus), money in millions of dollars and a final 'Total' row per nflreadr. |
+| `contract_history` | List | List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status, year_signed, yrs, total, apy, guarantees, amount_earned, percent_earned, effective_apy), with money fields in millions of dollars. |
 
 **Example**
 
@@ -708,7 +708,7 @@ Polars dataframe containing FTN charting data available for the requested season
 | `n_blitzers` | Int64 | number of blitzers |
 | `n_pass_rushers` | Int64 | number of pass rushers |
 | `is_qb_fault_sack` | Boolean | sack that is the fault of the quarterback |
-| `date_pulled` | String | Date the data was retrieved from the FTN Data API by nflverse jobs |
+| `date_pulled` | Datetime | Date the data was retrieved from the FTN Data API by nflverse jobs |
 
 **Raises**
 
@@ -769,7 +769,7 @@ Polars dataframe containing injuries data available for the requested seasons. `
 | `practice_primary_injury` | String | Primary injury listed on practice injury report |
 | `practice_secondary_injury` | String | Secondary injury listed on practice injury report |
 | `practice_status` | String | Player's participation in practice |
-| `date_modified` | String | Date and time that injury information was updated |
+| `date_modified` | Datetime | Date and time that injury information was updated |
 
 **Example**
 
@@ -969,8 +969,8 @@ Polars dataframe containing historical contracts available.
 | `draft_overall` | Int64 |  |
 | `draft_team` | String | Team that drafted player |
 | `cols` | Float64 | Number of contract columns returned in the contracts dataset (metadata artifact from the loader). |
-| `season_history` | Float64 | List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus, option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus, other_bonus), money in millions of dollars and a final 'Total' row per nflreadr. |
-| `contract_history` | Int64 | List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status, year_signed, yrs, total, apy, guarantees, amount_earned, percent_earned, effective_apy), with money fields in millions of dollars. |
+| `season_history` | List | List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus, option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus, other_bonus), money in millions of dollars and a final 'Total' row per nflreadr. |
+| `contract_history` | List | List of structs, one per contract in the player's OverTheCap contract history (team, contract_type, status, year_signed, yrs, total, apy, guarantees, amount_earned, percent_earned, effective_apy), with money fields in millions of dollars. |
 
 **Example**
 

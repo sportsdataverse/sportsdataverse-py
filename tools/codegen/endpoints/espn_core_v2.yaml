@@ -33,6 +33,9 @@ endpoints:
   parser: parse_single_entity
   example_args:
     season: 2024
+  league_example_args:
+    lacrosse:
+      season: 2026
 - short: season_types
   returns_schema: season_types
   scope: universal
@@ -44,6 +47,9 @@ endpoints:
   parser: parse_items
   example_args:
     season: 2024
+  league_example_args:
+    lacrosse:
+      season: 2026
 - short: season_type
   returns_schema: season_type
   scope: universal
@@ -59,6 +65,10 @@ endpoints:
   example_args:
     season: 2024
     season_type: 2
+  league_example_args:
+    lacrosse:
+      season: 2026
+      season_type: 2
 - short: season_group
   returns_schema: season_group
   scope: universal
@@ -78,6 +88,11 @@ endpoints:
     season: 2024
     season_type: 2
     group_id: 80
+  league_example_args:
+    lacrosse:
+      season: 2026
+      season_type: 2
+      group_id: 118
 - short: season_groups
   returns_schema: season_groups
   scope: universal
@@ -93,6 +108,10 @@ endpoints:
   example_args:
     season: 2024
     season_type: 2
+  league_example_args:
+    lacrosse:
+      season: 2026
+      season_type: 2
 - short: season_group_teams
   returns_schema: season_group_teams
   scope: universal
@@ -117,6 +136,11 @@ endpoints:
     season: 2024
     season_type: 2
     group_id: 80
+  league_example_args:
+    lacrosse:
+      season: 2026
+      season_type: 2
+      group_id: 118
 - short: season_group_children
   returns_schema: season_group_children
   scope: universal
@@ -146,6 +170,12 @@ endpoints:
     season: 2024
     season_type: 2
     group_id: 80
+  league_example_args:
+    lacrosse:
+      league: 'mens-college-lacrosse'
+      season: 2026
+      season_type: 2
+      group_id: 90
 - short: season_type_leaders
   returns_schema: season_type_leaders
   scope: universal
@@ -292,6 +322,9 @@ endpoints:
   parser: parse_items
   example_args:
     season: 2024
+  league_example_args:
+    lacrosse:
+      season: 2026
 - short: season_team
   returns_schema: season_team
   scope: universal
@@ -307,6 +340,10 @@ endpoints:
   example_args:
     season: 2024
     team_id: '4'
+  league_example_args:
+    lacrosse:
+      season: 2026
+      team_id: '122896'
 - short: season_athletes
   returns_schema: season_athletes
   scope: universal
@@ -606,6 +643,9 @@ endpoints:
   parser: parse_single_entity
   example_args:
     event_id: '401584793'
+  league_example_args:
+    lacrosse:
+      event_id: '401867221'
 - short: event_competition
   returns_schema: event_competition
   scope: universal
@@ -621,6 +661,9 @@ endpoints:
   parser: parse_single_entity
   example_args:
     event_id: '401584793'
+  league_example_args:
+    lacrosse:
+      event_id: '401867221'
 - short: event_competitors
   returns_schema: event_competitors
   scope: universal
@@ -636,6 +679,9 @@ endpoints:
   parser: parse_items
   example_args:
     event_id: '401584793'
+  league_example_args:
+    lacrosse:
+      event_id: '401867221'
 - short: event_competitor
   returns_schema: event_competitor
   scope: universal
@@ -656,6 +702,9 @@ endpoints:
     event_id: '401584793'
     team_id: '4'
   league_example_args:
+    lacrosse:
+      event_id: '401867221'
+      team_id: '122896'
     nba:
       event_id: '401584793'
       team_id: '15'
@@ -701,6 +750,10 @@ endpoints:
   example_args:
     event_id: '401584793'
     team_id: '4'
+  league_example_args:
+    lacrosse:
+      event_id: '401867221'
+      team_id: '122896'
 - short: event_competitor_statistics
   returns_schema: event_competitor_statistics
   scope: universal
@@ -899,6 +952,9 @@ endpoints:
   parser: parse_single_entity
   example_args:
     event_id: '401584793'
+  league_example_args:
+    lacrosse:
+      event_id: '401867221'
 - short: event_officials
   returns_schema: event_officials
   scope: universal
@@ -929,6 +985,9 @@ endpoints:
   parser: parse_items
   example_args:
     event_id: '401584793'
+  league_example_args:
+    lacrosse:
+      event_id: '401867221'
 - short: event_predictor
   returns_schema: event_predictor
   scope: universal
@@ -1039,6 +1098,9 @@ endpoints:
     default: 1
   parser: parse_teams
   returns_schema: teams
+  league_example_args:
+    golf:  # the team shorts answer only for the team match-play leagues
+      league: tgl
 - short: team_core
   returns_schema: team_core
   scope: universal
@@ -1050,6 +1112,9 @@ endpoints:
   parser: parse_single_entity
   example_args:
     team_id: '4'
+  league_example_args:
+    lacrosse:
+      team_id: '122896'
 - short: venues
   returns_schema: venues
   scope: universal
@@ -1094,6 +1159,9 @@ endpoints:
   parser: parse_single_entity
   example_args:
     franchise_id: '2'
+  league_example_args:
+    lacrosse:
+      franchise_id: '122896'
 # The season-less /leagues/{league}/coaches list 404s at ESPN for every league
 # (verified nfl/nba/cfb) -- removed. The season-scoped `season_coaches`
 # (/seasons/{season}/coaches) is the working coaches list; the coach-detail
@@ -1299,6 +1367,12 @@ endpoints:
     season: 2024
     season_type: 2
     week: 1
+  league_example_args:
+    lacrosse:
+      league: 'mens-college-lacrosse'
+      season: 2026
+      season_type: 2
+      week: 1
 - short: season_qbr
   returns_schema: season_qbr
   scope: football

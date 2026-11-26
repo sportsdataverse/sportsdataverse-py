@@ -12099,6 +12099,37 @@
   expected: kill
   note: Without the untried-first pass, a jump or a +1 step can revisit a proxy within one fetch and leave a healthy one untried.
 
+# --- NCAA fetcher: a page the origin answers with HTTP 5xx fails fast (2026-11-26) -------------------
+- id: ncaa-5xx-read-as-unsolved-stub
+  group: ncaa-5xx-fails-fast
+  finding: ncaa-5xx-pool-sweep
+  file: sportsdataverse/mbb/mbb_ncaa_fetch.py
+  snippet: 'if not _browser_response_unsolved(text) or _is_server_error(status, text):'
+  mutant: 'if not _browser_response_unsolved(text):'
+  test: tests/mbb/test_mbb_ncaa_fetch.py::test_a_server_error_page_is_an_answer_not_a_challenge
+  expected: kill
+  note: The 643-byte HTTP 500 page is re-solved as "bm-verify not passed" again (baseball 2012, three shards stuck ~2.5 h).
+
+- id: ncaa-5xx-not-counted
+  group: ncaa-5xx-fails-fast
+  finding: ncaa-5xx-pool-sweep
+  file: sportsdataverse/mbb/mbb_ncaa_fetch.py
+  snippet: '    _ServerErrorAnswer: (_SERVER_ERRORS_MAX, _PageServerError),'
+  mutant: '    _ServerErrorAnswer: (10**9, _PageServerError),'
+  test: tests/mbb/test_mbb_ncaa_fetch.py::test_a_page_that_errors_on_three_proxies_fails_without_sweeping_the_pool
+  expected: kill
+  note: A 5xx just rotates, so one broken page sweeps len(pool) + max_retries proxies.
+
+- id: ncaa-5xx-capture-halts-as-ban
+  group: ncaa-5xx-fails-fast
+  finding: ncaa-5xx-pool-sweep
+  file: sportsdataverse/scrape/ncaa/capture.py
+  snippet: 'except (NoDataError, _PageServerError) as exc:'
+  mutant: 'except NoDataError as exc:'
+  test: tests/scrape/ncaa/test_capture_behaviour.py::test_a_contest_whose_page_errors_is_counted_failed_and_the_run_goes_on
+  expected: kill
+  note: A page the origin 500s on halts the nightly capture as BAN-SUSPECT instead of counting one failed contest.
+
 # --- PR #1268: free throws on the lineup at their foul -------------------------------------------
 - id: ft-box-follows-the-foul
   group: ft-foul
@@ -12333,8 +12364,8 @@
   group: props-minutes-coldstart
   finding: props-team-minutes
   file: sportsdataverse/nba/nba_player_props.py
-  snippet: 'rates = player_rates(logs.sort("game_date", "game_id"))'
-  mutant: 'rates = player_rates(logs)'
+  snippet: 'rates = player_rates(logs.sort("game_date", "game_id"), prior_logs=prior, league_id=league_id)'
+  mutant: 'rates = player_rates(logs, prior_logs=prior, league_id=league_id)'
   test: tests/nba/test_nba_player_props_team_minutes.py -k traded
   expected: kill
   note: The release logs come newest first, so a traded player would project for his first team.
@@ -12758,11 +12789,31 @@
   group: cfb-adjustment
   finding: cfb-adjustment-a1
   file: sportsdataverse/cfb/cfb_ratings.py
-  snippet: '    base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)'
+  snippet: '    base, clean = _prepare(plays, _ADJ_REQUIRED, None)'
   mutant: '    base, clean = _prepare(plays, _ADJ_REQUIRED)'
-  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_band_is_the_spread_free_wp
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_plays_are_the_margin_rule
   expected: kill
   note: Falls back to the spread-aware 0.1 <= wp_before <= 0.9 band, so the pregame line picks the plays.
+
+- id: cfb-efficiency-ratings-own-epa-plays
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '    opp = _adjust_games(clean, offense, defense, fill_strength=None)'
+  mutant: '    opp = _adjust_games(base, offense, defense, fill_strength=None)'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_plays_are_the_margin_rule
+  expected: kill
+  note: Nets a team's own EPA over garbage time the strength fit never saw.
+
+- id: cfb-efficiency-ratings-pace-every-play
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '        base.group_by("pos_team_id")'
+  mutant: '        clean.group_by("pos_team_id")'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_plays_are_the_margin_rule
+  expected: kill
+  note: Drops garbage time from games and off_pace too, shrinking the totals tempo input by ~8-10%.
 
 - id: cfb-efficiency-ratings-penalty
   group: cfb-adjustment
@@ -12834,3 +12885,360 @@
   test: tests/test_pgatour.py::test_tour_cup_season_is_read_from_the_title
   expected: kill
   note: The API sends season as "2025 Standings"; read as an int it is null on every row.
+
+- id: pgatour-past-results-year-is-the-edition
+  group: pgatour
+  finding: pgatour-graphql-followups
+  file: sportsdataverse/golf/pgatour_runtime.py
+  snippet: '        return year * 10'
+  mutant: '        return year'
+  test: tests/test_pgatour.py::test_past_results_year_is_the_five_digit_edition
+  expected: kill
+  note: A four-digit year is not rejected by the API; it silently answers the current edition instead of that season's.
+
+- id: pgatour-ids-sent-as-a-list
+  group: pgatour
+  finding: pgatour-graphql-followups
+  file: sportsdataverse/golf/pgatour_runtime.py
+  snippet: '            out[key] = [_wire_text(v) for v in many if v is not None]'
+  mutant: '            out[key] = value'
+  test: tests/test_pgatour.py::test_variables_take_the_declared_type
+  expected: kill
+  note: tournaments(ids:) is [ID!]; a bare string or a tuple must still go out as a list of strings.
+
+- id: pgatour-answer-id-keeps-the-tournament
+  group: pgatour
+  finding: pgatour-graphql-followups
+  file: sportsdataverse/golf/pgatour_parsers.py
+  snippet: '    return text.split("-", 1)[0] if text else None'
+  mutant: '    return text'
+  test: tests/test_pgatour.py::test_answer_ids_keep_the_tournament_part
+  expected: kill
+  note: leaderboardStats and scorecardStats answer "R2026014-probability" / "R2026014-28237", which join nothing.
+
+- id: pgatour-course-stats-drops-summary-rows
+  group: pgatour
+  finding: pgatour-graphql-followups
+  file: sportsdataverse/golf/pgatour_parsers.py
+  snippet: '                if h.get("__typename", "CourseHoleStats") == "CourseHoleStats"'
+  mutant: '                if True'
+  test: tests/test_pgatour.py::test_course_stats_drops_summary_rows_and_ranks_holes
+  expected: kill
+  note: The SummaryRow entries (out / in / total) would become rows with a null hole number.
+
+- id: pgatour-past-results-other-edition-is-no-data
+  group: pgatour
+  finding: pgatour-graphql-followups
+  file: sportsdataverse/golf/pgatour_runtime.py
+  snippet: '        if answered and _TOURNAMENT_ID.match(answered) and answered[1:5] != season:'
+  mutant: '        if False:'
+  test: tests/test_pgatour.py::test_past_results_for_a_season_without_an_edition_is_no_data
+  expected: kill
+  note: A season with no edition answers the current one; it would come back as that season's results.
+
+- id: bb-team-games-postseason-one-type
+  group: bb-team-games-postseason
+  finding: bb-g14-playoffs-set
+  file: sportsdataverse/nba/nba_team_season_rates.py
+  snippet: '                nba_possession_rate_rows(possessions, schedule, league_id=league_id, season_type=t)'
+  mutant: '                nba_possession_rate_rows(possessions, schedule, league_id=league_id, season_type=types[0])'
+  test: tests/nba/test_nba_team_season_rates.py::test_wnba_2025_regular_season_and_playoffs_in_one_read
+  expected: kill
+  note: Every asked type would carry the first type's games, so the playoffs rows would be the regular season again.
+# --- NBA props rate prior: per-minute rates shrunk toward a minutes-and-role tier ---------------------
+# Killers: tests/nba/test_nba_player_props_rate_prior.py on the committed real Boston / New York 2024-25 and
+# early 2025-26 release rows, against a plain-Python oracle of the tiers and pooled rates.
+- id: nba-props-rate-prior-k-zero
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        ks = float(k.get(s, 0.0))'
+  mutant: '        ks = 0.0'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k "formula or short_samples or previous_regular"
+  expected: kill
+  note: The shrinkage off -- every rate is the raw rate again, including a two-game player's.
+- id: nba-props-rate-prior-no-starter-split
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '(starter_share >= 0.5)'
+  mutant: '(starter_share >= 2.0)'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k formula
+  expected: kill
+  note: Starters and bench players of the same minutes would pool into one tier.
+- id: nba-props-rate-prior-ignores-last-season
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: 'frames = {"box_logs": df} if prior_logs is None else {"box_logs": df, "prior_logs": _played(prior_logs)}'
+  mutant: 'frames = {"box_logs": df}'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k formula
+  expected: kill
+  note: The tier prior would pool only this season's few games, so opening night has no prior.
+- id: nba-props-rate-prior-pools-playoffs
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '_load_player_logs(season - 1, league_id).filter(pl.col("season_type") == 2)'
+  mutant: '_load_player_logs(season - 1, league_id)'
+  test: tests/nba/test_nba_player_props_rate_prior.py -k previous_regular
+  expected: kill
+  note: Last season's playoff games would enter the tier prior; the fit and the 2021-22 test used the regular season.
+- id: nba-props-rate-prior-prior-uncut
+  group: nba-props-rate-prior
+  finding: nba-props-rate-prior
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        prior = prior.filter(pl.col("game_date") < as_of_date)'
+  mutant: '        prior = prior'
+  test: tests/nba/test_nba_player_props_asof.py
+  expected: kill
+  note: The prior frame is cut at the as-of date too; the as-of corpus serves the same season as "last season", so uncut, the target game's own line reaches the tier prior (own-line probe red).
+
+# --- NBA props recent-window mixture: (1 - w) F(season line) + w F(last-10 line) --------------------------
+# Killers: tests/nba/test_nba_player_props_recent_mixture.py on the committed real Boston / New York 2023-24 and
+# 2024-25 release rows (plain-Python oracle, and a paired-CRPS gate on the rows with a positive weight).
+- id: nba-props-recent-weight-zero
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '.then(w).otherwise(0.0).alias("recent_weight")'
+  mutant: '.then(0.0).otherwise(0.0).alias("recent_weight")'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k "oracle or beats"
+  expected: kill
+  note: The mixture off -- every player prices from his season line alone, however far his role has moved.
+- id: nba-props-recent-window-ignored
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: 'own = df.sort(sort).group_by("player_id", maintain_order=True).tail(recent_games)'
+  mutant: 'own = df'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k "oracle or beats"
+  expected: kill
+  note: The "recent" line would be the season line again, so the mixture could not move the price.
+- id: nba-props-recent-mixture-single-sd-law
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '        law = (mix["pts_sd_a"], mix["pts_sd_b"])'
+  mutant: '        law = (c.pts_sd_a, c.pts_sd_b)'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k weighted_components
+  expected: kill
+  note: The components would keep the single points SD law, the width that failed E2's coverage rule.
+- id: nba-props-recent-cutoff-at-ten
+  group: nba-props-recent-mixture
+  finding: nba-props-recent-mixture
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: 'pl.when(pl.col("games") > n)'
+  mutant: 'pl.when(pl.col("games") >= n)'
+  test: tests/nba/test_nba_player_props_recent_mixture.py -k eleventh
+  expected: kill
+  note: At 10 earlier games the windows coincide; a weight there would only swap in the mixture's SD law.
+- id: bb-war-tier-counts-zero-teams
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '        .with_columns(pl.col("players").fill_null(0))'
+  mutant: '        .drop_nulls("players")'
+  test: tests/common/test_war_tiers.py::test_each_team_s_tiers_add_up_to_its_tiered_players
+  expected: kill
+  note: A team with nobody in a tier would drop out of that tier's median instead of counting 0, which lifts the Star median.
+
+- id: bb-war-tier-star-floor
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '"Star": 95.0'
+  mutant: '"Star": 90.0'
+  test: tests/common/test_war_tiers.py::test_tier_shares_are_the_cut_points
+  expected: kill
+  note: A Star floor of 90 makes the top tier a tenth of the league, twice the 5% cut.
+
+- id: bb-war-tier-no-possession-floor
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'TIER_MIN_POSS_SHARE = 0.10'
+  mutant: 'TIER_MIN_POSS_SHARE = 0.0'
+  test: tests/common/test_war_tiers.py::test_only_the_possession_cohort_is_tiered
+  expected: kill
+  note: Without the floor, call-ups with a few possessions and a WAR near 0 are tiered and land in the middle of the ladder.
+
+- id: bb-war-tier-traded-main-team-only
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: '            pl.col("team_ids").str.split(",").alias("team_id"),'
+  mutant: '            pl.col("_main").cast(pl.Utf8).implode().alias("team_id"),'
+  test: tests/common/test_war_tiers.py::test_a_traded_player_is_on_every_team_he_played_for
+  expected: kill
+  note: A traded player would sit on his main team only, missing from the roster of every other team he played for.
+
+- id: bb-war-tier-conf-ranked-league-wide
+  group: bb-war-tier
+  finding: bb-g61-depth-ladder
+  file: sportsdataverse/_common/player_war.py
+  snippet: 'by=("season", "conference_id"))'
+  mutant: 'by=("season",))'
+  test: tests/common/test_war_tiers.py::test_the_conference_tier_is_the_ladder_within_each_conference
+  expected: kill
+  note: The conference tier would be the Division I tier again, so a conference's shares would not hold.
+- id: bb-playoff-series-play-in-kept
+  group: bb-playoff-series
+  finding: bb-d43-playoff-series
+  file: sportsdataverse/_common/playoff_series.py
+  snippet: '    po = schedule.filter(pl.col("season_type") == 3)'
+  mutant: '    po = schedule.filter(pl.col("season_type").is_in([3, 5]))'
+  test: tests/nba/test_nba_playoff_series.py::test_every_postseason_game_is_in_exactly_one_series_and_play_in_in_none
+  expected: kill
+  note: Play-in games (ESPN season_type 5) would become one-game series of their own.
+
+- id: bb-playoff-series-key-by-venue
+  group: bb-playoff-series
+  finding: bb-d43-playoff-series
+  file: sportsdataverse/_common/playoff_series.py
+  snippet: '    lo = pl.min_horizontal("home_id", "away_id").cast(pl.Int64)'
+  mutant: '    lo = pl.col("home_id").cast(pl.Int64)'
+  test: tests/nba/test_nba_playoff_series.py::test_nba_2025_bracket_and_finals
+  expected: kill
+  note: A key read off the home side splits each series in two by venue.
+
+- id: bb-playoff-series-clinch-early
+  group: bb-playoff-series
+  finding: bb-d43-playoff-series
+  file: sportsdataverse/_common/playoff_series.py
+  snippet: '                & (pl.col("plays_on").fill_null(False) | (pl.col("lead_wins") >= pl.col("clinch")).fill_null(False))'
+  mutant: '                & (pl.col("plays_on").fill_null(False) | (pl.col("lead_wins") >= pl.col("clinch") - 1).fill_null(False))'
+  test: tests/nba/test_nba_playoff_series.py::test_a_series_whose_leader_has_not_clinched_is_not_decided
+  expected: kill
+  note: A Finals leader one win short would be called the winner mid-series.
+
+- id: bb-playoff-series-cameo-dropped
+  group: bb-playoff-series
+  finding: bb-d43-playoff-series
+  file: sportsdataverse/_common/playoff_series.py
+  snippet: '        & ((pl.col("minutes").fill_null(0) > 0) | counted)'
+  mutant: '        & (pl.col("minutes").fill_null(0) > 0)'
+  test: tests/nba/test_nba_playoff_series.py::test_a_zero_minute_cameo_with_a_stat_counts_as_played
+  expected: kill
+  note: A 0.0-minute cameo with a stat (ESPN lists a dozen a season) would drop out of the games and the totals.
+# --- CFB adjusted EPA: one garbage-time rule for the fit and a team's own EPA (A3) ----------------
+- id: cfb-adjusted-epa-fit-margin-rule
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_adjusted_epa.py
+  snippet: '        base, clean = _prepare(plays, _ADJ_REQUIRED, None)'
+  mutant: '        base, clean = _prepare(plays, _ADJ_REQUIRED, ("wp_before_naive", 0.05, 0.95))'
+  test: tests/cfb/test_cfb_adjusted_epa.py::test_fit_reads_the_score_margin_not_any_win_probability
+  expected: kill
+  note: Puts the season fit back on the naive WP band, which dropped 24% of plays, many within three scores.
+
+- id: cfb-adjusted-epa-own-epa-same-plays
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_adjusted_epa.py
+  snippet: "        base = clean  # a team's own EPA on the same plays as the fit"
+  mutant: '        pass'
+  test: tests/cfb/test_cfb_adjusted_epa.py::test_garbage_time_reaches_neither_the_fit_nor_a_teams_own_epa
+  expected: kill
+  note: Season own EPA back on every play, so blowing out a weak team lowers the rating again.
+
+- id: cfb-adjusted-epa-by-game-own-epa-same-plays
+  group: cfb-adjustment
+  finding: cfb-adjustment-a3
+  file: sportsdataverse/cfb/cfb_adjusted_epa.py
+  snippet: "        base = clean  # each week's own EPA on the same plays the fits use"
+  mutant: '        pass'
+  test: tests/cfb/test_cfb_adjusted_epa.py::test_own_epa_is_the_mean_over_the_kept_plays
+  expected: kill
+  note: The walk-forward per-game EPA would count garbage time the strengths never saw.
+
+# --- Premier Lacrosse League stats API runtime + parsers (pll_*) ----------------------------------
+- id: pll-referer-sent
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_runtime.py
+  snippet: '"Referer": f"{HOST}/",'
+  mutant: '"Referer": "https://example.com/",'
+  test: tests/test_pll.py::test_get_sends_the_referer_and_returns_stamped_data
+  expected: kill
+  note: The proxy answers 403 Origin not allowed to any other Referer.
+
+- id: pll-bool-query-lowercased
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_runtime.py
+  snippet: 'str(v).lower() if isinstance(v, bool) else v'
+  mutant: 'v'
+  test: tests/test_pll.py::test_wire_lowercases_bools_and_keeps_lists
+  expected: kill
+  note: requests would send True as "True"; the site sends true / false.
+
+- id: pll-stamp-skips-route-segments
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_runtime.py
+  snippet: '_NOT_SLUGS = frozenset({"season-stats", "stats"})'
+  mutant: '_NOT_SLUGS = frozenset()'
+  test: tests/test_pll.py::test_stamp
+  expected: kill
+  note: teams/season-stats and players/stats/... would be stamped as a team or player slug.
+
+- id: pll-envelope-required
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_runtime.py
+  snippet: 'if not isinstance(data, dict):'
+  mutant: 'if False:'
+  test: tests/test_pll.py::test_get_refuses_a_body_that_is_not_the_envelope
+  expected: kill
+  note: An error body or a bare list would reach the parsers as an empty answer instead of a failed fetch.
+
+- id: pll-whole-float-id-loses-dot-zero
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_parsers.py
+  snippet: 'return str(int(value)) if math.isfinite(value) and value.is_integer() else str(value)'
+  mutant: 'return str(value)'
+  test: tests/test_pll.py::test_malformed_cells_are_null_not_errors
+  expected: kill
+  note: A float-origin id would stringify as "3009.0" and never join.
+
+- id: pll-away-score-is-visitor
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_parsers.py
+  snippet: '"away_score": g.get("visitorScore")'
+  mutant: '"away_score": g.get("homeScore")'
+  test: tests/test_pll.py::test_schedule_scores_and_start_time
+  expected: kill
+  note: The API calls the away side visitor; reading home twice would still pass a schedule-only check.
+
+- id: pll-leaders-rank-one-based
+  group: pll
+  finding: pll-stats-api
+  file: sportsdataverse/lacrosse/pll_parsers.py
+  snippet: 'enumerate(_l(rows), start=1)'
+  mutant: 'enumerate(_l(rows))'
+  test: tests/test_pll.py::test_leaders_are_long_and_ranked
+  expected: kill
+  note: The documented rank is 1-based.
+
+- id: bb-tournament-runs-early-events-kept
+  group: bb-tournament-runs
+  finding: bb-d43-tournament-runs
+  file: sportsdataverse/_common/tournament_runs.py
+  snippet: '        pl.col("game_date") >= pl.date(pl.col("season").cast(pl.Int32), 2, CONFERENCE_TOURNAMENT_FROM)'
+  mutant: '        pl.col("game_date") >= pl.date(pl.col("season").cast(pl.Int32) - 1, 9, 1)'
+  test: tests/mbb/test_mbb_tournament_runs.py::test_early_season_events_are_not_runs
+  expected: kill
+  note: Early-season events that carry a conference group would become conference-tournament runs.
+
+- id: bb-tournament-runs-untagged-split
+  group: bb-tournament-runs
+  finding: bb-d43-tournament-runs
+  file: sportsdataverse/_common/tournament_runs.py
+  snippet: '            pl.coalesce(pl.col("tournament_id"), pl.col("tagged_id")).alias("tournament_id"),'
+  mutant: '            pl.col("tournament_id"),'
+  test: tests/mbb/test_mbb_tournament_runs.py::test_an_untagged_game_joins_its_tagged_tournament_or_keys_on_its_event_name
+  expected: kill
+  note: An untagged game of a tagged tournament (older seasons) would split its run in two.

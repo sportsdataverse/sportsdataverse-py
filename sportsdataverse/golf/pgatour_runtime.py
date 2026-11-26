@@ -132,10 +132,23 @@ def decode_payload(value: Any) -> Any:
 
 
 #: Variables the API types as ``Int``. ``schedule(year:)`` is the one ``String`` year.
-_INT_VARS = frozenset({"year", "round"})
+_INT_VARS = frozenset({"year", "round", "hole"})
 _STRING_VARS = {"schedule": frozenset({"year"})}
 #: ``ID`` / ``String`` variables: a caller's ``120`` or ``28237`` is sent as text.
-_TEXT_VARS = frozenset({"id", "tournamentId", "playerId", "statId", "tourCode"})
+_TEXT_VARS = frozenset({"id", "tournamentId", "playerId", "statId", "tourCode", "courseId"})
+#: ``[ID!]`` variables: one id or a list of them, each sent as text.
+_LIST_VARS = frozenset({"ids"})
+#: ``tournamentPastResults(year:)`` names an edition by its five-digit season (``20250`` is 2025): a
+#: four-digit year is not an error to the API, it silently answers the current edition instead.
+_EDITION_YEAR_OPS = frozenset({"tournamentPastResults"})
+#: Answers that do not repeat the tournament id they were asked for: it is stamped in as ``tournamentId``.
+_STAMP_TOURNAMENT_OPS = frozenset({"tournamentOverview"})
+#: A tournament id: tour code, four-digit season, event number (``R2026014``).
+_TOURNAMENT_ID = re.compile(r"[A-Z]\d{4}")
+
+
+def _str_or_none(value: Any) -> str | None:
+    return str(value) if value not in (None, "") else None
 
 
 def _whole(value: Any) -> int | None:
@@ -146,20 +159,38 @@ def _whole(value: Any) -> int | None:
     return _integral(value)
 
 
+def _edition_year(operation: str, year: int) -> int:
+    """A season as the five-digit edition value (``2025`` -> ``20250``); a five-digit one as given.
+
+    Raises:
+        ValueError: ``year`` is neither four nor five digits.
+    """
+    if 1000 <= year <= 9999:
+        return year * 10
+    if 10000 <= year <= 99999:
+        return year
+    raise ValueError(f"PGA Tour {operation}: year must be a season such as 2025 (or 20250), got {year!r}")
+
+
 def _variables(operation: str, body: dict | None) -> dict[str, Any]:
     """The non-None variables of ``body``, each sent as the type the API declares.
 
     Raises:
-        ValueError: an ``Int`` variable is not a whole number.
+        ValueError: an ``Int`` variable is not a whole number, or an edition year is not a season.
     """
     out: dict[str, Any] = {k: v for k, v in (body or {}).items() if v is not None}
     for key, value in list(out.items()):
-        if key in _TEXT_VARS or key in _STRING_VARS.get(operation, frozenset()):
+        if key in _LIST_VARS:
+            many = value if isinstance(value, (list, tuple)) else [value]
+            out[key] = [_wire_text(v) for v in many if v is not None]
+        elif key in _TEXT_VARS or key in _STRING_VARS.get(operation, frozenset()):
             out[key] = _wire_text(value)
         elif key in _INT_VARS:
             whole = _whole(value)
             if whole is None:
                 raise ValueError(f"PGA Tour {operation}: {key} must be a whole number, got {value!r}")
+            if key == "year" and operation in _EDITION_YEAR_OPS:
+                whole = _edition_year(operation, whole)
             out[key] = whole
     return out
 
@@ -238,10 +269,12 @@ def _get(url: str, params: dict | None = None, json: dict | None = None, **kwarg
     """POST the GraphQL request ``json`` (built by :func:`graphql_body`) to ``url``.
 
     Returns the operation's ``data`` field (a dict), with a compressed ``payload`` decoded; ``{}`` when
-    the API answers 204 / 205 (no content).
+    the API answers 204 / 205 (no content). A ``tournamentOverview`` answer, which does not repeat its
+    tournament, gets the requested one stamped in as ``tournamentId``.
 
     Raises:
-        NoDataError: the API answers ``null`` for the operation (an unknown id) or says it does not exist.
+        NoDataError: the API answers ``null`` for the operation (an unknown id) or says it does not exist, or
+            ``tournamentPastResults`` answers another edition than the season asked for (it has none for it).
         ValueError: the API rejects the query or its variables.
         AssetFetchError: a refused key, any other GraphQL error, a transport failure after retries,
             an answer whose ``data`` lacks the operation and has no ``errors``, or a payload that does not decode.
@@ -264,4 +297,15 @@ def _get(url: str, params: dict | None = None, json: dict | None = None, **kwarg
         if not isinstance(data, dict) or field not in data:  # no data, or no key for the operation: malformed
             raise AssetFetchError(f"PGA Tour {field}: the answer carries no data ({str(answer)[:80]})")
         raise NoDataError(f"PGA Tour {field} answered null for {body['variables']}")
-    return decode_payload(value)
+    value = decode_payload(value)
+    variables = body.get("variables") or {}
+    year = variables.get("year")
+    if field in _EDITION_YEAR_OPS and isinstance(year, int) and year >= 10000 and isinstance(value, dict):
+        # A season the tournament has no edition for is not an error to the API: it answers the current one.
+        season = str(year // 10)
+        answered = _str_or_none(value.get("id"))
+        if answered and _TOURNAMENT_ID.match(answered) and answered[1:5] != season:
+            raise NoDataError(f"PGA Tour {field}: no {season} edition of {variables.get('id')} (answered {answered})")
+    if field in _STAMP_TOURNAMENT_OPS and isinstance(value, dict) and "tournamentId" in variables:
+        value = {"tournamentId": variables["tournamentId"], **value}
+    return value

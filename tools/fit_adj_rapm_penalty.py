@@ -14,6 +14,18 @@ own width, is scored on the same held-out games as the penalty.
 
 Stages:
 
+* ``spm`` (same inputs as ``curves``) fits the prior's own penalty first. Per league and regular season
+  it writes the SPM training rows (``box_features`` joined to that season's plain RAPM) and the
+  player-grouped 5-fold CV error of :func:`~sportsdataverse.nba.nba_spm.train_spm` (minute-weighted) at
+  every :data:`SPM_ALPHAS` point, then prints the pooled pick and writes ``spm_cv.parquet``, which
+  ``tests/fixtures/bb_adj_rapm_penalty`` commits so a test re-derives
+  :data:`~sportsdataverse.nba.nba_spm.SPM_ALPHA_WEIGHTED`. Run it before ``curves``: the ``weighted``
+  prior rule is ``train_spm(..., weight="min", alpha=SPM_ALPHA_WEIGHTED)``.
+
+The minute-weighted stages fit an UNSHIPPED alternative (2026-11-26): ``train_spm``'s default is the
+equal-weight fit at ``SPM_ALPHA`` 100 with ``ADJ_RAPM_PRIOR_SCALE`` 2, the published configuration (the
+``equal`` prior rule). The weighted rule's constants are ``SPM_ALPHA_WEIGHTED`` and
+``ADJ_RAPM_PRIOR_SCALE_WEIGHTED``; it fails the NBA producer's ``r_rapm_adj_min`` publish floor.
 * ``curves`` (network: the possessions / schedule release assets; the leaguegamelog captures of the
   -raw stores, a local checkout or an ``http(s)://`` base) writes one ``.npz`` per league and season
   (regular season): the grouped-CV SSE per fold, ``k`` and grid point, the leave-one-possession-out
@@ -27,8 +39,12 @@ Stages:
 
 Usage::
 
+    uv run --frozen python tools/fit_adj_rapm_penalty.py spm OUT_DIR --nba-raw DIR --wnba-raw DIR
     uv run --frozen python tools/fit_adj_rapm_penalty.py curves OUT_DIR --nba-raw DIR --wnba-raw DIR
     uv run --frozen python tools/fit_adj_rapm_penalty.py report OUT_DIR
+    # the paired comparison against the equal-weight prior at its #1150 scale (a second, baseline OUT):
+    uv run --frozen python tools/fit_adj_rapm_penalty.py curves BASE_DIR --prior-rule equal --nba-raw DIR --wnba-raw DIR
+    uv run --frozen python tools/fit_adj_rapm_penalty.py report OUT_DIR --baseline BASE_DIR
 """
 
 from __future__ import annotations
@@ -43,19 +59,20 @@ import numpy as np
 import polars as pl
 from scipy.sparse import csr_matrix
 from scipy.stats import spearmanr
-from sklearn.model_selection import GroupKFold
+from sklearn.model_selection import GroupKFold, KFold
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fit_rapm_penalty import FOLDS, GRID, SEASON_TYPES, _rows  # noqa: E402
 
 from sportsdataverse.nba import box_features, nba_box_logs, nba_raw_store_season_frame, nba_spm, train_spm  # noqa: E402
 from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design, nba_rapm  # noqa: E402
+from sportsdataverse.nba.nba_spm import SPM_ALPHA, SPM_ALPHA_WEIGHTED  # noqa: E402
 
 #: Prior scales scored (``k = 1``: the prior as fit; ``k = 0``: no prior, plain RAPM).
 PRIOR_SCALES = (0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0)
-#: The scale frozen in ``ADJ_RAPM_PRIOR_SCALE`` (both leagues): where next-season R^2 and Spearman peak, the
-#: conservative end of the range where held-out game error also falls (see the report).
-CHOSEN_SCALE = 2.0
+#: The scale frozen in ``ADJ_RAPM_PRIOR_SCALE_WEIGHTED`` (both leagues; the weighted alternative): where next-season R^2 and Spearman peak and
+#: held-out game error is at or near its minimum (see the report). 2 for the equal-weight SPM prior (#1150).
+CHOSEN_SCALE = 1.5
 #: league -> (season end years, training end years, league id, year-over-year possession floor,
 #: scale-check off_poss floor). Training is every complete season (fit 2026-11-09: NBA 2026-27 is in
 #: progress, WNBA 2026 is complete). The first season has no prior (the producers' chain starts there).
@@ -63,6 +80,19 @@ LEAGUES = {
     "nba": (range(1997, 2027), range(1997, 2027), "00", 2000, 300),
     "wnba": (range(1997, 2027), range(1997, 2027), "10", 1000, 300),
 }
+#: ``train_spm`` penalties the ``spm`` stage scores (raw per-100 features, minute weights at mean 1).
+SPM_ALPHAS = (0.0, 0.1, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0, 1000.0)
+SPM_FOLDS = 5
+#: ``train_spm`` keywords of the prior ``curves`` chains: ``weighted`` is the unshipped alternative; ``equal`` is the
+#: equal-weight alpha-100 fit before minute weighting, run into a second OUT for ``report --baseline``. ``curves``
+#: records the rule it ran in ``OUT/curves_config.json`` and refuses to resume an OUT written under another one (or an
+#: unstamped OUT from before the stamp: rerun into a fresh OUT, or write the stamp by hand once the rule is confirmed).
+PRIOR_RULES: dict[str, dict] = {
+    "weighted": {"weight": "min", "alpha": SPM_ALPHA_WEIGHTED},
+    "equal": {"weight": None, "alpha": SPM_ALPHA},
+}
+#: The prior scale the ``equal`` rule shipped with (#1150), the baseline ``report --baseline`` pairs against.
+BASELINE_SCALE = 2.0
 _CHUNK = 20_000
 _RETRIES = 4
 
@@ -171,9 +201,21 @@ def season_curves(X: csr_matrix, Y: np.ndarray, games: np.ndarray, grid: np.ndar
     return {"cv_sse": cv_sse, "cv_n": cv_n, "coef": coef, "loo_mse": loo / n}
 
 
-def curves(out: Path, raw: dict[str, str]) -> None:
-    """One ``.npz`` per league and regular season (skipping those written), carrying the prior forward."""
+def curves(out: Path, raw: dict[str, str], prior_rule: str = "weighted") -> None:
+    """One ``.npz`` per league and regular season (skipping those written), carrying the prior forward.
+
+    Seasons are reused only from an OUT whose ``curves_config.json`` matches this run's prior rule and its
+    ``train_spm`` keywords; an OUT written under another rule, or with curves and no record, raises.
+    """
     out.mkdir(parents=True, exist_ok=True)
+    cfg = {"prior_rule": prior_rule, **PRIOR_RULES[prior_rule]}
+    stamp = out / "curves_config.json"
+    if stamp.exists():
+        if (old := json.loads(stamp.read_text())) != cfg:
+            raise SystemExit(f"{out} holds curves fit under {old}, not {cfg}: use another OUT")
+    elif any(out.glob("*_rs.npz")):
+        raise SystemExit(f"{out} holds curves with no recorded prior rule: use another OUT")
+    stamp.write_text(json.dumps(cfg))
     for league, (seasons, _, lid, *_) in LEAGUES.items():
         prior: pl.DataFrame | None = None
         for season in seasons:
@@ -196,7 +238,7 @@ def curves(out: Path, raw: dict[str, str]) -> None:
             rapm = nba_rapm(part, league_id=lid)
             logs = _logs(league, season, "Regular Season", raw[league])
             bf = box_features(logs["player"], logs["team"])
-            coef_spm = train_spm(bf, rapm.select("player_id", "o_rapm", "d_rapm"))
+            coef_spm = train_spm(bf, rapm.select("player_id", "o_rapm", "d_rapm"), **PRIOR_RULES[prior_rule])
             spm = nba_spm(bf, coef_spm)
             # a season with playoff games must have its playoff capture (the next season's prior blends it
             # in): a miss raises, except in the last season, whose prior no fitted season reads
@@ -233,6 +275,73 @@ def curves(out: Path, raw: dict[str, str]) -> None:
                 f"{league} {season}: n={X.shape[0]:,} P={P} prior={'yes' if res and pm.any() else 'no'} {time.time() - t0:.0f}s",
                 flush=True,
             )
+
+
+def spm_cv(rows: pl.DataFrame, alphas=SPM_ALPHAS) -> np.ndarray:
+    """Player-grouped CV error of minute-weighted ``train_spm`` per penalty, on one season's own target.
+
+    ``rows`` is one row per player (``box_features`` joined to the season's plain RAPM), so a plain
+    ``KFold`` over rows is grouped by player. The error is the held-out squared error of the offense
+    and defense predictions, each row weighted by its minutes over the training rows' mean minutes.
+    """
+    if not rows["player_id"].is_unique().all():
+        raise ValueError("spm_cv needs one row per player (the KFold over rows is the player grouping)")
+    rows = rows.sort("player_id")  # the seeded folds are row positions: fix the order so they are the same players
+    sse = np.zeros(len(alphas))
+    for tr, te in KFold(SPM_FOLDS, shuffle=True, random_state=0).split(np.arange(rows.height)):
+        train, test = rows[tr], rows[te]
+        w = (test["min"] / train["min"].mean()).to_numpy()
+        for k, a in enumerate(alphas):
+            pred = nba_spm(test, train_spm(train, train.select("player_id", "o_rapm", "d_rapm"), weight="min", alpha=a))
+            assert (pred["player_id"] == test["player_id"]).all()
+            err = (test["o_rapm"] - pred["ospm"]) ** 2 + (test["d_rapm"] - pred["dspm"]) ** 2
+            sse[k] += float((w * err.to_numpy()).sum())
+    return sse
+
+
+def spm(out: Path, raw: dict[str, str]) -> None:
+    """Write each season's SPM training rows (skipping those written), then the pooled CV per penalty."""
+    out.mkdir(parents=True, exist_ok=True)
+    recs = []
+    for league, (seasons, train, lid, *_) in LEAGUES.items():
+        for season in seasons:
+            f = out / f"{league}_{season}_spm_rows.parquet"
+            if not f.exists():
+                t0 = time.time()
+                poss, sched = _with_retry(_rows, league, season)
+                poss = poss.with_columns(pl.col("game_id").cast(pl.Utf8))
+                games = sched.filter(pl.col("season_type") == SEASON_TYPES["rs"]).select(
+                    pl.col("game_id").cast(pl.Utf8).unique()
+                )
+                part = poss.join(games, on="game_id", how="semi").drop_nulls(["game_id", "points"])
+                rapm = nba_rapm(part, league_id=lid)
+                logs = _logs(league, season, "Regular Season", raw[league])
+                bf = box_features(logs["player"], logs["team"])
+                assert bf.schema["player_id"] == rapm.schema["player_id"] == pl.Int64
+                rows = bf.join(
+                    rapm.select("player_id", "o_rapm", "d_rapm", "rapm", "off_poss", "def_poss"), on="player_id"
+                )
+                rows.write_parquet(f)
+                print(
+                    f"{league} {season}: {rows.height} SPM rows ({bf.height} box) {time.time() - t0:.0f}s", flush=True
+                )
+            rows = pl.read_parquet(f)
+            sse = spm_cv(rows)
+            recs.append(
+                {"league": league, "season": season, "alpha": list(SPM_ALPHAS), "sse": sse.tolist(), "n": rows.height}
+            )
+    cv = pl.DataFrame(recs).explode("alpha", "sse")
+    cv.write_parquet(out / "spm_cv.parquet")
+    for league, (_, train, *_) in LEAGUES.items():
+        pooled = (
+            cv.filter((pl.col("league") == league) & pl.col("season").is_in(list(train)))
+            .group_by("alpha")
+            .agg(pl.col("sse").sum())
+            .sort("alpha")
+        )
+        best = pooled.sort("sse")["alpha"][0]
+        rel = (pooled["sse"] / pooled["sse"].min()).round(5).to_list()
+        print(f"== {league}: pooled SPM penalty pick {best:g}; error / min per penalty {dict(zip(SPM_ALPHAS, rel))}")
 
 
 def _pick(curve: np.ndarray) -> float:
@@ -304,7 +413,31 @@ def _paired(a: dict[int, float], b: dict[int, float]) -> list[float]:
     return _summ({k: a[k] - b[k] for k in keys})
 
 
-def _league_report(out: Path, league: str) -> dict:
+def _vs_baseline(z: dict, zb: dict, train, frozen: float, frozen_b: float, plain: dict, floor: int) -> dict:
+    """This prior at (CHOSEN_SCALE, frozen) minus the baseline's at (BASELINE_SCALE, its frozen), paired by season.
+
+    Held-out MSE (basis points) is paired on the same games: both OUTs read the same possessions, which the
+    caller checks through the ``k = 0`` (no prior) curves. Next-season Spearman / R^2 are against the same
+    plain-RAPM targets.
+    """
+    kc, kb = PRIOR_SCALES.index(CHOSEN_SCALE), PRIOR_SCALES.index(BASELINE_SCALE)
+
+    def mse(zz, ki, alpha):
+        return {s: float(zz[s]["cv_sse"][ki][:, np.isclose(GRID, alpha)].sum() / zz[s]["cv_n"].sum()) for s in train}
+
+    m_new, m_old = mse(z, kc, frozen), mse(zb, kb, frozen_b)
+    f_new = _forecast({s: _adj(v, kc, frozen) for s, v in z.items()}, plain, floor)
+    f_old = _forecast({s: _adj(v, kb, frozen_b) for s, v in zb.items()}, plain, floor)
+    d = _paired(m_new, m_old)
+    return {
+        "heldout_mse_bp": [d[0] * 1e4, d[1] * 1e4, d[2]],
+        "seasons_lower_mse": int(sum(m_new[s] < m_old[s] for s in train)),
+        **{m: _paired(f_new[m], f_old[m]) for m in ("spearman", "r2")},
+        "baseline_forecast": {m: _summ(f_old[m]) for m in ("spearman", "r2")},
+    }
+
+
+def _league_report(out: Path, league: str, baseline: Path | None = None) -> dict:
     seasons, train, _, floor, sc_floor = LEAGUES[league]
     z = {s: dict(np.load(f)) for s in seasons if (f := out / f"{league}_{s}_rs.npz").exists()}
     missing = sorted(set(train) - set(z))
@@ -339,7 +472,19 @@ def _league_report(out: Path, league: str) -> dict:
         ki = PRIOR_SCALES.index(k)
         fc[f"adj_k{k}"] = _forecast({s: _adj(v, ki, picks[k]) for s, v in z.items()}, plain, floor)
     stab = {name: _forecast(fr, fr, floor)["spearman"] for name, fr in (("adj_before", before), ("adj_after", after))}
+    vs_base = None
+    if baseline is not None:
+        zb = {s: dict(np.load(f)) for s in seasons if (f := baseline / f"{league}_{s}_rs.npz").exists()}
+        if set(zb) != set(z):
+            raise SystemExit(f"{league}: the baseline has seasons {sorted(zb)}, this OUT {sorted(z)}")
+        k0 = PRIOR_SCALES.index(0.0)
+        for s in z:  # k = 0 fits no prior: identical curves prove both OUTs read the same possessions and folds
+            if not np.allclose(z[s]["cv_sse"][k0], zb[s]["cv_sse"][k0], rtol=1e-9):
+                raise SystemExit(f"{league} {s}: the k = 0 curves differ, so the two OUTs read different possessions")
+        frozen_b = _pick(sum(zb[s]["cv_sse"][PRIOR_SCALES.index(BASELINE_SCALE)].sum(axis=0) for s in train))
+        vs_base = {"baseline_frozen": frozen_b, **_vs_baseline(z, zb, train, frozen, frozen_b, plain, floor)}
     return {
+        "vs_baseline": vs_base,
         "frozen": frozen, "scale": CHOSEN_SCALE, "picks": {f"{k}": p for k, p in picks.items()}, "best_mse": best_mse, "mse_vs_k1_bp": vs_k1,
         "seasons": rows,
         "forecast": {n: {m: _summ(d) for m, d in f.items()} for n, f in fc.items()},
@@ -350,8 +495,12 @@ def _league_report(out: Path, league: str) -> dict:
     }  # fmt: skip
 
 
-def report(out: Path) -> None:
-    res = {lg: _league_report(out, lg) for lg in LEAGUES}
+def report(out: Path, baseline: Path | None = None) -> None:
+    for d, rule in ((out, "weighted"), (baseline, "equal")):
+        stamp = d / "curves_config.json" if d else None
+        if stamp and stamp.exists() and json.loads(stamp.read_text())["prior_rule"] != rule:
+            raise SystemExit(f"{d} holds curves fit under another prior rule than {rule!r}")
+    res = {lg: _league_report(out, lg, baseline) for lg in LEAGUES}
     (out / "report.json").write_text(json.dumps(res, indent=1))
     sse = [
         {
@@ -377,11 +526,13 @@ def report(out: Path) -> None:
             print("forecast (mean, SE, pairs):", json.dumps(r["forecast"]))
             print("after - before:", r["after_minus_before"], "after - rapm:", r["after_minus_rapm"])
             print("rank stability:", r["rank_stability"], "after - before:", r["rank_stability_after_minus_before"])
+            if r["vs_baseline"]:
+                print("this prior minus the baseline (mean, SE, seasons):", json.dumps(r["vs_baseline"]))
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="fit_adj_rapm_penalty")
-    ap.add_argument("stage", choices=["curves", "report"])
+    ap.add_argument("stage", choices=["spm", "curves", "report"])
     ap.add_argument("out", type=Path)
     ap.add_argument(
         "--nba-raw", default="https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-stats-raw/main/nba_stats/json"
@@ -390,15 +541,19 @@ def main(argv: list[str] | None = None) -> int:
         "--wnba-raw",
         default="https://raw.githubusercontent.com/sportsdataverse/wehoop-wnba-stats-raw/main/wnba_stats/json",
     )
-    ap.add_argument("--league", choices=list(LEAGUES), default=None, help="curves for one league only")
+    ap.add_argument("--league", choices=list(LEAGUES), default=None, help="spm / curves for one league only")
+    ap.add_argument("--prior-rule", choices=list(PRIOR_RULES), default="weighted", help="curves: the SPM prior's fit")
+    ap.add_argument("--baseline", type=Path, default=None, help="report: an OUT of `curves --prior-rule equal`")
     a = ap.parse_args(argv)
-    if a.stage == "curves":
-        if a.league:
-            for other in [lg for lg in LEAGUES if lg != a.league]:
-                LEAGUES.pop(other)
-        curves(a.out, {"nba": a.nba_raw, "wnba": a.wnba_raw})
+    if a.league and a.stage != "report":
+        for other in [lg for lg in LEAGUES if lg != a.league]:
+            LEAGUES.pop(other)
+    if a.stage == "spm":
+        spm(a.out, {"nba": a.nba_raw, "wnba": a.wnba_raw})
+    elif a.stage == "curves":
+        curves(a.out, {"nba": a.nba_raw, "wnba": a.wnba_raw}, a.prior_rule)
     else:
-        report(a.out)
+        report(a.out, a.baseline)
     return 0
 
 

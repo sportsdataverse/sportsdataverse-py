@@ -164,10 +164,10 @@ columns:
   type: integer
   description: ''
 - name: game_date
-  type: character
+  type: date
   description: ''
 - name: game_date_time
-  type: character
+  type: datetime
   description: ''
 - name: coordinate_x
   type: double

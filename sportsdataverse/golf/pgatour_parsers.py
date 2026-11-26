@@ -18,16 +18,27 @@ import pandas as pd
 import polars as pl
 
 __all__ = [
+    "parse_pgatour_course_stats",
+    "parse_pgatour_field",
+    "parse_pgatour_hole_by_hole",
+    "parse_pgatour_hole_details",
     "parse_pgatour_leaderboard",
+    "parse_pgatour_leaderboard_stats",
+    "parse_pgatour_past_champions",
+    "parse_pgatour_past_results",
     "parse_pgatour_player",
     "parse_pgatour_player_directory",
+    "parse_pgatour_player_results",
     "parse_pgatour_schedule",
+    "parse_pgatour_schedule_years",
     "parse_pgatour_scorecard",
+    "parse_pgatour_scorecard_stats",
     "parse_pgatour_shot_details",
     "parse_pgatour_stat_catalog",
     "parse_pgatour_stat_details",
     "parse_pgatour_tee_times",
     "parse_pgatour_tour_cup",
+    "parse_pgatour_tournaments",
 ]
 
 S, INT, F, B = pl.String, pl.Int64, pl.Float64, pl.Boolean
@@ -83,6 +94,56 @@ SHOT_DETAILS_SCHEMA = {
     "hole_score": INT, "hole_status": S, "stroke_number": INT, "stroke_type": S, "play_by_play": S, "distance": S,
     "distance_remaining": S, "from_location_code": S, "from_location": S, "to_location_code": S,
     "to_location": S, "final_stroke": B, "from_x": F, "from_y": F, "from_z": F, "to_x": F, "to_y": F, "to_z": F,
+}  # fmt: skip
+SCHEDULE_YEARS_SCHEMA = {"season": INT, "display_season": S, "is_default": B}  # fmt: skip
+TOURNAMENTS_SCHEMA = {
+    "tournament_id": S, "tournament_name": S, "season": INT, "display_date": S, "tournament_status": S,
+    "round_status": S, "round_display": S, "current_round": INT, "format_type": S, "scored_level": S, "city": S,
+    "state": S, "country": S, "timezone": S, "location": S,
+}  # fmt: skip
+PAST_CHAMPIONS_SCHEMA = {
+    "tournament_id": S, "format_type": S, "season": INT, "display_season": S, "player_id": S, "display_name": S, "country_code": S,
+    "total": INT, "to_par": S,
+}  # fmt: skip
+HOLE_BY_HOLE_SCHEMA = {
+    "tournament_id": S, "player_id": S, "course_id": S, "course_code": S, "hole_number": INT, "sequence_number": INT,
+    "par": INT, "yardage": INT, "score": INT, "score_status": S, "round_to_par": S, "front_nine": INT,
+    "back_nine": INT, "round_total": INT, "round_total_to_par": S,
+}  # fmt: skip
+LEADERBOARD_STATS_SCHEMA = {
+    "tournament_id": S, "stats_type": S, "player_id": S, "stat_id": S, "stat_title": S, "stat_value": S, "rank": S,
+    "sort_value": F,
+}  # fmt: skip
+FIELD_SCHEMA = {
+    "tournament_id": S, "player_id": S, "first_name": S, "last_name": S, "display_name": S, "short_name": S,
+    "country": S, "country_code": S, "amateur": B, "alternate": B, "withdrawn": B, "status": S, "owgr": S,
+    "qualifier": S, "ranking_points": S,
+}  # fmt: skip
+PAST_RESULTS_SCHEMA = {
+    "tournament_id": S, "season": INT, "position": S, "player_id": S, "first_name": S, "last_name": S,
+    "display_name": S, "short_name": S, "country": S, "country_code": S, "amateur": B, "total": INT, "to_par": S,
+    **{f"round_{i}": INT for i in range(1, 5)},
+}  # fmt: skip
+COURSE_STATS_SCHEMA = {
+    "tournament_id": S, "course_id": S, "course_name": S, "course_code": S, "course_par": INT, "course_yardage": INT,
+    "host_course": B, "round_number": INT, "round_header": S, "hole_number": INT, "par": INT, "yards": INT,
+    "scoring_average": F, "scoring_average_diff": F, "difficulty_rank": INT, "eagles": INT, "birdies": INT,
+    "pars": INT, "bogeys": INT, "double_bogeys": INT,
+}  # fmt: skip
+HOLE_DETAILS_SCHEMA = {
+    "tournament_id": S, "course_id": S, "hole_number": INT, "par": INT, "yards": INT, "difficulty_rank": INT,
+    "rounds_played": INT, "scoring_average_diff": F, "eagles": INT, "eagles_pct": S, "birdies": INT,
+    "birdies_pct": S, "pars": INT, "pars_pct": S, "bogeys": INT, "bogeys_pct": S, "double_bogeys": INT,
+    "double_bogeys_pct": S,
+}  # fmt: skip
+SCORECARD_STATS_SCHEMA = {
+    "tournament_id": S, "round": S, "round_name": S, "round_status": S, "stat_group": S, "stat_id": S,
+    "stat_name": S, "stat_value": S, "rank": S, "year_to_date": S,
+}  # fmt: skip
+PLAYER_RESULTS_SCHEMA = {
+    "player_id": S, "tournament_num": S, "tournament_id": S, "tournament_name": S, "season": INT, "start_date": S,
+    "course_name": S, "position": S, "to_par": S, "total": INT, "points": S, "points_rank": S, "winnings": S,
+    **{f"round_{i}": INT for i in range(1, 5)},
 }  # fmt: skip
 
 
@@ -537,3 +598,413 @@ def parse_pgatour_shot_details(raw: Any, return_as_pandas: bool = False) -> pl.D
             for st in _l(hole.get("strokes"))
         )  # fmt: skip
     return _frame(rows, SHOT_DETAILS_SCHEMA, return_as_pandas)
+
+
+def _num(value: Any) -> float | None:
+    """``"4.036"`` / ``"+0.152"`` / ``0.2`` -> float; ``"-"``, ``""``, None -> None."""
+    if isinstance(value, bool) or value is None:
+        return None
+    try:
+        out = float(str(value).replace(",", "").strip())
+    except ValueError:
+        return None
+    return out if math.isfinite(out) else None
+
+
+def _tournament(value: Any) -> str | None:
+    """The tournament id at the head of an answer id: ``"R2026014-probability"`` / ``"R2026014-28237"`` -> ``"R2026014"``."""
+    text = _str(value)
+    return text.split("-", 1)[0] if text else None
+
+
+def _rounds(scores: Any, key: str, number: str | None = None) -> dict[str, int | None]:
+    """``round_1`` .. ``round_4`` from a list of per-round dicts (strokes under ``key``).
+
+    With ``number``, each dict says its own round (``roundNum``); otherwise the list order is the round order.
+    """
+    if number is not None:
+        by = {_int(r.get(number)): r for r in _l(scores)}
+        return {f"round_{i}": _int(by[i].get(key)) if i in by else None for i in range(1, 5)}
+    # positional: a null slot stays a slot, so later rounds keep their numbers
+    slots = [r if isinstance(r, dict) else {} for r in scores] if isinstance(scores, list) else []
+    return {f"round_{i}": _int(slots[i - 1].get(key)) if i <= len(slots) else None for i in range(1, 5)}
+
+
+def parse_pgatour_schedule_years(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row per season with a published schedule for a tour, newest first.
+
+    Args:
+        raw: The ``scheduleYears`` answer (``pgatour_schedule_years(..., return_parsed=False)``).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`SCHEDULE_YEARS_SCHEMA` columns; ``season`` is the year ``pgatour_schedule``
+        takes (``2023`` for the split ``"2022-2023"`` season), ``is_default`` marks the current one.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_schedule_years, pgatour_schedule_years
+            parse_pgatour_schedule_years(pgatour_schedule_years(tour_code="R", return_parsed=False))
+    """
+    rows = [
+        {"season": _int(y.get("queryValue")), "display_season": _str(y.get("displayValue")), "is_default": y.get("default")}
+        for y in _l(_d(raw).get("years"))
+    ]  # fmt: skip
+    return _frame(rows, SCHEDULE_YEARS_SCHEMA, return_as_pandas)
+
+
+def parse_pgatour_tournaments(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row per requested tournament: dates, status, current round, format and location.
+
+    Args:
+        raw: The ``tournaments`` answer (a list, one entry per id asked for).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`TOURNAMENTS_SCHEMA` columns.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_tournaments, pgatour_tournaments
+            parse_pgatour_tournaments(pgatour_tournaments(tournament_ids="R2026014", return_parsed=False))
+    """
+    rows = [
+        {
+            "tournament_id": _str(t.get("id")), "tournament_name": t.get("tournamentName"),
+            "season": _int(t.get("seasonYear")), "display_date": t.get("displayDate"),
+            "tournament_status": t.get("tournamentStatus"), "round_status": t.get("roundStatus"),
+            "round_display": t.get("roundDisplay"), "current_round": _int(t.get("currentRound")),
+            "format_type": t.get("formatType"), "scored_level": t.get("scoredLevel"), "city": t.get("city"),
+            "state": t.get("state"), "country": t.get("country"), "timezone": t.get("timezone"),
+            "location": t.get("tournamentLocation"),
+        }
+        for t in _l(raw)
+        if _str(t.get("id"))
+    ]  # fmt: skip
+    return _frame(rows, TOURNAMENTS_SCHEMA, return_as_pandas)
+
+
+def parse_pgatour_past_champions(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row per past champion of a tournament, newest edition first.
+
+    The answer does not repeat the tournament id; ``tournament_id`` is the one the wrapper was given
+    (the runtime stamps it in as ``tournamentId``), null on an answer without that stamp.
+
+    Args:
+        raw: The ``tournamentOverview`` answer.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`PAST_CHAMPIONS_SCHEMA` columns; ``to_par`` is as displayed (``"-11"``).
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_past_champions, pgatour_past_champions
+            parse_pgatour_past_champions(pgatour_past_champions(tournament_id="R2026014", return_parsed=False))
+    """
+    raw = _d(raw)
+    tid = _str(raw.get("tournamentId"))
+    rows = [
+        {
+            "tournament_id": tid, "format_type": raw.get("formatType"), "season": _int(c.get("year")),
+            "display_season": _str(c.get("displaySeason")), "player_id": _str(c.get("playerId")),
+            "display_name": c.get("displayName"), "country_code": c.get("countryCode"), "total": _int(c.get("total")),
+            "to_par": _str(c.get("score")),
+        }
+        for c in _l(raw.get("pastChampions"))
+        if _str(c.get("playerId"))
+    ]  # fmt: skip
+    return _frame(rows, PAST_CHAMPIONS_SCHEMA, return_as_pandas)
+
+
+def parse_pgatour_hole_by_hole(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row per player per hole of one round of a tournament.
+
+    The answer does not say which round it holds: it is the round the wrapper asked for, or
+    the tournament's current round when none was given.
+
+    Args:
+        raw: The ``leaderboardHoleByHole`` answer.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`HOLE_BY_HOLE_SCHEMA` columns; ``score`` is null on a hole not yet played.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_hole_by_hole, pgatour_hole_by_hole
+            parse_pgatour_hole_by_hole(pgatour_hole_by_hole(tournament_id="R2026014", round=4, return_parsed=False))
+    """
+    raw = _d(raw)
+    rows = []
+    for p in _l(raw.get("playerData")):
+        head = {
+            "tournament_id": _str(raw.get("tournamentId")), "player_id": _str(p.get("playerId")),
+            "course_id": _str(p.get("courseId")), "course_code": p.get("courseCode"), "front_nine": _int(p.get("out")),
+            "back_nine": _int(p.get("in")), "round_total": _int(p.get("total")),
+            "round_total_to_par": _str(p.get("totalToPar")),
+        }  # fmt: skip
+        rows.extend(
+            {
+                **head, "hole_number": _int(h.get("holeNumber")), "sequence_number": _int(h.get("sequenceNumber")),
+                "par": _int(h.get("par")), "yardage": _int(h.get("yardage")), "score": _int(h.get("score")),
+                "score_status": h.get("status"), "round_to_par": _str(h.get("roundScore")),
+            }
+            for h in _l(p.get("scores"))
+        )  # fmt: skip
+    return _frame(rows, HOLE_BY_HOLE_SCHEMA, return_as_pandas)
+
+
+def parse_pgatour_leaderboard_stats(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row per player per stat of a tournament's leaderboard stat table (long form).
+
+    ``stat_title`` is the column heading the site shows for ``stat_id`` (``win`` -> ``Win %``).
+    An event without that table (no strokes-gained data, say) is a zero-row frame.
+
+    Args:
+        raw: The ``leaderboardStats`` answer.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`LEADERBOARD_STATS_SCHEMA` columns; ``stat_value`` and ``rank`` are as displayed.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_leaderboard_stats, pgatour_leaderboard_stats
+            parse_pgatour_leaderboard_stats(pgatour_leaderboard_stats(tournament_id="R2026014", return_parsed=False))
+    """
+    raw = _d(raw)
+    ids, titles = raw.get("statIds"), raw.get("titles")
+    title = (
+        {_str(i): t for i, t in zip(ids, titles, strict=False)}
+        if isinstance(ids, list) and isinstance(titles, list)
+        else {}
+    )
+    rows = [
+        {
+            "tournament_id": _tournament(raw.get("id")), "stats_type": raw.get("type"), "player_id": _str(p.get("playerId")),
+            "stat_id": _str(s.get("statId")), "stat_title": _str(title.get(_str(s.get("statId")))),
+            "stat_value": _str(s.get("value")), "rank": _str(s.get("rank")), "sort_value": _num(s.get("sortValue")),
+        }
+        for p in _l(raw.get("players"))
+        for s in _l(p.get("stats"))
+    ]  # fmt: skip
+    return _frame(rows, LEADERBOARD_STATS_SCHEMA, return_as_pandas)
+
+
+def parse_pgatour_field(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row per player in a tournament's field, entered players first, then the alternates.
+
+    Args:
+        raw: The ``field`` answer.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`FIELD_SCHEMA` columns.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_field, pgatour_field
+            parse_pgatour_field(pgatour_field(tournament_id="R2026014", return_parsed=False))
+    """
+    raw = _d(raw)
+    rows = [
+        {
+            "tournament_id": _str(raw.get("id")), "player_id": _str(p.get("id")), "first_name": p.get("firstName"),
+            "last_name": p.get("lastName"), "display_name": p.get("displayName"), "short_name": p.get("shortName"),
+            "country": p.get("country"), "country_code": p.get("countryFlag"), "amateur": p.get("amateur"),
+            "alternate": p.get("alternate"), "withdrawn": p.get("withdrawn"), "status": p.get("status"),
+            "owgr": _str(p.get("owgr")), "qualifier": p.get("qualifier"), "ranking_points": _str(p.get("rankingPoints")),
+        }
+        for p in _l(raw.get("players")) + _l(raw.get("alternates"))
+        if _str(p.get("id"))
+    ]  # fmt: skip
+    return _frame(rows, FIELD_SCHEMA, return_as_pandas)
+
+
+def parse_pgatour_past_results(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row per player of one edition's final leaderboard.
+
+    ``tournament_id`` is the edition the API answered with (``R2025014`` for the 2025 Masters),
+    and ``season`` is read from it.
+
+    Args:
+        raw: The ``tournamentPastResults`` answer.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`PAST_RESULTS_SCHEMA` columns; ``round_<n>`` is null for a round not played.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_past_results, pgatour_past_results
+            parse_pgatour_past_results(pgatour_past_results(tournament_id="R2026014", year=2025, return_parsed=False))
+    """
+    raw = _d(raw)
+    tid = _str(raw.get("id"))
+    rows = []
+    for r in _l(raw.get("players")):
+        p = _d(r.get("player"))
+        rows.append({
+            "tournament_id": tid, "season": _int(tid[1:5]) if tid else None, "position": _str(r.get("position")),
+            "player_id": _str(p.get("id")), "first_name": p.get("firstName"), "last_name": p.get("lastName"),
+            "display_name": p.get("displayName"), "short_name": p.get("shortName"), "country": p.get("country"),
+            "country_code": p.get("countryFlag"), "amateur": p.get("amateur"), "total": _int(r.get("total")),
+            "to_par": _str(r.get("parRelativeScore")), **_rounds(r.get("rounds"), "score"),
+        })  # fmt: skip
+    return _frame(rows, PAST_RESULTS_SCHEMA, return_as_pandas)
+
+
+def parse_pgatour_course_stats(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row per hole per round per course of a tournament: scoring average and score counts.
+
+    ``round_number`` is null on the all-rounds rows (``round_header`` ``"All Rounds"``);
+    ``difficulty_rank`` 1 is the hardest hole. The summary rows the site shows are dropped.
+
+    Args:
+        raw: The ``courseStats`` answer.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`COURSE_STATS_SCHEMA` columns.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_course_stats, pgatour_course_stats
+            parse_pgatour_course_stats(pgatour_course_stats(tournament_id="R2026014", return_parsed=False))
+    """
+    raw = _d(raw)
+    rows = []
+    for c in _l(raw.get("courses")):
+        course = {
+            "tournament_id": _str(raw.get("tournamentId")), "course_id": _str(c.get("courseId")),
+            "course_name": c.get("courseName"), "course_code": c.get("courseCode"), "course_par": _int(c.get("par")),
+            "course_yardage": _int(c.get("yardage")), "host_course": c.get("hostCourse"),
+        }  # fmt: skip
+        for rnd in _l(c.get("roundHoleStats")):
+            rows.extend(
+                {
+                    **course, "round_number": _int(rnd.get("roundNum")), "round_header": rnd.get("roundHeader"),
+                    "hole_number": _int(h.get("courseHoleNum")), "par": _int(h.get("parValue")),
+                    "yards": _int(h.get("yards")), "scoring_average": _num(h.get("scoringAverage")),
+                    "scoring_average_diff": _num(h.get("scoringAverageDiff")), "difficulty_rank": _int(h.get("rank")),
+                    "eagles": _int(h.get("eagles")), "birdies": _int(h.get("birdies")), "pars": _int(h.get("pars")),
+                    "bogeys": _int(h.get("bogeys")), "double_bogeys": _int(h.get("doubleBogey")),
+                }
+                for h in _l(rnd.get("holeStats"))
+                if h.get("__typename", "CourseHoleStats") == "CourseHoleStats"
+            )  # fmt: skip
+    return _frame(rows, COURSE_STATS_SCHEMA, return_as_pandas)
+
+
+def parse_pgatour_hole_details(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row: one hole of one course over a whole tournament (par, yardage, score counts).
+
+    Args:
+        raw: The ``holeDetails`` answer.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`HOLE_DETAILS_SCHEMA` columns; zero rows when ``raw`` names no hole.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_hole_details, pgatour_hole_details
+            parse_pgatour_hole_details(pgatour_hole_details(tournament_id="R2026014", course_id="014", hole=12, return_parsed=False))
+    """
+    raw = _d(raw)
+    info, summary = _d(raw.get("holeInfo")), _d(raw.get("statsSummary"))
+    rows = [] if raw.get("holeNum") is None else [{
+        "tournament_id": _str(raw.get("tournamentId")), "course_id": _str(raw.get("courseId")),
+        "hole_number": _int(raw.get("holeNum")), "par": _int(info.get("par")), "yards": _int(info.get("yards")),
+        "difficulty_rank": _int(info.get("rank")), "rounds_played": _int(info.get("rounds")),
+        "scoring_average_diff": _num(info.get("scoringAverageDiff")),
+        **{
+            f"{k}{suffix}": (_int if suffix == "" else _str)(summary.get(f"{camel}{'Percent' if suffix else ''}"))
+            for k, camel in (("eagles", "eagles"), ("birdies", "birdies"), ("pars", "pars"), ("bogeys", "bogeys"),
+                             ("double_bogeys", "doubleBogeys"))
+            for suffix in ("", "_pct")
+        },
+    }]  # fmt: skip
+    return _frame(rows, HOLE_DETAILS_SCHEMA, return_as_pandas)
+
+
+_SCORECARD_STAT_GROUPS = (("performance", "performance"), ("scoring", "scoring"), ("strokesGained", "strokes_gained"))
+
+
+def parse_pgatour_scorecard_stats(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row per stat per round of one player's tournament (performance, scoring, strokes gained).
+
+    ``round`` is the round number as a string (``"1"`` .. ``"4"``; ``"-1"``, named ``All``, is the
+    whole tournament); ``year_to_date`` is the player's season value of the same stat. An event
+    without ShotLink (the Masters) carries only the scoring group.
+
+    Args:
+        raw: The ``scorecardStatsV3Compressed`` answer, payload decoded.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`SCORECARD_STATS_SCHEMA` columns; values are as displayed.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_scorecard_stats, pgatour_scorecard_stats
+            parse_pgatour_scorecard_stats(pgatour_scorecard_stats(tournament_id="R2026014", player_id="28237", return_parsed=False))
+    """
+    body = _payload(raw)
+    rows = [
+        {
+            "tournament_id": _tournament(body.get("id")), "round": _str(rnd.get("round")), "round_name": rnd.get("displayName"),
+            "round_status": rnd.get("roundStatus"), "stat_group": group, "stat_id": _str(s.get("statId")),
+            "stat_name": s.get("label"), "stat_value": _str(s.get("total")), "rank": _str(s.get("rank")),
+            "year_to_date": _str(s.get("yearToDate")),
+        }
+        for rnd in _l(body.get("rounds"))
+        for key, group in _SCORECARD_STAT_GROUPS
+        for s in _l(rnd.get(key))
+    ]  # fmt: skip
+    return _frame(rows, SCORECARD_STATS_SCHEMA, return_as_pandas)
+
+
+def parse_pgatour_player_results(raw: Any, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """One row per tournament edition a player has played on a tour (career results).
+
+    Args:
+        raw: The ``playerProfileTournamentResults`` answer.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A frame with :data:`PLAYER_RESULTS_SCHEMA` columns; ``start_date``, ``winnings`` and ``points`` are as
+        displayed (``"3.19.2015"``, ``"$151,200.00"``, ``"67.500"``). ``total`` is null for a match-play event
+        (the API sends ``"0"``), ``round_<n>`` for a round not played.
+
+    Example:
+        Parse a raw answer::
+
+            from sportsdataverse.golf import parse_pgatour_player_results, pgatour_player_results
+            parse_pgatour_player_results(pgatour_player_results(player_id="28237", return_parsed=False))
+    """
+    raw = _d(raw)
+    rows = [
+        {
+            "player_id": _str(raw.get("playerId")), "tournament_num": _str(t.get("tournamentNum")),
+            "tournament_id": _str(e.get("tournamentId")), "tournament_name": e.get("tournamentName"),
+            "season": _int(e.get("year")), "start_date": _str(e.get("startDate")), "course_name": e.get("courseName"),
+            "position": _str(e.get("position")), "to_par": _str(e.get("toPar")), "total": _int(e.get("total")) or None,
+            "points": _str(e.get("points")), "points_rank": _str(e.get("pointsRank")),
+            "winnings": _str(e.get("winnings")), **_rounds(e.get("roundScores"), "roundScore", "roundNum"),
+        }
+        for t in _l(raw.get("tournaments"))
+        for e in _l(t.get("tournaments"))
+    ]  # fmt: skip
+    return _frame(rows, PLAYER_RESULTS_SCHEMA, return_as_pandas)

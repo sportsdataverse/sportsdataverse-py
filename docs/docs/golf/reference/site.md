@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # Golf — ESPN site API (v2)
 
-`sportsdataverse.golf` — 4 endpoints.
+`sportsdataverse.golf` — 9 endpoints.
 
 ## espn_golf_scoreboard
 
@@ -189,6 +189,48 @@ ESPN endpoint.
 espn_golf_news(league='pga')
 ```
 
+## espn_golf_conferences
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/golf/pga/groups`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/golf/tgl/groups](https://site.api.espn.com/apis/site/v2/sports/golf/tgl/groups)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_golf_conferences-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group_id` | Int64 |  |
+| `name` | String |  |
+| `abbreviation` | String |  |
+| `short_name` | String |  |
+| `is_conference` | Boolean |  |
+| `parent_group_id` | Int64 |  |
+| `depth` | Int64 |  |
+| `children_count` | Int64 |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_golf_conferences-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_golf_conferences-example}
+
+```python
+espn_golf_conferences(league='tgl')
+```
+
 ## espn_golf_statistics_league
 
 ESPN endpoint.
@@ -220,4 +262,246 @@ No returns table is published for this endpoint: parser: parse_items returns no 
 
 ```python
 espn_golf_statistics_league(league='pga')
+```
+
+## espn_golf_teams_site
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/golf/tgl/teams?limit=1000](https://site.api.espn.com/apis/site/v2/sports/golf/tgl/teams?limit=1000)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_golf_teams_site-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | String | Short team abbreviation (e.g. "BOS"). |
+| `team_alternate_color` | String | Secondary team color as a hex string (no leading '#'). |
+| `team_color` | String | Primary team color as a hex string (no leading '#'). |
+| `team_display_name` | String | Full team display name (location + nickname). |
+| `team_id` | Int64 | ESPN team id (stable join key across ESPN endpoints). |
+| `team_is_active` | Boolean | Whether the team is currently active. |
+| `team_is_all_star` | Boolean | Whether the entry is an all-star squad rather than a franchise. |
+| `team_location` | String | Team location / city (e.g. "Boston"). |
+| `team_logos` | String | Pipe-delimited logo image URLs. |
+| `team_name` | String | Team nickname/mascot (e.g. "Celtics"). |
+| `team_nickname` | String | Team nickname as ESPN labels it (often equals team_name). |
+| `team_short_display_name` | String | Abbreviated display name for compact UIs. |
+| `team_slug` | String | URL slug used in ESPN web paths. |
+| `team_uid` | String | ESPN global UID (encodes sport/league/team). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_golf_teams_site-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_golf_teams_site-example}
+
+```python
+espn_golf_teams_site(league='tgl')
+```
+
+## espn_golf_team
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/{team_id}`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/4](https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/4)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_golf_team-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | String |  |
+| `team_alternate_color` | String |  |
+| `team_color` | String |  |
+| `team_display_name` | String |  |
+| `team_franchise_$ref` | String |  |
+| `team_franchise_abbreviation` | String |  |
+| `team_franchise_color` | String |  |
+| `team_franchise_display_name` | String |  |
+| `team_franchise_id` | Int64 |  |
+| `team_franchise_is_active` | Boolean |  |
+| `team_franchise_location` | String |  |
+| `team_franchise_name` | String |  |
+| `team_franchise_short_display_name` | String |  |
+| `team_franchise_slug` | String |  |
+| `team_franchise_team_$ref` | String |  |
+| `team_franchise_uid` | String |  |
+| `team_franchise_venue_$ref` | String |  |
+| `team_franchise_venue_address_city` | String |  |
+| `team_franchise_venue_address_state` | String |  |
+| `team_franchise_venue_full_name` | String |  |
+| `team_franchise_venue_grass` | Boolean |  |
+| `team_franchise_venue_guid` | String |  |
+| `team_franchise_venue_id` | Int64 |  |
+| `team_franchise_venue_images` | String |  |
+| `team_franchise_venue_indoor` | Boolean |  |
+| `team_franchise_venue_short_name` | String |  |
+| `team_groups_id` | Int64 |  |
+| `team_groups_is_conference` | Boolean |  |
+| `team_groups_parent_id` | Int64 |  |
+| `team_id` | Int64 |  |
+| `team_is_active` | Boolean |  |
+| `team_links` | String |  |
+| `team_location` | String |  |
+| `team_logos` | String |  |
+| `team_name` | String |  |
+| `team_next_event` | String |  |
+| `team_record_items` | String |  |
+| `team_short_display_name` | String |  |
+| `team_slug` | String |  |
+| `team_standing_summary` | String |  |
+| `team_uid` | String |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_golf_team-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_golf_team-example}
+
+```python
+espn_golf_team(league='pga', team_id='4')
+```
+
+## espn_golf_team_schedule
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/{team_id}/schedule`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/4/schedule](https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/4/schedule)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+
+### Returns {#espn_golf_team_schedule-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | Int64 | ESPN numeric event identifier. |
+| `date` | String | Event timestamp (ISO 8601, UTC). |
+| `name` | String | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | String | Abbreviated event name (e.g. 'TA @ TB'). |
+| `time_valid` | Boolean | Whether the event time is confirmed. |
+| `competitions` | String | Competition detail (list of dicts, stringified): competitors, venue, status. |
+| `links` | String | Related links (list, stringified). |
+| `season_year` | Int64 | Four-digit season year. |
+| `season_display_name` | String | Human-readable season label (e.g. '2024-25'). |
+| `season_type_id` | Int64 | ESPN numeric identifier for the season type. |
+| `season_type_type` | Int64 | Season type numeric code. |
+| `season_type_name` | String | Season type name (e.g. Regular Season). |
+| `season_type_abbreviation` | String | Season type abbreviation. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_golf_team_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_golf_team_schedule-example}
+
+```python
+espn_golf_team_schedule(league='pga', team_id='4')
+```
+
+## espn_golf_standings
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/v2/sports/golf/pga/standings`
+
+**Valid URL:** [https://site.api.espn.com/apis/v2/sports/golf/tgl/standings](https://site.api.espn.com/apis/v2/sports/golf/tgl/standings)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
+| `type` | `standings_type` |  |  | `Y` | Standings variant (e.g. 'by-division' or 'by-conference'). |
+
+### Returns {#espn_golf_standings-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group_name` | String | Group name. |
+| `group_abbreviation` | String | Group abbreviation. |
+| `team_id` | Int64 | Team id. |
+| `team_name` | String | Team name. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `team_display_name` | String | Team display name. |
+| `team_location` | String | Team location. |
+| `team_logo` | String | Team logo. |
+| `avg_points_against` | Float64 | Avg points against. |
+| `avg_points_for` | Float64 | Avg points for. |
+| `clincher` | Float64 | Clincher. |
+| `differential` | Float64 | Differential. |
+| `division_win_percent` | Float64 | Division win percent. |
+| `games_behind` | Float64 | Games behind. |
+| `league_win_percent` | Float64 | League win percent. |
+| `losses` | Float64 | Losses. |
+| `playoff_seed` | Float64 | Playoff seed. |
+| `point_differential` | Float64 | Point differential. |
+| `points` | Float64 | Points. |
+| `points_against` | Float64 | Points against. |
+| `points_for` | Float64 | Points for. |
+| `streak` | Float64 | Streak. |
+| `win_percent` | Float64 | Win percent. |
+| `wins` | Float64 | Wins. |
+| `games_ahead` | Float64 | Games ahead. |
+| `overall` | String | Overall. |
+| `home` | String | Home. |
+| `road` | String | Road. |
+| `vs. div.` | String | Vs. div.. |
+| `vs. conf.` | String | Vs. conf.. |
+| `last ten games` | String | Last ten games. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#espn_golf_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#espn_golf_standings-example}
+
+```python
+espn_golf_standings(league='tgl')
 ```

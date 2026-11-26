@@ -1,0 +1,14 @@
+query TournamentOverview($tournamentId: ID!) {
+  tournamentOverview(tournamentId: $tournamentId) {
+    formatType
+    pastChampions {
+      year
+      displaySeason
+      playerId
+      displayName
+      countryCode
+      total
+      score
+    }
+  }
+}

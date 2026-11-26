@@ -1,0 +1,27 @@
+schema: pgatour_leaderboard_stats
+kind: dataframe
+columns:
+- name: tournament_id
+  type: character
+  description: ''
+- name: stats_type
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: stat_id
+  type: character
+  description: ''
+- name: stat_title
+  type: character
+  description: ''
+- name: stat_value
+  type: character
+  description: ''
+- name: rank
+  type: character
+  description: ''
+- name: sort_value
+  type: double
+  description: ''

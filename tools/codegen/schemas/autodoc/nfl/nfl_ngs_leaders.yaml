@@ -101,7 +101,7 @@ columns:
   type: character
   description: ''
 - name: play_playStats
-  type: integer
+  type: list
   description: ''
 - name: play_playType
   type: character

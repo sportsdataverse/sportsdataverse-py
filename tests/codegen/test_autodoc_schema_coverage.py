@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import signal
 import sys
+import threading
 import time
 
 import polars as pl
@@ -145,17 +146,18 @@ def test_a_call_reference_is_resolved_once_and_can_pick_a_key(monkeypatch):
     assert generate._resolve_autodoc_arg(7, memo) == 7
 
 
-_NO_ALARM = pytest.mark.skipif(not hasattr(signal, "SIGALRM"), reason="SIGALRM is POSIX-only; the timeout is a no-op")
-
-
-@_NO_ALARM
 def test_a_stalled_call_times_out():
+    # SIGALRM on POSIX, the thread fallback on Windows: either way the capture moves on
+    release = threading.Event()
     with pytest.raises(generate._CallTimeout, match="SDV_AUTODOC_CALL_TIMEOUT"):
-        generate._call_with_timeout(lambda: time.sleep(5), 0.2)
+        generate._call_with_timeout(lambda: release.wait(5), 0.2)
+    release.set()  # the thread fallback abandons the call; let it end now
     assert generate._call_with_timeout(lambda: 3, 0.2) == 3
 
 
-@_NO_ALARM
+@pytest.mark.skipif(
+    not hasattr(signal, "SIGALRM"), reason="the alarm path: on the thread fallback one attempt holds either way"
+)
 def test_the_timeout_escapes_a_retry_loop_that_catches_exception():
     """dl_utils.download retries on any Exception: a plain TimeoutError would be swallowed and
     the stalled call retried with no alarm left."""
@@ -172,6 +174,18 @@ def test_the_timeout_escapes_a_retry_loop_that_catches_exception():
     with pytest.raises(generate._CallTimeout):
         generate._call_with_timeout(retrying, 0.2)
     assert len(attempts) == 1
+
+
+def test_the_thread_fallback_times_out_and_hands_back_value_or_error():
+    """Where SIGALRM cannot interrupt (Windows, a worker thread), the wait ends instead: one
+    hung call (nhl_special_teams_value did) no longer stalls the whole capture."""
+    release = threading.Event()
+    with pytest.raises(generate._CallTimeout, match="SDV_AUTODOC_CALL_TIMEOUT"):
+        generate._call_in_thread(lambda: release.wait(5), 0.2)
+    release.set()
+    assert generate._call_in_thread(lambda: 3, 0.2) == 3
+    with pytest.raises(ZeroDivisionError):
+        generate._call_in_thread(lambda: 1 / 0, 0.2)
 
 
 def test_an_unannotated_function_without_args_or_schema_is_never_called(tmp_path, monkeypatch):
@@ -278,7 +292,7 @@ def test_a_passthrough_transformer_inherits_its_inputs_descriptions_per_league(m
 
 @pytest.mark.parametrize("schema", ["aggregate_stints", "stack_seasons"])
 def test_a_list_column_is_documented_as_list_not_its_inner_type(schema: str) -> None:
-    """``_pl_to_doc_type`` folds ``List(Utf8)`` to ``character``; the committed table must say ``list``."""
+    """A ``List(Utf8)`` column is documented as ``list``, not its inner ``character``."""
     from sportsdataverse.mbb.mbb_ncaa_rapm_league import STINT_SCHEMA
 
     cols = {c["name"]: c["type"] for c in yaml.safe_load((SCHEMAS / "mbb" / f"{schema}.yaml").read_text())["columns"]}

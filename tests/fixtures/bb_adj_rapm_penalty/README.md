@@ -9,25 +9,59 @@
 # Adjusted-RAPM penalty corpus
 
 `cv_sse.parquet` holds the game-grouped 10-fold cross-validation error of adjusted RAPM (ridge toward
-the previous season's SPM prior). There is one row per league (`nba`, `wnba`), regular season (named by
+the previous season's minute-weighted SPM prior). There is one row per league (`nba`, `wnba`), regular season (named by
 its end year), prior scale (`k`, the 8 values of `tools/fit_adj_rapm_penalty.py`'s `PRIOR_SCALES`) and
 grid penalty (`alpha`, the 71 points of `tools/fit_rapm_penalty.py`'s `GRID`). `sse` is the squared
 error of the held-out games' points, summed over the ten folds.
 
-It is the `cv_sse.parquet` that `tools/fit_adj_rapm_penalty.py report` wrote on 2026-11-09. The
-`curves` stage behind it read:
+It is the `cv_sse.parquet` that `tools/fit_adj_rapm_penalty.py report` wrote on 2026-11-25 for the
+minute-weighted SPM prior (`train_spm(..., weight="min")`; the 2026-11-09 corpus had the equal-weight
+prior). That prior is the **unshipped alternative**: `train_spm` defaults to the published equal-weight
+fit, with `ADJ_RAPM_PRIOR_SCALE` 2. The weighted one is kept as `SPM_ALPHA_WEIGHTED` /
+`ADJ_RAPM_PRIOR_SCALE_WEIGHTED`, because as the prior it fails the NBA producer's `r_rapm_adj_min` floor
+(2026-11-26). The `spm` and `curves` stages behind it read:
 
 - the `nba_stats_possessions` / `wnba_stats_possessions` and `_schedules` release assets (1997-2026
   both);
 - the leaguegamelog captures of local hoopR-nba-stats-raw / wehoop-wnba-stats-raw checkouts, which
   give the box logs the SPM prior is trained on.
 
+`report.json` is the same run's `report --baseline` output: per league the frozen penalty and scale,
+the per-season spread of adjusted RAPM against plain RAPM, the next-season forecast blocks, and
+`vs_baseline`, the season-paired comparison against a second `curves --prior-rule equal` OUT (the
+equal-weight SPM prior at its #1150 scale 2; that OUT's curves reproduce the 2026-11-09 corpus).
+
 Nothing is synthetic or edited. Rezipped at zstd level 19.
 
-`tests/tools/test_fit_adj_rapm_penalty.py` checks four things:
+The SPM prior's own fit (`tools/fit_adj_rapm_penalty.py spm`, run 2026-11-25 on the same inputs; its CV rerun 2026-11-26 on
+the same rows after `spm_cv` began sorting them by `player_id`, so the seeded folds hold the same players however the
+rows arrive):
 
-- Summed over the training seasons at `k = 2`, the minimum is `nba_adj_rapm.ADJ_RAPM_PENALTY` (NBA
-  3,728, WNBA 2,683).
-- At `k = 1` the minimum is NBA 3,162 / WNBA 2,276.
-- The pooled error at `k = 2` is below the error at `k = 1` (the prior-scale evidence).
+- `spm_cv.parquet`: one row per league, regular season 1997-2026, and `train_spm` penalty (`alpha`, the
+  9 points of `SPM_ALPHAS`): `sse` is the player-grouped 5-fold CV error of the minute-weighted
+  `train_spm` on that season's own plain RAPM (offense plus defense squared error, each held-out row
+  weighted by its minutes over the training rows' mean); `n` is the season's player count.
+- `spm_rows_2024_2025.parquet`: four of the seasons' training rows that stage wrote (NBA 2023-24 and
+  2024-25, WNBA 2024 and 2025; 1,479 rows). Columns: `league`, `season`, then `box_features`
+  (`player_id`, the 11 per-100 rates, `min`, `gp`) joined to `nba_rapm` (`o_rapm`, `d_rapm`, `rapm`,
+  `off_poss`, `def_poss`).
+
+`tests/tools/test_fit_adj_rapm_penalty_spm.py` re-derives `nba_spm.SPM_ALPHA_WEIGHTED` from `spm_cv.parquet`,
+re-runs the CV on a committed season to match its row, and gates the weighting: trained on 2024 and
+scored on 2025's box line, the weighted fit's Spearman and spread against 2025's own plain RAPM sit
+above floors that the equal-weight default misses.
+
+`cv_sse_equal.parquet` is the 2026-11-09 corpus, the same table for the equal-weight SPM prior (#1150). That is the
+published configuration, and `train_spm`'s default. It is restored unchanged from before #1309 so the shipped
+`ADJ_RAPM_PRIOR_SCALE` (2) and `ADJ_RAPM_PENALTY` keep their own gate:
+`test_the_shipped_penalty_and_scale_are_the_equal_weight_cv_minimum` re-derives both from it.
+
+`tests/tools/test_fit_adj_rapm_penalty.py` checks five things on the weighted corpus:
+
+- Summed over the training seasons at `k = 1.5` (`ADJ_RAPM_PRIOR_SCALE_WEIGHTED`), the minimum is
+  `nba_adj_rapm.ADJ_RAPM_PENALTY` (NBA 3,728, WNBA 2,683).
+- At `k = 1` the minimum is the same two values.
+- The pooled error at `k = 1.5` is below the error at `k = 1` (the prior-scale evidence).
 - `k = 0` reproduces plain RAPM's frozen penalty, `RAPM_PENALTY`.
+- From `report.json`: every season's adjusted-RAPM spread is within 0.8-1.6 times plain RAPM's, and
+  the refit is not worse than the equal-weight baseline on held-out games by more than two SEs.

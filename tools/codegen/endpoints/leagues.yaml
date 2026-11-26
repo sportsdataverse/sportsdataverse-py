@@ -52,12 +52,16 @@ leagues:
   - {prefix: wc, sport: soccer, league: fifa.world, scopes: [universal], group: soccer}
   # --- Cricket: param-mode catch-all (headline cricket aliases land later after slug discovery) ---
   - {prefix: cricket, sport: cricket, league: eng.1, league_param: true, scopes: [universal]}
-  # --- Lacrosse: param-mode family over league=pll | mens-college-lacrosse | womens-college-lacrosse.
+  # --- Lacrosse: param-mode family over league=pll | nll | mens-college-lacrosse | womens-college-lacrosse.
   # ESPN's lacrosse surface is thin (no athletes, rosters, play-by-play or player box scores), so
   # ``endpoints`` allowlists the shorts a live probe (2026-11-25, real event and team ids) saw return
-  # data for at least one of the three. College-only: rankings, season_week_rankings. PLL-only: draft,
-  # teams_site, standings, franchises, franchise. season_group_teams answers for pll and the women,
-  # season_group_children for the men (checked with each league's own group id). ---
+  # data for at least one of the four. College-only: rankings, season_week_rankings (the poll week comes
+  # from the league rankings, e.g. week 17 for the men in 2026; Core v2 lists no weeks). PLL-only: draft.
+  # PLL and NLL: teams_site, standings, franchises, franchise. nll answers no other short the PLL does
+  # not. season_group_teams answers for pll and the women, season_group_children for the men (checked
+  # with each league's own group id). The examples carry those
+  # probed ids (``league_example_args: lacrosse`` in espn_site_v2 / espn_core_v2; the college-only routes name
+  # a college league), and tests/test_espn_live.py runs every one. ---
   - prefix: lacrosse
     sport: lacrosse
     league: pll
@@ -99,10 +103,13 @@ leagues:
       - season_week_rankings
       - franchises
       - franchise
-  # --- Golf: param-mode family over league=pga | lpga | liv | eur | champions-tour. A golf event is a
-  # field of players (no teams, rosters or standings), so ``endpoints`` allowlists the shorts a live probe
-  # (2026-11-25, the 2026 Masters and CME Group Tour Championship) saw return data; the golf-scoped
-  # ``leaderboard`` adds the full field with positions and player status. ``leaders`` answered for pga only. ---
+  # --- Golf: param-mode family over league=pga | lpga | liv | eur | champions-tour | ntw (Korn Ferry) |
+  # tgl | wtgl | mens-olympics-golf | womens-olympics-golf. A stroke-play event is a field of players (no
+  # teams, rosters or standings), so ``endpoints`` allowlists the shorts a live probe (2026-11-25, the
+  # 2026 Masters and CME Group Tour Championship) saw return data; the golf-scoped ``leaderboard`` adds
+  # the full field with positions and player status. ``leaders`` answered for pga only. tgl and wtgl are
+  # team match play: the team, group, standings and season-week shorts below answer only for them
+  # (probed on the 2026 TGL finals and a 2026 WTGL match). ---
   - prefix: golf
     sport: golf
     league: pga
@@ -140,3 +147,18 @@ leagues:
       - venues
       - venue
       - tournaments
+      - teams_site
+      - team
+      - team_schedule
+      - conferences
+      - standings
+      - season_groups
+      - season_group
+      - season_group_children
+      - season_teams
+      - season_team
+      - season_weeks
+      - season_week
+      - season_week_events
+      - teams_core
+      - team_core

@@ -273,3 +273,84 @@ def test_nba_spm_live_season_smoke():
     )
     out = nba_spm(bf, train_spm(bf, target))
     assert set(out.columns) == {"player_id", "ospm", "dspm", "spm", "min", "gp"}
+
+
+def test_train_spm_weight_is_a_row_count() -> None:
+    """A row at twice the minutes fits as that row twice; ``weight=None`` (the default) is the equal-weight rule."""
+    rng = np.random.default_rng(7)
+    n = 60
+    bf = pl.DataFrame(
+        {"player_id": np.arange(n), **{f: rng.normal(0, 1, n) for f in SPM_FEATURES}, "gp": np.full(n, 10)}
+    ).with_columns(min=pl.Series(np.where(np.arange(n) < 10, 400.0, 200.0)))
+    target = pl.DataFrame({"player_id": np.arange(n), "o_rapm": rng.normal(0, 2, n), "d_rapm": rng.normal(0, 1, n)})
+    weighted = train_spm(bf, target, alpha=5.0, weight="min")
+    # the 400-minute rows duplicated, every row at the same minutes
+    dup = pl.concat([bf, bf.head(10).with_columns(pl.col("player_id") + 1000)]).with_columns(pl.lit(200.0).alias("min"))
+    dup_t = pl.concat([target, target.head(10).with_columns(pl.col("player_id") + 1000)])
+    # Ridge's penalty is not rescaled by the row count, so the duplicated fit's weights sum to 70 against 60:
+    # scale the penalty by the same ratio
+    stacked = train_spm(dup, dup_t, alpha=5.0 * 70 / 60, weight="min")
+    np.testing.assert_allclose(weighted.o_coef, stacked.o_coef, rtol=1e-8, atol=1e-10)
+    np.testing.assert_allclose(weighted.d_intercept, stacked.d_intercept, rtol=1e-8)
+    equal = train_spm(bf, target, alpha=5.0, weight=None)
+    assert not np.allclose(weighted.o_coef, equal.o_coef)
+    assert np.allclose(
+        equal.o_coef, train_spm(bf.with_columns(pl.lit(1.0).alias("min")), target, alpha=5.0, weight="min").o_coef
+    )
+    # the weight can come from the target frame
+    via_target = train_spm(
+        bf.drop("min").with_columns(pl.lit(1.0).alias("x")),
+        target.join(bf.select("player_id", "min"), on="player_id"),
+        alpha=5.0,
+        weight="min",
+    )
+    np.testing.assert_allclose(weighted.o_coef, via_target.o_coef, rtol=1e-10)
+
+
+def test_train_spm_rejects_a_bad_weight() -> None:
+    n = 10
+    bf = pl.DataFrame(
+        {
+            "player_id": range(n),
+            **{f: np.arange(n, dtype=float) for f in SPM_FEATURES},
+            "min": np.full(n, 100.0),
+            "gp": [5] * n,
+        }
+    )
+    target = pl.DataFrame({"player_id": range(n), "o_rapm": np.zeros(n), "d_rapm": np.zeros(n)})
+    with pytest.raises(ValueError, match="neither"):
+        train_spm(bf, target, weight="poss")
+    for bad in (-1.0, float("nan"), 0.0):
+        with pytest.raises(ValueError, match="finite, non-negative"):
+            train_spm(bf.with_columns(pl.lit(bad).alias("min")), target, weight="min")
+
+
+def test_the_default_is_the_published_equal_weight_fit() -> None:
+    """``train_spm``'s defaults and the adjusted-RAPM prior scale are the published configuration.
+
+    Every released ``player_impact`` SPM was fit with equal weights at alpha 100, and its adjusted RAPM
+    with the prior scaled by 2. The minute-weighted fit (#1309) is opt-in and unshipped: as the prior it
+    fails the NBA producer's ``r_rapm_adj_min`` floor. A default that drifts from the published one
+    changes every season the producers rebuild.
+    """
+    import inspect
+
+    from sportsdataverse.nba.nba_adj_rapm import ADJ_RAPM_PRIOR_SCALE, ADJ_RAPM_PRIOR_SCALE_WEIGHTED
+    from sportsdataverse.nba.nba_spm import SPM_ALPHA, SPM_ALPHA_WEIGHTED
+
+    sig = inspect.signature(train_spm).parameters
+    assert sig["weight"].default is None and sig["alpha"].default == SPM_ALPHA == 100.0
+    assert ADJ_RAPM_PRIOR_SCALE == {"00": 2.0, "10": 2.0, "20": 2.0}
+    assert SPM_ALPHA_WEIGHTED == 30.0 and ADJ_RAPM_PRIOR_SCALE_WEIGHTED == {"00": 1.5, "10": 1.5, "20": 1.5}
+    # on a real season: the default fit is the unweighted ridge, and the weighted option differs from it
+    from pathlib import Path
+
+    from sklearn.linear_model import Ridge
+
+    fx = Path(__file__).resolve().parents[1] / "fixtures" / "bb_adj_rapm_penalty" / "spm_rows_2024_2025.parquet"
+    rows = pl.read_parquet(fx).filter((pl.col("league") == "nba") & (pl.col("season") == 2025))
+    coef = train_spm(rows, rows.select("player_id", "o_rapm", "d_rapm"))
+    ridge = Ridge(alpha=100.0).fit(rows.select(SPM_FEATURES).to_numpy().astype(np.float64), rows["o_rapm"].to_numpy())
+    np.testing.assert_allclose(coef.o_coef, ridge.coef_, rtol=1e-12, atol=1e-14)
+    weighted = train_spm(rows, rows.select("player_id", "o_rapm", "d_rapm"), weight="min", alpha=SPM_ALPHA_WEIGHTED)
+    assert not np.allclose(coef.o_coef, weighted.o_coef)

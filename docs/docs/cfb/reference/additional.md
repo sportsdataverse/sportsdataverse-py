@@ -111,7 +111,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [calculate_win_probability](additional/models-and-calculators.md#calculate_win_probability) | Win probability for each row. |
 | [calculate_wpa](additional/models-and-calculators.md#calculate_wpa) | Win probability added: the change in WP across a play. |
 | [calculate_xpass](additional/models-and-calculators.md#calculate_xpass) | Expected pass probability for each row. |
-| [cfb_adjusted_epa](additional/models-and-calculators.md#cfb_adjusted_epa) | Season opponent-adjusted per-team EPA from a season's play-by-play. |
+| [cfb_adjusted_epa](additional/models-and-calculators-2.md#cfb_adjusted_epa) | Season opponent-adjusted per-team EPA from a season's play-by-play. |
 | [cfb_adjusted_epa_by_game](additional/models-and-calculators-2.md#cfb_adjusted_epa_by_game) | Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game. |
 | [cfb_compute_results](additional/models-and-calculators-2.md#cfb_compute_results) | Default results generator — nflseedR's dynamic ELO model for CFB. |
 | [cfb_draft_projection](additional/models-and-calculators-2.md#cfb_draft_projection) | Project NFL-draft probability per player + expected picks per team. |
@@ -119,6 +119,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [cfb_kickoff_out_of_bounds_spot_expr](additional/models-and-calculators-2.md#cfb_kickoff_out_of_bounds_spot_expr) | The receiving team's yardline after a kickoff out of bounds: the 40 through 2011, the 35 from 2012. |
 | [cfb_predict_games](additional/models-and-calculators-2.md#cfb_predict_games) | Predict a whole schedule of games from a ratings frame (vectorized). |
 | [cfb_ratings](additional/models-and-calculators-2.md#cfb_ratings) | One row per team: the full CFB ratings spine (off/def/ST EPA + FEI). |
+| [cfb_ratings_compute_results](additional/models-and-calculators-2.md#cfb_ratings_compute_results) | Results generator driven by fixed team ratings (points, adjusted EPA or raw EPA). |
 | [cfb_recruiting_projection](additional/models-and-calculators-2.md#cfb_recruiting_projection) | Project team wins / scoring margin for a season from preseason roster features. |
 | [cfb_roster_talent](additional/models-and-calculators-2.md#cfb_roster_talent) | Team-talent composite per team-season (247 Team Talent Composite style). |
 | [cfb_simulations](additional/models-and-calculators-2.md#cfb_simulations) | Simulate college football seasons (nflseedR-style week loop). |

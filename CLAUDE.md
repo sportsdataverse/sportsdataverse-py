@@ -205,8 +205,10 @@ sportsdataverse/
   baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
-  lacrosse/   # ESPN lacrosse (league-parameterized: PLL, men's and women's college; probed endpoint allowlist)
-  golf/       # ESPN golf (league-parameterized: pga, lpga, liv, eur, champions-tour) + golf_espn_parsers (field-of-players leaderboard)
+  lacrosse/   # ESPN lacrosse (league-parameterized: PLL, NLL, men's and women's college; probed endpoint allowlist)
+              #   + the PLL stats API family pll_* (runtime only; pll_runtime sends the stats site's Referer, no key)
+  golf/       # ESPN golf (league-parameterized: pga, lpga, liv, eur, champions-tour, ntw, tgl, wtgl, men's / women's olympics)
+              #   + golf_espn_parsers (field-of-players leaderboard)
               #   + the PGA TOUR GraphQL family pgatour_* (runtime only; pgatour_runtime posts pgatour_queries/*.graphql)
   football/   # UFL / XFL / CFL ESPN families
   nbagl/      # NBA G League: ESPN wrappers, nbagl_stats (stats.nba.com, LeagueID=20) and engine helpers
@@ -263,8 +265,8 @@ description of that pattern anywhere, it predates 0.1.x.
 
 Total cross-league surface: **127 short names** (from the five ESPN
 endpoint YAMLs in `generate.ESPN_APIS`) emitted across 42 league modules
-= **4,632 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
-lacrosse emits 35, golf 31). The `espn_cdn` family (`cdn.espn.com/core`, shorts
+= **4,647 wrappers** (a league's `endpoints:` allowlist in `leagues.yaml` can narrow its set:
+lacrosse emits 35, golf 46). The `espn_cdn` family (`cdn.espn.com/core`, shorts
 `cdn_playbyplay` / `cdn_boxscore` / `cdn_schedule` / `cdn_scoreboard` /
 `cdn_rankings`) is the one family whose per-league reach was live-probed:
 each endpoint carries an `include_prefixes` allowlist (league prefixes, so
@@ -296,7 +298,7 @@ The rest follow the same contract, one per provider family, among them `provider
 `hockeytech/_parsers.py`, `odds/the_odds_api_parsers.py`,
 `mlb/mlb_statcast_parsers.py`, `soccer/` (`soccer_espn`, `asa`, `fotmob`, `uefa`,
 `fifa`, `mls/mls_api`, `nwsl/nwsl_api`), `basketball/euroleague/euroleague_parsers.py`,
-`cricket/cricket_espn_parsers.py`, `golf/golf_espn_parsers.py` + `golf/pgatour_parsers.py`, and the NCAA HTML parsers
+`cricket/cricket_espn_parsers.py`, `golf/golf_espn_parsers.py` + `golf/pgatour_parsers.py`, `lacrosse/pll_parsers.py`, and the NCAA HTML parsers
 `mbb/mbb_ncaa_team_parsers.py` + `wbb/wbb_ncaa_team_parsers.py`, plus the international
 basketball and European hockey families under `basketball/` and `hockey/`.
 
@@ -1201,6 +1203,13 @@ code at the source; never blanket-ignore a category.
   cited scripts that are lost or only on the maintainer's disk). Put a new fitter under `tools/fit_<what>.py`,
   never the gitignored `dev/`, and label a seeded value as seeded. `tests/test_model_lineage.py` fails on a
   cited script that is neither tracked nor in the gap table, and on a booster without a row.
+- **Model lifecycle: ledger fields and the retire rule.** Every `tools/models/model_ledger.json` row carries
+  `baseline`, `primary_metric`, `adoption_margin`, `status` and `lifecycle_note`. Fill them from committed evidence
+  only. A field with no evidence stays null and the note gives the reason; never type a number the evidence does not
+  state. `retire.py --check-ledger` (run by `tests/tools/test_model_lifecycle.py`) enforces this. After each completed
+  season past a model's holdout, score it once against its baseline with `tools/models/lifecycle/retire.py`. Only the
+  owner sets `status: retired`. Season sims also get `coverage.py`, refit-per-season models get `signs.py`. Rules:
+  `docs/docs/architecture/model-lineage.md#lifecycle-baseline-retire-rule-coverage-sign-stability`.
 - **Cache invalidation when modifying loaders.** The `@cached_loader`
   decorator hashes `(qualified_name, args, sorted_kwargs)` — it does NOT
   hash the URL or function body. If you change a loader's URL or
@@ -1379,7 +1388,8 @@ RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
 `sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
 event data, Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
 TheSportsDB (`thesportsdb`), `euroleague`, SIHF (`sihf`), Jolpica (`f1`), the PGA TOUR
-GraphQL API (`pgatour`), `cbs_napi`, `yahoo_shangrila`, `fox_api`, HockeyTech, the European hockey leagues (the eSports
+GraphQL API (`pgatour`), the Premier Lacrosse League stats API (`pll`), `cbs_napi`, `yahoo_shangrila`, `fox_api`,
+HockeyTech, the European hockey leagues (the eSports
 hokejovyzapis S3 feeds `del_esports` / `icehl_esports` / `eihl_esports` / `metal_esports`,
 hokej.cz (`elh`), Liiga (`liiga`), SHL (`shl`), HockeyAllsvenskan (`ha`), National League
 (`nationalleague`), Ligue Magnus (`magnus`), KHL (`khl_rest`, `khl_webcaster`) and VHL (`vhl`)), the international
@@ -1423,7 +1433,7 @@ The parts worth repeating here:
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.
-- **`FLAT_APIS` has 80 families**, not three.
+- **`FLAT_APIS` has 81 families**, not three.
 - **The documented leagues come from `docs/src/data/leagues.json`**, written by
   `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
 - **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in

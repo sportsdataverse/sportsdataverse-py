@@ -36,7 +36,7 @@ holds each model's gates, retrain date and cadence. Each booster here ships a
 | `sportsdataverse/cfb/models/wp_naive.ubj` | `model_training/train_wp.py --variant naive` | `05bfcb1641` | no (release asset 2026-06-18) |
 | `sportsdataverse/cfb/models/cfb_cp_model.ubj` | `cpoe/` (`python -m cfb_model_build.cpoe --variant game_state`) | `fbe11c473a` | no |
 | `sportsdataverse/cfb/models/cfb_cp_model_air_yards.ubj` | `cpoe/` (air-yards variant) | `4b34e0e81e` | yes |
-| `sportsdataverse/cfb/models/fd_model.ubj` | `model_training/fourth_down/` | `fbe11c473a` | no |
+| `sportsdataverse/cfb/models/fd_model.ubj` | `model_training/fourth_down/`; kept by the 2026-holdout rebuild gate (`fourth_down/rebuild_gate.py`, result `models/fourth_down/fd_rebuild.gate.json`, cfb-data `895b0e21f`) | `fbe11c473a` | no |
 | `sportsdataverse/cfb/models/fg_model.ubj` | `model_training/train_fg.py` | `05bfcb1641` | no |
 | `sportsdataverse/cfb/models/two_pt_model.ubj` | `model_training/train_two_pt.py` | `05bfcb1641` | no |
 | `sportsdataverse/cfb/models/xpass_model.ubj` | `model_training/train_xpass.py` | `05bfcb1641` | no |
@@ -101,7 +101,7 @@ compared paired); the owner chose "as is" over a signed paired difference. Both 
 | constant | fitting script | status |
 |---|---|---|
 | `nba_rapm.RAPM_PENALTY` (NBA 2,683, WNBA 1,931) | `tools/fit_rapm_penalty.py` | tracked; `curves` reads the possessions release assets (network), `report` scores offline and writes the pooled CV error that `tests/fixtures/bb_rapm_penalty` commits, from which `tests/tools/test_fit_rapm_penalty.py` re-derives both values and the as-of picks. The G League key `"20"` is **seeded** with the NBA value, not fitted. Refit policy: re-run after each complete season, and change a value only when the pooled pick moves off it by more than one standard error of the per-season differences (it moved once in the NBA history, 2,276 to 2,683 at 2018-19); a change re-scales every season, so it ships with a republish of every season's `player_impact`. Plain RAPM, `nba_player_impact` / `wnba_player_impact` and `{nba,wnba}_player_factor_rapm` fit before November 2026 used RidgeCV's per-season pick instead and are not comparable across seasons |
-| `nba_adj_rapm.ADJ_RAPM_PENALTY` (NBA 3,728, WNBA 2,683) and `ADJ_RAPM_PRIOR_SCALE` (2.0 both) | `tools/fit_adj_rapm_penalty.py` | tracked. `curves` reads the possessions release assets and the -raw stores' leaguegamelog captures (network or local) and chains the SPM prior as the producers do. `report` scores offline and writes the pooled CV error over penalty and prior scale that `tests/fixtures/bb_adj_rapm_penalty` commits, from which `tests/tools/test_fit_adj_rapm_penalty.py` re-derives the penalty at the frozen scale and checks that the scale beats the unscaled prior on held-out games. The scale itself was chosen where next-season R^2 and Spearman peak, which only `report` measures (its `report.json` `forecast` block); the test does not re-derive that peak. The G League key `"20"` is **seeded** with the NBA values. Refit policy: as `RAPM_PENALTY`'s; a change re-scales every season, so it ships with a republish of every season's `player_impact`. Adjusted RAPM fit before #1150 used RidgeCV's per-season pick at the unscaled prior |
+| `nba_spm.SPM_ALPHA` (100, the default equal-weight fit) and `SPM_ALPHA_WEIGHTED` (30), `nba_adj_rapm.ADJ_RAPM_PENALTY` (NBA 3,728, WNBA 2,683), `ADJ_RAPM_PRIOR_SCALE` (2, default) and `ADJ_RAPM_PRIOR_SCALE_WEIGHTED` (1.5) | `tools/fit_adj_rapm_penalty.py` | tracked. The defaults are the published configuration (#1150). The `*_WEIGHTED` constants are the minute-weighted alternative (#1309): opt-in through `train_spm(..., weight="min")`, and not shipped, because as the prior it fails the NBA producer's `r_rapm_adj_min` floor (2026-11-26). `spm` fits the prior's own penalty first: the player-grouped CV error of the minute-weighted `train_spm` on each season's own plain RAPM, pooled over 1997-2026 per league; `tests/fixtures/bb_adj_rapm_penalty` commits that curve (`spm_cv.parquet`) and four seasons' training rows, from which `tests/tools/test_fit_adj_rapm_penalty_spm.py` re-derives `SPM_ALPHA_WEIGHTED` (the NBA pick; the WNBA's own pick, 100, is within 0.3% at 30, so the value is shared) and gates the weighting on a next-season split. `curves --prior-rule equal` into a second OUT plus `report --baseline` pair the refit against the equal-weight prior at its #1150 scale 2 season by season (held-out error on the same games, next-season Spearman / R^2); the fixture's `report.json` carries that block, and `test_fit_adj_rapm_penalty.py` gates the per-season spread band and the paired held-out delta from it. `curves` reads the possessions release assets and the -raw stores' leaguegamelog captures (network or local) and chains the SPM prior as the producers do. `report` scores offline and writes the pooled CV error over penalty and prior scale that `tests/fixtures/bb_adj_rapm_penalty` commits, from which `tests/tools/test_fit_adj_rapm_penalty.py` re-derives the penalty at the frozen scale and checks that the scale beats the unscaled prior on held-out games. The scale itself was chosen where next-season R^2 and Spearman peak and held-out error is at or near its minimum, which only `report` measures (its `report.json` `forecast` block); the test does not re-derive that peak. The G League key `"20"` is **seeded** with the NBA values. Refit policy: as `RAPM_PENALTY`'s; a change re-scales every season, so it ships with a republish of every season's `player_impact`. Adjusted RAPM fit before #1150 used RidgeCV's per-season pick at the unscaled prior |
 | `nba_box_prior.BOX_PRIOR_PAD_POSS` (1,000), `BOX_PRIOR_HALF_LIFE` (4 seasons), `BOX_PRIOR_RIDGE_ALPHA` (1.0), `BOX_PRIOR_AGE_CENTER` (27), `BOX_PRIOR_LEAVE_SEASON_OUT_THROUGH` (2005), `BOX_PRIOR_FOLDS` (5); `nba_reml_rapm.REML_PENALTY_BOUNDS` (10, 1e7); `tools/fit_box_prior_v2.py` `CHRONO_SHARE` (0.6) | none (chosen a priori, documented at the constants) | **not fitted**: set before the gate ran and not tuned on it. `tools/fit_box_prior_v2.py` fits the box prior itself (per season: walk-forward from 2006, leave-one-season-out through 2005, five player folds; nothing is frozen in the package) and gates `nba_reml_rapm` against `nba_adj_rapm` on held-out games and a chronological split; `tests/fixtures/bb_box_prior_v2` commits its `gate.parquet` / `report.json` and `tests/tools/test_fit_box_prior_v2.py` re-derives the gate and tests the harness's leakage wiring. `nba_reml_rapm` defaults to the fixed `ADJ_RAPM_PENALTY` (owner decision 2026-11-10: it beat the per-call REML pick on held-out games in 27 of 29 seasons); that value was fitted for the previous-season SPM prior, so refitting it for the v2 prior is a follow-up. `penalty="reml"` chooses penalties per call. Cadence: TODO, no workflow runs the fitter yet; publishing the season rating (and the 2026-27 prior, whose player game logs are not captured yet) is a follow-up |
 | `nba_current_impact.CURRENT_IMPACT_ENTRY_SD` (0.983), `CURRENT_IMPACT_SEASON_SD` (0.417), `CURRENT_IMPACT_TEAM_SD` (0.026), `CURRENT_IMPACT_DRIFT_SD` (0.0115 per sqrt day); a priori: `CURRENT_IMPACT_LEVEL_SD` (0.05), `CURRENT_IMPACT_NOISE_VAR_FALLBACK` (1.3), `CURRENT_IMPACT_PRIOR_WINDOW_DAYS` (365) | `tools/fit_current_impact.py` | tracked. `inputs` builds weekly box priors from the BB-D38 run (`tools/fit_box_prior_v2.py`, local release assets and the -raw store); `fit` chooses the four SDs by Nelder-Mead on the 28-day forward MSE of NBA 2007-2013 (filter from 2006, the first strictly walk-forward prior season; it stopped at its 80-evaluation cap on a surface flat to 1e-6, so the team SD and the drift are not identified: zeroing either moves the gate error by under 0.03 bp); harness settings chosen a priori: `STEP_DAYS` 7, `HORIZON_DAYS` 28, `REF_POSS` 20,000, `BOOT` 10,000, the Nelder-Mead start (1.8, 1.0, 0.5, 0.05) and x1.65 simplex, `BASELINE_PENALTY_GRID`; `gate` / `report` score 2014-2026 against the season-to-date `nba_reml_rapm` (also at the window prior and at a penalty tuned on 2007-2013) with a season-cluster bootstrap. `tests/fixtures/bb_current_impact` commits `fit.json` / `gate.parquet` / `report.json`; `tests/tools/test_fit_current_impact.py` checks the constants equal `fit.json`, re-derives the margins and holds the gate floors. Cadence: TODO, no workflow runs it; publishing a daily current rating is a follow-up |
 | `mbb_ncaa_rapm_league.DEFAULT_RIDGE_LAMBDA` (1000.0) | `tools/fit_ncaa_rapm_lambda.py` | tracked (moved from untracked `dev/ncaa_rapm/fit_lambda_league.py`) |
@@ -168,3 +168,45 @@ Cite the fitting script by a path that is tracked: put a new fitter under
 `tools/fit_<what>.py` (the `tools/fit_cfb_wp_overtime.py` pattern) rather than in
 the gitignored `dev/`, add the artifact's row above, and label any value that is a
 seed rather than a fit as seeded where it is defined.
+Then give the model its `tools/models/model_ledger.json` row, with the lifecycle
+fields below.
+
+## Lifecycle: baseline, retire rule, coverage, sign stability
+
+Each `model_ledger.json` row (schema 1.1) carries `baseline` (the model it was
+shown to beat or tie on held-out data), `primary_metric` (that comparison's metric
+and SE clustering), `adoption_margin` (its paired `model - baseline` difference,
+negative = better), `status` (`active` or `retired`) and `lifecycle_note` (the
+evidence, or why a field is null). Fill them from committed evidence only; a field
+the evidence does not hold stays null with the reason in the note.
+`uv run python tools/models/lifecycle/retire.py --check-ledger` checks them, and
+`tests/tools/test_model_lifecycle.py` runs that check.
+
+Three checks run on shipped models, each reported first; one becomes a gate only by
+an owner decision:
+
+- **Retire rule** (`tools/models/lifecycle/retire.py`). After each completed season
+  past the holdout, score the model once against its baseline (same metric,
+  paired, same clustering, no refit). Two consecutive seasons whose upper 97.5%
+  bound of `model - baseline` is at or above 0 (consecutive scored seasons: a
+  season with no record between two failures does not break the run), or one season worse than the
+  baseline by more than the adoption margin's magnitude (`abs(adoption_margin)`;
+  the ledger stores a gain as negative) at 1.96 SE (its lower 97.5% bound above
+  it), make it a RETIRE-candidate. The latest
+  season failing alone is WATCH; before any season is scored it is UNSCORED. The rule
+  runs only on a row with both a `baseline` and `holdout_seasons`. Retiring is the owner's call: `status: retired`
+  with `retired_reason`, one release of warning through
+  `sportsdataverse/_deprecation.py`, then the function returns the baseline. A
+  retired model is re-adopted only on a new fit with its own holdout.
+- **Win-total coverage** (`tools/models/lifecycle/coverage.py`) for the NBA / WNBA
+  season sim: realized wins against the sim's 50 / 80 / 95% intervals at the
+  preseason and an in-season cutoff, on seasons outside the fit, clustered by
+  season. Only seasons outside every fit on the sim's path count (NBA and WNBA
+  2010-2017); NBA 2024-2026 and WNBA 2024-2025 sit inside the rest-and-travel fit or
+  the ridge penalty's cross-validation, so they are scored only with `--near-holdout`
+  and labelled. It also checks that the rating draw widens the
+  preseason 80% intervals at least 1.5 times; if it doesn't, that is a bug.
+- **Sign stability** (`tools/models/lifecycle/signs.py`) for a model refit per
+  season: a coefficient whose sign flips between folds with both estimates more
+  than 2 SE from zero is a finding, and it puts the model on WATCH at its next
+  season.

@@ -1,0 +1,19 @@
+query Tournaments($ids: [ID!]) {
+  tournaments(ids: $ids) {
+    id
+    tournamentName
+    seasonYear
+    displayDate
+    tournamentStatus
+    roundStatus
+    roundDisplay
+    currentRound
+    formatType
+    scoredLevel
+    city
+    state
+    country
+    timezone
+    tournamentLocation
+  }
+}

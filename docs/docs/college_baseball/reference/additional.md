@@ -168,8 +168,8 @@ One row per input play with every text-derivable `PBP_SCHEMA` column populated (
 | `error_position` | String |  |
 | `unearned` | Boolean |  |
 | `runs_scored` | Int64 |  |
-| `scoring_runners` | String |  |
-| `runners_advanced` | String |  |
+| `scoring_runners` | List |  |
+| `runners_advanced` | List |  |
 | `outs_on_play` | Int64 |  |
 | `is_scoring_play` | Boolean | Flag indicating that the play put points on the board (1 = scoring play, 0 = not). |
 | `description` | String |  |
