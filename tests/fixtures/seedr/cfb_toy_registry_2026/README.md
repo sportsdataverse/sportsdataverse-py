@@ -28,6 +28,11 @@ matches.
 - Re-captured: 2026-11-09, R 4.5.3, cfbseedR 0.3.0 with the dated MAC and
   Conference USA epochs (sportsdataverse/cfbseedR#20): `cusa_apr` moved to
   season 2024 and `mac_2024` added; every other row is unchanged.
+- Re-captured: 2026-11-26, R 4.6.0, cfbseedR 0.3.0 (`b85f788`): T10 in the
+  seeding field became a Mountain West non-champion ranked above the Sun Belt
+  champion T13, so the 2026 G6 bid (best-ranked G6 team, champion or not) and
+  the 2025 one (best-ranked G6 champion) pick different teams. Only
+  `seeds_standings.csv` and `expected_seeds.csv` changed.
 - Command, from the sdv-py repo root:
 
 ```sh
@@ -66,19 +71,17 @@ it that way (the Python and R RNGs differ).
   `cfb_standings(games, teams, tiebreaker_data = ...)`. `sov` / `sos` pin the
   pooled opponents'-record formula; a per-game mean differs on 5 cases.
 - `seeds_standings.csv`, `seeds_rankings.csv` — a 16-team ranked field: P4
-  champions T01, T02, T06 and T14 (ranked outside the top 12), Sun Belt champion
-  T13 (the best G6 team), MAC champion T16, Notre Dame 12th.
+  champions T01, T02, T06 and T14 (ranked outside the top 12), Mountain West
+  non-champion T10 (the best G6 team), Sun Belt champion T13 (the best G6
+  champion), MAC champion T16, Notre Dame 12th.
 - `expected_seeds.csv` — `cfb_playoff_seeds(..., autobid = "2025" | "2026")`;
   Python's `season=2025 | 2026`.
 
 ## Known divergences from cfbseedR 0.2.0 (kept out of the fixture)
 
-- **G6 bid:** cfbseedR gives it to the best-ranked G6 *team*, champion or not;
-  sdv-py to the best-ranked G6 *champion* (the CFP rule). The seeding fixture's
-  best G6 team is a champion, so the engines agree on it.
-- **Notre Dame:** cfbseedR reads the committee `rank` only and matches
-  `"Notre Dame"` only; sdv-py reads Notre Dame's position in the ranking order
-  (fallback order included) and also matches ESPN id `"87"`.
+- **Notre Dame:** cfbseedR reads the committee `rank` only; sdv-py reads Notre
+  Dame's position in the ranking order (fallback order included). Both match
+  `"Notre Dame"` and ESPN id `"87"`.
 - **Season rules in standings / simulations:** cfbseedR's `cfb_standings()`
   always seeds with the 2026 rule and `cfb_simulations()` always uses the
   current registry; sdv-py follows a `season`-keyed input (or `season=`) for

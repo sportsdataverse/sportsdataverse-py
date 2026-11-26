@@ -1287,6 +1287,7 @@ def _seed_field(
         st = st.with_columns(pl.lit(None, dtype=pl.Float64).alias("rank"))
     n = pl.lit(playoff_seeds, dtype=pl.Int64)
     is_champ = pl.col("conf_champ") == True  # noqa: E712
+    # fill_null: a null conference must not reach the _g6_cum cum_sum as null
     g6_team = pl.col("conference").is_in(_G6_CONFS).fill_null(False)
     ordered = (
         st.with_columns(pl.col("rank").fill_null(float("inf")))
@@ -1366,9 +1367,10 @@ def cfb_playoff_seeds(
     ranking is the intended input). Notre Dame's "ranked inside the field"
     test reads its position in that same ordering.
 
-    Differs from cfbseedR 0.3.0 (``autobid``) in one place: cfbseedR tests
-    Notre Dame's committee ``rank`` only (no bid without ``rankings``). Both
-    match Notre Dame as ``"Notre Dame"`` or ``"87"``, and cfbseedR's
+    Differs from cfbseedR 0.3.0's selection rule (``autobid``) in one place:
+    cfbseedR tests Notre Dame's committee ``rank`` only (no bid without
+    ``rankings``). Neither engine reads ``postseason_eligible`` when seeding,
+    so an ineligible team can take a bid. Both match Notre Dame as ``"Notre Dame"`` or ``"87"``, and cfbseedR's
     ``cfb_standings()`` keys the rule by a ``season``-keyed input as
     :func:`cfb_standings` does here; its
     ``cfb_simulations()`` takes an explicit ``autobid`` (default ``"2026"``)
