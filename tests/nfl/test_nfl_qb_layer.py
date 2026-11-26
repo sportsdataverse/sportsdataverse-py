@@ -11,6 +11,7 @@ from pathlib import Path
 
 import polars as pl
 import pytest
+from polars.testing import assert_frame_equal
 
 from sportsdataverse.nfl import nfl_qb_layer as mod
 
@@ -161,7 +162,9 @@ def test_week5_prices_from_pre_kickoff_plays_only(data, starters):
     # games on the first week-5 date see the same inputs whether or not later plays are in the frame
     a = full.filter(pl.col("game_id").is_in(week5.filter(pl.col("gameday") == first)["game_id"].to_list()))
     b = cut.filter(pl.col("game_id").is_in(a["game_id"].to_list()))
-    assert a.height > 0 and a.sort("game_id").equals(b.sort("game_id"))
+    assert a.height > 0
+    # float sums run multithreaded: equal to rounding, not bit for bit
+    assert_frame_equal(a.sort("game_id"), b.sort("game_id"), check_exact=False, abs_tol=1e-9)
 
 
 def test_realized_arm_reads_the_schedule_starter_with_certainty(data):
@@ -197,7 +200,7 @@ def test_the_expected_arm_never_reads_the_games_own_starter(data, starters):
     )
     a = mod.nfl_qb_predict_games(week5, data["pbp"], starters=starters, config=CFG)
     b = mod.nfl_qb_predict_games(week5, data["pbp"], starters=st, config=CFG)
-    assert a.sort("game_id").equals(b.sort("game_id"))
+    assert_frame_equal(a.sort("game_id"), b.sort("game_id"), check_exact=False, abs_tol=1e-9)
     # the previous-start rule does read week 5's starters for week 6
     fallback_a = mod.nfl_expected_starters(data["schedule"], config=CFG)
     fallback_b = mod.nfl_expected_starters(scrambled, config=CFG)

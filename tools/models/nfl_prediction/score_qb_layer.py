@@ -42,7 +42,7 @@ from sportsdataverse.nfl.nfl_qb_layer import _team_games, nfl_expected_starters,
 
 PREREGISTERED_SEASON = 2026
 PREREGISTERED_WEEKS = (5, 18)
-#: coverage is k / n, so a boundary value (0.75, 0.85) must not fail on float rounding
+#: a boundary value (coverage 15/20, a mean of exactly 0.10) must not fail on float rounding
 EPS = 1e-9
 PBP_COLS = [
     "game_id",
@@ -110,7 +110,7 @@ def score(games: pl.DataFrame) -> dict:
     d2 = (games["qb_margin"] - games["result"]).abs() - (games["base_margin"] - games["result"]).abs()
     c2 = paired(d2.to_numpy(), w)
     c2["upper"] = c2["dbar"] + c2["t975"] * c2["se"]
-    c2["pass"] = c2["upper"] <= 0.10
+    c2["pass"] = c2["upper"] <= 0.10 + EPS
     out["2_mae_vs_result"] = c2
     uncertain = games.filter(
         pl.col("home_status").is_in(["Questionable", "Doubtful"])
@@ -136,7 +136,7 @@ def score(games: pl.DataFrame) -> dict:
     d4 = (games["qb_win_prob"] - y) ** 2 - (games["base_win_prob"] - y) ** 2
     c4 = paired(d4.to_numpy(), w)
     c4["upper"] = c4["dbar"] + c4["t975"] * c4["se"]
-    c4["pass"] = c4["upper"] <= 0.003
+    c4["pass"] = c4["upper"] <= 0.003 + EPS
     out["4_brier"] = c4
     out["keep"] = all(
         out[k]["pass"]
@@ -173,11 +173,16 @@ def _asset_updated_at(url: str) -> str:
         return f"unknown: {type(exc).__name__}"
 
 
-def _provenance(season: int, frames: dict[str, pl.DataFrame]) -> dict[str, dict]:
+def _provenance(season: int, frames: dict[str, pl.DataFrame], *, strict: bool) -> dict[str, dict]:
+    """Release ``updated_at``, rows and IPC sha256 per input; ``strict`` refuses an unknown ``updated_at``."""
     out = {}
     for name, df in frames.items():
-        url = INPUT_URLS[name].format(season=season)
+        kind, _, year = name.partition(":")
+        url = INPUT_URLS[kind].format(season=int(year) if year else season)
         out[name] = {"url": url, "updated_at": _asset_updated_at(url), "rows": df.height, "ipc_sha256": _frame_sha(df)}
+    unknown = [n for n, v in out.items() if v["updated_at"].startswith("unknown")]
+    if strict and unknown:
+        raise SystemExit(f"release updated_at unknown for {unknown}: rerun when the GitHub API answers")
     return out
 
 
@@ -255,10 +260,11 @@ def main(argv: list[str] | None = None) -> int:
             args.season,
             {
                 "schedule": schedule,
-                "pbp": pbp.filter(pl.col("season") == args.season),
+                **{f"pbp:{s}": pbp.filter(pl.col("season") == s) for s in seasons},
                 "depth_charts": depth,
                 "injuries": injuries,
             },
+            strict=args.season == PREREGISTERED_SEASON,
         ),
         "games_without_a_line_dropped": no_line,
         "starter_sources_scored_window": sources,

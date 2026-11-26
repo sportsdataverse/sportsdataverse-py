@@ -116,3 +116,23 @@ def test_keep_needs_every_criterion():
     res = S.score(_games(base_margin=np.full(n, 1.0) + noise))
     assert res["keep"] == all(res[k]["pass"] for k in res if k != "keep")
     assert not S.score(_games())["keep"]
+
+
+def test_criterion_2_passes_at_exactly_a_tenth_of_a_point():
+    n = 28
+    at = S.score(_games(qb_margin=np.tile([-0.1, 0.1], n // 2)))["2_mae_vs_result"]  # +0.1 every game, SE 0
+    assert at["upper"] == pytest.approx(0.10) and at["pass"]
+    over = S.score(_games(qb_margin=np.tile([-0.11, 0.11], n // 2)))["2_mae_vs_result"]
+    assert not over["pass"]
+
+
+def test_criterion_3a_needs_q_strictly_closer_to_80_than_base():
+    status = ["Questionable"] * 20 + ["none"] * 8
+    # both cover 16 of 20 (0.80): within 0.05 but not closer than base -> fail
+    lo = np.array([5.0] * 4 + [-10.0] * 24)
+    same = S.score(_games(home_status=status, qb_lo80=lo, base_lo80=lo))["3a_coverage_uncertain"]
+    assert same["cov_q"] == same["cov_base"] == pytest.approx(0.80) and not same["pass"]
+    # Q at 0.80, base at 0.75: closer -> pass; Q at 0.75 against base 0.80 -> fail
+    base75 = np.array([5.0] * 5 + [-10.0] * 23)
+    assert S.score(_games(home_status=status, qb_lo80=lo, base_lo80=base75))["3a_coverage_uncertain"]["pass"]
+    assert not S.score(_games(home_status=status, qb_lo80=base75, base_lo80=lo))["3a_coverage_uncertain"]["pass"]
