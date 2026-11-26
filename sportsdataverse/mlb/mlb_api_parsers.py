@@ -208,12 +208,12 @@ def parse_mlb_api_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.
 
 
 def parse_mlb_api_teams(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``mlb_api_teams()`` into one row per team."""
+    """Parse ``mlb_teams()`` into one row per team."""
     return _flatten_rows(_as_dict(payload).get("teams"), return_as_pandas, where="parse_mlb_api_teams: teams")
 
 
 def parse_mlb_api_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``mlb_api_team_roster()`` into one row per player.
+    """Parse ``mlb_team_roster()`` into one row per player.
 
     Input: ``{roster: [{person, jerseyNumber, position, status}, ...],
     teamId, rosterType, ...}``. The ``person`` / ``position`` / ``status``
@@ -229,7 +229,7 @@ def parse_mlb_api_team_roster(payload: Dict, return_as_pandas: bool = False) -> 
 
 
 def parse_mlb_api_standings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``mlb_api_standings()`` into one row per (division × team).
+    """Parse ``mlb_standings()`` into one row per (division × team).
 
     Input: ``{records: [{standingsType, league, division, sport,
     teamRecords: [...]}, ...]}``. This parser walks each division's
@@ -274,7 +274,7 @@ def parse_mlb_api_standings(payload: Dict, return_as_pandas: bool = False) -> pl
 
 
 def parse_mlb_api_person_stats(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``mlb_api_person_stats()`` / ``mlb_api_team_stats()`` into
+    """Parse ``mlb_person_stats()`` / ``mlb_team_stats()`` into
     one row per stats split.
 
     Input: ``{stats: [{type, group, exemptions, splits: [{season, stat,
@@ -317,7 +317,7 @@ def parse_mlb_api_person_stats(payload: Dict, return_as_pandas: bool = False) ->
 
 
 def parse_mlb_api_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``mlb_api_boxscore()`` into one row per (team-side × player).
+    """Parse ``mlb_boxscore()`` into one row per (team-side × player).
 
     Input: ``{teams: {home: {team, teamStats, players: {ID######: {...}}},
     away: {...}}}``. The ``players`` block is a *dict keyed by* ``ID<id>``
@@ -351,7 +351,7 @@ def parse_mlb_api_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.
 
 
 def parse_mlb_api_linescore(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``mlb_api_linescore()`` into one row per inning.
+    """Parse ``mlb_linescore()`` into one row per inning.
 
     Input: ``{innings: [{num, ordinalNum, home: {runs, hits, errors,
     leftOnBase}, away: {...}}, ...]}``. Each inning row is flattened so the
@@ -370,7 +370,7 @@ def parse_mlb_api_linescore(payload: Dict, return_as_pandas: bool = False) -> pl
 
 
 def parse_mlb_api_play_by_play(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``mlb_api_play_by_play()`` into one row per play.
+    """Parse ``mlb_play_by_play()`` into one row per play.
 
     Input: ``{allPlays: [{result, about, count, matchup, ...}, ...]}``. Each
     ``allPlays[]`` entry is flattened: nested ``result.*`` / ``about.*`` /
@@ -389,7 +389,7 @@ def parse_mlb_api_play_by_play(payload: Dict, return_as_pandas: bool = False) ->
 
 
 def parse_mlb_api_win_probability(payload, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``mlb_api_win_probability()`` into one row per play.
+    """Parse ``mlb_win_probability()`` into one row per play.
 
     Unlike most Stats API endpoints, ``winProbability`` returns a *bare
     top-level JSON array* of play objects carrying win-probability series
@@ -419,7 +419,7 @@ def parse_mlb_api_win_probability(payload, return_as_pandas: bool = False) -> pl
 
 
 def parse_mlb_api_draft_latest(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``mlb_api_draft_latest()`` into a single-row frame.
+    """Parse ``mlb_draft_latest()`` into a single-row frame.
 
     The latest-pick endpoint returns ``{pick: {...}, number, nextUp}`` -- a
     single object rather than a list -- so it is flattened as one row (with the

@@ -11,7 +11,7 @@
 
 # paper_index fixtures
 
-Real-game oracles for `sportsdataverse/paper_index.py`, the port of Game on
+Real-game oracles for `sportsdataverse/analytics/paper_index.py`, the port of Game on
 Paper's `python/paper_index.py`.
 
 ## `paper_index_oracle.json` and `paper_index_oracle_nfl.json`

@@ -1,9 +1,9 @@
 """Snapshot the SportsDataVerse package list (projects.json) the website renders.
 
-Network tool -- run manually to refresh ``tools/codegen/packages.json``; the docs
-generator (``generate.render_packages_page``) reads the committed snapshot offline,
-so the drift gate never needs the network. The packages page is simply omitted when
-no snapshot exists.
+Network tool -- run manually to write ``tools/codegen/packages.json``; the docs
+generator (``generate.render_packages_page``) reads that snapshot offline, so the
+drift gate never needs the network. No snapshot is committed, so the packages page
+is omitted unless one is written locally.
 """
 
 from __future__ import annotations
