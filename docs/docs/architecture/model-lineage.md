@@ -175,7 +175,8 @@ fields below.
 Each `model_ledger.json` row (schema 1.1) carries `baseline` (the model it was
 shown to beat or tie on held-out data), `primary_metric` (that comparison's metric
 and SE clustering), `adoption_margin` (its paired `model - baseline` difference,
-negative = better), `status` (`active` or `retired`) and `lifecycle_note` (the
+negative = better), `status` (`active`, `baseline_tied` or `retired`; `baseline_tied` marks a
+model that ties its baseline by construction and is scored like `active`) and `lifecycle_note` (the
 evidence, or why a field is null). Fill them from committed evidence only; a field
 the evidence does not hold stays null with the reason in the note.
 `uv run python tools/models/lifecycle/retire.py --check-ledger` checks them, and

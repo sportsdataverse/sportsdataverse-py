@@ -7,8 +7,9 @@
 held-out data and ``primary_metric`` that comparison's metric and SE clustering; both are null when
 no committed evidence holds one, and ``lifecycle_note`` then says why. ``adoption_margin`` is the
 comparison's paired ``model - baseline`` difference in loss orientation (negative = model better),
-null unless the evidence states it. ``status`` is ``active`` or ``retired``; only the owner sets
-``retired``, with a ``retired_reason``.
+null unless the evidence states it. ``status`` is ``active``, ``baseline_tied`` (shipped, and ties
+its baseline by construction, such as a curve monotone in the draft pick; the rule scores it exactly
+as ``active``) or ``retired``; only the owner sets ``retired``, with a ``retired_reason``.
 
 **The rule.** After each completed season past a model's holdout, the shipped model is scored once
 against its named baseline on that season: the provenance's metric, paired, with the provenance's
@@ -53,7 +54,7 @@ import numpy as np
 
 LEDGER = Path(__file__).resolve().parents[1] / "model_ledger.json"
 LIFECYCLE_FIELDS = ("baseline", "primary_metric", "adoption_margin", "status", "lifecycle_note")
-STATUSES = ("active", "retired")
+STATUSES = ("active", "baseline_tied", "retired")
 #: one-sided 97.5% normal quantile
 Z = 1.959963984540054
 

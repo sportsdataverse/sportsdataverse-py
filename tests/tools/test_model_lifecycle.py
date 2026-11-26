@@ -74,6 +74,17 @@ def test_check_ledger_catches_each_bad_row(edit, needle: str) -> None:  # type: 
     assert len(problems) == 1 and needle in problems[0], problems
 
 
+def test_baseline_tied_is_a_ledger_status_scored_like_active(capsys) -> None:  # type: ignore[no-untyped-def]
+    """The draft / rookie pick curves ship as ``baseline_tied``: the check accepts it, and the rule runs on it as on active."""
+    ledger = _ledger()
+    tied = {(r["league"], r["model"]) for r in ledger["models"] if r["status"] == "baseline_tied"}
+    assert tied >= {("nba", "draft_value"), ("nba", "rookie_projection")}
+    assert retire.check_ledger(ledger) == []
+    assert retire.main(["--league", "nba", "--model", "draft_value"]) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["ledger_status"] == "baseline_tied" and out["status"] == "UNSCORED"
+
+
 @pytest.fixture(scope="module")
 def rated_prior_diffs() -> pl.DataFrame:
     """Per-game log-loss ``rated - hfa`` on the committed holdout games, through the card's own code."""
