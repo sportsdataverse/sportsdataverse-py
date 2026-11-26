@@ -791,6 +791,37 @@ def _simulate_season(
     cup: CupInputs | None = None,
 ) -> tuple[pl.DataFrame, CupDraws | None]:
     """:func:`simulate_pro_season`, with the simulated Cups when ``cup`` is given."""
+    frame, cup_draws, _ = _simulate_season_draws(
+        games,
+        model,
+        league_id=league_id,
+        n_sims=n_sims,
+        seed=seed,
+        prior_records=prior_records,
+        chances=chances,
+        rating_uncertainty=rating_uncertainty,
+        as_of_date=as_of_date,
+        season_games=season_games,
+        cup=cup,
+    )
+    return frame, cup_draws
+
+
+def _simulate_season_draws(
+    games: pl.DataFrame,
+    model: GameModel,
+    *,
+    league_id: str = "00",
+    n_sims: int = 10_000,
+    seed: int = 20261103,
+    prior_records: pl.DataFrame | None = None,
+    chances: list[float] | None = None,
+    rating_uncertainty: bool = True,
+    as_of_date: dt.date | None = None,
+    season_games: int | None = None,
+    cup: CupInputs | None = None,
+) -> tuple[pl.DataFrame, CupDraws | None, tuple[list[int], np.ndarray]]:
+    """:func:`_simulate_season` plus ``(team_ids, total_wins)``: wins per draw, columns in sorted ``team_ids``."""
     if cup is not None:
         if league_id != "00":
             raise ValueError("cup is NBA only")
@@ -874,7 +905,7 @@ def _simulate_season(
         "adj_net_rtg_sd": sd.tolist(),
         **_summary(sims, total_games, league_id=league_id, draws=draws, have_odds=have_odds),
     }
-    return pl.DataFrame(out, schema=SIM_SCHEMA).sort("conference", "mean_seed"), cup_draws
+    return pl.DataFrame(out, schema=SIM_SCHEMA).sort("conference", "mean_seed"), cup_draws, (teams, total_wins)
 
 
 def _regular_games(schedule: pl.DataFrame, as_of_date: dt.date | None, league_id: str = "00") -> pl.DataFrame:

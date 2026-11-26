@@ -329,3 +329,21 @@ class TestTiebreakerDataPassThrough:
         ccg = out["games"].filter(pl.col("game_type") == "CONF_CHAMP")
         assert ccg.height == 20
         assert set(zip(ccg["home_team"], ccg["away_team"])) == {("B", "A")}
+
+
+class TestOptionalGameColumns:
+    def test_mapper_columns_survive_generated_games(self) -> None:
+        """Points and conf_game (``cfb_games_from_schedule`` output) don't break the generated CCG/CFP rows."""
+        real = Path(__file__).parent.parent / "fixtures" / "seedr" / "cfb_2025_title_ties"
+        games = pl.read_csv(real / "games.csv")
+        late = pl.col("week") >= 12  # the real 2025 ACC/SEC season with its last weeks unplayed
+        games = games.with_columns(
+            pl.when(late).then(None).otherwise(pl.col(c)).cast(pl.Float64).alias(c)
+            for c in ("result", "home_points", "away_points")
+        ).with_columns(pl.lit(True).alias("conf_game"))
+        teams = pl.read_csv(real / "teams.csv")
+        out = cfb_simulations(games, teams, simulations=5, seed=SEED, playoff_seeds=4)
+        g = out["games"]
+        assert {"home_points", "away_points", "conf_game"} <= set(g.columns)
+        assert g.filter(pl.col("game_type") == "CONF_CHAMP").height == 5 * 2  # ACC + SEC title games per sim
+        assert g["result"].null_count() == 0
