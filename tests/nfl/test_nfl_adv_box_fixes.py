@@ -205,3 +205,24 @@ def test_rush_flags_gate_on_rush_and_opportunity_means_four_plus_yards(game_id, 
     for team, grp in runs.group_by("pos_team"):
         row = team_box[int(team[0])]
         assert row["rushing_opportunity_rate"] == pytest.approx((grp["yds_rushed"] >= 4).mean(), abs=0.005)
+
+
+def test_a_loss_on_a_fumble_typed_rush_is_a_stuff_and_a_short_rushing_td_a_stopped_run():
+    # PHI @ TB, 2024 week 4: an aborted snap ESPN types "Fumble Recovery (Own)" is a rush in the
+    # stuff-rate denominator, so it must be a stuff; a 1-yard rushing TD is a stopped run. Both were
+    # dropped while the flags gated on type.text == "Rush".
+    plays, box = _process(401671740, "summary_401671740_trimmed.json.gz")
+    runs = plays.filter(_t("rush") & _t("scrimmage_play"))
+    aborted = runs.filter(pl.col("text").str.contains("B.Mayfield FUMBLES (Aborted) at PHI 3", literal=True))
+    assert aborted.height == 1
+    assert aborted.row(0, named=True)["type.text"] == "Fumble Recovery (Own)"
+    assert aborted["yds_rushed"].to_list() == [0]
+    assert aborted["stuffed_run"].to_list() == [True] and aborted["stopped_run"].to_list() == [True]
+    tds = runs.filter((pl.col("type.text") == "Rushing Touchdown") & (pl.col("yds_rushed") == 1))
+    assert tds.height == 3
+    assert tds["stopped_run"].all() and not tds["stuffed_run"].any()
+    yds = runs["yds_rushed"]
+    assert (runs["stuffed_run"] == (yds <= 0)).all() and (runs["stopped_run"] == (yds <= 2)).all()
+    team = _rows(box, "team")
+    assert (team[27]["rushing_stuff"], team[27]["rushing_stopped"]) == (6, 10)  # TB; 5 and 7 by play type
+    assert (team[21]["rushing_stuff"], team[21]["rushing_stopped"]) == (4, 9)  # PHI; 4 and 8 by play type
