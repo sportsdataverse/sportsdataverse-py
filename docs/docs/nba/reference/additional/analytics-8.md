@@ -373,26 +373,36 @@ print(onoff.sort("diff_transition_freq", descending=True).head())
 
 ### player_rates {#player_rates}
 
-`player_rates(box_logs: 'pl.DataFrame') -> 'pl.DataFrame'`
+`player_rates(box_logs: 'pl.DataFrame', *, prior_logs: 'pl.DataFrame | None' = None, league_id: 'str | None' = None, recent_games: 'int | None' = None) -> 'pl.DataFrame'`
 
-Per-player per-minute rate stats from box logs.
+Per-player per-minute rate stats from box logs, shrunk toward a tier prior in the NBA.
 
 Rows with null, zero or negative minutes (DNPs) are dropped before anything
 is counted, so `games` counts only games the player logged minutes in.
-Rate = total stat / total minutes across those games; `minutes_pg` is the
+The raw rate is total stat / total minutes across those games; `minutes_pg` is the
 mean minutes. A traded player gets one row: the rates pool every team's
 games, and `team_id` is the team on the player's last kept input row
 (sort `box_logs` by date to make that the latest team).
+
+With a `league_id` that has fitted `rate_prior_minutes` (the NBA, `"00"`), each
+rate is `(stat_sum + k * tier_rate) / (min_sum + k)`: `k` pseudo-minutes of the
+pooled rate of the player's minutes-and-role tier (`minutes_pg` in [0,12), [12,20),
+[20,28), 28+, split by starter share >= .5). The tier rate pools `box_logs` and
+`prior_logs`, each player tiered by his own profile in each frame; pass the previous
+regular season as `prior_logs` so a player's first games have a prior.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `box_logs` | `DataFrame` |  | Per-player-per-game frame with `player_id, team_id, minutes, pts, reb, ast, fg3m`. |
+| `box_logs` | `DataFrame` |  | Per-player-per-game frame with `player_id, team_id, minutes` and the stats `pts, reb, ast, fg3m`; `stl, blk, tov, fgm, ftm` are optional (a stat missing from the frame, or null on every played row, gets a null rate). Shrinkage also needs `starter`. |
+| `prior_logs` | `DataFrame \| None` | `None` | Earlier games (same columns), pooled into the tier rates only; they never enter a player's own totals. |
+| `league_id` | `str \| None` | `None` | `None` (default) for raw rates; `"00"` / `"10"` / `"20"` for that league's fitted shrinkage. Only the NBA has one, so WNBA and G-League stay raw. |
+| `recent_games` | `int \| None` | `None` | When set, each player's own totals (`games`, `minutes_pg` and the rates) cover only his last `recent_games` played rows by `game_date`, while his tier and the tier rates still come from all of `box_logs` (needs `game_date`). |
 
 **Returns**
 
-One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per_min, ast_per_min, fg3m_per_min`; `games` is Int64. `player_id` and `team_id` keep the input's dtype (String from the `nba_player_props` loader; integer ids come back as integers); empty input returns the documented schema, with String ids, and zero rows.
+One row per player: `player_id, team_id, games, minutes_pg`, then `pts_per_min, reb_per_min, ast_per_min, fg3m_per_min, stl_per_min, blk_per_min, tov_per_min, fgm_per_min, ftm_per_min`; `games` is Int64. `player_id` and `team_id` keep the input's dtype (String from the `nba_player_props` loader; integer ids come back as integers); empty input returns the documented schema, with String ids, and zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -404,12 +414,27 @@ One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per
 | `reb_per_min` | Float64 |  |
 | `ast_per_min` | Float64 |  |
 | `fg3m_per_min` | Float64 |  |
+| `stl_per_min` | Float64 |  |
+| `blk_per_min` | Float64 |  |
+| `tov_per_min` | Float64 |  |
+| `fgm_per_min` | Float64 |  |
+| `ftm_per_min` | Float64 |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Shrinkage is on and `box_logs` or `prior_logs` has no `starter` value on any played row (the tiers split on it); or `recent_games` is set and `box_logs` has no `game_date`. |
 
 **Example**
 
 ```python
 from sportsdataverse.nba.nba_player_props import player_rates
 rates = player_rates(box_logs)
+
+# Shrunk toward the tier prior, with last season pooled in
+
+rates = player_rates(box_logs, prior_logs=last_season_logs, league_id="00")
 ```
 
 ### players_on_court_from_pbp {#players_on_court_from_pbp}
@@ -626,7 +651,7 @@ print(df.shape)
 
 ### prob_over {#prob_over}
 
-`prob_over(exp_value: 'float', line: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'float'`
+`prob_over(exp_value: 'float', line: 'float', stat: 'str', *, league_id: 'str' = '00', recent_value: 'float | None' = None, recent_weight: 'float | None' = None) -> 'float'`
 
 Probability a stat finishes strictly above `line`.
 
@@ -636,8 +661,10 @@ Probability a stat finishes strictly above `line`.
 |---|---|---|---|
 | `exp_value` | `float` |  | Projected mean of the stat. |
 | `line` | `float` |  | The prop line. |
-| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `stat` | `str` |  | A `prop_distribution` stat (`"pts"` ... `"ftm"`). |
 | `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League (passed to `prop_distribution`). |
+| `recent_value` | `float \| None` | `None` | The recent-window mean, for the mixture (see `prop_distribution`). |
+| `recent_weight` | `float \| None` | `None` | The mixture weight; `None` or `0` prices the single distribution. |
 
 **Returns**
 
@@ -648,6 +675,10 @@ Probability a stat finishes strictly above `line`.
 ```python
 from sportsdataverse.nba.nba_player_props import prob_over
 prob_over(24.0, 22.5, "pts")
+
+# Priced as the recent-window mixture (the ``nba_player_props`` columns)
+
+prob_over(24.0, 22.5, "pts", recent_value=28.0, recent_weight=0.4)
 ```
 
 ### project_player_line {#project_player_line}
@@ -669,7 +700,7 @@ scale with both projected minutes and pace.
 
 **Returns**
 
-`{"exp_pts", "exp_reb", "exp_ast", "exp_fg3m"}`.
+`{"exp_<stat>": value}` for each `<stat>_per_min` in `rate_row` that is not null: `exp_pts, exp_reb, exp_ast, exp_fg3m`, plus `exp_stl` ... `exp_ftm` from a `player_rates` row whose input carried those stats.
 
 **Example**
 
@@ -681,31 +712,48 @@ line = project_player_line(r, exp_minutes=32.0, pace_factor=1.02)
 
 ### prop_distribution {#prop_distribution}
 
-`prop_distribution(exp_value: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'tuple[str, dict[str, float]]'`
+`prop_distribution(exp_value: 'float', stat: 'str', *, league_id: 'str' = '00', recent_value: 'float | None' = None, recent_weight: 'float | None' = None) -> 'tuple[str, dict[str, Any]]'`
 
 Distribution family + parameters for a projected stat mean.
 
 Points -> Normal `(mu, sd)` with `sd = a + b*sqrt(mu)`; counts
-(reb/ast/fg3m) -> Negative-Binomial `(r, p)` matching mean `mu` and
-variance `dispersion*mu` (Poisson if dispersion <= 1).
+(reb/ast/fg3m, and stl/blk/tov/fgm/ftm where the league has their fit) ->
+Negative-Binomial `(r, p)` matching mean `mu` and variance
+`dispersion*mu` (Poisson if dispersion <= 1). With a positive
+`recent_weight` it is the two-component mixture
+`(1 - w) F(exp_value) + w F(recent_value)` of `nba_player_props`; its
+points components use the mixture's own SD law (`recent_mixture` in
+`~sportsdataverse.nba.nba_prediction_constants.LEAGUE_CONSTANTS`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `exp_value` | `float` |  | Projected mean of the stat. |
-| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `exp_value` | `float` |  | Projected mean of the stat (`stat_<stat>_exp`). |
+| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`, `"stl"`, `"blk"`, `"tov"`, `"fgm"`, `"ftm"`. |
 | `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League; selects that league's fitted SD law and dispersion. |
+| `recent_value` | `float \| None` | `None` | The recent-window mean (`stat_<stat>_recent_exp`). |
+| `recent_weight` | `float \| None` | `None` | The mixture weight (`recent_weight`); `None` or `0` gives the single distribution. |
 
 **Returns**
 
-`(family, params)` where family is `"normal"`, `"nbinom"` or `"poisson"`.
+`(family, params)` where family is `"normal"`, `"nbinom"` or `"poisson"`; or `"mixture"` with params `{"weights": [1 - w, w], "components": [(family, params), (family, params)]}`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `stat` is one of stl/blk/tov/fgm/ftm and the league has no fitted dispersion for it (only the NBA has one); or `recent_weight` is positive and the league has no fitted mixture or `recent_value` is missing. |
 
 **Example**
 
 ```python
 from sportsdataverse.nba.nba_player_props import prop_distribution
 fam, par = prop_distribution(24.0, "pts")
+
+# A player whose last 10 games run hotter than his season
+
+fam, par = prop_distribution(24.0, "pts", recent_value=28.0, recent_weight=0.4)
 ```
 
 ### ratings_as_of {#ratings_as_of}
