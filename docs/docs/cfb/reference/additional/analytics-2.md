@@ -17,8 +17,8 @@ ranking order (no champion bump to the top four):
 
 * **2026+** (`season=None` or `>= 2026`, the current rule): the ACC,
   Big Ten, Big 12 and SEC champions are in regardless of ranking; so is
-  the highest-ranked champion of the American, Conference USA, MAC,
-  Mountain West, Pac-12 and Sun Belt; and Notre Dame (`"Notre Dame"` or
+  the highest-ranked team (champion or not) of the American, Conference
+  USA, MAC, Mountain West, Pac-12 and Sun Belt; and Notre Dame (`"Notre Dame"` or
   ESPN id `"87"`) when it ranks inside the top `playoff_seeds`; the
   rest of the field is at-large.
 * **2024-2025** (`season < 2026`): the 5 highest-ranked conference
@@ -35,14 +35,14 @@ desc, then team name (documented deterministic fallback; a committee
 ranking is the intended input). Notre Dame's "ranked inside the field"
 test reads its position in that same ordering.
 
-Differs from cfbseedR 0.3.0 (`autobid`) in two places: cfbseedR gives
-the Group-of-6 bid to the best-ranked G6 team whether or not it won its
-conference, and it tests Notre Dame's committee `rank` only (no bid
-without `rankings`). Both match Notre Dame as `"Notre Dame"` or
-`"87"`, and cfbseedR's `cfb_standings()` keys the rule by a
-`season`-keyed input as `cfb_standings` does here; its
+Differs from cfbseedR 0.3.0's selection rule (`autobid`) in one place:
+cfbseedR tests Notre Dame's committee `rank` only (no bid without
+`rankings`). Both match Notre Dame as `"Notre Dame"` or `"87"`, and cfbseedR's
+`cfb_standings()` keys the rule by a `season`-keyed input as
+`cfb_standings` does here; its
 `cfb_simulations()` takes an explicit `autobid` (default `"2026"`)
 where `sportsdataverse.cfb.cfb_simulations` follows the season.
+Neither engine reads `postseason_eligible` when seeding: an ineligible team can still take a bid.
 
 Called on its own, this function cannot see a season: pass `season=`
 for standings of a pre-2026 season (`cfb_standings(...,
@@ -83,7 +83,7 @@ The standings frame with a `seed` column (Int64; null for teams outside the fiel
 | `sos` | Float64 | Strength of schedule, conference-REG-scoped (unlike nflseedR's overall version) - conference opponents' summed conference wins (ties half) over their summed conference games, one term per conference game played (pooled, as cfbseedR); 0.0 for independents. |
 | `conf_rank` | Int64 | Rank within the conference from the tiebreaker cascade (1 = best); null for independents. |
 | `conf_champ` | Boolean | Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the conference's rank-1 team; always false for independents. |
-| `seed` | Int64 | College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From 2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 champion and a Notre Dame ranked within the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions. Automatic qualifiers are capped at the field size. |
+| `seed` | Int64 | College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. From 2026 the ACC / Big Ten / Big 12 / SEC champions, the highest-ranked Group-of-6 team (champion or not) and a Notre Dame ranked within the field size are selected before at-large teams; before 2026, the five highest-ranked conference champions. Automatic qualifiers are capped at the field size. |
 
 **Raises**
 

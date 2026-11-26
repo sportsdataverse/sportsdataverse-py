@@ -2,8 +2,8 @@
 # strict identity (which generate.py handles automatically). Verified to exist in
 # the target package's r_exports.yaml. Shape: {league: {python_fn: r_fn}}.
 # - NFL: sdv's canonical `load_nfl_*` loaders map to nflreadr's bare `load_*` (nflreadpy-style).
-# MLB wrappers were renamed from `mlb_api_*` to `mlb_*` in 0.0.65+ and now match
-# baseballr's names exactly — generate.py handles identity automatically; no mlb: section needed.
+# - MLB: most `mlb_*` wrappers match baseballr's names (identity), but the statsapi wrappers below
+#   name the same endpoint differently, so they need the mlb: section.
 mbb:
   # hoopR names diverging from sdv-py's (hoopR-cran-parity-audit 06, 2026-10-30). KenPom: hoopR
   # splits a page into one function per table, so a Python function that returns the whole page
@@ -46,12 +46,47 @@ mbb:
   load_mbb_player_season_stats: load_mbb_player_stats
   load_mbb_team_boxscore: load_mbb_team_box
   load_mbb_team_season_stats: load_mbb_team_stats
+  # ncaa_espn_*(league="mbb") reads the same mbb_crosswalk release assets as hoopR's load_mbb_ncaa_espn_*.
+  ncaa_espn_school_seasons: load_mbb_ncaa_espn_school_seasons
+  ncaa_espn_schools: load_mbb_ncaa_espn_schools
+  ncaa_espn_team_crosswalk: load_mbb_ncaa_espn_team_crosswalk
+mlb:
+  # baseballr names for the same statsapi.mlb.com endpoint (or Savant search route); each pair checked
+  # against both sources' endpoint paths (2026-11-26). Pairs whose paths differ carry a note.
+  mlb_all_star_ballot: mlb_all_star_ballots
+  mlb_award_recipients: mlb_awards_recipient
+  mlb_datacasters: mlb_jobs_datacasters
+  mlb_free_agents: mlb_people_free_agents
+  mlb_high_low: mlb_high_low_stats
+  mlb_home_run_derby: mlb_homerun_derby
+  mlb_home_run_derby_bracket: mlb_homerun_derby_bracket
+  mlb_home_run_derby_pool: mlb_homerun_derby_players
+  # Different paths, same data: sdv-py reads v1/leagues, baseballr reads v1/league (both answer sportId=1).
+  mlb_leagues: mlb_league
+  # Different paths, same data: sdv-py reads v1/game/{pk}/linescore, baseballr parses the linescore out of v1.1/game/{pk}/feed/live.
+  mlb_linescore: mlb_game_linescore
+  mlb_official_scorers: mlb_jobs_official_scorers
+  mlb_person_game_stats: mlb_player_game_stats
+  mlb_schedule_tied: mlb_schedule_games_tied
+  mlb_sport: mlb_sports_info
+  mlb_sport_players: mlb_sports_players
+  mlb_statcast_search: statcast_search
+  mlb_statcast_search_minors: statcast_search_minors
+  mlb_statcast_search_wbc: statcast_search_wbc
+  mlb_team: mlb_team_info
+  # baseballr always reads v1/teams/{id}/roster/{roster_type}; sdv-py's mlb_team_roster omits the roster type.
+  mlb_team_roster: mlb_rosters
+  mlb_team_roster_type: mlb_rosters
+  mlb_teams_history: mlb_team_history
+  mlb_umpires: mlb_jobs_umpires
+  mlb_win_probability: mlb_game_wp
 nba:
   # stats.nba.com wrappers carry an nba_stats_ prefix where hoopR uses nba_; the ESPN loaders say
   # boxscore / season_stats where hoopR says box / stats.
   helper_nba_play_by_play: helper_espn_nba_pbp
   helper_nba_player_box: helper_espn_nba_player_box
   helper_nba_team_box: helper_espn_nba_team_box
+  load_nba_depth_charts: load_nba_depthcharts
   load_nba_player_boxscore: load_nba_player_box
   load_nba_player_season_stats: load_nba_player_stats
   load_nba_stats_schedules: load_nba_stats_schedule
@@ -211,7 +246,54 @@ nfl:
   load_nfl_trades: load_trades
   load_nfl_weekly_rosters: load_rosters_weekly
 nhl:
+  # fastRhockey names for the same api-web.nhle.com / api.nhle.com/stats/rest / records.nhl.com endpoint
+  # (sdv-py says nhl_stats_rest_* where fastRhockey says nhl_stats_*); each pair checked against both
+  # sources' endpoint paths (2026-11-26). Not aliased, because the R default call returns other data:
+  # nhl_web_pbp (nhl_game_pbp parses and adds shifts + xG unless raw = TRUE) and
+  # nhl_stats_rest_component_season (nhl_stats_misc defaults to endpoint = "glossary"),
+  # nhl_club_schedule_month / _week (nhl_club_schedule defaults to view = "season"), and
+  # nhl_stats_rest_shiftcharts (nhl_game_shifts returns per-player records only with detailed = TRUE).
+  nhl_boxscore: nhl_game_boxscore
+  nhl_club_schedule_season: nhl_club_schedule
+  nhl_club_stats: nhl_teams_stats
+  nhl_draft_picks: nhl_draft_year
+  nhl_draft_picks_now: nhl_draft
+  nhl_draft_rankings_now: nhl_draft_prospects
+  nhl_draft_tracker_picks_now: nhl_draft_tracker
+  nhl_edge_cat_goalie_detail: nhl_cat_edge_goalie_detail
+  nhl_edge_cat_skater_detail: nhl_cat_edge_skater_detail
+  nhl_goalie_leaders: nhl_goalie_stats_leaders
+  nhl_landing: nhl_gamecenter_landing
+  nhl_player_landing: nhl_player_info
+  nhl_playoff_series: nhl_playoff_schedule
+  nhl_records_awards: nhl_records_award_details
+  nhl_records_franchises: nhl_records_franchise
+  nhl_right_rail: nhl_gamecenter_right_rail
+  nhl_roster: nhl_teams_roster
+  nhl_score: nhl_scores
+  nhl_skater_leaders: nhl_skater_stats_leaders
+  nhl_stats_rest_config: nhl_stats_config
+  nhl_stats_rest_content_module: nhl_stats_content_module
+  nhl_stats_rest_country: nhl_stats_country
+  nhl_stats_rest_draft: nhl_stats_draft
+  nhl_stats_rest_franchise: nhl_stats_franchise
+  nhl_stats_rest_game: nhl_stats_game_listing
+  nhl_stats_rest_glossary: nhl_stats_glossary
+  nhl_stats_rest_goalie_report: nhl_stats_goalies
+  nhl_stats_rest_leaders_goalies: nhl_stats_goalie_leaders
+  nhl_stats_rest_leaders_skaters: nhl_stats_skater_leaders
+  nhl_stats_rest_milestones_goalies: nhl_stats_goalie_milestones
+  nhl_stats_rest_milestones_skaters: nhl_stats_skater_milestones
+  nhl_stats_rest_ping: nhl_stats_ping
+  nhl_stats_rest_players: nhl_stats_players
+  nhl_stats_rest_season: nhl_stats_seasons
+  nhl_stats_rest_skater_report: nhl_stats_skaters
+  nhl_stats_rest_team: nhl_stats_team_listing
+  nhl_stats_rest_team_by_id: nhl_stats_team_listing
+  nhl_stats_rest_team_report: nhl_stats_teams
   nhl_web_schedule: nhl_schedule
+  # nhl_xg ports helper_nhl_calculate_xg (see its docstring).
+  nhl_xg: helper_nhl_calculate_xg
 pwhl:
   # Live API wrappers — sdv-py names match fastRhockey exactly; listed here
   # so the parity table generator picks them up explicitly.
@@ -235,8 +317,7 @@ pwhl:
   pwhl_game_info: pwhl_game_info
   pwhl_player_box: pwhl_player_box
   most_recent_pwhl_season: most_recent_pwhl_season
-  # Analytics functions — Part B will add these to fastRhockey; mapping to
-  # themselves for now so the table shows them as Python-only until then.
+  # Analytics functions, also exported by fastRhockey under the same names.
   pwhl_game_shifts: pwhl_game_shifts
   pwhl_player_toi: pwhl_player_toi
   pwhl_game_corsi: pwhl_game_corsi
@@ -254,6 +335,8 @@ wbb:
   herhoopstats_team_roster: hhs_team_roster
   herhoopstats_team_stats: hhs_team_stats
   herhoopstats_teams: hhs_teams
+  # No ncaa_espn_* rows: sportsdataverse.wbb re-exports the mbb functions, which default to league="mbb", so
+  # a default call is not wehoop's load_wbb_ncaa_espn_* (that needs league="wbb", which the table cannot show).
 wnba:
   # stats.wnba.com wrappers carry a wnba_stats_ prefix where wehoop uses wnba_ (as nba: above).
   espn_wnba_summary: espn_wnba_game_all
