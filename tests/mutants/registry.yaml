@@ -12855,6 +12855,36 @@
   expected: kill
   note: The leaderboard payload is not in leaderboard order; unsorted, row 0 is not the leader.
 
+- id: golf-thru-is-holes-completed
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '    if "thru" in status:'
+  mutant: '    if False:'
+  test: tests/test_espn_golf_parsers.py::test_pga_playoff_and_split_tee_thru
+  expected: kill
+  note: ESPN's hole is the last hole played, so a split-tee start would show 9 holes done; LIV sends no hole at all.
+
+- id: golf-withdrawn-and-disqualified-abbr
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '        "player_status_abbr": _dict(status.get("type")).get("shortDetail"),'
+  mutant: '        "player_status_abbr": None,'
+  test: tests/test_espn_golf_parsers.py::test_withdrawal_and_disqualification_are_told_apart_from_a_missed_cut
+  expected: kill
+  note: ESPN files WD and DQ under STATUS_CUT, so without the abbreviation they read as missed cuts.
+
+- id: golf-scoreboard-playoff-is-null
+  group: golf-espn-parsers
+  finding: espn-golf-parser
+  file: sportsdataverse/golf/golf_espn_parsers.py
+  snippet: '        "playoff": in_playoff if status else None,'
+  mutant: '        "playoff": in_playoff,'
+  test: tests/test_espn_golf_parsers.py::test_scoreboard_rows_leave_the_leaderboard_only_columns_null
+  expected: kill
+  note: The scoreboard carries no player status, so it cannot say a player was not in a playoff.
+
 # --- CFB efficiency ratings on the adjusted-EPA fit (A1/A2) ---------------------------------------
 - id: cfb-efficiency-ratings-fit-band
   group: cfb-adjustment
