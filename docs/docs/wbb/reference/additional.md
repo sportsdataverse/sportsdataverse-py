@@ -129,7 +129,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [reorder_and_reverse](additional/stats-ncaa-org-3.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
 | [reset_config](additional/stats-ncaa-org-3.md#reset_config) | Reset the active config to its env-var-derived defaults. |
 | [right_kind_of_shot](additional/stats-ncaa-org-3.md#right_kind_of_shot) | Whether `pbp_event`'s shot type is compatible with `shot`'s |
-| [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
+| [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | Iterative SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
 | [select_contains](additional/stats-ncaa-org-3.md#select_contains) | JSoup `root.select(sel + ":contains(text)")`: candidates whose full |
 | [select_matching](additional/stats-ncaa-org-3.md#select_matching) | JSoup `root.select(sel + ":matches(regex)")`: candidates whose full |
 | [select_matching_own](additional/stats-ncaa-org-3.md#select_matching_own) | JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose |

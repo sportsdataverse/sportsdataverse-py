@@ -6,7 +6,7 @@ Per the Phase-0 capture-contract finding in
 does **not** port the NHL xG/RAPM/GSAx suite -- it builds team-game
 goals-for/against from the ESPN scoreboard and feeds the league-agnostic
 :func:`sportsdataverse._common.ratings.iterative_opponent_adjust` fixed
-point (the same MBB/NBA KenPom-style solver), unchanged.
+point (the same MBB/NBA opponent-adjustment solver), unchanged.
 
 League-agnostic core; :mod:`sportsdataverse.hockey.mch.mch_ratings` /
 :mod:`sportsdataverse.hockey.wch.wch_ratings` are by-reference shims that
@@ -102,7 +102,7 @@ def college_hockey_ratings(
     Builds team-game goals-for/against via :func:`college_hockey_game_results`
     and adjusts it with the league-agnostic
     :func:`sportsdataverse._common.ratings.iterative_opponent_adjust` fixed
-    point (MBB/NBA KenPom-style solver, unchanged).
+    point (the MBB/NBA opponent-adjustment solver, unchanged).
 
     Args:
         events: Raw ESPN scoreboard ``events[]``, concatenated across
