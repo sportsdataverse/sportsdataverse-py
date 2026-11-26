@@ -598,27 +598,29 @@ One row per team: opponent-adjusted offensive/defensive efficiency.
 
 The same fit as `sportsdataverse.cfb.cfb_adjusted_epa`: one ridge of
 per-play EPA on offense, defense and home-field indicators over the pass
-and rush plays with `0.05 <= wp_before_naive <= 0.95` (the spread-free
+and rush plays that are not garbage time (score margin at the snap above
+43 / 37 / 27 / 21 in Q1-Q4 and overtime, the
+`~sportsdataverse.cfb.cfb_opponent_adjust.flag_garbage_time` rule; no
 win probability, so the pregame line never decides which plays count),
 every team shrunk toward the league average by its own play count
-(`_ADJ_EPA_LAMBDA`). Each team's raw per-game EPA (all pass/rush plays,
-garbage time included) is then netted against the opponent's fitted
-strength and averaged across games -- the R `adjust_epa` statistic and
-scale (a top team nets ~0.30-0.40/play). Through 0.2.0b1 this function fit
-a separate standardized ridge (lambda 0.035) on `0.1 <= wp_before <=
-0.9`, which priced the pregame spread into the fit and predicted next
-week's margins 0.67 points worse.
+(`_ADJ_EPA_LAMBDA`). Each team's raw per-game EPA on those same plays is
+then netted against the opponent's fitted strength and averaged across
+games -- the R `adjust_epa` statistic. `games` and `off_pace` still
+count every pass/rush play. Through 0.2.0b1 this function fit a separate
+standardized ridge (lambda 0.035) on `0.1 <= wp_before <= 0.9`, which
+priced the pregame spread into the fit and predicted next week's margins
+0.67 points worse.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._ADJ_REQUIRED` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `wp_before_naive`). Callers pass an already as-of-date-filtered frame; this function is pure. |
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._ADJ_REQUIRED` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `period`, `pos_score_diff_start`). Callers pass an already as-of-date-filtered frame; this function is pure. |
 | `config` | `RatingsConfig \| None` | `None` | Accepted for signature parity with `fei_ratings`; not read here (the penalty is `cfb_adjusted_epa`'s, so the two entry points cannot disagree). |
 
 **Returns**
 
-A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when no play falls in the fit band.
+A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when every play is garbage time.
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
 
