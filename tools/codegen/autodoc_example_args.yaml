@@ -640,6 +640,9 @@ nhl:
   as_of_ratings_split: {df: {$call: nhl.load_nhl_schedules, args: {seasons: 2025}}, cutoff_date: "2025-01-01", date_col: game_date}  # 600 rows x 35 cols
   nhl_team_ratings: {seasons: 2025}  # 32 rows x 12 cols
   nhl_player_props: {seasons: 2025}  # 100642 rows x 10 cols
+  nhl_goalie_saves: {seasons: 2025}  # 2796 rows x 13 cols
+  # nhl_score_distribution / nhl_total_goals_distribution take a predictions frame no loader returns
+  # (nhl_predict_games needs home_team/away_team): their schemas are hand_authored from a 2025 run.
   nhl_goalie_gsax: {pbp: {$call: nhl.load_nhl_pbp_full, args: {seasons: 2025}}, shifts: {$call: nhl.load_nhl_shifts, args: {seasons: 2025}}}  # 103 rows x 7 cols
   nhl_special_teams_value: {pbp: {$call: nhl.load_nhl_pbp_full, args: {seasons: 2027}}, shifts: {$call: nhl.load_nhl_shifts, args: {seasons: 2027}}}  # 572 rows x 5 cols
   nhl_unit_ratings: {pbp: {$call: nhl.load_nhl_pbp_full, args: {seasons: 2027}}, shifts: {$call: nhl.load_nhl_shifts, args: {seasons: 2027}}}  # 215 rows x 9 cols

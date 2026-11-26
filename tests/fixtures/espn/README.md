@@ -169,6 +169,7 @@ run offline on them (`tests/<lg>/test_<lg>_schedule_teams_offline.py`, via
 | `scoreboard_nba.json` | `espn_nba_scoreboard(dates=20241201)` | 10 events, 2024-12-01/02 UTC |
 | `scoreboard_nfl.json` | `espn_nfl_scoreboard(week=6, season_type=2)` | 15 events: no `dates`, so the CURRENT season's week 6 at capture time (2025 season, 2025-10-10/13) |
 | `scoreboard_nhl.json` | `espn_nhl_scoreboard(dates=20241201)` | 5 events, 2024-12-01/02 UTC |
+| `scoreboard_nhl_pregame.json` | `espn_nhl_scoreboard(dates=20261125)`, fetched 2026-11-26T00:10:47Z | 14 events (6 `in`, 8 `pre`), 28 probable goalies (24 Confirmed, 4 Expected) |
 | `scoreboard_wbb.json` | `espn_wbb_scoreboard(dates=20241201)` | 6 events, 2024-12-01/02 UTC |
 | `scoreboard_wnba.json` | `espn_wnba_scoreboard(dates=20240622)` | 3 events, 2024-06-22/23 UTC |
 | `teams_cfb.json` | `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams?limit=1000` | 755 teams |

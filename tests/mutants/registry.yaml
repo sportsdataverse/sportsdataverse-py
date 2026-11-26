@@ -12429,6 +12429,16 @@
   expected: kill
   note: A lineup's rebound chances would add its own defensive rebounds, the team table's convention, not the opponent's.
 
+- id: bb-factor-points-defense-rebound-chances
+  group: bb-factor-points
+  finding: bb-d42-factor-points
+  file: sportsdataverse/_common/factor_points.py
+  snippet: '"def": _parts(_side("d", d_rc, "opp_pts", "opp_poss"))'
+  mutant: '"def": _parts(_side("d", o_rc, "opp_pts", "opp_poss"))'
+  test: tests/common/test_factor_points.py::test_team_defense_parts_are_the_opponents_game_prices_summed
+  expected: kill
+  note: The defense priced on the offense's rebound chances still adds up (def_ft_pts absorbs it); only the opponents' game prices catch it.
+
 - id: soccer-standings-infer-all-rows
   group: polars-2.2
   finding: polars-2.2-from-dicts-extra-key
@@ -12722,6 +12732,27 @@
   test: tests/test_espn_golf_parsers.py::test_leaderboard_one_row_per_player_with_string_ids
   expected: kill
   note: The leaderboard payload is not in leaderboard order; unsorted, row 0 is not the leader.
+
+# --- CFB efficiency ratings on the adjusted-EPA fit (A1/A2) ---------------------------------------
+- id: cfb-efficiency-ratings-fit-band
+  group: cfb-adjustment
+  finding: cfb-adjustment-a1
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '    base, clean = _prepare(plays, _ADJ_REQUIRED, _FIT_WP)'
+  mutant: '    base, clean = _prepare(plays, _ADJ_REQUIRED)'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_band_is_the_spread_free_wp
+  expected: kill
+  note: Falls back to the spread-aware 0.1 <= wp_before <= 0.9 band, so the pregame line picks the plays.
+
+- id: cfb-efficiency-ratings-penalty
+  group: cfb-adjustment
+  finding: cfb-adjustment-a1
+  file: sportsdataverse/cfb/cfb_ratings.py
+  snippet: '    offense, defense, _intercept = _fit_team_strengths(clean, _ADJ_EPA_LAMBDA)'
+  mutant: '    offense, defense, _intercept = _fit_team_strengths(clean, 0.035)'
+  test: tests/cfb/test_cfb_ratings.py::test_efficiency_ratings_is_the_adjusted_epa_fit
+  expected: kill
+  note: A second penalty would let the ratings engine and cfb_adjusted_epa disagree again.
 
 # --- PGA TOUR GraphQL runtime + parsers (pgatour_*) ----------------------------------------------
 - id: pgatour-key-from-the-prod-block
