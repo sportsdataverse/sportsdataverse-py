@@ -637,7 +637,7 @@ def espn_depthcharts_snapshot(
 #: moves from Expected to Confirmed in the hours before puck drop. ``event_state`` is ``pre``,
 #: ``in`` or ``post`` at fetch time. The frame carries no capture stamp; the caller that stores
 #: it records when it was fetched.
-PROBABLES_SNAPSHOT_SCHEMA: Dict[str, Any] = {
+PROBABLES_SNAPSHOT_SCHEMA: dict[str, Any] = {
     "league": pl.Utf8,
     "event_id": pl.Int64,
     "event_date": pl.Utf8,
@@ -653,7 +653,7 @@ PROBABLES_SNAPSHOT_SCHEMA: Dict[str, Any] = {
 
 
 def parse_probables_snapshot(
-    payload: Optional[Mapping[str, Any]],
+    payload: Mapping[str, Any] | None,
     *,
     league: str,
     return_as_pandas: bool = False,
@@ -697,7 +697,7 @@ def parse_probables_snapshot(
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     .. _baseballr: https://baseballr.sportsdataverse.org
     """
-    rows: List[Dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
     for event in _list(_mapping(payload).get("events")):
         if not isinstance(event, Mapping):
             continue
@@ -730,7 +730,7 @@ def parse_probables_snapshot(
     return _pandas_ids(df) if return_as_pandas else df
 
 
-def pregame_state_as_of(snapshots: Any, t: Union[datetime, pl.Expr]) -> Any:
+def pregame_state_as_of(snapshots: Any, t: datetime | pl.Expr) -> Any:
     """Keep the snapshot rows that were known at decision time ``t``.
 
     A snapshot table stores each observed state as an interval: ``valid_from`` is the first

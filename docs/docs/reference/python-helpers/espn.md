@@ -98,7 +98,7 @@ df = espn_injuries_snapshot(["nfl", "nba", "nhl", "mlb", "wnba", "cfb"])
 
 ### pregame_state_as_of {#pregame_state_as_of}
 
-`pregame_state_as_of(snapshots: 'Any', t: 'Union[datetime, pl.Expr]') -> 'Any'`
+`pregame_state_as_of(snapshots: 'Any', t: 'datetime | pl.Expr') -> 'Any'`
 
 Keep the snapshot rows that were known at decision time `t`.
 
@@ -115,7 +115,7 @@ is a filter, not an as-of join.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `snapshots` | `Any` |  | A polars `DataFrame` or `LazyFrame` with timezone-aware `valid_from` and `valid_to` datetime columns (any zone; compared as UTC instants), such as the `nhl_pregame_snapshots` release. |
-| `t` | `Union[datetime, Expr]` |  | The decision time. A timezone-aware `datetime` applies one time to every row; a `pl.Expr` gives each row its own, for example puck drop minus three hours after a join to the schedule. The expression must also be timezone-aware. |
+| `t` | `datetime \| Expr` |  | The decision time. A timezone-aware `datetime` applies one time to every row; a `pl.Expr` gives each row its own, for example puck drop minus three hours after a join to the schedule. The expression must also be timezone-aware. |
 
 **Returns**
 
