@@ -1,10 +1,10 @@
 ---
-title: "Women's college basketball — additional Python functions — Analytics: wbb_team–weighted_avg"
-sidebar_label: "Analytics: wbb_team–weighted_avg"
+title: "Women's college basketball — additional Python functions — Analytics: wbb_team"
+sidebar_label: "Analytics: wbb_team"
 sidebar_position: 15
-description: "Women's college basketball — additional Python functions — Analytics: wbb_team–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "Women's college basketball — additional Python functions — Analytics: wbb_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# Women's college basketball — additional Python functions — Analytics: wbb_team–weighted_avg
+# Women's college basketball — additional Python functions — Analytics: wbb_team
 
 ### wbb_team_season_rates {#wbb_team_season_rates}
 
@@ -418,58 +418,4 @@ One row per `(season, team_id)`: `games`, `wins`, `losses`, `poss`, `opp_poss`, 
 ```python
 from sportsdataverse.wbb import wbb_team_strength
 wbb_team_strength(2025).sort("adj_net_rtg_rank").head()
-```
-
-### weighted_avg {#weighted_avg}
-
-`weighted_avg(mutable_acc: 'LineupStatSet', obj: 'LineupStatSet') -> 'None'`
-
-Merge `obj` into `mutable_acc` with possession weighting.
-
-Faithful port of `LineupUtils.weightedAvg` (`LineupUtils.ts:645`).
-Mutates `mutable_acc` in place (matching the upstream mutable-state
-contract) and returns `None`. Each call accumulates a **weighted
-sum**, not a weighted average -- the companion `completeWeightedAvg`
-(upstream `LineupUtils.ts:752`, not yet ported) divides by the
-accumulated weight totals to finish the average. The per-field weight
-used at each merge step is derived from `obj`'s *own* totals (e.g.
-that single lineup's `total_off_fga`), not from any running total on
-`mutable_acc` -- callers accumulating many lineups must call
-`weighted_avg` once per lineup so every lineup contributes its own
-weight.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `mutable_acc` | `LineupStatSet` |  | The running accumulator (`LineupStatSet`). Mutated in place; fields absent from the accumulator are initialized to `{"value": 0.0}` (plus `old_value` / `override` when `obj`'s field carries a luck-adjustment `override` marker) before `obj`'s contribution is added. |
-| `obj` | `LineupStatSet` |  | The per-lineup `LineupStatSet` document to merge in. |
-
-**Returns**
-
-None. `mutable_acc` is mutated in place.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `NotImplementedError` | If `obj` carries a `game_info` key -- that merge branch is deliberately deferred (see module docstring). |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_lineup_stats import weighted_avg
-
-acc: dict = {}
-weighted_avg(acc, lineup_a)
-weighted_avg(acc, lineup_b)
-print(acc["off_poss"]["value"])  # plain sum (SUM_FIELDS)
-
-# Two-lineup possession-weighted merge
-
-acc = {}
-for lineup in three_lineups:
-    weighted_avg(acc, lineup)
-# acc now holds weighted SUMS; complete_weighted_avg (not yet
-# ported) is required to turn these into rate-stat averages.
 ```
