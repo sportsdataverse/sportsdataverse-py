@@ -10,7 +10,7 @@ from sportsdataverse._common.possessions import PRO_FT_POSSESSION_WEIGHT, TS_FT_
 from sportsdataverse.nba.nba_box_logs import box_features
 from sportsdataverse.nba.nba_model_validation import RatingsFit
 
-# Published BPM 2.0 coefficients (Basketball-Reference "About BPM 2.0", Daniel Myers 2020).
+# Published BPM 2.0 coefficients.
 # position-varying cols are (pos1_PG, pos5_C); *_role cols are (role1_Creator, role5_Receiver).
 BPM2_COEFFICIENTS: Dict[str, Dict[str, Tuple[float, float]]] = {
     "base": {
@@ -307,10 +307,9 @@ def _team_shares(player_logs: pl.DataFrame, team_logs: pl.DataFrame) -> pl.DataF
 
 
 def _team_adjust(raw: pl.DataFrame, team_margin: pl.DataFrame, ptm: pl.DataFrame) -> pl.DataFrame:
-    """BPM 2.0 team adjustment: one constant for BPM, a separate one for OBPM (Myers 2020).
+    """BPM 2.0 team adjustment: one constant for BPM, a separate one for OBPM.
 
-    Basketball-Reference's "About Box Plus/Minus (BPM)" (Daniel Myers, BPM 2.0) sets each team
-    adjustment so the players' ratings, weighted by %Min (minutes / (team minutes / 5), five
+    BPM 2.0 sets each team adjustment so the players' ratings, weighted by %Min (minutes / (team minutes / 5), five
     slots that sum to 5), add up to the team's rating: ``(team rating - sum(raw * %Min)) / 5``.
     That is a minute-weighted team MEAN of ``rating / 5``. BPM is fit to the team's net rating
     per 100 and OBPM, separately, to the team's offensive rating relative to the league;
@@ -456,7 +455,7 @@ def nba_bpm(
 ) -> pl.DataFrame:
     """Faithful BPM 2.0 per player, at season or single-game granularity.
 
-    Team adjustment (Myers, "About Box Plus/Minus (BPM)", BPM 2.0, Basketball-Reference): a
+    Team adjustment (BPM 2.0): a
     team's %Min-weighted ratings (five slots) sum to its rating, so its minute-weighted mean
     ``bpm`` is its net rating per 100 / 5, and its minute-weighted ``obpm`` is (its offensive
     rating - the league's) / 5, a separate constant. ``dbpm = bpm - obpm`` then averages (the

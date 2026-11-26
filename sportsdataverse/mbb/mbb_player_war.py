@@ -127,7 +127,7 @@ def mbb_player_war(
 
     Box BPM is anchored to the team and centred on Division I, so 0 is an average D1 player.
     ``vorp`` is points per 100 team possessions above a replacement player over one team's
-    season of possessions (Basketball-Reference's VORP scale); ``war`` is wins above replacement
+    season of possessions (so a full season of possessions at ``R + 1`` per 100 is a VORP of 1); ``war`` is wins above replacement
     against an average D1 schedule. A replacement-level player has 0, and a season's ``war``
     adds up to the D1 teams' wins minus those of a team of replacement players. The replacement
     level and points per win are fitted per league
