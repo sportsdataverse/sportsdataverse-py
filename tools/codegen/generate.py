@@ -1120,10 +1120,37 @@ _COMPANIONS_FILE = ROOT / "tools" / "codegen" / "companions.yaml"
 # League prefix -> R package for parity (pwhl is also fastRhockey; otherwise the
 # same mapping used for column descriptions). fastRhockey 1.1 also exports the SIHF,
 # European-league and ESPN college-hockey (mch/wch) wrappers under sdv-py's names.
+# The international basketball homes that only one of hoopR/wehoop ports map to that
+# package; the homes both export (fiba_hub, genius, atrium, nbl_au, feb, scb, tbf) are
+# split men's/women's and need a per-function package, so they get no rows yet.
 _R_PARITY_PACKAGE = {
     **_LEAGUE_R_PACKAGE,
     "pwhl": "fastRhockey",
     **{lg: "fastRhockey" for lg in ("sihf", *_EURO_HOCKEY_HOMES, "mch", "wch")},
+    **{
+        lg: "hoopR"
+        for lg in (
+            "euroleague",
+            "lba",
+            "acb",
+            "ibba",
+            "vtb",
+            "kbl",
+            "bleague",
+            "kzs",
+            "lkl",
+            "cebl",
+            "aba",
+            "easl",
+            "bnxt",
+            "tpbl",
+            "plg",
+            "cba",
+            "dbl",
+        )
+    },
+    "wjbl": "wehoop",
+    "college_baseball": "baseballr",
 }
 
 # R package -> pkgdown reference base URL (one <fn>.html per function topic).
@@ -4286,6 +4313,7 @@ def render_league_index(
         companions=_companions_for(prefix),
         r_parity=r_parity or [],
         r_pkg=r_pkg,
+        r_home=_R_PKGDOWN_BASE.get(r_pkg or "", "").removesuffix("/reference"),
         source_rows=source_rows or [],
         category_rows=category_rows or [],
     )

@@ -145,7 +145,7 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 
 ## Python ↔ R parity
 
-Each `sportsdataverse` function and its equivalent in the sister R package, [`fastRhockey`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
+Each `sportsdataverse` function and its equivalent in the sister R package, [`fastRhockey`](https://fastRhockey.sportsdataverse.org). Same-named where possible; the R column links the package's pkgdown reference.
 
 | `sportsdataverse.nhl` (Python) | `fastRhockey` (R) |
 |---|---|
@@ -378,7 +378,6 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`nhl_skater_leaders`](reference/nhl_api_web/other#nhl_skater_leaders) | [`nhl_skater_stats_leaders`](https://fastRhockey.sportsdataverse.org/reference/nhl_skater_stats_leaders.html) |
 | [`nhl_standings`](reference/nhl_api_web/other#nhl_standings) | [`nhl_standings`](https://fastRhockey.sportsdataverse.org/reference/nhl_standings.html) |
 | [`nhl_standings_season`](reference/nhl_api_web/other#nhl_standings_season) | [`nhl_standings_season`](https://fastRhockey.sportsdataverse.org/reference/nhl_standings_season.html) |
-| [`nhl_stats_rest_component_season`](reference/nhl_stats_rest#nhl_stats_rest_component_season) | [`nhl_stats_misc`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_misc.html) |
 | [`nhl_stats_rest_config`](reference/nhl_stats_rest#nhl_stats_rest_config) | [`nhl_stats_config`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_config.html) |
 | [`nhl_stats_rest_content_module`](reference/nhl_stats_rest#nhl_stats_rest_content_module) | [`nhl_stats_content_module`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_content_module.html) |
 | [`nhl_stats_rest_country`](reference/nhl_stats_rest#nhl_stats_rest_country) | [`nhl_stats_country`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_country.html) |
@@ -399,6 +398,5 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`nhl_stats_rest_team`](reference/nhl_stats_rest#nhl_stats_rest_team) | [`nhl_stats_team_listing`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_team_listing.html) |
 | [`nhl_stats_rest_team_by_id`](reference/nhl_stats_rest#nhl_stats_rest_team_by_id) | [`nhl_stats_team_listing`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_team_listing.html) |
 | [`nhl_stats_rest_team_report`](reference/nhl_stats_rest#nhl_stats_rest_team_report) | [`nhl_stats_teams`](https://fastRhockey.sportsdataverse.org/reference/nhl_stats_teams.html) |
-| [`nhl_web_pbp`](reference/nhl_api_web/web#nhl_web_pbp) | [`nhl_game_pbp`](https://fastRhockey.sportsdataverse.org/reference/nhl_game_pbp.html) |
 | [`nhl_web_schedule`](reference/nhl_api_web/web#nhl_web_schedule) | [`nhl_schedule`](https://fastRhockey.sportsdataverse.org/reference/nhl_schedule.html) |
 | [`nhl_xg`](reference/additional/models-and-calculators#nhl_xg) | [`helper_nhl_calculate_xg`](https://fastRhockey.sportsdataverse.org/reference/helper_nhl_calculate_xg.html) |

@@ -1,7 +1,7 @@
 # Exported function names of the sister SDV R packages (from each NAMESPACE).
 # Drives the per-league Python<->R parity table in generate.py.
 # Regenerate with:
-#   python tools/codegen/build_r_exports.py
+#   uv run python tools/codegen/build_r_exports.py
 baseballr:
 - batter_game_logs_fg
 - bref_daily_batter

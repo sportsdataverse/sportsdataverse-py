@@ -136,7 +136,7 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 
 ## Python ↔ R parity
 
-Each `sportsdataverse` function and its equivalent in the sister R package, [`baseballr`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
+Each `sportsdataverse` function and its equivalent in the sister R package, [`baseballr`](https://billpetti.github.io/baseballr). Same-named where possible; the R column links the package's pkgdown reference.
 
 | `sportsdataverse.mlb` (Python) | `baseballr` (R) |
 |---|---|
