@@ -8,8 +8,10 @@ held-out data and ``primary_metric`` that comparison's metric and SE clustering;
 no committed evidence holds one, and ``lifecycle_note`` then says why. ``adoption_margin`` is the
 comparison's paired ``model - baseline`` difference in loss orientation (negative = model better),
 null unless the evidence states it. ``status`` is ``active``, ``baseline_tied`` (shipped, and ties
-its baseline by construction, such as a curve monotone in the draft pick; the rule scores it exactly
-as ``active``) or ``retired``; only the owner sets ``retired``, with a ``retired_reason``.
+its baseline by construction, such as a curve monotone in the draft pick; see the rule below) or
+``retired``; only the owner sets ``retired``, with a ``retired_reason``. An optional
+``reserved_seasons`` list names seasons another study holds back (the 2026-11-02 sim-vs-market
+spec's WNBA 2022, 2023 and 2026): the retire rule and ``coverage.py`` refuse to score them.
 
 **The rule.** After each completed season past a model's holdout, the shipped model is scored once
 against its named baseline on that season: the provenance's metric, paired, with the provenance's
@@ -23,6 +25,11 @@ higher-is-better metric pass ``baseline - model``). Then :func:`retire_status`:
   would trip on noise alone in about one season in four);
 * **WATCH** if the latest season fails and neither trigger holds;
 * **KEEP** otherwise; **UNSCORED** before any season past the holdout is scored.
+
+A ``baseline_tied`` model ties by construction, so every season's upper bound is about 0 and the
+"fail to beat" count would retire it after two seasons on no evidence. For it only the margin
+trigger runs (owner, 2026-11-26): RETIRE-candidate when a season is worse than the baseline beyond
+``|adoption_margin|`` at 1.96 SE, a margin of 0 when the ledger states none; never WATCH.
 
 The rule runs only on a row with both a ``baseline`` and ``holdout_seasons`` (a LOSO-only or
 in-sample comparison names no season past the fit).
@@ -89,6 +96,11 @@ def check_ledger(ledger: Mapping[str, Any]) -> list[str]:
                 problems.append(f"{name}: adoption_margin {margin!r} is not a finite number")
             elif margin > 0 and "tie" not in row["lifecycle_note"]:
                 problems.append(f"{name}: adoption_margin > 0 (model worse) without the note calling it a tie")
+        reserved = row.get("reserved_seasons", [])
+        if not isinstance(reserved, list) or not all(isinstance(s, int) and not isinstance(s, bool) for s in reserved):
+            problems.append(f"{name}: reserved_seasons must be a list of integer seasons")
+        elif reserved != sorted(set(reserved)):
+            problems.append(f"{name}: reserved_seasons must be sorted and unique")
     return problems
 
 
@@ -154,7 +166,12 @@ def _check_record(r: Mapping[str, Any]) -> None:
 
 
 def retire_status(
-    records: Sequence[Mapping[str, Any]], adoption_margin: float | None, *, holdout_end: int
+    records: Sequence[Mapping[str, Any]],
+    adoption_margin: float | None,
+    *,
+    holdout_end: int,
+    tied: bool = False,
+    reserved: Sequence[int] = (),
 ) -> dict[str, Any]:
     """UNSCORED / KEEP / WATCH / RETIRE-candidate over the post-holdout :func:`season_record` list (any order).
 
@@ -166,8 +183,12 @@ def retire_status(
     model (ClaudeCowork specs/2026-11-25-model-lifecycle-checks-design.md,
     section (b)).
 
+    ``tied`` (a ``baseline_tied`` row) runs the margin trigger only, at ``|adoption_margin|`` or 0.
+    ``reserved`` (the row's ``reserved_seasons``) are seasons another study holds back.
+
     Raises:
-        ValueError: On a duplicate season, a season inside the fit's window, or a malformed record.
+        ValueError: On a duplicate season, a season inside the fit's window, a reserved season, or a
+            malformed record.
     """
     recs = sorted(records, key=lambda r: int(r["season"]))
     seasons = [int(r["season"]) for r in recs]
@@ -175,6 +196,9 @@ def retire_status(
         raise ValueError(f"duplicate seasons in {seasons}")
     if any(s <= holdout_end for s in seasons):
         raise ValueError(f"seasons {seasons} include the fit's window (holdout ends {holdout_end})")
+    held = sorted(set(seasons) & {int(s) for s in reserved})
+    if held:
+        raise ValueError(f"seasons {held} are reserved (ledger reserved_seasons); they are not scored")
     for r in recs:
         _check_record(r)
     fails = [r["upper"] >= 0.0 for r in recs]
@@ -183,8 +207,10 @@ def retire_status(
         for a, b, fa, fb in zip(recs, recs[1:], fails, fails[1:], strict=False)
         if fa and fb  # consecutive scored seasons (an unscored season between two failures does not break the run)
     ]
-    if adoption_margin is not None:
-        bar = abs(float(adoption_margin))
+    if tied:  # ties by construction: only a loss beyond the margin counts (owner, 2026-11-26)
+        reasons, fails = [], [False] * len(recs)
+    if adoption_margin is not None or tied:
+        bar = abs(float(adoption_margin)) if adoption_margin is not None else 0.0
         reasons += [
             f"{r['season']}: worse than the baseline by {r['diff']:.4g}, beyond the adoption margin {bar:.4g} "
             f"at 1.96 SE (lower bound {r['diff'] - Z * r['se']:.4g})"
@@ -203,7 +229,13 @@ def retire_status(
         "status": status,
         "reasons": reasons,
         "scored_seasons": seasons,
-        "margin_trigger": "off (no adoption_margin in the ledger)" if adoption_margin is None else "on",
+        "margin_trigger": (
+            "on, margin only (baseline_tied)"
+            if tied
+            else "off (no adoption_margin in the ledger)"
+            if adoption_margin is None
+            else "on"
+        ),
     }
 
 
@@ -247,7 +279,14 @@ def main(argv: list[str] | None = None) -> int:
         "holdout_seasons": row.get("holdout_seasons"),
         "adoption_margin": row["adoption_margin"],
         "ledger_status": row["status"],
-        **retire_status(records, row["adoption_margin"], holdout_end=int(row["holdout_seasons"][1])),
+        "reserved_seasons": row.get("reserved_seasons", []),
+        **retire_status(
+            records,
+            row["adoption_margin"],
+            holdout_end=int(row["holdout_seasons"][1]),
+            tied=row["status"] == "baseline_tied",
+            reserved=row.get("reserved_seasons", []),
+        ),
     }
     print(json.dumps(out, indent=2))
     return 0
