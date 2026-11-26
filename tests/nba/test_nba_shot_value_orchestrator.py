@@ -61,10 +61,13 @@ def test_lineup_capture_names_its_zone_table():
 
     from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
 
-    cap = Path(__file__).resolve().parents[1] / "fixtures" / "nba_stats" / "endpoints" / "shotchartlineupdetail.json"
-    parsed = parse_nba_stats_result_sets(json.loads(cap.read_text(encoding="utf-8")))
+    caps = Path(__file__).resolve().parents[1] / "fixtures" / "nba_stats" / "endpoints"
+    parsed = parse_nba_stats_result_sets(json.loads((caps / "shotchartlineupdetail.json").read_text(encoding="utf-8")))
     assert set(parsed) == {"ShotChartLineupDetail", "ShotChartLineupLeagueAverage"}
     assert parsed["ShotChartLineupLeagueAverage"].height > 0
+    # the scorer reads it as it reads shotchartdetail's LeagueAverages: the same columns
+    detail = parse_nba_stats_result_sets(json.loads((caps / "shotchartdetail.json").read_text(encoding="utf-8")))
+    assert parsed["ShotChartLineupLeagueAverage"].columns == detail["LeagueAverages"].columns
 
 
 def test_lineups_empty(monkeypatch):
