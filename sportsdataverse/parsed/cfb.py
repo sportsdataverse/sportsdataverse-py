@@ -356,6 +356,7 @@ from sportsdataverse.cfb import calculate_xpass as calculate_xpass  # noqa: F401
 from sportsdataverse.cfb import canonical_play_type_expr as canonical_play_type_expr  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa as cfb_adjusted_epa  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa_by_game as cfb_adjusted_epa_by_game  # noqa: F401
+from sportsdataverse.cfb import cfb_adjusted_epa_ledger as cfb_adjusted_epa_ledger  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_tempo as cfb_adjusted_tempo  # noqa: F401
 from sportsdataverse.cfb import cfb_advanced_stats as cfb_advanced_stats  # noqa: F401
 from sportsdataverse.cfb import cfb_compute_results as cfb_compute_results  # noqa: F401
@@ -551,6 +552,7 @@ __all__ = [
     "canonical_play_type_expr",
     "cfb_adjusted_epa",
     "cfb_adjusted_epa_by_game",
+    "cfb_adjusted_epa_ledger",
     "cfb_adjusted_tempo",
     "cfb_advanced_stats",
     "cfb_compute_results",

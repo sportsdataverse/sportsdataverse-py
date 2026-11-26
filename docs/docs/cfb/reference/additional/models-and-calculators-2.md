@@ -99,6 +99,61 @@ tg = cfb.cfb_adjusted_epa_by_game(pbp)
 tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
 ```
 
+### cfb_adjusted_epa_ledger {#cfb_adjusted_epa_ledger}
+
+`cfb_adjusted_epa_ledger(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, influence: 'bool' = True, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Per-game decomposition of `cfb_adjusted_epa`'s season figure, one row per team-game.
+
+The season `net_adj_epa` is a mean over games of `adj_off_epa` minus a mean over
+games of `adj_def_epa`, and each game's adjusted value is its raw EPA plus a schedule
+term (the opponent's fitted strengths). This frame lays that sum out: per team-game the
+raw net EPA, the schedule term, the game's weight in each mean and its contribution. It
+uses the same plays, fit and penalty as `cfb_adjusted_epa` (`method="current"`),
+so for every team `contribution` sums to its season `net_adj_epa`, and
+`raw_contribution + schedule_contribution == contribution` row by row. The fitted
+home-field term is not netted out of a team's own EPA (nor is it in the season figure),
+so the ledger records each game's `site` and has no home term.
+
+With `influence=True` it also refits the season once per game without that game
+(leave one game out) and reports how far the game moved each of its two teams' season
+values (the refit moves every team; the ledger reports the two that played).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns `cfb_adjusted_epa` reads. One season at a time. `season`, `week` and `seasonType` are carried through when present. |
+| `ridge_lambda` | `float \| None` | `None` | Ridge penalty, as in `cfb_adjusted_epa` (`None` means 0.075). |
+| `influence` | `bool` | `True` | Add `loo_net_adj_epa` and `game_influence` (one ridge refit per game; seconds for a full FBS season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per (game, team) for the teams `cfb_adjusted_epa` rates (two or more valid games), sorted by `team_id`, then `week` (when present), then `game_id`: `game_id`, the carried `season` / `week` / `season_type`, `team_id`, `pos_team`, `opponent_id`, `site` (`home` / `away` / `neutral`), `off_plays` / `def_plays` (the team's offensive / defensive plays in the fit), `raw_off_epa`, `raw_def_epa`, `raw_net_epa`, `off_strength_faced` / `def_strength_faced` (the opponent's fitted offense / defense, EPA/play), `schedule_adj` (`off_strength_faced - def_strength_faced`: what the schedule term adds to this game's raw net), `adj_off_epa`, `adj_def_epa`, `adj_net_epa`, `off_weight` / `def_weight` (the game's weight in each season mean: 1 / the games where that side has fit plays, so the two differ when a game has plays on one side only), `raw_contribution`, `schedule_contribution`, `contribution` (to the season value), `net_adj_epa` (the season value, repeated) and, with `influence`, `loo_net_adj_epa` (the season value without this game) and `game_influence` (`net_adj_epa - loo_net_adj_epa`; both null when the team would keep fewer than two games).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+| `ValueError` | If `ridge_lambda` is not positive or every play is garbage time. |
+
+**Example**
+
+```python
+# Quick start (``plays`` is a season of FBS pass / rush plays with the columns the module docstring lists, such as the cfbfastR-cfb-data team-summaries input; the released ``load_cfb_pbp`` frame alone lacks ``home`` and ``neutral_site``)
+
+    import polars as pl
+    import sportsdataverse.cfb as cfb
+    ledger = cfb.cfb_adjusted_epa_ledger(plays)
+    ledger.filter(pl.col("pos_team") == "LSU").select("opponent_id", "raw_net_epa", "schedule_adj")
+
+# The games that moved a team the most
+
+    ledger.sort(pl.col("game_influence").abs(), descending=True).head()
+```
+
 ### cfb_compute_results {#cfb_compute_results}
 
 `cfb_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, rng: 'np.random.Generator | None' = None, elo: 'dict[str, float] | None' = None, home_field: 'float' = 59.4, margin_sd: 'float' = 16.7, **kwargs: 'Any') -> 'dict[str, pl.DataFrame]'`
