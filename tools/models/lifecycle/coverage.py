@@ -217,7 +217,8 @@ def noop_check(shift: dict[str, Any], fixed: dict[str, Any]) -> dict[str, Any]:
     Run on the preseason summaries, where the draw is the whole rating uncertainty; ``report`` also
     lists the in-season widths, reported only.
     """
-    ratio = shift["width"] / fixed["width"] if fixed["width"] > 0 else float("inf")
+    # zero-width fixed intervals (one sim) leave the ratio undefined: unassessable, so not a PASS
+    ratio = shift["width"] / fixed["width"] if fixed["width"] > 0 else None
     covers = shift["coverage"] >= fixed["coverage"]
     return {
         "width_shift": shift["width"],
@@ -226,7 +227,7 @@ def noop_check(shift: dict[str, Any], fixed: dict[str, Any]) -> dict[str, Any]:
         "width_ratio_floor": WIDTH_RATIO_FLOOR,
         "coverage_shift": shift["coverage"],
         "coverage_fixed": fixed["coverage"],
-        "status": "PASS" if ratio >= WIDTH_RATIO_FLOOR and covers else "BUG",
+        "status": "PASS" if ratio is not None and ratio >= WIDTH_RATIO_FLOOR and covers else "BUG",
     }
 
 
@@ -297,6 +298,9 @@ def report(rows: pl.DataFrame, league: str) -> dict[str, Any]:
     """The (a) report: per cutoff and arm, every level's summary; the readings; the no-op check."""
     out: dict[str, Any] = {"league": league, "cutoffs": {}}
     for cut in ("preseason", "in_season"):
+        if rows.filter(pl.col("cutoff") == cut).is_empty():  # e.g. NBA 2012 alone: no in-season cutoff
+            out["cutoffs"][cut] = {"reading": "TOO_FEW_SEASONS", "tolerance": None, "reason": f"no {cut} cutoff"}
+            continue
         entry: dict[str, Any] = {}
         for arm in ("shift", "fixed"):
             sub = rows.filter((pl.col("cutoff") == cut) & (pl.col("arm") == arm))
@@ -309,12 +313,16 @@ def report(rows: pl.DataFrame, league: str) -> dict[str, Any]:
         out["cutoffs"]["preseason"]["shift"][gate], out["cutoffs"]["preseason"]["fixed"][gate]
     )
     ins = out["cutoffs"]["in_season"]
-    out["noop_check"]["in_season_reported_only"] = {
-        "width_shift": ins["shift"][gate]["width"],
-        "width_fixed": ins["fixed"][gate]["width"],
-        "coverage_shift": ins["shift"][gate]["coverage"],
-        "coverage_fixed": ins["fixed"][gate]["coverage"],
-    }
+    out["noop_check"]["in_season_reported_only"] = (
+        {
+            "width_shift": ins["shift"][gate]["width"],
+            "width_fixed": ins["fixed"][gate]["width"],
+            "coverage_shift": ins["shift"][gate]["coverage"],
+            "coverage_fixed": ins["fixed"][gate]["coverage"],
+        }
+        if "shift" in ins
+        else None
+    )
     readings = [out["cutoffs"][c]["reading"] for c in ("preseason", "in_season")]
     out["reading"] = (
         "BUG"

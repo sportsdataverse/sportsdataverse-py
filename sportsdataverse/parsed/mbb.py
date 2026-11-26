@@ -545,6 +545,9 @@ from sportsdataverse.mbb import mbb_team_season_rates as mbb_team_season_rates  
 from sportsdataverse.mbb import mbb_team_shot_zones as mbb_team_shot_zones  # noqa: F401
 from sportsdataverse.mbb import mbb_team_strength as mbb_team_strength  # noqa: F401
 from sportsdataverse.mbb import mbb_tournament_ineligible as mbb_tournament_ineligible  # noqa: F401
+from sportsdataverse.mbb import mbb_tournament_run_players as mbb_tournament_run_players  # noqa: F401
+from sportsdataverse.mbb import mbb_tournament_run_teams as mbb_tournament_run_teams  # noqa: F401
+from sportsdataverse.mbb import mbb_tournament_runs as mbb_tournament_runs  # noqa: F401
 from sportsdataverse.mbb import mbb_transfer_projection as mbb_transfer_projection  # noqa: F401
 from sportsdataverse.mbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
@@ -1235,6 +1238,9 @@ __all__ = [
     "mbb_team_shot_zones",
     "mbb_team_strength",
     "mbb_tournament_ineligible",
+    "mbb_tournament_run_players",
+    "mbb_tournament_run_teams",
+    "mbb_tournament_runs",
     "mbb_transfer_projection",
     "misspellings",
     "most_recent_mbb_season",
