@@ -17,8 +17,9 @@ figures (:func:`gate`), so a ranked row is at least half signal on the train sea
 holdout seasons the median rate is about half signal at its gate (single rates scatter).
 
 * **Team rates** (``TEAM_MIN_N``): the ESPN team box scores (``load_{lg}_team_boxscore``), with the
-  box possession estimate ``FGA + 0.44 FTA - OREB + TOV`` averaged over both teams. A rating's unit
-  is that estimate; the table's ``net_rtg_n`` counts both sides, so its curve is scaled by 2. Pace
+  box possession estimate ``FGA + w FTA - OREB + TOV`` averaged over both teams (``w`` 0.44 in
+  the pros, 0.475 in college: ``ft_possession_weight``). A rating's unit is that estimate; the
+  table's ``net_rtg_n`` counts both sides, so its curve is scaled by 2. Pace
   is fitted per game; the table counts the clock in regulation games, so an overtime game counts a
   little over 1 there (about 0.6% more clock in an NBA season: the gate is that much lenient).
 * **Player box per game** (``PLAYER_BOX_MIN_N``): the ESPN player box scores
@@ -56,6 +57,8 @@ from pathlib import Path
 
 import numpy as np
 import polars as pl
+
+from sportsdataverse._common.possessions import ft_possession_weight
 
 #: league -> kind -> (train, holdout) seasons by END year, disjoint, the holdout after the train.
 SPANS: dict[str, dict[str, tuple[range, range]]] = {
@@ -177,6 +180,7 @@ def _team_box(league: str, season: int) -> pl.DataFrame:
 
 def team_games(league: str, seasons: range, data: Path | None = None) -> pl.DataFrame:
     """One row per regular-season team-game: own (``x``) and opponent (``o_x``) counts, ``poss``."""
+    w = ft_possession_weight(league)
     frames = []
     for s in seasons:
         t = _cached(data, f"{league}_team_box_{s}.parquet", lambda s=s: _team_box(league, s))
@@ -198,7 +202,7 @@ def team_games(league: str, seasons: range, data: Path | None = None) -> pl.Data
             *[pl.col(c).cast(pl.Float64) for c in [*cnt, "team_score"]],
         )
         t = t.rename({"team_score": "pts"}).with_columns(
-            (pl.col("fga") + 0.44 * pl.col("fta") - pl.col("oreb") + pl.col("tov")).alias("raw_poss")
+            (pl.col("fga") + w * pl.col("fta") - pl.col("oreb") + pl.col("tov")).alias("raw_poss")
         )
         opp = t.select(
             "game_id",

@@ -39,3 +39,41 @@ def test_wehoop_renamed_pairs_resolve():
     assert aliases["wbb"]["load_wbb_team_boxscore"] == "load_wbb_team_box"
     assert aliases["wbb"]["herhoopstats_teams"] == "hhs_teams"
     assert sum(py.startswith("wnba_stats_") for py in aliases["wnba"]) == 103
+
+
+def test_baseballr_and_fastrhockey_renamed_pairs_resolve():
+    """The statsapi / NHL API names sdv-py and baseballr / fastRhockey spell differently (parity delta 2026-11-26)."""
+    aliases = yaml.safe_load((CODEGEN / "r_parity_aliases.yaml").read_text(encoding="utf-8"))
+    assert aliases["mlb"]["mlb_win_probability"] == "mlb_game_wp"
+    assert aliases["mlb"]["mlb_statcast_search"] == "statcast_search"
+    assert aliases["nhl"]["nhl_stats_rest_config"] == "nhl_stats_config"
+    assert aliases["nhl"]["nhl_skater_leaders"] == "nhl_skater_stats_leaders"
+    assert sum(py.startswith("nhl_stats_rest_") for py in aliases["nhl"]) == 19
+
+
+def test_european_and_college_hockey_homes_link_fastrhockey():
+    """fastRhockey 1.1 exports the SIHF, European-league and mch/wch wrappers under sdv-py's names."""
+    for lg in ("sihf", *generate._EURO_HOCKEY_HOMES, "mch", "wch"):
+        assert generate._R_PARITY_PACKAGE[lg] == "fastRhockey"
+
+
+def test_single_package_basketball_and_baseball_homes_map_their_r_package():
+    """Homes one R sister ports link it; homes both hoopR and wehoop export stay unmapped (split men's/women's)."""
+    assert generate._R_PARITY_PACKAGE["acb"] == "hoopR"
+    assert generate._R_PARITY_PACKAGE["wjbl"] == "wehoop"
+    assert generate._R_PARITY_PACKAGE["college_baseball"] == "baseballr"
+    for lg in ("fiba_hub", "genius", "atrium", "nbl_au", "feb", "scb", "tbf"):
+        assert lg not in generate._R_PARITY_PACKAGE
+
+
+def test_no_alias_shadows_a_same_name_r_export():
+    """An alias wins over identity, so aliasing a name the R package also exports would replace the correct link."""
+    aliases = yaml.safe_load((CODEGEN / "r_parity_aliases.yaml").read_text(encoding="utf-8"))
+    exports = yaml.safe_load((CODEGEN / "r_exports.yaml").read_text(encoding="utf-8"))
+    shadowed = sorted(
+        (league, py, r)
+        for league, pairs in aliases.items()
+        for py, r in pairs.items()
+        if py != r and py in set(exports.get(generate._R_PARITY_PACKAGE[league], []))
+    )
+    assert shadowed == []

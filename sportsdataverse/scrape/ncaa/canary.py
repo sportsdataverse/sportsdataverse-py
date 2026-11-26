@@ -11,7 +11,7 @@ Why this exists: the ProxyBonanza pool was ASN-confirmed **datacenter**
 (QuickPacket / Hivelocity / ReliableSite), which is exactly what Akamai
 bm-verify + IP reputation defeats. Before spending on a residential/ISP/mobile
 or managed-unblocker vendor, prove one actually solves the challenge on this
-host. See ``docs/SCRAPING_NOTES.md``.
+host.
 
 Two adapter classes, both reusing the existing :class:`NcaaFetcher` (so the
 probe's fetch path == production's):

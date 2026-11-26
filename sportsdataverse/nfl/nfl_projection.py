@@ -20,6 +20,7 @@ from sportsdataverse.nfl.nfl_projection_constants import (
     SCORING_PPR,
     SCORING_STANDARD,
     PositionConstants,
+    _season_rosters,
     as_of_season_split,
     get_position_constants,
 )
@@ -56,8 +57,26 @@ _RATE_SCHEMA_BASE: dict = {
 }
 
 
+# load_nfl_player_stats emits fumbles lost split by play type, never a single
+# fumbles_lost column (its legacy reconciliation drops the release's
+# fumbles_lost_total, which equals this sum); the sum is the fumbles_lost the
+# scoring formats charge.
+_FUMBLES_LOST_PARTS = ("sack_fumbles_lost", "rushing_fumbles_lost", "receiving_fumbles_lost")
+
+
 def _col_or_zero(name: str, cols: List[str]) -> pl.Expr:
     return pl.col(name) if name in cols else pl.lit(0.0)
+
+
+def _with_fumbles_lost(weekly: pl.DataFrame) -> pl.DataFrame:
+    """Add ``fumbles_lost`` as the sum of the per-play-type columns when absent or all null."""
+    parts = [c for c in _FUMBLES_LOST_PARTS if c in weekly.columns]
+    has_single = "fumbles_lost" in weekly.columns and weekly["fumbles_lost"].null_count() < weekly.height
+    if has_single or not parts:
+        return weekly
+    return weekly.with_columns(
+        pl.sum_horizontal([pl.col(c).cast(pl.Float64).fill_null(0.0) for c in parts]).alias("fumbles_lost")
+    )
 
 
 def season_player_rates(weekly: pl.DataFrame, rosters: pl.DataFrame) -> pl.DataFrame:
@@ -72,8 +91,9 @@ def season_player_rates(weekly: pl.DataFrame, rosters: pl.DataFrame) -> pl.DataF
         weekly (pl.DataFrame): nflverse weekly offense stats (at minimum
             ``player_id, season, week, position_group`` + counting stats +
             ``fantasy_points_ppr``).
-        rosters (pl.DataFrame): Season rosters carrying ``player_id, season,
-            age``.
+        rosters (pl.DataFrame): Season rosters: :func:`sportsdataverse.nfl.load_nfl_rosters`
+            (``gsis_id``, ``season``, ``birth_date``; age is computed as of about October 1),
+            or a frame already carrying ``player_id, season, age``.
 
     Returns:
         pl.DataFrame: One row per (player_id, season) with ``player_id:Utf8,
@@ -95,6 +115,7 @@ def season_player_rates(weekly: pl.DataFrame, rosters: pl.DataFrame) -> pl.DataF
 
     .. _nflverse: https://nflverse.nflverse.com
     """
+    weekly = _with_fumbles_lost(weekly)
     stats = [c for c in _COUNTING_STATS if c in weekly.columns]
     schema = dict(_RATE_SCHEMA_BASE)
     for c in stats:
@@ -136,12 +157,9 @@ def season_player_rates(weekly: pl.DataFrame, rosters: pl.DataFrame) -> pl.DataF
         *[(pl.col(c) / pl.col("games")).cast(pl.Float64).alias(f"{c}_rate") for c in stats],
     ).drop("_fp_ppr", *stats)
 
-    if {"player_id", "season", "age"}.issubset(rosters.columns) and rosters.height > 0:
-        ros = rosters.select(
-            pl.col("player_id").cast(pl.Utf8),
-            pl.col("season").cast(pl.Int64),
-            pl.col("age").cast(pl.Float64),
-        ).unique(subset=["player_id", "season"], keep="first")
+    ros = _season_rosters(rosters)
+    if ros is not None:
+        ros = ros.select("player_id", "season", "age")
         assert agg.schema["player_id"] == ros.schema["player_id"]
         assert agg.schema["season"] == ros.schema["season"]
         agg = agg.join(ros, on=["player_id", "season"], how="left")
@@ -183,7 +201,9 @@ def aging_curve(season_rates: pl.DataFrame, *, position_group: str, rate_col: st
     # (birth-date-derived) floats, and per-unique-float transitions chained by
     # cum_prod compound noise into a degenerate curve.
     df = season_rates.filter(
-        (pl.col("position_group") == position_group) & (pl.col("volume") >= consts.min_volume)
+        (pl.col("position_group") == position_group)
+        & (pl.col("volume") >= consts.min_volume)
+        & pl.col("age").is_not_null()  # an unknown age is no transition (a null group broke the chain anchor)
     ).select("player_id", "season", pl.col("age").floor().alias("age"), "volume", pl.col(rate_col).alias("rate"))
     # match season s (age a) to the same player's season s+1 (age a+1)
     nxt = df.select(
@@ -436,6 +456,7 @@ def score_fantasy(stats: pl.DataFrame, scoring: Dict[str, float]) -> pl.Series:
             from sportsdataverse.nfl.nfl_projection_constants import SCORING_PPR
             pts = score_fantasy(pl.DataFrame({"receiving_yards": [100.0], "receptions": [5.0]}), SCORING_PPR)
     """
+    stats = _with_fumbles_lost(stats)
     present = [k for k in scoring if k in stats.columns]
     if not present:
         return pl.Series("fantasy_points", [0.0] * stats.height, dtype=pl.Float64)

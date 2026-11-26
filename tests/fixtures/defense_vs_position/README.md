@@ -13,7 +13,7 @@
 
 # defense_vs_position fixtures
 
-Real released 2024 rows for `sportsdataverse/defense_vs_position.py`, read from the
+Real released 2024 rows for `sportsdataverse/analytics/defense_vs_position.py`, read from the
 `sportsdataverse-data` release assets by URL on 2026-10-03 (no repo checkout).
 
 ## `cfb_pbp_2024_psu3_uga2_def.parquet` (398 rows)

@@ -11,10 +11,21 @@ one the stats.ncaa.org lineup ports already use).
 The box-score possession counts, pace, offensive / defensive ratings, turnover rates (turnovers per
 possession-ending play) and usage of the game page, the official season profiles and the four-factor
 point accounting take their weight from :func:`ft_possession_weight`. True shooting keeps 0.44 in every
-league (:data:`TS_FT_WEIGHT`): it is a shooting convention, not a possession count. Three college
-inputs to fitted models keep the pros' weight until they are refit with the college one: the
-opponent-adjusted ratings engine (``mbb_team_ratings``, whose tempo the pregame constants were fit on),
-the player-value features and the expected player box usage.
+league (:data:`TS_FT_WEIGHT`): it is a shooting convention, not a possession count. The college rank
+sample gates (``rate_gates.TEAM_MIN_N``) are fit on the 0.475 estimate.
+
+Three college inputs to fitted models keep the pros' weight. Each was refit at 0.475 on 2026-11-26
+against a pre-registered no-regression gate (new no worse than the shipped model by more than 2
+clustered SEs), and each refit failed somewhere:
+
+* the opponent-adjusted ratings engine (``mbb_team_ratings``) and the pregame constants fit on it: the
+  2025-2026 pregame Brier, margin MAE and calibration slope pass in both leagues, but an existing season
+  sim test fails (two near-tied men's teams swap seed lines 8 and 9 between the sim and bracketology);
+* the player-value features (``usage``, ``tov_pct``): box-BPM passes for men and fails for women
+  against the 2025 external BPM, and one weight serves both;
+* the expected player box usage: points improve, assists get worse by more than 2 SEs in both leagues.
+
+The numbers sit beside each constant.
 
 **Internal** -- not re-exported at the top-level ``sportsdataverse`` package.
 """

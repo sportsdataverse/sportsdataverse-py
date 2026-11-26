@@ -2,8 +2,8 @@
 
 Live alongside the generated :mod:`sportsdataverse.nhl.nhl_records`
 (``tools/codegen/endpoints/nhl_records.yaml``). These embed a value mid-path or
-branch on scope -- shapes the single-URL-builder template cannot represent. Listed
-in ``tests/codegen/test_parity_native.py::_IRREGULAR``.
+branch on scope -- shapes the single-URL-builder template cannot represent.
+``tests/codegen/test_native_families_cut_over.py`` checks this module imports.
 """
 
 from __future__ import annotations

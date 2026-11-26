@@ -98,8 +98,9 @@ same restart rule (sportsdataverse/cfbseedR#13), so outputs cross-validate):
   NCAA-exempt games are not modeled.
 * **CFP selection rule evolves by season.** :func:`cfb_playoff_seeds` holds
   both 12-team straight-seeding rules in ONE function: the 2026 rule (P4
-  champions, best Group-of-6 champion, Notre Dame if top 12, at-large) and
-  the 2024-2025 rule (5 highest-ranked champions, at-large).
+  champions, best-ranked Group-of-6 team (champion or not), Notre Dame if
+  top 12, at-large) and the 2024-2025 rule (5 highest-ranked champions,
+  at-large).
 """
 
 from __future__ import annotations
@@ -1286,7 +1287,7 @@ def _seed_field(
         st = st.with_columns(pl.lit(None, dtype=pl.Float64).alias("rank"))
     n = pl.lit(playoff_seeds, dtype=pl.Int64)
     is_champ = pl.col("conf_champ") == True  # noqa: E712
-    g6_champ = is_champ & pl.col("conference").is_in(_G6_CONFS)
+    g6_team = pl.col("conference").is_in(_G6_CONFS).fill_null(False)  # null conf -> not G6
     ordered = (
         st.with_columns(pl.col("rank").fill_null(float("inf")))
         .sort(
@@ -1296,15 +1297,15 @@ def _seed_field(
         .with_columns(
             pl.int_range(1, pl.len() + 1).over("sim").alias("_pos"),
             is_champ.cast(pl.Int64).cum_sum().over("sim").alias("_champ_cum"),
-            g6_champ.cast(pl.Int64).cum_sum().over("sim").alias("_g6_cum"),
+            g6_team.cast(pl.Int64).cum_sum().over("sim").alias("_g6_cum"),
         )
         .with_columns(
             pl.when(rule_2026)
-            # 2026: P4 champions regardless of rank, the best-ranked G6 champion,
-            # Notre Dame when it ranks inside the field size
+            # 2026: P4 champions regardless of rank, the best-ranked G6 team
+            # (champion or not), Notre Dame when it ranks inside the field size
             .then(
                 (is_champ & pl.col("conference").is_in(_P4_CONFS))
-                | (g6_champ & (pl.col("_g6_cum") == 1))
+                | (g6_team & (pl.col("_g6_cum") == 1))
                 | (pl.col("team").is_in(_NOTRE_DAME) & (pl.col("_pos") <= n))
             )
             # 2024-2025: the 5 highest-ranked conference champions
@@ -1347,8 +1348,8 @@ def cfb_playoff_seeds(
 
     * **2026+** (``season=None`` or ``>= 2026``, the current rule): the ACC,
       Big Ten, Big 12 and SEC champions are in regardless of ranking; so is
-      the highest-ranked champion of the American, Conference USA, MAC,
-      Mountain West, Pac-12 and Sun Belt; and Notre Dame (``"Notre Dame"`` or
+      the highest-ranked team (champion or not) of the American, Conference
+      USA, MAC, Mountain West, Pac-12 and Sun Belt; and Notre Dame (``"Notre Dame"`` or
       ESPN id ``"87"``) when it ranks inside the top ``playoff_seeds``; the
       rest of the field is at-large.
     * **2024-2025** (``season < 2026``): the 5 highest-ranked conference
@@ -1365,14 +1366,14 @@ def cfb_playoff_seeds(
     ranking is the intended input). Notre Dame's "ranked inside the field"
     test reads its position in that same ordering.
 
-    Differs from cfbseedR 0.3.0 (``autobid``) in two places: cfbseedR gives
-    the Group-of-6 bid to the best-ranked G6 team whether or not it won its
-    conference, and it tests Notre Dame's committee ``rank`` only (no bid
-    without ``rankings``). Both match Notre Dame as ``"Notre Dame"`` or
-    ``"87"``, and cfbseedR's ``cfb_standings()`` keys the rule by a
-    ``season``-keyed input as :func:`cfb_standings` does here; its
+    Differs from cfbseedR 0.3.0's selection rule (``autobid``) in one place:
+    cfbseedR tests Notre Dame's committee ``rank`` only (no bid without
+    ``rankings``). Both match Notre Dame as ``"Notre Dame"`` or ``"87"``, and cfbseedR's
+    ``cfb_standings()`` keys the rule by a ``season``-keyed input as
+    :func:`cfb_standings` does here; its
     ``cfb_simulations()`` takes an explicit ``autobid`` (default ``"2026"``)
     where :func:`sportsdataverse.cfb.cfb_simulations` follows the season.
+    Neither engine reads ``postseason_eligible`` when seeding: an ineligible team can still take a bid.
 
     Called on its own, this function cannot see a season: pass ``season=``
     for standings of a pre-2026 season (``cfb_standings(...,

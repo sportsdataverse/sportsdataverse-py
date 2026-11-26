@@ -14,7 +14,7 @@ The three headerless files (`*_getgamestats_head.json`, `*_getadvstats_head.csv`
 `*_super_sked_head.json`) were captured 2026-10-05 (full 2025 files: 11,528 /
 5,060 / 6,293 rows, all with the documented field counts) and keep the first 15
 rows (the game-stats capture also keeps the 2 rows whose `margin` is null). Used by
-`tests/test_torvik_codegen.py`.
+`tests/mbb/test_mbb_torvik.py`.
 
 | File | URL |
 |---|---|

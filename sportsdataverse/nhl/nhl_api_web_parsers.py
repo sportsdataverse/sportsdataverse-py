@@ -7,7 +7,7 @@ NHL game-feed API at ``api-web.nhle.com/v1/``.
 * Parsers overview: https://py.sportsdataverse.org/docs/parsers/
 * Reusable patterns: https://py.sportsdataverse.org/docs/architecture/building-blocks
 
-Each ``nhl_web_*`` wrapper in :mod:`sportsdataverse.nhl.nhl_api_web` ships
+Each ``nhl_*`` wrapper in :mod:`sportsdataverse.nhl.nhl_api_web` ships
 a different payload shape — game-center deep dives carry per-team player
 arrays, schedules nest day → games, leaderboards key by stat-category, and
 the right-rail endpoint exposes 8+ independent sub-frames. This module
@@ -134,7 +134,7 @@ def _space_initial(name: object) -> object:
 
 
 def parse_nhl_web_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_boxscore()`` into one row per (team × player).
+    """Parse ``nhl_boxscore()`` into one row per (team × player).
 
     Boxscore ships ``playerByGameStats: {awayTeam: {forwards, defense,
     goalies}, homeTeam: {forwards, defense, goalies}}``. This parser
@@ -168,7 +168,7 @@ def parse_nhl_web_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.
 
 
 def parse_nhl_web_landing(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_landing()`` into a single-row game profile.
+    """Parse ``nhl_landing()`` into a single-row game profile.
 
     The landing endpoint ships the game header (id, date, venue, teams,
     periodDescriptor, gameState, clock, plus a ``summary`` sub-dict with
@@ -183,7 +183,7 @@ def parse_nhl_web_right_rail(
     section: str | None = None,
     return_as_pandas: bool = False,
 ):
-    """Parse ``nhl_web_right_rail()`` — dispatcher with 6 sub-frames.
+    """Parse ``nhl_right_rail()`` — dispatcher with 6 sub-frames.
 
     The right-rail endpoint ships game-context sub-frames typically
     rendered alongside the box-score on NHL.com:
@@ -258,7 +258,7 @@ def parse_nhl_web_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.
 
 
 def parse_nhl_web_score(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_score()`` into one row per game for the date.
+    """Parse ``nhl_score()`` into one row per game for the date.
 
     Shape: ``{currentDate, games: [...], gameWeek: [...]}``.
     Returns the ``games`` array flattened.
@@ -267,7 +267,7 @@ def parse_nhl_web_score(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
 
 
 def parse_nhl_web_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_scoreboard()`` into one row per game across days.
+    """Parse ``nhl_scoreboard()`` into one row per game across days.
 
     Shape: ``{focusedDate, gamesByDate: [{date, games: [...]}, ...]}``.
     Walks every ``gamesByDate[].games[]`` and prefixes the day's
@@ -288,7 +288,7 @@ def parse_nhl_web_scoreboard(payload: Dict, return_as_pandas: bool = False) -> p
 
 
 def parse_nhl_web_club_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_club_schedule_season()`` / ``_month`` / ``_week``
+    """Parse ``nhl_club_schedule_season()`` / ``_month`` / ``_week``
     into one row per game.
 
     All three club-schedule endpoints share the ``{games: [...]}``
@@ -320,14 +320,14 @@ def parse_nhl_web_club_schedule(payload: Dict, return_as_pandas: bool = False) -
 
 
 def parse_nhl_web_standings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_standings()`` into one row per team."""
+    """Parse ``nhl_standings()`` into one row per team."""
     return _flatten_rows(
         _as_dict(payload).get("standings"), return_as_pandas, where="parse_nhl_web_standings: standings"
     )
 
 
 def parse_nhl_web_standings_season(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_standings_season()`` into one row per season."""
+    """Parse ``nhl_standings_season()`` into one row per season."""
     return _flatten_rows(
         _as_dict(payload).get("seasons"), return_as_pandas, where="parse_nhl_web_standings_season: seasons"
     )
@@ -343,7 +343,7 @@ def parse_nhl_web_club_stats(
     section: str | None = None,
     return_as_pandas: bool = False,
 ):
-    """Parse ``nhl_web_club_stats()`` — dispatcher with skaters + goalies.
+    """Parse ``nhl_club_stats()`` — dispatcher with skaters + goalies.
 
     Returns a dict ``{skaters: <frame>, goalies: <frame>}`` by default,
     or a single frame when ``section="skaters"`` / ``"goalies"``.
@@ -370,7 +370,7 @@ def parse_nhl_web_club_stats(
 
 
 def parse_nhl_web_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_roster()`` into one row per player.
+    """Parse ``nhl_roster()`` into one row per player.
 
     Shape: ``{forwards: [...], defensemen: [...], goalies: [...]}``.
     Merges all three position groups with a ``position_group`` column
@@ -389,7 +389,7 @@ def parse_nhl_web_roster(payload: Dict, return_as_pandas: bool = False) -> pl.Da
 
 
 def parse_nhl_web_player_landing(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_player_landing()`` into a single-row player
+    """Parse ``nhl_player_landing()`` into a single-row player
     profile. Nested ``featuredStats`` / ``careerTotals`` / ``last5Games``
     sub-frames are stringified — call them out separately if needed.
     """
@@ -397,7 +397,7 @@ def parse_nhl_web_player_landing(payload: Dict, return_as_pandas: bool = False) 
 
 
 def parse_nhl_web_player_game_log(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_player_game_log()`` into one row per game.
+    """Parse ``nhl_player_game_log()`` into one row per game.
 
     Walks ``payload["gameLog"]`` (~76 games per season for a regular
     skater) and flattens.
@@ -413,7 +413,7 @@ def parse_nhl_web_player_game_log(payload: Dict, return_as_pandas: bool = False)
 
 
 def parse_nhl_web_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_skater_leaders()`` / ``nhl_web_goalie_leaders()``
+    """Parse ``nhl_skater_leaders()`` / ``nhl_goalie_leaders()``
     into one row per (category × player).
 
     The leaders payloads are keyed by stat category at the top level —
@@ -439,12 +439,12 @@ def parse_nhl_web_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.D
 
 
 def parse_nhl_web_draft_picks(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_draft_picks()`` into one row per pick."""
+    """Parse ``nhl_draft_picks()`` into one row per pick."""
     return _flatten_rows(_as_dict(payload).get("picks"), return_as_pandas, where="parse_nhl_web_draft_picks: picks")
 
 
 def parse_nhl_web_player_spotlight(payload, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_player_spotlight()`` into one row per featured player.
+    """Parse ``nhl_player_spotlight()`` into one row per featured player.
 
     The ``/v1/player-spotlight`` endpoint returns a *bare top-level JSON
     array* of currently-spotlighted players, so this parser flattens it directly.
@@ -455,7 +455,7 @@ def parse_nhl_web_player_spotlight(payload, return_as_pandas: bool = False) -> p
 
 
 def parse_nhl_web_draft_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_draft_rankings()`` / ``_now()`` into one row per prospect.
+    """Parse ``nhl_draft_rankings()`` / ``_now()`` into one row per prospect.
 
     Input: ``{draftYear, categoryId, categoryKey, rankings: [...]}``. Each
     ``rankings[]`` row is flattened and prefixed with the draft-year / category
@@ -478,7 +478,7 @@ def parse_nhl_web_draft_rankings(payload: Dict, return_as_pandas: bool = False) 
 
 
 def parse_nhl_web_playoff_series(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
-    """Parse ``nhl_web_playoff_series()`` into one row per series game.
+    """Parse ``nhl_playoff_series()`` into one row per series game.
 
     Input: ``{round, seriesLetter, topSeedTeam, bottomSeedTeam, games: [...]}``.
     Emits one row per game prefixed with series context (round, series letter,
@@ -510,7 +510,7 @@ def parse_nhl_web_playoff_series(payload: Dict, return_as_pandas: bool = False) 
 # ---------------------------------------------------------------------------
 
 
-# Maps an nhl_web_* wrapper name to its parser. Dispatchers
+# Maps an nhl_* wrapper name to its parser. Dispatchers
 # (``parse_nhl_web_right_rail``, ``parse_nhl_web_club_stats``) return a
 # dict by default — callers wanting a single frame pass section=.
 NHL_API_WEB_ENDPOINT_PARSERS = {
@@ -552,15 +552,14 @@ NHL_API_WEB_ENDPOINT_PARSERS = {
 
 
 def parser_for_nhl_api_web(fn_name: str):
-    """Return the registered parser for an ``nhl_web_*`` wrapper.
+    """Return the registered parser for an ``nhl_*`` wrapper.
 
-    Returns ``None`` for endpoints without a registered parser (e.g.
-    ``playoff_series``, ``player_spotlight``, ``draft_rankings``) since
+    Returns ``None`` for endpoints without a registered parser, since
     their payloads are too idiosyncratic for a useful generic fallback.
     Callers should null-check the result.
 
     Args:
-        fn_name: The ``__name__`` of any ``nhl_web_*`` wrapper.
+        fn_name: The ``__name__`` of any ``nhl_*`` wrapper.
 
     Returns:
         Parser callable, or ``None`` if unregistered.

@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING, List, Literal, Optional, Union, overload
 import polars as pl
 
 from sportsdataverse.nfl.nfl_loaders import load_nfl_rosters, load_nfl_snap_counts
-from sportsdataverse.nfl.nfl_projection_constants import as_of_season_split, get_position_constants
+from sportsdataverse.nfl.nfl_projection_constants import _season_rosters, as_of_season_split, get_position_constants
 
 if TYPE_CHECKING:  # pragma: no cover
     import pandas as pd
@@ -58,8 +58,9 @@ def season_availability(
     Args:
         snap_counts (pl.DataFrame): Weekly snap counts (``player_id, season,
             week, offense_snaps``).
-        rosters (pl.DataFrame): Season rosters (``player_id, season, position,
-            age``).
+        rosters (pl.DataFrame): Season rosters: :func:`sportsdataverse.nfl.load_nfl_rosters`
+            (``gsis_id``, ``season``, ``position``, ``birth_date``) or a frame carrying
+            ``player_id, season, position, age``.
         team_games (int): Regular-season team games (17 from 2021).
         injuries (Optional[pl.DataFrame]): Optional weekly injury report frame
             (``player_id, season, week``); counted into ``injury_weeks``.
@@ -95,17 +96,8 @@ def season_availability(
         .agg(pl.col("week").n_unique().cast(pl.Int64).alias("games_available"))
         .with_columns((pl.col("games_available") / float(team_games)).cast(pl.Float64).alias("availability_rate"))
     )
-    if {"player_id", "season"}.issubset(rosters.columns) and rosters.height > 0:
-        ros = rosters.select(
-            pl.col("player_id").cast(pl.Utf8),
-            pl.col("season").cast(pl.Int64),
-            (pl.col("position").cast(pl.Utf8) if "position" in rosters.columns else pl.lit(None, dtype=pl.Utf8)).alias(
-                "position"
-            ),
-            (pl.col("age").cast(pl.Float64) if "age" in rosters.columns else pl.lit(None, dtype=pl.Float64)).alias(
-                "age"
-            ),
-        ).unique(subset=["player_id", "season"], keep="first")
+    ros = _season_rosters(rosters)
+    if ros is not None:
         assert agg.schema["player_id"] == ros.schema["player_id"]
         agg = agg.join(ros, on=["player_id", "season"], how="left")
     else:

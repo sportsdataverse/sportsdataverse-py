@@ -70,8 +70,10 @@ __all__ = [
 
 #: The box stats the tables carry: output prefix -> ESPN player box column.
 STATS: dict[str, str] = {"pts": "points", "reb": "rebounds", "ast": "assists"}
-# ponytail: the pro weight in every league, college too: EXPECTED_COEFS were fit on usage with it;
-# the college 0.475 needs a refit of tools/fit_player_box_expected.py first.
+# The pro weight in every league, college too: EXPECTED_COEFS were fit on usage with it. A refit at the
+# college 0.475 (2026-11-26, pre-registered gate: every holdout MAE and MSE within 2 athlete-clustered SEs)
+# failed on assists: mbb ast MSE +0.00009 (SE 0.000008), wbb +0.00006 (SE 0.000007), though points
+# improved (mbb MAE 2.4327 -> 2.4235). 0.44 stays; see sportsdataverse._common.possessions.
 FT_WEIGHT = PRO_FT_POSSESSION_WEIGHT
 #: A game usage below this (percent) is read as this in the model's log: a player who used nothing
 #: still rebounds and passes.
