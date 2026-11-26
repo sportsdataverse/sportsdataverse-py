@@ -54,6 +54,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Literal, overload
 
+import numpy as np
 import polars as pl
 
 from sportsdataverse.cfb.cfb_opponent_adjust import flag_garbage_time
@@ -591,6 +592,54 @@ def cfb_adjusted_epa_by_game(
 _LEDGER_META = {"season": "season", "week": "week", "seasonType": "season_type"}
 
 
+def _cell_normal_equations(
+    clean: pl.DataFrame,
+) -> tuple[dict[str, int], int, np.ndarray, Callable[[np.ndarray], tuple[np.ndarray, np.ndarray]]]:
+    """The fit plays as (game, offense, defense, site) cells -> (team index, team count, cell game ids, terms).
+
+    Every regressor of :func:`_fit_team_strengths`' ridge is constant within a cell, so the
+    play-level ``X'X`` / ``X'y`` are sums of one weighted outer product per cell; ``terms(rows)``
+    returns that sum over the given cell rows. Columns: [off_0..off_{T-1}, def_0..def_{T-1}, intercept, home].
+    """
+    cells = (
+        clean.filter(pl.col("pos_team_id").is_not_null() & pl.col("def_pos_team_id").is_not_null())
+        .group_by(["game_id", "pos_team_id", "def_pos_team_id", "hfa"])
+        .agg(n=pl.len().cast(pl.Float64), y=pl.col("EPA").sum())
+    )
+    teams = sorted(set(cells["pos_team_id"].to_list()) | set(cells["def_pos_team_id"].to_list()))
+    idx = {t: i for i, t in enumerate(teams)}
+    n_t = len(teams)
+    p = 2 * n_t + 2
+    n_w = cells["n"].to_numpy()
+    y_w = cells["y"].to_numpy()  # sum of EPA in the cell = n * mean
+    off_i = np.array([idx[t] for t in cells["pos_team_id"].to_list()], dtype=int)
+    def_i = n_t + np.array([idx[t] for t in cells["def_pos_team_id"].to_list()], dtype=int)
+    hfa = cells["hfa"].cast(pl.Float64).to_numpy()
+
+    def terms(rows: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        a = np.zeros((p, p))
+        b = np.zeros(p)
+        for r in rows:
+            x = np.zeros(p)
+            x[[off_i[r], def_i[r], 2 * n_t]] = 1.0
+            x[2 * n_t + 1] = hfa[r]
+            a += n_w[r] * np.outer(x, x)
+            b += y_w[r] * x
+        return a, b
+
+    return idx, n_t, cells["game_id"].to_numpy(), terms
+
+
+def _untraced_teams(clean: pl.DataFrame) -> set[str]:
+    """Teams with a fit play whose offense or defense id is null (that play's opponent is unknown)."""
+    return set(
+        clean.filter(pl.col("pos_team_id").is_null() | pl.col("def_pos_team_id").is_null())
+        .select(pl.concat_list("pos_team_id", "def_pos_team_id").explode(empty_as_null=True).drop_nulls())
+        .to_series()
+        .to_list()
+    )
+
+
 def _leave_one_game_out(clean: pl.DataFrame, opp: pl.DataFrame, lam: float) -> pl.DataFrame:
     """Each team's season net adjusted EPA with one of its games removed, one row per (game, team).
 
@@ -605,42 +654,9 @@ def _leave_one_game_out(clean: pl.DataFrame, opp: pl.DataFrame, lam: float) -> p
     ``X'X`` and ``X'y`` are sums of one weighted term per cell, and dropping a game subtracts
     that game's cells. One small solve per game, no frame operations inside the loop.
     """
-    import numpy as np
-
-    cells = (
-        clean.filter(pl.col("pos_team_id").is_not_null() & pl.col("def_pos_team_id").is_not_null())
-        .group_by(["game_id", "pos_team_id", "def_pos_team_id", "hfa"])
-        .agg(n=pl.len().cast(pl.Float64), y=pl.col("EPA").sum())
-    )
-    teams = sorted(set(cells["pos_team_id"].to_list()) | set(cells["def_pos_team_id"].to_list()))
-    idx = {t: i for i, t in enumerate(teams)}
-    n_t = len(teams)
-    p = 2 * n_t + 2  # [off_0..off_{T-1}, def_0..def_{T-1}, intercept, home]
-    n_w = cells["n"].to_numpy()
-    y_w = cells["y"].to_numpy()  # sum of EPA in the cell = n * mean
-    cols = np.stack(
-        [
-            np.array([idx[t] for t in cells["pos_team_id"].to_list()]),
-            n_t + np.array([idx[t] for t in cells["def_pos_team_id"].to_list()]),
-            np.full(cells.height, 2 * n_t),
-        ],
-        axis=1,
-    )
-    hfa = cells["hfa"].cast(pl.Float64).to_numpy()
-
-    def cell_terms(rows: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-        a = np.zeros((p, p))
-        b = np.zeros(p)
-        for r in rows:
-            x = np.zeros(p)
-            x[cols[r]] = 1.0
-            x[2 * n_t + 1] = hfa[r]
-            a += n_w[r] * np.outer(x, x)
-            b += y_w[r] * x
-        return a, b
-
-    cell_game = cells["game_id"].to_numpy()
-    a_all, b_all = cell_terms(np.arange(cells.height))
+    idx, n_t, cell_game, cell_terms = _cell_normal_equations(clean)
+    p = 2 * n_t + 2
+    a_all, b_all = cell_terms(np.arange(cell_game.size))
     penalty = np.full(p, lam * _TEAM_SEASON_PLAYS)
     penalty[2 * n_t] = 0.0  # free intercept
     penalty[2 * n_t + 1] = 0.0  # free home term
@@ -651,13 +667,7 @@ def _leave_one_game_out(clean: pl.DataFrame, opp: pl.DataFrame, lam: float) -> p
     rows_opp = np.array([idx.get(t, -1) for t in opp["def_pos_team_id"].to_list()])
     raw_off = opp["raw_off_epa"].cast(pl.Float64).fill_null(np.nan).to_numpy()
     raw_def = opp["raw_def_epa"].cast(pl.Float64).fill_null(np.nan).to_numpy()
-
-    untraced = set(
-        clean.filter(pl.col("pos_team_id").is_null() | pl.col("def_pos_team_id").is_null())
-        .select(pl.concat_list("pos_team_id", "def_pos_team_id").explode(empty_as_null=True).drop_nulls())
-        .to_series()
-        .to_list()
-    )
+    untraced = _untraced_teams(clean)
     out_game: list[str] = []
     out_team: list[str] = []
     out_val: list[float | None] = []
@@ -682,9 +692,9 @@ def _leave_one_game_out(clean: pl.DataFrame, opp: pl.DataFrame, lam: float) -> p
             adj_def = raw_def[keep] - off_str[rows_opp[keep]]
             valid = int((~np.isnan(adj_off) & ~np.isnan(adj_def)).sum())
             ok = valid >= 2 and (~np.isnan(adj_off)).any() and (~np.isnan(adj_def)).any()
+            ok = ok and team not in untraced
             out_game.append(gid)
             out_team.append(team)
-            ok = ok and team not in untraced
             out_val.append(float(np.nanmean(adj_off) - np.nanmean(adj_def)) if ok else None)
     return pl.DataFrame(
         {"game_id": out_game, "pos_team_id": out_team, "loo_net_adj_epa": out_val},
