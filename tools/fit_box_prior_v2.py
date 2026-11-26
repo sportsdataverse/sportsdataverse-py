@@ -13,12 +13,13 @@ Stages (each skips work already on disk under ``OUT``):
 * ``gate`` -- per complete season 1998-2026: five game-grouped folds and one chronological split (fit on the
   games before the date by which 60% of the season's games were played, score the rest). Each split fits on
   the training games only (the v2 prior's features rebuilt from them) and scores the held-out possessions'
-  points under: ``adj`` (today's ``nba_adj_rapm``: the previous season's SPM prior x2 at the frozen penalty,
+  points under: ``adj`` (today's ``nba_adj_rapm``: the previous season's SPM prior times
+  ``ADJ_RAPM_PRIOR_SCALE`` at the frozen penalty (2, and the equal-weight SPM, when the committed gate ran),
   read from ``--adj-prior``, the ``*_prior_next.parquet`` of ``tools/fit_adj_rapm_penalty.py``), ``rapm``
   (plain, frozen penalty), ``v2`` (v2 prior, REML penalties: the candidate), ``v2_fixed`` (v2 prior at the
   adjusted-RAPM penalty), ``adj_reml`` (the previous season's SPM unscaled, REML penalties) and ``prior``
-  (the v2 prior alone). A player absent from the training games is scored at his prior: last season's SPM x2
-  under ``adj``, the league average (0) under the v2 methods, which have no box line for him. Also the
+  (the v2 prior alone). A player absent from the training games is scored at his prior: last season's SPM times the
+  scale under ``adj``, the league average (0) under the v2 methods, which have no box line for him. Also the
   full-season v2 rating per season.
 * ``report`` -- pooled held-out error per method, paired differences against ``adj`` and of ``v2_fixed``
   against ``v2`` (basis points of MSE, SE over seasons, all seasons and the strictly walk-forward 2006+), REML penalties and prior weights per season, and the long-window oracle check: Spearman and

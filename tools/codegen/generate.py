@@ -242,6 +242,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.basketball.genius.genius_runtime",
         "sportsdataverse.basketball.atrium.atrium_runtime",
         "sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime",
+        "sportsdataverse.lacrosse.pll_runtime",
         "sportsdataverse.basketball.feb.feb_runtime",
         "sportsdataverse.basketball.scb.scb_runtime",
         "sportsdataverse.basketball.lba.lba_runtime",
@@ -299,6 +300,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.nfl.nflpro_runtime",
         # 4.4
         "sportsdataverse.providers.cbs.cbs_napi_runtime",
+        "sportsdataverse.golf.pgatour_runtime",
     }
 )
 # (error name, aliases a YAML ``raises:`` line may already use for it, line to add)
@@ -1462,7 +1464,9 @@ class _EndpointView:
 
         # The route's own getter (``getter:``) as (module, call name); default the family's ``_get``.
         route_module, self.getter_name = route_getter or (getter_module, "_get")
-        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module, route_module)
+        # a league-param family's example may name its own league (a college-only route): the URL follows it
+        example_league = str(ep.example_args.get("league", league.league)) if league.league_param else league.league
+        self.example_url = _example_request(ep_host, ep, league.sport, example_league, getter_module, route_module)
         # A body endpoint (``body: form|json``) has no fetchable URL: the query string carries only the
         # ``in: query`` params and the rest travels in the body, so show a curl request instead.
         self.body_kind = ep.body
@@ -3110,6 +3114,7 @@ FLAT_APIS = [
     ("sleeper", "nfl"),
     ("f1", "f1"),  # Jolpica F1 (Ergast-compatible)
     ("pgatour", "golf"),  # PGA TOUR GraphQL (orchestrator.pgatour.com), runtime only
+    ("pll", "lacrosse"),  # Premier Lacrosse League stats API (stats.premierlacrosseleague.com), runtime only
     # wave-2 intake families (espn-content, thesportsdb, football-data.co.uk, openligadb,
     # polymarket, kalshi)
     ("espn_content", "espn_content"),
@@ -3835,6 +3840,7 @@ _FLAT_API_DOC = {
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
     "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
     "pgatour": "PGA TOUR GraphQL API (orchestrator.pgatour.com; runtime only, public frontend key or $PGA_API_KEY)",
+    "pll": "Premier Lacrosse League stats API (stats.premierlacrosseleague.com; runtime only, no key, the site's Referer)",
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
     "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",
@@ -5269,22 +5275,24 @@ def _resolve_autodoc_arg(value, memo: dict):
 
 
 class _CallTimeout(BaseException):
-    """Raised by :func:`_call_with_timeout`. A ``BaseException`` on purpose: the HTTP layer
-    (``dl_utils.download``) retries on any ``Exception``, which would swallow a plain
-    ``TimeoutError`` and retry the stalled call with no alarm left."""
+    """Raised by :func:`_call_with_timeout`. A ``BaseException`` on purpose: the alarm raises it
+    inside the call, and the HTTP layer (``dl_utils.download``) retries on any ``Exception``, which
+    would swallow a plain ``TimeoutError`` and retry the stalled call with no alarm left."""
 
 
 def _call_with_timeout(thunk, seconds: float):
     """``thunk()``, raising :class:`_CallTimeout` after ``seconds`` (0 = no limit).
 
     stats.nba.com stalls rather than failing on a datacenter IP; one such call must not
-    hang the whole capture run. Needs SIGALRM and the main thread; elsewhere (Windows, a
-    worker thread) the call simply runs unbounded."""
+    hang the whole capture run. SIGALRM interrupts the call on the main thread; elsewhere
+    (Windows, a worker thread) :func:`_call_in_thread` stops waiting for it."""
     import signal
     import threading
 
-    if not seconds or not hasattr(signal, "SIGALRM") or threading.current_thread() is not threading.main_thread():
+    if not seconds:
         return thunk()
+    if not hasattr(signal, "SIGALRM") or threading.current_thread() is not threading.main_thread():
+        return _call_in_thread(thunk, seconds)
 
     def _alarm(*_):
         raise _CallTimeout(f"no answer within {seconds:g}s (SDV_AUTODOC_CALL_TIMEOUT)")
@@ -5296,6 +5304,36 @@ def _call_with_timeout(thunk, seconds: float):
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)
         signal.signal(signal.SIGALRM, old)
+
+
+def _call_in_thread(thunk, seconds: float):
+    """``thunk()`` on a daemon thread, raising :class:`_CallTimeout` if it has not returned in ``seconds`` (> 0).
+
+    The fallback where SIGALRM cannot interrupt the call. Its exception, if any, is re-raised here. A call
+    that times out is not stopped: it keeps running, and its result is dropped."""
+    import threading
+
+    box: list = []
+
+    def run() -> None:
+        try:
+            box.append((True, thunk()))
+        except BaseException as e:  # noqa: BLE001 -- handed back to the caller as is
+            box.append((False, e))
+
+    # ponytail: a stalled call is abandoned, not killed; it holds its thread and socket until it
+    # returns or the process exits, and later calls run beside it (a second request to a host that
+    # is stalling, a ``$call`` input it may still memoize). Fine for one capture run; a subprocess
+    # per call if that bites.
+    worker = threading.Thread(target=run, name="autodoc-call", daemon=True)
+    worker.start()
+    worker.join(seconds)
+    if not box:
+        raise _CallTimeout(f"no answer within {seconds:g}s (SDV_AUTODOC_CALL_TIMEOUT)")
+    ok, value = box[0]
+    if ok:
+        return value
+    raise value
 
 
 def _returns_a_frame(annotation) -> bool:
@@ -5385,7 +5423,8 @@ def refresh_autodoc_schemas() -> int:
                 continue  # not a frame function: never call it blind (it may write files or clear a cache)
             try:
                 df = _call_with_timeout(
-                    lambda: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}), timeout
+                    lambda obj=obj, kwargs=kwargs: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}),
+                    timeout,
                 )
             except (Exception, _CallTimeout) as e:  # noqa: BLE001 -- a live call of any public fn; every skip is reported
                 msg = str(e).splitlines()[0][:120] if str(e) else type(e).__name__

@@ -1124,3 +1124,35 @@ def test_espn_golf_scoreboard_answers(league):
 
     payload = espn_golf_scoreboard(league=league, return_parsed=False)
     assert payload["events"], f"{league}: no events on the default scoreboard"
+
+
+def _lacrosse_examples() -> list[tuple[str, str]]:
+    import inspect
+    import re
+
+    from sportsdataverse.lacrosse import lacrosse_espn_ext as ext
+
+    out = []
+    for name, fn in inspect.getmembers(ext, inspect.isfunction):
+        if name.startswith("espn_lacrosse_"):
+            call = re.search(r"Quick start::\s+(espn_lacrosse_\w+\(.*\))", fn.__doc__ or "")
+            assert call, f"{name} has no Quick start example"
+            out.append((name, call.group(1)))
+    return out
+
+
+@pytest.mark.parametrize(("name", "call"), _lacrosse_examples())
+def test_espn_lacrosse_docstring_example_answers(name, call):
+    # Every espn_lacrosse_* Quick start must run as written against ESPN and come back with data:
+    # the examples carry real per-league ids (codegen league_example_args, probed 2026-11-25).
+    import ast
+
+    from sportsdataverse.lacrosse import lacrosse_espn_ext as ext
+
+    node = ast.parse(call, mode="eval").body
+    kwargs = {k.arg: ast.literal_eval(k.value) for k in node.keywords}
+    raw = getattr(ext, name)(return_parsed=False, **kwargs)
+    assert raw, f"{call} came back empty"
+    for key in ("count", "events"):  # a list page or a scoreboard: empty is a wrong id or date
+        if isinstance(raw, dict) and key in raw:
+            assert raw[key], f"{call} has no {key}"

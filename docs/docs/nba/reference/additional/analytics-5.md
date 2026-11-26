@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_player–nba_season"
-sidebar_label: "Analytics: nba_player–nba_season"
+title: "NBA — additional Python functions — Analytics: nba_player–nba_score"
+sidebar_label: "Analytics: nba_player–nba_score"
 sidebar_position: 19
-description: "NBA — additional Python functions — Analytics: nba_player–nba_season — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_player–nba_score — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_player–nba_season
+# NBA — additional Python functions — Analytics: nba_player–nba_score
 
 ### nba_player_war {#nba_player_war}
 
@@ -16,7 +16,7 @@ Each rating is anchored to the team (its players' possession-weighted mean ratin
 season is the team's net rating / 5; it is a season constraint, not an estimate for each
 five-man lineup) and centred on the league, so 0 is a league-average player. `vorp` is points per
 100 team possessions above a replacement player over one team's season of possessions
-(Basketball-Reference's VORP scale); `war` is wins above replacement. A replacement-level
+(a full season of possessions at `R + 1` per 100 is a VORP of 1); `war` is wins above replacement. A replacement-level
 player has 0, and a season's `war` adds up to the league's wins minus those of a team of
 replacement players. `rating` / `war` are the mean of the three sources; `rating_<s>`
 / `war_<s>` are each one. The replacement level and points per win are fitted per league
@@ -48,7 +48,7 @@ One row per `(season, player_id)` (stats.nba.com ids, Int64): `player_name`, `te
 | `rating_bpm` | Float64 | Our BPM per 100, team-anchored and centred: the release's bpm with its team constant repaired (minute-weighted team mean = net rating / 5, BPM 2.0's), minus the player's team mean, plus the team's net rating / 5, centred so the league's possession-weighted mean is 0. |
 | `rating_rapm` | Float64 | Our prior-informed RAPM (adj_rapm) per 100, team-anchored and centred like rating_bpm. Only the net adj_rapm is read: the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset. |
 | `rating_boban` | Float64 | Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm. |
-| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per team, R the league's replacement level (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference's VORP scale: a season of possessions at R + 1 is 1. |
+| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per team, R the league's replacement level (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). On that scale a season of possessions at R + 1 is a VORP of 1. |
 | `war` | Float64 | Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement level; a season's war adds up to the league's wins minus a team of replacement players' (.189 NBA 2024-25, .104 WNBA 2025). |
 | `war_lo` | Float64 | Low end of the nominal 90% interval for war (5th percentile of 1000 bootstrap replicates, each team-season seeded on its own): each team-season's games resampled with replacement (a game's player possessions, team possessions and margin move together), then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level are held fixed, so this is the sampling uncertainty of the team side and the playing time; the war_bpm / war_rapm / war_boban spread is the source uncertainty. |
 | `war_hi` | Float64 | High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo). |
@@ -192,7 +192,7 @@ four from 2025) or plays a later series that postseason.
 
 **Returns**
 
-One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `round` (1 = first round .. 4 = Finals, from ESPN's `type_abbreviation`; null where ESPN gives none), `round_code`, `round_name` (the game headline without "Game N"), `game_number` (by tip-off), `game_id`, `game_date`, `completed`, the home and away `team_id` / `abbreviation` / `display_name` / `score`, `winner_team_id` (null until final), `team_a_id`, `team_b_id`, `team_a_wins` / `team_b_wins` (the series score after this game), and on every row of the series `series_games`, `decided` and `series_winner_team_id` (null until decided). Empty input returns that schema with zero rows.
+One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `round` (1 = first round .. 4 = Finals, from ESPN's `type_abbreviation`; null where ESPN gives none), `round_code`, `round_name` (the game headline without "Game N"), `game_number` (the headline's "Game N"; tip-off order in a series with a headline lacking one), `game_id`, `game_date`, `completed`, the home and away `team_id` / `abbreviation` / `display_name` / `score`, `winner_team_id` (null until final), `team_a_id`, `team_b_id`, `team_a_wins` / `team_b_wins` (the series score after this game), and on every row of the series `series_games`, `decided` and `series_winner_team_id` (null until decided): the series' outcome as of the release, not as of that game, so they leak the result into an earlier game's row. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -201,7 +201,7 @@ One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `roun
 | `round` | Int64 | Round number from ESPN's type_abbreviation: 1 first round, 2 second round (NBA conference semifinals), 3 semifinals (NBA conference finals), 4 Finals; null where ESPN gives no round (older seasons). |
 | `round_code` | String | ESPN's type_abbreviation for the round (RD16, QTR, SEMI, FINAL); null where it carries none. |
 | `round_name` | String | The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series). |
-| `game_number` | Int64 | Game number within the series, by tip-off. |
+| `game_number` | Int64 | Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves a gap; tip-off order for the whole series when one of its headlines has no number. |
 | `game_id` | Int64 | ESPN game id. |
 | `game_date` | String | Game date (US). |
 | `completed` | Boolean | True when the game is final. |
@@ -219,8 +219,8 @@ One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `roun
 | `team_a_wins` | Int64 | team_a's series wins after this game (finals up to and including it). |
 | `team_b_wins` | Int64 | team_b's series wins after this game. |
 | `series_games` | Int64 | Games listed in the series so far (played and scheduled); the same on every row of the series. |
-| `decided` | Boolean | True once the series leader has the wins to clinch (NBA: four, every round since 2003; WNBA: the Finals only, two through 2004, three 2005-2024, four from 2025) or plays a later series that postseason. |
-| `series_winner_team_id` | Int64 | The series winner's ESPN team id; null until decided. |
+| `decided` | Boolean | True once the series leader has the wins to clinch (NBA: four, every round since 2003; WNBA: the Finals only, two through 2004, three 2005-2024, four from 2025) or plays a later series that postseason. The final outcome as of the release, repeated on every row of the series, not as of that game: an earlier game's row already shows it, so never use it as a feature for that game. |
+| `series_winner_team_id` | Int64 | The series winner's ESPN team id; null until decided. The final outcome as of the release, repeated on every row of the series, not as of that game: an earlier game's row already shows it, so never use it as a feature for that game. |
 
 **Raises**
 
@@ -272,7 +272,7 @@ One row per player who played (minutes above zero) in a final game of the series
 | `fta` | Int64 | Total free throws attempted in the series: the sum of the player's ESPN game boxes. |
 | `oreb` | Int64 | Total offensive rebounds in the series: the sum of the player's ESPN game boxes. |
 | `dreb` | Int64 | Total defensive rebounds in the series: the sum of the player's ESPN game boxes. |
-| `reb` | Int64 | Total total rebounds in the series: the sum of the player's ESPN game boxes. |
+| `reb` | Int64 | Total rebounds in the series: the sum of the player's ESPN game boxes. |
 | `ast` | Int64 | Total assists in the series: the sum of the player's ESPN game boxes. |
 | `stl` | Int64 | Total steals in the series: the sum of the player's ESPN game boxes. |
 | `blk` | Int64 | Total blocks in the series: the sum of the player's ESPN game boxes. |
@@ -359,7 +359,7 @@ Two rows per series with a final game, keyed `(season, series_id, team_id)` with
 | `fta` | Int64 | Total free throws attempted over the series' final games: the sum of the team's ESPN game boxes. |
 | `oreb` | Int64 | Total offensive rebounds over the series' final games: the sum of the team's ESPN game boxes. |
 | `dreb` | Int64 | Total defensive rebounds over the series' final games: the sum of the team's ESPN game boxes. |
-| `reb` | Int64 | Total total rebounds over the series' final games: the sum of the team's ESPN game boxes. |
+| `reb` | Int64 | Total rebounds over the series' final games: the sum of the team's ESPN game boxes. |
 | `ast` | Int64 | Total assists over the series' final games: the sum of the team's ESPN game boxes. |
 | `stl` | Int64 | Total steals over the series' final games: the sum of the team's ESPN game boxes. |
 | `blk` | Int64 | Total blocks over the series' final games: the sum of the team's ESPN game boxes. |
@@ -867,99 +867,4 @@ Rows in `~sportsdataverse._common.game_flow.SCORE_ROWS_SCHEMA`, without `home_wp
 from sportsdataverse.nba.nba_loaders import load_nba_stats_pbp, load_nba_stats_schedules
 from sportsdataverse.nba.nba_game_flow import nba_score_rows
 rows = nba_score_rows(load_nba_stats_pbp(2025), load_nba_stats_schedules(2025))
-```
-
-### nba_season_sim {#nba_season_sim}
-
-`nba_season_sim(season: 'int', *, as_of_date: 'dt.date | None' = None, league_id: 'str' = '00', n_sims: 'int' = 10000, seed: 'int' = 20261103, chances: 'list[float] | None' = None, cup_schedule: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds.
-
-Reads the `{nba,wnba}_stats_schedules` and `_possessions` releases for the season and the
-one before, fits the game model on the regular-season games played before `as_of_date`,
-shrunk toward last season's final ratings (`as_of_game_model`, `preseason_prior`),
-and simulates the rest (`simulate_pro_season`). Before the first game the ratings are
-the prior alone. The rules applied to each simulated season
-are in `sportsdataverse.nba.nba_season_rules`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  | The season, named by the year it ends (`2027` is 2026-27); the WNBA season is its calendar year. |
-| `as_of_date` | `date \| None` | `None` | Games on or after this date are simulated even when the release has their score (a backtest). None: every game with a score counts as played. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `n_sims` | `int` | `10000` | Simulated seasons (Monte Carlo error: see `SIM_SCHEMA`'s `_se` columns). |
-| `seed` | `int` | `20261103` | Seeds the generator; the same release data and seed give the same output. |
-| `chances` | `list[float] \| None` | `None` | Lottery chances per slot, worst record first, one per lottery team; overrides the published table (needed for the 2027 WNBA lottery's seven teams, not published yet). |
-| `cup_schedule` | `DataFrame \| None` | `None` | NBA: stats.nba.com's schedule for the season (`~sportsdataverse.nba.nba_stats.nba_stats_scheduleleaguev2`), which marks the Cup games. Read only while the release lists TBD Cup games; None fetches it then (a residential connection), and a failed fetch falls back to league-average opponents for the Cup slots with a warning. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per team (stats.nba.com `team_id`, Int64), sorted by conference and mean seed: * `wins` / `losses` so far, `games_remaining`, and the as-of `adj_net_rtg` with its posterior sd `adj_net_rtg_sd` (capped so two teams' shift carries at most 3/4 of a game's variance; it binds only near the prior, before many games are played). * `proj_wins` / `proj_losses` (means), `proj_wins_sd`, the 10th and 90th percentiles, and `proj_wins_se` (the Monte Carlo error of the mean). * `p_division` (NBA), `p_seed_1` .. `p_seed_15` (the regular-season finish in the conference, NBA, or the league, WNBA) and `mean_seed`. * `p_top4` (first-round home court), `p_top6` (NBA, straight to the playoffs), `p_play_in` (NBA, seeds 7-10), `p_playoffs` (NBA: top 6 or through the play-in; WNBA: top 8) and its Monte Carlo `p_playoffs_se`. * `p_lottery`, `p_pick_1`, `p_drawn_pick` (a pick from the drawing: the NBA's top four, the WNBA's top two) and `mean_pick` (given a lottery finish). The pick columns are null when the league has no published chances for that many lottery teams. * `n_sims`.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26); the WNBA season is its calendar year. |
-| `as_of_date` | Date | The as-of date: games on or after it are simulated, the ones before it are played. Null when every game with a score counts as played. |
-| `team_id` | Int64 | stats.nba.com team id (Int64). |
-| `conference` | String | NBA conference (East / West) from the 2004-05 alignment; "WNBA" for every WNBA team (one table). |
-| `division` | String | NBA division (Atlantic, Central, Southeast, Northwest, Pacific, Southwest); "WNBA" for every WNBA team. |
-| `wins` | Int64 | Regular-season wins in the games already played. |
-| `losses` | Int64 | Regular-season losses in the games already played. |
-| `games_remaining` | Int64 | Regular-season games on the schedule still to play (simulated). |
-| `adj_net_rtg` | Float64 | As-of adjusted net rating from the possession ridge at the sim's penalty: points per 100 over an average opponent on a neutral court. |
-| `adj_net_rtg_sd` | Float64 | Posterior sd of adj_net_rtg (points per 100) from the ridge, capped so two teams' shift carries at most 3/4 of a game's variance; the sd of the per-season rating shift each simulated season draws. |
-| `proj_wins` | Float64 | Mean final regular-season wins over the simulated seasons (played wins plus simulated ones). |
-| `proj_losses` | Float64 | Mean final regular-season losses over the simulated seasons. |
-| `proj_wins_sd` | Float64 | Standard deviation of the final wins over the simulated seasons. |
-| `proj_wins_p10` | Float64 | 10th percentile of the final wins over the simulated seasons. |
-| `proj_wins_p90` | Float64 | 90th percentile of the final wins over the simulated seasons. |
-| `proj_wins_se` | Float64 | Monte Carlo standard error of proj_wins: proj_wins_sd / sqrt(n_sims). |
-| `p_division` | Float64 | Share of simulated seasons in which the team wins its division under the NBA tiebreakers; null for the WNBA. |
-| `p_seed_1` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 1: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_2` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 2: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_3` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 3: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_4` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 4: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_5` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 5: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_6` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 6: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_7` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 7: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_8` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 8: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_9` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 9: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_10` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 10: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_11` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 11: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_12` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 12: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_13` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 13: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_14` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 14: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `p_seed_15` | Float64 | Share of simulated seasons in which the team finishes the regular season seeded 15: in its conference for the NBA, in the league for the WNBA (before the NBA play-in). 0 for a seed past the number of teams. |
-| `mean_seed` | Float64 | Mean regular-season seed over the simulated seasons (1 = best). |
-| `p_top4` | Float64 | Share of simulated seasons with a top-4 seed: first-round home court. |
-| `p_top6` | Float64 | NBA: share of simulated seasons with a top-6 conference seed, straight to the playoffs; null for the WNBA. |
-| `p_play_in` | Float64 | NBA: share of simulated seasons with a conference seed of 7 to 10, the play-in; null for the WNBA. |
-| `p_playoffs` | Float64 | Share of simulated seasons in which the team makes the playoffs: NBA top 6 or through the simulated play-in; WNBA top 8. |
-| `p_playoffs_se` | Float64 | Monte Carlo standard error of p_playoffs: sqrt(p (1 - p) / n_sims). |
-| `p_lottery` | Float64 | Share of simulated seasons in which the team misses the playoffs and enters the draft lottery. |
-| `p_pick_1` | Float64 | Share of simulated seasons in which the team's own lottery slot draws the first pick; null when the league has no published chances for that many lottery teams. |
-| `p_drawn_pick` | Float64 | Share of simulated seasons in which the team's slot gets a drawn pick (NBA top 4, WNBA top 2); null as p_pick_1. |
-| `mean_pick` | Float64 | Mean draft pick over the simulated seasons in which the team is in the lottery; null when it never is, or as p_pick_1. |
-| `n_sims` | Int64 | Number of simulated seasons behind every share on the row. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
-
-**Example**
-
-```python
-import datetime as dt
-from sportsdataverse.nba.nba_season_sim import nba_season_sim
-sim = nba_season_sim(2026, as_of_date=dt.date(2026, 2, 13))
-sim.select("team_id", "wins", "proj_wins", "p_playoffs", "p_pick_1").head()
-
-# WNBA via ``league_id``
-
-nba_season_sim(2025, as_of_date=dt.date(2025, 7, 1), league_id="10")
 ```

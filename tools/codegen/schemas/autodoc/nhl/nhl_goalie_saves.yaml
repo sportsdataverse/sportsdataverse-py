@@ -1,0 +1,42 @@
+schema: nhl_goalie_saves
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: game_id
+  type: integer
+  description: ''
+- name: game_date
+  type: date
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: opp_team
+  type: character
+  description: ''
+- name: is_home
+  type: logical
+  description: ''
+- name: exp_shots_against
+  type: double
+  description: ''
+- name: exp_save_pct
+  type: double
+  description: ''
+- name: exp_saves
+  type: double
+  description: ''
+- name: saves_lo
+  type: integer
+  description: ''
+- name: saves_hi
+  type: integer
+  description: ''
+- name: coverage
+  type: double
+  description: ''

@@ -1,0 +1,42 @@
+schema: pll_career_leaders
+kind: dataframe
+columns:
+- name: stat
+  type: character
+  description: ''
+- name: rank
+  type: integer
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: player_slug
+  type: character
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: status
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: team_name
+  type: character
+  description: ''
+- name: stat_value
+  type: double
+  description: ''
+- name: games_played
+  type: integer
+  description: ''
+- name: seasons_played
+  type: integer
+  description: ''
+- name: avg_per_season
+  type: double
+  description: ''

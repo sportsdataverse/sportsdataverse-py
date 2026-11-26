@@ -601,6 +601,15 @@ providers:
       - sportsdataverse.golf.pgatour_runtime
       - sportsdataverse.golf.pgatour_parsers
 
+  pll:
+    label: Premier Lacrosse League stats API
+    home: https://stats.premierlacrosseleague.com
+    auth: none (no key; the proxy answers only the stats site's own Referer, which the runtime sends)
+    flat_apis: [pll]
+    modules:
+      - sportsdataverse.lacrosse.pll_runtime
+      - sportsdataverse.lacrosse.pll_parsers
+
   kenpom:
     label: KenPom
     featured: true

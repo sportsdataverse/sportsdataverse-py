@@ -1,16 +1,16 @@
 """Gate :func:`sportsdataverse.nba.nba_rapm_variants.nba_multiseason_rapm` against an external 8-season RAPM.
 
-The oracle is Jeremias Engelmann's single RAPM fit over the 2019-20 through 2026-27 NBA regular
-seasons (posted 2026-11-02): a CSV keyed by NBA ``PERSON_ID`` with ``ID, Player, Off, Def, Poss, Tot``
+The oracle is an external single RAPM fit over the 2019-20 through 2026-27 NBA regular
+seasons (published 2026-11-02): a CSV keyed by NBA ``PERSON_ID`` with ``ID, Player, Off, Def, Poss, Tot``
 (``Def`` negative = good, ``Tot = Off - Def``). It carries no license, so it is read from a local path
 and never committed.
 
 The script fits our multi-season RAPM over the same window (``nba_stats_possessions`` release assets,
 regular-season games only, via the ``nba_stats_schedules`` release), joins on ``player_id`` (dtype
 asserted equal first) and prints the match rate, the Spearman rho of our total / offense / defense
-against his at three possession floors, and the ratio of our spread to his. It exits 1 when Spearman
-on the total at ``Poss >= 10,000`` is below :data:`RHO_FLOOR`, the register's bar, or when fewer than
-:data:`MATCH_RATE_FLOOR` of his players match.
+against the oracle at three possession floors, and the ratio of our spread to the oracle's. It exits 1 when Spearman
+on the total at ``Poss >= 10,000`` is below :data:`RHO_FLOOR`, or when fewer than
+:data:`MATCH_RATE_FLOOR` of the oracle's players match.
 
 Usage::
 
@@ -31,7 +31,7 @@ from sportsdataverse.nba.nba_rapm_variants import nba_multiseason_rapm
 
 #: Season START years of the window (2019-20 .. 2026-27); the release stamps ``season`` with the end year.
 STARTS = range(2019, 2027)
-#: Spearman floor on the total at ``Poss >= 10,000`` (Intake Register ACC-2026-0001). Never lowered.
+#: Spearman floor on the total at ``Poss >= 10,000``. Never lowered.
 RHO_FLOOR = 0.95
 #: Share of the oracle's players that must match on ``player_id`` (observed 1,224 / 1,224 on 2026-11-18).
 MATCH_RATE_FLOOR = 0.99
@@ -76,7 +76,7 @@ def gate(ours: pl.DataFrame, oracle: pl.DataFrame) -> dict:
         report[f"poss_ge_{floor}"] = {
             "n": k.height,
             "rho_total": rho(k, "Tot", "multiseason_rapm"),
-            # his Def is negative-good, ours positive-good: report the agreement as a positive rho
+            # the oracle's Def is negative-good, ours positive-good: report the agreement as a positive rho
             "rho_off": rho(k, "Off", "o_multiseason_rapm"),
             "rho_def": -rho(k, "Def", "d_multiseason_rapm"),
             "std_ratio": round(k["multiseason_rapm"].std() / k["Tot"].std(), 4),

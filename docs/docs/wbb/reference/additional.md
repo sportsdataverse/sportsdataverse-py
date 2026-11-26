@@ -129,7 +129,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [reorder_and_reverse](additional/stats-ncaa-org-3.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
 | [reset_config](additional/stats-ncaa-org-3.md#reset_config) | Reset the active config to its env-var-derived defaults. |
 | [right_kind_of_shot](additional/stats-ncaa-org-3.md#right_kind_of_shot) | Whether `pbp_event`'s shot type is compatible with `shot`'s |
-| [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
+| [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | Iterative SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
 | [select_contains](additional/stats-ncaa-org-3.md#select_contains) | JSoup `root.select(sel + ":contains(text)")`: candidates whose full |
 | [select_matching](additional/stats-ncaa-org-3.md#select_matching) | JSoup `root.select(sel + ":matches(regex)")`: candidates whose full |
 | [select_matching_own](additional/stats-ncaa-org-3.md#select_matching_own) | JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose |
@@ -381,7 +381,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [wbb_team_season_rates](additional/analytics-5.md#wbb_team_season_rates) | Women's college season team rates from possessions, with home/away/close/clutch splits. |
 | [wbb_team_shot_zones](additional/analytics-5.md#wbb_team_shot_zones) | Women's college season shot profile by zone per team, for and allowed. |
 | [wbb_team_strength](additional/analytics-5.md#wbb_team_strength) | Women's college team strength: adjusted ratings, SOS, SOV, tempo and the four factors. |
-| [wbb_tournament_run_players](additional/analytics-5.md#wbb_tournament_run_players) | Each women's player's run line against the regular season. Delegates to `mbb_tournament_run_players`. |
+| [wbb_tournament_run_players](additional/analytics-6.md#wbb_tournament_run_players) | Each women's player's run line against the regular season. Delegates to `mbb_tournament_run_players`. |
 | [wbb_tournament_run_teams](additional/analytics-6.md#wbb_tournament_run_teams) | Each women's run's record and box totals. Delegates to `mbb_tournament_run_teams(league="womens")`. |
 | [wbb_tournament_runs](additional/analytics-6.md#wbb_tournament_runs) | Women's tournament games, once per side, keyed to each team's run (NCAA, WNIT, WBIT, conference ...). |
 | [weighted_avg](additional/analytics-6.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |

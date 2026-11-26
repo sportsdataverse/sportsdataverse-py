@@ -248,7 +248,7 @@ description: "sdv-py Women's college basketball: endpoint references, dataset lo
 - [`wbb_team_season_rates`](reference/additional/analytics-5#wbb_team_season_rates)
 - [`wbb_team_shot_zones`](reference/additional/analytics-5#wbb_team_shot_zones)
 - [`wbb_team_strength`](reference/additional/analytics-5#wbb_team_strength)
-- [`wbb_tournament_run_players`](reference/additional/analytics-5#wbb_tournament_run_players)
+- [`wbb_tournament_run_players`](reference/additional/analytics-6#wbb_tournament_run_players)
 - [`wbb_tournament_run_teams`](reference/additional/analytics-6#wbb_tournament_run_teams)
 - [`wbb_tournament_runs`](reference/additional/analytics-6#wbb_tournament_runs)
 - [`weighted_avg`](reference/additional/analytics-6#weighted_avg)

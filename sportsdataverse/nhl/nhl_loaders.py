@@ -31,6 +31,7 @@ __all__ = [
     "load_nhl_pbp_lite",
     "load_nhl_penalties",
     "load_nhl_player_boxscores",
+    "load_nhl_pregame_snapshots",
     "load_nhl_rosters",
     "load_nhl_schedules",
     "load_nhl_scoring",
@@ -1170,6 +1171,72 @@ def load_nhl_player_boxscores(seasons, return_as_pandas: bool = False):
         pl.concat(frames, how="diagonal_relaxed")
         if frames
         else _empty_from_schema("loader_schemas:load_nhl_player_boxscores")
+    )
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nhl_pregame_snapshots(seasons, return_as_pandas: bool = False):
+    """Load nhl_pregame_snapshots (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pregame_snapshots
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2027).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name        |type                                      |
+        |:---------------|:-----------------------------------------|
+        |season          |Int32                                     |
+        |game_date       |String                                    |
+        |game_id         |Int64                                     |
+        |espn_event_id   |Int64                                     |
+        |start_time_utc  |Datetime(time_unit='us', time_zone='UTC') |
+        |team_id         |Int64                                     |
+        |team_abbr       |String                                    |
+        |kind            |String                                    |
+        |player_id       |Int64                                     |
+        |espn_athlete_id |Int64                                     |
+        |player_name     |String                                    |
+        |status          |String                                    |
+        |valid_from      |Datetime(time_unit='us', time_zone='UTC') |
+        |valid_to        |Datetime(time_unit='us', time_zone='UTC') |
+        |source          |String                                    |
+
+    Note:
+        Pregame state captured every 30 minutes on game days (probable goalies with ESPN's Expected / Confirmed status, and the ESPN injury list), one row per state interval. Read it as of a decision time t with pregame_state_as_of (valid_from <= t < valid_to, null valid_to = still current), never past it: a row whose valid_from is after t was not known at t. Capture began 2026-11-25 (season 2027) and cannot be backfilled.
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2027.
+
+    Example:
+        Quick start::
+
+            load_nhl_pregame_snapshots(seasons=2027)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2027:
+            raise SeasonNotFoundError("season cannot be less than 2027")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pregame_snapshots/nhl_pregame_snapshots_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nhl_pregame_snapshots: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_nhl_pregame_snapshots")
     )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 

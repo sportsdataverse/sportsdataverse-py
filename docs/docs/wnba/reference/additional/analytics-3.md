@@ -182,7 +182,7 @@ One row per `(season, player_id)` (stats.nba.com ids, Int64): `player_name`, `te
 | `rating_bpm` | Float64 | Our BPM per 100, team-anchored and centred: the release's bpm with its team constant repaired (minute-weighted team mean = net rating / 5, BPM 2.0's), minus the player's team mean, plus the team's net rating / 5, centred so the league's possession-weighted mean is 0. |
 | `rating_rapm` | Float64 | Our prior-informed RAPM (adj_rapm) per 100, team-anchored and centred like rating_bpm. Only the net adj_rapm is read: the o_adj_rapm / d_adj_rapm split carries a +11 / -11 offset. |
 | `rating_boban` | Float64 | Our BOBAN (boban_filtered_skill) per 100, team-anchored and centred like rating_bpm. |
-| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per team, R the league's replacement level (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). Basketball-Reference's VORP scale: a season of possessions at R + 1 is 1. |
+| `vorp` | Float64 | Value over replacement player: (rating - R) * poss / the season's possessions per team, R the league's replacement level (REPLACEMENT_LEVEL; NBA -1.98, WNBA -3.18 per 100). On that scale a season of possessions at R + 1 is a VORP of 1. |
 | `war` | Float64 | Wins above replacement: (rating - R) * poss / 100 / points per win (PTS_PER_WIN; NBA 31.56, WNBA 31.31). 0 at replacement level; a season's war adds up to the league's wins minus a team of replacement players' (.189 NBA 2024-25, .104 WNBA 2025). |
 | `war_lo` | Float64 | Low end of the nominal 90% interval for war (5th percentile of 1000 bootstrap replicates, each team-season seeded on its own): each team-season's games resampled with replacement (a game's player possessions, team possessions and margin move together), then his possessions, the team net rating, the anchoring and the centring recomputed. The source ratings and the replacement level are held fixed, so this is the sampling uncertainty of the team side and the playing time; the war_bpm / war_rapm / war_boban spread is the source uncertainty. |
 | `war_hi` | Float64 | High end of the nominal 90% interval for war (95th percentile of the same 1000 game-resampled replicates as war_lo). |
@@ -286,7 +286,7 @@ WNBA postseason games keyed to their series (league_id='10'). See sportsdatavers
 
 **Returns**
 
-One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `round` (1 = first round .. 4 = Finals, from ESPN's `type_abbreviation`; null where ESPN gives none), `round_code`, `round_name` (the game headline without "Game N"), `game_number` (by tip-off), `game_id`, `game_date`, `completed`, the home and away `team_id` / `abbreviation` / `display_name` / `score`, `winner_team_id` (null until final), `team_a_id`, `team_b_id`, `team_a_wins` / `team_b_wins` (the series score after this game), and on every row of the series `series_games`, `decided` and `series_winner_team_id` (null until decided). Empty input returns that schema with zero rows.
+One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `round` (1 = first round .. 4 = Finals, from ESPN's `type_abbreviation`; null where ESPN gives none), `round_code`, `round_name` (the game headline without "Game N"), `game_number` (the headline's "Game N"; tip-off order in a series with a headline lacking one), `game_id`, `game_date`, `completed`, the home and away `team_id` / `abbreviation` / `display_name` / `score`, `winner_team_id` (null until final), `team_a_id`, `team_b_id`, `team_a_wins` / `team_b_wins` (the series score after this game), and on every row of the series `series_games`, `decided` and `series_winner_team_id` (null until decided): the series' outcome as of the release, not as of that game, so they leak the result into an earlier game's row. Empty input returns that schema with zero rows.
 
 | col_name | type | description |
 |---|---|---|
@@ -295,7 +295,7 @@ One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `roun
 | `round` | Int64 | Round number from ESPN's type_abbreviation: 1 first round, 2 second round (NBA conference semifinals), 3 semifinals (NBA conference finals), 4 Finals; null where ESPN gives no round (older seasons). |
 | `round_code` | String | ESPN's type_abbreviation for the round (RD16, QTR, SEMI, FINAL); null where it carries none. |
 | `round_name` | String | The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series). |
-| `game_number` | Int64 | Game number within the series, by tip-off. |
+| `game_number` | Int64 | Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves a gap; tip-off order for the whole series when one of its headlines has no number. |
 | `game_id` | Int64 | ESPN game id. |
 | `game_date` | String | Game date (US). |
 | `completed` | Boolean | True when the game is final. |
@@ -313,8 +313,8 @@ One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `roun
 | `team_a_wins` | Int64 | team_a's series wins after this game (finals up to and including it). |
 | `team_b_wins` | Int64 | team_b's series wins after this game. |
 | `series_games` | Int64 | Games listed in the series so far (played and scheduled); the same on every row of the series. |
-| `decided` | Boolean | True once the series leader has the wins to clinch (NBA: four, every round since 2003; WNBA: the Finals only, two through 2004, three 2005-2024, four from 2025) or plays a later series that postseason. |
-| `series_winner_team_id` | Int64 | The series winner's ESPN team id; null until decided. |
+| `decided` | Boolean | True once the series leader has the wins to clinch (NBA: four, every round since 2003; WNBA: the Finals only, two through 2004, three 2005-2024, four from 2025) or plays a later series that postseason. The final outcome as of the release, repeated on every row of the series, not as of that game: an earlier game's row already shows it, so never use it as a feature for that game. |
+| `series_winner_team_id` | Int64 | The series winner's ESPN team id; null until decided. The final outcome as of the release, repeated on every row of the series, not as of that game: an earlier game's row already shows it, so never use it as a feature for that game. |
 
 ### wnba_playoff_series_players {#wnba_playoff_series_players}
 
@@ -352,7 +352,7 @@ One row per player who played (minutes above zero) in a final game of the series
 | `fta` | Int64 | Total free throws attempted in the series: the sum of the player's ESPN game boxes. |
 | `oreb` | Int64 | Total offensive rebounds in the series: the sum of the player's ESPN game boxes. |
 | `dreb` | Int64 | Total defensive rebounds in the series: the sum of the player's ESPN game boxes. |
-| `reb` | Int64 | Total total rebounds in the series: the sum of the player's ESPN game boxes. |
+| `reb` | Int64 | Total rebounds in the series: the sum of the player's ESPN game boxes. |
 | `ast` | Int64 | Total assists in the series: the sum of the player's ESPN game boxes. |
 | `stl` | Int64 | Total steals in the series: the sum of the player's ESPN game boxes. |
 | `blk` | Int64 | Total blocks in the series: the sum of the player's ESPN game boxes. |
@@ -425,7 +425,7 @@ Two rows per series with a final game, keyed `(season, series_id, team_id)` with
 | `fta` | Int64 | Total free throws attempted over the series' final games: the sum of the team's ESPN game boxes. |
 | `oreb` | Int64 | Total offensive rebounds over the series' final games: the sum of the team's ESPN game boxes. |
 | `dreb` | Int64 | Total defensive rebounds over the series' final games: the sum of the team's ESPN game boxes. |
-| `reb` | Int64 | Total total rebounds over the series' final games: the sum of the team's ESPN game boxes. |
+| `reb` | Int64 | Total rebounds over the series' final games: the sum of the team's ESPN game boxes. |
 | `ast` | Int64 | Total assists over the series' final games: the sum of the team's ESPN game boxes. |
 | `stl` | Int64 | Total steals over the series' final games: the sum of the team's ESPN game boxes. |
 | `blk` | Int64 | Total blocks over the series' final games: the sum of the team's ESPN game boxes. |

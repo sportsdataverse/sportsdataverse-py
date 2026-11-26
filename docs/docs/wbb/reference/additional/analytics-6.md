@@ -6,6 +6,83 @@ description: "Women's college basketball — additional Python functions — Ana
 ---
 # Women's college basketball — additional Python functions — Analytics: wbb_tournament–weighted_avg
 
+### wbb_tournament_run_players {#wbb_tournament_run_players}
+
+`wbb_tournament_run_players(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Each women's player's run line against the regular season. Delegates to `mbb_tournament_run_players`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2025` is 2024-25). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per player and run: totals, per-game lines, `ts_pct`, the regular season's and the shift.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25). |
+| `run_id` | String | Run key: '{season}-{tournament_key}-{ESPN team id}', one team's games in one tournament. |
+| `team_id` | Int64 | ESPN team id of the player's team in the run. |
+| `athlete_id` | Int64 | ESPN athlete id. |
+| `athlete_display_name` | String | The player's name. |
+| `games` | Int64 | Run games played (not marked did-not-play, with minutes or any box count). |
+| `min` | Float64 | Total minutes in the run. |
+| `pts` | Int64 | Total points in the run: the sum of the player's ESPN game boxes. |
+| `fgm` | Int64 | Total field goals made in the run: the sum of the player's ESPN game boxes. |
+| `fga` | Int64 | Total field goals attempted in the run: the sum of the player's ESPN game boxes. |
+| `fg3m` | Int64 | Total three-pointers made in the run: the sum of the player's ESPN game boxes. |
+| `fg3a` | Int64 | Total three-pointers attempted in the run: the sum of the player's ESPN game boxes. |
+| `ftm` | Int64 | Total free throws made in the run: the sum of the player's ESPN game boxes. |
+| `fta` | Int64 | Total free throws attempted in the run: the sum of the player's ESPN game boxes. |
+| `oreb` | Int64 | Total offensive rebounds in the run: the sum of the player's ESPN game boxes. |
+| `dreb` | Int64 | Total defensive rebounds in the run: the sum of the player's ESPN game boxes. |
+| `reb` | Int64 | Total total rebounds in the run: the sum of the player's ESPN game boxes. |
+| `ast` | Int64 | Total assists in the run: the sum of the player's ESPN game boxes. |
+| `stl` | Int64 | Total steals in the run: the sum of the player's ESPN game boxes. |
+| `blk` | Int64 | Total blocks in the run: the sum of the player's ESPN game boxes. |
+| `tov` | Int64 | Total turnovers in the run: the sum of the player's ESPN game boxes. |
+| `pf` | Int64 | Total personal fouls in the run: the sum of the player's ESPN game boxes. |
+| `min_pg` | Float64 | Minutes per run game played. |
+| `pts_pg` | Float64 | Points per run game played. |
+| `reb_pg` | Float64 | Total rebounds per run game played. |
+| `ast_pg` | Float64 | Assists per run game played. |
+| `stl_pg` | Float64 | Steals per run game played. |
+| `blk_pg` | Float64 | Blocks per run game played. |
+| `tov_pg` | Float64 | Turnovers per run game played. |
+| `fg3m_pg` | Float64 | Three-pointers made per run game played. |
+| `ts_pct` | Float64 | True shooting in the run: PTS / (2 * (FGA + 0.44 * FTA)); null with no attempts. |
+| `reg_games` | Int64 | Regular-season games played, without the conference-tournament games (every team the player played for); null with none. |
+| `reg_min_pg` | Float64 | Minutes per regular-season game played. |
+| `reg_pts_pg` | Float64 | Points per regular-season game played. |
+| `reg_reb_pg` | Float64 | Total rebounds per regular-season game played. |
+| `reg_ast_pg` | Float64 | Assists per regular-season game played. |
+| `reg_stl_pg` | Float64 | Steals per regular-season game played. |
+| `reg_blk_pg` | Float64 | Blocks per regular-season game played. |
+| `reg_tov_pg` | Float64 | Turnovers per regular-season game played. |
+| `reg_fg3m_pg` | Float64 | Three-pointers made per regular-season game played. |
+| `reg_ts_pct` | Float64 | True shooting over the player's regular season. |
+| `min_pg_diff` | Float64 | min_pg - reg_min_pg: the run against the player's regular season (positive is up). |
+| `pts_pg_diff` | Float64 | pts_pg - reg_pts_pg: the run against the player's regular season (positive is up). |
+| `reb_pg_diff` | Float64 | reb_pg - reg_reb_pg: the run against the player's regular season (positive is up). |
+| `ast_pg_diff` | Float64 | ast_pg - reg_ast_pg: the run against the player's regular season (positive is up). |
+| `stl_pg_diff` | Float64 | stl_pg - reg_stl_pg: the run against the player's regular season (positive is up). |
+| `blk_pg_diff` | Float64 | blk_pg - reg_blk_pg: the run against the player's regular season (positive is up). |
+| `tov_pg_diff` | Float64 | tov_pg - reg_tov_pg: the run against the player's regular season (positive is up). |
+| `fg3m_pg_diff` | Float64 | fg3m_pg - reg_fg3m_pg: the run against the player's regular season (positive is up). |
+| `ts_pct_diff` | Float64 | ts_pct - reg_ts_pct. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_tournament_run_players
+wbb_tournament_run_players(2025).sort("pts", descending=True).head()
+```
+
 ### wbb_tournament_run_teams {#wbb_tournament_run_teams}
 
 `wbb_tournament_run_teams(seasons: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

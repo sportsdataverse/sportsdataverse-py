@@ -7,7 +7,8 @@ A **series** is every postseason game (ESPN ``season_type`` 3) between one pair 
 season: in these leagues a pair meets at most once per postseason, so the pair is the key.
 Play-in games are ESPN ``season_type`` 5 and are not a series. The series id is
 ``"{season}-{lower team id}-{higher team id}"`` (ESPN team ids), so it is stable whatever order
-the games arrive in. Games are numbered by tip-off within the series.
+the games arrive in. A game's number is the "Game N" of its headline, or its tip-off order within
+the series when a headline of the series has none.
 
 ``team_a`` is the home team of game 1 (the side with home court), ``team_b`` the other. A series
 is ``decided`` once its leader has the wins to clinch (:func:`wins_to_clinch`) or has a later
@@ -145,6 +146,19 @@ def wins_to_clinch(league: str, season: int, *, final: bool) -> int | None:
     return 2 if season <= 2004 else 3 if season <= 2024 else 4
 
 
+def _game_number() -> pl.Expr:
+    """``game_number`` over rows sorted by tip-off: the headline's "Game N" ("NBA Finals - Game 7"), so a game
+    missing from the release leaves a gap rather than renumbering the rest; tip-off order for the whole series
+    when one of its headlines has no number (mixing the two could repeat a number)."""
+    headline = pl.col("notes_headline").str.extract(r"(?i)game\s+(\d+)\s*$", 1).cast(pl.Int64, strict=False)
+    return (
+        pl.when(headline.null_count().over("series_id") == 0)
+        .then(headline)
+        .otherwise(pl.int_range(1, pl.len() + 1).over("series_id"))
+        .alias("game_number")
+    )
+
+
 def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame:
     """One row per postseason game, keyed to its series, with the series score after it.
 
@@ -159,8 +173,11 @@ def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame
         :data:`SERIES_GAMES_SCHEMA` rows, one per ``season_type`` 3 game, ordered by season,
         series and game number. ``winner_team_id`` is null until the game is final;
         ``team_a_wins`` / ``team_b_wins`` count the finals up to and including this game, and
-        ``series_games`` / ``decided`` / ``series_winner_team_id`` repeat on every row of the
-        series. ``series_games`` counts the games listed in the series, played and scheduled.
+        ``series_games`` / ``decided`` / ``series_winner_team_id`` repeat the series' outcome
+        as of the release on every row (not as of that game: a model must not read them from an
+        earlier game's row). ``series_games`` counts the games listed in the series, played and
+        scheduled. ``game_number`` is the headline's "Game N" (tip-off order for a series with a headline
+        lacking one).
         ``round_name`` is the game headline without its "Game N".
 
     Raises:
@@ -180,8 +197,9 @@ def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame
     po = schedule.filter(pl.col("season_type") == 3)
     if po.height == 0:
         return pl.DataFrame(schema=SERIES_GAMES_SCHEMA)
-    lo = pl.min_horizontal("home_id", "away_id").cast(pl.Int64)
-    hi = pl.max_horizontal("home_id", "away_id").cast(pl.Int64)
+    # cast first: a String id column would order "9" above "10"
+    lo = pl.min_horizontal(pl.col("home_id", "away_id").cast(pl.Int64))
+    hi = pl.max_horizontal(pl.col("home_id", "away_id").cast(pl.Int64))
     completed = pl.col("status_type_completed").fill_null(False)
     winner = (
         pl.when(completed == False)
@@ -206,7 +224,7 @@ def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame
         )
         .sort("season", "series_id", "game_date_time", "game_id", nulls_last=True)
         .with_columns(
-            pl.int_range(1, pl.len() + 1).over("series_id").alias("game_number"),
+            _game_number(),
             pl.col("home_id").first().over("series_id").cast(pl.Int64).alias("team_a_id"),
             pl.col("away_id").first().over("series_id").cast(pl.Int64).alias("team_b_id"),
             # the latest headline names the round best (game 1 is sometimes blank)

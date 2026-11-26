@@ -239,7 +239,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [shot_coordinates](additional/models-and-calculators-4.md#shot_coordinates) | Shot locations in the court frame the Game on Paper hex chart uses. |
 | [team_game_rates](additional/models-and-calculators-4.md#team_game_rates) | Four factors, possessions, ratings and pace for both teams of one game. |
 | [train_box_prior](additional/models-and-calculators-4.md#train_box_prior) | Possession-weighted ridge of the career target on the box-prior features, cross-fit by player. |
-| [train_spm](additional/models-and-calculators-4.md#train_spm) | Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions). |
+| [train_spm](additional/models-and-calculators-4.md#train_spm) | Ridge-fit box features onto `o_rapm` and `d_rapm` (two regressions), weighted by minutes. |
 | [validate_model](additional/models-and-calculators-4.md#validate_model) | Run the selected oracles and assemble a `ValidationReport`. |
 | [walk_forward](additional/models-and-calculators-4.md#walk_forward) | Oracle 6: time-ordered "predict tomorrow" retrodiction. |
 | [win_prob_from_margin](additional/models-and-calculators-4.md#win_prob_from_margin) | Home win probability from an expected margin (normal-CDF closed form). |
@@ -316,7 +316,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_raw_store_season_frame](additional/analytics-5.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
 | [nba_referee_assignments](additional/analytics-5.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
 | [nba_score_rows](additional/analytics-5.md#nba_score_rows) | Map the stats.nba.com play-by-play onto the game-flow score rows. |
-| [nba_season_sim](additional/analytics-5.md#nba_season_sim) | Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds. |
+| [nba_season_sim](additional/analytics-6.md#nba_season_sim) | Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds. |
 | [nba_season_standings](additional/analytics-6.md#nba_season_standings) | Standings with the league's tiebreakers from completed regular-season games. |
 | [nba_shot_value](additional/analytics-6.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |
 | [nba_shot_value_lineups](additional/analytics-6.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
