@@ -213,7 +213,7 @@ def test_a_zero_minute_cameo_with_a_stat_counts_as_played() -> None:
     scores 2). They count as games played, and their counts reach the totals."""
     box = _read("nba", "player_box")
     counts = pl.sum_horizontal([pl.col(c).fill_null(0) for c in SERIES_BOX_STATS.values()])
-    played = (pl.col("did_not_play").fill_null(False) == False) & ((pl.col("minutes").fill_null(0) > 0) | (counts > 0))  # noqa: E712
+    played = (pl.col("did_not_play").fill_null(False) == False) & ((pl.col("minutes").fill_null(0) > 0) | (counts > 0))
     cameo = box.filter((pl.col("minutes").fill_null(0) <= 0) & played)
     assert cameo.height == 12 and cameo["points"].max() == 2
     players = playoff_series_players(_games("nba"), box)

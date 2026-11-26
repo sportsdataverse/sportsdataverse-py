@@ -182,7 +182,7 @@ def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame
     hi = pl.max_horizontal("home_id", "away_id").cast(pl.Int64)
     completed = pl.col("status_type_completed").fill_null(False)
     winner = (
-        pl.when(completed == False)  # noqa: E712 - an explicit boolean mask (house style)
+        pl.when(completed == False)
         .then(None)
         .when(pl.col("home_score") > pl.col("away_score"))
         .then(pl.col("home_id"))
@@ -229,33 +229,11 @@ def playoff_series_games(schedule: pl.DataFrame, *, league: str) -> pl.DataFrame
         )
     )
     games = games.join(_series_outcomes(games, league), on="series_id", how="left")
-    return games.select(
-        "season",
-        "series_id",
-        "round",
-        "round_code",
-        "round_name",
-        "game_number",
-        "game_id",
-        "game_date",
-        "completed",
-        pl.col("home_id").alias("home_team_id"),
-        "home_abbreviation",
-        "home_display_name",
-        "home_score",
-        pl.col("away_id").alias("away_team_id"),
-        "away_abbreviation",
-        "away_display_name",
-        "away_score",
-        "winner_team_id",
-        "team_a_id",
-        "team_b_id",
-        "team_a_wins",
-        "team_b_wins",
-        "series_games",
-        "decided",
-        "series_winner_team_id",
-    ).cast(SERIES_GAMES_SCHEMA)
+    return (
+        games.rename({"home_id": "home_team_id", "away_id": "away_team_id"})
+        .select(list(SERIES_GAMES_SCHEMA))
+        .cast(SERIES_GAMES_SCHEMA)
+    )
 
 
 def _series_outcomes(games: pl.DataFrame, league: str) -> pl.DataFrame:
@@ -268,7 +246,7 @@ def _series_outcomes(games: pl.DataFrame, league: str) -> pl.DataFrame:
         pl.col("team_a_wins").max(),
         pl.col("team_b_wins").max(),
         pl.col("game_date").min().alias("first_date"),
-        pl.col("game_date").filter(pl.col("completed") == True).max().alias("last_date"),  # noqa: E712
+        pl.col("game_date").filter(pl.col("completed") == True).max().alias("last_date"),
     )
     # the season's latest-starting series is its final where ESPN gives no round (older seasons)
     latest = pl.col("first_date") == pl.col("first_date").max().over("season")
@@ -311,10 +289,7 @@ def _series_outcomes(games: pl.DataFrame, league: str) -> pl.DataFrame:
     return per.select(
         "series_id",
         "decided",
-        pl.when(pl.col("decided") == True)  # noqa: E712
-        .then(pl.col("leader"))
-        .cast(pl.Int64)
-        .alias("series_winner_team_id"),
+        pl.when(pl.col("decided") == True).then(pl.col("leader")).cast(pl.Int64).alias("series_winner_team_id"),
     )
 
 
@@ -347,7 +322,7 @@ def playoff_series_teams(games: pl.DataFrame, team_box: pl.DataFrame) -> pl.Data
             games = playoff_series_games(load_nba_schedule([2025]), league="nba")
             teams = playoff_series_teams(games, load_nba_team_boxscore([2025]))
     """
-    finals = games.filter(pl.col("completed") == True)  # noqa: E712 - an explicit boolean mask (house style)
+    finals = games.filter(pl.col("completed") == True)
     finals = finals.select("season", "series_id", "game_id", "winner_team_id")
     if finals.height == 0:
         return pl.DataFrame(schema=SERIES_TEAMS_SCHEMA)
@@ -377,8 +352,7 @@ def _played(box: pl.DataFrame) -> pl.DataFrame:
     """
     counted = pl.sum_horizontal([pl.col(c).fill_null(0) for c in SERIES_BOX_STATS.values()]) > 0
     return box.unique(subset=["game_id", "athlete_id"], keep="first", maintain_order=True).filter(
-        (pl.col("did_not_play").fill_null(False) == False)  # noqa: E712 - an explicit boolean mask (house style)
-        & ((pl.col("minutes").fill_null(0) > 0) | counted)
+        (pl.col("did_not_play").fill_null(False) == False) & ((pl.col("minutes").fill_null(0) > 0) | counted)
     )
 
 
@@ -420,7 +394,7 @@ def playoff_series_players(games: pl.DataFrame, player_box: pl.DataFrame) -> pl.
             games = playoff_series_games(load_nba_schedule([2025]), league="nba")
             players = playoff_series_players(games, load_nba_player_boxscore([2025]))
     """
-    finals = games.filter(pl.col("completed") == True)  # noqa: E712 - an explicit boolean mask (house style)
+    finals = games.filter(pl.col("completed") == True)
     finals = finals.select("season", "series_id", "game_id")
     if finals.height == 0:
         return pl.DataFrame(schema=SERIES_PLAYERS_SCHEMA)
