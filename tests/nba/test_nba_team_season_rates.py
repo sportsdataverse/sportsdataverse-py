@@ -382,10 +382,15 @@ _GAME_SUMS = ("poss", "opp_poss", "pts", "opp_pts")
 GAMES_SCHEMA = {**TEAM_GAME_POSSESSIONS_SCHEMA, "season_type": pl.Utf8()}
 
 
-def assert_games_add_up(games: pl.DataFrame, rates: pl.DataFrame, minutes_per_game: int) -> None:
-    """Per-game rows summed over a team-season's split reproduce the season row exactly."""
-    assert dict(games.schema) == GAMES_SCHEMA
-    games = games.drop("season_type")
+def assert_games_add_up(
+    games: pl.DataFrame, rates: pl.DataFrame, minutes_per_game: int, schema: dict | None = None
+) -> None:
+    """Per-game rows summed over a team-season's split reproduce the season row exactly.
+
+    ``schema`` defaults to the NBA / WNBA frame's (with ``season_type``); college frames have no season type.
+    """
+    assert dict(games.schema) == (GAMES_SCHEMA if schema is None else schema)
+    games = games.drop("season_type", strict=False)
     assert games.select("season", "team_id", "game_id", "split").is_duplicated().sum() == 0
     summed = games.group_by("season", "team_id", "split").agg(
         pl.len().cast(pl.Int64).alias("games"), *[pl.col(c).sum() for c in (*_GAME_SUMS, "seconds")]
