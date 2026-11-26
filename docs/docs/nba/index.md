@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 288 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 291 | — |
 
 ## ESPN {#espn}
 
@@ -234,6 +234,9 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_player_shot_zones`](reference/additional/analytics-4#nba_player_shot_zones)
 - [`nba_player_war`](reference/additional/analytics-5#nba_player_war)
 - [`nba_player_wowy`](reference/additional/analytics-5#nba_player_wowy)
+- [`nba_playoff_series`](reference/additional/analytics-5#nba_playoff_series)
+- [`nba_playoff_series_players`](reference/additional/analytics-5#nba_playoff_series_players)
+- [`nba_playoff_series_teams`](reference/additional/analytics-5#nba_playoff_series_teams)
 - [`nba_playtype_ratings`](reference/additional/analytics-5#nba_playtype_ratings)
 - [`nba_possession_rate_rows`](reference/additional/analytics-5#nba_possession_rate_rows)
 - [`nba_pregame_projections`](reference/additional/analytics-5#nba_pregame_projections)
@@ -242,11 +245,11 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_raw_store_season_frame`](reference/additional/analytics-5#nba_raw_store_season_frame)
 - [`nba_referee_assignments`](reference/additional/analytics-5#nba_referee_assignments)
 - [`nba_score_rows`](reference/additional/analytics-5#nba_score_rows)
-- [`nba_season_sim`](reference/additional/analytics-5#nba_season_sim)
-- [`nba_season_standings`](reference/additional/analytics-5#nba_season_standings)
-- [`nba_shot_value`](reference/additional/analytics-5#nba_shot_value)
-- [`nba_shot_value_lineups`](reference/additional/analytics-5#nba_shot_value_lineups)
-- [`nba_situation_rows`](reference/additional/analytics-5#nba_situation_rows)
+- [`nba_season_sim`](reference/additional/analytics-6#nba_season_sim)
+- [`nba_season_standings`](reference/additional/analytics-6#nba_season_standings)
+- [`nba_shot_value`](reference/additional/analytics-6#nba_shot_value)
+- [`nba_shot_value_lineups`](reference/additional/analytics-6#nba_shot_value_lineups)
+- [`nba_situation_rows`](reference/additional/analytics-6#nba_situation_rows)
 - [`nba_situational_lineup`](reference/additional/analytics-6#nba_situational_lineup)
 - [`nba_situational_player`](reference/additional/analytics-6#nba_situational_player)
 - [`nba_situational_team`](reference/additional/analytics-6#nba_situational_team)
