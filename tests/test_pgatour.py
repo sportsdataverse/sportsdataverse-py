@@ -71,8 +71,8 @@ def test_every_column_is_read_from_the_fixture(short, fixture, schema, min_rows)
     assert not [c for c in df.columns if df[c].null_count() == df.height]
 
 
-@pytest.mark.parametrize("short", ["tournaments", "past_champions", "field"])
-@pytest.mark.parametrize("payload", [[{}], {"players": [{}], "pastChampions": [{}]}])
+@pytest.mark.parametrize("short", ["tournaments", "past_champions", "field", "schedule_years"])
+@pytest.mark.parametrize("payload", [[{}], {"players": [{}], "pastChampions": [{}], "years": [{}]}])
 def test_an_entry_without_an_id_is_no_row(short, payload):
     assert getattr(P, f"parse_pgatour_{short}")(payload).height == 0
 

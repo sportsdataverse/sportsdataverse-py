@@ -444,7 +444,7 @@ def espn_golf_team_schedule(
     Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/schedule``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/golf/pga/teams/4/schedule
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/golf/tgl/teams/130349/schedule
 
     Args:
         team_id: team_id path parameter.
@@ -464,7 +464,7 @@ def espn_golf_team_schedule(
     Example:
         Quick start::
 
-            espn_golf_team_schedule(league='pga', team_id='4')
+            espn_golf_team_schedule(league='tgl', team_id='130349')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_golf_team_schedule", kwargs)
@@ -2260,7 +2260,7 @@ def espn_golf_team_core(
     Bound to sport='golf'; ``league`` is a required argument (e.g. 'pga').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/teams/{team_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/pga/teams/4
+    Example URL: https://sports.core.api.espn.com/v2/sports/golf/leagues/tgl/teams/130349
 
     Args:
         team_id: team_id path parameter.
@@ -2279,7 +2279,7 @@ def espn_golf_team_core(
     Example:
         Quick start::
 
-            espn_golf_team_core(league='pga', team_id='4')
+            espn_golf_team_core(league='tgl', team_id='130349')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_golf_team_core", kwargs)

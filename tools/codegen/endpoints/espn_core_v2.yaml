@@ -1115,6 +1115,9 @@ endpoints:
   league_example_args:
     lacrosse:
       team_id: '122896'
+    golf:  # a team match-play league (pga answers 400); probed 2026-11-26
+      league: tgl
+      team_id: '130349'
 - short: venues
   returns_schema: venues
   scope: universal
