@@ -81128,6 +81128,16 @@ nba_player_props:
   stat_ftm_exp: Expected made free throws if he plays, on the same basis; null when the box logs carry none.
   minutes_exp: 'Expected minutes: the player''s minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 240; a team''s rows sum to 240. The stat_*_exp lines assume the player plays; this does not.'
   pace_proj: Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet.
+  stat_pts_recent_exp: Expected points if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_reb_recent_exp: Expected rebounds if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_ast_recent_exp: Expected assists if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_fg3m_recent_exp: Expected made threes if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_stl_recent_exp: Expected steals if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_blk_recent_exp: Expected blocks if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_tov_recent_exp: Expected turnovers if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_fgm_recent_exp: Expected field goals made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  stat_ftm_recent_exp: Expected free throws made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line.
+  recent_weight: Weight on the recent line in the prop mixture, logistic(a + b x |last-10 minus season mean minutes| / his season minutes SD); 0 with 10 or fewer earlier games, where the two windows coincide.
 wnba_player_props:
   player_id: ESPN athlete id (Utf8).
   team_id: ESPN team id (Utf8) of the player's team in his latest game with positive minutes before the as-of cut (All-Star exhibition games left out), so a traded player projects for his new team.
@@ -81142,6 +81152,16 @@ wnba_player_props:
   stat_ftm_exp: Expected made free throws if he plays, on the same basis; null when the box logs carry none.
   minutes_exp: 'Expected minutes: the player''s minutes for his current team over the summed minutes for that team of every player returned on it (minutes a player since traded away logged for it are left out), all before the as-of cut (a game sat counts as zero), x 200; a team''s rows sum to 200. The stat_*_exp lines assume the player plays; this does not.'
   pace_proj: Projected game possessions from the two teams' adjusted paces; the league-norm pace stands in for a team with no ratings row yet.
+  stat_pts_recent_exp: Expected points if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_reb_recent_exp: Expected rebounds if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_ast_recent_exp: Expected assists if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_fg3m_recent_exp: Expected made threes if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_stl_recent_exp: Expected steals if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_blk_recent_exp: Expected blocks if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_tov_recent_exp: Expected turnovers if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_fgm_recent_exp: Expected field goals made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  stat_ftm_recent_exp: Expected free throws made if he plays, from his last 10 games (rates shrunk toward the same tier prior) x his last-10 mean minutes x the pace factor; the mixture's second line. Null in the WNBA (no fitted mixture).
+  recent_weight: Weight on the recent line in the prop mixture, logistic(a + b x |last-10 minus season mean minutes| / his season minutes SD); 0 with 10 or fewer earlier games, where the two windows coincide. Null in the WNBA (no fitted mixture).
 wp_variants:
   game_id: ESPN game id, the join key to the play-by-play and the play_wp table (the dtype the pbp carries).
   game_play_number: Play order within the game, as in the play-by-play (the dtype the pbp carries).
