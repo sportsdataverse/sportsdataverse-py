@@ -117,12 +117,21 @@ MATCHED_ODDS_MIN = 12  # documented matched-odds count; a silent join drop must 
 # Brier must beat the line's own implied 50/50 (0.25; the ESPN feed carries no over price, so even
 # odds is the only implied probability). Observed on the 12 games: 0.2380 with the fitted 6.19,
 # 0.2402 with the 6.05 seed; the model's side matches the result in 7 / 12 under either seed.
+# A gross-error sanity guard, not a level gate: on 12 games both seeds pass (0.2402 / 0.2380), so
+# it cannot tell 6.05 from 6.19. TOTAL_BIAS_FLOOR below is the level check.
 TOTAL_OVER_BRIER_FLOOR = 0.25
 # Mean exp_total - actual_total over the 1174 games: -2.2389 with the old centring on
 # avg_total_goals, -0.4239 after centring on 2 * avg_xgf (2026-11-11), both against labels that
 # counted every scoring shootout attempt. Against settled scores (a shootout is one goal):
-# -0.3139 with the 6.05 seed, -0.1740 with the fitted 6.19 (2026-11-25).
-TOTAL_BIAS_FLOOR = 0.50
+# -0.3139 with the 6.05 seed, -0.1740 with the fitted 6.19 (2026-11-25). The floor sits between the
+# fitted -0.174 and the seed's -0.314: 0.076 of headroom, 0.064 of kill margin, each about one
+# clustered SE on 1174 games (the fixture is fixed, so it cannot flake). 2022-23 is outside the
+# 2023-24 .. 2025-26 seasons the 6.19 mean is fitted on. The bias is about avg_total_goals - 6.364
+# (2022-23's settled mean), so the gate passes avg_total_goals in roughly 6.11 .. 6.61 and is
+# one-sided in practice: it catches a drop of about 0.08 goals, a rise only past about 0.42.
+# A correct refit that lands outside that window moves the gate to the newest season left out of
+# the fit, with the floor re-derived there; never loosen it to pass.
+TOTAL_BIAS_FLOOR = 0.25
 
 
 @pytest.fixture(scope="module")
@@ -218,7 +227,8 @@ def test_pregame_favorite_agreement_and_total_side_vs_espn_odds(pregame_backtest
     )
 
     # Closing total as an over/under side: P(over the line) under a Poisson around exp_total, scored
-    # against whether the game went over (see TOTAL_OVER_BRIER_FLOOR).
+    # against whether the game went over (see TOTAL_OVER_BRIER_FLOOR). A gross-error sanity guard on
+    # 12 games; the level check is test_pregame_total_is_unbiased_against_realized_goals.
     mt = m.filter(pl.col("close_total").is_not_null())
     assert mt.height >= MATCHED_ODDS_MIN
     line = mt["close_total"].to_numpy()
