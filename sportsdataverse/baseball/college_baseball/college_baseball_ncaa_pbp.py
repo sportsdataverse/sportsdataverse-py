@@ -47,8 +47,9 @@ __all__ = [
 # parser handles both -- verified e2e against a real WSB game (contest 6548848).
 # Three era/site spellings: modern "Last, F." (Canci, A.), legacy R-era
 # "First Last" (Andres Canci -- multi-word, verbs are lowercase so additional
-# capitalized words are safely part of the name), softball bare "Last".
-_NAME = r"[A-Z][A-Za-z'.\-]+(?:\s+[A-Z][A-Za-z'.\-]+)*(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
+# capitalized words are safely part of the name), softball bare "Last". Any word may be a bare
+# initial ("BAINER L", 2012; "C Mcguire", 2024).
+_NAME = r"[A-Z][A-Za-z'.\-]*(?:\s+[A-Z][A-Za-z'.\-]*)*(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
 
 # Clause separator inside a description (literal "3a", always followed by a
 # capital-led clause). Python re -> lookahead is fine here (not a polars expr).
@@ -64,12 +65,14 @@ _POS_RE = re.compile(r"\bto\s+(rf|lf|cf|1b|2b|3b|ss|p|c|dh)\b")
 # Fuller "to <phrase>" location when no short code (e.g. "right field", "second base").
 _LOC_RE = re.compile(r"\bto\s+([a-z][a-z ]+?)(?=,|\s*\(|\s*$|\s+for\b)")
 _LEADNAME_RE = re.compile(rf"^({_NAME})\s+(.*)$", re.DOTALL)
-_SCORED_RE = re.compile(rf"^({_NAME})\s+scored")
+_SCORED_RE = re.compile(rf"^({_NAME}),?\s+scored")  # "Dixon, B, scored" (2013)
+# A runner (or the batter) who moves up and then scores in one clause: "... advanced to third, scored on an error".
+_THEN_SCORED_RE = re.compile(r",\s*scored\b")
 _ADVANCED_RE = re.compile(rf"^({_NAME})\s+advanced to (\w+)")
 _OUT_RE = re.compile(r"\bout (?:at|on)\b")
 _POS_CODES = r"(?:p|1b|2b|3b|ss|lf|cf|rf|c|dh|ph|pr|dp|flex)"
 # A "Last", "Last, F", or legacy "First Last" name (no intervening verbs).
-_SUB_NAME = r"[A-Z][A-Za-z'.\-]+(?:\s+[A-Z][A-Za-z'.\-]+)*(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
+_SUB_NAME = _NAME  # the same name shapes, bare initials included ("C Mcguire to p for Smith.")
 # A substitution clause = "<player> to <pos>" (optionally "for <player>") and the
 # WHOLE clause is just that. The player name sits DIRECTLY before "to <pos>" -- no
 # action verb between -- which separates it both from a batted ball ("singled to
@@ -77,8 +80,21 @@ _SUB_NAME = r"[A-Z][A-Za-z'.\-]+(?:\s+[A-Z][A-Za-z'.\-]+)*(?:,\s*[A-Z][A-Za-z'.\
 _SUB_FULL_RE = re.compile(rf"^{_SUB_NAME}\s+to\s+{_POS_CODES}\b(?:\s+for\s+{_SUB_NAME})?\.*$")
 
 
+# Where a runner clause starts: a name (never a scoring tag) and a runner verb. Pages before ~2022 run the
+# clauses on with no separator ("... RBI (0-2) TAYLOR, B. advanced to second HALLUM, C. scored.", 2012) or
+# after a colon (2016-2021), so the 3a/; split alone left them inside the batter's clause.
+_RUNNER_START_RE = re.compile(
+    rf"(?<![A-Za-z'.\-])(?!(?:RBI|SAC|SF)\b){_NAME},?\s+"
+    r"(?:scored|advanced to|out (?:at|on)\b|stole|picked off|caught stealing)"
+)
+
+
 def _clauses(desc: str) -> "list[str]":
-    return [c.strip() for c in _SEP_RE.split(desc) if c.strip()]
+    out = []
+    for piece in _SEP_RE.split(desc):  # the separators first, so none is left glued to a clause
+        cuts = [m.start() for m in _RUNNER_START_RE.finditer(piece) if m.start() > 0]
+        out += [piece[a:b].strip(" :") for a, b in zip([0, *cuts], [*cuts, len(piece)], strict=True)]
+    return [c for c in out if c]
 
 
 def _classify(rest: str) -> "tuple[str, dict]":
@@ -113,7 +129,7 @@ def _classify(rest: str) -> "tuple[str, dict]":
         return "popup", {"is_out": True, "hit_trajectory": "pop"}
     if low.startswith("fouled out"):
         return "foulout", {"is_out": True, "hit_trajectory": "foul"}
-    if "reached on a fielder's choice" in low or "fielder's choice" in low:
+    if re.search(r"fielder'?s choice", low):  # 2020 pages drop the apostrophe
         return "fielders_choice", x
     if re.search(r"reached on (?:an? )?(?:throwing |fielding )?error", low):
         return "reached_on_error", x
@@ -166,11 +182,16 @@ def _decompose(desc: str) -> "dict":
         # roster move (defensive change / pitching change / pinch hitter-runner);
         # no batter/count/RBI to lift -- keep the raw description.
         out["play_type"] = "substitution"
+    elif plow.rstrip(". ") == "no play":  # a row the 2020 pages print with nothing happening
+        out["play_type"] = "other"
     else:
         m = _LEADNAME_RE.match(primary)
         batter, rest = (m.group(1), m.group(2)) if m else (None, primary)
         out["batter"] = batter
         ptype, extra = _classify(rest)
+        if ptype == "runner_advance" and len(clauses) > 1:
+            # run-on pages put the cause after the LAST runner ("... advanced to third on a wild pitch.")
+            ptype, extra = _classify(desc[len(batter or "") :])
         out["play_type"] = ptype
         out.update(extra)
 
@@ -208,8 +229,9 @@ def _decompose(desc: str) -> "dict":
         if out["is_out"]:
             out["outs_on_play"] += 1
 
-    # runner clauses
-    for c in clauses[1:]:
+    # runner clauses; a row led by a runner's advance ("Fogel, A. advanced to second Kaler, K. ...") counts it too
+    lead_runner = bool(_ADVANCED_RE.match(primary))
+    for c in clauses if lead_runner else clauses[1:]:
         sc = _SCORED_RE.match(c)
         if sc:
             out["runs_scored"] += 1
@@ -218,6 +240,11 @@ def _decompose(desc: str) -> "dict":
         ac = _ADVANCED_RE.match(c)
         if ac:
             out["runners_advanced"].append(f"{ac.group(1)}->{ac.group(2)}")
+            if _THEN_SCORED_RE.search(c):
+                out["runs_scored"] += 1
+                out["scoring_runners"].append(ac.group(1))
+            elif _OUT_RE.search(c.lower()):  # "BIRKOFER advanced to third, out at home rf to ss to c."
+                out["outs_on_play"] += 1
             continue
         sh = re.match(rf"^({_NAME})\s+stole home", c)  # a steal of home is a run
         if sh:
@@ -226,6 +253,14 @@ def _decompose(desc: str) -> "dict":
             continue
         if _OUT_RE.search(c.lower()):
             out["outs_on_play"] += 1
+    # a row that opens with its runner scoring ("Mihos, D. scored on a wild pitch.") is a run too.
+    if (ps := _SCORED_RE.match(primary)) and out["play_type"] != "home_run":
+        out["runs_scored"] += 1
+        out["scoring_runners"].append(ps.group(1))
+    elif out["batter"] and not lead_runner and out["play_type"] != "home_run" and _THEN_SCORED_RE.search(primary):
+        # the batter comes all the way round: "Vitaletti tripled to center field, scored on a throwing error"
+        out["runs_scored"] += 1
+        out["scoring_runners"].append(out["batter"])
     # on a home run the batter also scores, but NCAA text only lists the runners.
     if out["play_type"] == "home_run" and out["batter"]:
         out["runs_scored"] += 1
