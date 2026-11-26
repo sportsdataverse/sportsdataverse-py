@@ -1,10 +1,10 @@
 ---
-title: "WNBA — additional Python functions — Analytics: wnba_player–wnba_team"
-sidebar_label: "Analytics: wnba_player–wnba_team"
+title: "WNBA — additional Python functions — Analytics: wnba_player–wnba_situational"
+sidebar_label: "Analytics: wnba_player–wnba_situational"
 sidebar_position: 9
-description: "WNBA — additional Python functions — Analytics: wnba_player–wnba_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — additional Python functions — Analytics: wnba_player–wnba_situational — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WNBA — additional Python functions — Analytics: wnba_player–wnba_team
+# WNBA — additional Python functions — Analytics: wnba_player–wnba_situational
 
 ### wnba_player_season_box_rates {#wnba_player_season_box_rates}
 
@@ -269,6 +269,168 @@ One row per `(season, team_id, player_id_a, player_id_b)` (`player_id_a` the sma
 | `off_rtg_neither` | Float64 | Offensive rating with neither A nor B on the floor: pts_neither per 100 poss_neither; null with no possessions. |
 | `def_rtg_neither` | Float64 | Defensive rating with neither A nor B on the floor: opp_pts_neither per 100 opp_poss_neither; null with no possessions. |
 | `net_rtg_neither` | Float64 | Net rating with neither A nor B on the floor: off_rtg_neither - def_rtg_neither; null when either is null. |
+
+### wnba_playoff_series {#wnba_playoff_series}
+
+`wnba_playoff_series(seasons: 'int | list[int]', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA postseason games keyed to their series (league_id='10'). See sportsdataverse.nba.nba_playoff_series.nba_playoff_series.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per postseason game (ESPN `season_type` 3): `season`, `series_id`, `round` (1 = first round .. 4 = Finals, from ESPN's `type_abbreviation`; null where ESPN gives none), `round_code`, `round_name` (the game headline without "Game N"), `game_number` (the headline's "Game N"; tip-off order in a series with a headline lacking one), `game_id`, `game_date`, `completed`, the home and away `team_id` / `abbreviation` / `display_name` / `score`, `winner_team_id` (null until final), `team_a_id`, `team_b_id`, `team_a_wins` / `team_b_wins` (the series score after this game), and on every row of the series `series_games`, `decided` and `series_winner_team_id` (null until decided): the series' outcome as of the release, not as of that game, so they leak the result into an earlier game's row. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25; the WNBA season is its calendar year). |
+| `series_id` | String | Series key: '{season}-{lower ESPN team id}-{higher ESPN team id}'. A pair of teams meets at most once per postseason, so the pair is the series. |
+| `round` | Int64 | Round number from ESPN's type_abbreviation: 1 first round, 2 second round (NBA conference semifinals), 3 semifinals (NBA conference finals), 4 Finals; null where ESPN gives no round (older seasons). |
+| `round_code` | String | ESPN's type_abbreviation for the round (RD16, QTR, SEMI, FINAL); null where it carries none. |
+| `round_name` | String | The round as ESPN's game headline names it, without its 'Game N' (the latest game's headline in the series). |
+| `game_number` | Int64 | Game number within the series: the "Game N" of the ESPN headline, so a game missing from the release leaves a gap; tip-off order for the whole series when one of its headlines has no number. |
+| `game_id` | Int64 | ESPN game id. |
+| `game_date` | String | Game date (US). |
+| `completed` | Boolean | True when the game is final. |
+| `home_team_id` | Int64 | Home team's ESPN team id. |
+| `home_abbreviation` | String | Home team's abbreviation. |
+| `home_display_name` | String | Home team's display name. |
+| `home_score` | Int64 | Home points (null before tip-off). |
+| `away_team_id` | Int64 | Away team's ESPN team id. |
+| `away_abbreviation` | String | Away team's abbreviation. |
+| `away_display_name` | String | Away team's display name. |
+| `away_score` | Int64 | Away points (null before tip-off). |
+| `winner_team_id` | Int64 | The game winner's ESPN team id; null until the game is final. |
+| `team_a_id` | Int64 | ESPN team id of game 1's home team (the side with home court). |
+| `team_b_id` | Int64 | ESPN team id of the other side. |
+| `team_a_wins` | Int64 | team_a's series wins after this game (finals up to and including it). |
+| `team_b_wins` | Int64 | team_b's series wins after this game. |
+| `series_games` | Int64 | Games listed in the series so far (played and scheduled); the same on every row of the series. |
+| `decided` | Boolean | True once the series leader has the wins to clinch (NBA: four, every round since 2003; WNBA: the Finals only, two through 2004, three 2005-2024, four from 2025) or plays a later series that postseason. The final outcome as of the release, repeated on every row of the series, not as of that game: an earlier game's row already shows it, so never use it as a feature for that game. |
+| `series_winner_team_id` | Int64 | The series winner's ESPN team id; null until decided. The final outcome as of the release, repeated on every row of the series, not as of that game: an earlier game's row already shows it, so never use it as a feature for that game. |
+
+### wnba_playoff_series_players {#wnba_playoff_series_players}
+
+`wnba_playoff_series_players(seasons: 'int | list[int]', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA player totals per playoff series against the regular season (league_id='10'). See sportsdataverse.nba.nba_playoff_series.nba_playoff_series_players.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per player who played (minutes above zero) in a final game of the series, keyed `(season, series_id, team_id, athlete_id)` with `athlete_display_name`: `games`, `min` and the summed counts as `nba_playoff_series_teams`; `<stat>_pg` per game for `min`, `pts`, `reb`, `ast`, `stl`, `blk`, `tov` and `fg3m`, plus `ts_pct` (`PTS / (2 * (FGA + 0.44 * FTA))`); `reg_games` and `reg_<stat>_pg` / `reg_ts_pct` over the player's regular season (every team played for; null with none); and `<stat>_pg_diff` / `ts_pct_diff`, series minus regular season.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25; the WNBA season is its calendar year). |
+| `series_id` | String | Series key: '{season}-{lower ESPN team id}-{higher ESPN team id}'. A pair of teams meets at most once per postseason, so the pair is the series. |
+| `team_id` | Int64 | ESPN team id of the player's team in the series. |
+| `athlete_id` | Int64 | ESPN athlete id. |
+| `athlete_display_name` | String | The player's name. |
+| `games` | Int64 | Series games played (not marked did-not-play, with minutes or any box count). |
+| `min` | Float64 | Total minutes in the series. |
+| `pts` | Int64 | Total points in the series: the sum of the player's ESPN game boxes. |
+| `fgm` | Int64 | Total field goals made in the series: the sum of the player's ESPN game boxes. |
+| `fga` | Int64 | Total field goals attempted in the series: the sum of the player's ESPN game boxes. |
+| `fg3m` | Int64 | Total three-pointers made in the series: the sum of the player's ESPN game boxes. |
+| `fg3a` | Int64 | Total three-pointers attempted in the series: the sum of the player's ESPN game boxes. |
+| `ftm` | Int64 | Total free throws made in the series: the sum of the player's ESPN game boxes. |
+| `fta` | Int64 | Total free throws attempted in the series: the sum of the player's ESPN game boxes. |
+| `oreb` | Int64 | Total offensive rebounds in the series: the sum of the player's ESPN game boxes. |
+| `dreb` | Int64 | Total defensive rebounds in the series: the sum of the player's ESPN game boxes. |
+| `reb` | Int64 | Total rebounds in the series: the sum of the player's ESPN game boxes. |
+| `ast` | Int64 | Total assists in the series: the sum of the player's ESPN game boxes. |
+| `stl` | Int64 | Total steals in the series: the sum of the player's ESPN game boxes. |
+| `blk` | Int64 | Total blocks in the series: the sum of the player's ESPN game boxes. |
+| `tov` | Int64 | Total turnovers in the series: the sum of the player's ESPN game boxes. |
+| `pf` | Int64 | Total personal fouls in the series: the sum of the player's ESPN game boxes. |
+| `min_pg` | Float64 | Minutes per series game played. |
+| `pts_pg` | Float64 | Points per series game played. |
+| `reb_pg` | Float64 | Total rebounds per series game played. |
+| `ast_pg` | Float64 | Assists per series game played. |
+| `stl_pg` | Float64 | Steals per series game played. |
+| `blk_pg` | Float64 | Blocks per series game played. |
+| `tov_pg` | Float64 | Turnovers per series game played. |
+| `fg3m_pg` | Float64 | Three-pointers made per series game played. |
+| `ts_pct` | Float64 | True shooting in the series: PTS / (2 * (FGA + 0.44 * FTA)); null with no attempts. |
+| `reg_games` | Int64 | Regular-season games played (every team the player played for that season); null with none. |
+| `reg_min_pg` | Float64 | Minutes per regular-season game played. |
+| `reg_pts_pg` | Float64 | Points per regular-season game played. |
+| `reg_reb_pg` | Float64 | Total rebounds per regular-season game played. |
+| `reg_ast_pg` | Float64 | Assists per regular-season game played. |
+| `reg_stl_pg` | Float64 | Steals per regular-season game played. |
+| `reg_blk_pg` | Float64 | Blocks per regular-season game played. |
+| `reg_tov_pg` | Float64 | Turnovers per regular-season game played. |
+| `reg_fg3m_pg` | Float64 | Three-pointers made per regular-season game played. |
+| `reg_ts_pct` | Float64 | True shooting over the player's regular season. |
+| `min_pg_diff` | Float64 | min_pg - reg_min_pg: the series against the player's regular season (positive is up). |
+| `pts_pg_diff` | Float64 | pts_pg - reg_pts_pg: the series against the player's regular season (positive is up). |
+| `reb_pg_diff` | Float64 | reb_pg - reg_reb_pg: the series against the player's regular season (positive is up). |
+| `ast_pg_diff` | Float64 | ast_pg - reg_ast_pg: the series against the player's regular season (positive is up). |
+| `stl_pg_diff` | Float64 | stl_pg - reg_stl_pg: the series against the player's regular season (positive is up). |
+| `blk_pg_diff` | Float64 | blk_pg - reg_blk_pg: the series against the player's regular season (positive is up). |
+| `tov_pg_diff` | Float64 | tov_pg - reg_tov_pg: the series against the player's regular season (positive is up). |
+| `fg3m_pg_diff` | Float64 | fg3m_pg - reg_fg3m_pg: the series against the player's regular season (positive is up). |
+| `ts_pct_diff` | Float64 | ts_pct - reg_ts_pct. |
+
+### wnba_playoff_series_teams {#wnba_playoff_series_teams}
+
+`wnba_playoff_series_teams(seasons: 'int | list[int]', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+WNBA team totals per playoff series (league_id='10'). See sportsdataverse.nba.nba_playoff_series.nba_playoff_series_teams.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  |  |
+| `league_id` | `str` | `'10'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+Two rows per series with a final game, keyed `(season, series_id, team_id)` with `opponent_team_id` and `team_abbreviation`: `games`, `wins`, `losses`, `pts`, `opp_pts` and the summed counts `fgm`, `fga`, `fg3m`, `fg3a`, `ftm`, `fta`, `oreb`, `dreb`, `reb`, `ast`, `stl`, `blk`, `tov`, `pf` over the series' final games.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (2025 is 2024-25; the WNBA season is its calendar year). |
+| `series_id` | String | Series key: '{season}-{lower ESPN team id}-{higher ESPN team id}'. A pair of teams meets at most once per postseason, so the pair is the series. |
+| `team_id` | Int64 | ESPN team id. |
+| `opponent_team_id` | Int64 | The opponent's ESPN team id. |
+| `team_abbreviation` | String | Team abbreviation. |
+| `games` | Int64 | Final games in the series. |
+| `wins` | Int64 | Series wins. |
+| `losses` | Int64 | Series losses. |
+| `opp_pts` | Int64 | Opponent points over the series' final games. |
+| `pts` | Int64 | Total points over the series' final games: the sum of the team's ESPN game boxes. |
+| `fgm` | Int64 | Total field goals made over the series' final games: the sum of the team's ESPN game boxes. |
+| `fga` | Int64 | Total field goals attempted over the series' final games: the sum of the team's ESPN game boxes. |
+| `fg3m` | Int64 | Total three-pointers made over the series' final games: the sum of the team's ESPN game boxes. |
+| `fg3a` | Int64 | Total three-pointers attempted over the series' final games: the sum of the team's ESPN game boxes. |
+| `ftm` | Int64 | Total free throws made over the series' final games: the sum of the team's ESPN game boxes. |
+| `fta` | Int64 | Total free throws attempted over the series' final games: the sum of the team's ESPN game boxes. |
+| `oreb` | Int64 | Total offensive rebounds over the series' final games: the sum of the team's ESPN game boxes. |
+| `dreb` | Int64 | Total defensive rebounds over the series' final games: the sum of the team's ESPN game boxes. |
+| `reb` | Int64 | Total rebounds over the series' final games: the sum of the team's ESPN game boxes. |
+| `ast` | Int64 | Total assists over the series' final games: the sum of the team's ESPN game boxes. |
+| `stl` | Int64 | Total steals over the series' final games: the sum of the team's ESPN game boxes. |
+| `blk` | Int64 | Total blocks over the series' final games: the sum of the team's ESPN game boxes. |
+| `tov` | Int64 | Total turnovers over the series' final games: the sum of the team's ESPN game boxes. |
+| `pf` | Int64 | Total personal fouls over the series' final games: the sum of the team's ESPN game boxes. |
 
 ### wnba_playtype_ratings {#wnba_playtype_ratings}
 
@@ -637,138 +799,3 @@ One row per `(season, team_id, family, split)`: `games`, `minutes` / `seconds`, 
 | `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
 | `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
 | `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-### wnba_situational_team_games {#wnba_situational_team_games}
-
-`wnba_situational_team_games(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', top_n: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA team splits by situation, one game at a time (league_id='10'). See sportsdataverse.nba.nba_situational.nba_situational_team_games.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `season_type` | `str` | `'regular-season'` |  |
-| `top_n` | `int \| None` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, team_id, game_id, family, split)`, the columns of `nba_situational_team` plus `game_id` (the stats.nba.com game id); `games` is 1. A split the team did not play in the game has no row. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `game_id` | String | stats.wnba.com game id. |
-| `family` | String | The split family: all, clutch, period, half, garbage, score, venue, opponent, play_type or chance; within a family the splits add up to the all row. |
-| `split` | String | The split: all; clutch / not_clutch; p1..p4 / ot; h1 / h2 / ot; garbage_time / not_garbage_time; leading / tied / trailing; home / away / neutral; vs_top / vs_rest; transition / half_court; second_chance / first_chance. |
-| `games` | Int64 | 1: the row is one game (summed over a team-season's rows it is the season row's games). |
-| `minutes` | Float64 | Game-clock minutes of the split's possessions (seconds / 60). |
-| `seconds` | Float64 | Game-clock seconds of the split's possessions: each possession's start clock minus its end clock. |
-| `poss` | Int64 | Offensive possessions in the split. |
-| `opp_poss` | Int64 | Defensive possessions in the split. |
-| `pts` | Int64 | Points scored on the offensive possessions. |
-| `opp_pts` | Int64 | Points allowed on the defensive possessions. |
-| `plus_minus` | Int64 | Plus-minus over the split: pts - opp_pts. |
-| `off_rtg` | Float64 | Offensive rating: pts per 100 poss; null with no offensive possessions. |
-| `def_rtg` | Float64 | Defensive rating: opp_pts per 100 opp_poss; null with no defensive possessions. |
-| `net_rtg` | Float64 | Net rating: off_rtg - def_rtg; null when either is null. |
-| `off_rtg_n` | Int64 | Sample size of off_rtg: poss. |
-| `def_rtg_n` | Int64 | Sample size of def_rtg: opp_poss. |
-| `net_rtg_n` | Int64 | Sample size of net_rtg: poss + opp_poss. |
-
-### wnba_team_clutch {#wnba_team_clutch}
-
-`wnba_team_clutch(season: 'int', *, league_id: 'str' = '10', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
-
-No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-### wnba_team_game_four_factors {#wnba_team_game_four_factors}
-
-`wnba_team_game_four_factors(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA per team and game four factors in points against the league average (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_game_four_factors.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `season_type` | `str` | `'regular-season'` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, team_id, game_id)`. `team_id` is the stats.nba.com team id (Int64), `game_id` the stats.nba.com game id. `poss` / `pts` are the team's counted possessions and points, `exp_pts` is `lg_ppp * poss` and `pts_vs_exp` the difference; the five `*_pts` columns add up to it (they are null when a league value they use has a zero denominator). `lg_ppp`, `lg_efg_pct`, `lg_tov_pct`, `lg_orb_pct`, `lg_ft_rate`, `lg_ft_pct` and `chance_pts` are the season's league values the factors are priced with. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season (the calendar year). |
-| `team_id` | Int64 | stats.wnba.com team id. |
-| `game_id` | String | stats.wnba.com game id. |
-| `poss` | Int64 | The team's offensive possessions in the game, counted from possession rows. |
-| `pts` | Int64 | Points scored on the team's offensive possessions in the game. |
-| `exp_pts` | Float64 | Points a league-average offense scores on the team's counted possessions, lg_ppp x poss. |
-| `pts_vs_exp` | Float64 | Points above (+) or below (-) a league-average offense on the same possessions, pts - exp_pts. The four *_pts factors and residual_pts add up to it exactly; they are null (and do not) when a league value they use has a zero denominator or the game has no counts. |
-| `shooting_pts` | Float64 | Points from shooting: 2 x (eFG% - lg_efg_pct) x FGA, the same shots above a league-average shooter, plus chance_pts x lg_orb_pct x the rebound chances above the league's per FGA: the misses a league-average offense gets back. |
-| `turnover_pts` | Float64 | Points from turnovers: (lg_tov_pct x poss - TOV) x chance_pts, the turnovers saved, each a chance. |
-| `rebounding_pts` | Float64 | Points from offensive rebounding: (OREB - lg_orb_pct x (OREB + opponent DREB)) x chance_pts, the extra offensive rebounds on the team's own rebound chances, each a new chance. |
-| `free_throw_pts` | Float64 | Points from free throws: (FTA - lg_ft_rate x FGA) x (lg_ft_pct - 0.44 x chance_pts), the extra free throws at a league-average make less the share of a chance each uses, plus FTM - lg_ft_pct x FTA, the makes above league FT%. |
-| `residual_pts` | Float64 | The remainder, exactly chance_pts x (box_poss - poss - FGA x the league's box_poss - poss per FGA), box_poss = FGA - OREB + TOV + 0.44 FTA: the counted possessions' distance from the box estimate beyond the league's. Sums to zero over the league. |
-| `lg_ppp` | Float64 | League points per counted possession in the season, over the priced team-games (those with all their counts). |
-| `lg_efg_pct` | Float64 | League effective field-goal percentage in the season, (FGM + 0.5 3PM) / FGA over the priced team-games (those with all their counts). |
-| `lg_tov_pct` | Float64 | League turnovers per counted possession in the season, over the priced team-games (those with all their counts). |
-| `lg_orb_pct` | Float64 | League offensive-rebound percentage in the season, OREB / (OREB + opponent DREB) over the priced team-games (those with all their counts). |
-| `lg_ft_rate` | Float64 | League free-throw rate in the season, FTA / FGA over the priced team-games (those with all their counts). |
-| `lg_ft_pct` | Float64 | League free-throw percentage in the season, FTM / FTA over the priced team-games (those with all their counts). |
-| `chance_pts` | Float64 | Points a chance is worth, lg_ppp / (1 - lg_tov_pct): a possession that does not end in a turnover. The price of a turnover saved and of an extra offensive rebound. |
-
-### wnba_team_game_possessions {#wnba_team_game_possessions}
-
-`wnba_team_game_possessions(seasons: 'int | list[int]', *, league_id: 'str' = '10', season_type: 'str | list[str]' = 'regular-season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-WNBA per team and game possession counts (league_id='10'). See sportsdataverse.nba.nba_team_season_rates.nba_team_game_possessions.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  |  |
-| `league_id` | `str` | `'10'` |  |
-| `season_type` | `str \| list[str]` | `'regular-season'` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-One row per `(season, team_id, game_id, split)`: a game has an `all` row, a `home` or `away` row (neither at a neutral site) and, when it has clutch possessions, `close` and `clutch` rows. `team_id` is the stats.nba.com team id (Int64), `game_id` the stats.nba.com game id. `poss` / `opp_poss` are the team's offensive / defensive possessions, `pts` / `opp_pts` their points and `seconds` the game clock they used. `season_type` is the game's schedule type, so a list's rows of one type add up to that type's `nba_team_season_rates` row. Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | WNBA season (its calendar year). |
-| `team_id` | Int64 | stats.nba.com team id (the 10-digit franchise id). |
-| `game_id` | String | stats.wnba.com game id. The game this row's possessions are from. |
-| `split` | String | The season table's split this game is in: all (every game); home or away (neither at a neutral site); close and clutch when the game has clutch possessions. A team-season's rows of a split add up to its wnba_team_season_rates row. |
-| `poss` | Int64 | Offensive possessions in the split, counted from possession rows. |
-| `opp_poss` | Int64 | Defensive possessions in the split (the opponents' offensive possessions). |
-| `pts` | Int64 | Points scored on the team's offensive possessions in the split. Counted from each possession's made shots and free throws. |
-| `opp_pts` | Int64 | Points allowed on the team's defensive possessions in the split. |
-| `seconds` | Float64 | Game-clock seconds the team's possessions in the split used; pace over a set of games is regulation minutes x 60 x (poss + opp_poss) / 2 / summed seconds. |
-| `season_type` | String | The game's stats.wnba.com schedule type (regular-season, playoffs, preseason or play-in), the type the call asked for. Asked for a list, each type's rows add up to that type's season rates. |
