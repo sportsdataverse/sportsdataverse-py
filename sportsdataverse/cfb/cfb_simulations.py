@@ -330,12 +330,12 @@ def _ratings_expected_margin(
     margin_sd = d["margin_sd"] if margin_sd is None else margin_sd
 
     teams = r.select(_team_id(r, "team"))["team"].to_list()  # float ids join as "87", never "87.0"
-    rating = dict(zip(teams, r["rating"].cast(pl.Float64).to_list()))
+    rating = dict(zip(teams, r["rating"].cast(pl.Float64).to_list(), strict=True))
     r_home = np.asarray([rating.get(t, 0.0) for t in home_team], dtype=float)
     r_away = np.asarray([rating.get(t, 0.0) for t in away_team], dtype=float)
     n_games = np.full(len(home_team), np.nan)
     if has_games:
-        g = dict(zip(teams, r["games"].cast(pl.Float64).fill_null(float("nan")).to_list()))
+        g = dict(zip(teams, r["games"].cast(pl.Float64).fill_null(float("nan")).to_list(), strict=True))
         g_home = np.asarray([g.get(t, np.nan) for t in home_team], dtype=float)
         g_away = np.asarray([g.get(t, np.nan) for t in away_team], dtype=float)
         n_games = np.fmin(g_home, g_away)  # NaN-ignoring, like R pmin(na.rm = TRUE)
@@ -345,6 +345,21 @@ def _ratings_expected_margin(
         raise ValueError("margin_sd must be at least 0")
     expected = s * (r_home - r_away) + np.where(neutral == 1, 0.0, float(home_field))
     return expected, sd
+
+
+def _sample_margins(
+    expected: np.ndarray, sd: np.ndarray, postseason: np.ndarray, rng: np.random.Generator
+) -> np.ndarray:
+    """Normal draws rounded away from zero; a postseason 0 is re-broken to +-1 by ``Phi(expected / sd)``."""
+    raw = rng.normal(expected, sd)
+    res = np.where(raw > 0, np.ceil(raw), np.where(raw < 0, np.floor(raw), 0.0))
+    tie = postseason & (res == 0.0)
+    if tie.any():
+        with np.errstate(invalid="ignore", divide="ignore"):
+            z = expected[tie] / sd[tie]
+        wp = np.asarray([0.5 if np.isnan(v) else 0.5 * (1.0 + math.erf(v / math.sqrt(2.0))) for v in z])
+        res[tie] = np.where(rng.uniform(0.0, 1.0, int(tie.sum())) < wp, 1.0, -1.0)
+    return res
 
 
 def cfb_ratings_compute_results(
@@ -362,35 +377,19 @@ def cfb_ratings_compute_results(
 ) -> dict[str, pl.DataFrame]:
     """Results generator driven by fixed team ratings (points, adjusted EPA or raw EPA).
 
-    An alternative to the default :func:`cfb_compute_results` (dynamic ELO): each unplayed
-    ``week == week_num`` game gets a home margin drawn from
-    ``Normal(scale * (rating_home - rating_away) + home_field, margin_sd)`` (no ``home_field`` at a
-    neutral site), rounded away from zero. A postseason draw of exactly 0 (in practice only with
-    ``margin_sd = 0``) is re-decided by the win probability ``Phi(expected / margin_sd)`` with a
-    1-point margin. Ratings stay fixed, so ``teams`` passes through unchanged. Same semantics and
-    defaults as cfbseedR's ``cfbseedR_ratings_compute_results()``.
-
-    ``scale`` and ``margin_sd`` are a scalar or ``"lo-hi"`` games-played buckets. A game takes the
-    bucket of its less-observed team (the smaller ``games`` of the two; a team missing from
-    ``ratings`` or with a null count does not count), then the bucket with the largest lower bound
-    at or below that count; below every bucket takes the bottom one, and a game with no count (no
-    ``games`` column, say) takes the top one, treating the ratings as full-season ratings.
-
-    Defaults (buckets 0-3 / 4-5 / 6-7 / 8-20 games):
-
-    * ``"points"`` (points per game vs an average team): scale 1.0929 / 0.9234 / 1.0305 /
-      1.0628, margin SD 16.968 / 16.638 / 16.231 / 16.451, home field 2.376.
-    * ``"adj_epa"`` (opponent-adjusted net EPA/play, the scale of :func:`cfb_ratings` ``adj_net``):
-      the modern-era ``slope_by_games``, ``margin_sd`` and ``hfa_points`` of
-      :data:`sportsdataverse.cfb.cfb_prediction_constants.CFB_CONSTANTS`.
-    * ``"raw_epa"`` (net EPA/play, no adjustment): scale 28.585 / 34.321 / 45.097 / 52.025,
-      margin SD 17.931 / 17.240 / 16.981 / 17.393, home field 2.376.
-
-    The points and raw-EPA values are cfbseedR's walk-forward fit
-    (``data-raw/cfb_generator_constants.R``, FBS-vs-FBS 2014-2025, 2020 out). In that test the ELO
-    margin formula on CollegeFootballData's pregame ELO had the smallest error overall (MAE 12.94
-    vs 13.10 for a least-squares points rating); from about six games on the points rating is
-    level with it, which makes it a reasonable input for a late-season or postseason simulation.
+    An alternative to :func:`cfb_compute_results` (dynamic ELO), with cfbseedR's
+    ``cfbseedR_ratings_compute_results()`` semantics and defaults: each unplayed ``week == week_num``
+    game gets ``Normal(scale * (rating_home - rating_away) + home_field, margin_sd)`` (no home field at
+    a neutral site), rounded away from zero; a postseason draw of exactly 0 is re-decided by
+    ``Phi(expected / margin_sd)`` with a 1-point margin. Ratings are fixed; ``teams`` passes through.
+    ``scale`` / ``margin_sd`` buckets use the smaller ``games`` of the two teams (unrated or null counts
+    skipped), then the bucket with the largest lower bound at or below it (bottom bucket below all;
+    top bucket when no count). Defaults: ``"adj_epa"`` (the scale of :func:`cfb_ratings` ``adj_net``)
+    reads the modern-era ``slope_by_games`` / ``margin_sd`` / ``hfa_points`` of
+    :data:`sportsdataverse.cfb.cfb_prediction_constants.CFB_CONSTANTS`; ``"points"`` and ``"raw_epa"``
+    are ``_RATINGS_DEFAULTS``, cfbseedR's walk-forward fit (FBS-vs-FBS 2014-2025). In that test the ELO
+    formula on CollegeFootballData's pregame ELO had the smallest error (MAE 12.94 vs 13.10 for a
+    least-squares points rating); from about six games on the points rating is level with it.
 
     Args:
         teams: Per-sim team table (``sim``, ``team``, ``conference``); returned unchanged.
@@ -413,9 +412,8 @@ def cfb_ratings_compute_results(
         week's previously unplayed games.
 
     Raises:
-        ValueError: On an unknown ``rating_type``, a ``ratings`` frame without ``team`` /
-            ``rating``, a missing or non-numeric rating, a duplicated team, a negative or
-            non-numeric ``games``, malformed buckets, or a negative ``margin_sd``.
+        ValueError: On an unknown ``rating_type``, missing ``team`` / ``rating`` columns, a null, NaN or
+            duplicated rating, a bad ``games`` count, malformed or NaN constants, or a negative ``margin_sd``.
 
     Example:
         Fill week 3 from points ratings::
@@ -458,14 +456,8 @@ def cfb_ratings_compute_results(
         home_field=home_field,
         margin_sd=margin_sd,
     )
-    raw = rng.normal(expected, sd)
-    res = np.where(raw > 0, np.ceil(raw), np.where(raw < 0, np.floor(raw), 0.0))
-    post_tie = (sub["game_type"].fill_null("REG").to_numpy() != "REG") & (res == 0.0)
-    if post_tie.any():
-        with np.errstate(invalid="ignore", divide="ignore"):
-            z = expected[post_tie] / sd[post_tie]
-        wp = np.asarray([0.5 if np.isnan(v) else 0.5 * (1.0 + math.erf(v / math.sqrt(2.0))) for v in z])
-        res[post_tie] = np.where(rng.uniform(0.0, 1.0, int(post_tie.sum())) < wp, 1.0, -1.0)
+    postseason = sub["game_type"].fill_null("REG").to_numpy() != "REG"
+    res = _sample_margins(expected, sd, postseason, rng)
     filled = g["result"].to_numpy(allow_copy=True).astype(float, copy=True)
     filled[idx] = res
     games_out = g.with_columns(pl.Series("result", filled, dtype=pl.Float64).fill_nan(None))
