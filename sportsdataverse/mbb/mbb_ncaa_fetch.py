@@ -663,6 +663,21 @@ _TERMS_DWELL_MS = 10_000
 # Failed click-throughs tolerated per fetch before the form, not the proxy, is
 # the likely cause (see _get_with_rotation).
 _ACCEPT_FAILURES_MAX = 3
+_SERVER_ERRORS_MAX = 3  # likewise for clean HTTP 5xx answers: then the page is broken, not the proxy
+
+
+class _PageServerError(AssetFetchError):
+    """stats.ncaa.org answered a page with HTTP 5xx on several proxies (baseball 2012 contest 780704,
+    2026-11-26). Still a failed fetch, but the session is healthy: a capture loop can move on."""
+
+
+class _ServerErrorAnswer(RuntimeError):
+    """One clean HTTP 5xx on this proxy: rotated on, and counted per fetch like _TermsAcceptError."""
+
+
+def _is_server_error(status: int, text: str) -> bool:
+    """Is this a 5xx the origin itself sent (no ban marker, no challenge)? The same from every proxy."""
+    return status >= 500 and _ban_check(text) == "clean" and not _is_challenge(text)
 
 
 class _TermsGateError(AssetFetchError):
@@ -686,6 +701,14 @@ class _SessionDeniedError(RuntimeError):
     ordinary transport error: the fetch layer rotates on it and does not retire the
     proxy. The observed denials follow the session, and the ~400-byte page was never
     retired before either."""
+
+
+# Failures that, on this many proxies in one fetch, are the page's and not the proxy's: raise the
+# paired error instead of sweeping the pool (~1 h per URL at 50 proxies, ~2.5 h at 200).
+_STOP_AFTER: dict[type[Exception], tuple[int, type[AssetFetchError]]] = {
+    _TermsAcceptError: (_ACCEPT_FAILURES_MAX, _TermsGateError),
+    _ServerErrorAnswer: (_SERVER_ERRORS_MAX, _PageServerError),
+}
 
 
 # Chromium's error for an in-page fetch() that died at the network layer. A
@@ -1003,7 +1026,9 @@ class _PlaywrightTransport:
                 if self.relaunch_backoff:  # same settle as a rotation relaunch (patchright EPIPE)
                     time.sleep(self.relaunch_backoff)
                 raise _SessionDeniedError(f"Akamai denied this browser session (HTTP 403 Access Denied): {url}")
-            if not _browser_response_unsolved(text):
+            if not _browser_response_unsolved(text) or _is_server_error(status, text):
+                # A short 5xx page is the origin's answer, not a stub; re-solving cannot change it
+                # (2026-11-26: a 643-byte HTTP 500 read as "bm-verify not passed" swept 200 proxies).
                 return status, text
             # The solve did NOT take -- either it never passed, or Akamai
             # re-challenged once _abck aged out. The old code set
@@ -1209,7 +1234,7 @@ class NcaaFetcher:
         pool = self._pool or [""]
         attempts = len(pool) + self.config.max_retries
         last_err = "no proxies in pool"
-        accept_failures = 0
+        repeats: dict[type[Exception], int] = {}
         self._tried.clear()
         for i in range(attempts):
             if i and self.config.rotation_backoff > 0:
@@ -1223,6 +1248,8 @@ class NcaaFetcher:
             proxies = {"http": proxy, "https": proxy} if proxy else {}
             try:
                 status, text = transport(url, proxies, headers)
+                if _is_server_error(status, text):
+                    raise _ServerErrorAnswer(f"stats.ncaa.org answered HTTP {status}: {url}")
             except (ImportError, _TermsGateError):
                 # A missing optional dependency is a SETUP error, not a transport
                 # error, and no amount of proxy rotation installs patchright.
@@ -1243,14 +1270,8 @@ class NcaaFetcher:
                     type(exc).__name__,
                     _CREDS_RE.sub("://***@", str(exc))[:300],
                 )
-                if isinstance(exc, _TermsAcceptError):
-                    # One is usually the proxy; the same failure on several proxies
-                    # is the form itself -- stop instead of sweeping the whole pool
-                    # (~1 h per URL at 50 proxies).
-                    accept_failures += 1
-                    if accept_failures >= _ACCEPT_FAILURES_MAX:
-                        raise _TermsGateError(f"{exc} (on {accept_failures} proxies)") from exc
-                self._rotate("transport error", jump=isinstance(exc, _SessionDeniedError))
+                if (stop := self._after_transport_error(exc, repeats)) is not None:
+                    raise stop from exc
                 continue
             if _is_terms_gate(text):
                 # Only a browser transport can try the Terms gate (_raw_fetch).
@@ -1298,6 +1319,17 @@ class NcaaFetcher:
         raise AssetFetchError(
             f"NCAA fetch failed after rotating proxies (pool exhausted, {attempts} attempts): {url}: {last_err}"
         )
+
+    def _after_transport_error(self, exc: Exception, repeats: dict[type[Exception], int]) -> AssetFetchError | None:
+        """Rotate after a transport error, or return the error to raise once a :data:`_STOP_AFTER`
+        failure has happened on enough proxies in this fetch (*repeats*) to be the page's."""
+        if type(exc) in _STOP_AFTER:
+            limit, error = _STOP_AFTER[type(exc)]
+            repeats[type(exc)] = n = repeats.get(type(exc), 0) + 1
+            if n >= limit:
+                return error(f"{exc} (on {n} proxies)")
+        self._rotate("transport error", jump=isinstance(exc, _SessionDeniedError))
+        return None
 
     def _count_fetch(self) -> None:
         """Count one answered request on this proxy; rotate once it reaches ``rotate_every``."""

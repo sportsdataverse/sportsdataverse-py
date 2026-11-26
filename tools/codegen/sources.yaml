@@ -887,6 +887,8 @@ categories:
       - sportsdataverse._common.situational_splits
       - sportsdataverse._common.team_strength
       - sportsdataverse._common.team_luck
+      - sportsdataverse._common.playoff_series
+      - sportsdataverse._common.tournament_runs
       - sportsdataverse._common.shot_zone_profiles
       - sportsdataverse._common.player_war
       - sportsdataverse._common.coach_seasons
@@ -1038,6 +1040,8 @@ categories:
       - sportsdataverse.wnba.wnba_team_strength
       - sportsdataverse.nba.nba_team_luck
       - sportsdataverse.wnba.wnba_team_luck
+      - sportsdataverse.nba.nba_playoff_series
+      - sportsdataverse.wnba.wnba_playoff_series
       - sportsdataverse.nba.nba_shot_zone_profiles
       - sportsdataverse.wnba.wnba_shot_zone_profiles
       - sportsdataverse.nba.nba_player_war
@@ -1059,6 +1063,8 @@ categories:
       - sportsdataverse.wbb.wbb_team_strength
       - sportsdataverse.mbb.mbb_team_luck
       - sportsdataverse.wbb.wbb_team_luck
+      - sportsdataverse.mbb.mbb_tournament_runs
+      - sportsdataverse.wbb.wbb_tournament_runs
       - sportsdataverse.mbb.mbb_shot_zone_profiles
       - sportsdataverse.wbb.wbb_shot_zone_profiles
       - sportsdataverse.mbb.mbb_player_war
