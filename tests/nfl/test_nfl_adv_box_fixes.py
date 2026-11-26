@@ -70,6 +70,7 @@ def test_kneels_are_not_scrimmage_plays_and_leave_the_rush_rates(jax_ind):
     kneels = plays.filter(_t("kneel_down"))
     assert kneels.height == 3
     assert not kneels["scrimmage_play"].any()
+    assert not kneels["stuffed_run"].any() and not kneels["stopped_run"].any()  # 0-or-worse, but not runs
     rushes = plays.filter(_t("rush") & _t("scrimmage_play"))
     team = _rows(box, "team")[30]
     jax = rushes.filter(pl.col("pos_team") == 30)
