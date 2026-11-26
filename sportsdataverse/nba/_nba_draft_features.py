@@ -31,6 +31,7 @@ from typing import Callable, Optional
 import polars as pl
 
 from sportsdataverse._common_crosswalk_basketball import jaro_winkler, normalize_name
+from sportsdataverse.errors import SportsDataverseError
 
 FEATURE_SCHEMA: dict = {
     "college_espn_id": pl.Utf8,
@@ -75,10 +76,14 @@ def _seasons(years: list[int], back: int, first: int) -> list[int]:
 
 
 def _safe(fn: Callable[[], pl.DataFrame]) -> pl.DataFrame:
-    """A source with no published season (or no answer) contributes nothing."""
+    """A source with no published season (or no answer) contributes nothing.
+
+    Only a missing or unreachable source is absorbed (the library's own errors, and the OS-level
+    network errors under them); a bug in a loader or in this module still raises.
+    """
     try:
         out = fn()
-    except Exception:  # noqa: BLE001 -- descriptive columns: a missing source leaves them null, never raises
+    except (SportsDataverseError, OSError):  # descriptive columns: a missing source leaves them null
         return pl.DataFrame()
     return out if isinstance(out, pl.DataFrame) else pl.DataFrame()
 
@@ -151,7 +156,10 @@ def _college(picks: pl.DataFrame, loaders: dict) -> pl.DataFrame:
         pl.col("box_obpm").last().alias("col_obpm_last"),
         pl.col("box_dbpm").last().alias("col_dbpm_last"),
         pl.col("min").last().cast(pl.Float64).alias("col_min_last"),
-        ((pl.col("box_bpm") * pl.col("min")).sum() / pl.col("min").sum()).alias("col_bpm_career"),
+        # minutes-weighted over the seasons that have a BPM (a null-BPM season's minutes are not in the denominator)
+        ((pl.col("box_bpm") * pl.col("min")).sum() / pl.col("min").filter(pl.col("box_bpm").is_not_null()).sum()).alias(
+            "col_bpm_career"
+        ),
         pl.col("min").sum().cast(pl.Float64).alias("col_min_career"),
         pl.len().cast(pl.Int64).alias("col_seasons"),
         pl.col("team_id").last().alias("_team"),

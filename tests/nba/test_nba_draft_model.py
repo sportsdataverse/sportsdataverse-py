@@ -110,3 +110,30 @@ def test_gleague_bridge_empty_frame_no_crash(draft_2019, monkeypatch: pytest.Mon
     monkeypatch.setattr(mod, "nba_stats_leaguedashplayerstats", lambda season, league_id=None: pl.DataFrame())
     out = mod.nba_draft_model(2019, gleague_bridge=True)
     assert out.height == 60 and list(out.schema) == list(mod._SCHEMA)
+
+
+def test_col_bpm_career_weights_only_seasons_with_a_bpm(draft_2019, replay_sources, monkeypatch) -> None:
+    """A season with minutes but no BPM must not dilute the career BPM (it leaves the denominator).
+
+    Real 2019 slices; one multi-season player's earliest season has its BPM nulled.
+    """
+    feats = importlib.import_module("sportsdataverse.nba._nba_draft_features")
+    mod, _ = draft_2019
+    base = mod.nba_draft_model(2019, pre_draft_features=True)
+    multi = base.filter(pl.col("col_seasons") >= 2).sort("overall_pick").row(0, named=True)
+    value = pl.read_parquet(f"{FX}/value.parquet")
+    mine = value.filter(pl.col("player_id").cast(pl.Utf8) == multi["college_espn_id"]).sort("season")
+    first = mine["season"][0]
+    nulled = value.with_columns(
+        pl.when((pl.col("player_id").cast(pl.Utf8) == multi["college_espn_id"]) & (pl.col("season") == first))
+        .then(None)
+        .otherwise(pl.col("box_bpm"))
+        .alias("box_bpm")
+    )
+    loaders = feats._default_loaders() | {"value": lambda seasons: nulled}
+    monkeypatch.setattr(feats, "_default_loaders", lambda: loaders)
+    got = mod.nba_draft_model(2019, pre_draft_features=True).filter(pl.col("player_id") == multi["player_id"])
+    rest = mine.filter(pl.col("season") != first)
+    want = float((rest["box_bpm"] * rest["min"]).sum() / rest["min"].sum())
+    assert got["col_bpm_career"].item() == pytest.approx(want)
+    assert got["col_min_career"].item() == pytest.approx(float(mine["min"].sum()))  # minutes still count in total
