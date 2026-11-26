@@ -22,8 +22,14 @@ slug where the id is missing; ``run_id`` is ``"{season}-{tournament_key}-{team_i
 id). A game is in two runs, one per side.
 
 **Result.** A team is its tournament's ``champion`` when it won the tournament's last listed game
-(by tip-off) and that game is final; ``eliminated`` when it lost its last listed game; ``alive``
-otherwise. A final still to play is the last listed game, so nobody is champion before it.
+(by tip-off), that game is final and it is the only game on the tournament's last date;
+``eliminated`` when it lost its last listed game; ``alive`` otherwise. A final still to play is
+the last listed game, so nobody is champion before it, and a release whose last date holds two
+semifinals (the final not listed yet) names no champion. ``run_result`` and ``run_games`` are the
+run's outcome as of the release, on every row: never a feature for an earlier game.
+
+A bracket slot whose team ESPN has not named yet (a null team id) is in no run. A postseason game
+with neither a ``tournament_id`` nor a headline is in no run either.
 """
 
 from __future__ import annotations
@@ -136,7 +142,8 @@ def tournament_run_games(schedule: pl.DataFrame) -> pl.DataFrame:
         headlines carry; ``round_name`` the rest of the game's headline. ``home_away`` is
         ``neutral`` at a neutral site. ``wins`` / ``losses`` are the run's record after the game,
         ``run_games`` the games listed in the run (played and scheduled), and ``run_result``
-        (``champion``, ``eliminated`` or ``alive``) repeats on every row of the run.
+        (``champion``, ``eliminated`` or ``alive``) repeats on every row of the run: the run's
+        outcome as of the release, not as of that game. A side with a null team id is in no run.
 
     Raises:
         polars.exceptions.ColumnNotFoundError: If ``schedule`` lacks a column named above.
@@ -183,7 +190,7 @@ def tournament_run_games(schedule: pl.DataFrame) -> pl.DataFrame:
     tagged = (
         games.filter(pl.col("tournament_id").is_not_null() & (pl.col("slug") != ""))
         .group_by("season", "slug")
-        .agg(pl.col("tournament_id").mode().first().alias("tagged_id"))
+        .agg(pl.col("tournament_id").mode().sort().first().alias("tagged_id"))
     )
     games = (
         games.join(tagged, on=["season", "slug"], how="left")
@@ -205,6 +212,7 @@ def tournament_run_games(schedule: pl.DataFrame) -> pl.DataFrame:
         pl.col("event")
         .filter(pl.col("event") != "")
         .mode()
+        .sort()
         .first()
         .over("season", "tournament_key")
         .alias("tournament_name"),
@@ -250,7 +258,9 @@ def tournament_run_games(schedule: pl.DataFrame) -> pl.DataFrame:
         ]
     )
     rows = (
-        rows.with_columns(pl.format("{}-{}-{}", "season", "tournament_key", "team_id").alias("run_id"))
+        # a bracket slot whose team is not known yet is in no run (it would pool into one null run)
+        rows.filter(pl.col("team_id").is_not_null())
+        .with_columns(pl.format("{}-{}-{}", "season", "tournament_key", "team_id").alias("run_id"))
         .sort("season", "run_id", "game_date_time", "game_id", nulls_last=True)
         .with_columns(
             pl.int_range(1, pl.len() + 1).over("run_id").alias("game_number"),
@@ -267,16 +277,19 @@ def tournament_run_games(schedule: pl.DataFrame) -> pl.DataFrame:
 
 
 def _run_results(rows: pl.DataFrame) -> pl.DataFrame:
-    """``(run_id, run_result)``: the champion won the tournament's last listed game (a game to play has no winner)."""
+    """``(run_id, run_result)``: the champion won the tournament's last listed game, when that game is the only one
+    on the tournament's last date (a game to play has no winner; two semifinals on the last date mean the final is
+    not in the release yet)."""
     tournament = ["season", "tournament_key"]
     last_game = (
         rows.sort("game_date_time", "game_id", nulls_last=True)
         .group_by(tournament)
         .agg(
             pl.col("winner_team_id").last().alias("last_winner"),
+            pl.col("game_id").filter(pl.col("game_date") == pl.col("game_date").max()).n_unique().alias("last_day"),
         )
     )
-    champion = last_game.filter(pl.col("last_winner").is_not_null()).select(
+    champion = last_game.filter(pl.col("last_winner").is_not_null() & (pl.col("last_day") == 1)).select(
         *tournament, pl.col("last_winner").alias("team_id"), pl.lit(True).alias("champion")
     )
     per = rows.group_by("run_id").agg(
@@ -340,7 +353,9 @@ def tournament_run_players(games: pl.DataFrame, player_box: pl.DataFrame) -> pl.
     Args:
         games: :func:`tournament_run_games` output.
         player_box: ESPN player box rows for the season (``load_mbb_player_boxscore``), regular
-            season and the tournament games.
+            season and the tournament games: ``game_id``, ``season``, ``season_type``, ``athlete_id``,
+            ``athlete_display_name``, ``team_id``, ``minutes``, ``did_not_play`` and the
+            :data:`~sportsdataverse._common.playoff_series.SERIES_BOX_STATS` columns.
 
     Returns:
         :data:`RUN_PLAYERS_SCHEMA` rows, one per player who played in a final game of the run,

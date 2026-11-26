@@ -100,9 +100,20 @@ def test_the_ncaa_champion_and_the_kinds(lg: str) -> None:
     assert (champ["team_id"], champ["wins"], champ["losses"]) == (NCAA_CHAMPION[lg], 6, 0)
     assert ncaa.filter(pl.col("run_result") == "champion").height == 1
     assert ncaa.filter(pl.col("run_result") == "eliminated").height == 67
-    # every finished tournament has exactly one champion
+    # a tournament has one champion when its last listed date holds one game (its final), else none: the 2025
+    # women's release stops on 2025-03-10 (fixture README), so 11 conference tournaments and the WBIT end at a
+    # round of several games and name no champion; every men's tournament is complete
     tournaments = last.group_by("tournament_key").agg((pl.col("run_result") == "champion").sum().alias("champions"))
-    assert tournaments["champions"].unique().to_list() == [1]
+    one_final = (
+        _games(lg)
+        .unique("game_id")
+        .filter(pl.col("game_date") == pl.col("game_date").max().over("tournament_key"))
+        .group_by("tournament_key")
+        .agg((pl.len() == 1).alias("final"))
+    )
+    j = tournaments.join(one_final, on="tournament_key", validate="1:1")
+    assert (j["champions"] == j["final"].cast(pl.UInt32)).all()
+    assert j.filter(pl.col("final") == False).height == (0 if lg == "mbb" else 12)
     conference = last.filter(pl.col("tournament_kind") == "conference")
     assert conference["conference_id"].null_count() == 0
     assert conference["tournament_key"].n_unique() == (31 if lg == "mbb" else 21)
@@ -199,7 +210,9 @@ def test_run_player_totals_are_the_sum_of_the_game_boxes(lg: str) -> None:
     top = players.filter(pl.col("run_id") == champ).sort("pts", descending=True).row(0, named=True)
     conference = games.filter(pl.col("tournament_kind") == "conference")["game_id"].unique()
     rows = box.filter((pl.col("athlete_id") == top["athlete_id"]) & (pl.col("minutes").fill_null(0) > 0))
-    reg = rows.filter((pl.col("season_type") == 2) & ~pl.col("game_id").cast(pl.Int64).is_in(conference.implode()))
+    reg = rows.filter(
+        (pl.col("season_type") == 2) & (pl.col("game_id").cast(pl.Int64).is_in(conference.implode()) == False)
+    )
     ncaa_ids = games.filter(pl.col("run_id") == champ)["game_id"]
     po = rows.filter(pl.col("game_id").cast(pl.Int64).is_in(ncaa_ids.implode()))
     assert (top["games"], top["pts"]) == (po.height, po["points"].sum()) and top["games"] == 6
@@ -210,3 +223,33 @@ def test_run_player_totals_are_the_sum_of_the_game_boxes(lg: str) -> None:
 def test_bad_league_raises_before_any_load() -> None:
     with pytest.raises(ValueError, match="league"):
         mbb_tournament_runs(2025, league="coed")
+
+
+@pytest.mark.parametrize("lg", LEAGUES)
+def test_a_release_without_the_final_names_no_champion(lg: str) -> None:
+    """With the NCAA final missing, the last date holds the two semifinals: both winners are alive, not champion."""
+    sched = _read(lg, "schedule")
+    ncaa = _games(lg).filter(pl.col("tournament_kind") == "ncaa")
+    final_id = ncaa.filter(pl.col("round_name") == "National Championship")["game_id"][0]
+    last = (
+        tournament_run_games(sched.filter(pl.col("game_id") != final_id))
+        .filter(pl.col("tournament_kind") == "ncaa")
+        .group_by("run_id")
+        .agg(pl.all().last())
+    )
+    assert last.filter(pl.col("run_result") == "champion").height == 0
+    assert last.filter(pl.col("run_result") == "alive").height == 2
+
+
+@pytest.mark.parametrize("lg", LEAGUES)
+def test_a_side_whose_team_is_not_named_yet_is_in_no_run(lg: str) -> None:
+    """A bracket slot ESPN has not filled (null team id) is dropped, never pooled into one null run."""
+    sched = _read(lg, "schedule")
+    final_id = _games(lg).filter(pl.col("round_name") == "National Championship")["game_id"][0]
+    tbd = sched.with_columns(
+        pl.when(pl.col("game_id") == final_id).then(None).otherwise(pl.col("away_id")).alias("away_id")
+    )
+    games = tournament_run_games(tbd)
+    assert games["run_id"].null_count() == 0 and games["team_id"].null_count() == 0
+    assert games.filter(pl.col("game_id") == final_id).height == 1  # the named side only
+    assert set(games["run_result"].unique().to_list()) <= {"champion", "eliminated", "alive"}
