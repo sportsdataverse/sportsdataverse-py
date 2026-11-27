@@ -11,7 +11,7 @@ description: "sdv-py PWHL: endpoint references, dataset loaders and parsers for 
 |---|---|---:|---|
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 27 | none |
 | [HockeyTech / LeagueStat](#hockeytech-leaguestat) | `lscluster.hockeytech.com` | 25 | per-league public key (SDV_<LEAGUE>_API_KEY) |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 45 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 46 | — |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
@@ -40,6 +40,7 @@ description: "sdv-py PWHL: endpoint references, dataset loaders and parsers for 
 
 ### Analytics {#analytics}
 
+- [`pwhl_game_story`](reference/additional/analytics#pwhl_game_story)
 - [`pwhl_game_total`](reference/additional/analytics#pwhl_game_total)
 - [`pwhl_in_game_win_prob`](reference/additional/analytics#pwhl_in_game_win_prob)
 - [`pwhl_player_props`](reference/additional/analytics#pwhl_player_props)

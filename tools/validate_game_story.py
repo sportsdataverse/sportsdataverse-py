@@ -32,6 +32,160 @@ import polars as pl
 
 _BASKETBALL = ("nba", "wnba", "mbb", "wbb")
 _FOOTBALL = ("cfb", "nfl")
+_MORE = ("nhl", "pwhl", "mlb", "epl")
+
+
+def _rd(data_dir: Path, name: str) -> pl.DataFrame:
+    return pl.read_parquet(data_dir / f"{name}.parquet")
+
+
+def _more(lg: str, season: int, data_dir: Path | None) -> tuple[dict, pl.DataFrame | None, pl.DataFrame]:
+    """Hockey, baseball and soccer: the story, the G2 reference plays (None where G2 does not apply) and each
+    game's last running score, from the cached release parquets in ``data_dir`` (``epl`` reads the raw ESPN
+    summaries in ``data_dir/soccer/eng.1_<season start year>``)."""
+    if data_dir is None:
+        raise SystemExit(f"--data-dir is required for {lg}")
+    if lg == "nhl":
+        return _nhl(season, data_dir)
+    if lg == "pwhl":
+        return _pwhl(season, data_dir)
+    if lg == "mlb":
+        return _mlb(season, data_dir)
+    return _epl(season, data_dir)
+
+
+def _nhl(season: int, data_dir: Path) -> tuple[dict, pl.DataFrame, pl.DataFrame]:
+    from sportsdataverse.nhl.nhl_game_story import nhl_game_story
+    from sportsdataverse.nhl.nhl_market import nhl_in_game_win_prob, win_prob_from_margin
+    from sportsdataverse.nhl.nhl_prediction_constants import get_constants
+
+    pbp = _rd(data_dir, f"nhl_pbp_full_{season}").with_columns(pl.col("game_id").cast(pl.Int64))
+    sched = _rd(data_dir, f"nhl_schedules_{season}").filter(pl.col("game_state").is_in(["OFF", "FINAL"]))
+    story = nhl_game_story(pbp, sched, _rd(data_dir, f"nhl_skater_boxscores_{season}"))
+    # G2 reference: the model run here, shootout attempts unscored, the shootout's swing on one closing row
+    prior = win_prob_from_margin(get_constants("nhl").hfa)
+    so = (pl.col("period_type") == "SHOOTOUT").fill_null(False)
+    p = pbp.filter(pl.col("game_id").is_not_null()).sort("game_id", "event_idx")
+    wp = nhl_in_game_win_prob(p, prior)["home_win_prob"]
+    p = p.with_columns(pl.when(so).then(None).otherwise(wp).alias("_wp")).with_columns(
+        (pl.col("_wp") - pl.col("_wp").shift(1).over("game_id").fill_null(prior)).alias("wpa")
+    )
+    ref = p.select("game_id", pl.col("event_idx").cast(pl.Int64).alias("order"), "wpa")
+    fin = sched.select(
+        pl.col("game_id").cast(pl.Int64),
+        pl.col("home_score").cast(pl.Int64).alias("_h"),
+        pl.col("away_score").cast(pl.Int64).alias("_a"),
+    )
+    g = (
+        p.group_by("game_id")
+        .agg(
+            pl.col("_wp").drop_nulls().last().fill_null(prior).alias("_lw"),
+            pl.col("event_idx").max().alias("_im"),
+            pl.col("home_score").drop_nulls().last().alias("_ph"),
+            pl.col("away_score").drop_nulls().last().alias("_pa"),
+            so.any().alias("_so"),
+        )
+        .join(fin, on="game_id")
+        .with_columns(
+            (pl.col("_so") & ((pl.col("_h") + pl.col("_a")) == (pl.col("_ph") + pl.col("_pa") + 1))).alias("_sg")
+        )
+    )
+    so_rows = g.filter(pl.col("_sg")).select(
+        "game_id",
+        (pl.col("_im") + 1).cast(pl.Int64).alias("order"),
+        ((pl.col("_h") > pl.col("_a")).cast(pl.Float64) - pl.col("_lw")).alias("wpa"),
+    )
+    # the plays reach the final: the last running score, plus the shootout's goal where there is one
+    last = g.select(
+        "game_id",
+        (pl.col("_ph") + (pl.col("_sg") & (pl.col("_h") > pl.col("_a"))).cast(pl.Int64)).alias("pbp_home"),
+        (pl.col("_pa") + (pl.col("_sg") & (pl.col("_a") > pl.col("_h"))).cast(pl.Int64)).alias("pbp_away"),
+    )
+    return story, pl.concat([ref, so_rows]), last
+
+
+def _pwhl(season: int, data_dir: Path) -> tuple[dict, None, pl.DataFrame]:
+    from sportsdataverse.pwhl.pwhl_game_story import pwhl_game_story
+
+    sched = _rd(data_dir, f"pwhl_schedules_{season}")
+    pbp = _rd(data_dir, f"pwhl_pbp_{season}")
+    story = pwhl_game_story(
+        pbp, sched, _rd(data_dir, f"pwhl_skater_boxscores_{season}"), _rd(data_dir, f"pwhl_xg_pbp_{season}")
+    )
+    # reach: the goal events (plus the shootout's one goal) against the official final
+    s = sched.select(
+        pl.col("game_id").cast(pl.Int64),
+        pl.col("home_team_id").cast(pl.Int64),
+        pl.col("away_team_id").cast(pl.Int64),
+        (pl.col("game_status") == "Final SO").alias("_so"),
+        pl.col("home_score").cast(pl.Int64).alias("_h"),
+        pl.col("away_score").cast(pl.Int64).alias("_a"),
+    )
+    goals = pbp.filter(pl.col("event") == "goal").select(
+        pl.col("game_id").cast(pl.Int64), pl.col("team_id").cast(pl.Int64, strict=False).alias("_t")
+    )
+    last = (
+        s.join(goals, on="game_id", how="left")
+        .group_by("game_id", "_so", "_h", "_a")
+        .agg(
+            (pl.col("_t") == pl.col("home_team_id")).sum().cast(pl.Int64).alias("_gh"),
+            (pl.col("_t") == pl.col("away_team_id")).sum().cast(pl.Int64).alias("_ga"),
+        )
+        .select(
+            "game_id",
+            (pl.col("_gh") + (pl.col("_so") & (pl.col("_h") > pl.col("_a"))).cast(pl.Int64)).alias("pbp_home"),
+            (pl.col("_ga") + (pl.col("_so") & (pl.col("_a") > pl.col("_h"))).cast(pl.Int64)).alias("pbp_away"),
+        )
+    )
+    return story, None, last
+
+
+def _mlb(season: int, data_dir: Path) -> tuple[dict, pl.DataFrame, pl.DataFrame]:
+    from sportsdataverse.mlb.mlb_game_story import mlb_game_story
+
+    sched = _rd(data_dir, f"mlb_schedule_{season}").filter(
+        (pl.col("detailed_state") == "Final") & pl.col("game_type").is_in(["R", "F", "D", "L", "W"])
+    )
+    pbp, wpa = _rd(data_dir, f"mlb_pbp_{season}"), _rd(data_dir, f"mlb_wpa_{season}")
+    story = mlb_game_story(pbp, sched, wpa, _rd(data_dir, f"mlb_re24_{season}"))
+    # G2 reference: the release's WPA moved back to the PA that made it (index 0 is the pregame step)
+    ref = wpa.filter(pl.col("at_bat_index") > 0).select(
+        pl.col("game_id").cast(pl.Int64), (pl.col("at_bat_index") - 1).cast(pl.Int64).alias("order"), "wpa"
+    )
+    last = (
+        pbp.sort("game_pk", "at_bat_index")
+        .group_by("game_pk")
+        .agg(pl.col("home_score").last().alias("pbp_home"), pl.col("away_score").last().alias("pbp_away"))
+        .select(pl.col("game_pk").cast(pl.Int64).alias("game_id"), "pbp_home", "pbp_away")
+    )
+    return story, ref, last
+
+
+def _epl(season: int, data_dir: Path) -> tuple[dict, None, pl.DataFrame]:
+    import glob
+    import gzip
+    import json
+
+    from sportsdataverse.soccer.soccer_game_story import soccer_game_story
+
+    files = sorted(glob.glob(str(data_dir / "soccer" / f"eng.1_{season}" / "*.json.gz")))
+    payloads = []
+    for f in files:
+        with gzip.open(f, "rt", encoding="utf-8") as fh:
+            payloads.append(json.load(fh))
+    story = soccer_game_story(payloads)
+    rows = []
+    for p in payloads:  # reach: the scoring key events (the shootout left out) against the competitors' scores
+        side = {c["team"]["id"]: c["homeAway"] for c in p["header"]["competitions"][0]["competitors"]}
+        n = {"home": 0, "away": 0}
+        for e in p.get("keyEvents") or []:
+            who = side.get((e.get("team") or {}).get("id"))
+            if e.get("scoringPlay") and (e.get("period") or {}).get("number", 99) < 5 and who in n:
+                n[who] += 1
+        rows.append({"game_id": int(p["header"]["id"]), "pbp_home": n["home"], "pbp_away": n["away"]})
+    return story, None, pl.DataFrame(rows, schema={"game_id": pl.Int64, "pbp_home": pl.Int64, "pbp_away": pl.Int64})
+
+
 _RELEASE = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
 
 
@@ -136,7 +290,7 @@ def run(lg: str, season: int, data_dir: Path | None) -> dict:
     """Score G1-G3 on one league-season.
 
     Args:
-        lg: ``nba``, ``wnba``, ``mbb``, ``wbb``, ``cfb`` or ``nfl``.
+        lg: ``nba``, ``wnba``, ``mbb``, ``wbb``, ``cfb``, ``nfl``, ``nhl``, ``pwhl``, ``mlb`` or ``epl``.
         season: The season (the release's end-year convention).
         data_dir: A directory of cached release parquets, or ``None`` to read the releases.
 
@@ -150,8 +304,10 @@ def run(lg: str, season: int, data_dir: Path | None) -> dict:
     official = None
     if lg in _BASKETBALL:
         story, wp, last = _basketball(lg, season, data_dir)
-    else:
+    elif lg in _FOOTBALL:
         story, wp, last, official = _football(lg, season, data_dir)
+    else:
+        story, wp, last = _more(lg, season, data_dir)
     summ = story["summary"]
     if official is not None:  # the NFL's final is the schedule's, not the play-by-play's
         summ = summ.join(official, on="game_id", how="left").with_columns(
@@ -163,17 +319,20 @@ def run(lg: str, season: int, data_dir: Path | None) -> dict:
     g1_n, g1_pass = top.height, int((top["points_worth"] > 0).sum())
     lower = wilson_lower(g1_pass, g1_n)
     # G2: argmax |wpa| on the input, earliest on ties
+    if wp is None:  # no win probability in this league: G2 does not apply
+        wp = pl.DataFrame(schema={"game_id": pl.Int64, "order": pl.Int64, "wpa": pl.Float64})
     truth = (
         wp.filter(pl.col("wpa").is_not_null() & pl.col("wpa").is_not_nan())
         .sort("game_id", pl.col("wpa").abs(), "order", descending=[False, True, False])
         .group_by("game_id", maintain_order=True)
         .first()
-        .select("game_id", pl.col("play_id").alias("true_play"))
+        .select("game_id", pl.col("order").alias("true_order"))
     )
-    mom = story["moment"].filter(pl.col("rule") == "max_abs_wpa").select("game_id", "play_id")
+    # by play order: a hockey shootout's closing row has no play id
+    mom = story["moment"].filter(pl.col("rule") == "max_abs_wpa").select("game_id", "order")
     no_story = truth.join(summ.select("game_id"), on="game_id", how="anti").height  # no box: no final, no story
     g2 = truth.join(summ.select("game_id"), on="game_id", how="semi").join(mom, on="game_id", how="left")
-    g2_pass = int((g2["true_play"] == g2["play_id"]).fill_null(False).sum())
+    g2_pass = int((g2["true_order"] == g2["order"]).fill_null(False).sum())
     # G3: on games whose pbp reaches the official final
     per = (
         story["periods"]
@@ -228,7 +387,7 @@ def run(lg: str, season: int, data_dir: Path | None) -> dict:
 def main() -> None:
     """Parse the arguments, score the gates and print (and optionally write) the JSON."""
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--league", required=True, choices=[*_BASKETBALL, *_FOOTBALL])
+    ap.add_argument("--league", required=True, choices=[*_BASKETBALL, *_FOOTBALL, *_MORE])
     ap.add_argument("--season", required=True, type=int)
     ap.add_argument("--data-dir", type=Path)
     ap.add_argument("--out", type=Path)

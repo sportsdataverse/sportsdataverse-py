@@ -1,7 +1,7 @@
 ---
 title: "MLB — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
-sidebar_position: 8
+sidebar_position: 9
 description: "MLB — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MLB — additional Python functions — Dates and seasons

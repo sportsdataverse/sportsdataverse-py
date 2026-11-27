@@ -83962,3 +83962,260 @@ nfl_game_story:
   summary.periods_agree: True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose
     plays end on another score.
   summary.winner_team_id: Winning team's id; null on a tie.
+nhl_game_story:
+  edges.edge: 'Edge name. Accounting: even_strength_goals, power_play_goals, short_handed_goals, empty_net_goals, penalty_shot_goals, shootout
+    (the one goal the final credits the shootout''s winner); together the official margin exactly. Splits: xg, xg_5v5, high_danger_xg, goaltending
+    (goals saved above expected).'
+  edges.game_id: The game's NHL game id (e.g. 2024020001).
+  edges.kind: accounting for edges that split the game between them (their points_worth add up to the margin, exactly or nearly; see the function's
+    docstring), split for overlapping cuts.
+  edges.loser_team_id: Losing team's id (null on a tie).
+  edges.loser_value: Loser's value for the edge, in the same unit as winner_value.
+  edges.points_worth: 'The winner''s edge in the sport''s scoring unit: the winner''s points from the edge less the loser''s. Positive favours
+    the winner.'
+  edges.rank: Rank of the edge within the game by points_worth, 1 = largest; equal worths keep the edge list's order.
+  edges.unit: 'Always goals: the scoring unit the edges are priced in.'
+  edges.winner_team_id: Winning team's id (null on a tie, where the edges read from the home side's view).
+  edges.winner_value: 'Winner''s value for the edge in the edge''s own unit: points for a points edge, a rate for a rate edge.'
+  moment.away_score: Away score after the play.
+  moment.clock: Game clock of the play as the source shows it.
+  moment.game_id: The game's NHL game id (e.g. 2024020001).
+  moment.home_score: Home score after the play.
+  moment.order: The play's position in the game's play order.
+  moment.period: Period of the play.
+  moment.play_id: Play id of the deciding moment (null for a hockey shootout's closing row, which no play carries).
+  moment.rule: 'max_abs_wpa: the play with the largest absolute win-probability change (earliest on ties); deciding_score where no play has one:
+    the winner''s score that put it ahead for good.'
+  moment.team_id: 'Team of the play: the event''s team (hockey), the batting team (baseball), the scoring team (soccer).'
+  moment.text: Play description as the source writes it.
+  moment.winner_wpa: The same change from the winner's side (null on a tie).
+  moment.wpa: Home win probability after the play less before it.
+  performers.game_id: The game's NHL game id (e.g. 2024020001).
+  performers.metric: 'Always points: goals plus assists, the metric the performer is chosen by.'
+  performers.player_id: The side's top performer's player id.
+  performers.player_name: Player's display name.
+  performers.team_id: Team of the top performer.
+  performers.value: The player's points, goals plus assists (ties go to goals).
+  periods.away_cum: Away running score at the end of the period.
+  periods.away_pts: Away points in the period.
+  periods.game_id: The game's NHL game id (e.g. 2024020001).
+  periods.home_cum: Home running score at the end of the period.
+  periods.home_pts: 'Home points in the period: its last running score less the previous period''s.'
+  periods.is_overtime: True for a period after regulation.
+  periods.period: Period number, from 1; overtimes follow regulation.
+  periods.period_label: P1-P3, then OT (OT2 ... in the playoffs) and SO for a shootout.
+  runs.away_score_after: Away score at the end of the run.
+  runs.end_order: Play order of the run's last score.
+  runs.end_period: Period of the run's last score.
+  runs.game_id: The game's NHL game id (e.g. 2024020001).
+  runs.home_score_after: Home score at the end of the run.
+  runs.points: 'The side''s largest unanswered run: points it scored in a row with no score by the other side (a score correction stays in the
+    run and counts against its side).'
+  runs.start_order: Play order of the run's first score.
+  runs.start_period: Period of the run's first score.
+  runs.team_id: Team that made the run.
+  summary.away_score: Away team's official final score.
+  summary.away_team_id: Away team's NHL team id.
+  summary.decided: True when the game has a winner (false on a tie).
+  summary.game_id: The game's NHL game id (e.g. 2024020001).
+  summary.home_score: Home team's official final score.
+  summary.home_team_id: Home team's NHL team id.
+  summary.loser_team_id: Losing team's id; null on a tie.
+  summary.margin: Winner's final score less the loser's; 0 on a tie.
+  summary.n_periods: Periods played, overtimes included.
+  summary.overtime: True when the game went past regulation.
+  summary.periods_agree: True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose
+    plays end on another score.
+  summary.winner_team_id: Winning team's id; null on a tie.
+pwhl_game_story:
+  edges.edge: 'Edge name. Accounting: even_strength_goals, power_play_goals, short_handed_goals, empty_net_goals, penalty_shot_goals, shootout;
+    together the official margin exactly. Splits, with the xG shots: xg, goaltending (goals saved above expected).'
+  edges.game_id: The game's HockeyTech (PWHL) game id.
+  edges.kind: accounting for edges that split the game between them (their points_worth add up to the margin, exactly or nearly; see the function's
+    docstring), split for overlapping cuts.
+  edges.loser_team_id: Losing team's id (null on a tie).
+  edges.loser_value: Loser's value for the edge, in the same unit as winner_value.
+  edges.points_worth: 'The winner''s edge in the sport''s scoring unit: the winner''s points from the edge less the loser''s. Positive favours
+    the winner.'
+  edges.rank: Rank of the edge within the game by points_worth, 1 = largest; equal worths keep the edge list's order.
+  edges.unit: 'Always goals: the scoring unit the edges are priced in.'
+  edges.winner_team_id: Winning team's id (null on a tie, where the edges read from the home side's view).
+  edges.winner_value: 'Winner''s value for the edge in the edge''s own unit: points for a points edge, a rate for a rate edge.'
+  moment.away_score: Away score after the play.
+  moment.clock: Game clock of the play as the source shows it.
+  moment.game_id: The game's HockeyTech (PWHL) game id.
+  moment.home_score: Home score after the play.
+  moment.order: The play's position in the game's play order.
+  moment.period: Period of the play.
+  moment.play_id: The play's position in the release (null for a shootout's closing row).
+  moment.rule: 'Always deciding_score: no in-game win-probability model ships for this league, so the moment is the winner''s go-ahead-for-good
+    score.'
+  moment.team_id: 'Team of the play: the event''s team (hockey), the batting team (baseball), the scoring team (soccer).'
+  moment.text: Play description as the source writes it.
+  moment.winner_wpa: The same change from the winner's side (null on a tie).
+  moment.wpa: Home win probability after the play less before it.
+  performers.game_id: The game's HockeyTech (PWHL) game id.
+  performers.metric: 'Always points: goals plus assists, the metric the performer is chosen by.'
+  performers.player_id: The side's top performer's player id.
+  performers.player_name: Player's display name.
+  performers.team_id: Team of the top performer.
+  performers.value: The player's points, goals plus assists (ties go to goals).
+  periods.away_cum: Away running score at the end of the period.
+  periods.away_pts: Away points in the period.
+  periods.game_id: The game's HockeyTech (PWHL) game id.
+  periods.home_cum: Home running score at the end of the period.
+  periods.home_pts: 'Home points in the period: its last running score less the previous period''s.'
+  periods.is_overtime: True for a period after regulation.
+  periods.period: Period number, from 1; overtimes follow regulation.
+  periods.period_label: P1-P3, then OT, OT2, ... and SO for a shootout.
+  runs.away_score_after: Away score at the end of the run.
+  runs.end_order: Play order of the run's last score.
+  runs.end_period: Period of the run's last score.
+  runs.game_id: The game's HockeyTech (PWHL) game id.
+  runs.home_score_after: Home score at the end of the run.
+  runs.points: 'The side''s largest unanswered run: points it scored in a row with no score by the other side (a score correction stays in the
+    run and counts against its side).'
+  runs.start_order: Play order of the run's first score.
+  runs.start_period: Period of the run's first score.
+  runs.team_id: Team that made the run.
+  summary.away_score: Away team's official final score.
+  summary.away_team_id: Away team's HockeyTech (PWHL) team id.
+  summary.decided: True when the game has a winner (false on a tie).
+  summary.game_id: The game's HockeyTech (PWHL) game id.
+  summary.home_score: Home team's official final score.
+  summary.home_team_id: Home team's HockeyTech (PWHL) team id.
+  summary.loser_team_id: Losing team's id; null on a tie.
+  summary.margin: Winner's final score less the loser's; 0 on a tie.
+  summary.n_periods: Periods played, overtimes included.
+  summary.overtime: True when the game went past regulation.
+  summary.periods_agree: True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose
+    plays end on another score.
+  summary.winner_team_id: Winning team's id; null on a tie.
+mlb_game_story:
+  edges.edge: 'Edge name. Accounting: starting_pitching, bullpen (RE24 each staff allowed, negated: runs saved against expectation; together close
+    to the margin). Splits: home_runs (runs on home runs), risp_hits (hits with a runner on second or third, priced at the runs scored on them).'
+  edges.game_id: The game's MLB game_pk.
+  edges.kind: accounting for edges that split the game between them (their points_worth add up to the margin, exactly or nearly; see the function's
+    docstring), split for overlapping cuts.
+  edges.loser_team_id: Losing team's id (null on a tie).
+  edges.loser_value: Loser's value for the edge, in the same unit as winner_value.
+  edges.points_worth: 'The winner''s edge in the sport''s scoring unit: the winner''s points from the edge less the loser''s. Positive favours
+    the winner.'
+  edges.rank: Rank of the edge within the game by points_worth, 1 = largest; equal worths keep the edge list's order.
+  edges.unit: 'Always runs: the scoring unit the edges are priced in.'
+  edges.winner_team_id: Winning team's id (null on a tie, where the edges read from the home side's view).
+  edges.winner_value: 'Winner''s value for the edge in the edge''s own unit: points for a points edge, a rate for a rate edge.'
+  moment.away_score: Away score after the play.
+  moment.clock: Game clock of the play as the source shows it.
+  moment.game_id: The game's MLB game_pk.
+  moment.home_score: Home score after the play.
+  moment.order: The play's position in the game's play order.
+  moment.period: Period of the play.
+  moment.play_id: The plate appearance's at_bat_index.
+  moment.rule: 'max_abs_wpa: the play with the largest absolute win-probability change (earliest on ties); deciding_score where no play has one:
+    the winner''s score that put it ahead for good.'
+  moment.team_id: 'Team of the play: the event''s team (hockey), the batting team (baseball), the scoring team (soccer).'
+  moment.text: Play description as the source writes it.
+  moment.winner_wpa: The same change from the winner's side (null on a tie).
+  moment.wpa: Home win probability after the play less before it.
+  performers.game_id: The game's MLB game_pk.
+  performers.metric: 'Always wpa: win probability added, the metric the performer is chosen by.'
+  performers.player_id: The side's top performer's player id.
+  performers.player_name: 'Always null: the MLB releases carry player ids only.'
+  performers.team_id: Team of the top performer.
+  performers.value: The player's WPA as batter (his side's view) and pitcher (the other side's WPA, negated); ties go to plate appearances.
+  periods.away_cum: Away running score at the end of the period.
+  periods.away_pts: Away points in the period.
+  periods.game_id: The game's MLB game_pk.
+  periods.home_cum: Home running score at the end of the period.
+  periods.home_pts: 'Home points in the period: its last running score less the previous period''s.'
+  periods.is_overtime: True for a period after regulation.
+  periods.period: Period number, from 1; overtimes follow regulation.
+  periods.period_label: The inning number, 1-9; an extra inning keeps its number (10, 11, ...).
+  runs.away_score_after: Away score at the end of the run.
+  runs.end_order: Play order of the run's last score.
+  runs.end_period: Period of the run's last score.
+  runs.game_id: The game's MLB game_pk.
+  runs.home_score_after: Home score at the end of the run.
+  runs.points: 'The side''s largest unanswered run: points it scored in a row with no score by the other side (a score correction stays in the
+    run and counts against its side).'
+  runs.start_order: Play order of the run's first score.
+  runs.start_period: Period of the run's first score.
+  runs.team_id: Team that made the run.
+  summary.away_score: Away team's official final score.
+  summary.away_team_id: Away team's MLB team id.
+  summary.decided: True when the game has a winner (false on a tie).
+  summary.game_id: The game's MLB game_pk.
+  summary.home_score: Home team's official final score.
+  summary.home_team_id: Home team's MLB team id.
+  summary.loser_team_id: Losing team's id; null on a tie.
+  summary.margin: Winner's final score less the loser's; 0 on a tie.
+  summary.n_periods: Periods played, overtimes included.
+  summary.overtime: True when the game went past regulation.
+  summary.periods_agree: True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose
+    plays end on another score.
+  summary.winner_team_id: Winning team's id; null on a tie.
+soccer_game_story:
+  edges.edge: 'Edge name. Accounting: open_play_goals, set_piece_goals (direct free kicks and goals following a corner or set piece), penalty_goals,
+    own_goals_for; together the margin exactly. Split: shots_on_target, priced at the match''s goals per shot on target.'
+  edges.game_id: The match's ESPN event id.
+  edges.kind: accounting for edges that split the game between them (their points_worth add up to the margin, exactly or nearly; see the function's
+    docstring), split for overlapping cuts.
+  edges.loser_team_id: Losing team's id (null on a tie).
+  edges.loser_value: Loser's value for the edge, in the same unit as winner_value.
+  edges.points_worth: 'The winner''s edge in the sport''s scoring unit: the winner''s points from the edge less the loser''s. Positive favours
+    the winner.'
+  edges.rank: Rank of the edge within the game by points_worth, 1 = largest; equal worths keep the edge list's order.
+  edges.unit: 'Always goals: the scoring unit the edges are priced in.'
+  edges.winner_team_id: Winning team's id (null on a tie, where the edges read from the home side's view).
+  edges.winner_value: 'Winner''s value for the edge in the edge''s own unit: points for a points edge, a rate for a rate edge.'
+  moment.away_score: Away score after the play.
+  moment.clock: Game clock of the play as the source shows it.
+  moment.game_id: The match's ESPN event id.
+  moment.home_score: Home score after the play.
+  moment.order: The play's position in the game's play order.
+  moment.period: Period of the play.
+  moment.play_id: ESPN key-event id of the deciding goal (null for a shootout's closing row).
+  moment.rule: 'Always deciding_score: no in-game win-probability model ships for this league, so the moment is the winner''s go-ahead-for-good
+    score.'
+  moment.team_id: 'Team of the play: the event''s team (hockey), the batting team (baseball), the scoring team (soccer).'
+  moment.text: Play description as the source writes it.
+  moment.winner_wpa: The same change from the winner's side (null on a tie).
+  moment.wpa: Home win probability after the play less before it.
+  performers.game_id: The match's ESPN event id.
+  performers.metric: 'Always goals_assists: goals plus assists, the metric the performer is chosen by.'
+  performers.player_id: The side's top performer's player id.
+  performers.player_name: Player's display name.
+  performers.team_id: Team of the top performer.
+  performers.value: The player's goals plus assists from the goal events (ties go to goals).
+  periods.away_cum: Away running score at the end of the period.
+  periods.away_pts: Away points in the period.
+  periods.game_id: The match's ESPN event id.
+  periods.home_cum: Home running score at the end of the period.
+  periods.home_pts: 'Home points in the period: its last running score less the previous period''s.'
+  periods.is_overtime: True for a period after regulation.
+  periods.period: Period number, from 1; overtimes follow regulation.
+  periods.period_label: H1, H2, then ET1, ET2 for extra time (a penalty shootout is not a period).
+  runs.away_score_after: Away score at the end of the run.
+  runs.end_order: Play order of the run's last score.
+  runs.end_period: Period of the run's last score.
+  runs.game_id: The match's ESPN event id.
+  runs.home_score_after: Home score at the end of the run.
+  runs.points: 'The side''s largest unanswered run: points it scored in a row with no score by the other side (a score correction stays in the
+    run and counts against its side).'
+  runs.start_order: Play order of the run's first score.
+  runs.start_period: Period of the run's first score.
+  runs.team_id: Team that made the run.
+  summary.away_score: Away team's official final score.
+  summary.away_team_id: Away team's ESPN team id.
+  summary.decided: True when the game has a winner (false on a tie).
+  summary.game_id: The match's ESPN event id.
+  summary.home_score: Home team's official final score.
+  summary.home_team_id: Home team's ESPN team id.
+  summary.loser_team_id: Losing team's id; null on a tie.
+  summary.margin: Winner's final score less the loser's; 0 on a tie.
+  summary.n_periods: Periods played, overtimes included.
+  summary.overtime: True when the game went past regulation.
+  summary.periods_agree: True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose
+    plays end on another score.
+  summary.winner_team_id: Winning team's id; null on a tie.

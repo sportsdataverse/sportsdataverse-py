@@ -101,3 +101,4 @@ from sportsdataverse.mlb.mlb_win_expectancy import (
 # import ...` or importlib.import_module("sportsdataverse.mlb.mlb_schedule"),
 # which read sys.modules (tests/mlb/test_mlb_namespace_binding.py pins this).
 from sportsdataverse.mlb.mlb_api_extra import mlb_schedule, mlb_teams  # noqa: E402
+from sportsdataverse.mlb.mlb_game_story import mlb_game_story  # noqa: F401,E402

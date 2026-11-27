@@ -4602,6 +4602,7 @@
   "mlb_expected_home_runs": "models-and-calculators",
   "mlb_expected_stats": "models-and-calculators",
   "mlb_fielding_oaa": "analytics",
+  "mlb_game_story": "analytics",
   "mlb_injury_risk": "analytics",
   "mlb_markov_run_expectancy": "models-and-calculators",
   "mlb_pbp_diff": "mlb-stats-api",
@@ -4652,8 +4653,8 @@
   "sb_success_surface": "analytics",
   "siera_like": "analytics",
   "spearman_corr": "models-and-calculators",
-  "tto_penalty_table": "analytics",
-  "x_era": "analytics"
+  "tto_penalty_table": "analytics-2",
+  "x_era": "analytics-2"
  },
  "/docs/mlb/reference/core": {
   "espn_mlb_award": "other",
@@ -8341,6 +8342,7 @@
   "nhl_edge_skating_value": "analytics",
   "nhl_expected_assists": "models-and-calculators",
   "nhl_faceoff_value": "analytics",
+  "nhl_game_story": "analytics",
   "nhl_game_total": "analytics",
   "nhl_goalie_gsax": "models-and-calculators",
   "nhl_goalie_saves": "analytics",
@@ -9344,6 +9346,7 @@
   "pwhl_game_corsi": "hockeytech-leaguestat",
   "pwhl_game_info": "hockeytech-leaguestat",
   "pwhl_game_shifts": "hockeytech-leaguestat",
+  "pwhl_game_story": "analytics",
   "pwhl_game_summary": "hockeytech-leaguestat",
   "pwhl_game_total": "analytics",
   "pwhl_in_game_win_prob": "analytics",

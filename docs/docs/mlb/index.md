@@ -15,7 +15,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 | [Baseball Savant (Statcast)](#baseball-savant-statcast) | `baseballsavant.mlb.com` | 43 | none |
 | [Chadwick Baseball Bureau register](#chadwick-baseball-bureau-register) | `github.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 23 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 107 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 108 | — |
 
 ## ESPN {#espn}
 
@@ -107,6 +107,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 - [`mlb_catcher_framing`](reference/additional/analytics#mlb_catcher_framing)
 - [`mlb_catcher_throwing`](reference/additional/analytics#mlb_catcher_throwing)
 - [`mlb_fielding_oaa`](reference/additional/analytics#mlb_fielding_oaa)
+- [`mlb_game_story`](reference/additional/analytics#mlb_game_story)
 - [`mlb_injury_risk`](reference/additional/analytics#mlb_injury_risk)
 - [`mlb_pitch_era`](reference/additional/analytics#mlb_pitch_era)
 - [`mlb_pitch_tunneling`](reference/additional/analytics#mlb_pitch_tunneling)
@@ -121,8 +122,8 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 - [`sb_attempts_from_pitches`](reference/additional/analytics#sb_attempts_from_pitches)
 - [`sb_success_surface`](reference/additional/analytics#sb_success_surface)
 - [`siera_like`](reference/additional/analytics#siera_like)
-- [`tto_penalty_table`](reference/additional/analytics#tto_penalty_table)
-- [`x_era`](reference/additional/analytics#x_era)
+- [`tto_penalty_table`](reference/additional/analytics-2#tto_penalty_table)
+- [`x_era`](reference/additional/analytics-2#x_era)
 
 ### Dates and seasons {#dates-and-seasons}
 

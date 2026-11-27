@@ -361,6 +361,7 @@ from sportsdataverse.mlb import mlb_draft_prospects as mlb_draft_prospects  # no
 from sportsdataverse.mlb import mlb_expected_home_runs as mlb_expected_home_runs  # noqa: F401
 from sportsdataverse.mlb import mlb_expected_stats as mlb_expected_stats  # noqa: F401
 from sportsdataverse.mlb import mlb_fielding_oaa as mlb_fielding_oaa  # noqa: F401
+from sportsdataverse.mlb import mlb_game_story as mlb_game_story  # noqa: F401
 from sportsdataverse.mlb import mlb_injury_risk as mlb_injury_risk  # noqa: F401
 from sportsdataverse.mlb import mlb_markov_run_expectancy as mlb_markov_run_expectancy  # noqa: F401
 from sportsdataverse.mlb import mlb_pbp_diff as mlb_pbp_diff  # noqa: F401
@@ -659,6 +660,7 @@ __all__ = [
     "mlb_game_context_metrics",
     "mlb_game_guids",
     "mlb_game_pace",
+    "mlb_game_story",
     "mlb_game_timestamps",
     "mlb_high_low",
     "mlb_home_run_derby",

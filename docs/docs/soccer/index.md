@@ -17,7 +17,7 @@ description: "sdv-py Soccer (all): endpoint references, dataset loaders and pars
 | [Football-Data.co.uk](#football-data-co-uk) | `www.football-data.co.uk` | 3 | none (CSV archive) |
 | [OpenLigaDB](#openligadb) | `api.openligadb.de` | 11 | none |
 | [kloppy open event data](#kloppy-open-event-data) | `kloppy.pysport.org` | 8 | none (optional `soccer` extra) |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 8 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 9 | — |
 
 ## ESPN {#espn}
 
@@ -69,6 +69,12 @@ description: "sdv-py Soccer (all): endpoint references, dataset loaders and pars
 | Reference | Functions |
 |---|---:|
 | [Hand-written wrappers](reference/additional) | 8 |
+## Tools and helpers
+
+### Analytics {#analytics}
+
+- [`soccer_game_story`](reference/additional#soccer_game_story)
+
 
 ## See also
 

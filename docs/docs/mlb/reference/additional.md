@@ -133,6 +133,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [mlb_catcher_framing](additional/analytics.md#mlb_catcher_framing) | Per-catcher framing runs from a smooth called-strike logistic (Savant method). |
 | [mlb_catcher_throwing](additional/analytics.md#mlb_catcher_throwing) | Per-catcher caught-stealing (throwing) value = caught-stealing above average. |
 | [mlb_fielding_oaa](additional/analytics.md#mlb_fielding_oaa) | Per-fielder outs above average from a per-position catch-probability logistic. |
+| [mlb_game_story](additional/analytics.md#mlb_game_story) | How the winner won it, for one or many MLB games: edges in runs, the moment, innings, runs, performers. |
 | [mlb_injury_risk](additional/analytics.md#mlb_injury_risk) | Composite pitcher injury-risk index from leakage-safe trailing trends. |
 | [mlb_pitch_era](additional/analytics.md#mlb_pitch_era) | Combined xERA + SIERA-like estimator (model ③). |
 | [mlb_pitch_tunneling](additional/analytics.md#mlb_pitch_tunneling) | Per-pitch release/plate distance from the previous pitch + tunnel ratio. |
@@ -147,8 +148,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [sb_attempts_from_pitches](additional/analytics.md#sb_attempts_from_pitches) | Extract stolen-base / caught-stealing attempts from pitch-level Statcast rows. |
 | [sb_success_surface](additional/analytics.md#sb_success_surface) | Empirical P(stolen-base success) surface over `(sprint speed, pop time, base)`. |
 | [siera_like](additional/analytics.md#siera_like) | SIERA-like ERA estimator from K%/BB%/GB% (**experimental / provisional**). |
-| [tto_penalty_table](additional/analytics.md#tto_penalty_table) | Observed mean run value by times-through-order, with the penalty vs TTO=1. |
-| [x_era](additional/analytics.md#x_era) | Parametric xERA from Statcast expected wOBA allowed. |
+| [tto_penalty_table](additional/analytics-2.md#tto_penalty_table) | Observed mean run value by times-through-order, with the penalty vs TTO=1. |
+| [x_era](additional/analytics-2.md#x_era) | Parametric xERA from Statcast expected wOBA allowed. |
 
 ## Dates and seasons
 

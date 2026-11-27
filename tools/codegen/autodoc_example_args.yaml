@@ -589,6 +589,7 @@ wbb:
   ncaa_wbb_join_pbp_shots: {pbp: {$call: wbb.ncaa_wbb_game_pbp, args: {game_id: "5722355"}}, shots: {$call: wbb.ncaa_wbb_shot_locations, args: {game_ids: ["5722355"]}}}  # 460 rows x 40 cols
 
 mlb:
+  mlb_game_story: {pbp: {$call: mlb.load_mlb_pbp, args: {seasons: 2025}}, schedule: {$call: mlb.load_mlb_schedule, args: {seasons: 2025}}, wpa: {$call: mlb.load_mlb_wpa, args: {seasons: 2025}}, re24: {$call: mlb.load_mlb_re24_matrix, args: {seasons: 2025}}}  # dict of frames -> hand_authored
   x_era: {pitches: {$call: mlb.mlb_statcast_search, args: {start_dt: "2024-07-06", end_dt: "2024-07-06"}}, season: 2024}
   espn_mlb_player_stats: {athlete_id: 42470, season: 2024}
   espn_mlb_schedule: {}
@@ -625,6 +626,7 @@ mlb:
   fox_mlb_team_stats: {team_id: "1"}  # 28 rows x 6 cols
 
 nhl:
+  nhl_game_story: {pbp: {$call: nhl.load_nhl_pbp_full, args: {seasons: 2026}}, schedule: {$call: nhl.load_nhl_schedules, args: {seasons: 2026}}, skater_box: {$call: nhl.load_nhl_skater_boxscores, args: {seasons: 2026}}}  # dict of frames -> hand_authored
   espn_nhl_game_rosters: {game_id: 401687987}
   espn_nhl_player_stats: {athlete_id: 3895074, season: 2024}
   espn_nhl_schedule: {}
@@ -660,6 +662,7 @@ nhl:
 # game_id=2 is a completed 2025 PWHL regular-season game with shifts/TOI/Corsi/PBP data.
 # pwhl_transactions and pwhl_playoff_bracket have upstream parse errors; captured what works.
 pwhl:
+  pwhl_game_story: {pbp: {$call: pwhl.load_pwhl_pbp, args: {seasons: 2026}}, schedule: {$call: pwhl.load_pwhl_schedules, args: {seasons: 2026}}, skater_box: {$call: pwhl.load_pwhl_skater_boxscores, args: {seasons: 2026}}, xg_shots: {$call: pwhl.load_pwhl_xg_pbp, args: {seasons: 2026}}}  # dict of frames -> hand_authored
   pwhl_schedule: {season: 2025}
   pwhl_pbp: {game_id: 2}
   pwhl_standings: {season: 2025}
@@ -770,6 +773,7 @@ odds:
   join_espn_polymarket: {espn: {$call: nfl.espn_nfl_scoreboard, args: {dates: "20261122"}}, gamma_events: {$call: odds.polymarket_gamma_events, args: {closed: "false", limit: "100", params: {series_id: "12185"}}}, league: nfl}  # 11 rows x 8 cols
 
 soccer:
+  soccer_game_story: {summaries: {$call: soccer.espn_soccer_summary, args: {league: eng.1, event_id: 671031, return_parsed: false}}}  # dict of frames -> hand_authored
   soccer_open_events: {provider: statsbomb, match_id: 8658}  # 3036 rows x 24 cols
   soccer_events_to_frame: {dataset: {$call: soccer.soccer_open_dataset, args: {provider: statsbomb, match_id: 8658}}}  # 3036 rows x 24 cols
   soccer_spadl: {dataset: {$call: soccer.soccer_open_dataset, args: {provider: statsbomb, match_id: 8658}}}  # 1709 rows x 17 cols

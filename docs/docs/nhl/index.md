@@ -16,7 +16,7 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 | [NHL Stats REST](#nhl-stats-rest) | `api.nhle.com` | 21 | none |
 | [NHL Records](#nhl-records) | `records.nhl.com` | 50 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 92 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 93 | — |
 
 ## ESPN {#espn}
 
@@ -109,6 +109,7 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 - [`in_game_features`](reference/additional/analytics#in_game_features)
 - [`nhl_edge_skating_value`](reference/additional/analytics#nhl_edge_skating_value)
 - [`nhl_faceoff_value`](reference/additional/analytics#nhl_faceoff_value)
+- [`nhl_game_story`](reference/additional/analytics#nhl_game_story)
 - [`nhl_game_total`](reference/additional/analytics#nhl_game_total)
 - [`nhl_goalie_saves`](reference/additional/analytics#nhl_goalie_saves)
 - [`nhl_in_game_win_prob`](reference/additional/analytics#nhl_in_game_win_prob)
@@ -346,6 +347,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`nhl_edge_team_skating_speed_top_10`](reference/nhl_edge/team#nhl_edge_team_skating_speed_top_10) | [`nhl_edge_team_skating_speed_top_10`](https://fastRhockey.sportsdataverse.org/reference/nhl_edge_team_skating_speed_top_10.html) |
 | [`nhl_edge_team_zone_time_details`](reference/nhl_edge/team#nhl_edge_team_zone_time_details) | [`nhl_edge_team_zone_time_details`](https://fastRhockey.sportsdataverse.org/reference/nhl_edge_team_zone_time_details.html) |
 | [`nhl_edge_team_zone_time_top_10`](reference/nhl_edge/team#nhl_edge_team_zone_time_top_10) | [`nhl_edge_team_zone_time_top_10`](https://fastRhockey.sportsdataverse.org/reference/nhl_edge_team_zone_time_top_10.html) |
+| [`nhl_game_story`](reference/additional/analytics#nhl_game_story) | [`nhl_game_story`](https://fastRhockey.sportsdataverse.org/reference/nhl_game_story.html) |
 | [`nhl_goalie_leaders`](reference/nhl_api_web/other#nhl_goalie_leaders) | [`nhl_goalie_stats_leaders`](https://fastRhockey.sportsdataverse.org/reference/nhl_goalie_stats_leaders.html) |
 | [`nhl_landing`](reference/nhl_api_web/other#nhl_landing) | [`nhl_gamecenter_landing`](https://fastRhockey.sportsdataverse.org/reference/nhl_gamecenter_landing.html) |
 | [`nhl_player_game_log`](reference/nhl_api_web/player#nhl_player_game_log) | [`nhl_player_game_log`](https://fastRhockey.sportsdataverse.org/reference/nhl_player_game_log.html) |

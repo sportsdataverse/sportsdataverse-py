@@ -29,3 +29,4 @@ from sportsdataverse.pwhl.pwhl_prediction_constants import (
 from sportsdataverse.pwhl.pwhl_team_ratings import pwhl_team_ratings
 from sportsdataverse.pwhl.pwhl_market import pwhl_in_game_win_prob, pwhl_predict_games
 from sportsdataverse.pwhl.pwhl_player_props import pwhl_game_total, pwhl_player_props
+from sportsdataverse.pwhl.pwhl_game_story import pwhl_game_story  # noqa: F401
