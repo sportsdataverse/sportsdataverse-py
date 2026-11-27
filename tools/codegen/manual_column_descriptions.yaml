@@ -84305,3 +84305,16 @@ nfl_game_story:
   summary.periods_agree: True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose
     plays end on another score.
   summary.winner_team_id: Winning team's id; null on a tie.
+soccer_espn_transfermarkt_player_crosswalk:
+  espn_athlete_id: ESPN soccer athlete id, digits as text (Utf8, as the ESPN soccer roster frames carry it); unique in
+    the table.
+  espn_team_id: ESPN team whose roster listed the athlete on 2026-11-27 (Utf8).
+  espn_league: ESPN league slug of that team (eng.1, esp.1, ger.1, ita.1, fra.1, usa.1, mex.1).
+  espn_date_of_birth: Birth date ESPN gives for the athlete; null when ESPN gives none (the athlete is then unmatched).
+  player_id: Transfermarkt player id (Int64); joins player_id of load_soccer_transfermarkt_players and
+    load_soccer_transfermarkt_player_valuations. Null when unmatched; never on two athletes.
+  tm_name: Transfermarkt name of the matched player; null when unmatched.
+  match_method: How the athlete was resolved. 'name_dob' (the only Transfermarkt player with the same birth date and a
+    shared name token), 'name_dob_nationality' (several such players, one with the athlete's citizenship),
+    'name_jan1_club' / 'name_jan1_nationality' (a 1 January birth date, resolved only because exactly one such player
+    is also at the team's Transfermarkt club or shares the citizenship), or 'unmatched'.

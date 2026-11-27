@@ -13374,6 +13374,116 @@
   expected: kill
   note: An untagged game of a tagged tournament (older seasons) would split its run in two.
 
+- id: bb-doubled-name-not-scored
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "_DOUBLED_RE.match(c) if out[\"play_type\"] not in (\"substitution\", \"unknown\") else None"
+  mutant: "None"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A doubled runner name ('Verlin, Nate Verlin, Nate.') printed where 'scored' belongs counts no run (2019-2026)."
+
+- id: bb-doubled-name-not-cut
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "rf\"|(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?=(?:,\\s*unearned)?\\s*(?:[.;]|3a|$)))\""
+  mutant: "rf\"|(?P<dbl>{_NAME})(?!))\""
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A run-on doubled name stays inside the previous runner's clause and its run is lost."
+
+- id: bb-name-closes-advance-not-scored
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "or _name_closes(ac.group(1), c)"
+  mutant: "or False"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "'X advanced to third on an error by rf, X, unearned.' counts no run."
+
+- id: bb-name-closes-batter-not-scored
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "and (_THEN_SCORED_RE.search(primary) or _name_closes(out[\"batter\"], primary))"
+  mutant: "and (_THEN_SCORED_RE.search(primary))"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A batter who comes round with his own name in the 'scored' slot counts no run."
+
+- id: bb-advanced-to-home-not-scored
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "or (ac.group(2) == \"home\" and not is_out)"
+  mutant: "or False"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "'KEETER, Nathan advanced to home on a fielder's choice.' counts no run."
+
+- id: bb-advanced-to-home-out-scored
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "or (ac.group(2) == \"home\" and not is_out)"
+  mutant: "or (ac.group(2) == \"home\")"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A runner thrown out at home on 'advanced to home, out at home' would count a run."
+
+- id: bb-doubled-name-play-row-guard
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "_DOUBLED_RE.match(c) if out[\"play_type\"] not in (\"substitution\", \"unknown\") else None"
+  mutant: "_DOUBLED_RE.match(c)"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A commentary row ('Terrific sliding catch. Dah-nuh-nuh. Dah-nuh-nuh.') counts a run."
+
+- id: bb-doubled-name-must-end-clause
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "rf\"|(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?=(?:,\\s*unearned)?\\s*(?:[.;]|3a|$)))\""
+  mutant: "rf\"|(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?![A-Za-z]))\""
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k repeated_given_name_inside"
+  expected: kill
+  note: "'A Dai Dai singled to left field.' splits mid-name and loses its batter and single."
+
+- id: bb-stole-home-counted-twice
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "and out[\"batter\"] not in out[\"scoring_runners\"]  # \"X stole home, X, unearned.\" already counted"
+  mutant: "and True"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "'S. Mongelli stole home, S. Mongelli, unearned.' counts two runs."
+
+- id: bb-runner-clause-then-scored-fallback
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "if lr and _THEN_SCORED_RE.search(c):  # \"Mitchell,Mack advanced from second base, scored on play ...\" (2026)"
+  mutant: "if False:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "'Mitchell,Mack advanced from second base, scored on play ...' (2026) counts no run."
+
+- id: bb-advanced-from-not-cut
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "r\"(?:scored|advanced (?:to|from)|out (?:at|on)\\b|stole|picked off|caught stealing)\""
+  mutant: "r\"(?:scored|advanced to|out (?:at|on)\\b|stole|picked off|caught stealing)\""
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A run-on 'Jones advanced from second base, scored.' stays in the batter clause and credits the batter."
+
 # --- nfl-lateral-full-names: a lateral's credited player reads the box score's full name -----------
 - id: nfl-lateral-full-names-applied
   group: nfl-lateral-full-names
@@ -13394,3 +13504,13 @@
   test: tests/soccer/test_soccer_transfermarkt.py -k corrupt_footer
   expected: kill
   note: a mirror asset whose parquet footer will not decode raised a bare OSError instead of falling back to the source
+
+- id: tm-player-bridge-jan1-is-weak
+  group: codegen-runtime
+  finding: ACC-2026-0050
+  file: tools/build_soccer_espn_transfermarkt_player_crosswalk.py
+  snippet: '            ((pl.col("dob").dt.month() == 1) & (pl.col("dob").dt.day() == 1)).alias("weak"),'
+  mutant: '            pl.lit(False).alias("weak"),'
+  test: tests/soccer/test_soccer_espn_transfermarkt_player_crosswalk.py -k 1_january
+  expected: kill
+  note: a 1 January birth date (a stand-in for an unknown day) resolved on name alone, giving one player two athletes

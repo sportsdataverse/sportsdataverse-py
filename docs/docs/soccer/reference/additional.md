@@ -829,6 +829,67 @@ import polars as pl
 moves.filter(pl.col("transfer_season") == "25/26").sort("transfer_fee", descending=True, nulls_last=True)
 ```
 
+### soccer_espn_transfermarkt_player_crosswalk {#soccer_espn_transfermarkt_player_crosswalk}
+
+`soccer_espn_transfermarkt_player_crosswalk(league: 'str | None' = None, *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+ESPN soccer athlete id -> Transfermarkt `player_id`, for the first-tier leagues' current ESPN rosters.
+
+One row per athlete on the ESPN rosters (fetched 2026-11-27) of the eng.1, esp.1, ger.1, ita.1, fra.1, usa.1 and
+mex.1 teams whose Transfermarkt club is in the dataset: 4,346 athletes, 3,661 resolved (84%). The table ships
+with sdv-py; no request is made. An athlete is resolved by birth date and name against every Transfermarkt
+player: exactly one player with the same birth date and a shared name token, or, among several, the one with the
+athlete's citizenship. A 1 January birth date is too common a stand-in to count alone, so such an athlete is
+resolved only when exactly one same-date, same-name player also plays for the team's Transfermarkt club (or
+moved to it from 2025-07-01) or shares the citizenship. No player is matched to two athletes, and where the reep
+register carries both ids they agree on 99% of 2,478 pairs. The Transfermarkt data ends in July 2026, so a
+player who joined later can resolve with his previous club.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str \| None` | `None` | One of the seven ESPN league slugs above, to keep that league's rows; `None` (default) returns all. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+polars.DataFrame | pandas.DataFrame: one row per `espn_athlete_id` (Utf8, unique). `player_id` (Int64) joins `load_soccer_transfermarkt_players().player_id` and `load_soccer_transfermarkt_player_valuations()`; it is null, with `match_method == "unmatched"`, when no rule resolved the athlete.
+
+| col_name | type | description |
+|---|---|---|
+| `espn_athlete_id` | String | ESPN soccer athlete id, digits as text (Utf8, as the ESPN soccer roster frames carry it); unique in the table. |
+| `espn_team_id` | String | ESPN team whose roster listed the athlete on 2026-11-27 (Utf8). |
+| `espn_league` | String | ESPN league slug of that team (eng.1, esp.1, ger.1, ita.1, fra.1, usa.1, mex.1). |
+| `espn_date_of_birth` | Date | Birth date ESPN gives for the athlete; null when ESPN gives none (the athlete is then unmatched). |
+| `player_id` | Int64 | Transfermarkt player id (Int64); joins player_id of load_soccer_transfermarkt_players and load_soccer_transfermarkt_player_valuations. Null when unmatched; never on two athletes. |
+| `tm_name` | String | Transfermarkt name of the matched player; null when unmatched. |
+| `match_method` | String | How the athlete was resolved. 'name_dob' (the only Transfermarkt player with the same birth date and a shared name token), 'name_dob_nationality' (several such players, one with the athlete's citizenship), 'name_jan1_club' / 'name_jan1_nationality' (a 1 January birth date, resolved only because exactly one such player is also at the team's Transfermarkt club or shares the citizenship), or 'unmatched'. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If *league* is not one of the covered league slugs. |
+
+**Example**
+
+```python
+from sportsdataverse.soccer import soccer_espn_transfermarkt_player_crosswalk
+xw = soccer_espn_transfermarkt_player_crosswalk()
+print(xw.shape)
+
+# One league, as pandas
+
+epl = soccer_espn_transfermarkt_player_crosswalk(league="eng.1", return_as_pandas=True)
+
+# Market values for ESPN athletes
+
+from sportsdataverse.soccer import load_soccer_transfermarkt_players
+xw = soccer_espn_transfermarkt_player_crosswalk()
+xw.join(load_soccer_transfermarkt_players(), on="player_id").select("espn_athlete_id", "market_value_in_eur")
+```
+
 ### soccer_espn_transfermarkt_team_crosswalk {#soccer_espn_transfermarkt_team_crosswalk}
 
 `soccer_espn_transfermarkt_team_crosswalk(league: 'str | None' = None, *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

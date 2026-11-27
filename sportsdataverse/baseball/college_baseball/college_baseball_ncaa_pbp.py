@@ -84,9 +84,20 @@ _SUB_FULL_RE = re.compile(rf"^{_SUB_NAME}\s+to\s+{_POS_CODES}\b(?:\s+for\s+{_SUB
 # clauses on with no separator ("... RBI (0-2) TAYLOR, B. advanced to second HALLUM, C. scored.", 2012) or
 # after a colon (2016-2021), so the 3a/; split alone left them inside the batter's clause.
 _RUNNER_START_RE = re.compile(
-    rf"(?<![A-Za-z'.\-])(?!(?:RBI|SAC|SF)\b){_NAME},?\s+"
-    r"(?:scored|advanced to|out (?:at|on)\b|stole|picked off|caught stealing)"
+    rf"(?<![A-Za-z'.\-])(?!(?:RBI|SAC|SF)\b)(?:{_NAME},?\s+"
+    r"(?:scored|advanced (?:to|from)|out (?:at|on)\b|stole|picked off|caught stealing)"
+    rf"|(?P<dbl>{_NAME}),?\s+(?P=dbl)(?=(?:,\s*unearned)?\s*(?:[.;]|3a|$)))"  # the name must END its clause
 )
+# stats.ncaa.org sometimes prints the runner's name where "scored" belongs, with the RBI count confirming the run:
+# a bare doubled name ("Verlin, Nate Verlin, Nate.", 2019) or the name closing its own advance
+# ("Kamrin Markwardt advanced to third on an error by rf, Kamrin Markwardt, unearned.", 2019). The page's own
+# score column misses these runs too.
+_DOUBLED_RE = re.compile(rf"^(?P<n>{_NAME}),?\s+(?P=n)(?:,\s*unearned)?\.?$")
+
+
+def _name_closes(name: str, clause: str) -> bool:
+    """True when ``name`` repeats as the last item of its own clause (the "scored" slot)."""
+    return re.search(rf",\s*{re.escape(name)}(?:,\s*unearned)?\.?\s*$", clause) is not None
 
 
 def _clauses(desc: str) -> "list[str]":
@@ -232,7 +243,11 @@ def _decompose(desc: str) -> "dict":
     # runner clauses; a row led by a runner's advance ("Fogel, A. advanced to second Kaler, K. ...") counts it too
     lead_runner = bool(_ADVANCED_RE.match(primary))
     for c in clauses if lead_runner else clauses[1:]:
-        sc = _SCORED_RE.match(c)
+        # a doubled name is a run only on a real play, never in a substitution or a commentary row
+        # ("Terrific sliding catch. Dah-nuh-nuh. Dah-nuh-nuh.")
+        sc = _SCORED_RE.match(c) or (
+            _DOUBLED_RE.match(c) if out["play_type"] not in ("substitution", "unknown") else None
+        )
         if sc:
             out["runs_scored"] += 1
             out["scoring_runners"].append(sc.group(1))
@@ -240,10 +255,15 @@ def _decompose(desc: str) -> "dict":
         ac = _ADVANCED_RE.match(c)
         if ac:
             out["runners_advanced"].append(f"{ac.group(1)}->{ac.group(2)}")
-            if _THEN_SCORED_RE.search(c):
+            is_out = _OUT_RE.search(c.lower()) is not None
+            if (
+                _THEN_SCORED_RE.search(c)
+                or _name_closes(ac.group(1), c)
+                or (ac.group(2) == "home" and not is_out)  # "KEETER, Nathan advanced to home on a fielder's choice."
+            ):
                 out["runs_scored"] += 1
                 out["scoring_runners"].append(ac.group(1))
-            elif _OUT_RE.search(c.lower()):  # "BIRKOFER advanced to third, out at home rf to ss to c."
+            elif is_out:  # "BIRKOFER advanced to third, out at home rf to ss to c."
                 out["outs_on_play"] += 1
             continue
         sh = re.match(rf"^({_NAME})\s+stole home", c)  # a steal of home is a run
@@ -251,13 +271,23 @@ def _decompose(desc: str) -> "dict":
             out["runs_scored"] += 1
             out["scoring_runners"].append(sh.group(1))
             continue
+        lr = _LEADNAME_RE.match(c)
+        if lr and _THEN_SCORED_RE.search(c):  # "Mitchell,Mack advanced from second base, scored on play ..." (2026)
+            out["runs_scored"] += 1
+            out["scoring_runners"].append(lr.group(1))
+            continue
         if _OUT_RE.search(c.lower()):
             out["outs_on_play"] += 1
     # a row that opens with its runner scoring ("Mihos, D. scored on a wild pitch.") is a run too.
     if (ps := _SCORED_RE.match(primary)) and out["play_type"] != "home_run":
         out["runs_scored"] += 1
         out["scoring_runners"].append(ps.group(1))
-    elif out["batter"] and not lead_runner and out["play_type"] != "home_run" and _THEN_SCORED_RE.search(primary):
+    elif (
+        out["batter"]
+        and not lead_runner
+        and out["play_type"] != "home_run"
+        and (_THEN_SCORED_RE.search(primary) or _name_closes(out["batter"], primary))
+    ):
         # the batter comes all the way round: "Vitaletti tripled to center field, scored on a throwing error"
         out["runs_scored"] += 1
         out["scoring_runners"].append(out["batter"])
@@ -266,7 +296,12 @@ def _decompose(desc: str) -> "dict":
         out["runs_scored"] += 1
         out["scoring_runners"].append(out["batter"])
     # a standalone "<batter> stole home" primary is also a run.
-    if out["play_type"] == "stolen_base" and out["batter"] and "stole home" in primary.lower():
+    if (
+        out["play_type"] == "stolen_base"
+        and out["batter"]
+        and "stole home" in primary.lower()
+        and out["batter"] not in out["scoring_runners"]  # "X stole home, X, unearned." already counted
+    ):
         out["runs_scored"] += 1
         out["scoring_runners"].append(out["batter"])
     out["is_scoring_play"] = out["runs_scored"] > 0

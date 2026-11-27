@@ -14,10 +14,13 @@ ESPN teams) plus a reviewed id for a club whose reep row has none. No request is
 
 from __future__ import annotations
 
+import functools
 import gzip
 import io
 import warnings
 import zlib
+from importlib import resources
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import polars as pl
@@ -37,6 +40,7 @@ __all__ = [
     "load_soccer_transfermarkt_player_valuations",
     "load_soccer_transfermarkt_players",
     "load_soccer_transfermarkt_transfers",
+    "soccer_espn_transfermarkt_player_crosswalk",
     "soccer_espn_transfermarkt_team_crosswalk",
 ]
 
@@ -436,3 +440,86 @@ def soccer_espn_transfermarkt_team_crosswalk(
         )
     )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+_PLAYER_FILE = "espn_transfermarkt_player_crosswalk.csv"
+#: ``espn_athlete_id`` / ``espn_team_id`` are Utf8, the dtype of the ESPN soccer roster and team frames' ids;
+#: ``player_id`` is Int64, the dtype of ``load_soccer_transfermarkt_players().player_id``.
+_PLAYER_SCHEMA: dict[str, pl.DataType] = {
+    "espn_athlete_id": pl.Utf8,
+    "espn_team_id": pl.Utf8,
+    "espn_league": pl.Utf8,
+    "espn_date_of_birth": pl.Date,
+    "player_id": pl.Int64,
+    "tm_name": pl.Utf8,
+    "match_method": pl.Utf8,
+}
+
+
+@functools.lru_cache(maxsize=1)
+def _bundled_players() -> pl.DataFrame:
+    """The bundled table, read once per process (importlib.resources, then the source tree)."""
+    try:
+        raw = resources.files("sportsdataverse.soccer").joinpath("data", _PLAYER_FILE).read_bytes()
+    except (ModuleNotFoundError, OSError):  # a source tree run before the CSV is wired into package-data
+        raw = (Path(__file__).resolve().parent / "data" / _PLAYER_FILE).read_bytes()
+    return pl.read_csv(io.BytesIO(raw), schema=_PLAYER_SCHEMA)
+
+
+def soccer_espn_transfermarkt_player_crosswalk(
+    league: str | None = None, *, return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
+    """ESPN soccer athlete id -> Transfermarkt ``player_id``, for the first-tier leagues' current ESPN rosters.
+
+    One row per athlete on the ESPN rosters (fetched 2026-11-27) of the eng.1, esp.1, ger.1, ita.1, fra.1, usa.1 and
+    mex.1 teams whose Transfermarkt club is in the dataset: 4,346 athletes, 3,661 resolved (84%). The table ships
+    with sdv-py; no request is made. An athlete is resolved by birth date and name against every Transfermarkt
+    player: exactly one player with the same birth date and a shared name token, or, among several, the one with the
+    athlete's citizenship. A 1 January birth date is too common a stand-in to count alone, so such an athlete is
+    resolved only when exactly one same-date, same-name player also plays for the team's Transfermarkt club (or
+    moved to it from 2025-07-01) or shares the citizenship. No player is matched to two athletes, and where the reep
+    register carries both ids they agree on 99% of 2,478 pairs. The Transfermarkt data ends in July 2026, so a
+    player who joined later can resolve with his previous club.
+
+    Args:
+        league: One of the seven ESPN league slugs above, to keep that league's rows; ``None`` (default) returns all.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame | pandas.DataFrame: one row per ``espn_athlete_id`` (Utf8, unique). ``player_id`` (Int64)
+        joins ``load_soccer_transfermarkt_players().player_id`` and ``load_soccer_transfermarkt_player_valuations()``;
+        it is null, with ``match_method == "unmatched"``, when no rule resolved the athlete.
+
+    Raises:
+        ValueError: If *league* is not one of the covered league slugs.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.soccer import soccer_espn_transfermarkt_player_crosswalk
+            xw = soccer_espn_transfermarkt_player_crosswalk()
+            print(xw.shape)
+
+        One league, as pandas::
+
+            epl = soccer_espn_transfermarkt_player_crosswalk(league="eng.1", return_as_pandas=True)
+
+        Market values for ESPN athletes::
+
+            from sportsdataverse.soccer import load_soccer_transfermarkt_players
+            xw = soccer_espn_transfermarkt_player_crosswalk()
+            xw.join(load_soccer_transfermarkt_players(), on="player_id").select("espn_athlete_id", "market_value_in_eur")
+
+    See Also:
+        * `soccer_espn_transfermarkt_team_crosswalk` -- the team-level bridge the club check uses
+        * `transfermarkt-datasets`_ -- the Transfermarkt dataset ``player_id`` belongs to
+
+    .. _transfermarkt-datasets: https://github.com/dcaribou/transfermarkt-datasets
+    """
+    df = _bundled_players()
+    if league is not None:
+        known = sorted(set(df["espn_league"].to_list()))
+        if league not in known:
+            raise ValueError(f"league must be one of {known}, got {league!r}")
+        df = df.filter(pl.col("espn_league") == league)
+    return df.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else df.clone()
