@@ -214,7 +214,7 @@ def _games(rows: pl.DataFrame, pbp: pl.DataFrame, league: str, regulation_period
 def _plays(pbp: pl.DataFrame, games: pl.DataFrame, league: str) -> pl.DataFrame:
     """The games' plays with their win-probability change, in the core's play schema."""
     pbp = pbp.with_columns(pl.col("game_id").cast(pl.Int64)).join(games.select("game_id"), on="game_id", how="semi")
-    regs = dict(zip(games["game_id"].to_list(), games["regulation_periods"].to_list()))
+    regs = dict(zip(games["game_id"].to_list(), games["regulation_periods"].to_list(), strict=True))
     return _wp(pbp, league, regs).select(
         "game_id",
         pl.col("id").cast(pl.Int64).alias("play_id"),

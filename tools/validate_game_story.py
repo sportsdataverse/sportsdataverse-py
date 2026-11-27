@@ -391,7 +391,7 @@ def run(lg: str, season: int, data_dir: Path | None) -> dict:
             "source_off_final_games": off_final["game_id"].to_list()[:50],
         },
         "accounting_gap": {"max": acct["gap"].max(), "mean": acct["gap"].mean(), "median": acct["gap"].median()},
-        "rank1_edges": dict(zip(top_edges["edge"].to_list(), top_edges["len"].to_list())),
+        "rank1_edges": dict(zip(top_edges["edge"].to_list(), top_edges["len"].to_list(), strict=True)),
     }
 
 
