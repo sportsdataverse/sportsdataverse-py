@@ -215,6 +215,13 @@ strength and rolls the games up into:
 - `wab` -- wins above bubble: actual wins minus the expected wins of a
   bubble-quality team (`bubble_adj_net`) playing the same schedule, using the
   Phase-2 predictors with the HFA applied on the team's actual home/away side.
+- reference-team schedule strength, record difficulty and
+  `wins_above_bubble`: the win probability of a fixed reference team (the
+  5th, 25th or 12th-best rated FBS team, or an average one) on the team's
+  schedule, `Phi((net_points_scale * (r_ref - r_opp) + h * hfa_points) /
+  margin_sd)`. `as_of_date` splits completed from remaining games for these
+  columns only; the columns above use every completed game. The reference
+  ratings come from the ratings passed in (pooled when several seasons are).
 
 **Parameters**
 
@@ -227,7 +234,7 @@ strength and rolls the games up into:
 
 **Returns**
 
-One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense rank, best = 1), `quality_wins` (Int64), `game_control` (Float64), `wab` (Float64). Zero-row (typed) when no games are available.
+One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense rank, best = 1), `quality_wins` (Int64), `game_control` (Float64), `wab` (Float64), then the reference-team columns (Float64): for each reference `top5` / `top25` / `bubble` (the 5th / 25th / 12th-best rated FBS team) / `average` (rating 0), `sos_<ref>_past` / `_remaining` / `_season` (the reference team's mean win probability over completed, unplayed and all games, at the team's site, an FCS opponent a sure win) and `record_difficulty_<ref>` (the probability it wins at least as many of the completed games as the team did), and `wins_above_bubble` (wins minus the 12th-best team's expected wins). Zero-row (typed) when no games are available.
 
 | col_name | type | description |
 |---|---|---|
@@ -238,6 +245,23 @@ One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense ran
 | `quality_wins` | Int64 | Count of wins over opponents with adj_net at or above the era quality-win threshold. |
 | `game_control` | Float64 | Mean postgame win expectancy Phi(actual_margin / margin_sd) across played games - how dominant the results were, not just win/loss. |
 | `wab` | Float64 | Wins above bubble - actual wins minus a bubble-quality team's expected wins over the same schedule. |
+| `sos_top5_past` | Float64 | Mean probability that the 5th-best rated FBS team would win the team's completed games (before as_of_date when it is set) at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_top5_remaining` | Float64 | Mean probability that the 5th-best rated FBS team would win the team's games not yet played (null when none remain) at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_top5_season` | Float64 | Mean probability that the 5th-best rated FBS team would win the team's every scheduled game at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_top25_past` | Float64 | Mean probability that the 25th-best rated FBS team would win the team's completed games (before as_of_date when it is set) at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_top25_remaining` | Float64 | Mean probability that the 25th-best rated FBS team would win the team's games not yet played (null when none remain) at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_top25_season` | Float64 | Mean probability that the 25th-best rated FBS team would win the team's every scheduled game at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_bubble_past` | Float64 | Mean probability that the 12th-best rated FBS team (a bubble benchmark sized to a 12-team field, not the committee's cut) would win the team's completed games (before as_of_date when it is set) at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_bubble_remaining` | Float64 | Mean probability that the 12th-best rated FBS team (a bubble benchmark sized to a 12-team field, not the committee's cut) would win the team's games not yet played (null when none remain) at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_bubble_season` | Float64 | Mean probability that the 12th-best rated FBS team (a bubble benchmark sized to a 12-team field, not the committee's cut) would win the team's every scheduled game at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_average_past` | Float64 | Mean probability that an average team (rating 0) would win the team's completed games (before as_of_date when it is set) at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_average_remaining` | Float64 | Mean probability that an average team (rating 0) would win the team's games not yet played (null when none remain) at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `sos_average_season` | Float64 | Mean probability that an average team (rating 0) would win the team's every scheduled game at the team's site; an FCS opponent counts as a sure win; an unrated FBS opponent is left out. |
+| `record_difficulty_top5` | Float64 | Probability that the 5th-best rated FBS team would win at least as many of the team's completed games as the team did (exact Poisson-binomial; lower = harder record). |
+| `record_difficulty_top25` | Float64 | Probability that the 25th-best rated FBS team would win at least as many of the team's completed games as the team did (exact Poisson-binomial; lower = harder record). |
+| `record_difficulty_bubble` | Float64 | Probability that the 12th-best rated FBS team (a bubble benchmark sized to a 12-team field, not the committee's cut) would win at least as many of the team's completed games as the team did (exact Poisson-binomial; lower = harder record). |
+| `record_difficulty_average` | Float64 | Probability that an average team (rating 0) would win at least as many of the team's completed games as the team did (exact Poisson-binomial; lower = harder record). |
+| `wins_above_bubble` | Float64 | Wins minus the expected wins of the 12th-best rated FBS team over the team's completed games (an FCS opponent counts as a sure win; an unrated FBS opponent is left out). Differs from wab in its reference and home-field term. |
 
 **Example**
 
