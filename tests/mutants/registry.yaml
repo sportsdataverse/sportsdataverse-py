@@ -8869,7 +8869,7 @@
   file: sportsdataverse/mbb/mbb_team_strength.py
   snippet: 'lam=COLLEGE_RIDGE_LAMBDA[league]'
   mutant: 'lam=COLLEGE_RIDGE_LAMBDA["mens"]'
-  test: tests/mbb/test_mbb_team_strength.py::test_ridge_ratings_are_the_possession_ridge
+  test: tests/mbb/test_mbb_team_strength.py::test_the_prior_seeds_from_last_season
   expected: kill
   note: The women's ridge would run at the men's penalty (200, not 50).
 
@@ -9362,8 +9362,8 @@
   group: bb-preseason-prior
   finding: BB-preseason-prior
   file: sportsdataverse/nba/nba_season_sim.py
-  snippet: 'rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=prior'
-  mutant: 'rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=None'
+  snippet: '        prior=prior,'
+  mutant: '        prior=None,'
   test: tests/nba/test_nba_season_sim.py::test_nba_season_sim_carries_the_prior_from_the_release_before
   expected: kill
   note: nba_season_sim must hand the loaded prior to the game model.
@@ -11652,6 +11652,16 @@
   expected: kill
   note: A state missing from an empirical matrix would score as 0 RE instead of NaN.
 
+- id: mlb-run-value-missing-before-state-zero
+  group: mlb-dedupe-game-pks
+  finding: mlb-markov-run-expectancy
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    re_before = 0.0 if before_outs >= 3 else lut.get((before_state, before_outs))'
+  mutant: '    re_before = 0.0 if before_outs >= 3 else lut.get((before_state, before_outs), 0.0)'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_run_value_on_an_empirical_matrix_missing_a_state
+  expected: kill
+  note: A missing before-state would score as 0 RE, so the event's run value would be the after-state's RE.
+
 - id: mlb-base-out-states-not-deduped
   group: mlb-dedupe-game-pks
   finding: mlb-dedupe-game-pks
@@ -11789,8 +11799,8 @@
   group: nfl-espn-view
   finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
-  snippet: '_int_id(pl.col("game_id"), plays.schema["game_id"], "game_id")  # ... and a float game id'
-  mutant: 'pass  # ... and a float game id'
+  snippet: '    out = plays.with_columns(_int_id(pl.col("game_id"), plays.schema["game_id"], "game_id").alias("_espn"))'
+  mutant: '    out = plays.with_columns(pl.col("game_id").cast(pl.Utf8).cast(pl.Int64).alias("_espn"))'
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_float_game_id_is_refused_when_nflverse_game_id_is_there
   expected: kill
   note: A float game_id on a frame that already has nflverse_game_id would slip past the id guard (CodeRabbit on #1266).
@@ -13197,7 +13207,7 @@
   group: bb-playoff-series
   finding: bb-d43-playoff-series
   file: sportsdataverse/_common/playoff_series.py
-  snippet: '    lo = pl.min_horizontal("home_id", "away_id").cast(pl.Int64)'
+  snippet: '    lo = pl.min_horizontal(pl.col("home_id", "away_id").cast(pl.Int64))'
   mutant: '    lo = pl.col("home_id").cast(pl.Int64)'
   test: tests/nba/test_nba_playoff_series.py::test_nba_2025_bracket_and_finals
   expected: kill
@@ -13217,8 +13227,8 @@
   group: bb-playoff-series
   finding: bb-d43-playoff-series
   file: sportsdataverse/_common/playoff_series.py
-  snippet: '        & ((pl.col("minutes").fill_null(0) > 0) | counted)'
-  mutant: '        & (pl.col("minutes").fill_null(0) > 0)'
+  snippet: '& ((pl.col("minutes").fill_null(0) > 0) | counted)'
+  mutant: '& (pl.col("minutes").fill_null(0) > 0)'
   test: tests/nba/test_nba_playoff_series.py::test_a_zero_minute_cameo_with_a_stat_counts_as_played
   expected: kill
   note: A 0.0-minute cameo with a stat (ESPN lists a dozen a season) would drop out of the games and the totals.
