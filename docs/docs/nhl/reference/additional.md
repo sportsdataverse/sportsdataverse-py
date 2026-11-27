@@ -123,6 +123,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [in_game_features](additional/analytics.md#in_game_features) | Per-play in-game win-probability features from game state. |
 | [nhl_edge_skating_value](additional/analytics.md#nhl_edge_skating_value) | Per-skater EDGE skating-value composite (z-score or percentile blend). |
 | [nhl_faceoff_value](additional/analytics.md#nhl_faceoff_value) | Per-player context-adjusted faceoff-win value. |
+| [nhl_game_story](additional/analytics.md#nhl_game_story) | How the winner won it, for one or many NHL games: edges in goals, the moment, periods, runs, performers. |
 | [nhl_game_total](additional/analytics.md#nhl_game_total) | Per-game expected total goals -- a thin re-export of model ②'s expected-goals helper. |
 | [nhl_goalie_saves](additional/analytics.md#nhl_goalie_saves) | Starting goalie saves projection with a central interval, per goalie-game. |
 | [nhl_in_game_win_prob](additional/analytics.md#nhl_in_game_win_prob) | Per-play live home win probability from the bundled in-game logistic. |

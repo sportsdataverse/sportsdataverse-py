@@ -3338,9 +3338,16 @@ def _flat_modules_for_prefix(prefix: str) -> list[str]:
 # ``__init__.py`` is generated, so a module listed here is the ONLY way its public
 # names reach ``sportsdataverse.<group>`` and the top-level package.
 _CONTAINER_HANDWRITTEN: dict[str, list[str]] = {
-    # kloppy event data (the optional ``soccer`` extra), the bundled ESPN <-> reep team crosswalk and the
-    # Transfermarkt dataset loaders
-    "soccer": ["soccer_events", "spadl", "xthreat", "soccer_reep_crosswalk", "soccer_transfermarkt"],
+    # kloppy event data (the optional ``soccer`` extra), the bundled ESPN <-> reep team crosswalk, the
+    # Transfermarkt dataset loaders and the game story
+    "soccer": [
+        "soccer_events",
+        "spadl",
+        "xthreat",
+        "soccer_reep_crosswalk",
+        "soccer_transfermarkt",
+        "soccer_game_story",
+    ],
 }
 
 

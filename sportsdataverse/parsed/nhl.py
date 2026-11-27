@@ -362,6 +362,7 @@ from sportsdataverse.nhl import nhl_edge_team_skating_distance_detail as nhl_edg
 from sportsdataverse.nhl import nhl_edge_team_skating_speed_detail as nhl_edge_team_skating_speed_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_expected_assists as nhl_expected_assists  # noqa: F401
 from sportsdataverse.nhl import nhl_faceoff_value as nhl_faceoff_value  # noqa: F401
+from sportsdataverse.nhl import nhl_game_story as nhl_game_story  # noqa: F401
 from sportsdataverse.nhl import nhl_game_total as nhl_game_total  # noqa: F401
 from sportsdataverse.nhl import nhl_goalie_gsax as nhl_goalie_gsax  # noqa: F401
 from sportsdataverse.nhl import nhl_goalie_saves as nhl_goalie_saves  # noqa: F401
@@ -690,6 +691,7 @@ __all__ = [
     "nhl_edge_team_zone_time_top_10",
     "nhl_expected_assists",
     "nhl_faceoff_value",
+    "nhl_game_story",
     "nhl_game_total",
     "nhl_goalie_gsax",
     "nhl_goalie_leaders",

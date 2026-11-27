@@ -1,10 +1,10 @@
 ---
-title: "MLB — additional Python functions — Analytics"
-sidebar_label: "Analytics"
+title: "MLB — additional Python functions — Analytics: add_sequence–siera_like"
+sidebar_label: "Analytics: add_sequence–siera_like"
 sidebar_position: 7
-description: "MLB — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — additional Python functions — Analytics: add_sequence–siera_like — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MLB — additional Python functions — Analytics
+# MLB — additional Python functions — Analytics: add_sequence–siera_like
 
 ### add_sequence_features {#add_sequence_features}
 
@@ -591,6 +591,134 @@ mlb_fielding_oaa(bip, by_direction=True)
 oaa.filter(pl.col("opportunities") >= 100).sort("oaa", descending=True)
 ```
 
+### mlb_game_story {#mlb_game_story}
+
+`mlb_game_story(pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', wpa: 'pl.DataFrame', re24: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame]'`
+
+How the winner won it, for one or many MLB games: edges in runs, the moment, innings, runs, performers.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | `load_mlb_pbp` plate appearances, one or many games. |
+| `schedule` | `DataFrame` |  | `load_mlb_schedule` rows (`game_pk`, `season`, the team ids and the final score). |
+| `wpa` | `DataFrame` |  | `load_mlb_wpa` rows for the same games. |
+| `re24` | `DataFrame` |  | `load_mlb_re24_matrix` rows for the games' seasons. |
+| `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
+
+**Returns**
+
+`{"summary", "edges", "moment", "periods", "runs", "performers"}`, the frames of `~sportsdataverse._common.game_story.GAME_STORY_SCHEMAS`: the staffs' runs saved (`starting_pitching`, `bullpen`) and the `home_runs` / `risp_hits` splits, in runs and ranked; the largest-WPA plate appearance; innings (an extra inning keeps its number); each side's largest unanswered run; the top WPA player (`player_name` null: the releases carry ids only).
+
+`summary`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's MLB game_pk. |
+| `home_team_id` | Int64 | Home team's MLB team id. |
+| `away_team_id` | Int64 | Away team's MLB team id. |
+| `home_score` | Int64 | Home team's official final score. |
+| `away_score` | Int64 | Away team's official final score. |
+| `winner_team_id` | Int64 | Winning team's id; null on a tie. |
+| `loser_team_id` | Int64 | Losing team's id; null on a tie. |
+| `margin` | Int64 | Winner's final score less the loser's; 0 on a tie. |
+| `decided` | Boolean | True when the game has a winner (false on a tie). |
+| `periods_agree` | Boolean | True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose plays end on another score. |
+| `n_periods` | Int64 | Periods played, overtimes included. |
+| `overtime` | Boolean | True when the game went past regulation. |
+
+`edges`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's MLB game_pk. |
+| `winner_team_id` | Int64 | Winning team's id (null on a tie, where the edges read from the home side's view). |
+| `loser_team_id` | Int64 | Losing team's id (null on a tie). |
+| `edge` | String | Edge name. Accounting: starting_pitching, bullpen (RE24 each staff allowed, negated: runs saved against expectation; together close to the margin). Splits: home_runs (runs on home runs), risp_hits (hits with a runner on second or third, priced at the runs scored on them). |
+| `kind` | String | accounting for edges that split the game between them (their points_worth add up to the margin, exactly or nearly; see the function's docstring), split for overlapping cuts. |
+| `unit` | String | Always runs: the scoring unit the edges are priced in. |
+| `winner_value` | Float64 | Winner's value for the edge in the edge's own unit: points for a points edge, a rate for a rate edge. |
+| `loser_value` | Float64 | Loser's value for the edge, in the same unit as winner_value. |
+| `points_worth` | Float64 | The winner's edge in the sport's scoring unit: the winner's points from the edge less the loser's. Positive favours the winner. |
+| `rank` | Int64 | Rank of the edge within the game by points_worth, 1 = largest; equal worths keep the edge list's order. |
+
+`moment`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's MLB game_pk. |
+| `play_id` | Int64 | The plate appearance's at_bat_index. |
+| `order` | Int64 | The play's position in the game's play order. |
+| `period` | Int64 | Period of the play. |
+| `clock` | String | Game clock of the play as the source shows it. |
+| `team_id` | Int64 | Team of the play: the event's team (hockey), the batting team (baseball), the scoring team (soccer). |
+| `text` | String | Play description as the source writes it. |
+| `wpa` | Float64 | Home win probability after the play less before it. |
+| `winner_wpa` | Float64 | The same change from the winner's side (null on a tie). |
+| `home_score` | Int64 | Home score after the play. |
+| `away_score` | Int64 | Away score after the play. |
+| `rule` | String | max_abs_wpa: the play with the largest absolute win-probability change (earliest on ties); deciding_score where no play has one: the winner's score that put it ahead for good. |
+
+`periods`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's MLB game_pk. |
+| `period` | Int64 | Period number, from 1; overtimes follow regulation. |
+| `period_label` | String | The inning number, 1-9; an extra inning keeps its number (10, 11, ...). |
+| `is_overtime` | Boolean | True for a period after regulation. |
+| `home_pts` | Int64 | Home points in the period: its last running score less the previous period's. |
+| `away_pts` | Int64 | Away points in the period. |
+| `home_cum` | Int64 | Home running score at the end of the period. |
+| `away_cum` | Int64 | Away running score at the end of the period. |
+
+`runs`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's MLB game_pk. |
+| `team_id` | Int64 | Team that made the run. |
+| `points` | Int64 | The side's largest unanswered run: points it scored in a row with no score by the other side (a score correction stays in the run and counts against its side). |
+| `start_order` | Int64 | Play order of the run's first score. |
+| `end_order` | Int64 | Play order of the run's last score. |
+| `start_period` | Int64 | Period of the run's first score. |
+| `end_period` | Int64 | Period of the run's last score. |
+| `home_score_after` | Int64 | Home score at the end of the run. |
+| `away_score_after` | Int64 | Away score at the end of the run. |
+
+`performers`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's MLB game_pk. |
+| `team_id` | Int64 | Team of the top performer. |
+| `player_id` | Int64 | The side's top performer's player id. |
+| `player_name` | String | Always null: the MLB releases carry player ids only. |
+| `metric` | String | Always wpa: win probability added, the metric the performer is chosen by. |
+| `value` | Float64 | The player's WPA as batter (his side's view) and pitcher (the other side's WPA, negated); ties go to plate appearances. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `re24` has no run expectancy for one of the games' seasons, or for a PA's base-out state. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.mlb import load_mlb_pbp, load_mlb_re24_matrix, load_mlb_schedule, load_mlb_wpa
+from sportsdataverse.mlb.mlb_game_story import mlb_game_story
+sched = load_mlb_schedule([2025]).filter(pl.col("detailed_state") == "Final")
+story = mlb_game_story(load_mlb_pbp([2025]), sched, load_mlb_wpa([2025]), load_mlb_re24_matrix([2025]))
+story["edges"].filter(pl.col("rank") == 1)
+
+# The largest winner-favoring swings
+
+story["moment"].filter(pl.col("winner_wpa") > 0.4)
+```
+
 ### mlb_injury_risk {#mlb_injury_risk}
 
 `mlb_injury_risk(pitches: 'pl.DataFrame', *, as_of_date: 'Optional[dt.date]' = None, window: 'int' = 5, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
@@ -1131,71 +1259,4 @@ ERA; use `x_era` (oracle-gated vs Savant's xERA) for a fitted number.
 from sportsdataverse.mlb.mlb_pitch_era import siera_like
 out = siera_like(raw_pitches, 2024)
 print(out.sort("siera_like").head())
-```
-
-### tto_penalty_table {#tto_penalty_table}
-
-`tto_penalty_table(feats: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Observed mean run value by times-through-order, with the penalty vs TTO=1.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `feats` | `DataFrame` |  | Output of `sportsdataverse.mlb.mlb_pitch_features.add_sequence_features` (needs `times_through_order` and `run_value`). |
-| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
-
-**Returns**
-
-`times_through_order`, `mean_run_value`, `penalty_vs_first` (`mean_run_value` minus the TTO=1 mean run value), `n`. Empty input returns a zero-row frame with this schema.
-
-| col_name | type | description |
-|---|---|---|
-| `times_through_order` | Int64 | Times through the batting order (1-3). |
-| `mean_run_value` | Float64 | Mean observed run value for pitches at this TTO level. |
-| `penalty_vs_first` | Float64 | mean_run_value minus the TTO=1 mean run value. |
-| `n` | Int64 | Number of pitches observed at this TTO level. |
-
-**Example**
-
-```python
-from sportsdataverse.mlb.mlb_pitch_features import pitch_features, add_sequence_features
-from sportsdataverse.mlb.mlb_pitch_fatigue import tto_penalty_table
-feats = add_sequence_features(pitch_features(raw_pitches))
-out = tto_penalty_table(feats)
-print(out.sort("times_through_order"))
-```
-
-### x_era {#x_era}
-
-`x_era(pitches: 'pl.DataFrame', season: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Parametric xERA from Statcast expected wOBA allowed.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pitches` | `DataFrame` |  | Raw (or feature-substrate) pitch frame carrying `pitcher` and `estimated_woba_using_speedangle`. |
-| `season` | `int` |  | Season year (selects the league baseline via `sportsdataverse.mlb.mlb_pitching_constants.get_baselines`). |
-| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
-
-**Returns**
-
-`pitcher`, `season`, `x_woba`, `x_era`. Empty input returns a zero-row frame with this schema.
-
-| col_name | type | description |
-|---|---|---|
-| `pitcher` | Int64 | Whether the position is a pitcher. |
-| `season` | Int64 | Season year. |
-| `x_woba` | Float64 | Expected wOBA allowed, the mean of Statcast estimated_woba_using_speedangle over the pitcher's pitches that carry one (batted balls). |
-| `x_era` | Float64 | Parametric xERA, league ERA + (x_woba - league wOBA) / wOBA scale * PA per 9, from the season's league baselines. |
-
-**Example**
-
-```python
-from sportsdataverse.mlb.mlb_pitch_era import x_era
-out = x_era(raw_pitches, 2024)
-print(out.sort("x_era").head())
 ```

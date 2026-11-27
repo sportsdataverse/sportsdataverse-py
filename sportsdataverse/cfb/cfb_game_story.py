@@ -146,7 +146,9 @@ def _players(p: pl.DataFrame) -> pl.DataFrame:
         if f"{role}_player_id" not in p.columns:
             continue
         roles.append(
-            p.filter(pl.col(f"{role}_player_id").is_not_null() & pl.col("EPA").is_not_null()).select(
+            p.filter(
+                pl.col(f"{role}_player_id").is_not_null() & pl.col("EPA").is_not_null() & pl.col("EPA").is_not_nan()
+            ).select(
                 "game_id",
                 pl.col("pos_team_id").alias("team_id"),
                 pl.col(f"{role}_player_id").cast(pl.Int64).alias("player_id"),

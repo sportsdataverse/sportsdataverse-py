@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Game story fixtures](#game-story-fixtures)
+  - [Hockey, baseball and soccer (phase 2)](#hockey-baseball-and-soccer-phase-2)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -21,3 +22,16 @@ Real released plays, projected to the columns the football game-story adapter re
 
 The 2024 games come from the gate pilot seasons. The tie and the NBA game come from held-out seasons: ties are not in
 the edge-direction gate; the NBA game was added after the held-out run, as a regression test for the defect it found.
+
+## Hockey, baseball and soccer (phase 2)
+
+All from the gate pilot seasons, cut 2026-11-26 from the release assets (raw ESPN summaries for soccer).
+
+| File | Source | Games | Why |
+|---|---|---|---|
+| `nhl_{pbp,schedule,skater_box}_games.parquet` | `load_nhl_pbp_full` / `load_nhl_schedules` / `load_nhl_skater_boxscores`, season 2025 | 2024020022 (shootout), 2024020009 (overtime), 2024020001 (regulation) | the shootout's goal, which no play carries, and the `SO` period |
+| `pwhl_{pbp,schedule,skater_box,xg}_games.parquet` | `load_pwhl_pbp` / `load_pwhl_schedules` / `load_pwhl_skater_boxscores` / `load_pwhl_xg_pbp`, season 2025 | 106 (shootout), 107 (overtime), 105 (regulation) | the running score built from goal events; `deciding_score` moments |
+| `mlb_{pbp,schedule,wpa,re24}_games.parquet` | `load_mlb_pbp` / `load_mlb_schedule` / `load_mlb_wpa` / `load_mlb_re24_matrix`, season 2024 | 744802 (extra innings), 744795 (road win), 744797 (home win) | extra innings keep their number; the release keys a PA's WPA to the next index |
+| `mlb_{pbp,schedule,wpa}_716356.parquet`, `mlb_re24_2023.parquet` | the same loaders, season 2023 | 716356 (11 innings) | the automatic runner scores on the first PA of the 10th and 11th, so no base shows him after it |
+| `mlb_{pbp,schedule}_748542.parquet` | the same loaders, season 2023 | 748542 (World Series, 11 innings) | no automatic runner: its extra halves open empty |
+| `eng1_<event>.json.gz` | `espn_soccer_summary("eng.1", event_id, return_parsed=False)`, 2023-24 Premier League | 671031 (a goal following a corner), 671033 (a draw), 671048 (an own goal) | goal kinds, a draw's missing moment, own goals credited to the side they count for |

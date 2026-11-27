@@ -1036,6 +1036,10 @@ categories:
       - sportsdataverse.nba.nba_game_story
       - sportsdataverse.cfb.cfb_game_story
       - sportsdataverse.nfl.nfl_game_story
+      - sportsdataverse.nhl.nhl_game_story
+      - sportsdataverse.pwhl.pwhl_game_story
+      - sportsdataverse.mlb.mlb_game_story
+      - sportsdataverse.soccer.soccer_game_story
       - sportsdataverse.nba.nba_situational
       - sportsdataverse.wnba.wnba_team_season_rates
       - sportsdataverse.wnba.wnba_game_impact

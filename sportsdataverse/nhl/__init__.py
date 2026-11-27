@@ -102,6 +102,7 @@ from sportsdataverse.nhl.nhl_expected_assists import nhl_expected_assists
 from sportsdataverse.nhl.nhl_faceoff_value import nhl_faceoff_value
 from sportsdataverse.nhl.nhl_penalty_value import nhl_penalty_value
 from sportsdataverse.nhl.nhl_zone_transitions import nhl_zone_transitions
+from sportsdataverse.nhl.nhl_game_story import nhl_game_story  # noqa: F401
 from sportsdataverse.nhl.pwhl_microstat import (
     pwhl_edge_skating_value,
     pwhl_expected_assists,

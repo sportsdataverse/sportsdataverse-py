@@ -280,7 +280,10 @@ def nba_game_story(
         ValueError: If ``league`` is not one of the four.
         polars.exceptions.ColumnNotFoundError: If a frame lacks a column named above (``pbp``'s ``id``,
             ``game_play_number``, ``period_number``, ``clock_display_value``, ``team_id``, ``text``,
-            ``home_score``, ``away_score``; the boxes' ids, counts and ``team_home_away``).
+            ``home_score``, ``away_score``; the boxes' ids, counts and ``team_home_away``). A ``pbp``
+            without ``wp_delta`` is scored by :func:`~sportsdataverse.nba.nba_game_page.score_win_prob`,
+            so it also needs that function's columns (``home_team_spread``, ``game_spread_available``,
+            ``start_game_seconds_remaining``, the period clock, ``home_team_id``).
 
     Example:
         Quick start::

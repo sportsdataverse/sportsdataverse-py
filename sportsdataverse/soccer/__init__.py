@@ -22,6 +22,7 @@ from sportsdataverse.soccer.spadl import *  # noqa: F401,F403
 from sportsdataverse.soccer.xthreat import *  # noqa: F401,F403
 from sportsdataverse.soccer.soccer_reep_crosswalk import *  # noqa: F401,F403
 from sportsdataverse.soccer.soccer_transfermarkt import *  # noqa: F401,F403
+from sportsdataverse.soccer.soccer_game_story import *  # noqa: F401,F403
 
 # Sub-league packages — imported so ``sportsdataverse.soccer.<leaf>`` is reachable
 # as an attribute on this container module (0.0.65+).

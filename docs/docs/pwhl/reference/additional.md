@@ -67,6 +67,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 
 | Function | Summary |
 |---|---|
+| [pwhl_game_story](additional/analytics.md#pwhl_game_story) | How the winner won it, for one or many PWHL games: edges in goals, the moment, periods, runs, performers. |
 | [pwhl_game_total](additional/analytics.md#pwhl_game_total) | PWHL per-game expected total goals (re-export of the expected-goals helper). |
 | [pwhl_in_game_win_prob](additional/analytics.md#pwhl_in_game_win_prob) | PWHL per-play live home win probability from the bundled in-game model. |
 | [pwhl_player_props](additional/analytics.md#pwhl_player_props) | PWHL empirical-Bayes shots/points player-prop projections. |

@@ -940,3 +940,125 @@ tm = soccer_espn_transfermarkt_team_crosswalk(league="eng.1")
 from sportsdataverse.soccer import load_soccer_transfermarkt_players
 tm.join(load_soccer_transfermarkt_players(), left_on="club_id", right_on="current_club_id")
 ```
+
+## Analytics
+
+### soccer_game_story {#soccer_game_story}
+
+`soccer_game_story(summaries: 'dict | list[dict]', *, return_as_pandas: 'bool' = False) -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame]'`
+
+How the winner won it, for one or many soccer matches: edges in goals, the moment, halves, runs, performers.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `summaries` | `dict \| list[dict]` |  | One raw ESPN match summary or a list of them (`espn_soccer_summary(league, event_id, return_parsed=False)`), any league. |
+| `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
+
+**Returns**
+
+`{"summary", "edges", "moment", "periods", "runs", "performers"}`, the frames of `~sportsdataverse._common.game_story.GAME_STORY_SCHEMAS`: the goals by kind (adding up to the margin exactly) and shots on target, in goals and ranked; the winner's go-ahead-for-good goal (`rule` `deciding_score`); `H1`, `H2`, `ET1`, `ET2`; each side's largest unanswered run of goals; the goals-plus-assists leader. A summary without both teams' final score is skipped.
+
+`summary`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The match's ESPN event id. |
+| `home_team_id` | Int64 | Home team's ESPN team id. |
+| `away_team_id` | Int64 | Away team's ESPN team id. |
+| `home_score` | Int64 | Home team's official final score. |
+| `away_score` | Int64 | Away team's official final score. |
+| `winner_team_id` | Int64 | Winning team's id; null on a tie. |
+| `loser_team_id` | Int64 | Losing team's id; null on a tie. |
+| `margin` | Int64 | Winner's final score less the loser's; 0 on a tie. |
+| `decided` | Boolean | True when the game has a winner (false on a tie). |
+| `periods_agree` | Boolean | True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose plays end on another score. |
+| `n_periods` | Int64 | Periods played, overtimes included. |
+| `overtime` | Boolean | True when the game went past regulation. |
+
+`edges`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The match's ESPN event id. |
+| `winner_team_id` | Int64 | Winning team's id (null on a tie, where the edges read from the home side's view). |
+| `loser_team_id` | Int64 | Losing team's id (null on a tie). |
+| `edge` | String | Edge name. Accounting: open_play_goals, set_piece_goals (direct free kicks and goals following a corner or set piece), penalty_goals, own_goals_for; together the margin exactly. Split: shots_on_target, priced at the match's goals per shot on target. |
+| `kind` | String | accounting for edges that split the game between them (their points_worth add up to the margin, exactly or nearly; see the function's docstring), split for overlapping cuts. |
+| `unit` | String | Always goals: the scoring unit the edges are priced in. |
+| `winner_value` | Float64 | Winner's value for the edge in the edge's own unit: points for a points edge, a rate for a rate edge. |
+| `loser_value` | Float64 | Loser's value for the edge, in the same unit as winner_value. |
+| `points_worth` | Float64 | The winner's edge in the sport's scoring unit: the winner's points from the edge less the loser's. Positive favours the winner. |
+| `rank` | Int64 | Rank of the edge within the game by points_worth, 1 = largest; equal worths keep the edge list's order. |
+
+`moment`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The match's ESPN event id. |
+| `play_id` | Int64 | ESPN key-event id of the deciding goal (null for a shootout's closing row). |
+| `order` | Int64 | The play's position in the game's play order. |
+| `period` | Int64 | Period of the play. |
+| `clock` | String | Game clock of the play as the source shows it. |
+| `team_id` | Int64 | Team of the play: the event's team (hockey), the batting team (baseball), the scoring team (soccer). |
+| `text` | String | Play description as the source writes it. |
+| `wpa` | Float64 | Home win probability after the play less before it. |
+| `winner_wpa` | Float64 | The same change from the winner's side (null on a tie). |
+| `home_score` | Int64 | Home score after the play. |
+| `away_score` | Int64 | Away score after the play. |
+| `rule` | String | Always deciding_score: no in-game win-probability model ships for this league, so the moment is the winner's go-ahead-for-good score. |
+
+`periods`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The match's ESPN event id. |
+| `period` | Int64 | Period number, from 1; overtimes follow regulation. |
+| `period_label` | String | H1, H2, then ET1, ET2 for extra time (a penalty shootout is not a period). |
+| `is_overtime` | Boolean | True for a period after regulation. |
+| `home_pts` | Int64 | Home points in the period: its last running score less the previous period's. |
+| `away_pts` | Int64 | Away points in the period. |
+| `home_cum` | Int64 | Home running score at the end of the period. |
+| `away_cum` | Int64 | Away running score at the end of the period. |
+
+`runs`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The match's ESPN event id. |
+| `team_id` | Int64 | Team that made the run. |
+| `points` | Int64 | The side's largest unanswered run: points it scored in a row with no score by the other side (a score correction stays in the run and counts against its side). |
+| `start_order` | Int64 | Play order of the run's first score. |
+| `end_order` | Int64 | Play order of the run's last score. |
+| `start_period` | Int64 | Period of the run's first score. |
+| `end_period` | Int64 | Period of the run's last score. |
+| `home_score_after` | Int64 | Home score at the end of the run. |
+| `away_score_after` | Int64 | Away score at the end of the run. |
+
+`performers`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The match's ESPN event id. |
+| `team_id` | Int64 | Team of the top performer. |
+| `player_id` | Int64 | The side's top performer's player id. |
+| `player_name` | String | Player's display name. |
+| `metric` | String | Always goals_assists: goals plus assists, the metric the performer is chosen by. |
+| `value` | Float64 | The player's goals plus assists from the goal events (ties go to goals). |
+
+**Example**
+
+```python
+from sportsdataverse.soccer.soccer_espn_ext import espn_soccer_summary
+from sportsdataverse.soccer.soccer_game_story import soccer_game_story
+story = soccer_game_story(espn_soccer_summary("eng.1", event_id=704279, return_parsed=False))
+story["edges"]
+
+# A matchday
+
+from sportsdataverse.soccer.soccer_espn_ext import espn_soccer_scoreboard
+day = espn_soccer_scoreboard("eng.1", dates="20250525", return_parsed=False)
+ids = [e["id"] for e in day["events"]]
+soccer_game_story([espn_soccer_summary("eng.1", event_id=i, return_parsed=False) for i in ids])
+```
