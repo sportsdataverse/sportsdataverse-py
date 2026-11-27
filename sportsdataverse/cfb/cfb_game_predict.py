@@ -337,6 +337,8 @@ def cfb_predict_games(
     ratings: pl.DataFrame,
     *,
     era: str = ...,
+    model: Literal["closed_form", "hierarchical"] = ...,
+    hierarchical: pl.DataFrame | None = ...,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 @overload
@@ -345,6 +347,8 @@ def cfb_predict_games(
     ratings: pl.DataFrame,
     *,
     era: str = ...,
+    model: Literal["closed_form", "hierarchical"] = ...,
+    hierarchical: pl.DataFrame | None = ...,
     return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
 def cfb_predict_games(
@@ -352,6 +356,8 @@ def cfb_predict_games(
     ratings: pl.DataFrame,
     *,
     era: str = "modern",
+    model: Literal["closed_form", "hierarchical"] = "closed_form",
+    hierarchical: pl.DataFrame | None = None,
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
     """Predict a whole schedule of games from a ratings frame (vectorized).
@@ -370,6 +376,13 @@ def cfb_predict_games(
         ratings: A :func:`cfb_ratings.cfb_ratings`-style frame with ``team_id``,
             ``adj_net``, ``adj_off_epa``, ``adj_def_epa``, and ``off_pace``.
         era: Era key into :data:`cfb_prediction_constants.CFB_CONSTANTS`.
+        model: ``"closed_form"`` (the default and the served path) or ``"hierarchical"``
+            (opt-in). With ``"hierarchical"``, ``exp_margin`` is
+            ``theta_home - theta_away + hfa`` off neutral sites from ``hierarchical``, and
+            ``home_win_prob`` is ``Phi(exp_margin / HIER_MARGIN_SD)``. ``exp_total`` stays
+            closed-form, since the hierarchical model has no totals.
+        hierarchical: The :func:`~sportsdataverse.cfb.cfb_hierarchical.cfb_hierarchical_ratings`
+            frame for the slot being predicted. Required when ``model="hierarchical"``.
         return_as_pandas: If True, return a pandas DataFrame; otherwise polars.
 
     Returns:
@@ -378,7 +391,10 @@ def cfb_predict_games(
 
     Raises:
         AssertionError: If either team-id join key's dtype disagrees with
-            ``ratings["team_id"]``.
+            ``ratings["team_id"]`` (or ``hierarchical["team_id"]``).
+        ValueError: If ``model`` is unknown, ``model="hierarchical"`` has no ``hierarchical``
+            frame, or a team in ``games`` has no hierarchical strength. It never falls
+            back to the closed form.
 
     Example:
         Quick start::
@@ -388,6 +404,12 @@ def cfb_predict_games(
             from sportsdataverse.cfb.cfb_schedule import cfb_schedule  # schedule loader
             ratings = cfb_ratings(2023)
             preds = cfb_predict_games(schedule_2023, ratings)
+
+        Opt-in hierarchical margins (as of week 13, from completed games before it)::
+
+            from sportsdataverse.cfb import load_cfb_schedule, cfb_hierarchical_ratings
+            hier = cfb_hierarchical_ratings(load_cfb_schedule(list(range(2014, 2027))), 2026, 13)
+            preds = cfb_predict_games(week13_games, ratings, model="hierarchical", hierarchical=hier)
 
     See Also:
         * `cfbfastR`_ -- the R companion whose ratings/prediction surface this mirrors.
@@ -486,8 +508,44 @@ def cfb_predict_games(
         )
         + c.total_pace_scale * (pl.col("home_off_pace") * pl.col("away_off_pace") / league_avg_pace),
     )
-    win_prob = norm.cdf(with_margin["exp_margin"].to_numpy() / c.margin_sd)
+    margin_sd = c.margin_sd
+    if model == "hierarchical":
+        with_margin, margin_sd = _hierarchical_margin(with_margin, hierarchical)
+    elif model != "closed_form":
+        raise ValueError(f"cfb_predict_games: model must be 'closed_form' or 'hierarchical', got {model!r}")
+    win_prob = norm.cdf(with_margin["exp_margin"].to_numpy() / margin_sd)
     out = with_margin.with_columns(home_win_prob=pl.Series("home_win_prob", win_prob, dtype=pl.Float64)).select(
         _PREDICT_COLUMNS
     )
     return out.to_pandas() if return_as_pandas else out
+
+
+def _hierarchical_margin(frame: pl.DataFrame, hierarchical: pl.DataFrame | None) -> tuple[pl.DataFrame, float]:
+    """Replace ``exp_margin`` with the hierarchical model's, from its as-of strengths."""
+    from sportsdataverse.cfb.cfb_hierarchical import HIER_MARGIN_SD
+
+    if hierarchical is None:
+        raise ValueError("cfb_predict_games: model='hierarchical' needs the cfb_hierarchical_ratings frame")
+    hier = hierarchical if isinstance(hierarchical, pl.DataFrame) else pl.from_pandas(hierarchical)
+    key = hier.schema["team_id"]
+    for side in ("home_team_id", "away_team_id"):
+        assert frame.schema[side] == key, f"{side} dtype {frame.schema[side]} != hierarchical team_id {key}"
+    if hier["hfa"].n_unique() != 1 or hier["asof_t"].n_unique() != 1:
+        raise ValueError("cfb_predict_games: the hierarchical frame must hold ONE as-of fit (one hfa, one asof_t)")
+    th = hier.select("team_id", "theta")
+    out = frame.join(th.rename({"theta": "_th_home"}), left_on="home_team_id", right_on="team_id", how="left").join(
+        th.rename({"theta": "_th_away"}), left_on="away_team_id", right_on="team_id", how="left"
+    )
+    missing = out.filter(pl.col("_th_home").is_null() | pl.col("_th_away").is_null())
+    if missing.height:
+        raise ValueError(
+            f"cfb_predict_games: {missing.height} game(s) have a team with no hierarchical strength "
+            f"(first game_id {missing['game_id'][0]}); refusing to fall back to the closed form"
+        )
+    hfa = float(hier["hfa"][0])
+    out = out.with_columns(
+        exp_margin=pl.col("_th_home")
+        - pl.col("_th_away")
+        + pl.when(pl.col("neutral_site") == True).then(0.0).otherwise(hfa)  # noqa: E712
+    ).drop("_th_home", "_th_away")
+    return out, HIER_MARGIN_SD

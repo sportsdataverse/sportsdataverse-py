@@ -328,6 +328,44 @@ print(df.shape)
 df.sort("fp_margin", descending=True).head()
 ```
 
+### cfb_hierarchical_ratings {#cfb_hierarchical_ratings}
+
+`cfb_hierarchical_ratings(schedule: 'pl.DataFrame', season: 'int', t: 'int', *, first_season: 'int' = 2014, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+As-of hierarchical team strengths for slot `t` of `season`, in points.
+
+Feed the result to `~sportsdataverse.cfb.cfb_game_predict.cfb_predict_games` with
+`model="hierarchical"`. Expected home margin is `theta_home - theta_away + hfa` off
+neutral sites.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `schedule` | `DataFrame` |  | A `~sportsdataverse.cfb.load_cfb_schedule` frame covering `first_season` through `season`. It needs `game_id`, `season`, `week`, `season_type`, `fbs_participant`, `home_id`, `away_id`, `neutral_site`, `home_conference`, `away_conference`, `home_points` and `away_points`. Only completed games before the slot are read, so a whole season's schedule can be passed. |
+| `season` | `int` |  | Season of the slot. |
+| `t` | `int` |  | Slot to rate: the regular-season week, or `100 + week` for the postseason (bowls are postseason week 1, so `t=101`). |
+| `first_season` | `int` | `2014` | Start of the carryover chain, seeded with zero strengths. The gated model starts at 2014; another start gives a different (ungated) model. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per team in the corpus, with columns: | col_name | type | description | |---|---|---| | season | Int64 | Season of the slot. | | asof_t | Int64 | The slot rated; only games before it were used. | | team_id | String | ESPN team id (the `cfb_ratings` key dtype). | | theta | Float64 | Team strength in points, relative to the corpus average. | | hfa | Float64 | Home-field advantage in points (one value per fit). | | tau_team | Float64 | Fitted between-team spread of strength. | | sigma_obs | Float64 | Fitted per-game residual spread. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `schedule` has no completed `first_season` games, or `season` has no completed games before slot `t`. It never falls back to the closed form. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import load_cfb_schedule, cfb_hierarchical_ratings
+sched = load_cfb_schedule(seasons=list(range(2014, 2027)))
+hier = cfb_hierarchical_ratings(sched, 2026, 13)
+```
+
 ### cfb_kickoff_out_of_bounds_spot_expr {#cfb_kickoff_out_of_bounds_spot_expr}
 
 `cfb_kickoff_out_of_bounds_spot_expr(season: polars.expr.expr.Expr) -> polars.expr.expr.Expr`
@@ -358,7 +396,7 @@ print(df.select(cfb_kickoff_out_of_bounds_spot_expr(pl.col("season"))).to_series
 
 ### cfb_predict_games {#cfb_predict_games}
 
-`cfb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+`cfb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, era: 'str' = 'modern', model: "Literal['closed_form', 'hierarchical']" = 'closed_form', hierarchical: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Predict a whole schedule of games from a ratings frame (vectorized).
 
@@ -376,6 +414,8 @@ league average is the mean `off_pace` of the passed ratings frame.
 | `games` | `DataFrame` |  | Schedule frame with `game_id`, `home_team_id`, `away_team_id`, and `neutral_site` columns. The two team-id columns must share the dtype of `ratings["team_id"]` (asserted before the join). |
 | `ratings` | `DataFrame` |  | A `cfb_ratings.cfb_ratings`-style frame with `team_id`, `adj_net`, `adj_off_epa`, `adj_def_epa`, and `off_pace`. |
 | `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+| `model` | `Literal['closed_form', 'hierarchical']` | `'closed_form'` | `"closed_form"` (the default and the served path) or `"hierarchical"` (opt-in). With `"hierarchical"`, `exp_margin` is `theta_home - theta_away + hfa` off neutral sites from `hierarchical`, and `home_win_prob` is `Phi(exp_margin / HIER_MARGIN_SD)`. `exp_total` stays closed-form, since the hierarchical model has no totals. |
+| `hierarchical` | `DataFrame \| None` | `None` | The `~sportsdataverse.cfb.cfb_hierarchical.cfb_hierarchical_ratings` frame for the slot being predicted. Required when `model="hierarchical"`. |
 | `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
 
 **Returns**
@@ -396,7 +436,8 @@ One row per game with `game_id`, `home_team_id`, `away_team_id`, `neutral_site`,
 
 | Exception | Description |
 |---|---|
-| `AssertionError` | If either team-id join key's dtype disagrees with `ratings["team_id"]`. |
+| `AssertionError` | If either team-id join key's dtype disagrees with `ratings["team_id"]` (or `hierarchical["team_id"]`). |
+| `ValueError` | If `model` is unknown, `model="hierarchical"` has no `hierarchical` frame, or a team in `games` has no hierarchical strength. It never falls back to the closed form. |
 
 **Example**
 
@@ -406,6 +447,12 @@ from sportsdataverse.cfb import cfb_ratings
 from sportsdataverse.cfb.cfb_schedule import cfb_schedule  # schedule loader
 ratings = cfb_ratings(2023)
 preds = cfb_predict_games(schedule_2023, ratings)
+
+# Opt-in hierarchical margins (as of week 13, from completed games before it)
+
+from sportsdataverse.cfb import load_cfb_schedule, cfb_hierarchical_ratings
+hier = cfb_hierarchical_ratings(load_cfb_schedule(list(range(2014, 2027))), 2026, 13)
+preds = cfb_predict_games(week13_games, ratings, model="hierarchical", hierarchical=hier)
 ```
 
 ### cfb_ratings {#cfb_ratings}

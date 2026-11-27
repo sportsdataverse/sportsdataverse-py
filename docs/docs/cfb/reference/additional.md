@@ -117,6 +117,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [cfb_compute_results](additional/models-and-calculators-2.md#cfb_compute_results) | Default results generator — nflseedR's dynamic ELO model for CFB. |
 | [cfb_draft_projection](additional/models-and-calculators-2.md#cfb_draft_projection) | Project NFL-draft probability per player + expected picks per team. |
 | [cfb_field_position](additional/models-and-calculators-2.md#cfb_field_position) | Team-season field-position value: avg start, drive EP, margin, pts/drive. |
+| [cfb_hierarchical_ratings](additional/models-and-calculators-2.md#cfb_hierarchical_ratings) | As-of hierarchical team strengths for slot `t` of `season`, in points. |
 | [cfb_kickoff_out_of_bounds_spot_expr](additional/models-and-calculators-2.md#cfb_kickoff_out_of_bounds_spot_expr) | The receiving team's yardline after a kickoff out of bounds: the 40 through 2011, the 35 from 2012. |
 | [cfb_predict_games](additional/models-and-calculators-2.md#cfb_predict_games) | Predict a whole schedule of games from a ratings frame (vectorized). |
 | [cfb_ratings](additional/models-and-calculators-2.md#cfb_ratings) | One row per team: the full CFB ratings spine (off/def/ST EPA + FEI). |
