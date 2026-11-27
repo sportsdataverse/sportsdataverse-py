@@ -1090,6 +1090,7 @@ files = [
     "sportsdataverse/soccer/spadl.py",
     "sportsdataverse/soccer/xthreat.py",
     "sportsdataverse/soccer/soccer_reep_crosswalk.py",
+    "sportsdataverse/soccer/soccer_transfermarkt.py",
     "sportsdataverse/f1/f1_parsers.py",
     "sportsdataverse/f1/f1_extra.py",
     "sdv_docs/__init__.py",

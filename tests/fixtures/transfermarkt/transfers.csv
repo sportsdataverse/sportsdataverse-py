@@ -1,0 +1,120 @@
+player_id,transfer_date,transfer_season,from_club_id,to_club_id,from_club_name,to_club_name,transfer_fee,market_value_in_eur,player_name
+1013474,2026-12-31,26/27,63966,8816,Nashville,Dallas,0.000,,Malachi Molina
+1000630,2026-06-30,25/26,13222,6182,CD Mirandés,Valencia B,0.000,300000.000,Pablo López
+1000675,2026-06-30,25/26,18,15,Mönchengladbach,Leverkusen,0.000,2000000.000,Alejo Sarco
+1002127,2026-06-30,25/26,5662,40188,Puebla FC,San Luis,0.000,1000000.000,Íker Moreno
+1065383,2026-06-30,25/26,5662,1030,Puebla FC,Argentinos Jrs.,0.000,650000.000,Ariel Gamarra
+100131,2026-04-13,25/26,4035,515,Pachuca,Without Club,,1200000.000,William Carvalho
+1111922,2026-04-10,25/26,101282,78435,Crown Legacy FC,Charlotte,,1000000.000,Rodolfo Aloko
+1013474,2026-02-18,25/26,8816,63966,Dallas,Nashville,0.000,,Malachi Molina
+1018395,2026-01-31,25/26,324,398,Pogon Szczecin,Lazio,4500000.000,7000000.000,Adrian Przyborek
+1000301,2026-01-26,25/26,87,626,W. Bremen II,New England,0.000,200000.000,Ethan Kohler
+1000675,2026-01-20,25/26,15,18,Leverkusen,Mönchengladbach,0.000,2000000.000,Alejo Sarco
+1088718,2026-01-07,25/26,45604,63966,Orlando,Nashville,0.000,150000.000,Shak Mohammed
+1046965,2026-01-01,25/26,46719,4291,Portland 2,Portland,,,Sawyer Jura
+1000301,2025-12-31,25/26,93,87,SC Verl,W. Bremen II,0.000,200000.000,Ethan Kohler
+1111922,2025-12-31,25/26,12817,101282,NK Kustosija,Crown Legacy FC,0.000,1000000.000,Rodolfo Aloko
+1000630,2025-09-01,25/26,6182,13222,Valencia B,CD Mirandés,0.000,50000.000,Pablo López
+1111922,2025-08-28,25/26,101282,12817,Crown Legacy FC,NK Kustosija,0.000,,Rodolfo Aloko
+1111922,2025-08-21,25/26,12817,101282,NK Kustosija,Crown Legacy FC,4000000.000,,Rodolfo Aloko
+100131,2025-07-25,25/26,150,4035,Real Betis,Pachuca,0.000,1500000.000,William Carvalho
+1065383,2025-07-11,25/26,1030,5662,Argentinos Jrs.,Puebla FC,0.000,300000.000,Ariel Gamarra
+1002127,2025-07-08,25/26,40188,5662,San Luis,Puebla FC,0.000,100000.000,Íker Moreno
+1000301,2025-07-01,25/26,87,93,W. Bremen II,SC Verl,0.000,150000.000,Ethan Kohler
+1002127,2025-06-30,25/26,79097,40188,Atl. Ottawa,San Luis,0.000,100000.000,Íker Moreno
+1002127,2025-03-19,24/25,40188,79097,San Luis,Atl. Ottawa,0.000,100000.000,Íker Moreno
+1010899,2025-02-26,24/25,46823,11141,Toronto FC II,Toronto,,,Lazar Stefanović
+1001937,2025-02-07,24/25,46823,11141,Toronto FC II,Toronto,,,Adisa De Rosario
+1111922,2025-02-04,24/25,82551,12817,Dynamo Abomey,NK Kustosija,,,Rodolfo Aloko
+1001531,2025-01-31,24/25,9875,51772,Libertad,Cincinnati,,1300000.000,Gilberto Flores
+1013474,2025-01-09,24/25,71021,8816,North Texas SC,Dallas,,,Malachi Molina
+1000675,2025-01-02,24/25,1029,15,Vélez Sarsfield,Leverkusen,0.000,800000.000,Alejo Sarco
+1001531,2024-12-31,24/25,17427,9875,Trinidense,Libertad,0.000,1300000.000,Gilberto Flores
+1002223,2024-12-09,24/25,39815,623,NYRB II,New York,,150000.000,Omar Valencia
+1022383,2024-08-02,24/25,189,626,Boca Juniors,New England,6200000.000,4500000.000,Luca Langoni
+1000301,2024-07-01,24/25,2491,87,W. Bremen U19,W. Bremen II,,25000.000,Ethan Kohler
+1000630,2024-07-01,24/25,10200,6182,Valencia U19,Valencia B,,,Pablo López
+1002223,2024-01-31,23/24,20960,39815,Plaza Amador,NYRB II,,,Omar Valencia
+1046965,2024-01-09,23/24,53365,46719,Timbers Academy,Portland 2,,,Sawyer Jura
+1000675,2024-01-01,23/24,14842,1029,Vélez II,Vélez Sarsfield,,,Alejo Sarco
+1001531,2024-01-01,23/24,9875,17427,Libertad,Trinidense,0.000,400000.000,Gilberto Flores
+1009766,2024-01-01,23/24,10200,6182,Valencia U19,Valencia B,,,David Otorbi
+1016918,2024-01-01,23/24,77984,626,Revolution II,New England,,,Peyton Miller
+1065383,2024-01-01,23/24,16179,1030,Argentinos II,Argentinos Jrs.,,,Ariel Gamarra
+1002223,2023-12-31,23/24,39815,20960,NYRB II,Plaza Amador,0.000,,Omar Valencia
+1001937,2023-09-15,23/24,67002,46823,York United,Toronto FC II,0.000,,Adisa De Rosario
+1013474,2023-08-31,23/24,1196,71021,Dallas Academy,North Texas SC,,,Malachi Molina
+1001937,2023-08-02,23/24,46823,67002,Toronto FC II,York United,0.000,,Adisa De Rosario
+1000301,2023-07-03,23/24,69044,2491,Oakland Roots,W. Bremen U19,0.000,25000.000,Ethan Kohler
+1000135,2023-07-01,23/24,10200,6182,Valencia U19,Valencia B,,,Joselu Pérez
+1000630,2023-07-01,23/24,70397,10200,Valencia U18,Valencia U19,,,Pablo López
+1002127,2023-07-01,23/24,25014,40188,CF América U19,San Luis,,,Íker Moreno
+1009766,2023-07-01,23/24,16200,10200,Valencia CF You,Valencia U19,,,David Otorbi
+1026255,2023-07-01,23/24,12816,398,Lazio U19,Lazio,,200000.000,Saná Fernandes
+1010899,2023-06-30,22/23,29487,46823,TFC Academy,Toronto FC II,,,Lazar Stefanović
+1016918,2023-06-12,22/23,30842,77984,Revs Academy,Revolution II,,,Peyton Miller
+1001938,2023-04-06,22/23,46823,11141,Toronto FC II,Toronto,,,Alonso Coello
+1001937,2023-03-24,22/23,29487,46823,TFC Academy,Toronto FC II,,,Adisa De Rosario
+1002223,2023-02-08,22/23,20960,39815,Plaza Amador,NYRB II,0.000,100000.000,Omar Valencia
+1000355,2023-02-01,22/23,12774,11204,Stade Reims U19,Stade Reims B,,,Killian Prouchet
+1000301,2023-01-26,22/23,45259,69044,SJE Academy,Oakland Roots,0.000,,Ethan Kohler
+1018395,2023-01-25,22/23,15609,324,Pogon U19,Pogon Szczecin,,,Adrian Przyborek
+1000675,2023-01-01,22/23,15113,14842,Vélez U20,Vélez II,,,Alejo Sarco
+1088718,2022-12-21,22/23,9824,45604,Blue Devils,Orlando,0.000,,Shak Mohammed
+1002223,2022-11-30,22/23,39815,20960,NYRB II,Plaza Amador,0.000,100000.000,Omar Valencia
+1000273,2022-11-17,22/23,98402,78435,CLTFC Academy,Charlotte,,,Nimfasha Berchimas
+1008431,2022-11-07,22/23,69991,51772,FCC Academy,Cincinnati,,,Stiven Jimenez
+1001937,2022-09-29,22/23,67001,29487,HFX Wanderers,TFC Academy,0.000,,Adisa De Rosario
+1026255,2022-09-01,22/23,48365,12816,Sporting U17,Lazio U19,0.000,,Saná Fernandes
+1001937,2022-08-19,22/23,29487,67001,TFC Academy,HFX Wanderers,0.000,,Adisa De Rosario
+1002223,2022-08-11,22/23,20960,39815,Plaza Amador,NYRB II,0.000,100000.000,Omar Valencia
+1000274,2022-08-03,22/23,98402,78435,CLTFC Academy,Charlotte,,,Brian Romero
+1088718,2022-08-01,22/23,74069,9824,Manhattan,Blue Devils,0.000,,Shak Mohammed
+1000135,2022-07-01,22/23,15080,10200,Rayo B,Valencia U19,0.000,,Joselu Pérez
+1000355,2022-07-01,22/23,92744,12774,Stade Reims U17,Stade Reims U19,,,Killian Prouchet
+1000630,2022-07-01,22/23,25264,70397,Levante UD Yout,Valencia U18,100000.000,,Pablo López
+1002127,2022-07-01,22/23,64754,25014,CF América U18,CF América U20,,,Íker Moreno
+1018395,2022-07-01,22/23,50949,15609,Pogon Youth,Pogon U19,,,Adrian Przyborek
+1022383,2022-07-01,22/23,14831,189,Boca Juniors II,Boca Juniors,,,Luca Langoni
+1088718,2022-05-02,21/22,9824,74069,Blue Devils,Manhattan,0.000,,Shak Mohammed
+1001938,2022-04-01,21/22,2572,46823,F. Atlantic Owl,Toronto FC II,0.000,,Alonso Coello
+1001531,2022-01-01,21/22,79979,9875,Libertad U23,Libertad,,,Gilberto Flores
+1002223,2022-01-01,21/22,88241,20960,Pl. Amador II,Plaza Amador,,,Omar Valencia
+1065383,2022-01-01,21/22,15100,16179,Argentinos U20,Argentinos II,,,Ariel Gamarra
+1000135,2021-09-01,21/22,20201,15080,Rayo U19,Rayo B,,,Joselu Pérez
+1001938,2021-08-01,21/22,80095,2572,Corpus Christi,F. Atlantic Owl,0.000,,Alonso Coello
+1088718,2021-08-01,21/22,83743,9824,Black Rock FC,Blue Devils,0.000,,Shak Mohammed
+1000136,2021-07-01,21/22,28866,8510,Getafe U19,Getafe CF B,,,Gorka Rivera
+1000630,2021-07-01,21/22,51592,25264,Patacona CF You,Levante UD Yout,,,Pablo López
+1002127,2021-07-01,21/22,104488,64754,San Luis U18,CF América U18,,,Íker Moreno
+1026255,2021-07-01,21/22,53956,48365,Sporting Sub-15,Sporting U17,,,Saná Fernandes
+1001938,2021-05-01,20/21,2572,80095,F. Atlantic Owl,Corpus Christi,0.000,,Alonso Coello
+1022383,2021-01-01,20/21,15098,14831,CABJ U20,Boca Juniors II,,,Luca Langoni
+1000273,2020-09-01,20/21,70917,98402,NCF Yth.,CLTFC Academy,0.000,,Nimfasha Berchimas
+1000630,2020-08-01,20/21,25264,51592,Levante UD Yout,Patacona CF You,,,Pablo López
+1001938,2020-08-01,20/21,30255,2572,P. Timbers U23,F. Atlantic Owl,0.000,,Alonso Coello
+1000135,2020-07-01,20/21,40421,20201,Rayo Vallecano,Rayo U19,,,Joselu Pérez
+1000136,2020-07-01,20/21,44199,28866,Leganés Youth,Getafe U19,0.000,,Gorka Rivera
+1000274,2020-07-01,20/21,90388,98402,Charlotte SA,CLTFC Academy,0.000,,Brian Romero
+1000355,2020-07-01,20/21,100155,92744,Reims Yth.,Stade Reims U17,,,Killian Prouchet
+1002127,2020-07-01,20/21,104464,104488,Querétaro U17,San Luis U17,,,Íker Moreno
+1018395,2020-07-01,20/21,42449,50949,Koszalin U19,Pogon Youth,0.000,,Adrian Przyborek
+1001938,2020-02-06,19/20,2572,30255,F. Atlantic Owl,P. Timbers U23,0.000,,Alonso Coello
+1001938,2019-08-01,19/20,89464,2572,Dalton,F. Atlantic Owl,0.000,,Alonso Coello
+1002127,2019-07-01,19/20,81581,104464,Querétaro Yth.,Querétaro U17,,,Íker Moreno
+1026255,2019-07-01,19/20,53957,53956,Sporting Yth.,Sporting Sub-15,,,Saná Fernandes
+1001938,2019-05-01,18/19,2572,89464,F. Atlantic Owl,Dalton,0.000,,Alonso Coello
+1001938,2018-08-01,18/19,20201,2572,Rayo U19,F. Atlantic Owl,0.000,,Alonso Coello
+100131,2018-07-13,18/19,336,150,Sporting,Real Betis,18500000.000,25000000.000,William Carvalho
+1000136,2018-07-01,18/19,70321,44199,R.Madrid Yth.,Leganés Youth,0.000,,Gorka Rivera
+1088718,2018-07-01,18/19,40902,83743,Right to Dream,Black Rock FC,0.000,,Shak Mohammed
+100131,2013-06-30,12/13,520,336,Cercle Brugge,Sporting,0.000,800000.000,William Carvalho
+100131,2012-01-01,11/12,336,520,Sporting,Cercle Brugge,0.000,,William Carvalho
+100131,2011-12-31,11/12,6987,336,CD Fátima,Sporting,0.000,,William Carvalho
+100131,2011-08-01,11/12,336,6987,Sporting,CD Fátima,0.000,,William Carvalho
+100131,2011-07-01,11/12,10283,336,Sporting U19,Sporting,,,William Carvalho
+100131,2009-07-01,09/10,48365,10283,Sporting U17,Sporting U19,,,William Carvalho
+100131,2007-07-01,07/08,53956,48365,Sporting Sub-15,Sporting U17,,,William Carvalho
+402135,2027-07-04,27/28,6505,515,Gimcheon Sangmu,Without Club,,300000.000,Jun-su Ahn
+716435,2027-07-04,27/28,6505,515,Gimcheon Sangmu,Without Club,,300000.000,Kang-hyun Lee
+63463,2027-07-01,27/28,206,123,Bröndby IF,Retired,,400000.000,Daniel Wass
