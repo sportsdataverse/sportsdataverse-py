@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import inspect
 import json
+import re
 from pathlib import Path
 
 import polars as pl
@@ -129,13 +130,23 @@ def test_processors_read_the_shared_patterns():
     from sportsdataverse.cfb import cfb_pbp
     from sportsdataverse.nfl import nfl_pbp
 
+    def assignment(col: str, pattern: str) -> str:
+        # the whole column assignment, so swapping the two patterns between columns fails too
+        return (
+            rf'\b{col}=pl\.when\(pl\.col\("pass"\) == True\)\s*'
+            rf'\.then\(pl\.col\("text"\)\.str\.extract\({re.escape(pattern)}, 1\)\)\s*\.otherwise\(None\)'
+        )
+
     cfb_src, nfl_src = inspect.getsource(cfb_pbp), inspect.getsource(nfl_pbp)
-    assert cfb_src.count('pl.col("text").str.extract(_espn_text.PASS_DEPTH_RE, 1)') == 1
-    assert cfb_src.count('pl.col("text").str.extract(_espn_text.PASS_DIRECTION_RE, 1)') == 1
-    assert nfl_src.count('pl.col("text").str.extract(_PASS_DEPTH_RE, 1)') == 1
-    assert nfl_src.count('pl.col("text").str.extract(_PASS_DIRECTION_RE, 1)') == 1
-    for src in (cfb_src, nfl_src):
-        assert r'r"\s(short|deep)\s"' not in src
+    for src, depth, direction in (
+        (cfb_src, "_espn_text.PASS_DEPTH_RE", "_espn_text.PASS_DIRECTION_RE"),
+        (nfl_src, "_PASS_DEPTH_RE", "_PASS_DIRECTION_RE"),
+    ):
+        assert len(re.findall(assignment("pass_depth", depth), src)) == 1
+        assert len(re.findall(assignment("pass_direction", direction), src)) == 1
+        # and no other pass_depth / pass_direction assignment beside them
+        assert len(re.findall(r"\bpass_depth=pl\.when", src)) == 1
+        assert len(re.findall(r"\bpass_direction=pl\.when", src)) == 1
 
 
 # Real ESPN NFL text, as above

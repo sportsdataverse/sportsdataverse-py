@@ -7143,8 +7143,8 @@ class NFLPlayProcess(object):
         text = pl.col("text").fill_null("")
         # nflverse's own patterns, kept verbatim for parity (shield_pbp/description.py has the
         # same); the Game on Paper columns pass_depth / pass_direction read espn_text's
-        # PASS_DEPTH_RE / PASS_DIRECTION_RE, which agree with these on ESPN's NFL text
-        # (tests/test_play_matrix_fields.py).
+        # PASS_DEPTH_RE / PASS_DIRECTION_RE, which also read the older college "pass up the
+        # middle" these do not; on the NFL texts in tests/test_play_matrix_fields.py they agree.
         play_df = play_df.with_columns(
             pass_length=text.str.extract(r"pass (?:incomplete )?(short|deep)", 1),
             pass_location=text.str.extract(r"(?:short|deep) (left|middle|right)", 1),
