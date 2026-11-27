@@ -715,6 +715,13 @@ providers:
     modules:
       - sportsdataverse.soccer.soccer_reep_crosswalk
 
+  transfermarkt_datasets:
+    label: Transfermarkt dataset (CC0)
+    home: https://github.com/dcaribou/transfermarkt-datasets
+    auth: none (public CSV files, CC0 1.0)
+    modules:
+      - sportsdataverse.soccer.soccer_transfermarkt
+
   mls:
     label: MLS official web API
     home: https://sportapi.mlssoccer.com
