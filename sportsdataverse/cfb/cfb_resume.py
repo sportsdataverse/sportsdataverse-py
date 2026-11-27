@@ -20,6 +20,7 @@ import pandas as pd
 import polars as pl
 from scipy.stats import norm
 
+from sportsdataverse._temporal import as_date
 from sportsdataverse.cfb.cfb_loaders import load_cfb_schedule
 from sportsdataverse.cfb.cfb_prediction_constants import PredictConfig, get_constants
 from sportsdataverse.cfb.cfb_ratings import cfb_ratings
@@ -35,6 +36,13 @@ _RESUME_SCHEMA: dict[str, pl.PolarsDataType] = {
     "game_control": pl.Float64,
     "wab": pl.Float64,
 }
+#: Reference teams for the schedule-strength columns: the k-th best rated FBS team that season (0 = league average).
+#: ``bubble`` is the 12th: the last at-large place in a 12-team playoff.
+_REFERENCES: dict[str, int] = {"top5": 5, "top25": 25, "bubble": 12, "average": 0}
+_SPLITS = ("past", "remaining", "season")
+_RESUME_SCHEMA.update({f"sos_{ref}_{split}": pl.Float64 for ref in _REFERENCES for split in _SPLITS})
+_RESUME_SCHEMA.update({f"record_difficulty_{ref}": pl.Float64 for ref in _REFERENCES})
+_RESUME_SCHEMA["wins_above_bubble"] = pl.Float64
 _RESUME_COLUMNS = list(_RESUME_SCHEMA)
 
 # Real load_cfb_schedule column names -> the normalized names the core consumes.
@@ -80,8 +88,118 @@ def _team_game_rows(schedule: pl.DataFrame, ratings: pl.DataFrame) -> pl.DataFra
     return rows.join(opp, on="opp_team_id", how="left")
 
 
+def _poisson_binomial_tail(p: np.ndarray, k: int) -> float:
+    """P(at least ``k`` successes) in independent trials with success probabilities ``p``: exact, by recursion."""
+    dist = np.zeros(len(p) + 1)
+    dist[0] = 1.0
+    for q in p:
+        dist[1:] = dist[1:] * (1.0 - q) + dist[:-1] * q
+        dist[0] *= 1.0 - q
+    return float(dist[k:].sum())
+
+
+def _reference_ratings(ratings: pl.DataFrame, schedule: pl.DataFrame) -> dict[str, float | None]:
+    """The k-th best rating among the season's rated FBS teams per reference (``None`` when fewer are rated).
+
+    FBS membership comes from the schedule's ``home_division`` / ``away_division`` when it carries them; otherwise
+    every rated team counts.
+    """
+    rated = ratings.filter(pl.col("adj_net").is_not_null())
+    if {"home_division", "away_division"} <= set(schedule.columns):
+        fbs = pl.concat(
+            [
+                schedule.filter(pl.col("home_division") == "fbs").select(team_id="home_team_id"),
+                schedule.filter(pl.col("away_division") == "fbs").select(team_id="away_team_id"),
+            ]
+        ).unique()
+        rated = rated.join(fbs, on="team_id", how="semi")
+    values = sorted(rated["adj_net"].to_list(), reverse=True)
+    return {ref: (0.0 if k == 0 else (values[k - 1] if len(values) >= k else None)) for ref, k in _REFERENCES.items()}
+
+
+def _schedule_strength(
+    ratings: pl.DataFrame,
+    schedule: pl.DataFrame,
+    config: PredictConfig,
+    as_of_date: datetime.date | None,
+) -> pl.DataFrame:
+    """Reference-team schedule strength, record difficulty and wins above bubble, one row per team.
+
+    For a reference team of rating ``r_ref`` against opponent ``j`` at the rated team's site ``h`` (+1 home, -1 away,
+    0 neutral): ``P = Phi((net_points_scale * (r_ref - r_j) + h * hfa_points) / margin_sd)``. An unrated opponent
+    (FCS) is a win, ``P = 1``. ``past`` games are completed ones before ``as_of_date`` (every completed game when it
+    is ``None``); ``remaining`` the rest of the schedule.
+    """
+    date_col = next((c for c in ("date", "start_date") if c in schedule.columns), None)
+    played = pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null()
+    if as_of_date is not None and date_col is not None:
+        played = played & (as_date(pl.col(date_col)) < pl.lit(as_of_date))
+    games = schedule.with_columns(_played=played.fill_null(False))
+    neutral = pl.col("neutral_site") == True  # noqa: E712
+    sides = []
+    for team, opp, sign in (("home", "away", 1), ("away", "home", -1)):
+        sides.append(
+            games.select(
+                team_id=pl.col(f"{team}_team_id"),
+                opp_team_id=pl.col(f"{opp}_team_id"),
+                h=pl.when(neutral).then(0).otherwise(sign).cast(pl.Float64),
+                played="_played",
+                won=(pl.col(f"{team}_score") > pl.col(f"{opp}_score")).fill_null(False),
+            )
+        )
+    rows = pl.concat(sides).filter(pl.col("team_id").is_not_null())
+    opp = ratings.select(opp_team_id="team_id", opp_r="adj_net")
+    assert rows.schema["opp_team_id"] == opp.schema["opp_team_id"]
+    rows = rows.join(opp, on="opp_team_id", how="left")
+    refs = _reference_ratings(ratings, schedule)
+    opp_r = rows["opp_r"].to_numpy().astype(float)
+    h = rows["h"].to_numpy()
+    for ref, r_ref in refs.items():
+        if r_ref is None:
+            prob = np.full(rows.height, np.nan)
+        else:
+            margin = config.net_points_scale * (r_ref - opp_r) + h * config.hfa_points
+            prob = np.where(np.isnan(opp_r), 1.0, norm.cdf(margin / config.margin_sd))
+        rows = rows.with_columns(pl.Series(f"_p_{ref}", prob, dtype=pl.Float64))
+    past = pl.col("played") == True  # noqa: E712
+    aggs: list[pl.Expr] = []
+    for ref in _REFERENCES:
+        p = pl.col(f"_p_{ref}")
+        aggs += [
+            p.filter(past).mean().alias(f"sos_{ref}_past"),
+            p.filter(~past).mean().alias(f"sos_{ref}_remaining"),
+            p.mean().alias(f"sos_{ref}_season"),
+        ]
+    out = rows.group_by("team_id").agg(
+        *aggs,
+        wins=pl.col("won").filter(past).sum().cast(pl.Float64),
+        wins_above_bubble=(pl.col("won").filter(past).sum().cast(pl.Float64) - pl.col("_p_bubble").filter(past).sum()),
+    )
+    # record difficulty: P(reference team wins at least as many of the team's past games as the team did)
+    past_rows = rows.filter(past)
+    tails: dict[str, list[float | None]] = {ref: [] for ref in _REFERENCES}
+    teams = out["team_id"].to_list()
+    by_team = {t: g for (t,), g in past_rows.group_by("team_id")}
+    wins = dict(zip(out["team_id"].to_list(), out["wins"].to_list(), strict=True))
+    for t in teams:
+        g = by_team.get(t)
+        for ref in _REFERENCES:
+            if g is None or g.height == 0 or refs[ref] is None:
+                tails[ref].append(None)
+            else:
+                tails[ref].append(_poisson_binomial_tail(g[f"_p_{ref}"].to_numpy(), int(wins[t])))
+    out = out.with_columns([pl.Series(f"record_difficulty_{ref}", tails[ref], dtype=pl.Float64) for ref in _REFERENCES])
+    if refs["bubble"] is None:
+        out = out.with_columns(wins_above_bubble=pl.lit(None, dtype=pl.Float64))
+    return out.drop("wins")
+
+
 def _resume_core(
-    ratings: pl.DataFrame, schedule: pl.DataFrame, config: PredictConfig, season_value: int | None
+    ratings: pl.DataFrame,
+    schedule: pl.DataFrame,
+    config: PredictConfig,
+    season_value: int | None,
+    as_of_date: datetime.date | None = None,
 ) -> pl.DataFrame:
     """Aggregate the per-team résumé metrics from ratings + a normalized schedule."""
     rows = _team_game_rows(schedule, ratings)
@@ -127,6 +245,7 @@ def _resume_core(
             pl.lit(season_value).cast(pl.Int64).alias("season"),
             pl.col("sos").rank(method="dense", descending=True).cast(pl.Int64).alias("sos_rank"),
         )
+        .join(_schedule_strength(ratings, schedule, config, as_of_date), on="team_id", how="left")
         .select(_RESUME_COLUMNS)
         .sort("sos_rank", "team_id")
     )
@@ -170,6 +289,11 @@ def cfb_resume(
     - ``wab`` -- wins above bubble: actual wins minus the expected wins of a
       bubble-quality team (``bubble_adj_net``) playing the same schedule, using the
       Phase-2 predictors with the HFA applied on the team's actual home/away side.
+    - reference-team schedule strength, record difficulty and
+      ``wins_above_bubble``: the win probability of a fixed reference team (the
+      5th, 25th or 12th-best rated FBS team, or an average one) on the team's
+      schedule, ``Phi((net_points_scale * (r_ref - r_opp) + h * hfa_points) /
+      margin_sd)``. ``as_of_date`` splits completed from remaining games.
 
     Args:
         seasons: A single season or list of seasons.
@@ -181,7 +305,15 @@ def cfb_resume(
     Returns:
         One row per team: ``season``, ``team_id`` (Utf8), ``sos``, ``sos_rank``
         (Int64 dense rank, best = 1), ``quality_wins`` (Int64), ``game_control``
-        (Float64), ``wab`` (Float64). Zero-row (typed) when no games are available.
+        (Float64), ``wab`` (Float64), then the reference-team columns (Float64): for
+        each reference ``top5`` / ``top25`` / ``bubble`` (the 5th / 25th / 12th-best
+        rated FBS team) / ``average`` (rating 0), ``sos_<ref>_past`` /
+        ``_remaining`` / ``_season`` (the reference team's mean win probability over
+        completed, unplayed and all games, at the team's site, an FCS opponent a sure
+        win) and ``record_difficulty_<ref>`` (the probability it wins at least as many
+        of the completed games as the team did), and ``wins_above_bubble`` (wins minus
+        the 12th-best team's expected wins). Zero-row (typed) when no games are
+        available.
 
     Example:
         Quick start::
@@ -205,5 +337,5 @@ def cfb_resume(
 
     schedule = _normalize_schedule(schedule)
     season_value = season_list[0] if len(season_list) == 1 else None
-    out = _resume_core(ratings, schedule, get_constants(era), season_value)
+    out = _resume_core(ratings, schedule, get_constants(era), season_value, as_of_date)
     return out.to_pandas() if return_as_pandas else out

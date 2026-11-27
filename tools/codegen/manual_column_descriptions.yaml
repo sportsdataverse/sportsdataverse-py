@@ -1890,6 +1890,23 @@ cfb_resume:
   sos_rank: Dense rank on sos descending (toughest schedule = 1).
   team_id: Team ESPN id (character join key).
   wab: Wins above bubble - actual wins minus a bubble-quality team's expected wins over the same schedule.
+  sos_top5_past: "Mean probability that the 5th-best rated FBS team would win the team's completed games (before as_of_date when it is set) at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_top5_remaining: "Mean probability that the 5th-best rated FBS team would win the team's games not yet played (null when none remain) at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_top5_season: "Mean probability that the 5th-best rated FBS team would win the team's every scheduled game at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_top25_past: "Mean probability that the 25th-best rated FBS team would win the team's completed games (before as_of_date when it is set) at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_top25_remaining: "Mean probability that the 25th-best rated FBS team would win the team's games not yet played (null when none remain) at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_top25_season: "Mean probability that the 25th-best rated FBS team would win the team's every scheduled game at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_bubble_past: "Mean probability that the 12th-best rated FBS team (the last at-large place in a 12-team playoff) would win the team's completed games (before as_of_date when it is set) at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_bubble_remaining: "Mean probability that the 12th-best rated FBS team (the last at-large place in a 12-team playoff) would win the team's games not yet played (null when none remain) at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_bubble_season: "Mean probability that the 12th-best rated FBS team (the last at-large place in a 12-team playoff) would win the team's every scheduled game at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_average_past: "Mean probability that an average team (rating 0) would win the team's completed games (before as_of_date when it is set) at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_average_remaining: "Mean probability that an average team (rating 0) would win the team's games not yet played (null when none remain) at the team's site; an unrated (FCS) opponent counts as a sure win."
+  sos_average_season: "Mean probability that an average team (rating 0) would win the team's every scheduled game at the team's site; an unrated (FCS) opponent counts as a sure win."
+  record_difficulty_top5: "Probability that the 5th-best rated FBS team would win at least as many of the team's completed games as the team did (exact Poisson-binomial; lower = harder record)."
+  record_difficulty_top25: "Probability that the 25th-best rated FBS team would win at least as many of the team's completed games as the team did (exact Poisson-binomial; lower = harder record)."
+  record_difficulty_bubble: "Probability that the 12th-best rated FBS team (the last at-large place in a 12-team playoff) would win at least as many of the team's completed games as the team did (exact Poisson-binomial; lower = harder record)."
+  record_difficulty_average: "Probability that an average team (rating 0) would win at least as many of the team's completed games as the team did (exact Poisson-binomial; lower = harder record)."
+  wins_above_bubble: "Wins minus the expected wins of the 12th-best rated FBS team over the team's completed games (an FCS opponent counts as a sure win). Differs from wab in its reference and home-field term."
 cfb_returning_production:
   def_basis: 'Defensive measure behind def_returning: participants (production season 2014+: tackles, assists, tackles for
     loss, shared sacks, passes defended), pbp_splash (2004-2013: sacks, interceptions, pass breakups, forced fumbles; no tackle
