@@ -852,9 +852,7 @@ def cfb_adjusted_epa_ledger(
         ValueError: If ``ridge_lambda`` is not positive or every play is garbage time.
 
     Example:
-        Quick start (``plays`` is a season of FBS pass / rush plays with the columns the
-        module docstring lists, such as the cfbfastR-cfb-data team-summaries input; the
-        released ``load_cfb_pbp`` frame alone lacks ``home`` and ``neutral_site``)::
+        Quick start (``plays``: the team-summaries input; ``load_cfb_pbp`` alone lacks ``home``)::
 
             import polars as pl
             import sportsdataverse.cfb as cfb

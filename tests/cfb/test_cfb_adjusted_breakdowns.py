@@ -177,3 +177,9 @@ def test_release_column_names_work_like_the_build_input(plays: pl.DataFrame) -> 
     b = cfb_adjusted_breakdowns(released)
     # polars' threaded group-by means can differ in the last ULP between two runs of the same input
     assert_frame_equal(a, b, check_exact=False, abs_tol=1e-12)
+
+
+def test_a_repeated_metric_name_counts_once(plays: pl.DataFrame) -> None:
+    out = cfb_adjusted_breakdowns(plays, metrics=["success_all", "success_all"])
+    assert out["team_id"].n_unique() == out.height
+    assert out.columns == cfb_adjusted_breakdowns(plays, metrics=["success_all"]).columns

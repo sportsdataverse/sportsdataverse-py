@@ -153,8 +153,12 @@ def main() -> None:
     a.out.mkdir(parents=True, exist_ok=True)
     path, meta_path = a.out / "split_half_by_season.csv", a.out / "meta.json"
     meta = {"sdv_py": _head(Path(__file__).parent.parent), "data_repo": _head(a.data_repo)}
-    stale = meta_path.exists() and json.loads(meta_path.read_text()) != meta
-    done = pl.read_csv(path) if path.exists() and not stale else None  # resume only on the same commits
+    # Resume only from a table written by the same two clean commits; anything else is recomputed from scratch.
+    dirty = any(v.endswith("+dirty") for v in meta.values())
+    same = meta_path.exists() and json.loads(meta_path.read_text()) == meta
+    if path.exists() and (dirty or not same):
+        path.unlink()
+    done = pl.read_csv(path) if path.exists() else None
     meta_path.write_text(json.dumps(meta, indent=1))
     for season in a.seasons:
         if done is not None and season in set(done["season"].to_list()):

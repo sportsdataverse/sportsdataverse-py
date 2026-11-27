@@ -273,8 +273,7 @@ def cfb_adjusted_breakdowns(
         ValueError: If a name in ``metrics`` is not a published breakdown.
 
     Example:
-        Quick start (``plays`` is a season of FBS pass / rush plays with the columns :func:`cfb_adjusted_epa` reads,
-        such as the cfbfastR-cfb-data team-summaries input)::
+        Quick start (``plays``: a season of FBS plays such as the cfbfastR-cfb-data team-summaries input)::
 
             import polars as pl
             import sportsdataverse.cfb as cfb
@@ -291,7 +290,7 @@ def cfb_adjusted_breakdowns(
     .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     published = list(dict.fromkeys(m for m, _ in _PUBLISHED))
-    names = published if metrics is None else list(metrics)
+    names = published if metrics is None else list(dict.fromkeys(metrics))  # a repeated name would duplicate rows
     unknown = [m for m in names if m not in published]
     if unknown:
         raise ValueError(f"cfb_adjusted_breakdowns: not a published breakdown: {unknown}; published: {published}")

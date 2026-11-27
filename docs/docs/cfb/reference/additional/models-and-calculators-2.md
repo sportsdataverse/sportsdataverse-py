@@ -96,16 +96,14 @@ One row per team rated in any requested breakdown: `team_id`, `pos_team`, then f
 **Example**
 
 ```python
-# Quick start (``plays`` is a season of FBS pass / rush plays with the columns :func:`cfb_adjusted_epa` reads, such as the cfbfastR-cfb-data team-summaries input)
-
-    import polars as pl
-    import sportsdataverse.cfb as cfb
-    bd = cfb.cfb_adjusted_breakdowns(plays)
-    bd.sort("success_all_off_rank").select("pos_team", "success_all_off_shrunk", "success_all_off_n").head()
+import polars as pl
+import sportsdataverse.cfb as cfb
+bd = cfb.cfb_adjusted_breakdowns(plays)
+bd.sort("success_all_off_rank").select("pos_team", "success_all_off_shrunk", "success_all_off_n").head()
 
 # Only some breakdowns
 
-    cfb.cfb_adjusted_breakdowns(plays, metrics=["success_all", "epa_early_down"])
+cfb.cfb_adjusted_breakdowns(plays, metrics=["success_all", "epa_early_down"])
 ```
 
 ### cfb_adjusted_epa {#cfb_adjusted_epa}
@@ -274,16 +272,14 @@ One row per (game, team) for the teams `cfb_adjusted_epa` rates (two or more val
 **Example**
 
 ```python
-# Quick start (``plays`` is a season of FBS pass / rush plays with the columns the module docstring lists, such as the cfbfastR-cfb-data team-summaries input; the released ``load_cfb_pbp`` frame alone lacks ``home`` and ``neutral_site``)
-
-    import polars as pl
-    import sportsdataverse.cfb as cfb
-    ledger = cfb.cfb_adjusted_epa_ledger(plays)
-    ledger.filter(pl.col("pos_team") == "LSU").select("opponent_id", "raw_net_epa", "schedule_adj")
+import polars as pl
+import sportsdataverse.cfb as cfb
+ledger = cfb.cfb_adjusted_epa_ledger(plays)
+ledger.filter(pl.col("pos_team") == "LSU").select("opponent_id", "raw_net_epa", "schedule_adj")
 
 # The games that moved a team the most
 
-    ledger.sort(pl.col("game_influence").abs(), descending=True).head()
+ledger.sort(pl.col("game_influence").abs(), descending=True).head()
 ```
 
 ### cfb_compute_results {#cfb_compute_results}
