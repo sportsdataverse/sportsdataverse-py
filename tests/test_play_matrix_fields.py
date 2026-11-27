@@ -13,20 +13,21 @@ column-presence integration tests against cached fixtures.
 
 from __future__ import annotations
 
+import inspect
 import json
 from pathlib import Path
 
 import polars as pl
 import pytest
 
+# The processors' own patterns (cfb_pbp.py and nfl_pbp.py both read these, which
+# test_processors_read_the_shared_patterns pins), so a change to either shows up here.
+from sportsdataverse.football.espn_text import PASS_DEPTH_RE as _DEPTH_RE
+from sportsdataverse.football.espn_text import PASS_DIRECTION_RE as _DIR_RE
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-
-# The processors' own patterns (cfb_pbp.py and nfl_pbp.py both read these), so a change
-# to either shows up here.
-from sportsdataverse.football.espn_text import PASS_DEPTH_RE as _DEPTH_RE  # noqa: E402
-from sportsdataverse.football.espn_text import PASS_DIRECTION_RE as _DIR_RE  # noqa: E402
 
 # Rush direction is still the loose match, inline in both processors.
 _RUSH_DIR_RE = r"\s(left|middle|right)\s"
@@ -121,6 +122,46 @@ def test_pass_fields_null_for_non_pass():
     result = _apply_matrix_exprs(df)
     assert result["pass_depth"][0] is None
     assert result["pass_direction"][0] is None
+
+
+def test_processors_read_the_shared_patterns():
+    """Both processors extract pass_depth / pass_direction with espn_text's patterns, not an inline copy."""
+    from sportsdataverse.cfb import cfb_pbp
+    from sportsdataverse.nfl import nfl_pbp
+
+    cfb_src, nfl_src = inspect.getsource(cfb_pbp), inspect.getsource(nfl_pbp)
+    assert cfb_src.count('pl.col("text").str.extract(_espn_text.PASS_DEPTH_RE, 1)') == 1
+    assert cfb_src.count('pl.col("text").str.extract(_espn_text.PASS_DIRECTION_RE, 1)') == 1
+    assert nfl_src.count('pl.col("text").str.extract(_PASS_DEPTH_RE, 1)') == 1
+    assert nfl_src.count('pl.col("text").str.extract(_PASS_DIRECTION_RE, 1)') == 1
+    for src in (cfb_src, nfl_src):
+        assert r'r"\s(short|deep)\s"' not in src
+
+
+# Real ESPN NFL text, as above
+_NFL_TEXTS = [
+    "(14:18) (Shotgun) K.Murray pass short left to T.McBride pushed ob at ARI 36 for 11 yards (I.Yiadom).",
+    "(15:00) (Shotgun) G.Minshew pass incomplete short right.",
+    "(14:09) J.Allen pass incomplete deep right. thrown away from outside the pocket",
+    "(5:29) (Shotgun) M.Stafford scrambles right end ran ob at MIN 12 for 5 yards (H.Smith).",
+    "(1:49) (Shotgun) G.Minshew scrambles right end ran ob at MIA 9 for 5 yards (J.Holland). The Replay Official "
+    "reviewed the short of the line to gain ruling, and the play was REVERSED.",
+    "(13:24) J.Cutler scrambles up the middle to MIN 11 for 2 yards. J.Cutler pass incomplete short left to E.Bennett.",
+    "(4:22) J.Kitna pass to M.Furrey for 13 yards, TOUCHDOWN. Pass thrown right corner 5 yards deep end zone.",
+]
+
+
+def test_nfl_matrix_fields_agree_with_nflverse_columns():
+    """nfl_pbp's nflverse-parity pass_length / pass_location read the same depth and direction."""
+    text = pl.col("text")
+    df = pl.DataFrame({"text": _NFL_TEXTS}).with_columns(
+        depth=text.str.extract(_DEPTH_RE, 1),
+        direction=text.str.extract(_DIR_RE, 1),
+        pass_length=text.str.extract(r"pass (?:incomplete )?(short|deep)", 1),
+        pass_location=text.str.extract(r"(?:short|deep) (left|middle|right)", 1),
+    )
+    assert df["depth"].to_list() == df["pass_length"].to_list()
+    assert df["direction"].to_list() == df["pass_location"].to_list()
 
 
 # ---------------------------------------------------------------------------

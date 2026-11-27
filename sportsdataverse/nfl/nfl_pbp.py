@@ -7141,6 +7141,10 @@ class NFLPlayProcess(object):
         (a tracking/GSIS measure, absent here) and ``qb_hit`` (left at 0).
         """
         text = pl.col("text").fill_null("")
+        # nflverse's own patterns, kept verbatim for parity (shield_pbp/description.py has the
+        # same); the Game on Paper columns pass_depth / pass_direction read espn_text's
+        # PASS_DEPTH_RE / PASS_DIRECTION_RE, which agree with these on ESPN's NFL text
+        # (tests/test_play_matrix_fields.py).
         play_df = play_df.with_columns(
             pass_length=text.str.extract(r"pass (?:incomplete )?(short|deep)", 1),
             pass_location=text.str.extract(r"(?:short|deep) (left|middle|right)", 1),

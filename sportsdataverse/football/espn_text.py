@@ -25,6 +25,10 @@ surname-first "Arreola,Carlos" / "Wesco Jr.,Bryant" stats.ncaa.org writes, and
 field-goal anchors built from it (:data:`CLAUSE_RETURNER_RE`,
 :data:`CLAUSE_FG_KICKER_RE`), so the CFB processor keeps no name regex of its
 own for them.
+
+It also holds the charted-pass phrase both processors read ``pass_depth`` and
+``pass_direction`` from (:data:`PASS_DEPTH_RE`, :data:`PASS_DIRECTION_RE`),
+with what ESPN's "short" and "deep" mean in each league.
 """
 
 from __future__ import annotations
