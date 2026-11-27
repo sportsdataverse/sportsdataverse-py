@@ -46,7 +46,7 @@ leagues, college hockey (M/W), college baseball + softball, soccer, cricket,
 lacrosse, golf, UFL/XFL/CFL, and odds endpoints, plus international basketball (EuroLeague and
 24 provider families), European hockey (SIHF and 12 leagues), Formula 1, the
 Kalshi and Polymarket prediction markets, and the cross-sport providers (CBS,
-Fox, Yahoo, ESPN content, TheSportsDB).
+Fox, Yahoo, ESPN content, ESPN Fantasy, TheSportsDB).
 
 When there is any conflict between this file and repository contributor
 docs, follow `CONTRIBUTING.md`, `CLAUDE.md`, and the current test suite
@@ -485,7 +485,7 @@ uv add --dev some-package           # add dev-only dep
 ## Project Structure
 
 One package per primary league (`cfb/ mbb/ mlb/ nba/ nfl/ nhl/ wbb/ wnba/ pwhl/ nbagl/ odds/`), the
-cross-sport sources under `providers/` (`cbs/ fox/ yahoo/ espn_content/ thesportsdb/`), the HockeyTech core
+cross-sport sources under `providers/` (`cbs/ fox/ yahoo/ espn_content/ espn_fantasy/ thesportsdb/`), the HockeyTech core
 (`hockeytech/`) and its 19 league families under `hockey/`, `baseball/` (college
 baseball + softball), `soccer/` (+ `mls/`, `nwsl/`), `cricket/`, `lacrosse/` (+ the PLL stats API `pll_*`), `golf/` (+ the PGA TOUR GraphQL `pgatour_*`), `football/`
 (UFL/XFL/CFL + the `sources/` adapters), `scrape/` (`espn/ ncaa/ stats/`),

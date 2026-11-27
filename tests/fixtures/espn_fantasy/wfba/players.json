@@ -1,0 +1,57 @@
+[
+  {
+    "defaultPositionId": 1,
+    "droppable": true,
+    "eligibleSlots": [
+      1,
+      3,
+      5
+    ],
+    "firstName": "Helena",
+    "fullName": "Helena Pueyo",
+    "id": 4598223,
+    "lastName": "Pueyo",
+    "ownership": {
+      "percentOwned": 0.05
+    },
+    "proTeamId": 0,
+    "universeId": 0
+  },
+  {
+    "defaultPositionId": 2,
+    "droppable": true,
+    "eligibleSlots": [
+      2,
+      3,
+      4
+    ],
+    "firstName": "Camryn",
+    "fullName": "Camryn Taylor",
+    "id": 4595150,
+    "lastName": "Taylor",
+    "ownership": {
+      "percentOwned": 0.05
+    },
+    "proTeamId": 8,
+    "universeId": 2
+  },
+  {
+    "defaultPositionId": 1,
+    "droppable": true,
+    "eligibleSlots": [
+      1,
+      3,
+      5
+    ],
+    "firstName": "Rebecca",
+    "fullName": "Rebecca Allen",
+    "id": 3102133,
+    "lastName": "Allen",
+    "lastNewsDate": 1790003040000,
+    "ownership": {
+      "percentOwned": 4.75
+    },
+    "proTeamId": 9,
+    "universeId": 1
+  }
+]

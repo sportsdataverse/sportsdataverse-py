@@ -1,0 +1,660 @@
+{
+  "news": {
+    "timestamp": "2026-11-26T19:23:27Z",
+    "resultsOffset": 0,
+    "status": "success",
+    "resultsLimit": 50,
+    "resultsCount": 41,
+    "feed": [
+      {
+        "id": 54107746,
+        "nowId": "23-54107746",
+        "contentKey": "54107746-23-1-1",
+        "dataSourceIdentifier": "ff7c1c65452b2",
+        "type": "Rotowire",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-11-26T17:32:35Z",
+        "lastModified": "2026-11-26T17:27:18Z",
+        "published": "2026-11-26T17:27:18Z",
+        "images": [],
+        "story": "<editorial text omitted from the committed sample>",
+        "allowContentReactions": false,
+        "allowSearch": false,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "self": {}
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=54107746"
+          }
+        },
+        "premium": false,
+        "playerId": 5104157
+      },
+      {
+        "id": 50602219,
+        "nowId": "1-50602219",
+        "contentKey": "50602219-1-293-1",
+        "dataSourceIdentifier": "769eee3b9faaf",
+        "publishedkey": "nba401909325",
+        "type": "Media",
+        "eventId": 401909325,
+        "eventIdStr": "401909325",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-11-26T06:04:02Z",
+        "lastModified": "2026-11-26T06:04:01Z",
+        "published": "2026-11-26T06:04:01Z",
+        "root": "nba",
+        "section": "NBA",
+        "images": [
+          {
+            "name": "Blazers snag home win over the Spurs",
+            "caption": "Blazers snag home win over the Spurs",
+            "alt": "",
+            "height": 324,
+            "width": 576,
+            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557.jpg"
+          }
+        ],
+        "authors": [],
+        "allowComments": true,
+        "allowContentReactions": true,
+        "allowSearch": true,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "artwork": {
+              "href": "https://artwork.api.espn.com/artwork/collections/media/44dd1f80-5af2-421d-bc93-41957ba6c8a5"
+            },
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/video/clips/50602219"
+            }
+          },
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showVideo?videoID=50602219&videoDSI=769eee3b9faaf"
+          },
+          "web": {
+            "href": "https://www.espn.com/video/clip/_/id/50602219/blazers-snag-home-win-spurs",
+            "self": {
+              "href": "https://www.espn.com/video/clip/_/id/50602219/blazers-snag-home-win-spurs",
+              "dsi": {
+                "href": "https://www.espn.com/video/clip?id=769eee3b9faaf"
+              }
+            }
+          }
+        },
+        "premium": false,
+        "video": [
+          {
+            "id": 50602219,
+            "dataSourceIdentifier": "769eee3b9faaf",
+            "cerebroId": "6b07cb757f6a5e2e363d25fb",
+            "pccId": "44dd1f80-5af2-421d-bc93-41957ba6c8a5",
+            "source": "espn",
+            "headline": "Blazers snag home win over the Spurs",
+            "shortHeadline": "Blazers snag home win over the Spurs",
+            "caption": "Blazers snag home win over the Spurs",
+            "title": "Blazers snag home win over the Spurs",
+            "description": "Blazers snag home win over the Spurs",
+            "shortDescription": "Blazers snag home win over the Spurs",
+            "lastModified": "2026-11-26T06:04:01Z",
+            "originalPublishDate": "2026-11-26T06:02:29Z",
+            "premium": false,
+            "syndicatable": true,
+            "duration": 81,
+            "videoRatio": "16:9,9:16",
+            "timeRestrictions": {
+              "embargoDate": "2026-11-26T06:02:21Z",
+              "expirationDate": "2027-07-31T04:00:00Z"
+            },
+            "deviceRestrictions": {
+              "devices": [
+                "settop",
+                "tablet",
+                "handset"
+              ],
+              "type": "whitelist"
+            },
+            "geoRestrictions": {
+              "countries": [
+                "PR",
+                "HN",
+                "PY"
+              ],
+              "type": "whitelist"
+            },
+            "gameId": 401909325,
+            "plays": [
+              {
+                "id": 40190932520
+              }
+            ],
+            "thumbnail": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557.jpg",
+            "images": [
+              {
+                "name": "Poster Image",
+                "caption": "",
+                "alt": "",
+                "credit": "",
+                "height": 324,
+                "width": 576,
+                "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557.jpg"
+              }
+            ],
+            "posterImages": {
+              "default": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557_default.jpg",
+                "width": 576,
+                "height": 324
+              },
+              "firstFrame": {
+                "href": "https://cmp-espn.media.dssott.com/opp/img/espn/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557/thumb-1-w720-h406-f4.jpg"
+              },
+              "full": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557.jpg"
+              },
+              "square": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557_1x1.jpg"
+              },
+              "vertical": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557_9x16.jpg"
+              },
+              "verticalFirstFrame": {
+                "href": "https://cmp-espn.media.dssott.com/opp/img/espn/9x16/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557/thumb-1-w406-h720-f4.jpg"
+              },
+              "wide": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557_5x2.jpg"
+              }
+            },
+            "links": {
+              "api": {
+                "artwork": {
+                  "href": "https://artwork.api.espn.com/artwork/collections/media/44dd1f80-5af2-421d-bc93-41957ba6c8a5"
+                },
+                "self": {
+                  "href": "https://content.core.api.espn.com/v1/video/clips/50602219"
+                }
+              },
+              "mobile": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/44dd1f80-5af2-421d-bc93-41957ba6c8a5/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50602219/blazers-snag-home-win-spurs",
+                "alert": {
+                  "href": "https://m.espn.com/general/video/videoAlert?vid=50602219"
+                },
+                "progressiveDownload": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/brightcove/44dd1f80-5af2-421d-bc93-41957ba6c8a5/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50602219/blazers-snag-home-win-spurs"
+                },
+                "source": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557.mp4"
+                },
+                "streaming": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/brightcove/44dd1f80-5af2-421d-bc93-41957ba6c8a5/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50602219/blazers-snag-home-win-spurs"
+                }
+              },
+              "source": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557.mp4",
+                "HD": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557.mp4"
+                },
+                "HLS": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557/playlist.m3u8",
+                  "9x16": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/9x16/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557/playlist.m3u8"
+                  },
+                  "HD": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557/playlist.m3u8"
+                  },
+                  "cmaf": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557/playlist.m3u8",
+                    "9x16": {
+                      "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/9x16/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557/playlist.m3u8"
+                    },
+                    "cmb": {
+                      "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/cmb/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557/playlist.m3u8"
+                    }
+                  },
+                  "cmb": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/cmb/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557/playlist.m3u8"
+                  },
+                  "shield": {
+                    "href": "https://watch.auth.api.espn.com/video/auth/media/44dd1f80-5af2-421d-bc93-41957ba6c8a5/asset"
+                  }
+                },
+                "flash": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557.mp4"
+                },
+                "full": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557.mp4"
+                },
+                "mezzanine": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/3070f2c1-112d-4a35-8a0b-b02c60a8f557/3070f2c1-112d-4a35-8a0b-b02c60a8f557.mp4"
+                }
+              },
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showVideo?videoID=50602219&videoDSI=769eee3b9faaf"
+              },
+              "web": {
+                "href": "https://www.espn.com/video/clip/_/id/50602219/blazers-snag-home-win-spurs",
+                "self": {
+                  "href": "https://www.espn.com/video/clip/_/id/50602219/blazers-snag-home-win-spurs",
+                  "dsi": {
+                    "href": "https://www.espn.com/video/clip?id=769eee3b9faaf"
+                  }
+                }
+              }
+            },
+            "categories": [
+              {
+                "id": 457719,
+                "type": "athlete",
+                "uid": "s:40~l:46~a:4683021",
+                "guid": "c025f56a-78ee-3e47-be5a-f962c1b58ffb",
+                "description": "Deni Avdija",
+                "sportId": 46,
+                "athleteId": 4683021,
+                "athlete": {
+                  "id": 4683021,
+                  "description": "Deni Avdija",
+                  "links": {
+                    "mobile": {
+                      "athletes": {
+                        "href": "https://www.espn.com/nba/player/_/id/4683021/deni-avdija"
+                      }
+                    },
+                    "web": {
+                      "athletes": {
+                        "href": "https://www.espn.com/nba/player/_/id/4683021/deni-avdija"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": 4659,
+                "type": "team",
+                "uid": "s:40~l:46~t:22",
+                "guid": "ed294c02-3c44-db14-9e06-1b4e8cff9558",
+                "description": "Portland Trail Blazers",
+                "sportId": 46,
+                "teamId": 22,
+                "team": {
+                  "id": 22,
+                  "description": "Portland Trail Blazers",
+                  "abbreviation": "POR",
+                  "shortDisplayName": "Trail Blazers",
+                  "links": {
+                    "mobile": {
+                      "teams": {
+                        "href": "https://www.espn.com/nba/team/_/name/por/portland-trail-blazers"
+                      }
+                    },
+                    "web": {
+                      "teams": {
+                        "href": "https://www.espn.com/nba/team/_/name/por/portland-trail-blazers"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": 4548,
+                "type": "team",
+                "uid": "s:40~l:46~t:24",
+                "guid": "8aef8547-32f5-0943-a1de-e734567674cc",
+                "description": "San Antonio Spurs",
+                "sportId": 46,
+                "teamId": 24,
+                "team": {
+                  "id": 24,
+                  "description": "San Antonio Spurs",
+                  "abbreviation": "SA",
+                  "shortDisplayName": "Spurs",
+                  "links": {
+                    "mobile": {
+                      "teams": {
+                        "href": "https://www.espn.com/nba/team/_/name/sa/san-antonio-spurs"
+                      }
+                    },
+                    "web": {
+                      "teams": {
+                        "href": "https://www.espn.com/nba/team/_/name/sa/san-antonio-spurs"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "ad": {
+              "bundle": "nba_top_plays",
+              "sport": "nba"
+            },
+            "contributingPartner": "wsc",
+            "contributingSystem": "wsc",
+            "tracking": {
+              "coverageType": "Final Game Highlight",
+              "leagueName": "NBA",
+              "program": "ESPN",
+              "sportName": "basketball",
+              "trackingId": "dm_20261126_NBA_blazers_snag_home_win_over_the_spurs",
+              "trackingName": "COM_NBA Highlight (Blazers snag home win over the Spurs) 2026/11/26 ESHEET"
+            }
+          }
+        ],
+        "playerId": 5104157
+      },
+      {
+        "id": 50602027,
+        "nowId": "1-50602027",
+        "contentKey": "50602027-1-293-1",
+        "dataSourceIdentifier": "7fd9d619838a6",
+        "publishedkey": "nba401909325",
+        "type": "Media",
+        "eventId": 401909325,
+        "eventIdStr": "401909325",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-11-26T05:43:22Z",
+        "lastModified": "2026-11-26T05:43:21Z",
+        "published": "2026-11-26T05:43:21Z",
+        "root": "nba",
+        "section": "NBA",
+        "images": [
+          {
+            "name": "Wemby spins free for the alley-oop",
+            "caption": "Wemby spins free for the alley-oop",
+            "alt": "",
+            "height": 324,
+            "width": 576,
+            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa.jpg"
+          }
+        ],
+        "authors": [],
+        "allowComments": true,
+        "allowContentReactions": true,
+        "allowSearch": true,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "artwork": {
+              "href": "https://artwork.api.espn.com/artwork/collections/media/5d223c9d-be44-4efc-8133-5f7bfb40b6c4"
+            },
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/video/clips/50602027"
+            }
+          },
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showVideo?videoID=50602027&videoDSI=7fd9d619838a6"
+          },
+          "web": {
+            "href": "https://www.espn.com/video/clip/_/id/50602027/wemby-spins-free-alley-oop",
+            "self": {
+              "href": "https://www.espn.com/video/clip/_/id/50602027/wemby-spins-free-alley-oop",
+              "dsi": {
+                "href": "https://www.espn.com/video/clip?id=7fd9d619838a6"
+              }
+            }
+          }
+        },
+        "premium": false,
+        "video": [
+          {
+            "id": 50602027,
+            "dataSourceIdentifier": "7fd9d619838a6",
+            "cerebroId": "6b07c5717f6a5e2e363d24a5",
+            "pccId": "5d223c9d-be44-4efc-8133-5f7bfb40b6c4",
+            "source": "espn",
+            "headline": "Wemby spins free for the alley-oop",
+            "shortHeadline": "Wemby spins free for the alley-oop",
+            "caption": "Wemby spins free for the alley-oop",
+            "title": "Wemby spins free for the alley-oop",
+            "description": "Wemby spins free for the alley-oop",
+            "shortDescription": "Wemby spins free for the alley-oop",
+            "lastModified": "2026-11-26T05:43:21Z",
+            "originalPublishDate": "2026-11-26T05:36:49Z",
+            "premium": false,
+            "syndicatable": true,
+            "duration": 23,
+            "videoRatio": "16:9,9:16",
+            "timeRestrictions": {
+              "embargoDate": "2026-11-26T05:36:42Z",
+              "expirationDate": "2027-07-31T04:00:00Z"
+            },
+            "deviceRestrictions": {
+              "devices": [
+                "settop",
+                "tablet",
+                "handset"
+              ],
+              "type": "whitelist"
+            },
+            "geoRestrictions": {
+              "countries": [
+                "PR",
+                "HN",
+                "PY"
+              ],
+              "type": "whitelist"
+            },
+            "gameId": 401909325,
+            "plays": [
+              {
+                "id": 401909325692
+              }
+            ],
+            "thumbnail": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa.jpg",
+            "images": [
+              {
+                "name": "Poster Image",
+                "caption": "",
+                "alt": "",
+                "credit": "",
+                "height": 324,
+                "width": 576,
+                "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa.jpg"
+              }
+            ],
+            "posterImages": {
+              "default": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa_default.jpg",
+                "width": 576,
+                "height": 324
+              },
+              "firstFrame": {
+                "href": "https://cmp-espn.media.dssott.com/opp/img/espn/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa/thumb-1-w720-h406-f4.jpg"
+              },
+              "full": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa.jpg"
+              },
+              "square": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa_1x1.jpg"
+              },
+              "vertical": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa_9x16.jpg"
+              },
+              "verticalFirstFrame": {
+                "href": "https://cmp-espn.media.dssott.com/opp/img/espn/9x16/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa/thumb-1-w406-h720-f4.jpg"
+              },
+              "wide": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa_5x2.jpg"
+              }
+            },
+            "links": {
+              "api": {
+                "artwork": {
+                  "href": "https://artwork.api.espn.com/artwork/collections/media/5d223c9d-be44-4efc-8133-5f7bfb40b6c4"
+                },
+                "self": {
+                  "href": "https://content.core.api.espn.com/v1/video/clips/50602027"
+                }
+              },
+              "mobile": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/5d223c9d-be44-4efc-8133-5f7bfb40b6c4/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50602027/wemby-spins-free-alley-oop",
+                "alert": {
+                  "href": "https://m.espn.com/general/video/videoAlert?vid=50602027"
+                },
+                "progressiveDownload": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/brightcove/5d223c9d-be44-4efc-8133-5f7bfb40b6c4/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50602027/wemby-spins-free-alley-oop"
+                },
+                "source": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa.mp4"
+                },
+                "streaming": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/brightcove/5d223c9d-be44-4efc-8133-5f7bfb40b6c4/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50602027/wemby-spins-free-alley-oop"
+                }
+              },
+              "source": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa.mp4",
+                "HD": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa.mp4"
+                },
+                "HLS": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa/playlist.m3u8",
+                  "9x16": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/9x16/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa/playlist.m3u8"
+                  },
+                  "HD": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa/playlist.m3u8"
+                  },
+                  "cmaf": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa/playlist.m3u8",
+                    "9x16": {
+                      "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/9x16/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa/playlist.m3u8"
+                    },
+                    "cmb": {
+                      "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/cmb/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa/playlist.m3u8"
+                    }
+                  },
+                  "cmb": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/cmb/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa/playlist.m3u8"
+                  },
+                  "shield": {
+                    "href": "https://watch.auth.api.espn.com/video/auth/media/5d223c9d-be44-4efc-8133-5f7bfb40b6c4/asset"
+                  }
+                },
+                "flash": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa.mp4"
+                },
+                "full": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa.mp4"
+                },
+                "mezzanine": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/0f3223f6-1330-4328-93cb-1240e61dcbfa/0f3223f6-1330-4328-93cb-1240e61dcbfa.mp4"
+                }
+              },
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showVideo?videoID=50602027&videoDSI=7fd9d619838a6"
+              },
+              "web": {
+                "href": "https://www.espn.com/video/clip/_/id/50602027/wemby-spins-free-alley-oop",
+                "self": {
+                  "href": "https://www.espn.com/video/clip/_/id/50602027/wemby-spins-free-alley-oop",
+                  "dsi": {
+                    "href": "https://www.espn.com/video/clip?id=7fd9d619838a6"
+                  }
+                }
+              }
+            },
+            "categories": [
+              {
+                "id": 4659,
+                "type": "team",
+                "uid": "s:40~l:46~t:22",
+                "guid": "ed294c02-3c44-db14-9e06-1b4e8cff9558",
+                "description": "Portland Trail Blazers",
+                "sportId": 46,
+                "teamId": 22,
+                "team": {
+                  "id": 22,
+                  "description": "Portland Trail Blazers",
+                  "abbreviation": "POR",
+                  "shortDisplayName": "Trail Blazers",
+                  "links": {
+                    "mobile": {
+                      "teams": {
+                        "href": "https://www.espn.com/nba/team/_/name/por/portland-trail-blazers"
+                      }
+                    },
+                    "web": {
+                      "teams": {
+                        "href": "https://www.espn.com/nba/team/_/name/por/portland-trail-blazers"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": 4548,
+                "type": "team",
+                "uid": "s:40~l:46~t:24",
+                "guid": "8aef8547-32f5-0943-a1de-e734567674cc",
+                "description": "San Antonio Spurs",
+                "sportId": 46,
+                "teamId": 24,
+                "team": {
+                  "id": 24,
+                  "description": "San Antonio Spurs",
+                  "abbreviation": "SA",
+                  "shortDisplayName": "Spurs",
+                  "links": {
+                    "mobile": {
+                      "teams": {
+                        "href": "https://www.espn.com/nba/team/_/name/sa/san-antonio-spurs"
+                      }
+                    },
+                    "web": {
+                      "teams": {
+                        "href": "https://www.espn.com/nba/team/_/name/sa/san-antonio-spurs"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": 603357,
+                "type": "athlete",
+                "uid": "s:40~l:46~a:5104157",
+                "guid": "0e8844b2-d923-3926-82d2-f19a29d69490",
+                "description": "Victor Wembanyama",
+                "sportId": 46,
+                "athleteId": 5104157,
+                "athlete": {
+                  "id": 5104157,
+                  "description": "Victor Wembanyama",
+                  "links": {
+                    "mobile": {
+                      "athletes": {
+                        "href": "https://www.espn.com/nba/player/_/id/5104157/victor-wembanyama"
+                      }
+                    },
+                    "web": {
+                      "athletes": {
+                        "href": "https://www.espn.com/nba/player/_/id/5104157/victor-wembanyama"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "ad": {
+              "bundle": "nba_top_plays",
+              "sport": "nba"
+            },
+            "contributingPartner": "wsc",
+            "contributingSystem": "wsc",
+            "tracking": {
+              "coverageType": "OnePlay",
+              "leagueName": "NBA",
+              "program": "ESPN",
+              "sportName": "basketball",
+              "trackingId": "dm_20261126_NBA_victor_wembanyama_elevates_for_alleyoop",
+              "trackingName": "NBA_One-Play (Wemby spins free for the alley-oop) 2026/11/26 ESHEET"
+            }
+          }
+        ],
+        "playerId": 5104157
+      }
+    ]
+  }
+}

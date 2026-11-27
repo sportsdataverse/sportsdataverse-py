@@ -195,12 +195,17 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [calculate_nfl_standings](additional/analytics.md#calculate_nfl_standings) | Compute NFL division standings + conference playoff seeds. |
 | [compose_counting_projection](additional/analytics.md#compose_counting_projection) | Compose skill and availability into a counting projection. |
 | [nfl_availability_projection](additional/analytics.md#nfl_availability_projection) | Empirical-Bayes availability projection: expected fraction of team games. |
+| [nfl_expected_starters](additional/analytics.md#nfl_expected_starters) | Pregame expected starting QB, backup, report status and start probability per team-game. |
 | [nfl_game_script](additional/analytics.md#nfl_game_script) | Team-season pace / PROE / expected-plays engine. |
 | [nfl_play_call_probabilities](additional/analytics.md#nfl_play_call_probabilities) | Score the bundled play-call classifier over offensive plays. |
 | [nfl_play_call_tendencies](additional/analytics.md#nfl_play_call_tendencies) | Aggregate scored play-call probabilities to team-season tendencies. |
 | [nfl_player_props](additional/analytics.md#nfl_player_props) | Empirical-Bayes player-prop projections, leakage-safe per week. |
 | [nfl_predict_games](additional/analytics.md#nfl_predict_games) | Vectorized pregame predictions (+ display-only market edge) per game. |
 | [nfl_punter_value](additional/analytics.md#nfl_punter_value) | Punter net-field-position value over expected. |
+| [nfl_qb_dropbacks](additional/analytics.md#nfl_qb_dropbacks) | One row per offensive pass or run play, with the QB on dropbacks. |
+| [nfl_qb_margin_mixture](additional/analytics.md#nfl_qb_margin_mixture) | Mean, win probability and 80% interval of a Normal mixture of home margins. |
+| [nfl_qb_predict_games](additional/analytics.md#nfl_qb_predict_games) | Base spine and QB-layer pregame margin, win probability and 80% interval per game. |
+| [nfl_qb_values](additional/analytics.md#nfl_qb_values) | Shrunk career EPA per dropback for every QB, as of a date. |
 | [nfl_season_standings](additional/analytics.md#nfl_season_standings) | Compute NFL standings with the real NFL tiebreaking procedures. |
 | [nfl_special_teams_epa](additional/analytics.md#nfl_special_teams_epa) | Special-teams EPA by team-unit. |
 | [playcall_features](additional/analytics.md#playcall_features) | Build the play-call feature frame (one row per offensive run/pass play). |

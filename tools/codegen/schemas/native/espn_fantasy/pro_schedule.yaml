@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: pro_game_id
+  type: integer
+- description: ''
+  name: scoring_period_id
+  type: integer
+- description: ''
+  name: game_date
+  type: datetime
+- description: ''
+  name: home_pro_team_id
+  type: integer
+- description: ''
+  name: away_pro_team_id
+  type: integer
+- description: ''
+  name: start_time_tbd
+  type: logical
+- description: ''
+  name: stats_official
+  type: logical
+- description: ''
+  name: valid_for_locking
+  type: logical
+kind: dataframe
+schema: espn_fantasy_pro_schedule
