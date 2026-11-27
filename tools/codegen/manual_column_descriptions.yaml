@@ -83996,6 +83996,198 @@ soccer_espn_transfermarkt_team_crosswalk:
     load_soccer_transfermarkt_players. Null when no Transfermarkt id is known; never on two ESPN teams.
   match_method: Where club_id comes from - 'reep' (the reep row's Transfermarkt id) or 'review' (reviewed by hand
     because the reep row has none); null with club_id.
+nba_game_story:
+  edges.edge: 'Edge name. Accounting: shooting, turnovers, rebounding, free_throws (the four-factor parts priced at the game''s own pooled rates,
+    adding up to the margin exactly). Splits: three_pt_points, points_off_turnovers, fast_break_points, points_in_paint (box points).'
+  edges.game_id: The game's ESPN game id.
+  edges.kind: accounting for edges that split the game between them (their points_worth add up to the margin, exactly or nearly; see the function's
+    docstring), split for overlapping cuts.
+  edges.loser_team_id: Losing team's id (null on a tie).
+  edges.loser_value: Loser's value for the edge, in the same unit as winner_value.
+  edges.points_worth: 'The winner''s edge in the sport''s scoring unit: the winner''s points from the edge less the loser''s. Positive favours
+    the winner.'
+  edges.rank: Rank of the edge within the game by points_worth, 1 = largest; equal worths keep the edge list's order.
+  edges.unit: 'Always points: the scoring unit the edges are priced in.'
+  edges.winner_team_id: Winning team's id (null on a tie, where the edges read from the home side's view).
+  edges.winner_value: 'Winner''s value for the edge in the edge''s own unit: points for a points edge, a rate for a rate edge.'
+  moment.away_score: Away score after the play.
+  moment.clock: Game clock of the play as the source shows it.
+  moment.game_id: The game's ESPN game id.
+  moment.home_score: Home score after the play.
+  moment.order: The play's position in the game's play order.
+  moment.period: Period of the play.
+  moment.play_id: ESPN play id of the deciding moment.
+  moment.rule: 'max_abs_wpa: the play with the largest absolute win-probability change (earliest on ties); deciding_score where no play has one:
+    the winner''s score that put it ahead for good.'
+  moment.team_id: Team of the play (the offense in football, the event's team in basketball).
+  moment.text: Play description as the source writes it.
+  moment.winner_wpa: The same change from the winner's side (null on a tie).
+  moment.wpa: Home win probability after the play less before it.
+  performers.game_id: The game's ESPN game id.
+  performers.metric: 'Always points: the box score points the performer is chosen by.'
+  performers.player_id: ESPN athlete id of the side's top performer.
+  performers.player_name: Player's display name.
+  performers.team_id: Team of the top performer.
+  performers.value: The player's points (ties go to assists plus rebounds).
+  periods.away_cum: Away running score at the end of the period.
+  periods.away_pts: Away points in the period.
+  periods.game_id: The game's ESPN game id.
+  periods.home_cum: Home running score at the end of the period.
+  periods.home_pts: 'Home points in the period: its last running score less the previous period''s.'
+  periods.is_overtime: True for a period after regulation.
+  periods.period: Period number, from 1; overtimes follow regulation.
+  periods.period_label: Q1-Q4 for quarters or H1-H2 for halves, then OT, OT2, ...
+  runs.away_score_after: Away score at the end of the run.
+  runs.end_order: Play order of the run's last score.
+  runs.end_period: Period of the run's last score.
+  runs.game_id: The game's ESPN game id.
+  runs.home_score_after: Home score at the end of the run.
+  runs.points: 'The side''s largest unanswered run: points it scored in a row with no score by the other side (a score correction stays in the
+    run and counts against its side).'
+  runs.start_order: Play order of the run's first score.
+  runs.start_period: Period of the run's first score.
+  runs.team_id: Team that made the run.
+  summary.away_score: Away team's official final score.
+  summary.away_team_id: Away team's ESPN team id.
+  summary.decided: True when the game has a winner (false on a tie).
+  summary.game_id: The game's ESPN game id.
+  summary.home_score: Home team's official final score.
+  summary.home_team_id: Home team's ESPN team id.
+  summary.loser_team_id: Losing team's id; null on a tie.
+  summary.margin: Winner's final score less the loser's; 0 on a tie.
+  summary.n_periods: Periods played, overtimes included.
+  summary.overtime: True when the game went past regulation.
+  summary.periods_agree: True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose
+    plays end on another score.
+  summary.winner_team_id: Winning team's id; null on a tie.
+cfb_game_story:
+  edges.edge: 'Edge name. Accounting: passing, rushing, special_teams, other (every play with an EPA once; their sum is the net EPA). Splits:
+    turnovers, explosive_plays, success_rate, red_zone, late_downs.'
+  edges.game_id: The game's ESPN game id.
+  edges.kind: accounting for edges that split the game between them (their points_worth add up to the margin, exactly or nearly; see the function's
+    docstring), split for overlapping cuts.
+  edges.loser_team_id: Losing team's id (null on a tie).
+  edges.loser_value: Loser's value for the edge, in the same unit as winner_value.
+  edges.points_worth: 'The winner''s edge in the sport''s scoring unit: the winner''s points from the edge less the loser''s. Positive favours
+    the winner.'
+  edges.rank: Rank of the edge within the game by points_worth, 1 = largest; equal worths keep the edge list's order.
+  edges.unit: 'Always points: expected points added, the unit the edges are priced in.'
+  edges.winner_team_id: Winning team's id (null on a tie, where the edges read from the home side's view).
+  edges.winner_value: 'Winner''s value for the edge in the edge''s own unit: points for a points edge, a rate for a rate edge.'
+  moment.away_score: Away score after the play.
+  moment.clock: Game clock of the play as the source shows it.
+  moment.game_id: The game's ESPN game id.
+  moment.home_score: Home score after the play.
+  moment.order: The play's position in the game's play order.
+  moment.period: Period of the play.
+  moment.play_id: ESPN play id of the deciding moment.
+  moment.rule: 'max_abs_wpa: the play with the largest absolute win-probability change (earliest on ties); deciding_score where no play has one:
+    the winner''s score that put it ahead for good.'
+  moment.team_id: Team of the play (the offense in football, the event's team in basketball).
+  moment.text: Play description as the source writes it.
+  moment.winner_wpa: The same change from the winner's side (null on a tie).
+  moment.wpa: Home win probability after the play less before it.
+  performers.game_id: The game's ESPN game id.
+  performers.metric: 'Always epa: the expected points added the performer is chosen by.'
+  performers.player_id: ESPN athlete id of the side's top performer.
+  performers.player_name: Player's display name.
+  performers.team_id: Team of the top performer.
+  performers.value: The player's EPA as passer, rusher and receiver combined (a target credits both the passer and the receiver; ties go to touchdowns).
+  periods.away_cum: Away running score at the end of the period.
+  periods.away_pts: Away points in the period.
+  periods.game_id: The game's ESPN game id.
+  periods.home_cum: Home running score at the end of the period.
+  periods.home_pts: 'Home points in the period: its last running score less the previous period''s.'
+  periods.is_overtime: True for a period after regulation.
+  periods.period: Period number, from 1; overtimes follow regulation.
+  periods.period_label: Q1-Q4, then OT, OT2, ...
+  runs.away_score_after: Away score at the end of the run.
+  runs.end_order: Play order of the run's last score.
+  runs.end_period: Period of the run's last score.
+  runs.game_id: The game's ESPN game id.
+  runs.home_score_after: Home score at the end of the run.
+  runs.points: 'The side''s largest unanswered run: points it scored in a row with no score by the other side (a score correction stays in the
+    run and counts against its side).'
+  runs.start_order: Play order of the run's first score.
+  runs.start_period: Period of the run's first score.
+  runs.team_id: Team that made the run.
+  summary.away_score: Away team's official final score.
+  summary.away_team_id: Away team's ESPN team id.
+  summary.decided: True when the game has a winner (false on a tie).
+  summary.game_id: The game's ESPN game id.
+  summary.home_score: Home team's official final score.
+  summary.home_team_id: Home team's ESPN team id.
+  summary.loser_team_id: Losing team's id; null on a tie.
+  summary.margin: Winner's final score less the loser's; 0 on a tie.
+  summary.n_periods: Periods played, overtimes included.
+  summary.overtime: True when the game went past regulation.
+  summary.periods_agree: True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose
+    plays end on another score.
+  summary.winner_team_id: Winning team's id; null on a tie.
+nfl_game_story:
+  edges.edge: 'Edge name. Accounting: passing, rushing, special_teams, other (every play with an EPA once; their sum is the net EPA). Splits:
+    turnovers, explosive_plays, success_rate, red_zone, late_downs.'
+  edges.game_id: The game's ESPN game id.
+  edges.kind: accounting for edges that split the game between them (their points_worth add up to the margin, exactly or nearly; see the function's
+    docstring), split for overlapping cuts.
+  edges.loser_team_id: Losing team's id (null on a tie).
+  edges.loser_value: Loser's value for the edge, in the same unit as winner_value.
+  edges.points_worth: 'The winner''s edge in the sport''s scoring unit: the winner''s points from the edge less the loser''s. Positive favours
+    the winner.'
+  edges.rank: Rank of the edge within the game by points_worth, 1 = largest; equal worths keep the edge list's order.
+  edges.unit: 'Always points: expected points added, the unit the edges are priced in.'
+  edges.winner_team_id: Winning team's id (null on a tie, where the edges read from the home side's view).
+  edges.winner_value: 'Winner''s value for the edge in the edge''s own unit: points for a points edge, a rate for a rate edge.'
+  moment.away_score: Away score after the play.
+  moment.clock: Game clock of the play as the source shows it.
+  moment.game_id: The game's ESPN game id.
+  moment.home_score: Home score after the play.
+  moment.order: The play's position in the game's play order.
+  moment.period: Period of the play.
+  moment.play_id: ESPN play id of the deciding moment.
+  moment.rule: 'max_abs_wpa: the play with the largest absolute win-probability change (earliest on ties); deciding_score where no play has one:
+    the winner''s score that put it ahead for good.'
+  moment.team_id: Team of the play (the offense in football, the event's team in basketball).
+  moment.text: Play description as the source writes it.
+  moment.winner_wpa: The same change from the winner's side (null on a tie).
+  moment.wpa: Home win probability after the play less before it.
+  performers.game_id: The game's ESPN game id.
+  performers.metric: 'Always epa: the expected points added the performer is chosen by.'
+  performers.player_id: ESPN athlete id of the side's top performer.
+  performers.player_name: Player's display name.
+  performers.team_id: Team of the top performer.
+  performers.value: The player's EPA as passer, rusher and receiver combined (a target credits both the passer and the receiver; ties go to touchdowns).
+  periods.away_cum: Away running score at the end of the period.
+  periods.away_pts: Away points in the period.
+  periods.game_id: The game's ESPN game id.
+  periods.home_cum: Home running score at the end of the period.
+  periods.home_pts: 'Home points in the period: its last running score less the previous period''s.'
+  periods.is_overtime: True for a period after regulation.
+  periods.period: Period number, from 1; overtimes follow regulation.
+  periods.period_label: Q1-Q4, then OT, OT2, ...
+  runs.away_score_after: Away score at the end of the run.
+  runs.end_order: Play order of the run's last score.
+  runs.end_period: Period of the run's last score.
+  runs.game_id: The game's ESPN game id.
+  runs.home_score_after: Home score at the end of the run.
+  runs.points: 'The side''s largest unanswered run: points it scored in a row with no score by the other side (a score correction stays in the
+    run and counts against its side).'
+  runs.start_order: Play order of the run's first score.
+  runs.start_period: Period of the run's first score.
+  runs.team_id: Team that made the run.
+  summary.away_score: Away team's official final score.
+  summary.away_team_id: Away team's ESPN team id.
+  summary.decided: True when the game has a winner (false on a tie).
+  summary.game_id: The game's ESPN game id.
+  summary.home_score: Home team's official final score.
+  summary.home_team_id: Home team's ESPN team id.
+  summary.loser_team_id: Losing team's id; null on a tie.
+  summary.margin: Winner's final score less the loser's; 0 on a tie.
+  summary.n_periods: Periods played, overtimes included.
+  summary.overtime: True when the game went past regulation.
+  summary.periods_agree: True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose
+    plays end on another score.
+  summary.winner_team_id: Winning team's id; null on a tie.
 soccer_espn_transfermarkt_player_crosswalk:
   espn_athlete_id: ESPN soccer athlete id, digits as text (Utf8, as the ESPN soccer roster frames carry it); unique in
     the table.

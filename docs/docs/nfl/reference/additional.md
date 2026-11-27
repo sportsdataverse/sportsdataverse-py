@@ -197,6 +197,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nfl_availability_projection](additional/analytics.md#nfl_availability_projection) | Empirical-Bayes availability projection: expected fraction of team games. |
 | [nfl_expected_starters](additional/analytics.md#nfl_expected_starters) | Pregame expected starting QB, backup, report status and start probability per team-game. |
 | [nfl_game_script](additional/analytics.md#nfl_game_script) | Team-season pace / PROE / expected-plays engine. |
+| [nfl_game_story](additional/analytics.md#nfl_game_story) | How the winner won it, for one or many NFL games: edges in EPA, the moment, periods, runs, performers. |
 | [nfl_play_call_probabilities](additional/analytics.md#nfl_play_call_probabilities) | Score the bundled play-call classifier over offensive plays. |
 | [nfl_play_call_tendencies](additional/analytics.md#nfl_play_call_tendencies) | Aggregate scored play-call probabilities to team-season tendencies. |
 | [nfl_player_props](additional/analytics.md#nfl_player_props) | Empirical-Bayes player-prop projections, leakage-safe per week. |

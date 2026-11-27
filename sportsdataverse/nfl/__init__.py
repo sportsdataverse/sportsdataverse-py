@@ -157,3 +157,4 @@ from sportsdataverse.nfl.nfl_availability import (
     nfl_availability_projection,
 )
 from sportsdataverse.nfl.nfl_draft_model import nfl_draft_projection
+from sportsdataverse.nfl.nfl_game_story import nfl_game_story  # noqa: F401
