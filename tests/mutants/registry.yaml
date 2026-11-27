@@ -13604,3 +13604,14 @@
   test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k present_tense_rows_classify"
   expected: kill
   note: "'Lineup changed: Fluet in at pitcher' reads 'Lineup' as a batter."
+
+# --- nfl-pass-direction-old-feed: the 2002-04 "to the" / "across the" wording charts a direction ---------
+- id: nfl-pass-direction-old-feed-wording
+  group: nfl-pass-direction-old-feed
+  finding: nfl-pass-direction-old-feed
+  file: sportsdataverse/football/espn_text.py
+  snippet: '(?:up\s+the\s+|to\s+the\s+|across\s+the\s+)?'
+  mutant: '(?:up\s+the\s+)?'
+  test: tests/nfl/test_nfl_pbp_sweep_fixes.py::test_the_2002_feed_wording_charts_a_pass_direction
+  expected: kill
+  note: 2002-04 NFL passes written "pass incomplete to the right side." / "pass across the middle" would chart no direction.

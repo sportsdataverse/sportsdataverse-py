@@ -6414,8 +6414,9 @@ class CFBPlayProcess(object):
                 # Read from the phrase ESPN writes for a charted pass, "pass [complete|incomplete]
                 # short|deep left|middle|right" (football/espn_text.py PASS_DEPTH_RE /
                 # PASS_DIRECTION_RE); null when the phrase is absent (sacks, screens, and almost
-                # every play before 2025 Week 9, whose text omits it; an older "pass up the
-                # middle" still gives a direction).
+                # every play before 2025 Week 9, whose text omits it; the older "pass up the
+                # middle" and the 2004 feed's "pass incomplete to the left side." / "pass across
+                # the middle" still give a direction).
                 # Depth: ESPN's "short" | "deep" -- deep is 20+ air yards, short anything under
                 # Direction: "left" | "middle" | "right"
                 pass_depth=pl.when(pl.col("pass") == True)
