@@ -84,12 +84,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.upload:
         import subprocess
 
-        from sportsdataverse.release import _invoke_gh, sportsdataverse_upload
+        from sportsdataverse.release import _gh_env, _invoke_gh, sportsdataverse_upload
 
-        exists = subprocess.run(
-            ["gh", "release", "view", TAG, "-R", "sportsdataverse/sportsdataverse-data"], capture_output=True
-        ).returncode == 0  # fmt: skip
-        if not exists:
+        view = subprocess.run(
+            ["gh", "release", "view", TAG, "-R", "sportsdataverse/sportsdataverse-data"],
+            capture_output=True, text=True, env=_gh_env(),
+        )  # fmt: skip
+        if view.returncode and "not found" not in view.stderr.lower():
+            raise SystemExit(f"gh release view {TAG} failed: {view.stderr.strip()}")  # auth or network, not absence
+        if view.returncode:
             _invoke_gh(
                 ["release", "create", TAG, "-R", "sportsdataverse/sportsdataverse-data", "--title", TAG, "--notes",
                  f"Transfermarkt dataset mirror (CC0 1.0), snapshot {SNAPSHOT}. See README.md."]
