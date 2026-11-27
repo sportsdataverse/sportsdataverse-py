@@ -181,6 +181,8 @@ pl.DataFrame(rows)  # same columns, same shape — one contract, four leagues
 
     ✅ espn_nba_teams
     ✅ espn_wnba_teams
+
+
     ✅ espn_nhl_teams
     ✅ espn_mlb_teams
 
@@ -219,7 +221,7 @@ print("NFL scoreboard rows:", None if board is None else board.height,
 
     ✅ espn_nfl_scoreboard
     ✅ espn_nba_standings
-    NFL scoreboard rows: 14 | NBA standings rows: 30
+    NFL scoreboard rows: 13 | NBA standings rows: 30
 
 
 ### 📦 The loaders follow one pattern too
@@ -383,9 +385,9 @@ pl.DataFrame({"league": list(counts.keys()), "n_functions": list(counts.values()
     │ str          ┆ i64         │
     ╞══════════════╪═════════════╡
     │ mbb          ┆ 718         │
-    │ nba          ┆ 625         │
+    │ nba          ┆ 626         │
     │ wbb          ┆ 617         │
-    │ cfb          ┆ 469         │
+    │ cfb          ┆ 470         │
     │ wnba         ┆ 417         │
     │ …            ┆ …           │
     │ vijhl        ┆ 14          │
@@ -556,9 +558,9 @@ pl.DataFrame(rows)
 ```
 
     ✅ espn_nba_standings
-
-
     ✅ espn_nhl_standings
+
+
     ✅ espn_mlb_standings
 
 
@@ -597,6 +599,8 @@ for nm, lg in [("Patriots", "nfl"), ("Yankees", "mlb"), ("Bruins", "nhl"), ("Cri
 
 
     nhl  Bruins         -> Boston Bruins (id=1)
+
+
     cfb  Crimson Tide   -> Alabama Crimson Tide (id=333)
 
 
@@ -688,6 +692,8 @@ print("pandas:", type(teams_pd).__name__, None if teams_pd is None else teams_pd
 ```
 
     ✅ espn_wnba_teams (polars)
+
+
     ✅ espn_wnba_teams (pandas)
     polars: DataFrame (14, 14)
     pandas: DataFrame (14, 14)
@@ -707,6 +713,8 @@ print("raw    ->", type(raw).__name__, "(top-level keys:", None if not isinstanc
 ```
 
     ✅ nhl_standings (parsed)
+
+
 
 
     ✅ nhl_standings (raw dict)
@@ -831,10 +839,10 @@ show = [c for c in ["game_date", "player_name", "pitch_type", "release_speed",
     │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 97.4         ┆ null         ┆ null         ┆ strikeout │
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
     │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.8         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 97.5         ┆ null         ┆ null         ┆ strikeout │
-    │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
     │ 2024-07-01 ┆ Varsho,       ┆ KC         ┆ 84.0         ┆ 94.3         ┆ -12.0        ┆ null      │
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
+    │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 97.5         ┆ null         ┆ null         ┆ strikeout │
+    │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
     │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 96.6         ┆ null         ┆ null         ┆ null      │
     │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
     └────────────┴───────────────┴────────────┴──────────────┴──────────────┴──────────────┴───────────┘
@@ -867,14 +875,14 @@ keep = ["team_abbrev", "team_name", "wins", "losses", "ot_losses", "points",
     │ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---             ┆ ---           │
     │ i64  ┆ i64    ┆ i64       ┆ i64    ┆ str             ┆ str           │
     ╞══════╪════════╪═══════════╪════════╪═════════════════╪═══════════════╡
-    │ 16   ┆ 3      ┆ 3         ┆ 35     ┆ Western         ┆ Pacific       │
-    │ 16   ┆ 3      ┆ 2         ┆ 34     ┆ Eastern         ┆ Metropolitan  │
-    │ 15   ┆ 3      ┆ 4         ┆ 34     ┆ Western         ┆ Central       │
-    │ 15   ┆ 6      ┆ 0         ┆ 30     ┆ Eastern         ┆ Metropolitan  │
-    │ 13   ┆ 6      ┆ 3         ┆ 29     ┆ Western         ┆ Pacific       │
-    │ 13   ┆ 5      ┆ 2         ┆ 28     ┆ Eastern         ┆ Atlantic      │
-    │ 12   ┆ 4      ┆ 4         ┆ 28     ┆ Eastern         ┆ Atlantic      │
-    │ 13   ┆ 6      ┆ 2         ┆ 28     ┆ Eastern         ┆ Atlantic      │
+    │ 18   ┆ 3      ┆ 3         ┆ 39     ┆ Eastern         ┆ Metropolitan  │
+    │ 17   ┆ 3      ┆ 5         ┆ 39     ┆ Western         ┆ Central       │
+    │ 17   ┆ 5      ┆ 4         ┆ 38     ┆ Western         ┆ Pacific       │
+    │ 15   ┆ 6      ┆ 3         ┆ 33     ┆ Eastern         ┆ Atlantic      │
+    │ 14   ┆ 6      ┆ 5         ┆ 33     ┆ Western         ┆ Pacific       │
+    │ 15   ┆ 6      ┆ 2         ┆ 32     ┆ Eastern         ┆ Atlantic      │
+    │ 15   ┆ 6      ┆ 2         ┆ 32     ┆ Western         ┆ Central       │
+    │ 14   ┆ 6      ┆ 4         ┆ 32     ┆ Eastern         ┆ Atlantic      │
     └──────┴────────┴───────────┴────────┴─────────────────┴───────────────┘
 
 
@@ -919,6 +927,8 @@ print("standings rows:", None if pwhl_st is None else getattr(pwhl_st, "height",
 ```
 
     ✅ pwhl_standings
+
+
     ✅ load_pwhl_schedules([2024])
     standings rows: 12 | schedule rows: 85
 
@@ -1034,6 +1044,7 @@ out
     ╞═════════════════════════════════╪═══════════════════╪═══════════════════════════╡
     │ americanfootball_ncaaf          ┆ American Football ┆ NCAAF                     │
     │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner │
+    │ americanfootball_ncaaf_fcs      ┆ American Football ┆ NCAAF FCS                 │
     │ americanfootball_nfl            ┆ American Football ┆ NFL                       │
     │ americanfootball_nfl_super_bow… ┆ American Football ┆ NFL Super Bowl Winner     │
     │ aussierules_afl                 ┆ Aussie Rules      ┆ AFL                       │
@@ -1041,7 +1052,6 @@ out
     │ basketball_euroleague           ┆ Basketball        ┆ Basketball Euroleague     │
     │ basketball_nba                  ┆ Basketball        ┆ NBA                       │
     │ basketball_nba_championship_wi… ┆ Basketball        ┆ NBA Championship Winner   │
-    │ basketball_nbl                  ┆ Basketball        ┆ NBL                       │
     └─────────────────────────────────┴───────────────────┴───────────────────────────┘
 
 
@@ -1071,32 +1081,32 @@ out
 
 
     shape: (10, 6)
-    ┌───────────┬─────────────┬────────────────┬────────────┬──────────────────────┬───────────────┐
-    │ home_team ┆ away_team   ┆ bookmaker_key  ┆ market_key ┆ outcome_name         ┆ outcome_price │
-    │ ---       ┆ ---         ┆ ---            ┆ ---        ┆ ---                  ┆ ---           │
-    │ str       ┆ str         ┆ str            ┆ str        ┆ str                  ┆ i64           │
-    ╞═══════════╪═════════════╪════════════════╪════════════╪══════════════════════╪═══════════════╡
-    │ Baltimore ┆ Los Angeles ┆ draftkings     ┆ h2h        ┆ Baltimore Ravens     ┆ -225          │
-    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
-    │ Baltimore ┆ Los Angeles ┆ draftkings     ┆ h2h        ┆ Los Angeles Chargers ┆ 185           │
-    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
-    │ Baltimore ┆ Los Angeles ┆ williamhill_us ┆ h2h        ┆ Baltimore Ravens     ┆ -225          │
-    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
-    │ Baltimore ┆ Los Angeles ┆ williamhill_us ┆ h2h        ┆ Los Angeles Chargers ┆ 185           │
-    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
-    │ Baltimore ┆ Los Angeles ┆ betus          ┆ h2h        ┆ Baltimore Ravens     ┆ -215          │
-    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
-    │ Baltimore ┆ Los Angeles ┆ betus          ┆ h2h        ┆ Los Angeles Chargers ┆ 183           │
-    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
-    │ Baltimore ┆ Los Angeles ┆ fanduel        ┆ h2h        ┆ Baltimore Ravens     ┆ -230          │
-    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
-    │ Baltimore ┆ Los Angeles ┆ fanduel        ┆ h2h        ┆ Los Angeles Chargers ┆ 190           │
-    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
-    │ Baltimore ┆ Los Angeles ┆ lowvig         ┆ h2h        ┆ Baltimore Ravens     ┆ -210          │
-    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
-    │ Baltimore ┆ Los Angeles ┆ lowvig         ┆ h2h        ┆ Los Angeles Chargers ┆ 180           │
-    │ Ravens    ┆ Chargers    ┆                ┆            ┆                      ┆               │
-    └───────────┴─────────────┴────────────────┴────────────┴──────────────────────┴───────────────┘
+    ┌────────────┬────────────┬────────────────┬────────────┬───────────────────────┬───────────────┐
+    │ home_team  ┆ away_team  ┆ bookmaker_key  ┆ market_key ┆ outcome_name          ┆ outcome_price │
+    │ ---        ┆ ---        ┆ ---            ┆ ---        ┆ ---                   ┆ ---           │
+    │ str        ┆ str        ┆ str            ┆ str        ┆ str                   ┆ i64           │
+    ╞════════════╪════════════╪════════════════╪════════════╪═══════════════════════╪═══════════════╡
+    │ Washington ┆ Cincinnati ┆ draftkings     ┆ h2h        ┆ Cincinnati Bengals    ┆ -310          │
+    │ Commanders ┆ Bengals    ┆                ┆            ┆                       ┆               │
+    │ Washington ┆ Cincinnati ┆ draftkings     ┆ h2h        ┆ Washington Commanders ┆ 252           │
+    │ Commanders ┆ Bengals    ┆                ┆            ┆                       ┆               │
+    │ Washington ┆ Cincinnati ┆ williamhill_us ┆ h2h        ┆ Cincinnati Bengals    ┆ -295          │
+    │ Commanders ┆ Bengals    ┆                ┆            ┆                       ┆               │
+    │ Washington ┆ Cincinnati ┆ williamhill_us ┆ h2h        ┆ Washington Commanders ┆ 240           │
+    │ Commanders ┆ Bengals    ┆                ┆            ┆                       ┆               │
+    │ Washington ┆ Cincinnati ┆ betus          ┆ h2h        ┆ Cincinnati Bengals    ┆ -310          │
+    │ Commanders ┆ Bengals    ┆                ┆            ┆                       ┆               │
+    │ Washington ┆ Cincinnati ┆ betus          ┆ h2h        ┆ Washington Commanders ┆ 255           │
+    │ Commanders ┆ Bengals    ┆                ┆            ┆                       ┆               │
+    │ Washington ┆ Cincinnati ┆ fanduel        ┆ h2h        ┆ Cincinnati Bengals    ┆ -300          │
+    │ Commanders ┆ Bengals    ┆                ┆            ┆                       ┆               │
+    │ Washington ┆ Cincinnati ┆ fanduel        ┆ h2h        ┆ Washington Commanders ┆ 245           │
+    │ Commanders ┆ Bengals    ┆                ┆            ┆                       ┆               │
+    │ Washington ┆ Cincinnati ┆ betonlineag    ┆ h2h        ┆ Cincinnati Bengals    ┆ -305          │
+    │ Commanders ┆ Bengals    ┆                ┆            ┆                       ┆               │
+    │ Washington ┆ Cincinnati ┆ betonlineag    ┆ h2h        ┆ Washington Commanders ┆ 249           │
+    │ Commanders ┆ Bengals    ┆                ┆            ┆                       ┆               │
+    └────────────┴────────────┴────────────────┴────────────┴───────────────────────┴───────────────┘
 
 
 
@@ -1115,7 +1125,7 @@ print("Total wrappers across the counted leagues:", sum(counts.values()))
 df
 ```
 
-    Total wrappers across the counted leagues: 10136
+    Total wrappers across the counted leagues: 10145
 
 
 
@@ -1128,9 +1138,9 @@ df
     │ str          ┆ i64         │
     ╞══════════════╪═════════════╡
     │ mbb          ┆ 718         │
-    │ nba          ┆ 625         │
+    │ nba          ┆ 626         │
     │ wbb          ┆ 617         │
-    │ cfb          ┆ 469         │
+    │ cfb          ┆ 470         │
     │ wnba         ┆ 417         │
     │ …            ┆ …           │
     │ vijhl        ┆ 14          │

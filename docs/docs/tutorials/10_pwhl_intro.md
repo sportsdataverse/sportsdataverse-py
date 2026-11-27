@@ -300,10 +300,10 @@ No loader is needed for a quick standings table: the schedule's `winner` column 
     ╞═══════════╪══════╡
     │ Toronto   ┆ 17   │
     │ Montreal  ┆ 13   │
-    │ Boston    ┆ 12   │
     │ Minnesota ┆ 12   │
-    │ New York  ┆ 9    │
+    │ Boston    ┆ 12   │
     │ Ottawa    ┆ 9    │
+    │ New York  ┆ 9    │
     └───────────┴──────┘
 
 
@@ -339,9 +339,9 @@ Aggregate the skater boxscore across every game to build a points leaderboard �
     │ Marie-Philip ┆ Poulin          ┆ 11    ┆ 14      ┆ 25     │
     │ Sarah        ┆ Nurse           ┆ 11    ┆ 13      ┆ 24     │
     │ Alex         ┆ Carpenter       ┆ 8     ┆ 15      ┆ 23     │
-    │ Ella         ┆ Shelton         ┆ 7     ┆ 14      ┆ 21     │
     │ Emma         ┆ Maltais         ┆ 5     ┆ 16      ┆ 21     │
     │ Taylor       ┆ Heise           ┆ 9     ┆ 12      ┆ 21     │
+    │ Ella         ┆ Shelton         ┆ 7     ┆ 14      ┆ 21     │
     │ Brianne      ┆ Jenner          ┆ 9     ┆ 11      ┆ 20     │
     │ Erin         ┆ Ambrose         ┆ 4     ┆ 16      ┆ 20     │
     │ Kendall      ┆ Coyne Schofield ┆ 7     ┆ 13      ┆ 20     │
@@ -599,9 +599,9 @@ Not every contribution shows up on the scoresheet. Sum hits and blocked shots fr
     │ Blayre     ┆ Turnbull   ┆ C        ┆ 62   ┆ 14     ┆ 76               │
     │ Allie      ┆ Munroe     ┆ LD       ┆ 44   ┆ 25     ┆ 69               │
     │ Jessica    ┆ DiGirolamo ┆ LD       ┆ 36   ┆ 31     ┆ 67               │
-    │ Lee        ┆ Stecklein  ┆ LD       ┆ 36   ┆ 25     ┆ 61               │
-    │ Emma       ┆ Maltais    ┆ LW       ┆ 53   ┆ 8      ┆ 61               │
     │ Emma       ┆ Greco      ┆ LD       ┆ 32   ┆ 29     ┆ 61               │
+    │ Emma       ┆ Maltais    ┆ LW       ┆ 53   ┆ 8      ┆ 61               │
+    │ Lee        ┆ Stecklein  ┆ LD       ┆ 36   ┆ 25     ┆ 61               │
     │ Kelly      ┆ Pannek     ┆ C        ┆ 28   ┆ 30     ┆ 58               │
     └────────────┴────────────┴──────────┴──────┴────────┴──────────────────┘
 
@@ -675,9 +675,9 @@ top_infractions
     │ Megan          ┆ Keller        ┆ 22  ┆ 11        │
     │ Gabbie         ┆ Hughes        ┆ 20  ┆ 10        │
     │ Allie          ┆ Munroe        ┆ 20  ┆ 10        │
+    │ Emma           ┆ Maltais       ┆ 18  ┆ 9         │
     │ Sarah          ┆ Bujold        ┆ 18  ┆ 9         │
-    │ Sarah          ┆ Nurse         ┆ 18  ┆ 9         │
-    │ Renata         ┆ Fast          ┆ 18  ┆ 9         │
+    │ Jade           ┆ Downie-Landry ┆ 18  ┆ 9         │
     └────────────────┴───────────────┴─────┴───────────┘
 
 
@@ -739,14 +739,14 @@ goals_by_period
     ╞═══════════════════╪══════════════════╪═══════╡
     │ Natalie           ┆ Spooner          ┆ 21    │
     │ Grace             ┆ Zumwinkle        ┆ 12    │
-    │ Marie-Philip      ┆ Poulin           ┆ 11    │
     │ Sarah             ┆ Nurse            ┆ 11    │
+    │ Marie-Philip      ┆ Poulin           ┆ 11    │
     │ Daryl             ┆ Watts            ┆ 10    │
     │ Laura             ┆ Stacey           ┆ 10    │
-    │ Brianne           ┆ Jenner           ┆ 9     │
-    │ Taylor            ┆ Heise            ┆ 9     │
     │ Michela           ┆ Cava             ┆ 9     │
     │ Gabbie            ┆ Hughes           ┆ 9     │
+    │ Brianne           ┆ Jenner           ┆ 9     │
+    │ Taylor            ┆ Heise            ┆ 9     │
     └───────────────────┴──────────────────┴───────┘
 
 
@@ -780,13 +780,13 @@ three_stars = pwhl.load_pwhl_three_stars(seasons=[2024])
     │ Natalie      ┆ Spooner   ┆ 7           │
     │ Nicole       ┆ Hensley   ┆ 4           │
     │ Kristen      ┆ Campbell  ┆ 4           │
-    │ Gabbie       ┆ Hughes    ┆ 3           │
+    │ Hilary       ┆ Knight    ┆ 3           │
     │ Marie-Philip ┆ Poulin    ┆ 3           │
+    │ Gabbie       ┆ Hughes    ┆ 3           │
     │ Susanna      ┆ Tapani    ┆ 3           │
     │ Sarah        ┆ Nurse     ┆ 3           │
     │ Alex         ┆ Carpenter ┆ 3           │
-    │ Hilary       ┆ Knight    ┆ 3           │
-    │ Kateřina     ┆ Mrázová   ┆ 2           │
+    │ Maddie       ┆ Rooney    ┆ 2           │
     └──────────────┴───────────┴─────────────┘
 
 
@@ -855,17 +855,18 @@ out
 
 
 
-    shape: (10, 7)
+    shape: (11, 7)
     ┌────────────────────────┬───────────┬──────────────┬───────┬─────────┬────────┬─────────────────┐
     │ season_name            ┆ team_code ┆ games_played ┆ goals ┆ assists ┆ points ┆ points_per_game │
     │ ---                    ┆ ---       ┆ ---          ┆ ---   ┆ ---     ┆ ---    ┆ ---             │
     │ str                    ┆ str       ┆ str          ┆ str   ┆ str     ┆ str    ┆ str             │
     ╞════════════════════════╪═══════════╪══════════════╪═══════╪═════════╪════════╪═════════════════╡
+    │ 2026-27 Pre-Season     ┆ TOR       ┆ 1            ┆ 1     ┆ 0       ┆ 1      ┆ 1.00            │
     │ 2025-26 Regular Season ┆ TOR       ┆ 30           ┆ 3     ┆ 5       ┆ 8      ┆ 0.27            │
     │ 2024-25 Regular Season ┆ TOR       ┆ 14           ┆ 3     ┆ 2       ┆ 5      ┆ 0.36            │
     │ 2024 Regular Season    ┆ TOR       ┆ 24           ┆ 20    ┆ 7       ┆ 27     ┆ 1.13            │
-    │ Total                  ┆ null      ┆ 68           ┆ 26    ┆ 14      ┆ 40     ┆ 0.59            │
-    │ 2025-26 Preseason      ┆ TOR       ┆ 1            ┆ 0     ┆ 1       ┆ 1      ┆ 1.00            │
+    │ Total                  ┆ null      ┆ 69           ┆ 27    ┆ 14      ┆ 41     ┆ 0.59            │
+    │ …                      ┆ …         ┆ …            ┆ …     ┆ …       ┆ …      ┆ …               │
     │ 2024 Preseason         ┆ TOR       ┆ 1            ┆ 0     ┆ 0       ┆ 0      ┆ 0.00            │
     │ Total                  ┆ null      ┆ 2            ┆ 0     ┆ 1       ┆ 1      ┆ 0.50            │
     │ 2025 Playoffs          ┆ TOR       ┆ 4            ┆ 0     ┆ 1       ┆ 1      ┆ 0.25            │
@@ -1179,11 +1180,11 @@ xg.select(["game_id", "event_type", "shot_distance", "shot_angle", "xg"]).drop_n
     │ ---     ┆ ---        ┆ ---           ┆ ---        ┆ ---      │
     │ i64     ┆ str        ┆ f64           ┆ f64        ┆ f64      │
     ╞═════════╪════════════╪═══════════════╪════════════╪══════════╡
-    │ 105     ┆ Default    ┆ 38.6912       ┆ 33.3136    ┆ 0.050259 │
-    │ 105     ┆ Default    ┆ 46.5487       ┆ 21.4205    ┆ 0.053404 │
-    │ 105     ┆ Default    ┆ 24.8723       ┆ 17.9129    ┆ 0.082247 │
-    │ 105     ┆ Default    ┆ 36.8333       ┆ 22.6199    ┆ 0.06722  │
-    │ 105     ┆ Default    ┆ 25.5563       ┆ 61.145     ┆ 0.062107 │
+    │ 105     ┆ Default    ┆ 38.6912       ┆ 33.3136    ┆ 0.050358 │
+    │ 105     ┆ Default    ┆ 46.5487       ┆ 21.4205    ┆ 0.053277 │
+    │ 105     ┆ Default    ┆ 24.8723       ┆ 17.9129    ┆ 0.082155 │
+    │ 105     ┆ Default    ┆ 36.8333       ┆ 22.6199    ┆ 0.06702  │
+    │ 105     ┆ Default    ┆ 25.5563       ┆ 61.145     ┆ 0.062035 │
     └─────────┴────────────┴───────────────┴────────────┴──────────┘
 
 

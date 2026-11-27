@@ -128,22 +128,22 @@ series = safe("Kalshi sports series", lambda: odds.kalshi_series_list(category="
 
 
     shape: (10, 3)
-    ┌────────────────────────┬───────────────────────────────────────────────────────────┬───────────┐
-    │ ticker                 ┆ title                                                     ┆ frequency │
-    │ ---                    ┆ ---                                                       ┆ ---       │
-    │ str                    ┆ str                                                       ┆ str       │
-    ╞════════════════════════╪═══════════════════════════════════════════════════════════╪═══════════╡
-    │ KXNBA2HSPREAD          ┆ NBA 2nd Half Spread                                       ┆ custom    │
-    │ KXNHLSERIESTOTALGOALS  ┆ NHL Series Total Goals                                    ┆ custom    │
-    │ KXNCAAF1HTEAMTOTAL     ┆ College Football 1st Half Team Total Points               ┆ custom    │
-    │ KXNBAFINALSVIEWER      ┆ NBA finals viewership                                     ┆ custom    │
-    │ KXNBA3PTCONTEST        ┆ NBA 3-Point Contest Winner                                ┆ annual    │
-    │ KXNCAAF2PT             ┆ College Football 2-Point Conversion                       ┆ custom    │
-    │ KXNCAAMBSECREGTOP      ┆ Men's College Basketball SEC Regular Season Top Finishers ┆ custom    │
-    │ KXNBA1H                ┆ NBA 1st Half Winner                                       ┆ custom    │
-    │ KXNCAAMBUNDEFEATEDHOME ┆ Men's College Basketball Teams to go Undefeated at Home   ┆ custom    │
-    │ KXNBASTL               ┆ NBA Player Steals                                         ┆ custom    │
-    └────────────────────────┴───────────────────────────────────────────────────────────┴───────────┘
+    ┌────────────────────┬─────────────────────────────────────────┬───────────┐
+    │ ticker             ┆ title                                   ┆ frequency │
+    │ ---                ┆ ---                                     ┆ ---       │
+    │ str                ┆ str                                     ┆ str       │
+    ╞════════════════════╪═════════════════════════════════════════╪═══════════╡
+    │ KXNCAAFFFFF        ┆ NFL Draft Declare                       ┆ custom    │
+    │ KXNHLRETIRE        ┆ NHL Retire                              ┆ custom    │
+    │ KXNCAAFGO          ┆ College football games taking place     ┆ daily     │
+    │ KXNBACUPMVP        ┆ NBA Cup Tournament MVP                  ┆ annual    │
+    │ KXNCAAMBWINMARGIN  ┆ Men's College Basketball Winning Margin ┆ custom    │
+    │ KXNCAAWBSTATLEADER ┆ Women's College Basketball Stat Leader  ┆ custom    │
+    │ KXNCAAMB2ML        ┆ College Basketball 2-Moneyline Combo    ┆ one_off   │
+    │ KXNFLDELAY         ┆ NFL Weather Delay                       ┆ custom    │
+    │ KXNBA1Q            ┆ NBA 1st Quarter Winner                  ┆ custom    │
+    │ KXNCAAFTOTALFG     ┆ College Football Total Field Goals      ┆ custom    │
+    └────────────────────┴─────────────────────────────────────────┴───────────┘
 
 
 
@@ -164,24 +164,24 @@ mkts.select([c for c in cols if c in mkts.columns]) if mkts is not None and mkts
 ```
 
     ✅ Kalshi NFL events
-    ✅ markets KXNFLGAME-26NOV16LACBAL
+    ✅ markets KXNFLGAME-26NOV23CINWAS
 
 
 
 
 
     shape: (2, 6)
-    ┌─────────────────┬────────────────┬────────────────┬────────────────┬────────────────┬────────────┐
-    │ ticker          ┆ title          ┆ yes_bid_dollar ┆ yes_ask_dollar ┆ last_price_dol ┆ volume_fp  │
-    │ ---             ┆ ---            ┆ s              ┆ s              ┆ lars           ┆ ---        │
-    │ str             ┆ str            ┆ ---            ┆ ---            ┆ ---            ┆ str        │
-    │                 ┆                ┆ str            ┆ str            ┆ str            ┆            │
-    ╞═════════════════╪════════════════╪════════════════╪════════════════╪════════════════╪════════════╡
-    │ KXNFLGAME-26NOV ┆ Baltimore wins ┆ 0.6700         ┆ 0.6800         ┆ 0.6800         ┆ 6531139.11 │
-    │ 16LACBAL-BAL    ┆                ┆                ┆                ┆                ┆            │
-    │ KXNFLGAME-26NOV ┆ Los Angeles C  ┆ 0.3200         ┆ 0.3300         ┆ 0.3300         ┆ 2781098.04 │
-    │ 16LACBAL-LAC    ┆ wins           ┆                ┆                ┆                ┆            │
-    └─────────────────┴────────────────┴────────────────┴────────────────┴────────────────┴────────────┘
+    ┌──────────────────┬────────────┬─────────────────┬─────────────────┬─────────────────┬────────────┐
+    │ ticker           ┆ title      ┆ yes_bid_dollars ┆ yes_ask_dollars ┆ last_price_doll ┆ volume_fp  │
+    │ ---              ┆ ---        ┆ ---             ┆ ---             ┆ ars             ┆ ---        │
+    │ str              ┆ str        ┆ str             ┆ str             ┆ ---             ┆ str        │
+    │                  ┆            ┆                 ┆                 ┆ str             ┆            │
+    ╞══════════════════╪════════════╪═════════════════╪═════════════════╪═════════════════╪════════════╡
+    │ KXNFLGAME-26NOV2 ┆ Washington ┆ 0.2700          ┆ 0.2800          ┆ 0.2800          ┆ 1442716.84 │
+    │ 3CINWAS-WAS      ┆ wins       ┆                 ┆                 ┆                 ┆            │
+    │ KXNFLGAME-26NOV2 ┆ Cincinnati ┆ 0.7300          ┆ 0.7400          ┆ 0.7400          ┆ 3472885.79 │
+    │ 3CINWAS-CIN      ┆ wins       ┆                 ┆                 ┆                 ┆            │
+    └──────────────────┴────────────┴─────────────────┴─────────────────┴─────────────────┴────────────┘
 
 
 
@@ -207,7 +207,7 @@ else:
     print("no order book to draw")
 ```
 
-    ✅ order book KXNFLGAME-26NOV16LACBAL-BAL
+    ✅ order book KXNFLGAME-26NOV23CINWAS-WAS
 
 
 
@@ -222,7 +222,7 @@ trades = safe(f"trades {ticker}", lambda: odds.kalshi_trades(limit="20", ticker=
 trades.head() if trades is not None and trades.height else "no recent trades"
 ```
 
-    ✅ trades KXNFLGAME-26NOV16LACBAL-BAL
+    ✅ trades KXNFLGAME-26NOV23CINWAS-WAS
 
 
 
@@ -235,26 +235,26 @@ trades.head() if trades is not None and trades.height else "no recent trades"
     │ str      ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ str       ┆ str       ┆ ---       │
     │          ┆ str       ┆ bool      ┆ str       ┆   ┆ str       ┆           ┆           ┆ str       │
     ╞══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
-    │ 14.38    ┆ 2026-11-1 ┆ false     ┆ 0.3200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07267c31- ┆ 0.6800    │
-    │          ┆ 6T22:50:4 ┆           ┆           ┆   ┆           ┆ -26NOV16L ┆ 5d69-b5a9 ┆           │
-    │          ┆ 6.261352Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -e548-c85 ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ adc55f168 ┆           │
-    │ 80.00    ┆ 2026-11-1 ┆ false     ┆ 0.3200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07267c31- ┆ 0.6800    │
-    │          ┆ 6T22:50:4 ┆           ┆           ┆   ┆           ┆ -26NOV16L ┆ 4e89-9c25 ┆           │
-    │          ┆ 5.998962Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -c2ba-c2b ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 735ced1a4 ┆           │
-    │ 12.94    ┆ 2026-11-1 ┆ false     ┆ 0.3200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07267c31- ┆ 0.6800    │
-    │          ┆ 6T22:50:4 ┆           ┆           ┆   ┆           ┆ -26NOV16L ┆ 4e89-aa29 ┆           │
-    │          ┆ 5.534863Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -0181-ca5 ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ b5e00fc3c ┆           │
-    │ 14.38    ┆ 2026-11-1 ┆ false     ┆ 0.3200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07267c30- ┆ 0.6800    │
-    │          ┆ 6T22:50:4 ┆           ┆           ┆   ┆           ┆ -26NOV16L ┆ ae49-a25d ┆           │
-    │          ┆ 3.824668Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -b8ed-b0b ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ ef93781fc ┆           │
-    │ 37.65    ┆ 2026-11-1 ┆ false     ┆ 0.3200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 07267c30- ┆ 0.6800    │
-    │          ┆ 6T22:50:4 ┆           ┆           ┆   ┆           ┆ -26NOV16L ┆ 9fe9-b435 ┆           │
-    │          ┆ 2.669029Z ┆           ┆           ┆   ┆           ┆ ACBAL-BAL ┆ -f6ae-d1e ┆           │
-    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 427e67cd0 ┆           │
+    │ 6.80     ┆ 2026-11-2 ┆ false     ┆ 0.7200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 072a2ace- ┆ 0.2800    │
+    │          ┆ 4T00:43:1 ┆           ┆           ┆   ┆           ┆ -26NOV23C ┆ 2ba9-95c7 ┆           │
+    │          ┆ 8.28806Z  ┆           ┆           ┆   ┆           ┆ INWAS-WAS ┆ -fb88-33a ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 141728ed8 ┆           │
+    │ 34.00    ┆ 2026-11-2 ┆ false     ┆ 0.7200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 072a2ace- ┆ 0.2800    │
+    │          ┆ 4T00:43:1 ┆           ┆           ┆   ┆           ┆ -26NOV23C ┆ 2ba9-b7f7 ┆           │
+    │          ┆ 8.221734Z ┆           ┆           ┆   ┆           ┆ INWAS-WAS ┆ -bb6a-aba ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 60f3a26bc ┆           │
+    │ 32.00    ┆ 2026-11-2 ┆ false     ┆ 0.7200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 072a2ace- ┆ 0.2800    │
+    │          ┆ 4T00:43:1 ┆           ┆           ┆   ┆           ┆ -26NOV23C ┆ 2ba9-8e53 ┆           │
+    │          ┆ 8.02462Z  ┆           ┆           ┆   ┆           ┆ INWAS-WAS ┆ -7d7b-c74 ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ c6316d998 ┆           │
+    │ 13.57    ┆ 2026-11-2 ┆ false     ┆ 0.7200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 072a2ace- ┆ 0.2800    │
+    │          ┆ 4T00:43:1 ┆           ┆           ┆   ┆           ┆ -26NOV23C ┆ 5849-b77f ┆           │
+    │          ┆ 7.781553Z ┆           ┆           ┆   ┆           ┆ INWAS-WAS ┆ -6883-7d8 ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 3aa79600c ┆           │
+    │ 33.00    ┆ 2026-11-2 ┆ false     ┆ 0.7200    ┆ … ┆ yes       ┆ KXNFLGAME ┆ 072a2ace- ┆ 0.2800    │
+    │          ┆ 4T00:43:1 ┆           ┆           ┆   ┆           ┆ -26NOV23C ┆ 5849-8153 ┆           │
+    │          ┆ 7.772106Z ┆           ┆           ┆   ┆           ┆ INWAS-WAS ┆ -fb19-ed5 ┆           │
+    │          ┆           ┆           ┆           ┆   ┆           ┆           ┆ 99b7c373c ┆           │
     └──────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
 
 
@@ -311,21 +311,22 @@ pmk.select("question", "outcomes", "outcome_prices", "volume") if pmk is not Non
 
 
     shape: (5, 4)
-    ┌───────────────────────────────────────────┬───────────────────┬──────────────────────┬───────────┐
-    │ question                                  ┆ outcomes          ┆ outcome_prices       ┆ volume    │
-    │ ---                                       ┆ ---               ┆ ---                  ┆ ---       │
-    │ str                                       ┆ str               ┆ str                  ┆ str       │
-    ╞═══════════════════════════════════════════╪═══════════════════╪══════════════════════╪═══════════╡
-    │ Will the highest temperature in Karachi   ┆ ["Yes", "No"]     ┆ ["0.0395", "0.9605"] ┆ 9.99995   │
-    │ be 35°C on November …                     ┆                   ┆                      ┆           │
-    │ Will the lowest temperature in Milan be   ┆ ["Yes", "No"]     ┆ ["0.0005", "0.9995"] ┆ 99.993    │
-    │ 6°C on November 16?                       ┆                   ┆                      ┆           │
-    │ Southport FC vs. Macclesfield FC: O/U 2.5 ┆ ["Over", "Under"] ┆ ["0.505", "0.495"]   ┆ 99.992197 │
-    │ Gateshead FC vs. Tamworth FC: 1st Half    ┆ ["Over", "Under"] ┆ ["0.5", "0.5"]       ┆ 99.990435 │
-    │ O/U 0.5                                   ┆                   ┆                      ┆           │
-    │ Will Connor Bedard record 30+ goals in    ┆ ["Yes", "No"]     ┆ ["0.745", "0.255"]   ┆ 99.99     │
-    │ the 2026-27 regular s…                    ┆                   ┆                      ┆           │
-    └───────────────────────────────────────────┴───────────────────┴──────────────────────┴───────────┘
+    ┌─────────────────────────────────────┬───────────────────┬────────────────────┬───────────────────┐
+    │ question                            ┆ outcomes          ┆ outcome_prices     ┆ volume            │
+    │ ---                                 ┆ ---               ┆ ---                ┆ ---               │
+    │ str                                 ┆ str               ┆ str                ┆ str               │
+    ╞═════════════════════════════════════╪═══════════════════╪════════════════════╪═══════════════════╡
+    │ Will Stripe’s market cap be less    ┆ ["Yes", "No"]     ┆ ["0.22", "0.78"]   ┆ 99.996583         │
+    │ than $150B at market close …        ┆                   ┆                    ┆                   │
+    │ Will an international court find    ┆ ["Yes", "No"]     ┆ ["0.1", "0.9"]     ┆ 99995.75506400001 │
+    │ Israel or its leaders guilt…        ┆                   ┆                    ┆                   │
+    │ Southport FC vs. Macclesfield FC:   ┆ ["Over", "Under"] ┆ ["0.525", "0.475"] ┆ 99.992197         │
+    │ O/U 2.5                             ┆                   ┆                    ┆                   │
+    │ Gateshead FC vs. Tamworth FC: 1st   ┆ ["Over", "Under"] ┆ ["0.5", "0.5"]     ┆ 99.990435         │
+    │ Half O/U 0.5                        ┆                   ┆                    ┆                   │
+    │ Tyrese Maxey: 3-Pointers Made O/U   ┆ ["Yes", "No"]     ┆ ["0.2", "0.8"]     ┆ 99.99             │
+    │ 4.5                                 ┆                   ┆                    ┆                   │
+    └─────────────────────────────────────┴───────────────────┴────────────────────┴───────────────────┘
 
 
 
@@ -347,13 +348,13 @@ out
 
 
     shape: (1, 1)
-    ┌────────┐
-    │ mid    │
-    │ ---    │
-    │ str    │
-    ╞════════╡
-    │ 0.0395 │
-    └────────┘
+    ┌──────┐
+    │ mid  │
+    │ ---  │
+    │ str  │
+    ╞══════╡
+    │ 0.22 │
+    └──────┘
 
 
 

@@ -131,18 +131,14 @@ gsb.select([c for c in cols if c in gsb.columns]).head() if gsb is not None and 
 
 
 
-    shape: (5, 5)
-    ┌───────────────────┬──────────────┬───────────────────────────────────┬────────────┬────────────┐
-    │ date              ┆ short_name   ┆ status_type_detail                ┆ home_score ┆ away_score │
-    │ ---               ┆ ---          ┆ ---                               ┆ ---        ┆ ---        │
-    │ str               ┆ str          ┆ str                               ┆ str        ┆ str        │
-    ╞═══════════════════╪══════════════╪═══════════════════════════════════╪════════════╪════════════╡
-    │ 2026-11-16T17:00Z ┆ OKL @ LAK    ┆ Final                             ┆ 127        ┆ 105        │
-    │ 2026-11-16T19:00Z ┆ RAP @ CAP    ┆ Final                             ┆ 106        ┆ 142        │
-    │ 2026-11-16T22:00Z ┆ OSC @ MXC    ┆ 6:39 - 2nd Quarter                ┆ 32         ┆ 35         │
-    │ 2026-11-17T00:00Z ┆ DEL @ LIN    ┆ Mon, November 16th at 7:00 PM EST ┆ 0          ┆ 0          │
-    │ 2026-11-17T02:00Z ┆ SLC @ VALLEY ┆ Mon, November 16th at 9:00 PM EST ┆ 0          ┆ 0          │
-    └───────────────────┴──────────────┴───────────────────────────────────┴────────────┴────────────┘
+    shape: (1, 5)
+    ┌───────────────────┬────────────┬────────────────────────────────────┬────────────┬────────────┐
+    │ date              ┆ short_name ┆ status_type_detail                 ┆ home_score ┆ away_score │
+    │ ---               ┆ ---        ┆ ---                                ┆ ---        ┆ ---        │
+    │ str               ┆ str        ┆ str                                ┆ str        ┆ str        │
+    ╞═══════════════════╪════════════╪════════════════════════════════════╪════════════╪════════════╡
+    │ 2026-11-24T03:00Z ┆ SLC @ STO  ┆ Mon, November 23rd at 10:00 PM EST ┆ 0          ┆ 0          │
+    └───────────────────┴────────────┴────────────────────────────────────┴────────────┴────────────┘
 
 
 
@@ -327,11 +323,11 @@ news.select("published", "headline") if news is not None and news.height else "n
     │ ---                  ┆ ---                                                           │
     │ str                  ┆ str                                                           │
     ╞══════════════════════╪═══════════════════════════════════════════════════════════════╡
-    │ 2026-11-16T22:25:27Z ┆ Cavaliers' Evan Mobley sidelined another 7-10 days with spra… │
-    │ 2026-11-16T18:53:06Z ┆ 76ers star LeBron James ruled out vs. Nets due to lower back… │
-    │ 2026-11-16T18:51:01Z ┆ Fantasy basketball adds and NBA bets: All eyes on Tyrese Max… │
-    │ 2026-11-16T17:58:31Z ┆ Bulls' Buzelis, Nets' Minott fined $25K each after making ob… │
-    │ 2026-11-16T17:54:25Z ┆ Grizzlies' GG Jackson to miss time with left foot fracture    │
+    │ 2026-11-24T00:41:48Z ┆ Grizzlies' Cameron Boozer (ankle) to be reevaluated in 4 wee… │
+    │ 2026-11-23T23:53:39Z ┆ 76ers rule out Joel Embiid (illness) for game vs. Trail Blaz… │
+    │ 2026-11-23T21:00:09Z ┆ Fantasy risers and fallers: Trade Davion Mitchell? Move on f… │
+    │ 2026-11-23T19:44:13Z ┆ 2026 NBA Cup: Schedule, format, groups, updates and more      │
+    │ 2026-11-23T21:15:18Z ┆ Fantasy adds, NBA bets to make for Monday: Pick up Brook Lop… │
     └──────────────────────┴───────────────────────────────────────────────────────────────┘
 
 

@@ -297,16 +297,16 @@ out
     │ ---     ┆ --- ┆ ---  ┆ ---  ┆ ---  │
     │ str     ┆ str ┆ str  ┆ str  ┆ str  │
     ╞═════════╪═════╪══════╪══════╪══════╡
-    │ 1       ┆ 6   ┆ null ┆ null ┆ null │
-    │ 2       ┆ 6   ┆ null ┆ null ┆ null │
-    │ 3       ┆ 6   ┆ null ┆ null ┆ null │
-    │ 4       ┆ 6   ┆ null ┆ null ┆ null │
-    │ 5       ┆ 6   ┆ null ┆ null ┆ null │
-    │ 6       ┆ 6   ┆ null ┆ null ┆ null │
-    │ 7       ┆ 6   ┆ null ┆ null ┆ null │
-    │ 8       ┆ 6   ┆ null ┆ null ┆ null │
-    │ 9       ┆ 6   ┆ null ┆ null ┆ null │
-    │ 10      ┆ 6   ┆ null ┆ null ┆ null │
+    │ 1       ┆ 8   ┆ null ┆ null ┆ null │
+    │ 2       ┆ 8   ┆ null ┆ null ┆ null │
+    │ 3       ┆ 8   ┆ null ┆ null ┆ null │
+    │ 4       ┆ 8   ┆ null ┆ null ┆ null │
+    │ 5       ┆ 8   ┆ null ┆ null ┆ null │
+    │ 6       ┆ 8   ┆ null ┆ null ┆ null │
+    │ 7       ┆ 8   ┆ null ┆ null ┆ null │
+    │ 8       ┆ 8   ┆ null ┆ null ┆ null │
+    │ 9       ┆ 8   ┆ null ┆ null ┆ null │
+    │ 10      ┆ 8   ┆ null ┆ null ┆ null │
     └─────────┴─────┴──────┴──────┴──────┘
 
 
@@ -552,8 +552,8 @@ Same team-box parquet, different question: sum makes and attempts across the sea
     │ Colorado Buffaloes      ┆ 254.0 ┆ 649.0 ┆ 39.1      │
     │ Northwestern Wildcats   ┆ 278.0 ┆ 713.0 ┆ 39.0      │
     │ Baylor Bears            ┆ 301.0 ┆ 773.0 ┆ 38.9      │
-    │ Wright State Raiders    ┆ 218.0 ┆ 569.0 ┆ 38.3      │
     │ McNeese Cowboys         ┆ 257.0 ┆ 671.0 ┆ 38.3      │
+    │ Wright State Raiders    ┆ 218.0 ┆ 569.0 ┆ 38.3      │
     └─────────────────────────┴───────┴───────┴───────────┘
 
 
@@ -600,8 +600,8 @@ pbox = sdv.mbb.load_mbb_player_boxscore(seasons=[2024])
     │ Ryan Kalkbrenner     ┆ CREI              ┆ 35  ┆ 604.0 ┆ 68.9   │
     │ Cedric Coward        ┆ EWU               ┆ 32  ┆ 494.0 ┆ 68.3   │
     │ Jaylin Williams      ┆ AUB               ┆ 34  ┆ 422.0 ┆ 68.2   │
-    │ Chaz Lanier          ┆ UNF               ┆ 32  ┆ 629.0 ┆ 67.3   │
     │ Zach Edey            ┆ PUR               ┆ 39  ┆ 983.0 ┆ 67.3   │
+    │ Chaz Lanier          ┆ UNF               ┆ 32  ┆ 629.0 ┆ 67.3   │
     └──────────────────────┴───────────────────┴─────┴───────┴────────┘
 
 
@@ -738,16 +738,16 @@ out
     │ ---   ┆ --- ┆ --- ┆ --- ┆ ---  ┆ ---      │
     │ str   ┆ str ┆ str ┆ str ┆ str  ┆ str      │
     ╞═══════╪═════╪═════╪═════╪══════╪══════════╡
-    │ 1     ┆ 6   ┆ 2   ┆ 4   ┆ null ┆ null     │
-    │ 2     ┆ 6   ┆ 1   ┆ 5   ┆ null ┆ null     │
-    │ 3     ┆ 6   ┆ 1   ┆ 5   ┆ null ┆ null     │
-    │ 4     ┆ 6   ┆ 2   ┆ 4   ┆ null ┆ null     │
-    │ 5     ┆ 6   ┆ 1   ┆ 5   ┆ null ┆ null     │
-    │ 6     ┆ 6   ┆ 2   ┆ 4   ┆ null ┆ null     │
-    │ 7     ┆ 5   ┆ 3   ┆ 2   ┆ null ┆ null     │
-    │ 8     ┆ 5   ┆ 3   ┆ 2   ┆ null ┆ null     │
-    │ 9     ┆ 5   ┆ 0   ┆ 5   ┆ null ┆ null     │
-    │ 10    ┆ 5   ┆ 1   ┆ 4   ┆ null ┆ null     │
+    │ 1     ┆ 8   ┆ 4   ┆ 4   ┆ null ┆ null     │
+    │ 2     ┆ 8   ┆ 2   ┆ 6   ┆ null ┆ null     │
+    │ 3     ┆ 8   ┆ 1   ┆ 7   ┆ null ┆ null     │
+    │ 4     ┆ 8   ┆ 4   ┆ 4   ┆ null ┆ null     │
+    │ 5     ┆ 8   ┆ 2   ┆ 6   ┆ null ┆ null     │
+    │ 6     ┆ 8   ┆ 2   ┆ 6   ┆ null ┆ null     │
+    │ 7     ┆ 8   ┆ 3   ┆ 5   ┆ null ┆ null     │
+    │ 8     ┆ 8   ┆ 1   ┆ 7   ┆ null ┆ null     │
+    │ 9     ┆ 8   ┆ 1   ┆ 7   ┆ null ┆ null     │
+    │ 10    ┆ 8   ┆ 4   ┆ 4   ┆ null ┆ null     │
     └───────┴─────┴─────┴─────┴──────┴──────────┘
 
 
@@ -839,10 +839,10 @@ pbox_pd["is_dd"] = (pbox_pd[["points", "rebounds", "assists"]] >= 10).sum(axis=1
     3              DJ Burns               YSU              22
     4           Oumar Ballo              ARIZ              20
     5         Armando Bacot               UNC              19
-    6          Saint Thomas              UNCO              19
-    7         Fardaws Aimaq               CAL              19
-    8           Riley Minix              MORE              19
-    9       Yaxel Lendeborg               UAB              19
+    6         Fardaws Aimaq               CAL              19
+    7       Yaxel Lendeborg               UAB              19
+    8          Saint Thomas              UNCO              19
+    9           Riley Minix              MORE              19
 
 
 
