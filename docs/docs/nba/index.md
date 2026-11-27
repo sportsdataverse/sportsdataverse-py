@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 293 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 296 | — |
 
 ## ESPN {#espn}
 
@@ -184,6 +184,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`add_shot_make_prob`](reference/additional/analytics#add_shot_make_prob)
 - [`add_start_type_detail`](reference/additional/analytics#add_start_type_detail)
 - [`add_transition`](reference/additional/analytics#add_transition)
+- [`add_two_for_one_flags`](reference/additional/analytics#add_two_for_one_flags)
 - [`box_features`](reference/additional/analytics#box_features)
 - [`build_play_context_shots`](reference/additional/analytics#build_play_context_shots)
 - [`build_possession_shooting`](reference/additional/analytics#build_possession_shooting)
@@ -198,7 +199,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_availability`](reference/additional/analytics#nba_availability)
 - [`nba_box_events`](reference/additional/analytics#nba_box_events)
 - [`nba_box_logs`](reference/additional/analytics#nba_box_logs)
-- [`nba_coach_careers`](reference/additional/analytics#nba_coach_careers)
+- [`nba_coach_careers`](reference/additional/analytics-2#nba_coach_careers)
 - [`nba_coach_seasons`](reference/additional/analytics-2#nba_coach_seasons)
 - [`nba_cup_sim`](reference/additional/analytics-2#nba_cup_sim)
 - [`nba_cup_standings`](reference/additional/analytics-2#nba_cup_standings)
@@ -213,7 +214,8 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_game_on_off`](reference/additional/analytics-2#nba_game_on_off)
 - [`nba_game_player_box_splits`](reference/additional/analytics-2#nba_game_player_box_splits)
 - [`nba_game_player_impact`](reference/additional/analytics-2#nba_game_player_impact)
-- [`nba_game_stints`](reference/additional/analytics-2#nba_game_stints)
+- [`nba_game_stints`](reference/additional/analytics-3#nba_game_stints)
+- [`nba_game_story`](reference/additional/analytics-3#nba_game_story)
 - [`nba_game_units`](reference/additional/analytics-3#nba_game_units)
 - [`nba_impact_rows`](reference/additional/analytics-3#nba_impact_rows)
 - [`nba_l2m`](reference/additional/analytics-3#nba_l2m)
@@ -223,8 +225,8 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_neutral_site_games`](reference/additional/analytics-3#nba_neutral_site_games)
 - [`nba_official_seasons`](reference/additional/analytics-3#nba_official_seasons)
 - [`nba_play_context`](reference/additional/analytics-3#nba_play_context)
-- [`nba_play_style_features`](reference/additional/analytics-3#nba_play_style_features)
-- [`nba_player_ages`](reference/additional/analytics-3#nba_player_ages)
+- [`nba_play_style_features`](reference/additional/analytics-4#nba_play_style_features)
+- [`nba_player_ages`](reference/additional/analytics-4#nba_player_ages)
 - [`nba_player_factor_rapm`](reference/additional/analytics-4#nba_player_factor_rapm)
 - [`nba_player_game_expected_box`](reference/additional/analytics-4#nba_player_game_expected_box)
 - [`nba_player_identity`](reference/additional/analytics-4#nba_player_identity)
@@ -233,7 +235,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_player_positions`](reference/additional/analytics-4#nba_player_positions)
 - [`nba_player_props`](reference/additional/analytics-4#nba_player_props)
 - [`nba_player_season_box_rates`](reference/additional/analytics-4#nba_player_season_box_rates)
-- [`nba_player_shot_zones`](reference/additional/analytics-4#nba_player_shot_zones)
+- [`nba_player_shot_zones`](reference/additional/analytics-5#nba_player_shot_zones)
 - [`nba_player_war`](reference/additional/analytics-5#nba_player_war)
 - [`nba_player_wowy`](reference/additional/analytics-5#nba_player_wowy)
 - [`nba_playoff_series`](reference/additional/analytics-5#nba_playoff_series)
@@ -245,8 +247,8 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_rated_priors`](reference/additional/analytics-5#nba_rated_priors)
 - [`nba_ratings_panel`](reference/additional/analytics-5#nba_ratings_panel)
 - [`nba_raw_store_season_frame`](reference/additional/analytics-5#nba_raw_store_season_frame)
-- [`nba_referee_assignments`](reference/additional/analytics-5#nba_referee_assignments)
-- [`nba_score_rows`](reference/additional/analytics-5#nba_score_rows)
+- [`nba_referee_assignments`](reference/additional/analytics-6#nba_referee_assignments)
+- [`nba_score_rows`](reference/additional/analytics-6#nba_score_rows)
 - [`nba_season_sim`](reference/additional/analytics-6#nba_season_sim)
 - [`nba_season_standings`](reference/additional/analytics-6#nba_season_standings)
 - [`nba_shot_value`](reference/additional/analytics-6#nba_shot_value)
@@ -291,6 +293,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`starters_on_court_counts`](reference/additional/analytics-9#starters_on_court_counts)
 - [`team_pace_projection`](reference/additional/analytics-9#team_pace_projection)
 - [`team_play_context`](reference/additional/analytics-9#team_play_context)
+- [`two_for_one_summary`](reference/additional/analytics-9#two_for_one_summary)
 - [`xpoints_baseline`](reference/additional/analytics-9#xpoints_baseline)
 - [`zone_value_map`](reference/additional/analytics-9#zone_value_map)
 
@@ -478,7 +481,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`nba_live_boxscore`](reference/additional/nba-stats-api#nba_live_boxscore) | [`nba_live_boxscore`](https://hoopR.sportsdataverse.org/reference/nba_live_boxscore.html) |
 | [`nba_live_pbp`](reference/additional/nba-stats-api#nba_live_pbp) | [`nba_live_pbp`](https://hoopR.sportsdataverse.org/reference/nba_live_pbp.html) |
 | [`nba_player_crosswalk`](reference/additional/ids-and-crosswalks#nba_player_crosswalk) | [`nba_player_crosswalk`](https://hoopR.sportsdataverse.org/reference/nba_player_crosswalk.html) |
-| [`nba_referee_assignments`](reference/additional/analytics-5#nba_referee_assignments) | [`nba_referee_assignments`](https://hoopR.sportsdataverse.org/reference/nba_referee_assignments.html) |
+| [`nba_referee_assignments`](reference/additional/analytics-6#nba_referee_assignments) | [`nba_referee_assignments`](https://hoopR.sportsdataverse.org/reference/nba_referee_assignments.html) |
 | [`nba_schedule_crosswalk`](reference/additional/ids-and-crosswalks#nba_schedule_crosswalk) | [`nba_schedule_crosswalk`](https://hoopR.sportsdataverse.org/reference/nba_schedule_crosswalk.html) |
 | [`nba_stats_alltimeleadersgrids`](reference/nba_stats/other#nba_stats_alltimeleadersgrids) | [`nba_alltimeleadersgrids`](https://hoopR.sportsdataverse.org/reference/nba_alltimeleadersgrids.html) |
 | [`nba_stats_assistleaders`](reference/nba_stats/other#nba_stats_assistleaders) | [`nba_assistleaders`](https://hoopR.sportsdataverse.org/reference/nba_assistleaders.html) |

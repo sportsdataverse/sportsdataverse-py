@@ -546,3 +546,333 @@ epl = soccer_espn_reep_team_crosswalk(league="eng.1", return_as_pandas=True)
 
 xw.select("espn_team_id", "key_transfermarkt", "key_fbref").drop_nulls("key_transfermarkt")
 ```
+
+## Transfermarkt dataset (CC0)
+
+### load_soccer_transfermarkt_clubs {#load_soccer_transfermarkt_clubs}
+
+`load_soccer_transfermarkt_clubs(*, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Load the CC0 Transfermarkt clubs table: one row per club of the first-tier leagues the dataset covers.
+
+About 800 clubs, each with its league, squad profile and stadium as of its last season in the dataset.
+A snapshot current to 2026-07-06 (not refreshed), read on every call from the release mirror.
+Licence: CC0 1.0.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+polars.DataFrame | pandas.DataFrame: one row per `club_id` (Int64), the id `soccer_espn_transfermarkt_team_crosswalk` maps ESPN teams to. A column holding a value of another type comes back as text with a `SchemaDriftWarning`.
+
+| col_name | type | description |
+|---|---|---|
+| `club_id` | Int64 | Transfermarkt club id (Int64); the club_id of soccer_espn_transfermarkt_team_crosswalk. |
+| `club_code` | String | Transfermarkt URL slug of the club (e.g. 'fc-barcelona'). |
+| `name` | String | Club name as Transfermarkt writes it (e.g. 'FC Barcelona'). |
+| `domestic_competition_id` | String | Transfermarkt id of the club's domestic league (e.g. 'ES1'); joins competition_id of load_soccer_transfermarkt_competitions. |
+| `squad_size` | Int64 | Players in the club's squad in its last season in the dataset. |
+| `average_age` | Float64 | Average age of that squad, in years. |
+| `foreigners_number` | Int64 | Players in that squad without the club's nationality. |
+| `foreigners_percentage` | Float64 | foreigners_number as a percentage of squad_size; null when Transfermarkt shows none. |
+| `national_team_players` | Int64 | Players in that squad capped by a senior national team. |
+| `stadium_name` | String | Name of the club's home stadium. |
+| `stadium_seats` | Int64 | Seating capacity of that stadium. |
+| `net_transfer_record` | String | Net transfer balance as Transfermarkt displays it, text with currency and unit (e.g. '+€5.90m', '€-25.00m'). |
+| `coach_name` | String | Head coach Transfermarkt lists; null for about half the clubs. |
+| `last_season` | Int64 | Start year of the club's last season in a covered competition (2025 = 2025-26). |
+| `url` | String | Transfermarkt page of the club. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | The original source answered 400 / 422. |
+| `NoDataError` | The original source answered 404 (the file moved). |
+| `AssetFetchError` | The original source, read when the release mirror cannot be (with a warning), failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or lacks a column this loader types. |
+
+**Example**
+
+```python
+from sportsdataverse.soccer import load_soccer_transfermarkt_clubs
+clubs = load_soccer_transfermarkt_clubs()
+
+# ESPN Premier League teams with their Transfermarkt club rows
+
+from sportsdataverse.soccer import soccer_espn_transfermarkt_team_crosswalk
+soccer_espn_transfermarkt_team_crosswalk(league="eng.1").join(clubs, on="club_id", how="left")
+```
+
+### load_soccer_transfermarkt_competitions {#load_soccer_transfermarkt_competitions}
+
+`load_soccer_transfermarkt_competitions(*, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Load the CC0 Transfermarkt competitions table: the leagues and cups the dataset covers.
+
+65 competitions: first-tier domestic leagues, domestic cups and international club competitions, read
+on every call from the release mirror. Licence: CC0 1.0.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+polars.DataFrame | pandas.DataFrame: one row per `competition_id` (text, e.g. `"GB1"`), the id the clubs and players tables carry as `domestic_competition_id` / `current_club_domestic_competition_id`.
+
+| col_name | type | description |
+|---|---|---|
+| `competition_id` | String | Transfermarkt competition id (e.g. 'GB1', 'CL'). |
+| `competition_code` | String | Transfermarkt URL slug of the competition (e.g. 'premier-league'). |
+| `name` | String | Competition name as its slug (e.g. 'premier-league'). |
+| `sub_type` | String | Kind of competition (e.g. 'first_tier', 'domestic_cup', 'uefa_champions_league', 'world_cup'). |
+| `type` | String | Competition group - 'domestic_league', 'domestic_cup', 'international_cup', 'national_team_competition' or 'other'. |
+| `country_id` | Int64 | Transfermarkt country id (Int64); -1 for international competitions. |
+| `country_name` | String | Country name; null for international competitions. |
+| `domestic_league_code` | String | Id of the country's first-tier league; null for international competitions. |
+| `confederation` | String | Confederation as Transfermarkt names it ('europa', 'amerika', 'asien', 'afrika', 'fifa'). |
+| `total_clubs` | Int64 | Clubs in the competition; null for some cups and national-team competitions. |
+| `url` | String | Transfermarkt page of the competition. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | The original source answered 400 / 422. |
+| `NoDataError` | The original source answered 404 (the file moved). |
+| `AssetFetchError` | The original source, read when the release mirror cannot be (with a warning), failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or lacks a column this loader types. |
+
+**Example**
+
+```python
+from sportsdataverse.soccer import load_soccer_transfermarkt_competitions
+comps = load_soccer_transfermarkt_competitions()
+
+# First-tier leagues only
+
+import polars as pl
+comps.filter(pl.col("sub_type") == "first_tier")
+```
+
+### load_soccer_transfermarkt_player_valuations {#load_soccer_transfermarkt_player_valuations}
+
+`load_soccer_transfermarkt_player_valuations(*, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Load the CC0 Transfermarkt market-value history: one row per player and valuation date.
+
+About 656,000 valuations, from 2000 to 2026-06-12 (the snapshot is not refreshed), read on every call from
+the release mirror. Licence: CC0 1.0.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+polars.DataFrame | pandas.DataFrame: one row per (`player_id`, `date`); `player_id` and `current_club_id` are Int64 and join the players and clubs tables. A column holding a value of another type comes back as text with a `SchemaDriftWarning`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | Transfermarkt player id (Int64); joins load_soccer_transfermarkt_players. |
+| `date` | Date | Date of the valuation (2000-01-20 to 2026-06-12 in the snapshot). |
+| `market_value_in_eur` | Int64 | Market value Transfermarkt assigned on that date, in euros. |
+| `current_club_name` | String | Club the player was at on that date ('Unknown' when Transfermarkt does not say). |
+| `current_club_id` | Int64 | Transfermarkt id of that club (Int64). |
+| `player_club_domestic_competition_id` | String | Domestic league id of that club (e.g. 'BE1'); null for clubs outside the covered leagues. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | The original source answered 400 / 422. |
+| `NoDataError` | The original source answered 404 (the file moved). |
+| `AssetFetchError` | The original source, read when the release mirror cannot be (with a warning), failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or lacks a column this loader types. |
+
+**Example**
+
+```python
+from sportsdataverse.soccer import load_soccer_transfermarkt_player_valuations
+values = load_soccer_transfermarkt_player_valuations()
+
+# One player's value curve
+
+import polars as pl
+values.filter(pl.col("player_id") == 418560).sort("date")
+```
+
+### load_soccer_transfermarkt_players {#load_soccer_transfermarkt_players}
+
+`load_soccer_transfermarkt_players(*, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Load the CC0 Transfermarkt players table: one row per player, with current club and market value.
+
+About 50,000 players: everyone who appeared for a club of the first-tier leagues the dataset covers
+(Premier League, LaLiga, Bundesliga, Serie A, Ligue 1, MLS, Liga MX and about 20 more). A snapshot
+current to 2026-07-06 (not refreshed), read on every call from the release mirror. Licence: CC0 1.0.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+polars.DataFrame | pandas.DataFrame: one row per `player_id` (Int64). `current_club_id` (Int64) joins `club_id` of `load_soccer_transfermarkt_clubs` and of `soccer_espn_transfermarkt_team_crosswalk`. A column holding a value of another type comes back as text with a `SchemaDriftWarning`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | Transfermarkt player id (Int64), unique in the table. |
+| `first_name` | String | Given name; null when Transfermarkt shows one name only. |
+| `last_name` | String | Family name (or the single name). |
+| `name` | String | Full name as Transfermarkt shows it. |
+| `last_season` | Int64 | Start year of the last season the player appeared in a covered competition (2025 = 2025-26). |
+| `current_club_id` | Int64 | Transfermarkt id of the player's club at the snapshot (Int64); joins club_id. |
+| `player_code` | String | Transfermarkt URL slug of the player. |
+| `country_of_birth` | String | Country of birth. |
+| `city_of_birth` | String | City of birth, as Transfermarkt writes it (may carry trailing non-breaking spaces). |
+| `country_of_citizenship` | String | First citizenship Transfermarkt lists. |
+| `date_of_birth` | Date | Date of birth. |
+| `sub_position` | String | Detailed position (e.g. 'Centre-Forward', 'Left-Back'). |
+| `position` | String | Position group - 'Goalkeeper', 'Defender', 'Midfield', 'Attack' or 'Missing'. |
+| `foot` | String | Preferred foot - 'right', 'left' or 'both'; null when unknown. |
+| `height_in_cm` | Int64 | Height in centimetres. |
+| `contract_expiration_date` | Date | Date the player's current contract ends; null when unknown. |
+| `agent_name` | String | Player's agency as Transfermarkt lists it. |
+| `image_url` | String | URL of the player's Transfermarkt portrait. |
+| `international_caps` | Int64 | Senior caps for current_national_team_id; null when uncapped. |
+| `international_goals` | Int64 | Senior international goals; null when uncapped. |
+| `current_national_team_id` | Int64 | Transfermarkt id of the national team the player represents (Int64); null when none. |
+| `url` | String | Transfermarkt page of the player. |
+| `current_club_domestic_competition_id` | String | Domestic league id of current_club_id (e.g. 'GB1'). |
+| `current_club_name` | String | Name of current_club_id as Transfermarkt writes it (often the legal name, e.g. 'Società Sportiva Lazio S.p.A.'). |
+| `market_value_in_eur` | Int64 | Latest Transfermarkt market value, in euros; null when none is listed. |
+| `highest_market_value_in_eur` | Int64 | Highest market value Transfermarkt has recorded for the player, in euros. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | The original source answered 400 / 422. |
+| `NoDataError` | The original source answered 404 (the file moved). |
+| `AssetFetchError` | The original source, read when the release mirror cannot be (with a warning), failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or lacks a column this loader types. |
+
+**Example**
+
+```python
+from sportsdataverse.soccer import load_soccer_transfermarkt_players
+players = load_soccer_transfermarkt_players()
+print(players.shape)
+
+# Most valuable players
+
+players.sort("market_value_in_eur", descending=True, nulls_last=True).head(10)
+```
+
+### load_soccer_transfermarkt_transfers {#load_soccer_transfermarkt_transfers}
+
+`load_soccer_transfermarkt_transfers(*, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Load the CC0 Transfermarkt transfers table: one row per player move between clubs, with its fee.
+
+About 175,000 transfers involving the clubs the dataset covers, to the 2025-26 season (the snapshot is
+current to 2026-07-06 and not refreshed), read on every call from the release mirror. Licence: CC0 1.0.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+polars.DataFrame | pandas.DataFrame: one row per transfer. `player_id`, `from_club_id` and `to_club_id` are Int64 Transfermarkt ids. A column holding a value of another type comes back as text with a `SchemaDriftWarning`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | Transfermarkt player id (Int64). |
+| `transfer_date` | Date | Date the move takes effect; a pre-agreed future move can be dated years ahead. |
+| `transfer_season` | String | Season of the move as Transfermarkt writes it (e.g. '25/26'). |
+| `from_club_id` | Int64 | Transfermarkt id of the selling club (Int64). |
+| `to_club_id` | Int64 | Transfermarkt id of the buying club (Int64). |
+| `from_club_name` | String | Name of the selling club. |
+| `to_club_name` | String | Name of the buying club. |
+| `transfer_fee` | Float64 | Fee in euros; 0 for a free transfer, null when Transfermarkt shows no fee (undisclosed or unknown). |
+| `market_value_in_eur` | Float64 | Player's Transfermarkt market value at the time of the move, in euros; Float64 because the file writes it with decimals, e.g. '700000.000'). |
+| `player_name` | String | Name of the player. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | The original source answered 400 / 422. |
+| `NoDataError` | The original source answered 404 (the file moved). |
+| `AssetFetchError` | The original source, read when the release mirror cannot be (with a warning), failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or lacks a column this loader types. |
+
+**Example**
+
+```python
+from sportsdataverse.soccer import load_soccer_transfermarkt_transfers
+moves = load_soccer_transfermarkt_transfers()
+
+# The largest fees of one season
+
+import polars as pl
+moves.filter(pl.col("transfer_season") == "25/26").sort("transfer_fee", descending=True, nulls_last=True)
+```
+
+### soccer_espn_transfermarkt_team_crosswalk {#soccer_espn_transfermarkt_team_crosswalk}
+
+`soccer_espn_transfermarkt_team_crosswalk(league: 'str | None' = None, *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+ESPN soccer team id -> Transfermarkt `club_id`, for the leagues of the ESPN <-> reep crosswalk.
+
+Read from the bundled ESPN <-> reep table (`soccer_espn_reep_team_crosswalk`), whose reep rows carry
+the Transfermarkt id, plus a reviewed id for a club whose reep row has none. No request is made. A
+newly promoted club can carry a `club_id` the Transfermarkt clubs table does not list: that snapshot
+ends in July 2026 and covers first tiers only.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str \| None` | `None` | An ESPN league slug of the reep crosswalk (`eng.1`, `eng.2`, `esp.1`, `ger.1`, `ita.1`, `fra.1`, `usa.1`, `mex.1`); `None` (default) returns every league. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+polars.DataFrame | pandas.DataFrame: one row per `espn_team_id` (Utf8, unique; joins the ESPN soccer frames' team ids). `club_id` is Int64, null when no Transfermarkt id is known, and never on two ESPN teams.
+
+| col_name | type | description |
+|---|---|---|
+| `espn_team_id` | String | ESPN soccer team id, digits as text (Utf8, as the ESPN soccer frames carry team ids); unique. |
+| `espn_league` | String | ESPN league slug the team was listed under when the ESPN <-> reep crosswalk was built. |
+| `espn_display_name` | String | ESPN display name of the team at that build. |
+| `club_id` | Int64 | Transfermarkt club id (Int64); joins club_id of load_soccer_transfermarkt_clubs and current_club_id of load_soccer_transfermarkt_players. Null when no Transfermarkt id is known; never on two ESPN teams. |
+| `match_method` | String | Where club_id comes from - 'reep' (the reep row's Transfermarkt id) or 'review' (reviewed by hand because the reep row has none); null with club_id. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If *league* is not one of the covered league slugs. |
+
+**Example**
+
+```python
+from sportsdataverse.soccer import soccer_espn_transfermarkt_team_crosswalk
+tm = soccer_espn_transfermarkt_team_crosswalk(league="eng.1")
+
+# Current Transfermarkt squads of the ESPN Premier League teams
+
+from sportsdataverse.soccer import load_soccer_transfermarkt_players
+tm.join(load_soccer_transfermarkt_players(), left_on="club_id", right_on="current_club_id")
+```

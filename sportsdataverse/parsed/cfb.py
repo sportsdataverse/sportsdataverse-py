@@ -362,6 +362,7 @@ from sportsdataverse.cfb import cfb_advanced_stats as cfb_advanced_stats  # noqa
 from sportsdataverse.cfb import cfb_compute_results as cfb_compute_results  # noqa: F401
 from sportsdataverse.cfb import cfb_draft_projection as cfb_draft_projection  # noqa: F401
 from sportsdataverse.cfb import cfb_field_position as cfb_field_position  # noqa: F401
+from sportsdataverse.cfb import cfb_game_story as cfb_game_story  # noqa: F401
 from sportsdataverse.cfb import cfb_games_from_schedule as cfb_games_from_schedule  # noqa: F401
 from sportsdataverse.cfb import cfb_kickoff_out_of_bounds_spot_expr as cfb_kickoff_out_of_bounds_spot_expr  # noqa: F401
 from sportsdataverse.cfb import cfb_odds_events_crosswalk as cfb_odds_events_crosswalk  # noqa: F401
@@ -559,6 +560,7 @@ __all__ = [
     "cfb_compute_results",
     "cfb_draft_projection",
     "cfb_field_position",
+    "cfb_game_story",
     "cfb_games_from_schedule",
     "cfb_kickoff_out_of_bounds_spot_expr",
     "cfb_odds_events_crosswalk",

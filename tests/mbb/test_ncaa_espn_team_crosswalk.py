@@ -189,6 +189,12 @@ def _release_like(league: str) -> pl.DataFrame:
     return pl.concat([base, extra])
 
 
+def _valid_parquet() -> bytes:
+    buf = io.BytesIO()
+    _release_like("mbb").write_parquet(buf)
+    return buf.getvalue()
+
+
 def test_reads_the_release_first(monkeypatch):
     monkeypatch.setattr(xw, "_CROSSWALK_CACHE", {})
     monkeypatch.setattr(xw, "_read_release_parquet", lambda url: _release_like("mbb"))
@@ -212,6 +218,19 @@ def test_falls_back_to_the_bundled_copy(monkeypatch, read):
     monkeypatch.setattr(xw, "_CROSSWALK_CACHE", {})
     monkeypatch.setattr(xw, "_read_release_parquet", read)
     with pytest.warns(UserWarning, match="using the bundled copy"):
+        df = ncaa_espn_team_crosswalk(league="wbb")
+    assert df.equals(xw._packaged_crosswalk("wbb"))
+
+
+def test_a_corrupt_footer_falls_back_through_the_real_release_read(monkeypatch):
+    """A footer whose metadata will not decode: pyarrow raises a bare OSError, which the runtime leaves unclassified
+    (the bytes arrived whole) and the crosswalk must still treat as an unreadable asset."""
+    from sportsdataverse import _codegen_runtime as rt
+
+    corrupt = _valid_parquet()[:-8] + bytes(4) + b"PAR1"
+    monkeypatch.setattr(xw, "_CROSSWALK_CACHE", {})
+    monkeypatch.setattr(rt, "_release_bytes", lambda url: io.BytesIO(corrupt))
+    with pytest.warns(UserWarning, match=r"unavailable \(OSError: .*\); using the bundled copy"):
         df = ncaa_espn_team_crosswalk(league="wbb")
     assert df.equals(xw._packaged_crosswalk("wbb"))
 

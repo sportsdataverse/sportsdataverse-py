@@ -61,6 +61,32 @@ Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-dat
 load_mlb_wpa(seasons=2024)
 ```
 
+## load_mlb_leverage_index
+
+Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_game_state) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_game_state/mlb_leverage_index_{season}.parquet`
+
+:::caution[Coverage]
+Published 2020-2026, one row per load_mlb_we_table state bucket; extra half-innings open with the automatic runner on 2nd. Each PA's swing is the WE change it causes, with WE read from one table pooled over the 2015-2026 regular seasons and averaged over the season's own PAs (rebuilt 2026-11-27).
+:::
+
+### Returns {#load_mlb_leverage_index-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `inning_capped` | Int64 | Inning number with the ninth and every extra inning collapsed into 9, the same buckets as load_mlb_we_table. |
+| `half` | String | Half-inning, top (away team batting) or bottom (home team batting). |
+| `base_state` | String | Three-character pre-play base occupancy where each slot carries its base number when occupied and an underscore when empty, so ___ is bases empty and _2_ is a runner on second only. |
+| `outs_start` | Int64 | Outs already recorded when the plate appearance began (0-2). |
+| `score_diff_bucket` | Int64 | Home score minus away score before the play, clipped to the range -6 through +6. |
+| `leverage_index` | Float64 | Expected absolute change in home win expectancy that a plate appearance starting in this state causes (WE read from one table pooled over the 2015-2026 regular seasons; the game's result after its last PA), divided by the season's plate-appearance-weighted average of that quantity, so 1.0 is an average situation and 2.0 twice as pivotal. |
+| `n` | UInt32 | Plate appearances observed in this state bucket that season, the sample behind leverage_index. |
+| `thin` | Boolean | True when n is below 50, a small-sample flag; larger buckets also vary noticeably from one season to the next. |
+| `season` | Int64 | MLB season (calendar year). |
+
+```python
+load_mlb_leverage_index(seasons=2024)
+```
+
 ## load_mlb_pbp
 
 Release: [mlb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pbp/mlb_pbp_{season}.parquet`

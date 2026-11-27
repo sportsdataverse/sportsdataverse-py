@@ -1,10 +1,10 @@
 ---
-title: "College football — additional Python functions — Analytics: add_play–cfb_player"
-sidebar_label: "Analytics: add_play–cfb_player"
+title: "College football — additional Python functions — Analytics: add_play–cfb_games"
+sidebar_label: "Analytics: add_play–cfb_games"
 sidebar_position: 12
-description: "College football — additional Python functions — Analytics: add_play–cfb_player — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Analytics: add_play–cfb_games — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# College football — additional Python functions — Analytics: add_play–cfb_player
+# College football — additional Python functions — Analytics: add_play–cfb_games
 
 ### add_play_type_canonical {#add_play_type_canonical}
 
@@ -624,6 +624,140 @@ print(df.shape)
 df.sort("pace_rank").head()
 ```
 
+### cfb_game_story {#cfb_game_story}
+
+`cfb_game_story(pbp: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame]'`
+
+How the winner won it, for one or many college football games: edges in EPA, the moment, periods, runs, performers.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | The ESPN-processed plays of one or many games: `load_cfb_pbp` (the `espn_cfb_pbp` release) or a live game's `CFBPlayProcess.plays_frame` (set by `run_processing_pipeline()`). Needs `game_id`, `id`, `game_play_number`, `period.number`, `clock.displayValue`, `text`, `pos_team_id` (the processor's frame calls it `pos_team`), `homeTeamId`, `awayTeamId`, `homeScore`, `awayScore`, `EPA`, `wpa`, `scrimmage_play`, `pass`, `rush`, `type.text`, `is_pos_team_turnover`, `EPA_explosive`, `EPA_success`, `start.yardsToEndzone`, `late_down` and the `passer` / `rusher` / `receiver` `_player_id` / `_player_name` columns. |
+| `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
+
+**Returns**
+
+`{"summary", "edges", "moment", "periods", "runs", "performers"}`, the frames of `~sportsdataverse._common.game_story.GAME_STORY_SCHEMAS`. Edges are the accounting phases (`passing`, `rushing`, `special_teams`, `other`) and the splits (`turnovers`, `explosive_plays`, `success_rate`, `red_zone`, `late_downs`), each in expected points and ranked by `points_worth`. The final score is the release's `homeFinalScore` / `awayFinalScore` where present, else the last running score.
+
+`summary`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's ESPN game id. |
+| `home_team_id` | Int64 | Home team's ESPN team id. |
+| `away_team_id` | Int64 | Away team's ESPN team id. |
+| `home_score` | Int64 | Home team's official final score. |
+| `away_score` | Int64 | Away team's official final score. |
+| `winner_team_id` | Int64 | Winning team's id; null on a tie. |
+| `loser_team_id` | Int64 | Losing team's id; null on a tie. |
+| `margin` | Int64 | Winner's final score less the loser's; 0 on a tie. |
+| `decided` | Boolean | True when the game has a winner (false on a tie). |
+| `periods_agree` | Boolean | True when the period sums (from the play-by-play's running score) equal the official final; false flags a source whose plays end on another score. |
+| `n_periods` | Int64 | Periods played, overtimes included. |
+| `overtime` | Boolean | True when the game went past regulation. |
+
+`edges`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's ESPN game id. |
+| `winner_team_id` | Int64 | Winning team's id (null on a tie, where the edges read from the home side's view). |
+| `loser_team_id` | Int64 | Losing team's id (null on a tie). |
+| `edge` | String | Edge name. Accounting: passing, rushing, special_teams, other (every play with an EPA once; their sum is the net EPA). Splits: turnovers, explosive_plays, success_rate, red_zone, late_downs. |
+| `kind` | String | accounting for edges that split the game between them (their points_worth add up to the margin, exactly or nearly; see the function's docstring), split for overlapping cuts. |
+| `unit` | String | Always points: expected points added, the unit the edges are priced in. |
+| `winner_value` | Float64 | Winner's value for the edge in the edge's own unit: points for a points edge, a rate for a rate edge. |
+| `loser_value` | Float64 | Loser's value for the edge, in the same unit as winner_value. |
+| `points_worth` | Float64 | The winner's edge in the sport's scoring unit: the winner's points from the edge less the loser's. Positive favours the winner. |
+| `rank` | Int64 | Rank of the edge within the game by points_worth, 1 = largest; equal worths keep the edge list's order. |
+
+`moment`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's ESPN game id. |
+| `play_id` | Int64 | ESPN play id of the deciding moment. |
+| `order` | Int64 | The play's position in the game's play order. |
+| `period` | Int64 | Period of the play. |
+| `clock` | String | Game clock of the play as the source shows it. |
+| `team_id` | Int64 | Team of the play (the offense in football, the event's team in basketball). |
+| `text` | String | Play description as the source writes it. |
+| `wpa` | Float64 | Home win probability after the play less before it. |
+| `winner_wpa` | Float64 | The same change from the winner's side (null on a tie). |
+| `home_score` | Int64 | Home score after the play. |
+| `away_score` | Int64 | Away score after the play. |
+| `rule` | String | max_abs_wpa: the play with the largest absolute win-probability change (earliest on ties); deciding_score where no play has one: the winner's score that put it ahead for good. |
+
+`periods`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's ESPN game id. |
+| `period` | Int64 | Period number, from 1; overtimes follow regulation. |
+| `period_label` | String | Q1-Q4, then OT, OT2, ... |
+| `is_overtime` | Boolean | True for a period after regulation. |
+| `home_pts` | Int64 | Home points in the period: its last running score less the previous period's. |
+| `away_pts` | Int64 | Away points in the period. |
+| `home_cum` | Int64 | Home running score at the end of the period. |
+| `away_cum` | Int64 | Away running score at the end of the period. |
+
+`runs`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's ESPN game id. |
+| `team_id` | Int64 | Team that made the run. |
+| `points` | Int64 | The side's largest unanswered run: points it scored in a row with no score by the other side (a score correction stays in the run and counts against its side). |
+| `start_order` | Int64 | Play order of the run's first score. |
+| `end_order` | Int64 | Play order of the run's last score. |
+| `start_period` | Int64 | Period of the run's first score. |
+| `end_period` | Int64 | Period of the run's last score. |
+| `home_score_after` | Int64 | Home score at the end of the run. |
+| `away_score_after` | Int64 | Away score at the end of the run. |
+
+`performers`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int64 | The game's ESPN game id. |
+| `team_id` | Int64 | Team of the top performer. |
+| `player_id` | Int64 | ESPN athlete id of the side's top performer. |
+| `player_name` | String | Player's display name. |
+| `metric` | String | Always epa: the expected points added the performer is chosen by. |
+| `value` | Float64 | The player's EPA as passer, rusher and receiver combined (a target credits both the passer and the receiver; ties go to touchdowns). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | If `pbp` lacks a column named above. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import load_cfb_pbp
+from sportsdataverse.cfb.cfb_game_story import cfb_game_story
+pbp = load_cfb_pbp([2025]).filter(pl.col("game_id") == 401752873)
+story = cfb_game_story(pbp)
+story["edges"].head(3)
+
+# A live game
+
+from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+proc = CFBPlayProcess(gameId=401752873)
+proc.espn_cfb_pbp()
+proc.run_processing_pipeline()
+cfb_game_story(proc.plays_frame)["moment"]
+
+# The deciding play of each game in a week
+
+week = load_cfb_pbp([2025]).filter(pl.col("week") == 5)
+cfb_game_story(week)["moment"].select("game_id", "text", "winner_wpa")
+```
+
 ### cfb_games_from_schedule {#cfb_games_from_schedule}
 
 `cfb_games_from_schedule(schedule: 'FrameLike', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | Any'`
@@ -679,96 +813,4 @@ teams = (
 )
 st = cfb_standings(games, teams)
 print(st.head())
-```
-
-### cfb_player_havoc {#cfb_player_havoc}
-
-`cfb_player_havoc(seasons: 'int | list[int]', *, min_games: 'int' = 6, player_box: 'pl.DataFrame | None' = None, defensive_players: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-CFB player havoc per season: tackles for loss, sacks, pass breakups, interceptions and forced fumbles, per game.
-
-These are counting stats, not a grade. A defender's havoc is his tackles for loss, pass
-breakups, interceptions and forced fumbles, the player version of the team havoc rate. Sacks
-are listed and ranked on their own but not added again, because a sack is already a tackle for
-loss. Events are counted, not plays: a strip-sack is two events for the same player, where team
-havoc counts that play once. Nothing is adjusted for opponent, scheme or position, so an edge
-rusher and a corner are ranked on the same scale.
-
-Tackles for loss (half credit on a shared one), sacks, pass breakups and interceptions come
-from ESPN's player box score. In the college box, `passesDefended` excludes the defender's
-interceptions, so the two are added without double counting. Forced fumbles come from the
-play-by-play (`load_cfb_adv_defensive_players`), which only credits a forced fumble when
-ESPN's play text names the player. Measured on 2025, that is about 0.5 a game, so this column
-undercounts. College football has no public snap counts, so every rate is per game, and a game
-counts only when the player has a defensive or interception box line in it or the play text
-credits him with a forced fumble in it. ESPN's defensive
-box covers 935 of 958 games in 2025 but 473 in 2023 and 154 in 2021, so earlier seasons are
-partial. No PFF data is used.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons (2004 or later for the box release; the defensive box lines are near-complete from 2025). |
-| `min_games` | `int` | `6` | A rate is ranked only for a player with at least this many games (its `_n`). Defaults to 6, half a regular season. |
-| `player_box` | `DataFrame \| None` | `None` | An ESPN player box frame shaped like `load_cfb_player_box` (no download). |
-| `defensive_players` | `DataFrame \| None` | `None` | A frame shaped like `load_cfb_adv_defensive_players` (no download). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, team_id, athlete_id)` (ESPN ids, Int64): `athlete_name`, `games`, the season totals `havoc` / `tfl` / `sacks` / `pass_breakups` / `interceptions` / `forced_fumbles` (Float64, since a shared tackle for loss is a half), and for each total its `<stat>_per_game` with `_n` (games), `_rank` (1 is the most) and the Weibull `_pct`. These are ranked within the season among players with at least `min_games` games, and are null below that, or when fewer than 10 players qualify. A season with no box lines gives that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season of the player's games (every game in the box release, bowls included). |
-| `team_id` | Int64 | ESPN team id of the defender's team (Int64). |
-| `athlete_id` | Int64 | ESPN athlete id (Int64). |
-| `athlete_name` | String | ESPN display name, from his last box line of the season. |
-| `games` | Int64 | Games with a defensive or interception box line for the player (college football has no public snap counts); the denominator of every per-game rate. |
-| `havoc` | Float64 | Havoc events: tfl + pass_breakups + interceptions + forced_fumbles. Sacks are not added again, as a sack is already a tackle for loss, and a strip-sack counts twice. A counting stat, not a grade. |
-| `tfl` | Float64 | Tackles for loss from ESPN's player box, sacks included; a shared tackle for loss is a half. |
-| `sacks` | Float64 | Sacks from ESPN's player box; a shared sack is a half. Already inside tfl. |
-| `pass_breakups` | Float64 | Passes defended from ESPN's college player box, which excludes the defender's interceptions. |
-| `interceptions` | Float64 | Interceptions made, from the box's interceptions category (never the passing category's thrown interceptions). |
-| `forced_fumbles` | Float64 | Forced fumbles credited in ESPN's play text (load_cfb_adv_defensive_players), keyed to the box by team and name. Undercounts: about 0.5 a game in 2025. |
-| `havoc_per_game` | Float64 | Per-game havoc events (tackles for loss + pass breakups + interceptions + forced fumbles): the season total over games. |
-| `havoc_per_game_n` | Int64 | Sample size of havoc_per_game: the player's games. |
-| `havoc_per_game_rank` | Float64 | Rank of havoc_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
-| `havoc_per_game_pct` | Float64 | Weibull percentile of havoc_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
-| `tfl_per_game` | Float64 | Per-game tackles for loss (sacks included; a shared one is a half): the season total over games. |
-| `tfl_per_game_n` | Int64 | Sample size of tfl_per_game: the player's games. |
-| `tfl_per_game_rank` | Float64 | Rank of tfl_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
-| `tfl_per_game_pct` | Float64 | Weibull percentile of tfl_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
-| `sacks_per_game` | Float64 | Per-game sacks (a shared one is a half): the season total over games. |
-| `sacks_per_game_n` | Int64 | Sample size of sacks_per_game: the player's games. |
-| `sacks_per_game_rank` | Float64 | Rank of sacks_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
-| `sacks_per_game_pct` | Float64 | Weibull percentile of sacks_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
-| `pass_breakups_per_game` | Float64 | Per-game pass breakups (ESPN's college passesDefended, which excludes interceptions): the season total over games. |
-| `pass_breakups_per_game_n` | Int64 | Sample size of pass_breakups_per_game: the player's games. |
-| `pass_breakups_per_game_rank` | Float64 | Rank of pass_breakups_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
-| `pass_breakups_per_game_pct` | Float64 | Weibull percentile of pass_breakups_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
-| `interceptions_per_game` | Float64 | Per-game interceptions made: the season total over games. |
-| `interceptions_per_game_n` | Int64 | Sample size of interceptions_per_game: the player's games. |
-| `interceptions_per_game_rank` | Float64 | Rank of interceptions_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
-| `interceptions_per_game_pct` | Float64 | Weibull percentile of interceptions_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
-| `forced_fumbles_per_game` | Float64 | Per-game forced fumbles named in ESPN's play text: the season total over games. |
-| `forced_fumbles_per_game_n` | Int64 | Sample size of forced_fumbles_per_game: the player's games. |
-| `forced_fumbles_per_game_rank` | Float64 | Rank of forced_fumbles_per_game within the season, 1 = most, average ties; null under min_games or with fewer than 10 qualifiers. |
-| `forced_fumbles_per_game_pct` | Float64 | Weibull percentile of forced_fumbles_per_game within the season, 100 * (n + 1 - rank) / (n + 1) over the n ranked players; null where the rank is. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `SeasonNotFoundError` | If a season is before 2004 (raised by the loaders). |
-
-**Example**
-
-```python
-from sportsdataverse.cfb import cfb_player_havoc
-havoc = cfb_player_havoc(2025)
-havoc.sort("havoc_per_game_rank").select(
-    "athlete_name", "games", "havoc", "havoc_per_game", "havoc_per_game_pct"
-).head()
 ```
