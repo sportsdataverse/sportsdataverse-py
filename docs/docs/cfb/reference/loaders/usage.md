@@ -1,7 +1,7 @@
 ---
 title: "CFB dataset loaders — Usage"
 sidebar_label: "Usage"
-sidebar_position: 14
+sidebar_position: 15
 description: "CFB dataset loaders — Usage — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---

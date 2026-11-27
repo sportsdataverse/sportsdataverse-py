@@ -1,0 +1,103 @@
+{
+  "draftDetail": {
+    "completeDate": 1794358231802,
+    "drafted": true,
+    "inProgress": false,
+    "picks": [
+      {
+        "autoDraftTypeId": 0,
+        "bidAmount": 0,
+        "id": 1,
+        "keeper": false,
+        "lineupSlotId": 0,
+        "memberId": "{MEMBER-03}",
+        "nominatingTeamId": 0,
+        "overallPickNumber": 1,
+        "playerId": 3945274,
+        "reservedForKeeper": false,
+        "roundId": 1,
+        "roundPickNumber": 1,
+        "teamId": 3,
+        "tradeLocked": false
+      },
+      {
+        "autoDraftTypeId": 4,
+        "bidAmount": 0,
+        "id": 2,
+        "keeper": false,
+        "lineupSlotId": 0,
+        "nominatingTeamId": 0,
+        "overallPickNumber": 2,
+        "playerId": 4278073,
+        "reservedForKeeper": false,
+        "roundId": 1,
+        "roundPickNumber": 2,
+        "teamId": 5,
+        "tradeLocked": false
+      },
+      {
+        "autoDraftTypeId": 0,
+        "bidAmount": 0,
+        "id": 3,
+        "keeper": false,
+        "lineupSlotId": 4,
+        "memberId": "{MEMBER-01}",
+        "nominatingTeamId": 0,
+        "overallPickNumber": 3,
+        "playerId": 5104157,
+        "reservedForKeeper": false,
+        "roundId": 1,
+        "roundPickNumber": 3,
+        "teamId": 1,
+        "tradeLocked": false
+      }
+    ]
+  },
+  "gameId": 3,
+  "id": 1535462463,
+  "scoringPeriodId": 38,
+  "seasonId": 2027,
+  "segmentId": 0,
+  "settings": {
+    "draftSettings": {
+      "auctionBudget": 200,
+      "availableDate": 1794356100000,
+      "date": 1794356280000,
+      "isTradingEnabled": false,
+      "keeperCount": 0,
+      "keeperCountFuture": 0,
+      "keeperOrderType": "TRADITIONAL",
+      "leagueSubType": "DRAFT_LOBBY",
+      "orderType": "DRAFT_START",
+      "pickOrder": [
+        3,
+        5,
+        1
+      ],
+      "timePerSelection": 60,
+      "type": "SNAKE"
+    }
+  },
+  "status": {
+    "activatedDate": 1794355801938,
+    "createdAsLeagueType": 2,
+    "currentLeagueType": 2,
+    "currentMatchupPeriod": 6,
+    "finalScoringPeriod": 167,
+    "firstScoringPeriod": 28,
+    "isActive": true,
+    "isExpired": false,
+    "isFull": true,
+    "isPlayoffMatchupEdited": false,
+    "isToBeDeleted": false,
+    "isViewable": false,
+    "isWaiverOrderEdited": false,
+    "latestScoringPeriod": 38,
+    "previousSeasons": [],
+    "standingsUpdateDate": 1795684188615,
+    "teamsJoined": 10,
+    "transactionScoringPeriod": 38,
+    "waiverLastExecutionDate": 1795684188533,
+    "waiverProcessStatus": {}
+  }
+}

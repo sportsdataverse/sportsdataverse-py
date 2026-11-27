@@ -90,7 +90,7 @@ provider. The [Getting Started table](https://py.sportsdataverse.org/docs/intro)
 | | Golf (PGA Tour, LPGA, LIV, DP World Tour, PGA Tour Champions, Korn Ferry Tour, TGL, WTGL, Olympics) | `sportsdataverse.golf` | ESPN (scoreboard + leaderboard parsers), **PGA TOUR GraphQL** (`pgatour_*`: schedule, leaderboard, hole-by-hole, scorecards, tee times, field, past results and champions, course and hole stats, players and career results, stats, FedExCup, ShotLink shots; runtime only) |
 | | Formula 1 | `sportsdataverse.f1` | Jolpica |
 | | Odds & prediction markets | `sportsdataverse.odds` | The Odds API, Kalshi, Polymarket |
-| | Cross-sport providers | `sportsdataverse.providers.<name>` (`cbs`, `fox`, `yahoo`, `espn_content`, `thesportsdb`) | CBS Sports, Fox Sports, Yahoo Sports, ESPN content, TheSportsDB |
+| | Cross-sport providers | `sportsdataverse.providers.<name>` (`cbs`, `fox`, `yahoo`, `espn_content`, `espn_fantasy`, `thesportsdb`) | CBS Sports, Fox Sports, Yahoo Sports, ESPN content, ESPN Fantasy (public leagues), TheSportsDB |
 
 The big league modules export roughly 270–740 public names each (ESPN wrappers, that league's
 native-API wrappers, dataset loaders and parsers), and the flat `sportsdataverse` namespace holds
@@ -292,6 +292,7 @@ under [`examples/notebooks/`](examples/notebooks):
 | `17_european_college_hockey_intro.ipynb` | SHL, Liiga, DEL, KHL and NCAA hockey; a DEL shot map, college team colors (sdvplot) |
 | `18_prediction_markets_intro.ipynb` | Kalshi and Polymarket market data: events, markets, order books |
 | `19_more_sources_intro.ipynb` | NBA G League (ESPN), Formula 1, TheSportsDB, ESPN content |
+| `20_espn_fantasy_intro.ipynb` | ESPN Fantasy: games, player universe, pro schedule, default scoring, a public league |
 
 ## **Using with AI agents**
 

@@ -1,0 +1,98 @@
+[
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795722000000,
+    "draftDate": 1795722180000,
+    "draftInProgress": false,
+    "draftType": "SNAKE",
+    "experienceType": "BEGINNER",
+    "full": false,
+    "gameId": 2,
+    "leagueDefaultId": 5,
+    "leagueId": 1351003387,
+    "leagueName": "Los Angeles Beginner Season Points League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      34,
+      37,
+      39
+    ],
+    "scoringType": "TOTAL_SEASON_POINTS",
+    "seasonId": 2026,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 7,
+    "universeIds": [
+      0
+    ]
+  },
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795722000000,
+    "draftDate": 1795722180000,
+    "draftInProgress": false,
+    "draftType": "SNAKE",
+    "experienceType": "BEGINNER",
+    "full": false,
+    "gameId": 2,
+    "leagueDefaultId": 2,
+    "leagueId": 168191985,
+    "leagueName": "Arizona Beginner H2H Points League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      34,
+      37,
+      39
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2026,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 6,
+    "universeIds": [
+      0
+    ]
+  },
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795722000000,
+    "draftDate": 1795722180000,
+    "draftInProgress": false,
+    "draftType": "AUCTION",
+    "experienceType": "PRO",
+    "full": false,
+    "gameId": 2,
+    "leagueDefaultId": 3,
+    "leagueId": 1570017651,
+    "leagueName": "St. Louis Pro H2H Categories Salary Cap League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "ROTO",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      48,
+      2,
+      20
+    ],
+    "scoringType": "H2H_CATEGORY",
+    "seasonId": 2026,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 6,
+    "universeIds": [
+      0
+    ]
+  }
+]

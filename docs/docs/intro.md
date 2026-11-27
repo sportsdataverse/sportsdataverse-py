@@ -68,7 +68,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 <!-- BEGIN generated: leagues-and-sources -->
 | Sport | League | Module | Data sources |
 |---|---|---|---|
-| Football | [College football](cfb/) | `sportsdataverse.cfb` | ESPN (132), sportsdataverse-data releases (76), stats.ncaa.org (1), On3 Recruit Database (82), 247Sports Recruit Database (47), Yahoo Sports Shangrila (7), Fox Sports API (29) |
+| Football | [College football](cfb/) | `sportsdataverse.cfb` | ESPN (132), sportsdataverse-data releases (77), stats.ncaa.org (1), On3 Recruit Database (82), 247Sports Recruit Database (47), Yahoo Sports Shangrila (7), Fox Sports API (29) |
 | Football | [NFL](nfl/) | `sportsdataverse.nfl` | ESPN (125), NFL.com Shield API (22), NFL Pro (32), Sleeper fantasy API (15), PFF Developer API (68), PFF Premium Stats (LEGACY) (46), nflverse data releases (48), sportsdataverse-data releases (23), Fox Sports API (25) |
 | Football (Spring & Canadian) | [UFL](ufl/) | `sportsdataverse.football.ufl` | ESPN (114): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1, CDN API (cdn.espn.com) 1, Hand-written wrappers 1 |
 | Football (Spring & Canadian) | [XFL](xfl/) | `sportsdataverse.football.xfl` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
@@ -173,6 +173,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 | More sports & sources (Cross-sport providers) | [Yahoo Sports](yahoo/) | `sportsdataverse.providers.yahoo` | Yahoo Sports Shangrila (105) |
 | More sports & sources (Cross-sport providers) | [Fox Sports](fox/) | `sportsdataverse.providers.fox` | Fox Sports API (33) |
 | More sports & sources (Cross-sport providers) | [ESPN content (news)](espn_content/) | `sportsdataverse.providers.espn_content` | ESPN (3) |
+| More sports & sources (Cross-sport providers) | [ESPN Fantasy](espn_fantasy/) | `sportsdataverse.providers.espn_fantasy` | ESPN (16) |
 | More sports & sources (Cross-sport providers) | [TheSportsDB](thesportsdb/) | `sportsdataverse.providers.thesportsdb` | TheSportsDB (12) |
 | More sports & sources (Motorsport) | [Formula 1](f1/) | `sportsdataverse.f1` | Jolpica F1 API (Ergast-compatible) (16): Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour) 15, Hand-written wrappers 1 |
 <!-- END generated: leagues-and-sources -->
