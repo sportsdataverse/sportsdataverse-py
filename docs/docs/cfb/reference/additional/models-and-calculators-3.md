@@ -1,10 +1,94 @@
 ---
-title: "College football — additional Python functions — Models and calculators: get_2pt–get_4th"
-sidebar_label: "Models and calculators: get_2pt–get_4th"
+title: "College football — additional Python functions — Models and calculators: fei_ratings–get_4th"
+sidebar_label: "Models and calculators: fei_ratings–get_4th"
 sidebar_position: 9
-description: "College football — additional Python functions — Models and calculators: get_2pt–get_4th — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Models and calculators: fei_ratings–get_4th — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# College football — additional Python functions — Models and calculators: get_2pt–get_4th
+# College football — additional Python functions — Models and calculators: fei_ratings–get_4th
+
+### fei_ratings {#fei_ratings}
+
+`fei_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'`
+
+One row per team: opponent-adjusted per-drive efficiency (FEI-style).
+
+The Fremeau Efficiency Index rates teams on drive value above expectation
+given starting field position. The cfbfastR-schema `plays` frame this
+package works with carries no starting-field-position column, so this
+function uses the documented fallback: per-play EPA summed within each
+`(game_id, drive_id)` group stands in for drive value, and that
+aggregate is fit through the same opponent-adjustment ridge as
+`efficiency_ratings` / `special_teams_ratings` -- no forked
+solver. Offline validation against the Fremeau FEI oracle put this
+fallback's team ranking at Spearman 0.967.
+
+`cfb_adjusted_epa._prepare` filters to individual pass/rush plays and
+is not reused here (drive value should reflect every play on the drive,
+special-teams snaps included); the `hfa` treatment is reproduced
+directly, matching `special_teams_ratings`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._REQUIRED_COLUMNS` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `wp_before`) plus `drive_id`. Not pre-aggregated to drives -- this function does that grouping itself. |
+| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs. Only `ridge_lambda` is consulted here; defaults to `RatingsConfig` when omitted. |
+
+**Returns**
+
+A `polars.DataFrame` with one row per `team_id` appearing as `pos_team_id` on at least one drive: `team_id` (Utf8), `fei_off` / `fei_def` / `fei_net` (Float64). The ridge's dropped reference team is re-added at the shared intercept (`fei_net == 0.0`). Zero-row (correctly-typed) when `plays` has no rows with a non-null `EPA`.
+
+No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | If `scikit-learn` is not installed. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import fei_ratings
+fei = fei_ratings(pbp)
+fei.sort("fei_net", descending=True).head()
+```
+
+### fit_field_position_ep {#fit_field_position_ep}
+
+`fit_field_position_ep(drives: 'pl.DataFrame', *, start_col: 'str' = 'drive_start_yardline', pts_col: 'str' = 'drive_next_score_pts') -> 'pl.DataFrame'`
+
+Fit the monotone EP-by-starting-yardline curve from a drives frame.
+
+Groups drives by starting yard line (from own goal), takes the mean
+next-score points, and applies sample-count-weighted isotonic regression
+(weight = number of drives at each starting yard line, non-decreasing),
+interpolated onto the full 1..99 grid.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `drives` | `DataFrame` |  | one row per drive. |
+| `start_col` | `str` | `'drive_start_yardline'` | starting yard line from own goal (1..99). |
+| `pts_col` | `str` | `'drive_next_score_pts'` | net next-score points for the drive's offense. |
+
+**Returns**
+
+`yardline_own: Int64 (1..99), ep: Float64` -- monotone non-decreasing. Empty input returns a zero-row frame.
+
+| col_name | type | description |
+|---|---|---|
+| `yardline_own` | Int64 | Starting yard line from the offense's own goal (1-99). |
+| `ep` | Float64 | Fitted expected points for a drive starting at this yard line (isotonic, non-decreasing). |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb.cfb_field_position import fit_field_position_ep
+curve = fit_field_position_ep(drives_frame)
+```
 
 ### get_2pt_probs {#get_2pt_probs}
 
