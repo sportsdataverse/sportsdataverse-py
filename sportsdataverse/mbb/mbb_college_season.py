@@ -973,11 +973,7 @@ def game_noise_sd(tau_home: np.ndarray, tau_away: np.ndarray, league: str) -> np
 
 
 def _selection_score(base: np.ndarray, t: dict[str, np.ndarray], seen: np.ndarray | None) -> np.ndarray:
-    """Each sim's selection score: ``project_bracket``'s résumé score on the simulated WAB and Quad-1 wins.
-
-    ``seen`` is the AdjEM the committee sees once the rating shift has moved it (None: no shift);
-    the AdjEM term moves by its change in z, so with nothing left to play it is the résumé's own.
-    """
+    """``project_bracket``'s résumé score per sim; the AdjEM term moves by its change in z under ``seen``."""
     from sportsdataverse.mbb.mbb_bracketology import _RESUME_WEIGHTS as w
 
     pop = t["pop"]
@@ -998,8 +994,7 @@ def _sim_state(
     g0 = col("rpi_games")
     # SoS over every scheduled Division I game, not only the played ones
     sos = (col("sos") * g0 + sched["opp_em_left"]) / np.maximum(g0 + sched["d1_left"], 1)
-    # standardised on the teams season_bracketology scores, so a sim with nothing left to play
-    # reproduces its resume_score exactly
+    # standardised on the teams season_bracketology scores: nothing left to play reproduces resume_score
     pop = _selection_population(res, sched["d1_left"])
     base = w["adj_em_z"] * col("adj_em_z") + w["sos"] * _zscore(sos, pop)
     return base, {
@@ -1206,10 +1201,7 @@ def _select_field(score: np.ndarray, auto: np.ndarray, eligible: np.ndarray) -> 
 
 
 def _zscore(x: np.ndarray, pop: np.ndarray) -> np.ndarray:
-    """``x`` standardised on the population ``pop`` (a team mask), the way ``project_bracket`` scores résumés.
-
-    Before anyone has a résumé (preseason) the population is every team.
-    """
+    """``x`` standardised on the team mask ``pop``, as ``project_bracket`` does; preseason, on every team."""
     if pop.sum() < 2:
         pop = np.ones(x.shape[-1], dtype=bool)
     sd = x[..., pop].std(axis=-1, ddof=1, keepdims=True)
@@ -1217,13 +1209,11 @@ def _zscore(x: np.ndarray, pop: np.ndarray) -> np.ndarray:
 
 
 def _selection_population(res: pl.DataFrame, d1_left: np.ndarray) -> np.ndarray:
-    """The teams :func:`season_bracketology` will score at the end of the sim.
+    """The teams :func:`season_bracketology` will score: eligible, with a full résumé or a Division I game left.
 
-    Eligible teams with every résumé input known, plus eligible teams still to play a Division I game
-    (they have a résumé by then). With nothing left to play it is exactly bracketology's population.
-    """
+    With nothing left to play it is exactly bracketology's population."""
     known = pl.all_horizontal(pl.col(c).is_not_null() for c in ("adj_em_z", "sos", "wab", "quad1_w"))
-    eligible = res.get_column("eligible").to_numpy()
+    eligible = res.get_column("eligible").fill_null(False).to_numpy()
     return eligible & (res.select(known).to_series().to_numpy() | (d1_left > 0))
 
 
