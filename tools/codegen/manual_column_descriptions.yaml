@@ -1714,6 +1714,56 @@ cfb_adjusted_breakdowns:
   success_rush_def_shrunk: "Display value: the adjusted success rate (share of plays with positive EPA) the defense allowed on rush plays, shrunk toward the league mean by n / (n + 169)."
   success_rush_def_n: "Plays behind the defense values: its rush plays outside garbage time (the n in the shrinkage)."
   success_rush_def_rank: Rank of success_rush_def_shrunk (lowest = 1, ties averaged).
+  epa_pass_def_raw: Raw EPA per play the defense allowed on pass plays outside garbage time.
+  epa_pass_def_adj: "Always null: EPA per play on pass plays for the defense is published raw, since the opponent adjustment did not make it more reliable."
+  epa_pass_def_shrunk: "Display value: the raw EPA per play the defense allowed on pass plays, shrunk toward the league mean by n / (n + 387.6)."
+  epa_pass_def_n: "Plays behind the defense values: its pass plays outside garbage time (the n in the shrinkage)."
+  epa_pass_def_rank: Rank of epa_pass_def_shrunk (lowest = 1, ties averaged).
+  success_pass_def_raw: Raw success rate (share of plays with positive EPA) the defense allowed on pass plays outside garbage time.
+  success_pass_def_adj: "Always null: success rate (share of plays with positive EPA) on pass plays for the defense is published raw, since the opponent adjustment did not make it more reliable."
+  success_pass_def_shrunk: "Display value: the raw success rate (share of plays with positive EPA) the defense allowed on pass plays, shrunk toward the league mean by n / (n + 335.2)."
+  success_pass_def_n: "Plays behind the defense values: its pass plays outside garbage time (the n in the shrinkage)."
+  success_pass_def_rank: Rank of success_pass_def_shrunk (lowest = 1, ties averaged).
+  epa_passing_down_off_raw: Raw EPA per play the offense gained on passing downs (pass and rush plays outside garbage time).
+  epa_passing_down_off_adj: "Always null: EPA per play on passing downs for the offense is published raw, since the opponent adjustment did not make it more reliable."
+  epa_passing_down_off_shrunk: "Display value: the raw EPA per play the offense gained on passing downs, shrunk toward the league mean by n / (n + 245.3)."
+  epa_passing_down_off_n: "Plays behind the offense values: its pass and rush plays on passing downs outside garbage time (the n in the shrinkage)."
+  epa_passing_down_off_rank: Rank of epa_passing_down_off_shrunk (highest = 1, ties averaged).
+  epa_q1_off_raw: Raw EPA per play the offense gained on the first quarter (pass and rush plays outside garbage time).
+  epa_q1_off_adj: "Always null: EPA per play on the first quarter for the offense is published raw, since the opponent adjustment did not make it more reliable."
+  epa_q1_off_shrunk: "Display value: the raw EPA per play the offense gained on the first quarter, shrunk toward the league mean by n / (n + 165.2)."
+  epa_q1_off_n: "Plays behind the offense values: its pass and rush plays on the first quarter outside garbage time (the n in the shrinkage)."
+  epa_q1_off_rank: Rank of epa_q1_off_shrunk (highest = 1, ties averaged).
+  explosive_rate_off_raw: Raw explosive-play rate (pass EPA at least 2.4, rush EPA at least 1.8) the offense gained on all downs (pass and rush plays outside garbage time).
+  explosive_rate_off_adj: "Always null: explosive-play rate (pass EPA at least 2.4, rush EPA at least 1.8) on all downs for the offense is published raw, since the opponent adjustment did not make it more reliable."
+  explosive_rate_off_shrunk: "Display value: the raw explosive-play rate (pass EPA at least 2.4, rush EPA at least 1.8) the offense gained on all downs, shrunk toward the league mean by n / (n + 799.6)."
+  explosive_rate_off_n: "Plays behind the offense values: its pass and rush plays on all downs outside garbage time (the n in the shrinkage)."
+  explosive_rate_off_rank: Rank of explosive_rate_off_shrunk (highest = 1, ties averaged).
+  success_late_down_off_raw: Raw success rate (share of plays with positive EPA) the offense gained on third and fourth downs (pass and rush plays outside garbage time).
+  success_late_down_off_adj: "Always null: success rate (share of plays with positive EPA) on third and fourth downs is never opponent-adjusted; it is published raw with shrinkage."
+  success_late_down_off_shrunk: "Display value: the raw success rate (share of plays with positive EPA) the offense gained on third and fourth downs, shrunk toward the league mean by n / (n + 164.1)."
+  success_late_down_off_n: "Plays behind the offense values: its pass and rush plays on third and fourth downs outside garbage time (the n in the shrinkage)."
+  success_late_down_off_rank: Rank of success_late_down_off_shrunk (highest = 1, ties averaged).
+  success_late_down_def_raw: Raw success rate (share of plays with positive EPA) the defense allowed on third and fourth downs (pass and rush plays outside garbage time).
+  success_late_down_def_adj: "Always null: success rate (share of plays with positive EPA) on third and fourth downs is never opponent-adjusted; it is published raw with shrinkage."
+  success_late_down_def_shrunk: "Display value: the raw success rate (share of plays with positive EPA) the defense allowed on third and fourth downs, shrunk toward the league mean by n / (n + 184.9)."
+  success_late_down_def_n: "Plays behind the defense values: its pass and rush plays on third and fourth downs outside garbage time (the n in the shrinkage)."
+  success_late_down_def_rank: Rank of success_late_down_def_shrunk (lowest = 1, ties averaged).
+  epa_q2_off_raw: Raw EPA per play the offense gained on the second quarter (pass and rush plays outside garbage time).
+  epa_q2_off_adj: "Always null: EPA per play on the second quarter is never opponent-adjusted; it is published raw with shrinkage."
+  epa_q2_off_shrunk: "Display value: the raw EPA per play the offense gained on the second quarter, shrunk toward the league mean by n / (n + 237.9)."
+  epa_q2_off_n: "Plays behind the offense values: its pass and rush plays on the second quarter outside garbage time (the n in the shrinkage)."
+  epa_q2_off_rank: Rank of epa_q2_off_shrunk (highest = 1, ties averaged).
+  epa_q2_def_raw: Raw EPA per play the defense allowed on the second quarter (pass and rush plays outside garbage time).
+  epa_q2_def_adj: "Always null: EPA per play on the second quarter is never opponent-adjusted; it is published raw with shrinkage."
+  epa_q2_def_shrunk: "Display value: the raw EPA per play the defense allowed on the second quarter, shrunk toward the league mean by n / (n + 287.8)."
+  epa_q2_def_n: "Plays behind the defense values: its pass and rush plays on the second quarter outside garbage time (the n in the shrinkage)."
+  epa_q2_def_rank: Rank of epa_q2_def_shrunk (lowest = 1, ties averaged).
+  iso_ppp_def_raw: Raw EPA per play (isoPPP) the defense allowed on successful plays (pass and rush plays outside garbage time).
+  iso_ppp_def_adj: "Always null: EPA per play (isoPPP) on successful plays is never opponent-adjusted; it is published raw with shrinkage."
+  iso_ppp_def_shrunk: "Display value: the raw EPA per play (isoPPP) the defense allowed on successful plays, shrunk toward the league mean by n / (n + 299.2)."
+  iso_ppp_def_n: "Plays behind the defense values: its pass and rush plays on successful plays outside garbage time (the n in the shrinkage)."
+  iso_ppp_def_rank: Rank of iso_ppp_def_shrunk (lowest = 1, ties averaged).
 cfb_adjusted_tempo:
   adj_plays_game: Opponent-adjusted situation-neutral plays per game (iterative solver; higher = faster).
   adj_sec_play: Opponent-adjusted seconds elapsed per situation-neutral play (lower = faster).
