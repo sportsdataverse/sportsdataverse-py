@@ -13343,3 +13343,63 @@
   test: tests/mbb/test_mbb_tournament_runs.py::test_an_untagged_game_joins_its_tagged_tournament_or_keys_on_its_event_name
   expected: kill
   note: An untagged game of a tagged tournament (older seasons) would split its run in two.
+
+- id: bb-doubled-name-not-scored
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "sc = _SCORED_RE.match(c) or _DOUBLED_RE.match(c)"
+  mutant: "sc = _SCORED_RE.match(c)"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A doubled runner name ('Verlin, Nate Verlin, Nate.') printed where 'scored' belongs counts no run (2019-2026)."
+
+- id: bb-doubled-name-not-cut
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "rf\"|(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?![A-Za-z]))\""
+  mutant: "rf\"|(?P<dbl>{_NAME})(?!))\""
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A run-on doubled name stays inside the previous runner's clause and its run is lost."
+
+- id: bb-name-closes-advance-not-scored
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "or _name_closes(ac.group(1), c)"
+  mutant: "or False"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "'X advanced to third on an error by rf, X, unearned.' counts no run."
+
+- id: bb-name-closes-batter-not-scored
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "and (_THEN_SCORED_RE.search(primary) or _name_closes(out[\"batter\"], primary))"
+  mutant: "and (_THEN_SCORED_RE.search(primary))"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A batter who comes round with his own name in the 'scored' slot counts no run."
+
+- id: bb-advanced-to-home-not-scored
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "or (ac.group(2) == \"home\" and not is_out)"
+  mutant: "or False"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "'KEETER, Nathan advanced to home on a fielder's choice.' counts no run."
+
+- id: bb-advanced-to-home-out-scored
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "or (ac.group(2) == \"home\" and not is_out)"
+  mutant: "or (ac.group(2) == \"home\")"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A runner thrown out at home on 'advanced to home, out at home' would count a run."

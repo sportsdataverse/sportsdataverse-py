@@ -221,6 +221,48 @@ _RUNNER_CASES = [
     ("Gilbert, T. singled to right field, RBI (1-0 B) Dixon, B, scored.", 1, ["Dixon, B"], 0),
     # a one-letter first initial on a home run (2024)
     ("C Mcguire homered to left center, RBI (0-0).", 1, ["C Mcguire"], 0),
+    # the page prints the runner's name where "scored" belongs (2019 contest 1654161, 2023 contest 2398659)
+    (
+        "Hayes, Carter singled to left field, RBI Verlin, Nate advanced to second Free, James scored.",
+        1,
+        ["Free, James"],
+        0,
+    ),
+    (
+        "Ryan, Tyler doubled down the lf line, RBI Hayes, Carter advanced to third Verlin, Nate Verlin, Nate.",
+        1,
+        ["Verlin, Nate"],
+        0,
+    ),
+    (
+        "Williams doubled down the rf line, 2 RBI; Hanson advanced to third; Chatfield scored; Atkinson Atkinson, unearned.",
+        2,
+        ["Chatfield", "Atkinson"],
+        0,
+    ),
+    # ... or as the last item of the runner's own advance (2019 contest 1661692) or the batter's (2023 contest 2406783)
+    (
+        "Hunter Ruhstorfer singled to right field Dylan Watson advanced to second Kamrin Markwardt advanced to third"
+        " on an error by rf, Kamrin Markwardt, unearned.",
+        1,
+        ["Kamrin Markwardt"],
+        0,
+    ),
+    (
+        "S. Mongelli stole second, advanced to third on a throwing error by c, S. Mongelli, unearned.",
+        1,
+        ["S. Mongelli"],
+        0,
+    ),
+    # "advanced to home" is a run (2023 contest 2396369); thrown out at home is not
+    (
+        "HILLIER, Three grounded out to 2b, RBI; FOSTER, Cam advanced to second; TROYER, Camden advanced to third;"
+        " KEETER, Nathan advanced to home on a fielder's choice.",
+        1,
+        ["KEETER, Nathan"],
+        1,
+    ),
+    ("PICKENS doubled to right center (1-0) BIRKOFER advanced to home, out at home rf to ss to c.", 0, [], 1),
 ]
 
 
