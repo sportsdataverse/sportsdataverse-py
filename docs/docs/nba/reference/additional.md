@@ -255,6 +255,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [add_shot_make_prob](additional/analytics.md#add_shot_make_prob) | Add each field-goal attempt's make chance from the bundled location model. |
 | [add_start_type_detail](additional/analytics.md#add_start_type_detail) | Append the full pbpstats start-type taxonomy to a possession frame. |
 | [add_transition](additional/analytics.md#add_transition) | Flag possessions that started in transition, and time their initial play. |
+| [add_two_for_one_flags](additional/analytics.md#add_two_for_one_flags) | Append the 2-for-1 choice and its end-of-period outcome to possessions (BB-D44). |
 | [box_features](additional/analytics.md#box_features) | Aggregate per-player per-100-possession box features over a set of games. |
 | [build_play_context_shots](additional/analytics.md#build_play_context_shots) | Build the per-shot frame carrying CTG's play context. |
 | [build_possession_shooting](additional/analytics.md#build_possession_shooting) | Build the per-shooter companion frame from an enhanced play-by-play DataFrame. |
@@ -269,7 +270,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_availability](additional/analytics.md#nba_availability) | Project games-available % for a season (or seasons) from career GP history. |
 | [nba_box_events](additional/analytics.md#nba_box_events) | Each player's box counts per stats.nba.com action, the input of the stint and split box. |
 | [nba_box_logs](additional/analytics.md#nba_box_logs) | Fetch per-player and per-team game logs for a season (bulk, one call each). |
-| [nba_coach_careers](additional/analytics.md#nba_coach_careers) | Head-coach careers over `seasons`: `nba_coach_seasons` summed per coach, rates recomputed. |
+| [nba_coach_careers](additional/analytics-2.md#nba_coach_careers) | Head-coach careers over `seasons`: `nba_coach_seasons` summed per coach, rates recomputed. |
 | [nba_coach_seasons](additional/analytics-2.md#nba_coach_seasons) | Head-coach seasons: W-L, ratings and four factors over the games each coach was on the bench for. |
 | [nba_cup_sim](additional/analytics-2.md#nba_cup_sim) | NBA Cup sim as of a date: odds to win the group, take a wild card, reach each round and win. |
 | [nba_cup_standings](additional/analytics-2.md#nba_cup_standings) | NBA Cup Group Play standings as of a date, with the official tiebreak order and wild cards. |
@@ -284,7 +285,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_game_on_off](additional/analytics-2.md#nba_game_on_off) | In-game on/off: per player and game, the team with him on the floor and the rest of its game. |
 | [nba_game_player_box_splits](additional/analytics-2.md#nba_game_player_box_splits) | Player box by game, period and garbage time: minutes and counts from the play-by-play. |
 | [nba_game_player_impact](additional/analytics-2.md#nba_game_player_impact) | The game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
-| [nba_game_stints](additional/analytics-2.md#nba_game_stints) | Game stints: per player and game, every stretch on the floor with its clock, points and possessions. |
+| [nba_game_stints](additional/analytics-3.md#nba_game_stints) | Game stints: per player and game, every stretch on the floor with its clock, points and possessions. |
 | [nba_game_units](additional/analytics-3.md#nba_game_units) | In-game units: per 1- to 5-man set of teammates and game, minutes, ratings, four factors and shot zones. |
 | [nba_impact_rows](additional/analytics-3.md#nba_impact_rows) | Map the stats.nba.com releases onto the game-impact row frame. |
 | [nba_l2m](additional/analytics-3.md#nba_l2m) | Fetch and parse an NBA Last Two Minute report from official.nba.com. |
@@ -362,6 +363,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [starters_on_court_counts](additional/analytics-9.md#starters_on_court_counts) | Count, per possession, how many **starters** are on the floor across BOTH teams. |
 | [team_pace_projection](additional/analytics-9.md#team_pace_projection) | Expected possessions for a matchup (Phase-3 `expected_possessions`). |
 | [team_play_context](additional/analytics-9.md#team_play_context) | Roll possessions up into CTG's team Play-Context table. |
+| [two_for_one_summary](additional/analytics-9.md#two_for_one_summary) | How often teams go 2-for-1, how often it pays the extra possession, and clock-matched net points. |
 | [xpoints_baseline](additional/analytics-9.md#xpoints_baseline) | League-average FG% baseline table keyed by the three shot-zone columns. |
 | [zone_value_map](additional/analytics-9.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
 

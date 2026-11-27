@@ -12,7 +12,9 @@ Derivations beyond raw flags, per the metrics note:
 - garbage time: the scoreboard heuristic the site's spice levels use
   (up 38+ in Q2, 28+ in Q3, 22+ in Q4) -- non-garbage EPA ships next to raw;
 - depth of target: bucketed from air_yards (behind / short 0-9 / medium
-  10-19 / deep 20+); ESPN's pass_depth field is empty in practice.
+  10-19 / deep 20+). ESPN's own pass_depth label (deep = 20+ air yards) is
+  empty before 2025 Week 9, so the buckets read air_yards: one definition for
+  every season, with a short/medium edge the label does not draw.
 """
 
 from __future__ import annotations
@@ -343,7 +345,7 @@ def create_situational_stats(
             },
         }
 
-        # --- passing profile (air_yards buckets; pass_depth ships empty) ----
+        # --- passing profile (air_yards buckets; pass_depth is empty before 2025 Week 9) ----
         passes = mine.filter(_TRUE("pass") & (_TRUE("sack") == False))  # noqa: E712
         comps = passes.filter(_TRUE("completion"))
         depth = {}
