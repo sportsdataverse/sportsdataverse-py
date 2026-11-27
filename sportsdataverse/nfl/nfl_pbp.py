@@ -70,6 +70,7 @@ from sportsdataverse.football.espn_text import PASS_DIRECTION_RE as _PASS_DIRECT
 from sportsdataverse.football.espn_text import before_turnover as _before_turnover
 from sportsdataverse.football.espn_text import returned_for_touchdown as _returned_for_touchdown
 from sportsdataverse.football.play_participants import coalesce_participants as _coalesce_participants
+from sportsdataverse.football.play_participants import _LATERAL_RE, _LATERAL_ROLES
 from sportsdataverse.football.usage_box import SECTIONS as _USAGE_SECTIONS
 from sportsdataverse.football.usage_box import create_usage_box as _create_usage_box
 from sportsdataverse.football.series import add_series_data as _add_series_data
@@ -376,6 +377,37 @@ _NFL_NAME_SUFFIX_RE = re.compile(r"(?:,? (?:Jr|Sr)\.?|,? (?:III|II|IV)\b| (?:V|l
 _NFL_RECOVERY_RE = re.compile(r"(?i)recovered by\s+([A-Z]{2,3})-")
 _NFL_PENALTY_ON_RE = re.compile(r"(?i)penalty on\s+([A-Z]{2,3})\b")
 _NFL_ENFORCED_AT_RE = re.compile(r"(?i)enforced at\s+(?:([A-Z]{2,3})\s+)?(\d{1,2})\b")
+
+
+def _lateral_full_names(play_df: pl.DataFrame, full_names: dict[str, str]) -> pl.DataFrame:
+    """Give a lateral's credited catcher, carrier or returner the box score's full name.
+
+    On a lateral the participants join keeps the text's player for those roles (ESPN lists the
+    lateral's recipient there), so the name is the text's abbreviation ("A.St. Brown") while
+    every other play carries ESPN's display name. Where the role's id resolves to an athlete in
+    ``full_names`` (athlete id -> box-score display name), that name replaces the abbreviation;
+    an unresolved id keeps the text's name. ``athlete_name``, set from the rusher on a run,
+    follows the rusher's new name.
+    """
+    if not full_names or "text" not in play_df.columns:
+        return play_df
+    lateral = pl.col("text").fill_null("").str.contains(_LATERAL_RE)
+    exprs = []
+    new_rusher = None
+    for name_col in sorted(_LATERAL_ROLES):
+        id_col = name_col.replace("_name", "_id")
+        if name_col not in play_df.columns or id_col not in play_df.columns:
+            continue
+        box_name = pl.col(id_col).cast(pl.Utf8).replace_strict(full_names, default=None, return_dtype=pl.Utf8)
+        new = pl.when(lateral & pl.col(name_col).is_not_null() & box_name.is_not_null()).then(box_name)
+        new = new.otherwise(pl.col(name_col))
+        if name_col == "rusher_player_name":
+            new_rusher = new
+        exprs.append(new.alias(name_col))
+    if new_rusher is not None and "athlete_name" in play_df.columns:
+        follows = lateral & pl.col("athlete_name").eq_missing(pl.col("rusher_player_name"))
+        exprs.append(pl.when(follows).then(new_rusher).otherwise(pl.col("athlete_name")).alias("athlete_name"))
+    return play_df.with_columns(exprs) if exprs else play_df
 
 
 def _nfl_norm_abbr(abbr: str) -> str:
@@ -5337,6 +5369,7 @@ class NFLPlayProcess(object):
         with the participant athlete ids taking precedence. Falls back to the
         unchanged frame on any failure so offline paths are unaffected.
         """
+        self._participant_names_joined = False  # read by __attach_player_ids (lateral full names)
         passed = getattr(self, "participants", None)
         if passed is None and not getattr(self, "join_participants", True):
             return play_df
@@ -5360,6 +5393,7 @@ class NFLPlayProcess(object):
                     .then(pl.col("rusher_player_name"))
                     .otherwise(pl.col("athlete_name")),
                 )
+            self._participant_names_joined = True
             return joined
         except Exception as exc:
             logging.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
@@ -5417,7 +5451,13 @@ class NFLPlayProcess(object):
             if id_col in play_df.columns:
                 resolved = pl.coalesce(pl.col(id_col).cast(pl.Utf8), resolved)
             exprs.append(resolved.alias(id_col))
-        return play_df.with_columns(exprs) if exprs else play_df
+        out = play_df.with_columns(exprs) if exprs else play_df
+        full_names = {str(r["athlete_id"]): str(r["athlete"]) for r in rows if r.get("athlete_id") and r.get("athlete")}
+        if not getattr(self, "_participant_names_joined", False):
+            # without the participants join every play keeps the text name: a lateral must too, or one id
+            # would carry two names in a game (the box score groups by name)
+            return out
+        return _lateral_full_names(out, full_names)
 
     def __add_air_yards_cols(self, play_df):
         """Air yards / yards after catch for completions.

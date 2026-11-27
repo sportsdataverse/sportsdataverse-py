@@ -13343,3 +13343,14 @@
   test: tests/mbb/test_mbb_tournament_runs.py::test_an_untagged_game_joins_its_tagged_tournament_or_keys_on_its_event_name
   expected: kill
   note: An untagged game of a tagged tournament (older seasons) would split its run in two.
+
+# --- nfl-lateral-full-names: a lateral's credited player reads the box score's full name -----------
+- id: nfl-lateral-full-names-applied
+  group: nfl-lateral-full-names
+  finding: nfl-lateral-full-names
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        return _lateral_full_names(out, full_names)'
+  mutant: '        return out'
+  test: tests/nfl/test_nfl_lateral_full_names.py
+  expected: kill
+  note: A lateral's catcher, carrier or returner would keep the text's abbreviated name ("A.St. Brown").
