@@ -13433,3 +13433,13 @@
   test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
   expected: kill
   note: "'S. Mongelli stole home, S. Mongelli, unearned.' counts two runs."
+
+- id: bb-runner-clause-then-scored-fallback
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "if lr and _THEN_SCORED_RE.search(c):  # \"Mitchell,Mack advanced from second base, scored on play ...\" (2026)"
+  mutant: "if False:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "'Mitchell,Mack advanced from second base, scored on play ...' (2026) counts no run."

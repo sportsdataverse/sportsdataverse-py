@@ -270,6 +270,16 @@ _RUNNER_CASES = [
     ("Terrific sliding catch. Dah-nuh-nuh. Dah-nuh-nuh.", 0, [], 0),
     # a steal of home whose runner's name also closes the clause is one run, not two
     ("S. Mongelli stole home, S. Mongelli, unearned.", 1, ["S. Mongelli"], 0),
+    # "advanced from" a base, then scored (2026 contest 6501583)
+    (
+        "Bloomer,Chase singled to right field (2-1 BKB)3a Mitchell,Mack advanced from second base, scored on play and a"
+        " throwing error by Zirwas,Devan (E3)3a Niedzwiedz,Ryan advanced to second base.",
+        1,
+        ["Mitchell,Mack"],
+        0,
+    ),
+    # a steal of home that also says "scored" is one run (2026 contest 6501583)
+    ("Franck,Gage stole home, scored.", 1, ["Franck,Gage"], 0),
 ]
 
 

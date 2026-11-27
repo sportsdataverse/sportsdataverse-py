@@ -271,6 +271,11 @@ def _decompose(desc: str) -> "dict":
             out["runs_scored"] += 1
             out["scoring_runners"].append(sh.group(1))
             continue
+        lr = _LEADNAME_RE.match(c)
+        if lr and _THEN_SCORED_RE.search(c):  # "Mitchell,Mack advanced from second base, scored on play ..." (2026)
+            out["runs_scored"] += 1
+            out["scoring_runners"].append(lr.group(1))
+            continue
         if _OUT_RE.search(c.lower()):
             out["outs_on_play"] += 1
     # a row that opens with its runner scoring ("Mihos, D. scored on a wild pitch.") is a run too.
