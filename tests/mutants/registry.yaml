@@ -13358,7 +13358,7 @@
   group: bb-name-for-scored
   finding: bb-name-for-scored
   file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
-  snippet: "rf\"|(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?![A-Za-z]))\""
+  snippet: "rf\"|(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?=(?:,\\s*unearned)?\\s*(?:[.;]|3a|$)))\""
   mutant: "rf\"|(?P<dbl>{_NAME})(?!))\""
   test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
   expected: kill
@@ -13413,3 +13413,23 @@
   test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
   expected: kill
   note: "A commentary row ('Terrific sliding catch. Dah-nuh-nuh. Dah-nuh-nuh.') counts a run."
+
+- id: bb-doubled-name-must-end-clause
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "rf\"|(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?=(?:,\\s*unearned)?\\s*(?:[.;]|3a|$)))\""
+  mutant: "rf\"|(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?![A-Za-z]))\""
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k repeated_given_name_inside"
+  expected: kill
+  note: "'A Dai Dai singled to left field.' splits mid-name and loses its batter and single."
+
+- id: bb-stole-home-counted-twice
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "and out[\"batter\"] not in out[\"scoring_runners\"]  # \"X stole home, X, unearned.\" already counted"
+  mutant: "and True"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "'S. Mongelli stole home, S. Mongelli, unearned.' counts two runs."

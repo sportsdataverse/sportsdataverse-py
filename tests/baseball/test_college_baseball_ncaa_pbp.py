@@ -268,6 +268,8 @@ _RUNNER_CASES = [
     ("Hague, Teddy pinch hit for Otaka, Dai Dai.", 0, [], 0),
     ("ARIBAL, Matt pinch ran for GAZDAR, Jon Jon.", 0, [], 0),
     ("Terrific sliding catch. Dah-nuh-nuh. Dah-nuh-nuh.", 0, [], 0),
+    # a steal of home whose runner's name also closes the clause is one run, not two
+    ("S. Mongelli stole home, S. Mongelli, unearned.", 1, ["S. Mongelli"], 0),
 ]
 
 
@@ -316,3 +318,9 @@ def test_runner_led_row_and_out_after_advance() -> None:
     ).to_dicts()
     assert (lead["play_type"], lead["runners_advanced"]) == ("wild_pitch", ["Fogel, A.->second", "Kaler, K.->third"])
     assert (thrown_out["play_type"], thrown_out["outs_on_play"]) == ("double", 1)
+
+
+def test_repeated_given_name_inside_a_batter_name_does_not_split_the_clause() -> None:
+    """A doubled token mid-name ("A Dai Dai singled") is not the doubled-name scoring clause."""
+    row = decompose_college_baseball_plays([{"description": "A Dai Dai singled to left field."}]).row(0, named=True)
+    assert (row["batter"], row["play_type"], row["is_hit"], row["runs_scored"]) == ("A Dai Dai", "single", True, 0)

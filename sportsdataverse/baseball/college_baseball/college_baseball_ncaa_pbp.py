@@ -86,7 +86,7 @@ _SUB_FULL_RE = re.compile(rf"^{_SUB_NAME}\s+to\s+{_POS_CODES}\b(?:\s+for\s+{_SUB
 _RUNNER_START_RE = re.compile(
     rf"(?<![A-Za-z'.\-])(?!(?:RBI|SAC|SF)\b)(?:{_NAME},?\s+"
     r"(?:scored|advanced to|out (?:at|on)\b|stole|picked off|caught stealing)"
-    rf"|(?P<dbl>{_NAME}),?\s+(?P=dbl)(?![A-Za-z]))"
+    rf"|(?P<dbl>{_NAME}),?\s+(?P=dbl)(?=(?:,\s*unearned)?\s*(?:[.;]|3a|$)))"  # the name must END its clause
 )
 # stats.ncaa.org sometimes prints the runner's name where "scored" belongs, with the RBI count confirming the run:
 # a bare doubled name ("Verlin, Nate Verlin, Nate.", 2019) or the name closing its own advance
@@ -291,7 +291,12 @@ def _decompose(desc: str) -> "dict":
         out["runs_scored"] += 1
         out["scoring_runners"].append(out["batter"])
     # a standalone "<batter> stole home" primary is also a run.
-    if out["play_type"] == "stolen_base" and out["batter"] and "stole home" in primary.lower():
+    if (
+        out["play_type"] == "stolen_base"
+        and out["batter"]
+        and "stole home" in primary.lower()
+        and out["batter"] not in out["scoring_runners"]  # "X stole home, X, unearned." already counted
+    ):
         out["runs_scored"] += 1
         out["scoring_runners"].append(out["batter"])
     out["is_scoring_play"] = out["runs_scored"] > 0
