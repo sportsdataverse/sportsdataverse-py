@@ -113,3 +113,37 @@ def test_snaps_that_count_nobody_raise_in_the_projection(frames, monkeypatch):
     monkeypatch.setattr(av, "load_nfl_rosters", lambda *a, **k: frames["rosters"], raising=True)
     with pytest.raises(ValueError, match="gave no season availability"):
         av.nfl_availability_projection([2020, 2021, 2022, 2023], 2024)
+
+
+def test_one_bad_season_fails_although_the_pooled_rate_passes(frames):
+    live, bridge = frames["live"], frames["bridge"]
+    skill = (
+        (pl.col("game_type") == "REG")
+        & pl.col("position").is_in(["QB", "RB", "WR", "TE"])
+        & (pl.col("offense_snaps") > 0)
+    )
+    ids_2023 = live.filter(skill & (pl.col("season") == 2023))["pfr_player_id"].unique().sort()
+    gone = set(ids_2023.head(int(0.06 * ids_2023.len())).to_list())  # ~6% of 2023's ids missing from the crosswalk
+    broken = live.with_columns(
+        pl.when((pl.col("season") == 2023) & pl.col("pfr_player_id").is_in(list(gone)))
+        .then(pl.lit("x") + pl.col("pfr_player_id"))
+        .otherwise("pfr_player_id")
+        .alias("pfr_player_id")
+    )
+    rows = broken.filter(skill)
+    hit = pl.col("pfr_player_id").is_in(bridge["pfr_id"].implode())
+    assert rows.select(hit.mean()).item() >= av.SNAP_BRIDGE_MIN_MATCH  # pooled across seasons: passes
+    assert rows.filter(pl.col("season") == 2023).select(hit.mean()).item() < av.SNAP_BRIDGE_MIN_MATCH
+    with pytest.raises(ValueError, match="crosswalk is broken"):
+        av._snaps_by_gsis(broken, bridge)
+
+
+def test_gsis_keyed_snaps_still_drop_the_postseason(frames):
+    live, bridge = frames["live"], frames["bridge"]
+    keyed = live.join(bridge.select("pfr_id", "gsis_id"), left_on="pfr_player_id", right_on="pfr_id").rename(
+        {"gsis_id": "player_id"}
+    )
+    assert keyed["game_type"].n_unique() > 1
+    got = av._snaps_by_gsis(keyed, bridge)
+    assert got["game_type"].unique().to_list() == ["REG"]
+    assert got.height == keyed.filter(pl.col("game_type") == "REG").height

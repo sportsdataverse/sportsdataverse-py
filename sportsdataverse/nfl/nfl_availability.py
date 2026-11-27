@@ -8,7 +8,7 @@ projections only at composition time via :func:`compose_counting_projection`
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Literal, Optional, Union, overload
+from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
 
@@ -108,8 +108,8 @@ def season_availability(
     rosters: pl.DataFrame,
     *,
     team_games: int = 17,
-    injuries: Optional[pl.DataFrame] = None,
-    player_ids: Optional[pl.DataFrame] = None,
+    injuries: pl.DataFrame | None = None,
+    player_ids: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
     """Season availability rate per player from snap counts.
 
@@ -208,19 +208,19 @@ _PROJ_SCHEMA: dict = {
 
 @overload
 def nfl_availability_projection(
-    seasons: List[int], target_season: int, *, team_games: int = ..., return_as_pandas: Literal[False] = ...
+    seasons: list[int], target_season: int, *, team_games: int = ..., return_as_pandas: Literal[False] = ...
 ) -> pl.DataFrame: ...
 
 
 @overload
 def nfl_availability_projection(
-    seasons: List[int], target_season: int, *, team_games: int = ..., return_as_pandas: Literal[True]
-) -> "pd.DataFrame": ...
+    seasons: list[int], target_season: int, *, team_games: int = ..., return_as_pandas: Literal[True]
+) -> pd.DataFrame: ...
 
 
 def nfl_availability_projection(
-    seasons: List[int], target_season: int, *, team_games: int = 17, return_as_pandas: bool = False
-) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    seasons: list[int], target_season: int, *, team_games: int = 17, return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
     """Empirical-Bayes availability projection: expected fraction of team games.
 
     Shrinks each player's historical availability toward the fitted position
