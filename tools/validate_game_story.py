@@ -375,7 +375,7 @@ def run(lg: str, season: int, data_dir: Path | None) -> dict:
             "share": g1_pass / g1_n if g1_n else None,
             "wilson_lower": lower,
             "X": math.floor(100 * lower) if g1_n else None,
-            "fails": top.filter(pl.col("points_worth") <= 0)["game_id"].to_list(),
+            "fails": top.filter((pl.col("points_worth") > 0).fill_null(False) == False)["game_id"].to_list(),
         },
         "G2": {
             "n": g2.height,
