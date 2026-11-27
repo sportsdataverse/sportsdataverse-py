@@ -1,7 +1,7 @@
 """ESPN soccer team id -> reep team id crosswalk, with reep's ids at about 20 other providers.
 
 reep is a CC0 football id register: one row per club with its Wikidata, Transfermarkt, FBref, Opta,
-Sofascore, FotMob (and more) ids. It carries ESPN ids for only a couple of dozen clubs, so this table
+FotMob (and more) ids. It carries ESPN ids for only a couple of dozen clubs, so this table
 bridges the rest by name, matched only inside the league's country, and settles every ambiguous or
 unmatched name by hand (``tools/soccer_espn_reep_overrides.yaml``). The table is built by
 ``tools/build_soccer_espn_reep_crosswalk.py`` and bundled with sdv-py:

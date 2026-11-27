@@ -478,8 +478,11 @@ def soccer_espn_transfermarkt_player_crosswalk(
     athlete's citizenship. A 1 January birth date is too common a stand-in to count alone, so such an athlete is
     resolved only when exactly one same-date, same-name player also plays for the team's Transfermarkt club (or
     moved to it from 2025-07-01) or shares the citizenship. No player is matched to two athletes, and where the reep
-    register carries both ids they agree on 99% of 2,478 pairs. The Transfermarkt data ends in July 2026, so a
-    player who joined later can resolve with his previous club.
+    register carries both ids they agree on 99% of 2,478 pairs. Known limits: an ESPN birth date that belongs to a
+    same-surname player resolves to that player (about a dozen athletes found at review), first names are not
+    compared, and ESPN and Transfermarkt spell some countries differently ("USA", "Ivory Coast"), so the
+    citizenship checks never fire for those athletes. The Transfermarkt data ends in July 2026, so a player who
+    joined later can resolve with his previous club.
 
     Args:
         league: One of the seven ESPN league slugs above, to keep that league's rows; ``None`` (default) returns all.
