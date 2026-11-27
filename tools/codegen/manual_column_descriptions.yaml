@@ -84055,7 +84055,7 @@ load_soccer_transfermarkt_players:
   country_of_birth: Country of birth.
   city_of_birth: City of birth, as Transfermarkt writes it (may carry trailing non-breaking spaces).
   country_of_citizenship: First citizenship Transfermarkt lists.
-  date_of_birth: Date of birth.
+  date_of_birth: The player's date of birth as Transfermarkt records it.
   sub_position: Detailed position (e.g. 'Centre-Forward', 'Left-Back').
   position: Position group - 'Goalkeeper', 'Defender', 'Midfield', 'Attack' or 'Missing'.
   foot: Preferred foot - 'right', 'left' or 'both'; null when unknown.

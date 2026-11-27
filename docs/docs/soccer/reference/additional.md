@@ -740,7 +740,7 @@ polars.DataFrame | pandas.DataFrame: one row per `player_id` (Int64). `current_c
 | `country_of_birth` | String | Country of birth. |
 | `city_of_birth` | String | City of birth, as Transfermarkt writes it (may carry trailing non-breaking spaces). |
 | `country_of_citizenship` | String | First citizenship Transfermarkt lists. |
-| `date_of_birth` | Date | Date of birth. |
+| `date_of_birth` | Date | The player's date of birth as Transfermarkt records it. |
 | `sub_position` | String | Detailed position (e.g. 'Centre-Forward', 'Left-Back'). |
 | `position` | String | Position group - 'Goalkeeper', 'Defender', 'Midfield', 'Attack' or 'Missing'. |
 | `foot` | String | Preferred foot - 'right', 'left' or 'both'; null when unknown. |
