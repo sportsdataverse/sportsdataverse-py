@@ -556,7 +556,7 @@ xw.select("espn_team_id", "key_transfermarkt", "key_fbref").drop_nulls("key_tran
 Load the CC0 Transfermarkt clubs table: one row per club of the first-tier leagues the dataset covers.
 
 About 800 clubs, each with its league, squad profile and stadium as of its last season in the dataset.
-A snapshot current to 2026-07-06 (not refreshed), read from its published file on every call.
+A snapshot current to 2026-07-06 (not refreshed), read on every call from the release mirror.
 Licence: CC0 1.0.
 
 **Parameters**
@@ -591,9 +591,9 @@ polars.DataFrame | pandas.DataFrame: one row per `club_id` (Int64), the id `socc
 
 | Exception | Description |
 |---|---|
-| `ValueError` | The host answered 400 / 422. |
-| `NoDataError` | The host answered 404 (the file moved). |
-| `AssetFetchError` | The fetch failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV, or the file lacks a column this loader types. |
+| `ValueError` | The original source answered 400 / 422. |
+| `NoDataError` | The original source answered 404 (the file moved). |
+| `AssetFetchError` | The original source, read when the release mirror cannot be (with a warning), failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or lacks a column this loader types. |
 
 **Example**
 
@@ -614,7 +614,7 @@ soccer_espn_transfermarkt_team_crosswalk(league="eng.1").join(clubs, on="club_id
 Load the CC0 Transfermarkt competitions table: the leagues and cups the dataset covers.
 
 65 competitions: first-tier domestic leagues, domestic cups and international club competitions, read
-from the published file on every call. Licence: CC0 1.0.
+on every call from the release mirror. Licence: CC0 1.0.
 
 **Parameters**
 
@@ -644,9 +644,9 @@ polars.DataFrame | pandas.DataFrame: one row per `competition_id` (text, e.g. `"
 
 | Exception | Description |
 |---|---|
-| `ValueError` | The host answered 400 / 422. |
-| `NoDataError` | The host answered 404 (the file moved). |
-| `AssetFetchError` | The fetch failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV, or the file lacks a column this loader types. |
+| `ValueError` | The original source answered 400 / 422. |
+| `NoDataError` | The original source answered 404 (the file moved). |
+| `AssetFetchError` | The original source, read when the release mirror cannot be (with a warning), failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or lacks a column this loader types. |
 
 **Example**
 
@@ -666,8 +666,8 @@ comps.filter(pl.col("sub_type") == "first_tier")
 
 Load the CC0 Transfermarkt market-value history: one row per player and valuation date.
 
-About 656,000 valuations, from 2000 to 2026-06-12 (the snapshot is not refreshed), read from the
-published file on every call. Licence: CC0 1.0.
+About 656,000 valuations, from 2000 to 2026-06-12 (the snapshot is not refreshed), read on every call from
+the release mirror. Licence: CC0 1.0.
 
 **Parameters**
 
@@ -692,9 +692,9 @@ polars.DataFrame | pandas.DataFrame: one row per (`player_id`, `date`); `player_
 
 | Exception | Description |
 |---|---|
-| `ValueError` | The host answered 400 / 422. |
-| `NoDataError` | The host answered 404 (the file moved). |
-| `AssetFetchError` | The fetch failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV, or the file lacks a column this loader types. |
+| `ValueError` | The original source answered 400 / 422. |
+| `NoDataError` | The original source answered 404 (the file moved). |
+| `AssetFetchError` | The original source, read when the release mirror cannot be (with a warning), failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or lacks a column this loader types. |
 
 **Example**
 
@@ -716,7 +716,7 @@ Load the CC0 Transfermarkt players table: one row per player, with current club 
 
 About 50,000 players: everyone who appeared for a club of the first-tier leagues the dataset covers
 (Premier League, LaLiga, Bundesliga, Serie A, Ligue 1, MLS, Liga MX and about 20 more). A snapshot
-current to 2026-07-06 (not refreshed), read from its published file on every call. Licence: CC0 1.0.
+current to 2026-07-06 (not refreshed), read on every call from the release mirror. Licence: CC0 1.0.
 
 **Parameters**
 
@@ -761,9 +761,9 @@ polars.DataFrame | pandas.DataFrame: one row per `player_id` (Int64). `current_c
 
 | Exception | Description |
 |---|---|
-| `ValueError` | The host answered 400 / 422. |
-| `NoDataError` | The host answered 404 (the file moved). |
-| `AssetFetchError` | The fetch failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV, or the file lacks a column this loader types. |
+| `ValueError` | The original source answered 400 / 422. |
+| `NoDataError` | The original source answered 404 (the file moved). |
+| `AssetFetchError` | The original source, read when the release mirror cannot be (with a warning), failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or lacks a column this loader types. |
 
 **Example**
 
@@ -784,7 +784,7 @@ players.sort("market_value_in_eur", descending=True, nulls_last=True).head(10)
 Load the CC0 Transfermarkt transfers table: one row per player move between clubs, with its fee.
 
 About 175,000 transfers involving the clubs the dataset covers, to the 2025-26 season (the snapshot is
-current to 2026-07-06 and not refreshed), read from the published file on every call. Licence: CC0 1.0.
+current to 2026-07-06 and not refreshed), read on every call from the release mirror. Licence: CC0 1.0.
 
 **Parameters**
 
@@ -813,9 +813,9 @@ polars.DataFrame | pandas.DataFrame: one row per transfer. `player_id`, `from_cl
 
 | Exception | Description |
 |---|---|
-| `ValueError` | The host answered 400 / 422. |
-| `NoDataError` | The host answered 404 (the file moved). |
-| `AssetFetchError` | The fetch failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV, or the file lacks a column this loader types. |
+| `ValueError` | The original source answered 400 / 422. |
+| `NoDataError` | The original source answered 404 (the file moved). |
+| `AssetFetchError` | The original source, read when the release mirror cannot be (with a warning), failed (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or lacks a column this loader types. |
 
 **Example**
 
