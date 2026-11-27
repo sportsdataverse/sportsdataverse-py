@@ -1,8 +1,8 @@
 """Build ``sportsdataverse/soccer/data/espn_transfermarkt_player_crosswalk.csv``: ESPN athlete -> Transfermarkt player.
 
-The rule and gate were fixed before scoring (ClaudeCowork ``specs/2026-11-26-soccer-tm-player-bridge-prereg.md``,
-Amendment 2). Population: the athletes on the ESPN rosters of the first-tier ESPN teams whose Transfermarkt club is in
-the clubs table. Candidates: every Transfermarkt player. A candidate matches on the same birth date and at least one
+The rule and gate were fixed before scoring, by a pre-registration dated 2026-11-26 (its Amendment 2).
+Population: the athletes on the ESPN rosters of the first-tier ESPN teams whose Transfermarkt club is in the clubs
+table. Candidates: every Transfermarkt player. A candidate matches on the same birth date and at least one
 shared name token (ESPN last name, or display name when it is empty, against the Transfermarkt name):
 
 - one candidate -> resolved (``name_dob``); several -> the one whose citizenship equals the ESPN citizenship, if exactly
