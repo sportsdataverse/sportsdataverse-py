@@ -8,11 +8,11 @@ projections only at composition time via :func:`compose_counting_projection`
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Literal, Optional, Union, overload
+from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
 
-from sportsdataverse.nfl.nfl_loaders import load_nfl_rosters, load_nfl_snap_counts
+from sportsdataverse.nfl.nfl_loaders import load_nfl_ff_playerids, load_nfl_rosters, load_nfl_snap_counts
 from sportsdataverse.nfl.nfl_projection_constants import _season_rosters, as_of_season_split, get_position_constants
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -43,12 +43,73 @@ _SEASON_SCHEMA: dict = {
 }
 
 
+#: share of regular-season skill-position snap rows (QB/RB/WR/TE with offense snaps) the PFR -> gsis bridge must
+#: place in every season; 2020-2023 match at 0.9972-0.9986 by season (lowest season-position cell 0.991, 2023 TE),
+#: so a lower rate means the crosswalk broke
+SNAP_BRIDGE_MIN_MATCH = 0.98
+
+
+def _check_bridge_rate(reg: pl.DataFrame, pfr_ids: pl.Series) -> None:
+    """Raise when a season's skill-position snap rows find a gsis id less often than ``SNAP_BRIDGE_MIN_MATCH``."""
+    skill = reg.filter(pl.col("position").is_in(["QB", "RB", "WR", "TE"]) & (pl.col("offense_snaps") > 0))
+    if skill.height == 0:
+        return
+    rates = skill.group_by("season").agg(pl.col("pfr_player_id").is_in(pfr_ids.implode()).mean().alias("rate"))
+    worst = rates.sort("rate").row(0, named=True)
+    if worst["rate"] < SNAP_BRIDGE_MIN_MATCH:
+        raise ValueError(
+            f"only {worst['rate']:.1%} of {worst['season']} skill-position snap rows map to a gsis id "
+            f"(floor {SNAP_BRIDGE_MIN_MATCH:.0%}): the PFR -> gsis crosswalk is broken"
+        )
+
+
+def _snaps_by_gsis(snaps: pl.DataFrame, player_ids: pl.DataFrame) -> pl.DataFrame:
+    """Regular-season snap counts keyed by gsis ``player_id``, bridged from PFR ids as the fitted corpus was.
+
+    ``tests/fixtures/nfl_projection/snap_counts_2020_2023.parquet`` (the sample ``EB_PRIOR_SEASONS``,
+    ``AVAIL_RECAL`` and the position ``base_availability`` were fit on) is ``load_nfl_snap_counts`` regular-season
+    rows inner-joined to ``load_nfl_ff_playerids()`` on ``pfr_player_id == pfr_id``. Unlike that plain join, a
+    mapping that is ambiguous either way (one PFR id to two gsis ids, or two PFR ids to one gsis id) is dropped
+    rather than crediting or doubling a player; the 2026-11-26 crosswalk has none over the 2020-2023 snap ids.
+
+    Raises:
+        ValueError: On non-empty snaps with neither ``player_id`` nor ``pfr_player_id``, or when a season's
+            skill-position rows find a gsis id less often than ``SNAP_BRIDGE_MIN_MATCH``.
+        TypeError: When ``pfr_player_id`` / ``pfr_id`` are not both text.
+    """
+    if snaps.height == 0:
+        return snaps
+    reg = snaps.filter(pl.col("game_type") == "REG") if "game_type" in snaps.columns else snaps
+    if "player_id" in reg.columns:
+        return reg
+    if "pfr_player_id" not in reg.columns:
+        raise ValueError(f"snap counts carry neither player_id nor pfr_player_id: {snaps.columns}")
+    if not (reg.schema["pfr_player_id"] == player_ids.schema["pfr_id"] == pl.Utf8):
+        raise TypeError(
+            f"pfr_player_id is {reg.schema['pfr_player_id']} and pfr_id is {player_ids.schema['pfr_id']}; both must be "
+            "String (cast the raw ids at the loader, never a float)"
+        )
+    bridge = (
+        player_ids.select("pfr_id", pl.col("gsis_id").cast(pl.Utf8))
+        .drop_nulls()
+        .unique()
+        .filter((pl.len().over("pfr_id") == 1) & (pl.len().over("gsis_id") == 1))
+    )
+    _check_bridge_rate(reg, bridge["pfr_id"])
+    return (
+        reg.join(bridge, left_on="pfr_player_id", right_on="pfr_id", how="inner")
+        .rename({"gsis_id": "player_id"})
+        .with_columns(pl.col("season").cast(pl.Int64), pl.col("week").cast(pl.Int64))
+    )
+
+
 def season_availability(
     snap_counts: pl.DataFrame,
     rosters: pl.DataFrame,
     *,
     team_games: int = 17,
-    injuries: Optional[pl.DataFrame] = None,
+    injuries: pl.DataFrame | None = None,
+    player_ids: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
     """Season availability rate per player from snap counts.
 
@@ -57,13 +118,16 @@ def season_availability(
 
     Args:
         snap_counts (pl.DataFrame): Weekly snap counts (``player_id, season,
-            week, offense_snaps``).
+            week, offense_snaps``), or :func:`sportsdataverse.nfl.load_nfl_snap_counts` rows
+            (keyed by ``pfr_player_id``) together with ``player_ids``.
         rosters (pl.DataFrame): Season rosters: :func:`sportsdataverse.nfl.load_nfl_rosters`
             (``gsis_id``, ``season``, ``position``, ``birth_date``) or a frame carrying
             ``player_id, season, position, age``.
         team_games (int): Regular-season team games (17 from 2021).
         injuries (Optional[pl.DataFrame]): Optional weekly injury report frame
             (``player_id, season, week``); counted into ``injury_weeks``.
+        player_ids (Optional[pl.DataFrame]): :func:`sportsdataverse.nfl.load_nfl_ff_playerids` rows; when
+            given, PFR-keyed snap counts are bridged to gsis ids (regular season only).
 
     Returns:
         pl.DataFrame: One row per (player_id, season): ``player_id:Utf8,
@@ -71,12 +135,21 @@ def season_availability(
         availability_rate:Float64, injury_weeks:Float64``. Empty input returns
         a zero-row frame with that schema.
 
+    Raises:
+        ValueError: When ``snap_counts`` is keyed by ``pfr_player_id`` and no ``player_ids`` is given, or the
+            bridge places fewer than ``SNAP_BRIDGE_MIN_MATCH`` of a season's skill-position rows.
+        TypeError: When the PFR id columns are not both text.
+
     Example:
         Quick start::
 
             import sportsdataverse.nfl as nfl
             from sportsdataverse.nfl.nfl_availability import season_availability
-            avail = season_availability(nfl.load_nfl_snap_counts([2023]), nfl.load_nfl_rosters([2023]))
+            avail = season_availability(
+                nfl.load_nfl_snap_counts([2023]),
+                nfl.load_nfl_rosters([2023]),
+                player_ids=nfl.load_nfl_ff_playerids(),
+            )
 
     See Also:
         * `nflverse`_ -- full data ecosystem (R + Python)
@@ -84,6 +157,11 @@ def season_availability(
     .. _nflverse: https://nflverse.nflverse.com
     """
     required = {"player_id", "season", "week", "offense_snaps"}
+    if snap_counts.height and "player_id" not in snap_counts.columns and "pfr_player_id" in snap_counts.columns:
+        if player_ids is None:
+            # load_nfl_snap_counts is keyed by PFR id; counting it as empty silently projected nobody
+            raise ValueError("snap counts keyed by pfr_player_id: pass player_ids=load_nfl_ff_playerids()")
+        snap_counts = _snaps_by_gsis(snap_counts, player_ids)
     if snap_counts.height == 0 or not required.issubset(snap_counts.columns):
         return pl.DataFrame(schema=_SEASON_SCHEMA)
     sc = snap_counts.with_columns(
@@ -130,19 +208,19 @@ _PROJ_SCHEMA: dict = {
 
 @overload
 def nfl_availability_projection(
-    seasons: List[int], target_season: int, *, team_games: int = ..., return_as_pandas: Literal[False] = ...
+    seasons: list[int], target_season: int, *, team_games: int = ..., return_as_pandas: Literal[False] = ...
 ) -> pl.DataFrame: ...
 
 
 @overload
 def nfl_availability_projection(
-    seasons: List[int], target_season: int, *, team_games: int = ..., return_as_pandas: Literal[True]
-) -> "pd.DataFrame": ...
+    seasons: list[int], target_season: int, *, team_games: int = ..., return_as_pandas: Literal[True]
+) -> pd.DataFrame: ...
 
 
 def nfl_availability_projection(
-    seasons: List[int], target_season: int, *, team_games: int = 17, return_as_pandas: bool = False
-) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    seasons: list[int], target_season: int, *, team_games: int = 17, return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
     """Empirical-Bayes availability projection: expected fraction of team games.
 
     Shrinks each player's historical availability toward the fitted position
@@ -179,7 +257,9 @@ def nfl_availability_projection(
     """
     snaps = load_nfl_snap_counts(list(seasons))
     rosters = load_nfl_rosters(list(seasons))
-    season_avail = season_availability(snaps, rosters, team_games=team_games)
+    season_avail = season_availability(snaps, rosters, team_games=team_games, player_ids=load_nfl_ff_playerids())
+    if snaps.height and season_avail.height == 0:
+        raise ValueError(f"{snaps.height} snap-count rows gave no season availability: columns {snaps.columns}")
     hist = as_of_season_split(season_avail, target_season)
     if hist.height == 0:
         result = pl.DataFrame(schema=_PROJ_SCHEMA)

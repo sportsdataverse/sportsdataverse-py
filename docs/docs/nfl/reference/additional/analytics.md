@@ -113,7 +113,7 @@ out = compose_counting_projection(rate_frame, avail_frame)
 
 ### nfl_availability_projection {#nfl_availability_projection}
 
-`nfl_availability_projection(seasons: 'List[int]', target_season: 'int', *, team_games: 'int' = 17, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`nfl_availability_projection(seasons: 'list[int]', target_season: 'int', *, team_games: 'int' = 17, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Empirical-Bayes availability projection: expected fraction of team games.
 
