@@ -69,6 +69,9 @@ _SCORED_RE = re.compile(rf"^({_NAME}),?\s+scored")  # "Dixon, B, scored" (2013)
 # A runner (or the batter) who moves up and then scores in one clause: "... advanced to third, scored on an error".
 _THEN_SCORED_RE = re.compile(r",\s*scored\b")
 _ADVANCED_RE = re.compile(rf"^({_NAME})\s+advanced to (\w+)")
+# Present-tense pages (2022-2024) put each run in its own sentence: "... left field. Brown scores. Cates scores",
+# or lead with it: "Booker scores on steal of home". The past-tense pages never write "scores".
+_PRESENT_SCORES_RE = re.compile(rf"(?:^|\.\s+)({_NAME}) scores\b")
 _OUT_RE = re.compile(r"\bout (?:at|on)\b")
 _POS_CODES = r"(?:p|1b|2b|3b|ss|lf|cf|rf|c|dh|ph|pr|dp|flex)"
 # A "Last", "Last, F", or legacy "First Last" name (no intervening verbs).
@@ -115,42 +118,43 @@ def _classify(rest: str) -> "tuple[str, dict]":
     # order: specific before general (substitution is detected upstream in _decompose)
     if "double play" in low:
         return "double_play", {"is_double_play": True, "is_out": True}
-    if low.startswith("singled"):
+    # present-tense pages (2022-2024: "Simon homers on a line drive ...") use the same play types
+    if low.startswith(("singled", "singles")):
         return "single", {"is_hit": True}
-    if low.startswith("doubled"):
+    if low.startswith(("doubled", "doubles")):
         return "double", {"is_hit": True}
-    if low.startswith("tripled"):
+    if low.startswith(("tripled", "triples")):
         return "triple", {"is_hit": True}
-    if low.startswith("homered"):
+    if low.startswith(("homered", "homers")):
         return "home_run", {"is_hit": True}
-    if low.startswith("walked") or "intentionally walked" in low:
+    if low.startswith(("walked", "walks")) or "intentionally walked" in low:
         return "walk", x
-    if low.startswith("hit by pitch"):
+    if low.startswith(("hit by pitch", "is hit by pitch")):
         return "hit_by_pitch", x
-    if low.startswith("struck out"):
+    if low.startswith(("struck out", "strikes out")):
         t = "swinging" if "swinging" in low else ("looking" if "looking" in low else None)
         return "strikeout", {"is_out": True, "strikeout_type": t}
-    if low.startswith("grounded out"):
+    if low.startswith(("grounded out", "grounds out")):
         return "groundout", {"is_out": True, "hit_trajectory": "ground"}
-    if low.startswith("flied out") or low.startswith("flied into"):
+    if low.startswith(("flied out", "flied into", "flies out")):
         return "flyout", {"is_out": True, "hit_trajectory": "fly"}
-    if low.startswith("lined out") or low.startswith("lined into"):
+    if low.startswith(("lined out", "lined into", "lines out")):
         return "lineout", {"is_out": True, "hit_trajectory": "line"}
-    if low.startswith("popped up"):
+    if low.startswith(("popped up", "pops up", "pops out")):
         return "popup", {"is_out": True, "hit_trajectory": "pop"}
     if low.startswith("fouled out"):
         return "foulout", {"is_out": True, "hit_trajectory": "foul"}
     if re.search(r"fielder'?s choice", low):  # 2020 pages drop the apostrophe
         return "fielders_choice", x
-    if re.search(r"reached on (?:an? )?(?:throwing |fielding )?error", low):
+    if re.search(r"reach(?:ed|es) on (?:an? )?(?:throwing |fielding )?error", low):
         return "reached_on_error", x
-    if "stole " in low:
+    if "stole " in low or low.startswith("steals"):
         return "stolen_base", x
     if "wild pitch" in low:
         return "wild_pitch", x
     if "passed ball" in low:
         return "passed_ball", x
-    if low.startswith("advanced to") or "advanced to" in low[:20]:
+    if low.startswith(("advanced to", "advances to")) or "advanced to" in low[:20]:
         return "runner_advance", x
     if _OUT_RE.search(low):
         return "out", {"is_out": True}
@@ -189,7 +193,12 @@ def _decompose(desc: str) -> "dict":
         return out
     primary = clauses[0]
     plow = primary.lower()
-    if _SUB_FULL_RE.match(primary) or "pinch hit for" in plow or "pinch ran for" in plow:
+    if (
+        _SUB_FULL_RE.match(primary)
+        or "pinch hit for" in plow
+        or "pinch ran for" in plow
+        or plow.startswith("lineup changed")  # present-tense pages: "Lineup changed: Fluet in at pitcher"
+    ):
         # roster move (defensive change / pitching change / pinch hitter-runner);
         # no batter/count/RBI to lift -- keep the raw description.
         out["play_type"] = "substitution"
@@ -291,6 +300,9 @@ def _decompose(desc: str) -> "dict":
         # the batter comes all the way round: "Vitaletti tripled to center field, scored on a throwing error"
         out["runs_scored"] += 1
         out["scoring_runners"].append(out["batter"])
+    for pm in _PRESENT_SCORES_RE.finditer(desc):
+        out["runs_scored"] += 1
+        out["scoring_runners"].append(pm.group(1))
     # on a home run the batter also scores, but NCAA text only lists the runners.
     if out["play_type"] == "home_run" and out["batter"]:
         out["runs_scored"] += 1

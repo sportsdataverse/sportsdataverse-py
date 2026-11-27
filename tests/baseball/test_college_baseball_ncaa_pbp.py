@@ -282,7 +282,43 @@ _RUNNER_CASES = [
     ("Franck,Gage stole home, scored.", 1, ["Franck,Gage"], 0),
     # a run-on "advanced from" runner clause splits off too (CodeRabbit on #1356)
     ("Smith singled to right field, RBI Jones advanced from second base, scored.", 1, ["Jones"], 0),
+    # present-tense pages (2022-2024): each run is its own sentence, or leads the row (2023 contests 2391328, 2390316)
+    ("Simon homers on a line drive to left field. Brown scores. Cates scores", 3, ["Brown", "Cates", "Simon"], 0),
+    ("Booker scores on steal of home", 1, ["Booker"], 0),
+    (
+        "Castillo hits a ground ball and reaches on an error by shortstop Weaver. Goudeau scores. Vidato scores",
+        2,
+        ["Goudeau", "Vidato"],
+        0,
+    ),
+    ("Weaver grounds out to third baseman Castillo. Johnson II scores", 1, ["Johnson II"], 1),
+    ("Mims steals 2nd", 0, [], 0),
 ]
+
+
+def test_present_tense_rows_classify() -> None:
+    """2023 contests 2391617 / 2390316 / 2392056: the present-tense verbs map to the past-tense play types."""
+    rows = decompose_college_baseball_plays(
+        [
+            {"description": "Micah singles on a ground ball to third baseman Holmes. Jackson scores"},
+            {"description": "Brown walks, McClendon pitching"},
+            {"description": "Willis strikes out looking"},
+            {"description": "Mims steals 2nd"},
+            {"description": "Figueroa advances to 3rd on passed ball"},
+            {"description": "Mims hits a ground ball and reaches on an error by shortstop Jones"},
+            {"description": "Lineup changed: Fluet in at pitcher"},
+        ]
+    ).to_dicts()
+    assert [(r["play_type"], r["is_out"]) for r in rows] == [
+        ("single", False),
+        ("walk", False),
+        ("strikeout", True),
+        ("stolen_base", False),
+        ("passed_ball", False),
+        ("reached_on_error", False),
+        ("substitution", False),
+    ]
+    assert rows[-1]["batter"] is None
 
 
 @pytest.mark.parametrize(("desc", "runs", "runners", "outs"), _RUNNER_CASES)
