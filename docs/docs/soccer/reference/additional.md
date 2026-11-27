@@ -504,24 +504,24 @@ polars.DataFrame | pandas.DataFrame: one row per `espn_team_id` (unique). Every 
 | `key_wikidata` | String | Wikidata entity id of the club (e.g. 'Q18656'). |
 | `key_transfermarkt` | String | Transfermarkt club id, digits as text (e.g. '985'). |
 | `key_fbref` | String | FBref squad id (8 hex characters). |
-| `key_soccerway` | String | Soccerway's id for the club as reep records it (text); null when reep has none. |
+| `key_soccerway` | String | Soccerway's numeric id for the club, as text (e.g. '725' for Hull City). |
 | `key_opta` | String | Opta team UUID (25 alphanumeric characters). |
 | `key_opta_numeric` | String | Opta numeric team id. |
 | `key_kicker` | String | kicker.de club slug. |
-| `key_flashscore` | String | Flashscore's id for the club as reep records it (text); null when reep has none. |
-| `key_sofascore` | String | Sofascore's id for the club as reep records it (text); null when reep has none. |
-| `key_soccerbase` | String | Soccerbase's id for the club as reep records it (text); null when reep has none. |
-| `key_uefa` | String | UEFA's id for the club as reep records it (text); null when reep has none. |
+| `key_flashscore` | String | Flashscore's slug/id path for the club (e.g. 'liverpool/lId4TMwf'); set for only a few clubs. |
+| `key_sofascore` | String | Sofascore's id for the club; the register release bundled here carries none for these clubs, so every row is null. |
+| `key_soccerbase` | String | Soccerbase's numeric id for the club, as text (e.g. '1310' for Hull City). |
+| `key_uefa` | String | UEFA's numeric club id (uefa.com), as text (e.g. '2600537' for Hull City). |
 | `key_footballdatabase_eu` | String | footballdatabase.eu club id. |
 | `key_worldfootball` | String | worldfootball.net club slug. |
 | `key_playmakerstats` | String | playmakerstats.com team id. |
 | `key_clubelo` | String | ClubElo club name (the key its ratings use, e.g. 'ManUnited'). |
-| `key_sportmonks` | String | Sportmonks's id for the club as reep records it (text); null when reep has none. |
+| `key_sportmonks` | String | Sportmonks' numeric team id, as text (e.g. '22' for Hull City). |
 | `key_api_football` | String | API-Football team id. |
-| `key_sofifa` | String | SoFIFA's id for the club as reep records it (text); null when reep has none. |
-| `key_fotmob` | String | FotMob's id for the club as reep records it (text); null when reep has none. |
-| `key_thesportsdb` | String | TheSportsDB's id for the club as reep records it (text); null when reep has none. |
-| `key_understat` | String | Understat's id for the club as reep records it (text); null when reep has none. |
+| `key_sofifa` | String | SoFIFA's numeric team id (the EA FC ratings site), as text (e.g. '1' for Arsenal). |
+| `key_fotmob` | String | FotMob's numeric team id, as text (e.g. '10204' for Brighton & Hove Albion). |
+| `key_thesportsdb` | String | TheSportsDB's numeric team id, as text (e.g. '133617' for Hull City). |
+| `key_understat` | String | Understat's numeric team id, as text (e.g. '244' for Brentford); null for clubs Understat does not cover. |
 | `key_capology` | String | Capology club slug. |
 | `match_method` | String | How the ESPN team was tied to reep. 'key_espn' (reep already carries this ESPN id), 'name' (exactly one reep row in the league's country shares a normalized name or alias), 'review' (settled by hand in tools/soccer_espn_reep_overrides.yaml), 'unmatched' (reviewed; no reep row is this club, reep columns null). |
 
@@ -740,7 +740,7 @@ polars.DataFrame | pandas.DataFrame: one row per `player_id` (Int64). `current_c
 | `country_of_birth` | String | Country of birth. |
 | `city_of_birth` | String | City of birth, as Transfermarkt writes it (may carry trailing non-breaking spaces). |
 | `country_of_citizenship` | String | First citizenship Transfermarkt lists. |
-| `date_of_birth` | Date | The player's date of birth as Transfermarkt records it. |
+| `date_of_birth` | Date | Player's date of birth as Transfermarkt records it (Date); null for about 50 players. |
 | `sub_position` | String | Detailed position (e.g. 'Centre-Forward', 'Left-Back'). |
 | `position` | String | Position group - 'Goalkeeper', 'Defender', 'Midfield', 'Attack' or 'Missing'. |
 | `foot` | String | Preferred foot - 'right', 'left' or 'both'; null when unknown. |
@@ -842,8 +842,11 @@ player: exactly one player with the same birth date and a shared name token, or,
 athlete's citizenship. A 1 January birth date is too common a stand-in to count alone, so such an athlete is
 resolved only when exactly one same-date, same-name player also plays for the team's Transfermarkt club (or
 moved to it from 2025-07-01) or shares the citizenship. No player is matched to two athletes, and where the reep
-register carries both ids they agree on 99% of 2,478 pairs. The Transfermarkt data ends in July 2026, so a
-player who joined later can resolve with his previous club.
+register carries both ids they agree on 99% of 2,478 pairs. Known limits: an ESPN birth date that belongs to a
+same-surname player resolves to that player (about a dozen athletes found at review), first names are not
+compared, and ESPN and Transfermarkt spell some countries differently ("USA", "Ivory Coast"), so the
+citizenship checks never fire for those athletes. The Transfermarkt data ends in July 2026, so a player who
+joined later can resolve with his previous club.
 
 **Parameters**
 

@@ -84004,24 +84004,25 @@ soccer_espn_reep_team_crosswalk:
   key_wikidata: Wikidata entity id of the club (e.g. 'Q18656').
   key_transfermarkt: Transfermarkt club id, digits as text (e.g. '985').
   key_fbref: FBref squad id (8 hex characters).
-  key_soccerway: Soccerway's id for the club as reep records it (text); null when reep has none.
+  key_soccerway: Soccerway's numeric id for the club, as text (e.g. '725' for Hull City).
   key_opta: Opta team UUID (25 alphanumeric characters).
   key_opta_numeric: Opta numeric team id.
   key_kicker: kicker.de club slug.
-  key_flashscore: Flashscore's id for the club as reep records it (text); null when reep has none.
-  key_sofascore: Sofascore's id for the club as reep records it (text); null when reep has none.
-  key_soccerbase: Soccerbase's id for the club as reep records it (text); null when reep has none.
-  key_uefa: UEFA's id for the club as reep records it (text); null when reep has none.
+  key_flashscore: Flashscore's slug/id path for the club (e.g. 'liverpool/lId4TMwf'); set for only a few clubs.
+  key_sofascore: Sofascore's id for the club; the register release bundled here carries none for these clubs, so
+    every row is null.
+  key_soccerbase: Soccerbase's numeric id for the club, as text (e.g. '1310' for Hull City).
+  key_uefa: UEFA's numeric club id (uefa.com), as text (e.g. '2600537' for Hull City).
   key_footballdatabase_eu: footballdatabase.eu club id.
   key_worldfootball: worldfootball.net club slug.
   key_playmakerstats: playmakerstats.com team id.
   key_clubelo: ClubElo club name (the key its ratings use, e.g. 'ManUnited').
-  key_sportmonks: Sportmonks's id for the club as reep records it (text); null when reep has none.
+  key_sportmonks: Sportmonks' numeric team id, as text (e.g. '22' for Hull City).
   key_api_football: API-Football team id.
-  key_sofifa: SoFIFA's id for the club as reep records it (text); null when reep has none.
-  key_fotmob: FotMob's id for the club as reep records it (text); null when reep has none.
-  key_thesportsdb: TheSportsDB's id for the club as reep records it (text); null when reep has none.
-  key_understat: Understat's id for the club as reep records it (text); null when reep has none.
+  key_sofifa: SoFIFA's numeric team id (the EA FC ratings site), as text (e.g. '1' for Arsenal).
+  key_fotmob: FotMob's numeric team id, as text (e.g. '10204' for Brighton & Hove Albion).
+  key_thesportsdb: TheSportsDB's numeric team id, as text (e.g. '133617' for Hull City).
+  key_understat: Understat's numeric team id, as text (e.g. '244' for Brentford); null for clubs Understat does not cover.
   key_capology: Capology club slug.
   match_method: How the ESPN team was tied to reep. 'key_espn' (reep already carries this ESPN id), 'name' (exactly one
     reep row in the league's country shares a normalized name or alias), 'review' (settled by hand in
@@ -84055,7 +84056,7 @@ load_soccer_transfermarkt_players:
   country_of_birth: Country of birth.
   city_of_birth: City of birth, as Transfermarkt writes it (may carry trailing non-breaking spaces).
   country_of_citizenship: First citizenship Transfermarkt lists.
-  date_of_birth: The player's date of birth as Transfermarkt records it.
+  date_of_birth: Player's date of birth as Transfermarkt records it (Date); null for about 50 players.
   sub_position: Detailed position (e.g. 'Centre-Forward', 'Left-Back').
   position: Position group - 'Goalkeeper', 'Defender', 'Midfield', 'Attack' or 'Missing'.
   foot: Preferred foot - 'right', 'left' or 'both'; null when unknown.
