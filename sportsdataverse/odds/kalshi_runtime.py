@@ -14,7 +14,7 @@ Everything else -- retries, ``None``-param stripping, the error vocabulary -- is
 from __future__ import annotations
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 from sportsdataverse import _codegen_runtime as _rt
 
@@ -50,7 +50,7 @@ def _failover(**kwargs: Any) -> Any:
     return _rt.download(**{**kwargs, "url": fallback})
 
 
-def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
+def _get(url: str, params: dict | None = None, **kwargs: Any) -> Any:
     """GET a Kalshi Trade API v2 URL as JSON, failing over to the second host (see the module docstring).
 
     Raises:
