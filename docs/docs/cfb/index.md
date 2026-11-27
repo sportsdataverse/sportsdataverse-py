@@ -17,7 +17,7 @@ description: "sdv-py College football: endpoint references, dataset loaders and 
 | [247Sports Recruit Database](#247sports-recruit-database) | `247sports.com`, `ipa.247sports.com` | 47 | none |
 | [Yahoo Sports Shangrila](#yahoo-sports-shangrila) | `graphite-secure.sports.yahoo.com` | 7 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 29 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 114 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 115 | — |
 
 ## ESPN {#espn}
 
