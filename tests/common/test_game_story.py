@@ -292,3 +292,25 @@ def test_football_reads_the_processor_frame_too() -> None:
     b = cfb_game_story(pbp.rename({"pos_team_id": "pos_team"}))
     for k in a:
         assert a[k].equals(b[k]), k
+
+
+def test_basketball_one_missing_possession_estimate_prices_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A null FTA on one side leaves the shared possession count unknown: no accounting edges, not the other's count."""
+    fr = _frames(monkeypatch, "nba", "nba_401910002.json.gz")
+    tb = fr["team_box"]
+    away = tb.filter(pl.col("team_home_away") == "away")["team_id"][0]
+    tb = tb.with_columns(
+        pl.when(pl.col("team_id") == away)
+        .then(None)
+        .otherwise(pl.col("free_throws_attempted"))
+        .alias("free_throws_attempted")
+    )
+    edges = nba_game_story(fr["pbp"], tb, fr["player_box"])["edges"]
+    assert edges.filter(pl.col("kind") == "accounting").height == 0
+
+
+def test_football_each_official_final_stands_alone() -> None:
+    """With only homeFinalScore, the home side keeps its official final (401628337: plays end 20, official 14)."""
+    pbp = pl.read_parquet(FB / "espn_cfb_pbp_games.parquet").filter(pl.col("game_id") == 401628337)
+    s = cfb_game_story(pbp.drop("awayFinalScore"))["summary"].row(0, named=True)
+    assert (s["home_score"], s["away_score"]) == (14, 21)

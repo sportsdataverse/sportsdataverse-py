@@ -76,7 +76,7 @@ stints.filter(game_id="0022500101")
 
 ### nba_game_story {#nba_game_story}
 
-`nba_game_story(pbp: 'pl.DataFrame', team_box: 'pl.DataFrame', player_box: 'pl.DataFrame', *, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame]'`
+`nba_game_story(pbp: 'pl.DataFrame', team_box: 'pl.DataFrame', player_box: 'pl.DataFrame', *, league: 'str' = 'nba', regulation_periods: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame]'`
 
 How the winner won it, for one or many basketball games: edges in points, the moment, periods, runs, performers.
 
@@ -88,6 +88,7 @@ How the winner won it, for one or many basketball games: edges in points, the mo
 | `team_box` | `DataFrame` |  | The games' team box rows (`load_<lg>_team_boxscore`); a game needs both rows for edges. |
 | `player_box` | `DataFrame` |  | The games' player box rows (`load_<lg>_player_boxscore`). |
 | `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`. |
+| `regulation_periods` | `int \| None` | `None` | The games' regulation periods (2 or 4), e.g. `game_page_frames(...)["regulation_periods"]` for a live game; default the league's rule for each game's season (`~sportsdataverse.nba.nba_game_page.game_regulation_periods`). Unscored plays are scored on it too. |
 | `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
 
 **Returns**
@@ -203,8 +204,16 @@ story["edges"].head(3)
 
 # A men's college game
 
-story = nba_game_story(pbp, tb, pb, league="mbb")
-story["periods"]  # H1, H2 (and OT)
+from sportsdataverse.mbb import load_mbb_pbp, load_mbb_player_boxscore, load_mbb_team_boxscore
+gid = 401830342
+frames = [f([2026]).filter(pl.col("game_id") == gid) for f in (load_mbb_pbp, load_mbb_team_boxscore, load_mbb_player_boxscore)]
+nba_game_story(*frames, league="mbb")["periods"]  # H1, H2 and the overtimes
+
+# A live game, from the game page's frames
+
+from sportsdataverse.nba.nba_game_page import game_page_frames
+fr = game_page_frames(final, league="nba")  # final: espn_nba_pbp(game_id, return_parsed=False)
+nba_game_story(fr["pbp"], fr["team_box"], fr["player_box"], regulation_periods=fr["regulation_periods"])
 ```
 
 ### nba_game_units {#nba_game_units}

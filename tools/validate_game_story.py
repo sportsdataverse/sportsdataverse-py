@@ -92,6 +92,16 @@ def _football(
     tag = f"espn_{lg}_pbp"
     path = data_dir / f"{tag}_{season}.parquet" if data_dir else f"{_RELEASE}{tag}/play_by_play_{season}.parquet"
     pbp = pl.read_parquet(path, use_pyarrow=True)
+    official = None
+    if lg == "nfl":  # the NFL frame has no finals: give it the schedule's before the story picks a winner
+        from sportsdataverse.nfl import load_nfl_schedule
+
+        sched = load_nfl_schedule([season]).select(
+            pl.col("game_id").alias("nflverse_game_id"),
+            pl.col("home_score").cast(pl.Int64).alias("homeFinalScore"),
+            pl.col("away_score").cast(pl.Int64).alias("awayFinalScore"),
+        )
+        pbp = pbp.drop("homeFinalScore", "awayFinalScore", strict=False).join(sched, on="nflverse_game_id", how="left")
     story = _football_game_story(pbp)
     home = pl.col("pos_team_id") == pl.col("homeTeamId")
     wp = pbp.select(
@@ -159,7 +169,8 @@ def run(lg: str, season: int, data_dir: Path | None) -> dict:
             pl.coalesce("off_away", "away_score").alias("away_score"),
         )
     decided = summ.filter(pl.col("home_score") != pl.col("away_score"))
-    top = story["edges"].filter(pl.col("rank") == 1).join(decided.select("game_id"), on="game_id", how="semi")
+    # every decided game counts: one whose edges are all unpriced has no rank-1 row and fails
+    top = decided.select("game_id").join(story["edges"].filter(pl.col("rank") == 1), on="game_id", how="left")
     g1_n, g1_pass = top.height, int((top["points_worth"] > 0).sum())
     lower = wilson_lower(g1_pass, g1_n)
     # G2: argmax |wpa| on the input, earliest on ties

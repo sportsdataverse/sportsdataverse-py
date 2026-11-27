@@ -97,7 +97,8 @@ def _team_rows(team_box: pl.DataFrame, league: str) -> pl.DataFrame:
     )
     return tb.with_columns(
         pl.col("defensive_rebounds").reverse().over("game_id").alias("opp_dreb"),
-        est.mean().over("game_id").alias("poss"),
+        # one shared count, and only from both sides' estimates: a missing one prices none of the game
+        pl.when(est.is_null().any().over("game_id") == False).then(est.mean().over("game_id")).alias("poss"),
         pl.len().over("game_id").alias("_n"),
     ).filter(pl.col("_n") == 2)
 
@@ -160,15 +161,14 @@ def _edges(rows: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def _wp(pbp: pl.DataFrame, league: str) -> pl.DataFrame:
-    """``pbp`` with ``wp_delta``: the pbp's own, else :func:`score_win_prob` per game."""
+def _wp(pbp: pl.DataFrame, league: str, regs: dict[int, int]) -> pl.DataFrame:
+    """``pbp`` with ``wp_delta``: the pbp's own, else :func:`score_win_prob` per game on its regulation (``regs``)."""
     if "wp_delta" in pbp.columns:
         return pbp
     pbp = pbp.sort("game_id", "game_play_number", maintain_order=True)  # score_win_prob reads plays in order
     parts = []
-    for _, one in pbp.group_by("game_id", maintain_order=True):
-        season = one["season"].drop_nulls()
-        reg = game_regulation_periods(league, season=int(season[0]) if season.len() else None)
+    for (gid,), one in pbp.group_by("game_id", maintain_order=True):
+        reg = regs[int(gid)]
         neutral = bool(one["neutral_site"][0]) if "neutral_site" in one.columns else False
         parts.append(score_win_prob(one, league=league, regulation_periods=reg, neutral_site=neutral))
     return (
@@ -178,8 +178,12 @@ def _wp(pbp: pl.DataFrame, league: str) -> pl.DataFrame:
     )
 
 
-def _games(rows: pl.DataFrame, league: str) -> pl.DataFrame:
-    """One row per game: the teams, the official final and the regulation periods."""
+def _games(rows: pl.DataFrame, pbp: pl.DataFrame, league: str, regulation_periods: int | None) -> pl.DataFrame:
+    """One row per game: the teams, the official final and the regulation periods.
+
+    The regulation is ``regulation_periods`` when given (the game page's resolved count), else the league's rule
+    for the game's season, read from the team box or, failing that, the plays.
+    """
     home = rows.filter(pl.col("team_home_away") == "home").select(
         "game_id",
         "season",
@@ -190,6 +194,15 @@ def _games(rows: pl.DataFrame, league: str) -> pl.DataFrame:
         "game_id", pl.col("team_id").alias("away_team_id"), pl.col("team_score").cast(pl.Int64).alias("away_score")
     )
     games = home.join(away, on="game_id", how="inner")
+    if "season" in pbp.columns:
+        pbp_season = pbp.group_by(pl.col("game_id").cast(pl.Int64)).agg(
+            pl.col("season").drop_nulls().first().cast(pl.Int64).alias("_ps")
+        )
+        games = games.join(pbp_season, on="game_id", how="left").with_columns(
+            pl.coalesce("season", "_ps").alias("season")
+        )
+    if regulation_periods is not None:
+        return games.with_columns(pl.lit(regulation_periods, dtype=pl.Int64).alias("regulation_periods"))
     regs = {s: game_regulation_periods(league, season=s) for s in games["season"].drop_nulls().unique().to_list()}
     return games.with_columns(
         pl.col("season")
@@ -201,7 +214,8 @@ def _games(rows: pl.DataFrame, league: str) -> pl.DataFrame:
 def _plays(pbp: pl.DataFrame, games: pl.DataFrame, league: str) -> pl.DataFrame:
     """The games' plays with their win-probability change, in the core's play schema."""
     pbp = pbp.with_columns(pl.col("game_id").cast(pl.Int64)).join(games.select("game_id"), on="game_id", how="semi")
-    return _wp(pbp, league).select(
+    regs = dict(zip(games["game_id"].to_list(), games["regulation_periods"].to_list()))
+    return _wp(pbp, league, regs).select(
         "game_id",
         pl.col("id").cast(pl.Int64).alias("play_id"),
         pl.col("game_play_number").cast(pl.Int64).alias("order"),
@@ -237,6 +251,7 @@ def nba_game_story(
     player_box: pl.DataFrame,
     *,
     league: str = "nba",
+    regulation_periods: int | None = None,
     return_as_pandas: bool = False,
 ) -> dict[str, pl.DataFrame] | dict[str, pd.DataFrame]:
     """How the winner won it, for one or many basketball games: edges in points, the moment, periods, runs, performers.
@@ -249,6 +264,9 @@ def nba_game_story(
         team_box: The games' team box rows (``load_<lg>_team_boxscore``); a game needs both rows for edges.
         player_box: The games' player box rows (``load_<lg>_player_boxscore``).
         league: ``"nba"``, ``"wnba"``, ``"mbb"`` or ``"wbb"``.
+        regulation_periods: The games' regulation periods (2 or 4), e.g. ``game_page_frames(...)["regulation_periods"]``
+            for a live game; default the league's rule for each game's season
+            (:func:`~sportsdataverse.nba.nba_game_page.game_regulation_periods`). Unscored plays are scored on it too.
         return_as_pandas: Return pandas frames instead of polars.
 
     Returns:
@@ -279,8 +297,16 @@ def nba_game_story(
 
         A men's college game::
 
-            story = nba_game_story(pbp, tb, pb, league="mbb")
-            story["periods"]  # H1, H2 (and OT)
+            from sportsdataverse.mbb import load_mbb_pbp, load_mbb_player_boxscore, load_mbb_team_boxscore
+            gid = 401830342
+            frames = [f([2026]).filter(pl.col("game_id") == gid) for f in (load_mbb_pbp, load_mbb_team_boxscore, load_mbb_player_boxscore)]
+            nba_game_story(*frames, league="mbb")["periods"]  # H1, H2 and the overtimes
+
+        A live game, from the game page's frames::
+
+            from sportsdataverse.nba.nba_game_page import game_page_frames
+            fr = game_page_frames(final, league="nba")  # final: espn_nba_pbp(game_id, return_parsed=False)
+            nba_game_story(fr["pbp"], fr["team_box"], fr["player_box"], regulation_periods=fr["regulation_periods"])
 
         See Also:
             * `hoopR`_ -- the R companion for NBA and men's college play-by-play
@@ -292,7 +318,7 @@ def nba_game_story(
     if league not in _LEAGUES:
         raise ValueError(f"league must be one of {list(_LEAGUES)}, got {league!r}")
     rows = _team_rows(team_box, league)
-    games = _games(rows, league)
+    games = _games(rows, pbp, league, regulation_periods)
     plays = _plays(pbp, games, league)
     players = _players(player_box)
     story = game_story(games, _edges(rows), plays, players)

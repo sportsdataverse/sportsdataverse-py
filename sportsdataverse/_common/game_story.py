@@ -361,9 +361,11 @@ def _moment(sides: pl.DataFrame, sc: pl.DataFrame) -> pl.DataFrame:
             pl.col("_m").last().over(_G).alias("_final_m"),
         )
     )
-    # only where the plays end with the winner ahead: otherwise no lead in them was "for good"
+    # only where the plays end with the winner ahead (otherwise no lead in them was "for good"), and only on the
+    # winner's own score (a correction to the other side's score is not one)
+    own = pl.when(pl.col("_w") == pl.col("home_team_id")).then(pl.col("_dh")).otherwise(pl.col("_da"))
     deciding = (
-        lead.filter((pl.col("_m") > 0) & (pl.col("_pm") <= 0) & (pl.col("_final_m") > 0))
+        lead.filter((pl.col("_m") > 0) & (pl.col("_pm") <= 0) & (pl.col("_final_m") > 0) & (own > 0))
         .group_by(_G, maintain_order=True)
         .last()
         .with_columns(pl.lit("deciding_score").alias("rule"))

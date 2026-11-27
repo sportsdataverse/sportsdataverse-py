@@ -191,13 +191,12 @@ def _football_game_story(pbp: pl.DataFrame) -> dict[str, pl.DataFrame]:
             pl.col("homeTeamId", "awayTeamId").drop_nulls().first(),
             pl.col("homeScore").drop_nulls().last().cast(pl.Int64).alias("_h"),
             pl.col("awayScore").drop_nulls().last().cast(pl.Int64).alias("_a"),
+            # each side's official final where the frame has it, independently of the other's
             *(
-                [
-                    pl.col("homeFinalScore").drop_nulls().first().cast(pl.Int64).alias("_hf"),
-                    pl.col("awayFinalScore").drop_nulls().first().cast(pl.Int64).alias("_af"),
-                ]
-                if "homeFinalScore" in p.columns and "awayFinalScore" in p.columns
-                else [pl.lit(None, dtype=pl.Int64).alias("_hf"), pl.lit(None, dtype=pl.Int64).alias("_af")]
+                pl.col(c).drop_nulls().first().cast(pl.Int64).alias(a)
+                if c in p.columns
+                else pl.lit(None, dtype=pl.Int64).alias(a)
+                for c, a in (("homeFinalScore", "_hf"), ("awayFinalScore", "_af"))
             ),
         )
     )
@@ -238,7 +237,7 @@ def cfb_game_story(
 
     Args:
         pbp: The ESPN-processed plays of one or many games: ``load_cfb_pbp`` (the ``espn_cfb_pbp``
-            release) or ``CFBPlayProcess(...).run_processing_pipeline()``'s plays frame. Needs ``game_id``,
+            release) or a live game's ``CFBPlayProcess.plays_frame`` (set by ``run_processing_pipeline()``). Needs ``game_id``,
             ``id``, ``game_play_number``, ``period.number``, ``clock.displayValue``, ``text``,
             ``pos_team_id`` (the processor's frame calls it ``pos_team``), ``homeTeamId``, ``awayTeamId``, ``homeScore``, ``awayScore``, ``EPA``, ``wpa``,
             ``scrimmage_play``, ``pass``, ``rush``, ``type.text``, ``is_pos_team_turnover``,
@@ -266,6 +265,14 @@ def cfb_game_story(
             pbp = load_cfb_pbp([2025]).filter(pl.col("game_id") == 401752873)
             story = cfb_game_story(pbp)
             story["edges"].head(3)
+
+        A live game::
+
+            from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+            proc = CFBPlayProcess(gameId=401752873)
+            proc.espn_cfb_pbp()
+            proc.run_processing_pipeline()
+            cfb_game_story(proc.plays_frame)["moment"]
 
         The deciding play of each game in a week::
 
