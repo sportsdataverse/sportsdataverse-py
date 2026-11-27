@@ -71,7 +71,7 @@ _THEN_SCORED_RE = re.compile(r",\s*scored\b")
 _ADVANCED_RE = re.compile(rf"^({_NAME})\s+advanced to (\w+)")
 # Present-tense pages (2022-2024) put each run in its own sentence: "... left field. Brown scores. Cates scores",
 # or lead with it: "Booker scores on steal of home". Counted only on a present-tense page (see below).
-_PRESENT_SCORES_RE = re.compile(rf"(?:^|\.\s+)({_NAME}) scores\b")
+_PRESENT_SCORES_RE = re.compile(rf"(?:^|\.\s+)({_NAME})\s+scores\b")  # "Escobar  scores" (two spaces, 2023)
 # On a present-tense page each verb reads as its past-tense twin, so one classifier serves both. A past-tense
 # page is never normalized: its scorer comments ("Martinez scores on PB on 1-1 pitch.", 2025) restate a run
 # the row before already counted.
@@ -181,6 +181,8 @@ def _classify(rest: str, present: bool = False) -> "tuple[str, dict]":
         return "fielders_choice", x
     if re.search(r"reached on (?:an? )?(?:throwing |fielding )?error", low):
         return "reached_on_error", x
+    if present and "scores on steal of home" in low:  # "Booker scores on steal of home" (2023)
+        return "stolen_base", x
     if "stole " in low:
         return "stolen_base", x
     if "wild pitch" in low:

@@ -292,7 +292,14 @@ _RUNNER_CASES = [
         0,
     ),
     ("Weaver grounds out to third baseman Castillo. Johnson II scores", 1, ["Johnson II"], 1),
-    ("Mims steals 2nd", 0, [], 0),
+    # two spaces before "scores" (2023 contests 2402326, 2405089)
+    ("Easley  scores on wild pitch", 1, ["Easley"], 0),
+    (
+        "Cinton hits a ground ball and reaches on an error by shortstop Weaver. Escobar  scores",
+        1,
+        ["Escobar"],
+        0,
+    ),
 ]
 
 
@@ -393,3 +400,9 @@ def test_repeated_given_name_inside_a_batter_name_does_not_split_the_clause() ->
     """A doubled token mid-name ("A Dai Dai singled") is not the doubled-name scoring clause."""
     row = decompose_college_baseball_plays([{"description": "A Dai Dai singled to left field."}]).row(0, named=True)
     assert (row["batter"], row["play_type"], row["is_hit"], row["runs_scored"]) == ("A Dai Dai", "single", True, 0)
+
+
+def test_present_tense_steal_of_home_is_a_stolen_base_and_one_run() -> None:
+    """2023 contest 2390316: "Booker scores on steal of home" is the steal itself, counted once."""
+    row = decompose_college_baseball_plays([{"description": "Booker scores on steal of home"}]).row(0, named=True)
+    assert (row["play_type"], row["runs_scored"], row["scoring_runners"]) == ("stolen_base", 1, ["Booker"])

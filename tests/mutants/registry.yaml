@@ -13484,6 +13484,26 @@
   expected: kill
   note: "A run-on 'Jones advanced from second base, scored.' stays in the batter clause and credits the batter."
 
+- id: bb-present-scores-single-space
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "_PRESENT_SCORES_RE = re.compile(rf\"(?:^|\\.\\s+)({_NAME})\\s+scores\\b\")"
+  mutant: "_PRESENT_SCORES_RE = re.compile(rf\"(?:^|\\.\\s+)({_NAME}) scores\\b\")"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "'Easley  scores on wild pitch' (two spaces, 2023) counts no run."
+
+- id: bb-present-steal-of-home-unknown
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "if present and \"scores on steal of home\" in low:  # \"Booker scores on steal of home\" (2023)"
+  mutant: "if False:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k steal_of_home_is_a_stolen_base"
+  expected: kill
+  note: "'Booker scores on steal of home' parses as play type unknown."
+
 # --- nfl-lateral-full-names: a lateral's credited player reads the box score's full name -----------
 - id: nfl-lateral-full-names-applied
   group: nfl-lateral-full-names
