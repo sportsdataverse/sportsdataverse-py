@@ -263,6 +263,11 @@ _RUNNER_CASES = [
         1,
     ),
     ("PICKENS doubled to right center (1-0) BIRKOFER advanced to home, out at home rf to ss to c.", 0, [], 1),
+    # a real repeated given name or a commentary row is not a doubled-name run (2019 contest 1656406, 2023 contest
+    # 2398026, 2018 contest 106623)
+    ("Hague, Teddy pinch hit for Otaka, Dai Dai.", 0, [], 0),
+    ("ARIBAL, Matt pinch ran for GAZDAR, Jon Jon.", 0, [], 0),
+    ("Terrific sliding catch. Dah-nuh-nuh. Dah-nuh-nuh.", 0, [], 0),
 ]
 
 

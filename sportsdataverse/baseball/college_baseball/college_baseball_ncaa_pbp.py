@@ -86,7 +86,7 @@ _SUB_FULL_RE = re.compile(rf"^{_SUB_NAME}\s+to\s+{_POS_CODES}\b(?:\s+for\s+{_SUB
 _RUNNER_START_RE = re.compile(
     rf"(?<![A-Za-z'.\-])(?!(?:RBI|SAC|SF)\b)(?:{_NAME},?\s+"
     r"(?:scored|advanced to|out (?:at|on)\b|stole|picked off|caught stealing)"
-    rf"|(?P<dbl>{_NAME}),?\s+(?P=dbl)(?![A-Za-z]))"
+    rf"|(?<!,)(?<!,\s)(?P<dbl>{_NAME}),?\s+(?P=dbl)(?![A-Za-z]))"  # never a first name: "Otaka, Dai Dai"
 )
 # stats.ncaa.org sometimes prints the runner's name where "scored" belongs, with the RBI count confirming the run:
 # a bare doubled name ("Verlin, Nate Verlin, Nate.", 2019) or the name closing its own advance
@@ -243,7 +243,11 @@ def _decompose(desc: str) -> "dict":
     # runner clauses; a row led by a runner's advance ("Fogel, A. advanced to second Kaler, K. ...") counts it too
     lead_runner = bool(_ADVANCED_RE.match(primary))
     for c in clauses if lead_runner else clauses[1:]:
-        sc = _SCORED_RE.match(c) or _DOUBLED_RE.match(c)
+        # a doubled name is a run only on a real play, never in a substitution or a commentary row
+        # ("Terrific sliding catch. Dah-nuh-nuh. Dah-nuh-nuh.")
+        sc = _SCORED_RE.match(c) or (
+            _DOUBLED_RE.match(c) if out["play_type"] not in ("substitution", "unknown") else None
+        )
         if sc:
             out["runs_scored"] += 1
             out["scoring_runners"].append(sc.group(1))

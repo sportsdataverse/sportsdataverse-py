@@ -13348,8 +13348,8 @@
   group: bb-name-for-scored
   finding: bb-name-for-scored
   file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
-  snippet: "sc = _SCORED_RE.match(c) or _DOUBLED_RE.match(c)"
-  mutant: "sc = _SCORED_RE.match(c)"
+  snippet: "_DOUBLED_RE.match(c) if out[\"play_type\"] not in (\"substitution\", \"unknown\") else None"
+  mutant: "None"
   test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
   expected: kill
   note: "A doubled runner name ('Verlin, Nate Verlin, Nate.') printed where 'scored' belongs counts no run (2019-2026)."
@@ -13358,7 +13358,7 @@
   group: bb-name-for-scored
   finding: bb-name-for-scored
   file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
-  snippet: "rf\"|(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?![A-Za-z]))\""
+  snippet: "rf\"|(?<!,)(?<!,\\s)(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?![A-Za-z]))\""
   mutant: "rf\"|(?P<dbl>{_NAME})(?!))\""
   test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
   expected: kill
@@ -13403,3 +13403,23 @@
   test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
   expected: kill
   note: "A runner thrown out at home on 'advanced to home, out at home' would count a run."
+
+- id: bb-doubled-name-first-name-guard
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "rf\"|(?<!,)(?<!,\\s)(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?![A-Za-z]))\""
+  mutant: "rf\"|(?P<dbl>{_NAME}),?\\s+(?P=dbl)(?![A-Za-z]))\""
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A real repeated given name ('ARIBAL, Matt pinch ran for GAZDAR, Jon Jon.') splits off as a doubled-name run."
+
+- id: bb-doubled-name-play-row-guard
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "_DOUBLED_RE.match(c) if out[\"play_type\"] not in (\"substitution\", \"unknown\") else None"
+  mutant: "_DOUBLED_RE.match(c)"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A commentary row ('Terrific sliding catch. Dah-nuh-nuh. Dah-nuh-nuh.') counts a run."
