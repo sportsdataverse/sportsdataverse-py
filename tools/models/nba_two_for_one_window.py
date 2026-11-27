@@ -13,7 +13,7 @@ null):
 
 * ``extra_by_first_shot``: ``P(extra_possession)`` against ``first_shot_clock``. The opponent can
   hold for the last shot only when it gets the ball with 24 or fewer seconds left, so the rate
-  rises a few seconds above 24: from about 0.49 (16-21 s) to about 0.93 (30-40 s), a ramp over
+  rises a few seconds above 24: from about 0.48 (16-21 s) to about 0.93 (30-40 s), a ramp over
   22-33 s rather than a one-bin jump. ``GO_FLOOR`` is the candidate (24 to 28) where a step
   function best fits the curve: the count-weighted least-squares change point over 16-39 s.
   (The single largest bin-to-bin jump was tried first and is unstable: 24 to 28 by season.)

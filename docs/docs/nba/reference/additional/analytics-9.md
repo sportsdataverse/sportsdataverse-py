@@ -236,13 +236,15 @@ period 4 and overtime only when `|margin_at_change| <= late_margin_max` (late-ga
 fouling is not a 2-for-1 choice).
 
 Per `by` group: `games`, `n_went` / `n_held` / `n_other`, `go_rate` (went over
-went plus held), `extra_rate_*` (share with `extra_possession`), `extra_rate_1s_*` (the
-sensitivity that counts a later possession only with 1.0 s or more on its change clock),
-mean `sequence_net` per choice (`net_*`), and `net_diff`: went minus held, taken
-within 1-second `change_clock` bins and averaged with each bin weighted by its went plus
-held count, so the time each choice starts with does not drive it. `net_diff_lo` /
-`net_diff_hi` are the `ci` interval of a bootstrap that resamples whole games (never
-rows) within the group. `"other"` stays out of the comparison.
+went plus held, null with neither), `extra_rate_*` (share with `extra_possession`),
+`extra_rate_1s_*` (the sensitivity that counts the ball back only with 1.0 s or more on
+its change clock), mean `sequence_net` per choice (`net_*`), and `net_diff`: went
+minus held, taken within 1-second `change_clock` bins (`(b - 1, b]`, the window's shape)
+and averaged with each bin weighted by its went plus held count, so the time each choice
+starts with does not drive it. `net_diff_lo` / `net_diff_hi` are the `ci` interval of
+a bootstrap that resamples whole games (never rows) within the group; a replicate whose draw
+leaves no bin holding both choices is dropped, so the interval is conditional on the
+comparison existing. `"other"` stays out of the comparison.
 
 **Parameters**
 
@@ -252,13 +254,13 @@ rows) within the group. `"other"` stays out of the comparison.
 | `by` | `tuple[str, ...]` | `('offense_team_id',)` | Group columns; `()` for one league row. Default `("offense_team_id",)`. |
 | `exclude_garbage` | `bool` | `True` | Drop `is_garbage_time` possessions. Default True. |
 | `late_margin_max` | `int` | `10` | Period 4 and overtime keep `\|margin_at_change\|` up to this. Default 10. |
-| `n_boot` | `int` | `1000` | Bootstrap replicates. Default 1000. |
-| `ci` | `float` | `0.9` | Interval coverage. Default 0.90. |
+| `n_boot` | `int` | `1000` | Bootstrap replicates, at least 1. Default 1000. |
+| `ci` | `float` | `0.9` | Interval coverage, strictly between 0 and 1. Default 0.90. |
 | `seed` | `int` | `0` | Bootstrap seed. Default 0. |
 
 **Returns**
 
-One row per group: the `by` columns then `TWO_FOR_ONE_SUMMARY_SCHEMA`, sorted by `by`. `net_diff` is null with no bin holding both choices.
+One row per group: the `by` columns then `TWO_FOR_ONE_SUMMARY_SCHEMA`, sorted by `by`. `net_diff` is null with no bin holding both choices. Zero rows when no possession is kept, whatever `by` is.
 
 | col_name | type | description |
 |---|---|---|
@@ -267,15 +269,15 @@ One row per group: the `by` columns then `TWO_FOR_ONE_SUMMARY_SCHEMA`, sorted by
 | `n_went` | Int64 | Kept window possessions that went 2-for-1. |
 | `n_held` | Int64 | Kept window possessions that held. |
 | `n_other` | Int64 | Kept window possessions that were neither (an early turnover or foul trip, or an end between 24 and the floor). |
-| `go_rate` | Float64 | n_went over n_went plus n_held. |
-| `extra_rate_went` | Float64 | Share of went possessions whose offense got a later possession in the period. |
-| `extra_rate_held` | Float64 | Share of held possessions whose offense got a later possession in the period. |
-| `extra_rate_1s_went` | Float64 | As extra_rate_went, counting a later possession only with 1.0 s or more on its change clock. |
-| `extra_rate_1s_held` | Float64 | As extra_rate_held, counting a later possession only with 1.0 s or more on its change clock. |
+| `go_rate` | Float64 | n_went over n_went plus n_held; null when the group has neither. |
+| `extra_rate_went` | Float64 | Share of went possessions whose offense got the ball back after the opponent's possession. |
+| `extra_rate_held` | Float64 | Share of held possessions whose offense got the ball back after the opponent's possession. |
+| `extra_rate_1s_went` | Float64 | As extra_rate_went, counting the ball back only with 1.0 s or more on its change clock. |
+| `extra_rate_1s_held` | Float64 | As extra_rate_held, counting the ball back only with 1.0 s or more on its change clock. |
 | `net_went` | Float64 | Mean sequence_net (the offense's rest-of-period points minus the defense's) of went possessions. |
 | `net_held` | Float64 | Mean sequence_net of held possessions. |
 | `net_other` | Float64 | Mean sequence_net of other possessions (a sensitivity; not in the comparison). |
-| `net_diff` | Float64 | Went minus held sequence_net within 1-second change_clock bins, averaged with each bin weighted by its went plus held count. Descriptive, not the value of going 2-for-1. |
+| `net_diff` | Float64 | Went minus held sequence_net within 1-second change_clock bins ((b - 1, b]), averaged with each bin weighted by its went plus held count. Descriptive, not the value of going 2-for-1. |
 | `net_diff_lo` | Float64 | Lower end of net_diff's interval (90% by default) from a bootstrap that resamples whole games. |
 | `net_diff_hi` | Float64 | Upper end of net_diff's interval (90% by default) from a bootstrap that resamples whole games. |
 
@@ -283,7 +285,7 @@ One row per group: the `by` columns then `TWO_FOR_ONE_SUMMARY_SCHEMA`, sorted by
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If a needed column is missing. |
+| `ValueError` | If a needed column is missing, `n_boot` is below 1, or `ci` is not strictly between 0 and 1. |
 
 **Example**
 

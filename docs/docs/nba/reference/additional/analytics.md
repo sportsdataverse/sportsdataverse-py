@@ -213,7 +213,7 @@ and why the triggering possession can qualify on its own basket.
 | `end_seconds_remaining` | Float64 | Seconds remaining in the period when the possession ended. |
 | `points` | Int64 | Points scored. |
 | `is_second_chance` | Boolean | Whether the row is a second-chance continuation following an offensive rebound. |
-| `number_in_period` | Int64 | Sequential possession number for the offense within the period. |
+| `number_in_period` | Int64 | Possession number within the period, both teams counted, resetting to 1 at each period start. |
 | `possession_start_type` | String | How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start). |
 | `count_as_possession` | Boolean | Whether the row counts as a true possession for per-possession rate stats. |
 | `fg2a` | Int64 | Two-point field goal attempts during the possession. |
@@ -528,30 +528,34 @@ Near a period's end, a team that gets the ball with about half a minute left can
 early, leaving more than a shot clock so it gets the ball back for the last shot (two
 possessions to one), or run a normal possession and let the opponent hold for the last
 shot. This marks every possession that faces that choice, which one the team made, and
-what the rest of the period brought. Works for the NBA, WNBA and G League (24-second shot
-clock), on any number of games. Every clock is seconds left in the period.
+what the rest of the period brought: NBA, G League and WNBA from 2006 (24-second shot clock,
+quarters). A game whose first period runs over 15 minutes (WNBA halves and a 30-second shot
+clock through 2005; All-Star-weekend exhibitions) gets no `two_for_one`, so no outcomes.
+Every clock is seconds left in the period.
 
 **change_clock** (Float64): the clock at the change of possession, the same moment
 `seconds_to_first_shot` counts from (the previous possession's last event; a period's
 first possession uses its own first event). **first_shot_clock** (Float64): the clock at the
 possession's first field-goal attempt, null without one. **margin_at_change** (Int64): the
-offense's score minus the defense's at the change of possession, from the pbp running score.
-These three are set on every possession.
+offense's score minus the defense's at the change of possession, from the pbp running score;
+null for a game whose home side the score cannot tell. Set on every possession.
 
 **two_for_one** (Utf8, null outside the window): with `rules="sdv"` the window is
 `window[0] < change_clock <= window[1]`; `"went"` when `first_shot_clock >= go_floor`,
 `"held"` when not went and the possession ends with 24 or fewer seconds left (the
 opponent can hold for the last shot), `"other"` otherwise (an early turnover or foul
-trip, or an end between 24 and `go_floor`). `rules="mekonen"` reproduces ACC-2026-0075:
+trip, or an end between 24 and `go_floor`). `rules="mekonen"` approximates ACC-2026-0075:
 the change clock rounded half-to-even (as numpy does) in 34-40 s, `"went"` for a first
 shot within 7 s, `"held"` for a later first shot and a rounded end clock of 24 or less,
 and in the 4th quarter only when `|margin_at_change| <= 10`. The study's "start clock" is
 its possession's first event, and its possessions open with the defensive rebound or steal
 (625 of its 778 rows) that ours give to the previous possession, so it is our change clock
-(`tools/models/nba_two_for_one_parity.py`).
+(`tools/models/nba_two_for_one_parity.py`: 713 of its 778 rows match one of ours and 604 of
+those agree; the study times some first shots by possession length, which this does not).
 
-In the window: **extra_possession** (Boolean), the offense has a later possession in the
-period whose change clock is above 0 (a 0.4-second heave counts); **sequence_points**
+In the window: **extra_possession** (Boolean), the offense has the ball again after the
+defense has had it, in the same period, on a possession whose change clock is above 0 (a
+0.4-second heave counts; a team that keeps the ball does not); **sequence_points**
 (Int64), the offense's points on this and its later possessions in the period;
 **sequence_points_allowed** (Int64), the defense's points on its possessions after this one
 in the period; **sequence_net** (Int64), the difference. All four are null outside it.
@@ -564,7 +568,7 @@ in the period; **sequence_net** (Int64), the difference. All four are null outsi
 | `pbp` | `DataFrame` |  | The play-by-play of those games. Needs `game_id`, `order_index`, `event_type`, `seconds_remaining`, `score_home` and `score_away`. |
 | `window` | `tuple[float, float]` | `(33.0, 46.0)` | `(lo, hi]` on the change clock for `rules="sdv"`. Default `TWO_FOR_ONE_WINDOW`. |
 | `go_floor` | `float` | `27.0` | The first-shot clock at or above which a possession went 2-for-1. Default `TWO_FOR_ONE_GO_FLOOR`. |
-| `rules` | `str` | `'sdv'` | `"sdv"` (default) or `"mekonen"` (ACC-2026-0075's definition, for parity). |
+| `rules` | `str` | `'sdv'` | `"sdv"` (default) or `"mekonen"` (ACC-2026-0075's definition, approximated, for parity). |
 | `shot_clock` | `float` | `24.0` | Must be 24.0: the window and floor are calibrated for that shot clock only. |
 
 **Returns**
@@ -584,7 +588,7 @@ in the period; **sequence_net** (Int64), the difference. All four are null outsi
 | `end_seconds_remaining` | Float64 | Seconds remaining in the period when the possession ended. |
 | `points` | Int64 | Points scored. |
 | `is_second_chance` | Boolean | Whether the row is a second-chance continuation following an offensive rebound. |
-| `number_in_period` | Int64 | Sequential possession number for the offense within the period. |
+| `number_in_period` | Int64 | Possession number within the period, both teams counted, resetting to 1 at each period start. |
 | `possession_start_type` | String | How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start). |
 | `count_as_possession` | Boolean | Whether the row counts as a true possession for per-possession rate stats. |
 | `fg2a` | Int64 | Two-point field goal attempts during the possession. |
@@ -614,17 +618,17 @@ in the period; **sequence_net** (Int64), the difference. All four are null outsi
 | `change_clock` | Float64 | Seconds left in the period at the change of possession (the previous possession's last event; a period's first possession uses its own first event), the moment seconds_to_first_shot counts from. Set on every possession. |
 | `first_shot_clock` | Float64 | Seconds left in the period at the possession's first field-goal attempt (change_clock minus seconds_to_first_shot); null when it has no field-goal attempt. |
 | `two_for_one` | String | The 2-for-1 choice, null outside the window (change_clock in (33, 46] by default). went when the first shot leaves at least go_floor (27) seconds, held when not and the possession ends with 24 or fewer left (the opponent can hold for the last shot), other otherwise (an early turnover or foul trip, or an end between 24 and 27). |
-| `extra_possession` | Boolean | In the window, whether the offense has a later possession in the period whose change clock is above 0 (a last-second heave counts); null outside it. |
+| `extra_possession` | Boolean | In the window, whether the offense has the ball again after the defense has had it, in the same period, on a possession whose change clock is above 0 (a last-second heave counts; keeping the ball does not); null outside it. |
 | `sequence_points` | Int64 | In the window, the offense's points on this possession and its later ones in the period; null outside it. |
 | `sequence_points_allowed` | Int64 | In the window, the defense's points on its possessions after this one in the period; null outside it. |
 | `sequence_net` | Int64 | sequence_points minus sequence_points_allowed; null outside the window. |
-| `margin_at_change` | Int64 | The offense's score minus the defense's at the change of possession, from the play-by-play running score. Set on every possession. |
+| `margin_at_change` | Int64 | The offense's score minus the defense's at the change of possession, from the play-by-play running score. Set on every possession, except null for a game whose home side the score cannot tell. |
 
 **Raises**
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If a needed column is missing, a column it would write already exists, `game_id` differs in dtype between the frames, `offense_team_id` and `defense_team_id` differ in dtype, `rules` is unknown, or `shot_clock` is not 24. |
+| `ValueError` | If a needed column is missing, a column it would write already exists, `game_id` differs in dtype between the frames, `offense_team_id` and `defense_team_id` differ in dtype, `rules` is unknown, `shot_clock` is not 24, or a possession has no event in `pbp` (the wrong season, a filtered frame). |
 
 **Example**
 

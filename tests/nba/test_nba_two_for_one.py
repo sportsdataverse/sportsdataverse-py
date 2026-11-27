@@ -63,9 +63,18 @@ PINNED: dict[str, list[tuple[Any, ...]]] = {
 #: Observed on the season captures: went, held, other.
 SEASON_COUNTS = {"nba_2024": (2476, 1274, 1073), "wnba_2025": (470, 428, 307)}
 
+#: ``rules="mekonen"`` on the NBA 2023-24 capture: went, held, other. Moving the 34-40 start, the
+#: 7-second shot or the late margin of 10 moves them.
+MEKONEN_COUNTS = (660, 752, 996)
+
+#: NBA 2023-24 window possessions followed by another possession of the same team in the period (4 of
+#: the 10 still get the ball back after the opponent has had it).
+KEPT_BALL_WINDOW_ROWS = 10
+
 #: Sanity gates from the observed summaries (``by=("season",)``, garbage time out, late games within 10):
-#: P(extra | went) 0.879 NBA / 0.847 WNBA, P(extra | held) 0.432 / 0.403. Floors and ceilings sit at
-#: those values rounded against the test.
+#: P(extra | went) 0.877 NBA / 0.847 WNBA, P(extra | held) 0.432 / 0.397. Floors and ceilings sit at
+#: those values rounded against the test. In-sample for the NBA: the calibration's 2015-16 to 2025-26
+#: includes this 2023-24 capture (the WNBA was not calibrated).
 EXTRA_WENT_MIN = {"nba_2024": 0.87, "wnba_2025": 0.84}
 EXTRA_HELD_MAX = {"nba_2024": 0.44, "wnba_2025": 0.41}
 
@@ -150,32 +159,54 @@ def test_choice_definition_row_by_row(seasons: dict[str, pl.DataFrame]) -> None:
 def _brute_sequences(out: pl.DataFrame) -> list[tuple[int, int, bool]]:
     """Rest-of-period points and the extra possession, walked possession by possession."""
     res = []
-    rows = out.sort("game_id", "possession_number").to_dicts()
-    for i, r in enumerate(rows):
-        if r["two_for_one"] is None:
-            continue
-        rest = [x for x in rows[i:] if x["game_id"] == r["game_id"] and x["period"] == r["period"]]
-        mine = sum(x["points"] for x in rest if x["offense_team_id"] == r["offense_team_id"])
-        theirs = sum(x["points"] for x in rest[1:] if x["offense_team_id"] == r["defense_team_id"])
-        extra = any(x["offense_team_id"] == r["offense_team_id"] and x["change_clock"] > 0 for x in rest[1:])
-        res.append((mine, theirs, extra))
-    return res
+    periods: dict[tuple[Any, int], list[dict[str, Any]]] = {}
+    for r in out.sort("game_id", "possession_number").to_dicts():
+        periods.setdefault((r["game_id"], r["period"]), []).append(r)
+    for rows in periods.values():
+        for i, r in enumerate(rows):
+            if r["two_for_one"] is None:
+                continue
+            rest = rows[i:]
+            mine = sum(x["points"] for x in rest if x["offense_team_id"] == r["offense_team_id"])
+            theirs = sum(x["points"] for x in rest[1:] if x["offense_team_id"] == r["defense_team_id"])
+            # the ball back after the opponent has had it, with time on the clock
+            opp = next((k for k, x in enumerate(rest) if x["offense_team_id"] == r["defense_team_id"]), None)
+            after = rest[opp + 1 :] if opp is not None else []
+            extra = any(x["offense_team_id"] == r["offense_team_id"] and x["change_clock"] > 0 for x in after)
+            res.append((r["game_id"], r["possession_number"], mine, theirs, extra))
+    return sorted(res)
 
 
-@pytest.mark.parametrize("gid", list(GAMES))
-def test_sequences_match_a_possession_walk(gid: str) -> None:
-    poss, pbp = _game(gid)
-    out = add_two_for_one_flags(poss, pbp)
+def _walk_check(out: pl.DataFrame) -> None:
     got = (
-        out.sort("game_id", "possession_number")
-        .filter(pl.col("two_for_one").is_not_null())
-        .select("sequence_points", "sequence_points_allowed", "extra_possession")
+        out.filter(pl.col("two_for_one").is_not_null())
+        .select("game_id", "possession_number", "sequence_points", "sequence_points_allowed", "extra_possession")
+        .sort("game_id", "possession_number")
         .rows()
     )
     assert got == _brute_sequences(out)
     assert out.select(
         (pl.col("sequence_net") == pl.col("sequence_points") - pl.col("sequence_points_allowed")).all()
     ).item()
+
+
+@pytest.mark.parametrize("gid", list(GAMES))
+def test_sequences_match_a_possession_walk(gid: str) -> None:
+    poss, pbp = _game(gid)
+    _walk_check(add_two_for_one_flags(poss, pbp))
+
+
+def test_sequences_match_a_possession_walk_over_seasons(seasons: dict[str, pl.DataFrame]) -> None:
+    """The same walk over every window possession of both season captures (thousands, not 11)."""
+    for out in seasons.values():
+        _walk_check(out)
+    # a team that keeps the ball (two possessions of its own in a row) has not earned the extra one
+    nba = seasons["nba_2024"].sort("game_id", "possession_number")
+    kept = nba.filter(
+        (pl.col("two_for_one").is_not_null())
+        & (pl.col("offense_team_id").shift(-1).over("game_id", "period") == pl.col("offense_team_id"))
+    )
+    assert kept.height == KEPT_BALL_WINDOW_ROWS
 
 
 #: Possessions whose running possession points differ from the scoreboard: 0022200001's defensive
@@ -204,17 +235,25 @@ def test_change_clock_is_add_possession_flags_clock(seasons: dict[str, pl.DataFr
 
 
 def test_mekonen_rules_row_by_row() -> None:
-    """ACC-2026-0075's rules: rounded change clock 34-40, 7-second first shot, 24-second end, late margin 10."""
+    """ACC-2026-0075's rules restated over every row: rounded change clock 34-40, 7-second first
+    shot, rounded 24-second end, 4th-quarter margin 10. The counts pin the constants."""
     poss, pbp = _season("nba_2024")
     out = add_two_for_one_flags(poss, pbp, rules="mekonen")
-    w = out.filter(pl.col("two_for_one").is_not_null())
-    assert w["change_clock"].round(0, mode="half_to_even").is_between(34, 40).all()
-    assert (w.filter(pl.col("period") == 4)["margin_at_change"].abs() <= 10).all()
-    sts = pl.col("change_clock") - pl.col("first_shot_clock")
-    assert w.filter(pl.col("two_for_one") == "went").select((sts <= 7).all()).item()
-    held = w.filter(pl.col("two_for_one") == "held")
-    assert held.select((sts > 7).all()).item() and (held["end_seconds_remaining"].round(0) <= 24).all()
-    assert w.height > 0 and set(w["two_for_one"]) == {"went", "held", "other"}
+    c, end = pl.col("change_clock"), pl.col("end_seconds_remaining")
+    sts = c - pl.col("first_shot_clock")
+    late_ok = (pl.col("period") != 4) | (pl.col("margin_at_change").abs() <= 10)
+    inw = (c.round(0, mode="half_to_even").is_between(34, 40) & late_ok).fill_null(False)
+    want = (
+        pl.when(inw & (sts <= 7).fill_null(False))
+        .then(pl.lit("went"))
+        .when(inw & ((sts > 7) & (end.round(0, mode="half_to_even") <= 24)).fill_null(False))
+        .then(pl.lit("held"))
+        .when(inw)
+        .then(pl.lit("other"))
+    )
+    assert out.select(want.eq_missing(pl.col("two_for_one")).all()).item()
+    vc = dict(out.group_by("two_for_one").len().drop_nulls("two_for_one").iter_rows())
+    assert (vc["went"], vc["held"], vc["other"]) == MEKONEN_COUNTS
 
 
 def test_row_order_does_not_change_the_flags() -> None:
@@ -243,6 +282,45 @@ def test_empty_and_bad_inputs() -> None:
         add_two_for_one_flags(poss, pbp, rules="ctg")
     with pytest.raises(ValueError, match="24-second"):
         add_two_for_one_flags(poss, pbp, shot_clock=30.0)
+    # another game's pbp, or one cut short, would null every clock without this check
+    _, other_pbp = _game("0022300001")
+    with pytest.raises(ValueError, match=f"no events for {poss.height} of {poss.height}"):
+        add_two_for_one_flags(poss, other_pbp)
+    first_three = pbp.filter(pl.col("order_index") < poss.filter(pl.col("period") == 4)["start_order_index"].min())
+    with pytest.raises(ValueError, match="no events for"):
+        add_two_for_one_flags(poss, first_three)
+    # a 20-minute first period (the WNBA's halves, a 30-second shot clock; All-Star exhibitions): no flag
+    halves = poss.with_columns(
+        pl.when(pl.col("period") == 1)
+        .then(pl.col("start_seconds_remaining") + 600)
+        .otherwise(pl.col("start_seconds_remaining"))
+        .alias("start_seconds_remaining")
+    )
+    flagged = add_two_for_one_flags(halves, pbp)
+    assert flagged["two_for_one"].null_count() == flagged.height
+    assert flagged["extra_possession"].null_count() == flagged.height
+    assert flagged["change_clock"].null_count() == 0
+
+
+def test_margin_is_null_when_the_home_side_is_unreadable() -> None:
+    """One offense for the whole game cannot be split into home and away: null, never a guess."""
+    poss, pbp = _game("0022300001")
+    one_team = poss.with_columns(
+        pl.lit(poss["offense_team_id"][0], dtype=poss.schema["offense_team_id"]).alias("offense_team_id")
+    )
+    out = add_two_for_one_flags(one_team, pbp)
+    assert out["margin_at_change"].null_count() == out.height
+    assert add_two_for_one_flags(poss, pbp)["margin_at_change"].null_count() == 0
+
+
+def test_summary_go_rate_is_null_without_a_choice(seasons: dict[str, pl.DataFrame]) -> None:
+    """A group whose window possessions are all ``other`` gets a null go rate, never NaN."""
+    out = seasons["wnba_2025"].with_columns(
+        pl.when(pl.col("two_for_one").is_not_null()).then(pl.lit("other")).alias("two_for_one")
+    )
+    s = two_for_one_summary(out, by=(), n_boot=10)
+    assert s["n_went"].item() == 0 and s["n_held"].item() == 0 and s["n_other"].item() > 0
+    assert s["go_rate"].is_null().item() and s["net_diff"].is_null().item()
 
 
 def test_sanity_gates(seasons: dict[str, pl.DataFrame]) -> None:
@@ -266,7 +344,7 @@ def test_summary_binned_difference_and_interval(seasons: dict[str, pl.DataFrame]
         & ((pl.col("period") < 4) | (pl.col("margin_at_change").abs() <= 10))
     )
     per = (
-        w.group_by(pl.col("change_clock").floor().alias("b"))
+        w.group_by(pl.col("change_clock").ceil().alias("b"))
         .agg(
             pl.col("sequence_net").filter(pl.col("two_for_one") == "went").mean().alias("g"),
             pl.col("sequence_net").filter(pl.col("two_for_one") == "held").mean().alias("h"),
@@ -289,3 +367,12 @@ def test_summary_per_team_and_missing_columns(seasons: dict[str, pl.DataFrame]) 
     assert teams.columns == ["offense_team_id", *TWO_FOR_ONE_SUMMARY_SCHEMA]
     with pytest.raises(ValueError, match="missing columns"):
         two_for_one_summary(out.drop(*POSSESSION_FLAGS_SCHEMA))
+    with pytest.raises(ValueError, match="n_boot"):
+        two_for_one_summary(out, n_boot=0)
+    with pytest.raises(ValueError, match="ci must"):
+        two_for_one_summary(out, ci=90)
+    # nothing kept: zero rows for the league line too, not one row of zeros
+    none = out.with_columns(pl.lit(None, dtype=pl.Utf8).alias("two_for_one"))
+    for by in ((), ("offense_team_id",)):
+        empty = two_for_one_summary(none, by=by, n_boot=10)
+        assert empty.height == 0 and empty.columns == [*by, *TWO_FOR_ONE_SUMMARY_SCHEMA]

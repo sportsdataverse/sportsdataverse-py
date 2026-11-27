@@ -435,7 +435,7 @@ add_possession_flags:
   fg2m: Two-point field goals made during the possession.
   is_second_chance: Whether the row is a second-chance continuation following an offensive rebound.
   lineup_source: Provenance of the on-court lineup identification for the row (how the five-man units were resolved).
-  number_in_period: Sequential possession number for the offense within the period.
+  number_in_period: Possession number within the period, both teams counted, resetting to 1 at each period start.
   off_player_1: NBA Stats player id of offensive on-court player 1 of 5 for the possession.
   off_player_2: NBA Stats player id of offensive on-court player 2 of 5 for the possession.
   off_player_3: NBA Stats player id of offensive on-court player 3 of 5 for the possession.
@@ -467,7 +467,7 @@ add_two_for_one_flags:
   fg2m: Two-point field goals made during the possession.
   is_second_chance: Whether the row is a second-chance continuation following an offensive rebound.
   lineup_source: Provenance of the on-court lineup identification for the row (how the five-man units were resolved).
-  number_in_period: Sequential possession number for the offense within the period.
+  number_in_period: Possession number within the period, both teams counted, resetting to 1 at each period start.
   off_player_1: NBA Stats player id of offensive on-court player 1 of 5 for the possession.
   off_player_2: NBA Stats player id of offensive on-court player 2 of 5 for the possession.
   off_player_3: NBA Stats player id of offensive on-court player 3 of 5 for the possession.
@@ -487,31 +487,31 @@ add_two_for_one_flags:
   two_for_one: The 2-for-1 choice, null outside the window (change_clock in (33, 46] by default). went when the first shot
     leaves at least go_floor (27) seconds, held when not and the possession ends with 24 or fewer left (the opponent can
     hold for the last shot), other otherwise (an early turnover or foul trip, or an end between 24 and 27).
-  extra_possession: In the window, whether the offense has a later possession in the period whose change clock is above
-    0 (a last-second heave counts); null outside it.
+  extra_possession: In the window, whether the offense has the ball again after the defense has had it, in the same period,
+    on a possession whose change clock is above 0 (a last-second heave counts; keeping the ball does not); null outside it.
   sequence_points: In the window, the offense's points on this possession and its later ones in the period; null outside
     it.
   sequence_points_allowed: In the window, the defense's points on its possessions after this one in the period; null
     outside it.
   sequence_net: sequence_points minus sequence_points_allowed; null outside the window.
   margin_at_change: The offense's score minus the defense's at the change of possession, from the play-by-play running
-    score. Set on every possession.
+    score. Set on every possession, except null for a game whose home side the score cannot tell.
 two_for_one_summary:
   offense_team_id: NBA Stats team id of the offense (the default by group).
   games: Games with at least one kept 2-for-1-window possession for the group.
   n_went: Kept window possessions that went 2-for-1.
   n_held: Kept window possessions that held.
   n_other: Kept window possessions that were neither (an early turnover or foul trip, or an end between 24 and the floor).
-  go_rate: n_went over n_went plus n_held.
-  extra_rate_went: Share of went possessions whose offense got a later possession in the period.
-  extra_rate_held: Share of held possessions whose offense got a later possession in the period.
-  extra_rate_1s_went: As extra_rate_went, counting a later possession only with 1.0 s or more on its change clock.
-  extra_rate_1s_held: As extra_rate_held, counting a later possession only with 1.0 s or more on its change clock.
+  go_rate: n_went over n_went plus n_held; null when the group has neither.
+  extra_rate_went: Share of went possessions whose offense got the ball back after the opponent's possession.
+  extra_rate_held: Share of held possessions whose offense got the ball back after the opponent's possession.
+  extra_rate_1s_went: As extra_rate_went, counting the ball back only with 1.0 s or more on its change clock.
+  extra_rate_1s_held: As extra_rate_held, counting the ball back only with 1.0 s or more on its change clock.
   net_went: Mean sequence_net (the offense's rest-of-period points minus the defense's) of went possessions.
   net_held: Mean sequence_net of held possessions.
   net_other: Mean sequence_net of other possessions (a sensitivity; not in the comparison).
-  net_diff: Went minus held sequence_net within 1-second change_clock bins, averaged with each bin weighted by its went
-    plus held count. Descriptive, not the value of going 2-for-1.
+  net_diff: Went minus held sequence_net within 1-second change_clock bins ((b - 1, b]), averaged with each bin weighted
+    by its went plus held count. Descriptive, not the value of going 2-for-1.
   net_diff_lo: Lower end of net_diff's interval (90% by default) from a bootstrap that resamples whole games.
   net_diff_hi: Upper end of net_diff's interval (90% by default) from a bootstrap that resamples whole games.
 add_sequence_features:

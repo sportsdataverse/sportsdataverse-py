@@ -160,7 +160,7 @@ if __name__ == "__main__":
     data, csv = Path(sys.argv[1]), Path(sys.argv[2])
     res = compare(theirs(csv), ours(data))
     res.write_csv(Path(__file__).with_suffix(".csv"), float_precision=3)
-    matched = res.filter(~pl.col("cause").str.starts_with("unmatched"))
+    matched = res.filter(pl.col("cause").str.starts_with("unmatched").not_())
     for a in ("our_start", "change_clock"):
         print(f"matched nearest on {a}: {res.filter(pl.col('anchor') == a).height}")
     print(

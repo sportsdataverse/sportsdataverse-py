@@ -392,14 +392,14 @@ TWO_FOR_ONE_SCHEMA: dict[str, pl.DataType] = {
 #: ``natural`` rate (a mid-period possession's chance of a first shot that early) by 5 points or more:
 #: 0.059 in (33, 34], peaking at 0.257 in (38, 39], 0.064 in (45, 46] and 0.042 in (46, 47]. Below 33
 #: teams rarely manage it (a go rate of 0.13 or less); above 46 a normal possession goes anyway. A
-#: 3-point threshold gives (32, 47], a 10-point one (34, 42].
+#: 3-point threshold gives (32, 47], a 10-point one (34, 43].
 TWO_FOR_ONE_WINDOW: Final[tuple[float, float]] = (33.0, 46.0)
 
 #: A possession ``went`` 2-for-1 when its first shot leaves at least this many seconds. Same script and
 #: seasons: ``P(extra_possession)`` against the first-shot clock rises from about 0.48 (16-21 s) to
 #: about 0.93 (30-40 s) over a ramp (0.57 at 24, 0.64 at 25, 0.69 at 26, 0.75 at 27, 0.82 at 28 s),
 #: and 27 is where a step function fits it best (count-weighted least squares over 16-39 s, from the
-#: candidates 24-28): pooled, and in 7 of the 11 seasons (26 in 2015-16 and 2016-17, 28 in 2021-22 and
+#: candidates 24-28): pooled, and in 7 of the 11 seasons (26 in 2015-16, 28 in 2016-17, 2021-22 and
 #: 2023-24). A full shot clock plus about 3 seconds for the rebound or inbound.
 TWO_FOR_ONE_GO_FLOOR: Final[float] = 27.0
 
@@ -443,30 +443,34 @@ def add_two_for_one_flags(
     early, leaving more than a shot clock so it gets the ball back for the last shot (two
     possessions to one), or run a normal possession and let the opponent hold for the last
     shot. This marks every possession that faces that choice, which one the team made, and
-    what the rest of the period brought. Works for the NBA, WNBA and G League (24-second shot
-    clock), on any number of games. Every clock is seconds left in the period.
+    what the rest of the period brought: NBA, G League and WNBA from 2006 (24-second shot clock,
+    quarters). A game whose first period runs over 15 minutes (WNBA halves and a 30-second shot
+    clock through 2005; All-Star-weekend exhibitions) gets no ``two_for_one``, so no outcomes.
+    Every clock is seconds left in the period.
 
     **change_clock** (Float64): the clock at the change of possession, the same moment
     ``seconds_to_first_shot`` counts from (the previous possession's last event; a period's
     first possession uses its own first event). **first_shot_clock** (Float64): the clock at the
     possession's first field-goal attempt, null without one. **margin_at_change** (Int64): the
-    offense's score minus the defense's at the change of possession, from the pbp running score.
-    These three are set on every possession.
+    offense's score minus the defense's at the change of possession, from the pbp running score;
+    null for a game whose home side the score cannot tell. Set on every possession.
 
     **two_for_one** (Utf8, null outside the window): with ``rules="sdv"`` the window is
     ``window[0] < change_clock <= window[1]``; ``"went"`` when ``first_shot_clock >= go_floor``,
     ``"held"`` when not went and the possession ends with 24 or fewer seconds left (the
     opponent can hold for the last shot), ``"other"`` otherwise (an early turnover or foul
-    trip, or an end between 24 and ``go_floor``). ``rules="mekonen"`` reproduces ACC-2026-0075:
+    trip, or an end between 24 and ``go_floor``). ``rules="mekonen"`` approximates ACC-2026-0075:
     the change clock rounded half-to-even (as numpy does) in 34-40 s, ``"went"`` for a first
     shot within 7 s, ``"held"`` for a later first shot and a rounded end clock of 24 or less,
     and in the 4th quarter only when ``|margin_at_change| <= 10``. The study's "start clock" is
     its possession's first event, and its possessions open with the defensive rebound or steal
     (625 of its 778 rows) that ours give to the previous possession, so it is our change clock
-    (``tools/models/nba_two_for_one_parity.py``).
+    (``tools/models/nba_two_for_one_parity.py``: 713 of its 778 rows match one of ours and 604 of
+    those agree; the study times some first shots by possession length, which this does not).
 
-    In the window: **extra_possession** (Boolean), the offense has a later possession in the
-    period whose change clock is above 0 (a 0.4-second heave counts); **sequence_points**
+    In the window: **extra_possession** (Boolean), the offense has the ball again after the
+    defense has had it, in the same period, on a possession whose change clock is above 0 (a
+    0.4-second heave counts; a team that keeps the ball does not); **sequence_points**
     (Int64), the offense's points on this and its later possessions in the period;
     **sequence_points_allowed** (Int64), the defense's points on its possessions after this one
     in the period; **sequence_net** (Int64), the difference. All four are null outside it.
@@ -483,7 +487,7 @@ def add_two_for_one_flags(
             :data:`TWO_FOR_ONE_WINDOW`.
         go_floor: The first-shot clock at or above which a possession went 2-for-1. Default
             :data:`TWO_FOR_ONE_GO_FLOOR`.
-        rules: ``"sdv"`` (default) or ``"mekonen"`` (ACC-2026-0075's definition, for parity).
+        rules: ``"sdv"`` (default) or ``"mekonen"`` (ACC-2026-0075's definition, approximated, for parity).
         shot_clock: Must be 24.0: the window and floor are calibrated for that shot clock only.
 
     Returns:
@@ -493,7 +497,8 @@ def add_two_for_one_flags(
     Raises:
         ValueError: If a needed column is missing, a column it would write already exists,
             ``game_id`` differs in dtype between the frames, ``offense_team_id`` and
-            ``defense_team_id`` differ in dtype, ``rules`` is unknown, or ``shot_clock`` is not 24.
+            ``defense_team_id`` differ in dtype, ``rules`` is unknown, ``shot_clock`` is not 24,
+            or a possession has no event in ``pbp`` (the wrong season, a filtered frame).
 
     Example:
         Flag one season::
@@ -510,10 +515,49 @@ def add_two_for_one_flags(
             mek = add_two_for_one_flags(raw, load_nba_stats_pbp(2026), rules="mekonen")
 
         See Also:
-            * `NBA-2for1-Analysis`_ -- the 2025-26 study the ``mekonen`` rules reproduce.
+            * `NBA-2for1-Analysis`_ -- the 2025-26 study the ``mekonen`` rules approximate.
 
         .. _NBA-2for1-Analysis: https://github.com/NathanielMekonen/NBA-2for1-Analysis
     """
+    _check_tfo_inputs(possessions, pbp, rules, shot_clock)
+    if possessions.is_empty():
+        return possessions.with_columns(pl.lit(None, dtype=t).alias(c) for c, t in TWO_FOR_ONE_SCHEMA.items())
+
+    p = possessions.select(_TFO_POSS_COLS).with_row_index("_row")
+    ev = pbp.select(_PBP_COLS).sort("game_id", "order_index")
+    _check_coverage(p, ev)
+    g = _per_possession(p, ev, rules, window, go_floor)
+    return possessions.with_columns(_sequence_outcomes(g).drop("_row").get_columns())
+
+
+def _per_possession(
+    p: pl.DataFrame, ev: pl.DataFrame, rules: str, window: tuple[float, float], go_floor: float
+) -> pl.DataFrame:
+    """Clocks, margin and choice per possession, plus ``_rcum``: the offense's points to the buzzer."""
+    return (
+        p.join(_first_shot(p, ev), on="_row", how="left")
+        .join(_margin_at_change(p, ev), on="_row", how="left")
+        .with_columns(
+            pl.col("_ball_clock").alias("change_clock"),
+            (pl.col("_ball_clock") - pl.col("seconds_to_first_shot")).alias("first_shot_clock"),
+        )
+        .with_columns(
+            # quarters only: halves (and exhibition formats) are outside the calibration
+            pl.when(
+                pl.col("start_seconds_remaining").filter(pl.col("period") == 1).max().over("game_id")
+                <= _HALF_GAME_FIRST_PERIOD_SECONDS
+            )
+            .then(_choice(rules, window, go_floor))
+            .alias("two_for_one")
+        )
+        .sort("game_id", "possession_number")
+        # the offense's points from this possession to the buzzer
+        .with_columns(pl.col("points").cum_sum(reverse=True).over(_SEQ_KEYS).alias("_rcum"))
+    )
+
+
+def _check_tfo_inputs(possessions: pl.DataFrame, pbp: pl.DataFrame, rules: str, shot_clock: float) -> None:
+    """:func:`add_two_for_one_flags`'s argument and column checks (see its ``Raises``)."""
     if rules not in ("sdv", "mekonen"):
         raise ValueError(f"rules must be 'sdv' or 'mekonen', not {rules!r}")
     if shot_clock != TWO_FOR_ONE_SHOT_CLOCK:
@@ -535,58 +579,103 @@ def add_two_for_one_flags(
             f"team id dtype differs: offense_team_id {possessions.schema['offense_team_id']} vs "
             f"defense_team_id {possessions.schema['defense_team_id']}"
         )
-    if possessions.is_empty():
-        return possessions.with_columns(pl.lit(None, dtype=t).alias(c) for c, t in TWO_FOR_ONE_SCHEMA.items())
 
-    p = possessions.select(_TFO_POSS_COLS).with_row_index("_row")
-    ev = pbp.select(_PBP_COLS).sort("game_id", "order_index")
-    g = (
-        p.join(_first_shot(p, ev), on="_row", how="left")
-        .join(_margin_at_change(p, ev), on="_row", how="left")
-        .with_columns(
-            pl.col("_ball_clock").alias("change_clock"),
-            (pl.col("_ball_clock") - pl.col("seconds_to_first_shot")).alias("first_shot_clock"),
-        )
-        .with_columns(_choice(rules, window, go_floor).alias("two_for_one"))
-        .sort("game_id", "possession_number")
-        .with_columns(
-            # per team and period, from this possession to the buzzer
-            pl.col("points").cum_sum(reverse=True).over(_SEQ_KEYS).alias("_rcum"),
-            (pl.col("change_clock") > 0).cast(pl.Int64).cum_sum(reverse=True).over(_SEQ_KEYS).alias("_n_live"),
-        )
-    )
-    # The defense's points after this possession = the reverse cumsum at its first later possession.
-    later = g.select("game_id", "period", pl.col("offense_team_id").alias("_team"), "possession_number", "_rcum").sort(
-        "game_id", "period", "_team", "possession_number"
-    )
-    allowed = (
-        g.select("_row", "game_id", "period", pl.col("defense_team_id").alias("_team"), "possession_number")
-        .sort("game_id", "period", "_team", "possession_number")
+
+def _check_coverage(p: pl.DataFrame, ev: pl.DataFrame) -> None:
+    """Raise when a possession has no pbp event: its clocks and margin would be silently null."""
+    hit = (
+        p.select("game_id", "start_order_index", "end_order_index")
+        .sort("game_id", "start_order_index")
         .join_asof(
-            later.rename({"_rcum": "_allowed"}),
-            on="possession_number",
-            by=["game_id", "period", "_team"],
+            ev.select("game_id", pl.col("order_index").alias("_oi")),
+            left_on="start_order_index",
+            right_on="_oi",
+            by="game_id",
             strategy="forward",
-            allow_exact_matches=False,
             check_sortedness=False,
         )
-        .select("_row", "_allowed")
     )
+    uncovered = hit.filter((pl.col("_oi") <= pl.col("end_order_index")).fill_null(False).not_()).height
+    if uncovered:
+        raise ValueError(f"pbp has no events for {uncovered} of {p.height} possessions; pass the pbp they came from")
+
+
+def _sequence_outcomes(g: pl.DataFrame) -> pl.DataFrame:
+    """``_row`` + :data:`TWO_FOR_ONE_SCHEMA` in ``_row`` order, from the per-possession frame ``g``."""
     in_window = pl.col("two_for_one").is_not_null()
-    flags = (
-        g.join(allowed, on="_row", how="left")
+    return (
+        g.join(_after_opponent(g, pl.col("change_clock") > 0), on="_row", how="left")
         .with_columns(
-            pl.when(in_window)
-            .then(pl.col("_n_live") - (pl.col("change_clock") > 0).cast(pl.Int64) > 0)
-            .alias("extra_possession"),
+            pl.when(in_window).then(pl.col("_back")).alias("extra_possession"),
             pl.when(in_window).then(pl.col("_rcum")).alias("sequence_points"),
-            pl.when(in_window).then(pl.col("_allowed").fill_null(0)).alias("sequence_points_allowed"),
+            pl.when(in_window).then(pl.col("_allowed")).alias("sequence_points_allowed"),
         )
         .with_columns((pl.col("sequence_points") - pl.col("sequence_points_allowed")).alias("sequence_net"))
         .select("_row", *(pl.col(c).cast(t) for c, t in TWO_FOR_ONE_SCHEMA.items()))
         .sort("_row")
     )
-    return possessions.with_columns(flags.drop("_row").get_columns())
+
+
+_BY_TEAM: Final[list[str]] = ["game_id", "period", "_team"]
+
+
+def _first_after(left: pl.DataFrame, rest: pl.DataFrame, on: str) -> pl.DataFrame:
+    """Each ``left`` row joined to ``_team``'s first possession numbered after ``on`` in the period."""
+    return left.sort(*_BY_TEAM, on).join_asof(
+        rest,
+        left_on=on,
+        right_on="_pn",
+        by=_BY_TEAM,
+        strategy="forward",
+        allow_exact_matches=False,
+        check_sortedness=False,
+    )
+
+
+def _after_opponent(f: pl.DataFrame, live: pl.Expr) -> pl.DataFrame:
+    """``_row -> _allowed, _back``: what follows the defense's next possession in the period.
+
+    ``_allowed`` is the defense's points from that possession to the buzzer (0 without one).
+    ``_back`` is whether the offense then has the ball again on a ``live`` possession: two
+    possessions to the opponent's one, so a team that keeps the ball (a possession split by a
+    jump ball, say) has not earned an extra one.
+    """
+    rest = (
+        f.sort("game_id", "possession_number")
+        .select(
+            "game_id",
+            "period",
+            pl.col("offense_team_id").alias("_team"),
+            pl.col("possession_number").alias("_pn"),
+            pl.col("points").cum_sum(reverse=True).over(_SEQ_KEYS).alias("_rcum"),
+            live.fill_null(False).cast(pl.Int64).cum_sum(reverse=True).over(_SEQ_KEYS).alias("_n_live"),
+        )
+        .sort(*_BY_TEAM, "_pn")
+    )
+    nxt = _first_after(
+        f.select(
+            "_row",
+            "game_id",
+            "period",
+            pl.col("defense_team_id").alias("_team"),
+            "possession_number",
+            "offense_team_id",
+        ),
+        rest,
+        "possession_number",
+    ).select("_row", "game_id", "period", "offense_team_id", pl.col("_pn").alias("_def_next"), "_rcum")
+    back = _first_after(
+        nxt.filter(pl.col("_def_next").is_not_null()).select(
+            "_row", "game_id", "period", pl.col("offense_team_id").alias("_team"), "_def_next"
+        ),
+        rest,
+        "_def_next",
+    ).select("_row", (pl.col("_n_live").fill_null(0) > 0).alias("_back"))
+    return (
+        nxt.select("_row", pl.col("_rcum").fill_null(0).alias("_allowed"))
+        .join(back, on="_row", how="left")
+        .with_columns(pl.col("_back").fill_null(False))
+    )
 
 
 def _margin_at_change(p: pl.DataFrame, ev: pl.DataFrame) -> pl.DataFrame:
@@ -594,6 +683,8 @@ def _margin_at_change(p: pl.DataFrame, ev: pl.DataFrame) -> pl.DataFrame:
 
     The pbp score is home and away and neither frame names the home team, so the side comes
     from the score itself: per game, the offense whose possessions raise the home score is home.
+    A game where that does not give its two offenses opposite sides (a team that never scored,
+    or points credited to the other team's possessions) gets a null margin rather than a guess.
     """
     score = ev.select(
         "game_id", "order_index", (_running_score("score_home") - _running_score("score_away")).alias("_hma")
@@ -622,7 +713,14 @@ def _margin_at_change(p: pl.DataFrame, ev: pl.DataFrame) -> pl.DataFrame:
         .with_columns(
             (pl.col("_hma_end") - pl.col("_hma")).sum().over("game_id", "offense_team_id").sign().alias("_side")
         )
-        .select("_row", pl.when(pl.col("_side") != 0).then(pl.col("_hma") * pl.col("_side")).alias("margin_at_change"))
+        .with_columns(
+            (
+                (pl.col("offense_team_id").n_unique().over("game_id") == 2)
+                & (pl.col("_side").min().over("game_id") == -1)
+                & (pl.col("_side").max().over("game_id") == 1)
+            ).alias("_sides_ok")
+        )
+        .select("_row", pl.when(pl.col("_sides_ok")).then(pl.col("_hma") * pl.col("_side")).alias("margin_at_change"))
     )
 
 
@@ -692,13 +790,15 @@ def two_for_one_summary(
     fouling is not a 2-for-1 choice).
 
     Per ``by`` group: ``games``, ``n_went`` / ``n_held`` / ``n_other``, ``go_rate`` (went over
-    went plus held), ``extra_rate_*`` (share with ``extra_possession``), ``extra_rate_1s_*`` (the
-    sensitivity that counts a later possession only with 1.0 s or more on its change clock),
-    mean ``sequence_net`` per choice (``net_*``), and ``net_diff``: went minus held, taken
-    within 1-second ``change_clock`` bins and averaged with each bin weighted by its went plus
-    held count, so the time each choice starts with does not drive it. ``net_diff_lo`` /
-    ``net_diff_hi`` are the ``ci`` interval of a bootstrap that resamples whole games (never
-    rows) within the group. ``"other"`` stays out of the comparison.
+    went plus held, null with neither), ``extra_rate_*`` (share with ``extra_possession``),
+    ``extra_rate_1s_*`` (the sensitivity that counts the ball back only with 1.0 s or more on
+    its change clock), mean ``sequence_net`` per choice (``net_*``), and ``net_diff``: went
+    minus held, taken within 1-second ``change_clock`` bins (``(b - 1, b]``, the window's shape)
+    and averaged with each bin weighted by its went plus held count, so the time each choice
+    starts with does not drive it. ``net_diff_lo`` / ``net_diff_hi`` are the ``ci`` interval of
+    a bootstrap that resamples whole games (never rows) within the group; a replicate whose draw
+    leaves no bin holding both choices is dropped, so the interval is conditional on the
+    comparison existing. ``"other"`` stays out of the comparison.
 
     Args:
         flagged: :func:`add_two_for_one_flags` output with every possession of each game (the
@@ -707,16 +807,18 @@ def two_for_one_summary(
         by: Group columns; ``()`` for one league row. Default ``("offense_team_id",)``.
         exclude_garbage: Drop ``is_garbage_time`` possessions. Default True.
         late_margin_max: Period 4 and overtime keep ``|margin_at_change|`` up to this. Default 10.
-        n_boot: Bootstrap replicates. Default 1000.
-        ci: Interval coverage. Default 0.90.
+        n_boot: Bootstrap replicates, at least 1. Default 1000.
+        ci: Interval coverage, strictly between 0 and 1. Default 0.90.
         seed: Bootstrap seed. Default 0.
 
     Returns:
         One row per group: the ``by`` columns then :data:`TWO_FOR_ONE_SUMMARY_SCHEMA`, sorted
-        by ``by``. ``net_diff`` is null with no bin holding both choices.
+        by ``by``. ``net_diff`` is null with no bin holding both choices. Zero rows when no
+        possession is kept, whatever ``by`` is.
 
     Raises:
-        ValueError: If a needed column is missing.
+        ValueError: If a needed column is missing, ``n_boot`` is below 1, or ``ci`` is not
+            strictly between 0 and 1.
 
     Example:
         League line by season::
@@ -734,25 +836,14 @@ def two_for_one_summary(
 
         .. _NBA-2for1-Analysis: https://github.com/NathanielMekonen/NBA-2for1-Analysis
     """
-    need = [*by, "game_id", "period", "possession_number", "offense_team_id", *TWO_FOR_ONE_SCHEMA]
-    if exclude_garbage:
-        need.append("is_garbage_time")
-    missing = [c for c in dict.fromkeys(need) if c not in flagged.columns]
-    if missing:
-        raise ValueError(f"flagged is missing columns {missing}")
+    if n_boot < 1:
+        raise ValueError(f"n_boot must be at least 1, not {n_boot}")
+    if not 0 < ci < 1:
+        raise ValueError(f"ci must be strictly between 0 and 1, not {ci}")
     keys = list(by)
-    late_ok = (pl.col("period") < 4) | (pl.col("margin_at_change").abs() <= late_margin_max)
-    live = (pl.col("change_clock") >= 1.0).cast(pl.Int64)
-    w = (
-        flagged.sort("game_id", "possession_number")
-        .with_columns(
-            ((live.cum_sum(reverse=True) - live).over(_SEQ_KEYS) > 0).alias("_extra_1s"),
-            pl.col("change_clock").floor().alias("_bin"),
-        )
-        .filter(pl.col("two_for_one").is_not_null() & late_ok.fill_null(False))
-    )
-    if exclude_garbage:
-        w = w.filter(pl.col("is_garbage_time") == False)  # noqa: E712
+    w = _summary_rows(flagged, keys, exclude_garbage, late_margin_max)
+    if w.is_empty():
+        return pl.DataFrame(schema={**{k: flagged.schema[k] for k in keys}, **TWO_FOR_ONE_SUMMARY_SCHEMA})
 
     def rate(col: str, choice: str) -> pl.Expr:
         return pl.col(col).filter(pl.col("two_for_one") == choice).cast(pl.Float64).mean()
@@ -768,10 +859,39 @@ def two_for_one_summary(
         ),
         *(rate("sequence_net", c).alias(f"net_{c}") for c in ("went", "held", "other")),
     )
-    base = base.with_columns((pl.col("n_went") / (pl.col("n_went") + pl.col("n_held"))).alias("go_rate"))
+    went_or_held = pl.col("n_went") + pl.col("n_held")
+    # null, not NaN, for a group whose every possession is ``other``
+    base = base.with_columns(pl.when(went_or_held > 0).then(pl.col("n_went") / went_or_held).alias("go_rate"))
     boot = _binned_diff_boot(w.filter(pl.col("two_for_one") != "other"), keys, n_boot, ci, seed)
-    out = base.join(boot, on=keys or ["_all"], how="left")
+    out = base.join(boot, on=keys or ["_all"], how="left", nulls_equal=True)
     return out.select(*keys, *(pl.col(c).cast(t) for c, t in TWO_FOR_ONE_SUMMARY_SCHEMA.items())).sort(keys or "games")
+
+
+def _summary_rows(flagged: pl.DataFrame, keys: list[str], exclude_garbage: bool, late_margin_max: int) -> pl.DataFrame:
+    """The window possessions :func:`two_for_one_summary` keeps, with ``_extra_1s`` and the clock ``_bin``.
+
+    ``_bin`` is ``ceil(change_clock)``: bin ``b`` holds ``(b - 1, b]``, the window's own shape and
+    the calibration script's bins.
+    """
+    need = [*keys, *_SEQ_KEYS, "possession_number", "defense_team_id", "points", *TWO_FOR_ONE_SCHEMA]
+    if exclude_garbage:
+        need.append("is_garbage_time")
+    missing = [c for c in dict.fromkeys(need) if c not in flagged.columns]
+    if missing:
+        raise ValueError(f"flagged is missing columns {missing}")
+    late_ok = (pl.col("period") < 4) | (pl.col("margin_at_change").abs() <= late_margin_max)
+    f = flagged.with_row_index("_row")
+    # the sensitivity: the ball back only with 1.0 s or more on its change clock
+    back_1s = _after_opponent(f, pl.col("change_clock") >= 1.0).select("_row", pl.col("_back").alias("_extra_1s"))
+    w = (
+        f.join(back_1s, on="_row", how="left")
+        .with_columns(pl.col("change_clock").ceil().alias("_bin"))
+        .filter(pl.col("two_for_one").is_not_null() & late_ok.fill_null(False))
+        .drop("_row")
+    )
+    if exclude_garbage:
+        w = w.filter(pl.col("is_garbage_time") == False)  # noqa: E712
+    return w
 
 
 def _binned_diff_boot(w: pl.DataFrame, keys: list[str], n_boot: int, ci: float, seed: int) -> pl.DataFrame:
@@ -802,7 +922,7 @@ def _binned_diff_boot(w: pl.DataFrame, keys: list[str], n_boot: int, ci: float, 
         est, reps = diff[0], diff[1:]
         reps = reps[~np.isnan(reps)]
         lo, hi = np.quantile(reps, [(1 - ci) / 2, (1 + ci) / 2]) if reps.size else (np.nan, np.nan)
-        rows.append({**dict(zip(grp, gkey)), "net_diff": est, "net_diff_lo": lo, "net_diff_hi": hi})
+        rows.append({**dict(zip(grp, gkey, strict=True)), "net_diff": est, "net_diff_lo": lo, "net_diff_hi": hi})
     schema = {c: w.schema[c] for c in grp} | {
         "net_diff": pl.Float64,
         "net_diff_lo": pl.Float64,
@@ -817,7 +937,7 @@ def _diff_from(S: np.ndarray, K: np.ndarray, cols: pl.DataFrame) -> np.ndarray:
     bins = cols["_bin"].unique().sort().to_list()
     num, den = np.zeros(S.shape[0]), np.zeros(S.shape[0])
     choice = cols["two_for_one"].to_list()
-    at = {(b, c): i for i, (b, c) in enumerate(zip(cols["_bin"].to_list(), choice))}
+    at = {(b, c): i for i, (b, c) in enumerate(zip(cols["_bin"].to_list(), choice, strict=True))}
     for b in bins:
         i, j = at.get((b, "went")), at.get((b, "held"))
         if i is None or j is None:
