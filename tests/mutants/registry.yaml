@@ -13394,3 +13394,13 @@
   test: tests/soccer/test_soccer_transfermarkt.py -k corrupt_footer
   expected: kill
   note: a mirror asset whose parquet footer will not decode raised a bare OSError instead of falling back to the source
+
+- id: tm-player-bridge-jan1-is-weak
+  group: codegen-runtime
+  finding: ACC-2026-0050
+  file: tools/build_soccer_espn_transfermarkt_player_crosswalk.py
+  snippet: '            ((pl.col("dob").dt.month() == 1) & (pl.col("dob").dt.day() == 1)).alias("weak"),'
+  mutant: '            pl.lit(False).alias("weak"),'
+  test: tests/soccer/test_soccer_espn_transfermarkt_player_crosswalk.py -k 1_january
+  expected: kill
+  note: a 1 January birth date (a stand-in for an unknown day) resolved on name alone, giving one player two athletes
