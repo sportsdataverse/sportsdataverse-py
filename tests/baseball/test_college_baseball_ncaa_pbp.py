@@ -406,3 +406,15 @@ def test_present_tense_steal_of_home_is_a_stolen_base_and_one_run() -> None:
     """2023 contest 2390316: "Booker scores on steal of home" is the steal itself, counted once."""
     row = decompose_college_baseball_plays([{"description": "Booker scores on steal of home"}]).row(0, named=True)
     assert (row["play_type"], row["runs_scored"], row["scoring_runners"]) == ("stolen_base", 1, ["Booker"])
+
+
+def test_steal_of_home_comment_on_a_past_tense_page_stays_unknown() -> None:
+    """A past-tense page's present-tense scorer comment is never re-read as a play (round-2 review of #1368)."""
+    rows = decompose_college_baseball_plays(
+        [
+            {"description": "Martinez stole second."},
+            {"description": "Martinez stole second."},
+            {"description": "Booker scores on steal of home"},
+        ]
+    ).to_dicts()
+    assert (rows[-1]["play_type"], rows[-1]["runs_scored"]) == ("unknown", 0)

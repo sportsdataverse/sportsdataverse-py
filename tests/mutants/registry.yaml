@@ -13504,6 +13504,16 @@
   expected: kill
   note: "'Booker scores on steal of home' parses as play type unknown."
 
+- id: bb-present-steal-of-home-ungated
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "if present and \"scores on steal of home\" in low:  # \"Booker scores on steal of home\" (2023)"
+  mutant: "if \"scores on steal of home\" in low:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k steal_of_home_comment_on_a_past_tense_page"
+  expected: kill
+  note: "A past-tense page's 'X scores on steal of home' comment becomes an extra stolen base."
+
 # --- nfl-lateral-full-names: a lateral's credited player reads the box score's full name -----------
 - id: nfl-lateral-full-names-applied
   group: nfl-lateral-full-names
