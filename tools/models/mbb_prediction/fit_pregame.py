@@ -22,10 +22,11 @@ files against each other, paired, with SEs clustered by (season, week).
 ``--ft-weight`` overrides the engine's free-throw possession weight (0.44 today). The 2026-11-26 refit at
 the college 0.475 (``--ft-weight 0.475``) gave hfa 2.9291 / 2.6427, em_scale 0.5816 / 0.6278, margin_sd
 11.2203 / 12.1722, avg_tempo 70.3014 / 72.4083, bubble_adj_em 20.191 / 27.265 (men / women); it passed its
-2025-2026 pregame gate but did not ship (``mbb_team_ratings.raw_game_efficiency``). Its paired score was
-``--score 2025 2026`` once as shipped and once with ``--ft-weight 0.475 --constants '{...}'`` (the refit
-values), then ``--compare``. ``--keep-zero-turnover-games`` turns off the engine's later zero-turnover game
-drop, which the men's shipped constants predate: with it they reproduce to 4 dp.
+2025-2026 pregame gate, and the engine stays at 0.44 by the owner's decision
+(``mbb_team_ratings.raw_game_efficiency``). Its paired score was ``--score 2025 2026`` once as shipped and
+once with ``--ft-weight 0.475 --constants '{...}'`` (the refit values), then ``--compare``.
+``--keep-zero-turnover-games`` turns off the engine's later zero-turnover game drop, which the men's shipped
+constants predate: with it they reproduce to 4 dp.
 
 Usage::
 
