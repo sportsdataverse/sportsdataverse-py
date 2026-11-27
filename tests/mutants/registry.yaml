@@ -2872,8 +2872,8 @@
   group: codegen-runtime
   finding: R858-7
   file: tools/codegen/generate.py
-  snippet: '        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module, route_module)'
-  mutant: '        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module)'
+  snippet: '        self.example_url = _example_request(ep_host, ep, league.sport, example_league, getter_module, route_module)'
+  mutant: '        self.example_url = _example_request(ep_host, ep, league.sport, example_league, getter_module)'
   test: tests/codegen/test_api_module.py::test_per_route_getter_documents_the_url_its_own_module_requests
   expected: kill
   note: >-
@@ -13268,8 +13268,8 @@
   group: pll
   finding: pll-stats-api
   file: sportsdataverse/lacrosse/pll_runtime.py
-  snippet: 'str(v).lower() if isinstance(v, bool) else v'
-  mutant: 'v'
+  snippet: 'return str(v).lower()'
+  mutant: 'return v'
   test: tests/test_pll.py::test_wire_lowercases_bools_and_keeps_lists
   expected: kill
   note: requests would send True as "True"; the site sends true / false.
