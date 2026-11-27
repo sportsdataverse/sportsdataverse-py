@@ -279,3 +279,10 @@ def test_soccer_two_finals_for_one_game_raise() -> None:
     ]
     with pytest.raises(ValueError, match="different finals"):
         soccer_game_story([raw[0], stale])
+
+
+def test_mlb_matrix_missing_a_state_raises() -> None:
+    pbp, sched, wpa, re24 = (_read(f"mlb_{k}_games.parquet") for k in ("pbp", "schedule", "wpa", "re24"))
+    gap = re24.filter(((pl.col("base_state") == "1__") & (pl.col("outs") == 0)) == False)
+    with pytest.raises(ValueError, match="some PAs' base-out states"):
+        mlb_game_story(pbp, sched, wpa, gap)

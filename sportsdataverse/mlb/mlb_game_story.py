@@ -137,8 +137,8 @@ def _states(pbp: pl.DataFrame, re24: pl.DataFrame, games: pl.DataFrame) -> pl.Da
     missing = sorted(set(out["season"].drop_nulls().to_list()) - set(re["season"].drop_nulls().to_list()))
     if missing:
         raise ValueError(f"re24 has no run expectancy for season(s) {missing}: pass load_mlb_re24_matrix for them")
-    if out.height and out["re"].null_count() == out.height:
-        raise ValueError("re24 matches none of these PAs' base-out states: pass load_mlb_re24_matrix for them")
+    if out["re"].null_count():  # a state the matrix lacks would count as 0 in the staff sums
+        raise ValueError("re24 has no run expectancy for some PAs' base-out states: pass a full load_mlb_re24_matrix")
     # a side's starter: the first pitcher it used
     starter = (
         out.sort("game_id", "at_bat_index")
@@ -303,7 +303,7 @@ def mlb_game_story(
         largest unanswered run; the top WPA player (``player_name`` null: the releases carry ids only).
 
     Raises:
-        ValueError: If ``re24`` has no run expectancy for one of the games' seasons, or for any of the PAs.
+        ValueError: If ``re24`` has no run expectancy for one of the games' seasons, or for a PA's base-out state.
 
     Example:
         Quick start::
@@ -315,7 +315,7 @@ def mlb_game_story(
             story = mlb_game_story(load_mlb_pbp([2025]), sched, load_mlb_wpa([2025]), load_mlb_re24_matrix([2025]))
             story["edges"].filter(pl.col("rank") == 1)
 
-        Every walk-off's moment::
+        The largest winner-favoring swings::
 
             story["moment"].filter(pl.col("winner_wpa") > 0.4)
 

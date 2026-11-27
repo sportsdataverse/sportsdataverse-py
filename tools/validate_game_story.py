@@ -174,8 +174,11 @@ def _epl(season: int, data_dir: Path) -> tuple[dict, None, pl.DataFrame]:
         with gzip.open(f, "rt", encoding="utf-8") as fh:
             payloads.append(json.load(fh))
     story = soccer_game_story(payloads)
-    rows = []
+    rows, seen = [], set()
     for p in payloads:  # reach: the scoring key events (the shootout left out) against the competitors' scores
+        if int(p["header"]["id"]) in seen:  # one row per game, as the adapter counts a summary once
+            continue
+        seen.add(int(p["header"]["id"]))
         side = {c["team"]["id"]: c["homeAway"] for c in p["header"]["competitions"][0]["competitors"]}
         n = {"home": 0, "away": 0}
         for e in p.get("keyEvents") or []:
