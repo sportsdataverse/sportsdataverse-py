@@ -46,6 +46,7 @@ cfb:
   normalize_pbp_columns: {df: {$call: cfb.load_cfb_pbp, args: {seasons: 2026}}, model: xpass_model}  # 67447 rows x 507 cols
   get_fg_wp: {pbp_df: {$call: cfb.load_cfb_pbp, args: {seasons: 2026}}}  # 67447 rows x 505 cols
   get_2pt_probs: {pbp_df: {$call: cfb.load_cfb_pbp, args: {seasons: 2026}}}  # 67447 rows x 505 cols
+  cfb_game_story: {pbp: {$call: cfb.load_cfb_pbp, args: {seasons: 2026}}}  # dict of frames -> hand_authored
 
 nfl:
   espn_nfl_calendar: {season: 2025}
@@ -294,6 +295,7 @@ nba:
   shot_coordinates: {pbp: {$call: nba.helper_nba_play_by_play, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458, return_parsed: false}}}}}
   team_game_rates: {team_box: {$call: nba.helper_nba_team_box, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458, return_parsed: false}}}}}
   player_game_rates: {player_box: {$call: nba.helper_nba_player_box, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458, return_parsed: false}}}}, team_box: {$call: nba.helper_nba_team_box, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458, return_parsed: false}}}}}
+  nba_game_story: {pbp: {$call: nba.helper_nba_play_by_play, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458, return_parsed: false}}}}, team_box: {$call: nba.helper_nba_team_box, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458, return_parsed: false}}}}, player_box: {$call: nba.helper_nba_player_box, args: {final: {$call: nba.espn_nba_pbp, args: {game_id: 401766458, return_parsed: false}}}}}  # dict of frames -> hand_authored
   realgm_coaches: {}  # 31 rows x 6 cols
   realgm_future_free_agents: {}  # 910 rows x 13 cols
   realgm_gms: {}  # 22 rows x 6 cols (needed SDV_PY_REALGM_DELAY=8)

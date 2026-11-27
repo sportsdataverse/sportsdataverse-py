@@ -21,6 +21,7 @@ __all__ = [
     "load_mlb_re24_matrix",
     "load_mlb_we_table",
     "load_mlb_wpa",
+    "load_mlb_leverage_index",
     "load_mlb_pbp",
     "load_mlb_pitches",
     "load_mlb_runners",
@@ -209,6 +210,66 @@ def load_mlb_wpa(seasons, return_as_pandas: bool = False):
     # over the years) -- union columns, null-fill gaps.
     # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
     out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_from_schema("loader_schemas:load_mlb_wpa")
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_mlb_leverage_index(seasons, return_as_pandas: bool = False):
+    """Load mlb_game_state (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_game_state
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2020).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |inning_capped     |Int64   |
+        |half              |String  |
+        |base_state        |String  |
+        |outs_start        |Int64   |
+        |score_diff_bucket |Int64   |
+        |leverage_index    |Float64 |
+        |n                 |UInt32  |
+        |thin              |Boolean |
+        |season            |Int64   |
+
+    Note:
+        Published 2020-2026, one row per load_mlb_we_table state bucket; extra half-innings open with the automatic runner on 2nd. Each PA's swing is the WE change it causes, with WE read from one table pooled over the 2015-2026 regular seasons and averaged over the season's own PAs (rebuilt 2026-11-27).
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2020.
+
+    Example:
+        Quick start::
+
+            load_mlb_leverage_index(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2020:
+            raise SeasonNotFoundError("season cannot be less than 2020")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_game_state/mlb_leverage_index_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_mlb_leverage_index: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_mlb_leverage_index")
+    )
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

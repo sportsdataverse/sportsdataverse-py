@@ -1,0 +1,18 @@
+schema: soccer_espn_transfermarkt_team_crosswalk
+kind: dataframe
+columns:
+- name: espn_team_id
+  type: character
+  description: ''
+- name: espn_league
+  type: character
+  description: ''
+- name: espn_display_name
+  type: character
+  description: ''
+- name: club_id
+  type: integer
+  description: ''
+- name: match_method
+  type: character
+  description: ''

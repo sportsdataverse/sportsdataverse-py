@@ -1041,9 +1041,8 @@ def _build_view(
     missing = [c for c in _REQUIRED if c not in plays.columns]
     if missing:
         raise ValueError(f"espn_nfl_pbp_nflverse: plays lack {missing}; pass NFLPlayProcess output")
-    _int_id(pl.col("id"), plays.schema["id"], "id")  # refuses a float play id ...
-    _int_id(pl.col("game_id"), plays.schema["game_id"], "game_id")  # ... and a float game id
-    df = _attach_nflverse_game_id(plays, schedule)
+    _int_id(pl.col("id"), plays.schema["id"], "id")  # refuses a float play id
+    df = _attach_nflverse_game_id(plays, schedule)  # refuses a float game id, nflverse_game_id or not
     if split_pats and "pat_of_id" not in df.columns:  # a frame split_pat_rows already split is kept as it is
         df = split_pat_rows(df)
     if "pat_of_id" in df.columns:

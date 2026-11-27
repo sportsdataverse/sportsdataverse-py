@@ -16,6 +16,7 @@
   - [Receiver targets (`box_convention/`)](#receiver-targets-box_convention)
   - [Roof without a venue id (`roof/`)](#roof-without-a-venue-id-roof)
   - [Box-score conventions (`box_convention/`)](#box-score-conventions-box_convention)
+  - [Lateral credit names (`lateral_names/`)](#lateral-credit-names-lateral_names)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -405,3 +406,17 @@ own `boxscore` in each is the oracle. They sit in a subdirectory, so the whole-g
 | 401873053 | NE @ DET | R.McCreary's 22-yard return of a T.DeVito interception, out of NE's `off_yards`; four kneels |
 | 401873059 | MIA @ IND | Daniel Jones' two kneels on his rushing line |
 | 401873060 | MIN @ GB | GB 223 gross / 164 net passing (`pass_yards_net`) |
+
+## Lateral credit names (`lateral_names/`)
+
+Two 2024 games from `nflverse-dev/nfl-raw` (commit f5b5269e): the Site v2 summary `nfl/espn/raw/2024/<game_id>.json.gz`
+(source `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`), trimmed to the same keys
+as the whole-game captures, and the core play items `nfl/espn/plays/2024/<game_id>.json.gz` (source
+`https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/<game_id>/competitions/<game_id>/plays`), as
+stored. `tests/nfl/test_nfl_lateral_full_names.py` processes them offline the way the nfl-data build does. They sit in a
+subdirectory so the whole-game oracle does not pick them up.
+
+| game_id | play | pins |
+|---|---|---|
+| 401671772 | "B.Purdy pass short left to R.Bell ... Lateral to E.Saubert" | the catcher (R.Bell, 4372063) keeps the credit and reads "Ronnie Bell" |
+| 401671642 | "J.Goff pass short left to A.St. Brown ... Lateral to J.Williams" | id 4374302 reads "Amon-Ra St. Brown", not the text's "A.St. Brown" |

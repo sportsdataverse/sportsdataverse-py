@@ -373,6 +373,7 @@ from sportsdataverse.nba import nba_game_on_off as nba_game_on_off  # noqa: F401
 from sportsdataverse.nba import nba_game_player_box_splits as nba_game_player_box_splits  # noqa: F401
 from sportsdataverse.nba import nba_game_player_impact as nba_game_player_impact  # noqa: F401
 from sportsdataverse.nba import nba_game_stints as nba_game_stints  # noqa: F401
+from sportsdataverse.nba import nba_game_story as nba_game_story  # noqa: F401
 from sportsdataverse.nba import nba_game_units as nba_game_units  # noqa: F401
 from sportsdataverse.nba import nba_impact_rows as nba_impact_rows  # noqa: F401
 from sportsdataverse.nba import nba_in_game_win_prob as nba_in_game_win_prob  # noqa: F401
@@ -874,6 +875,7 @@ __all__ = [
     "nba_game_player_box_splits",
     "nba_game_player_impact",
     "nba_game_stints",
+    "nba_game_story",
     "nba_game_units",
     "nba_impact_rows",
     "nba_in_game_win_prob",

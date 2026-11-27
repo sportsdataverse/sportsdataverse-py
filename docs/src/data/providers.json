@@ -1,5 +1,5 @@
 {
-  "total": 85,
+  "total": 86,
   "sports": [
     {
       "label": "Football",
@@ -480,6 +480,11 @@
           "key": "reep",
           "label": "reep football id register",
           "href": "https://github.com/withqwerty/reep"
+        },
+        {
+          "key": "transfermarkt_datasets",
+          "label": "Transfermarkt dataset (CC0)",
+          "href": "https://github.com/dcaribou/transfermarkt-datasets"
         },
         {
           "key": "mls",

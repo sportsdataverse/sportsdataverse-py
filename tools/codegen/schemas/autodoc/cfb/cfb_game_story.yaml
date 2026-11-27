@@ -1,0 +1,188 @@
+schema: cfb_game_story
+kind: frames
+hand_authored: true
+description: 'A dict of six DataFrames: summary, edges, moment, periods, runs, performers (one or many games).'
+frames:
+- section: summary
+  columns:
+  - name: game_id
+    type: integer
+    description: ''
+  - name: home_team_id
+    type: integer
+    description: ''
+  - name: away_team_id
+    type: integer
+    description: ''
+  - name: home_score
+    type: integer
+    description: ''
+  - name: away_score
+    type: integer
+    description: ''
+  - name: winner_team_id
+    type: integer
+    description: ''
+  - name: loser_team_id
+    type: integer
+    description: ''
+  - name: margin
+    type: integer
+    description: ''
+  - name: decided
+    type: logical
+    description: ''
+  - name: periods_agree
+    type: logical
+    description: ''
+  - name: n_periods
+    type: integer
+    description: ''
+  - name: overtime
+    type: logical
+    description: ''
+- section: edges
+  columns:
+  - name: game_id
+    type: integer
+    description: ''
+  - name: winner_team_id
+    type: integer
+    description: ''
+  - name: loser_team_id
+    type: integer
+    description: ''
+  - name: edge
+    type: character
+    description: ''
+  - name: kind
+    type: character
+    description: ''
+  - name: unit
+    type: character
+    description: ''
+  - name: winner_value
+    type: double
+    description: ''
+  - name: loser_value
+    type: double
+    description: ''
+  - name: points_worth
+    type: double
+    description: ''
+  - name: rank
+    type: integer
+    description: ''
+- section: moment
+  columns:
+  - name: game_id
+    type: integer
+    description: ''
+  - name: play_id
+    type: integer
+    description: ''
+  - name: order
+    type: integer
+    description: ''
+  - name: period
+    type: integer
+    description: ''
+  - name: clock
+    type: character
+    description: ''
+  - name: team_id
+    type: integer
+    description: ''
+  - name: text
+    type: character
+    description: ''
+  - name: wpa
+    type: double
+    description: ''
+  - name: winner_wpa
+    type: double
+    description: ''
+  - name: home_score
+    type: integer
+    description: ''
+  - name: away_score
+    type: integer
+    description: ''
+  - name: rule
+    type: character
+    description: ''
+- section: periods
+  columns:
+  - name: game_id
+    type: integer
+    description: ''
+  - name: period
+    type: integer
+    description: ''
+  - name: period_label
+    type: character
+    description: ''
+  - name: is_overtime
+    type: logical
+    description: ''
+  - name: home_pts
+    type: integer
+    description: ''
+  - name: away_pts
+    type: integer
+    description: ''
+  - name: home_cum
+    type: integer
+    description: ''
+  - name: away_cum
+    type: integer
+    description: ''
+- section: runs
+  columns:
+  - name: game_id
+    type: integer
+    description: ''
+  - name: team_id
+    type: integer
+    description: ''
+  - name: points
+    type: integer
+    description: ''
+  - name: start_order
+    type: integer
+    description: ''
+  - name: end_order
+    type: integer
+    description: ''
+  - name: start_period
+    type: integer
+    description: ''
+  - name: end_period
+    type: integer
+    description: ''
+  - name: home_score_after
+    type: integer
+    description: ''
+  - name: away_score_after
+    type: integer
+    description: ''
+- section: performers
+  columns:
+  - name: game_id
+    type: integer
+    description: ''
+  - name: team_id
+    type: integer
+    description: ''
+  - name: player_id
+    type: integer
+    description: ''
+  - name: player_name
+    type: character
+    description: ''
+  - name: metric
+    type: character
+    description: ''
+  - name: value
+    type: double
+    description: ''

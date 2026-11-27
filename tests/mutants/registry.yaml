@@ -2872,8 +2872,8 @@
   group: codegen-runtime
   finding: R858-7
   file: tools/codegen/generate.py
-  snippet: '        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module, route_module)'
-  mutant: '        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module)'
+  snippet: '        self.example_url = _example_request(ep_host, ep, league.sport, example_league, getter_module, route_module)'
+  mutant: '        self.example_url = _example_request(ep_host, ep, league.sport, example_league, getter_module)'
   test: tests/codegen/test_api_module.py::test_per_route_getter_documents_the_url_its_own_module_requests
   expected: kill
   note: >-
@@ -4359,7 +4359,7 @@
   group: codegen-runtime
   finding: MD-4
   file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
-  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError, OSError) as e:'
   mutant: '    except Exception as e:'
   test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k bug_in_the_release_read
   expected: kill
@@ -4426,11 +4426,21 @@
   group: codegen-runtime
   finding: MD-4
   file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
-  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
-  mutant: '    except (AssetFetchError, NoDataError, pl.exceptions.PolarsError) as e:'
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError, OSError) as e:'
+  mutant: '    except (AssetFetchError, NoDataError, pl.exceptions.PolarsError, OSError) as e:'
   test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k corrupt
   expected: kill
   note: R907-5, a corrupt or truncated release asset raised instead of falling back to the bundled copy
+
+- id: crosswalk-corrupt-footer-falls-back
+  group: codegen-runtime
+  finding: MD-4
+  file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError, OSError) as e:'
+  mutant: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k corrupt_footer_falls_back
+  expected: kill
+  note: a release asset whose parquet footer will not decode raised a bare OSError instead of falling back
 
 # 3.5
 - id: fox-sack-safety-typed-sack
@@ -8869,7 +8879,7 @@
   file: sportsdataverse/mbb/mbb_team_strength.py
   snippet: 'lam=COLLEGE_RIDGE_LAMBDA[league]'
   mutant: 'lam=COLLEGE_RIDGE_LAMBDA["mens"]'
-  test: tests/mbb/test_mbb_team_strength.py::test_ridge_ratings_are_the_possession_ridge
+  test: tests/mbb/test_mbb_team_strength.py::test_the_prior_seeds_from_last_season
   expected: kill
   note: The women's ridge would run at the men's penalty (200, not 50).
 
@@ -9362,8 +9372,8 @@
   group: bb-preseason-prior
   finding: BB-preseason-prior
   file: sportsdataverse/nba/nba_season_sim.py
-  snippet: 'rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=prior'
-  mutant: 'rows.join(done.select("game_id"), on="game_id", how="semi"), league_id=league_id, prior=None'
+  snippet: '        prior=prior,'
+  mutant: '        prior=None,'
   test: tests/nba/test_nba_season_sim.py::test_nba_season_sim_carries_the_prior_from_the_release_before
   expected: kill
   note: nba_season_sim must hand the loaded prior to the game model.
@@ -11643,7 +11653,7 @@
   note: results_corpus lists 5028 and 6146 twice, so their 155 PAs would count twice in the WE table.
 
 - id: mlb-run-value-missing-state-zero
-  group: mlb-dedupe-game-pks
+  group: mlb-markov-re24
   finding: mlb-markov-run-expectancy
   file: sportsdataverse/mlb/mlb_run_expectancy.py
   snippet: '    re_after = 0.0 if after_outs >= 3 else lut.get((after_state, after_outs))'
@@ -11651,6 +11661,16 @@
   test: tests/mlb/test_mlb_markov_run_expectancy.py::test_run_value_on_an_empirical_matrix_missing_a_state
   expected: kill
   note: A state missing from an empirical matrix would score as 0 RE instead of NaN.
+
+- id: mlb-run-value-missing-before-state-zero
+  group: mlb-markov-re24
+  finding: mlb-markov-run-expectancy
+  file: sportsdataverse/mlb/mlb_run_expectancy.py
+  snippet: '    re_before = 0.0 if before_outs >= 3 else lut.get((before_state, before_outs))'
+  mutant: '    re_before = 0.0 if before_outs >= 3 else lut.get((before_state, before_outs), 0.0)'
+  test: tests/mlb/test_mlb_markov_run_expectancy.py::test_run_value_on_an_empirical_matrix_missing_a_state
+  expected: kill
+  note: A missing before-state would score as 0 RE, so the run value would be the after-state's RE plus the runs on the play.
 
 - id: mlb-base-out-states-not-deduped
   group: mlb-dedupe-game-pks
@@ -11789,11 +11809,21 @@
   group: nfl-espn-view
   finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
-  snippet: '_int_id(pl.col("game_id"), plays.schema["game_id"], "game_id")  # ... and a float game id'
-  mutant: 'pass  # ... and a float game id'
+  snippet: '    out = plays.with_columns(_int_id(pl.col("game_id"), plays.schema["game_id"], "game_id").alias("_espn"))'
+  mutant: '    out = plays.with_columns(pl.col("game_id").cast(pl.Int64).alias("_espn"))'
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_float_game_id_is_refused_when_nflverse_game_id_is_there
   expected: kill
   note: A float game_id on a frame that already has nflverse_game_id would slip past the id guard (CodeRabbit on #1266).
+
+- id: nfl-espn-view-float-play-id
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '    _int_id(pl.col("id"), plays.schema["id"], "id")  # refuses a float play id'
+  mutant: '    pass  # refuses a float play id'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_float_play_id_is_refused
+  expected: kill
+  note: A float play id (it may already have lost digits) would be cast instead of refused.
 
 - id: nfl-espn-view-split-two-point-pass
   group: nfl-espn-view
@@ -13197,7 +13227,7 @@
   group: bb-playoff-series
   finding: bb-d43-playoff-series
   file: sportsdataverse/_common/playoff_series.py
-  snippet: '    lo = pl.min_horizontal("home_id", "away_id").cast(pl.Int64)'
+  snippet: '    lo = pl.min_horizontal(pl.col("home_id", "away_id").cast(pl.Int64))'
   mutant: '    lo = pl.col("home_id").cast(pl.Int64)'
   test: tests/nba/test_nba_playoff_series.py::test_nba_2025_bracket_and_finals
   expected: kill
@@ -13217,8 +13247,8 @@
   group: bb-playoff-series
   finding: bb-d43-playoff-series
   file: sportsdataverse/_common/playoff_series.py
-  snippet: '        & ((pl.col("minutes").fill_null(0) > 0) | counted)'
-  mutant: '        & (pl.col("minutes").fill_null(0) > 0)'
+  snippet: '& ((pl.col("minutes").fill_null(0) > 0) | counted)'
+  mutant: '& (pl.col("minutes").fill_null(0) > 0)'
   test: tests/nba/test_nba_playoff_series.py::test_a_zero_minute_cameo_with_a_stat_counts_as_played
   expected: kill
   note: A 0.0-minute cameo with a stat (ESPN lists a dozen a season) would drop out of the games and the totals.
@@ -13268,8 +13298,8 @@
   group: pll
   finding: pll-stats-api
   file: sportsdataverse/lacrosse/pll_runtime.py
-  snippet: 'str(v).lower() if isinstance(v, bool) else v'
-  mutant: 'v'
+  snippet: 'return str(v).lower()'
+  mutant: 'return v'
   test: tests/test_pll.py::test_wire_lowercases_bools_and_keeps_lists
   expected: kill
   note: requests would send True as "True"; the site sends true / false.
@@ -13443,3 +13473,24 @@
   test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
   expected: kill
   note: "'Mitchell,Mack advanced from second base, scored on play ...' (2026) counts no run."
+
+# --- nfl-lateral-full-names: a lateral's credited player reads the box score's full name -----------
+- id: nfl-lateral-full-names-applied
+  group: nfl-lateral-full-names
+  finding: nfl-lateral-full-names
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        return _lateral_full_names(out, full_names)'
+  mutant: '        return out'
+  test: tests/nfl/test_nfl_lateral_full_names.py
+  expected: kill
+  note: A lateral's catcher, carrier or returner would keep the text's abbreviated name ("A.St. Brown").
+
+- id: transfermarkt-corrupt-mirror-falls-back
+  group: codegen-runtime
+  finding: MD-4
+  file: sportsdataverse/soccer/soccer_transfermarkt.py
+  snippet: '    except (NoDataError, AssetFetchError, pa.ArrowException, pl.exceptions.PolarsError, OSError) as e:'
+  mutant: '    except (NoDataError, AssetFetchError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  test: tests/soccer/test_soccer_transfermarkt.py -k corrupt_footer
+  expected: kill
+  note: a mirror asset whose parquet footer will not decode raised a bare OSError instead of falling back to the source
