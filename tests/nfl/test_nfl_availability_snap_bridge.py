@@ -49,14 +49,46 @@ def test_the_bridge_rebuilds_the_fitted_corpus(frames):
 def test_postseason_rows_are_not_counted(frames):
     bridged = av._snaps_by_gsis(frames["live"], frames["bridge"])
     assert frames["live"]["game_type"].n_unique() > 1
-    assert bridged["week"].max() <= 18
+    assert bridged["game_type"].unique().to_list() == ["REG"]
+
+
+def test_an_ambiguous_mapping_is_dropped_both_ways(frames):
+    live, bridge = frames["live"], frames["bridge"]
+    base = av._snaps_by_gsis(live, bridge)
+    pfr, gsis = bridge.filter(pl.col("pfr_id").is_in(base["pfr_player_id"].implode())).row(0)[:2]
+    n_rows = base.filter(pl.col("player_id") == gsis).height
+    assert n_rows > 0
+    for extra in ({"pfr_id": pfr, "gsis_id": "00-9999999"}, {"pfr_id": "ZzzzZz99", "gsis_id": gsis}):
+        dup = pl.concat([bridge, pl.DataFrame([{**extra, "position": "WR"}], schema=bridge.schema)])
+        got = av._snaps_by_gsis(live, dup)
+        assert got.filter(pl.col("player_id") == gsis).height == 0
+        assert got.height == base.height - n_rows
+
+
+def test_mis_typed_or_unkeyed_snaps_raise(frames):
+    live, bridge = frames["live"], frames["bridge"]
+    with pytest.raises(TypeError, match="both must be String"):
+        av._snaps_by_gsis(live, bridge.with_columns(pl.col("pfr_id").cast(pl.Categorical)))
+    with pytest.raises(ValueError, match="neither player_id nor pfr_player_id"):
+        av._snaps_by_gsis(live.drop("pfr_player_id"), bridge)
 
 
 def test_a_broken_bridge_fails_loudly(frames):
     with pytest.raises(ValueError, match="crosswalk is broken"):
         av._snaps_by_gsis(frames["live"], frames["bridge"].head(100))
+    # one season's ids gone from the crosswalk fails even though the pooled rate would still pass
+    one_season = frames["live"].with_columns(
+        pl.when(pl.col("season") == 2023)
+        .then(pl.lit("x") + pl.col("pfr_player_id"))
+        .otherwise("pfr_player_id")
+        .alias("pfr_player_id")
+    )
+    with pytest.raises(ValueError, match="of 2023 skill-position"):
+        av._snaps_by_gsis(one_season, frames["bridge"])
     with pytest.raises(ValueError, match="pfr_player_id"):
         av.season_availability(frames["live"], frames["rosters"])
+    bridged = av.season_availability(frames["live"], frames["rosters"], player_ids=frames["bridge"])
+    assert bridged.height > 1000
 
 
 def test_live_availability_matches_the_corpus_path(frames, monkeypatch):
@@ -72,3 +104,12 @@ def test_live_availability_matches_the_corpus_path(frames, monkeypatch):
     assert (both["proj_availability"] - both["proj_availability_corpus"]).abs().max() < 0.05
     same = both.filter((both["proj_availability"] - both["proj_availability_corpus"]).abs() < 1e-9).height
     assert same > 0.98 * both.height
+
+
+def test_snaps_that_count_nobody_raise_in_the_projection(frames, monkeypatch):
+    idle = frames["live"].with_columns(pl.lit(0).cast(frames["live"].schema["offense_snaps"]).alias("offense_snaps"))
+    monkeypatch.setattr(av, "load_nfl_snap_counts", lambda *a, **k: idle, raising=True)
+    monkeypatch.setattr(av, "load_nfl_ff_playerids", lambda *a, **k: frames["bridge"], raising=True)
+    monkeypatch.setattr(av, "load_nfl_rosters", lambda *a, **k: frames["rosters"], raising=True)
+    with pytest.raises(ValueError, match="gave no season availability"):
+        av.nfl_availability_projection([2020, 2021, 2022, 2023], 2024)
