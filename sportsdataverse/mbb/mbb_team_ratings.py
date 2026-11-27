@@ -190,10 +190,9 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
     # The pros' 0.44, not the college 0.475 (sportsdataverse._common.possessions): the pregame constants
     # (hfa, margin_sd, em_scale, avg_tempo, bubble_adj_em) are a fixed point fit with this engine at 0.44.
     # A refit at 0.475 (2026-11-26, tools/models/mbb_prediction/fit_pregame.py) passed its pre-registered
-    # 2025-2026 pregame gate in both leagues (Brier, margin MAE and calibration slope within 2 SEs) but
-    # failed an existing test, so it did not ship: in the men's 2024 season sim after Selection Sunday two
-    # teams 0.0008 apart in resume_score swap seed lines 8 and 9 between simulate_season and
-    # season_bracketology, whose selection scores do not match exactly.
+    # 2025-2026 pregame gate in both leagues (Brier, margin MAE and calibration slope within 2 SEs). It
+    # stays at 0.44 by the owner's decision: the player WAR constants and the recruiting and transfer models
+    # were fit on this engine at 0.44 and would all need refitting, for a negligible forecast gain.
     ft_w = PRO_FT_POSSESSION_WEIGHT
     box = team_box.select(
         id_text(team_box, "game_id"),

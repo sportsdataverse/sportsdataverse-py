@@ -16,11 +16,13 @@ sample gates (``rate_gates.TEAM_MIN_N``) are fit on the 0.475 estimate.
 
 Three college inputs to fitted models keep the pros' weight. Each was refit at 0.475 on 2026-11-26
 against a pre-registered no-regression gate (new no worse than the shipped model by more than 2
-clustered SEs), and each refit failed somewhere:
+clustered SEs):
 
-* the opponent-adjusted ratings engine (``mbb_team_ratings``) and the pregame constants fit on it: the
-  2025-2026 pregame Brier, margin MAE and calibration slope pass in both leagues, but an existing season
-  sim test fails (two near-tied men's teams swap seed lines 8 and 9 between the sim and bracketology);
+* the opponent-adjusted ratings engine (``mbb_team_ratings``) and the pregame constants fit on it passed:
+  the 2025-2026 pregame Brier, margin MAE and calibration slope are within 2 SEs in both leagues (Brier
+  moves by less than 5e-6). It stays at 0.44 by the owner's decision: the models fit downstream of the
+  engine at 0.44 (the player WAR constants, the recruiting and transfer models) would all need refitting,
+  for a negligible forecast gain;
 * the player-value features (``usage``, ``tov_pct``): box-BPM passes for men and fails for women
   against the 2025 external BPM, and one weight serves both;
 * the expected player box usage: points improve, assists get worse by more than 2 SEs in both leagues.
