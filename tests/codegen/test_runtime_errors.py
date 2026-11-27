@@ -537,6 +537,8 @@ _URL = {
     "ha_runtime": "https://hockeyallsvenskan.se/pages/matcher",
     "ibba_runtime": "https://basket.co.il/ws/ws.asmx/Configuration",
     "ibba_segev_runtime": "https://stats.segevstats.com/realtimestat_heb/api/",
+    # a Kalshi URL, so the matrix runs through the second-host failover (both hosts answer the same case)
+    "kalshi_runtime": "https://api.elections.kalshi.com/trade-api/v2/exchange/status",
     "kbl_runtime": "https://api.kbl.or.kr/season/list",
     "kzs_runtime": "https://api.kzs.si/api/v1/public/seasons/",
     "lkl_runtime": "https://lkl.lt/api/livestream/boxscore/11446",
