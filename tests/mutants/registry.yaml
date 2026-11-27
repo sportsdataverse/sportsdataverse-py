@@ -11643,7 +11643,7 @@
   note: results_corpus lists 5028 and 6146 twice, so their 155 PAs would count twice in the WE table.
 
 - id: mlb-run-value-missing-state-zero
-  group: mlb-dedupe-game-pks
+  group: mlb-markov-re24
   finding: mlb-markov-run-expectancy
   file: sportsdataverse/mlb/mlb_run_expectancy.py
   snippet: '    re_after = 0.0 if after_outs >= 3 else lut.get((after_state, after_outs))'
@@ -11653,14 +11653,14 @@
   note: A state missing from an empirical matrix would score as 0 RE instead of NaN.
 
 - id: mlb-run-value-missing-before-state-zero
-  group: mlb-dedupe-game-pks
+  group: mlb-markov-re24
   finding: mlb-markov-run-expectancy
   file: sportsdataverse/mlb/mlb_run_expectancy.py
   snippet: '    re_before = 0.0 if before_outs >= 3 else lut.get((before_state, before_outs))'
   mutant: '    re_before = 0.0 if before_outs >= 3 else lut.get((before_state, before_outs), 0.0)'
   test: tests/mlb/test_mlb_markov_run_expectancy.py::test_run_value_on_an_empirical_matrix_missing_a_state
   expected: kill
-  note: A missing before-state would score as 0 RE, so the event's run value would be the after-state's RE.
+  note: A missing before-state would score as 0 RE, so the run value would be the after-state's RE plus the runs on the play.
 
 - id: mlb-base-out-states-not-deduped
   group: mlb-dedupe-game-pks
@@ -11800,10 +11800,20 @@
   finding: gh-1266
   file: sportsdataverse/nfl/espn_nflverse_view.py
   snippet: '    out = plays.with_columns(_int_id(pl.col("game_id"), plays.schema["game_id"], "game_id").alias("_espn"))'
-  mutant: '    out = plays.with_columns(pl.col("game_id").cast(pl.Utf8).cast(pl.Int64).alias("_espn"))'
+  mutant: '    out = plays.with_columns(pl.col("game_id").cast(pl.Int64).alias("_espn"))'
   test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_float_game_id_is_refused_when_nflverse_game_id_is_there
   expected: kill
   note: A float game_id on a frame that already has nflverse_game_id would slip past the id guard (CodeRabbit on #1266).
+
+- id: nfl-espn-view-float-play-id
+  group: nfl-espn-view
+  finding: gh-1266
+  file: sportsdataverse/nfl/espn_nflverse_view.py
+  snippet: '    _int_id(pl.col("id"), plays.schema["id"], "id")  # refuses a float play id'
+  mutant: '    pass  # refuses a float play id'
+  test: tests/nfl/test_nfl_espn_nflverse_view.py::test_a_float_play_id_is_refused
+  expected: kill
+  note: A float play id (it may already have lost digits) would be cast instead of refused.
 
 - id: nfl-espn-view-split-two-point-pass
   group: nfl-espn-view
