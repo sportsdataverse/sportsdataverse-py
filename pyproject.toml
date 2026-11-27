@@ -605,6 +605,7 @@ files = [
     "sportsdataverse/nfl/nfl_market.py",
     "sportsdataverse/nfl/nfl_player_props.py",
     "sportsdataverse/nfl/nfl_prediction_constants.py",
+    "sportsdataverse/nfl/nfl_qb_layer.py",
     "sportsdataverse/nfl/nfl_ratings.py",
     "sportsdataverse/nfl/nfl_roster_builder.py",
     "sportsdataverse/nfl/nfl_season_standings.py",
