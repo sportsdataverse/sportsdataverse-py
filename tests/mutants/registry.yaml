@@ -4359,7 +4359,7 @@
   group: codegen-runtime
   finding: MD-4
   file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
-  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError, OSError) as e:'
   mutant: '    except Exception as e:'
   test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k bug_in_the_release_read
   expected: kill
@@ -4426,11 +4426,21 @@
   group: codegen-runtime
   finding: MD-4
   file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
-  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
-  mutant: '    except (AssetFetchError, NoDataError, pl.exceptions.PolarsError) as e:'
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError, OSError) as e:'
+  mutant: '    except (AssetFetchError, NoDataError, pl.exceptions.PolarsError, OSError) as e:'
   test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k corrupt
   expected: kill
   note: R907-5, a corrupt or truncated release asset raised instead of falling back to the bundled copy
+
+- id: crosswalk-corrupt-footer-falls-back
+  group: codegen-runtime
+  finding: MD-4
+  file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError, OSError) as e:'
+  mutant: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k corrupt_footer_falls_back
+  expected: kill
+  note: a release asset whose parquet footer will not decode raised a bare OSError instead of falling back
 
 # 3.5
 - id: fox-sack-safety-typed-sack
@@ -13354,3 +13364,13 @@
   test: tests/nfl/test_nfl_lateral_full_names.py
   expected: kill
   note: A lateral's catcher, carrier or returner would keep the text's abbreviated name ("A.St. Brown").
+
+- id: transfermarkt-corrupt-mirror-falls-back
+  group: codegen-runtime
+  finding: MD-4
+  file: sportsdataverse/soccer/soccer_transfermarkt.py
+  snippet: '    except (NoDataError, AssetFetchError, pa.ArrowException, pl.exceptions.PolarsError, OSError) as e:'
+  mutant: '    except (NoDataError, AssetFetchError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  test: tests/soccer/test_soccer_transfermarkt.py -k corrupt_footer
+  expected: kill
+  note: a mirror asset whose parquet footer will not decode raised a bare OSError instead of falling back to the source
