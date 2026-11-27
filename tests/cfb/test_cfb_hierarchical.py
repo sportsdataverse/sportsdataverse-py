@@ -36,8 +36,9 @@ def test_port_reproduces_the_reference_model(season, t):
 def test_later_games_cannot_move_an_as_of_rating():
     """The corpus is games before the slot: future results must not reach theta."""
     base = cfb_hierarchical_ratings(SCHED, 2024, 10, first_season=2023)
+    slot = pl.when(pl.col("season_type") == "postseason").then(pl.col("week") + 100).otherwise(pl.col("week"))
     poisoned = SCHED.with_columns(
-        pl.when((pl.col("season") == 2024) & (pl.col("week") >= 10))
+        pl.when((pl.col("season") == 2024) & (slot >= 10))
         .then(pl.col("home_points") + 60)
         .otherwise(pl.col("home_points"))
         .alias("home_points")
@@ -96,6 +97,7 @@ def test_predict_games_serves_hierarchical_only_when_asked():
     np.testing.assert_allclose(served["home_win_prob"].to_numpy(), norm.cdf(exp / HIER_MARGIN_SD), atol=1e-12)
     # the default path is untouched: it serves the closed form, not the hierarchical margin
     assert not np.allclose(closed["exp_margin"].to_numpy(), exp)
+    assert closed.equals(cfb_predict_games(games, ratings, model="closed_form"))
     np.testing.assert_allclose(served["exp_total"].to_numpy(), closed["exp_total"].to_numpy())
 
 
@@ -107,5 +109,7 @@ def test_predict_games_never_falls_back():
     gone = games["home_team_id"][0]
     with pytest.raises(ValueError, match="no hierarchical strength"):
         cfb_predict_games(games, ratings, model="hierarchical", hierarchical=hier.filter(pl.col("team_id") != gone))
+    with pytest.raises(ValueError, match="without model='hierarchical'"):
+        cfb_predict_games(games, ratings, hierarchical=hier)
     with pytest.raises(ValueError, match="model must be"):
         cfb_predict_games(games, ratings, model="bayes")

@@ -16,9 +16,14 @@ The corpus is every completed game BEFORE the slot: seasons ``first_season`` to
 variance components average over the whole team universe, so a corpus that grew after the
 slot would move every strength.
 
-Measured against the served closed form on identical as-of games:
+The stage 34 reference, measured against the served closed form on identical as-of games:
 - 2015-2025 (6,201 games): MAE 12.84 vs 13.33, 11/11 seasons.
 - 2005-2013, out of sample (4,774 games): MAE 12.62 vs 13.55, 9/9 seasons.
+
+Those numbers come from the reference's walk-forward, which builds ONE corpus over the whole run. Its team
+universe and conferences therefore include games after each slot. This path's before-the-slot corpus is
+the version a live caller can compute, and the pre-registered 2026 forward check scores it. It has not
+been rescored historically.
 
 It is opt-in and not the default.
 """

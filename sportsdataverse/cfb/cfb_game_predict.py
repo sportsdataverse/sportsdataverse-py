@@ -509,6 +509,8 @@ def cfb_predict_games(
         + c.total_pace_scale * (pl.col("home_off_pace") * pl.col("away_off_pace") / league_avg_pace),
     )
     margin_sd = c.margin_sd
+    if hierarchical is not None and model != "hierarchical":
+        raise ValueError("cfb_predict_games: a hierarchical frame was passed without model='hierarchical'")
     if model == "hierarchical":
         with_margin, margin_sd = _hierarchical_margin(with_margin, hierarchical)
     elif model != "closed_form":
