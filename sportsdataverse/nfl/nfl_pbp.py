@@ -65,6 +65,8 @@ from sportsdataverse.football.espn_box import parse_espn_player_box as _parse_es
 from sportsdataverse.football.espn_box import parse_espn_team_box as _parse_espn_team_box
 from sportsdataverse._xgb import xgb_threads as _xgb_threads
 from sportsdataverse.football.espn_text import ABBREVIATED_NAME as _ABBREVIATED_NAME
+from sportsdataverse.football.espn_text import PASS_DEPTH_RE as _PASS_DEPTH_RE
+from sportsdataverse.football.espn_text import PASS_DIRECTION_RE as _PASS_DIRECTION_RE
 from sportsdataverse.football.espn_text import before_turnover as _before_turnover
 from sportsdataverse.football.espn_text import returned_for_touchdown as _returned_for_touchdown
 from sportsdataverse.football.play_participants import coalesce_participants as _coalesce_participants
@@ -3865,15 +3867,17 @@ class NFLPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 # --- Pass depth/direction + rush direction (Game on Paper matrix fields) ---
-                # Extracted from ESPN play description text; null when the pattern is absent
-                # (sacks, screens, and pre-2025 plays that omit depth/direction).
-                # Depth: "short" (0-12 air yards) | "deep" (12+ air yards)
+                # Read from the phrase ESPN writes for a charted pass, "pass [incomplete]
+                # short|deep left|middle|right" (football/espn_text.py PASS_DEPTH_RE /
+                # PASS_DIRECTION_RE); null when the phrase is absent (sacks, scrambles, and the
+                # few plays written without it).
+                # Depth: ESPN's "short" | "deep" -- deep is 16+ air yards, short anything under
                 # Direction: "left" | "middle" | "right"
                 pass_depth=pl.when(pl.col("pass") == True)
-                .then(pl.col("text").str.extract(r"\s(short|deep)\s", 1))
+                .then(pl.col("text").str.extract(_PASS_DEPTH_RE, 1))
                 .otherwise(None),
                 pass_direction=pl.when(pl.col("pass") == True)
-                .then(pl.col("text").str.extract(r"\s(left|middle|right)\s", 1))
+                .then(pl.col("text").str.extract(_PASS_DIRECTION_RE, 1))
                 .otherwise(None),
                 rush_direction=pl.when(pl.col("rush") == True)
                 .then(pl.col("text").str.extract(r"\s(left|middle|right)\s", 1))

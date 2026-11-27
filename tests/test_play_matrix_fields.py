@@ -23,15 +23,22 @@ import pytest
 # Helpers
 # ---------------------------------------------------------------------------
 
-_DEPTH_RE = r"\s(short|deep)\s"
-_DIR_RE = r"\s(left|middle|right)\s"
+# The processors' own patterns (cfb_pbp.py and nfl_pbp.py both read these), so a change
+# to either shows up here.
+from sportsdataverse.football.espn_text import PASS_DEPTH_RE as _DEPTH_RE  # noqa: E402
+from sportsdataverse.football.espn_text import PASS_DIRECTION_RE as _DIR_RE  # noqa: E402
+
+# Rush direction is still the loose match, inline in both processors.
+_RUSH_DIR_RE = r"\s(left|middle|right)\s"
 
 
 def _apply_matrix_exprs(df: pl.DataFrame) -> pl.DataFrame:
     return df.with_columns(
         pass_depth=pl.when(pl.col("pass") == True).then(pl.col("text").str.extract(_DEPTH_RE, 1)).otherwise(None),
         pass_direction=pl.when(pl.col("pass") == True).then(pl.col("text").str.extract(_DIR_RE, 1)).otherwise(None),
-        rush_direction=pl.when(pl.col("rush") == True).then(pl.col("text").str.extract(_DIR_RE, 1)).otherwise(None),
+        rush_direction=pl.when(pl.col("rush") == True)
+        .then(pl.col("text").str.extract(_RUSH_DIR_RE, 1))
+        .otherwise(None),
     )
 
 
@@ -43,20 +50,62 @@ def _apply_matrix_exprs(df: pl.DataFrame) -> pl.DataFrame:
 @pytest.mark.parametrize(
     "text,depth,direction",
     [
-        ("pass complete short left to WR for 7 yards", "short", "left"),
-        ("pass complete short middle to RB for 3 yards", "short", "middle"),
-        ("pass complete short right for 12 yards", "short", "right"),
-        ("pass complete deep left to TE for 45 yards", "deep", "left"),
-        ("pass complete deep middle for 38 yards", "deep", "middle"),
-        ("pass incomplete deep right intended for WR", "deep", "right"),
-        # No depth keyword → null depth, direction still present
-        ("pass complete to WR left for 7 yards", None, "left"),
-        # No direction keyword → depth present, direction null
-        ("pass complete deep to TE for 30 yards", "deep", None),
-        # Sack: neither keyword
-        ("sacked for a loss of 5 yards", None, None),
-        # Screen: no qualifying depth/direction tokens
+        # Real ESPN play text. College, the 2025 vendor template:
+        (
+            "(00:24) No Huddle-Shotgun #1 T.Castellanos pass incomplete deep right to #0 D.Robinson thrown to CLE30 "
+            "broken up by #23 A.Hampton",
+            "deep",
+            "right",
+        ),
+        (
+            "(10:05) No Huddle-Shotgun #4 L.Fife pass complete short left to #5 D.Faupel caught at NMSU29, for 3 "
+            "yards to the NMSU29 (#8 C.Hood)",
+            "short",
+            "left",
+        ),
+        # The phrase ends the text: a trailing-space match read neither word
+        ("(10:29) Shotgun #8 J.Sharman pass incomplete short right", "short", "right"),
+        ("(10:28) No Huddle-Shotgun #12 D.DeShields pass incomplete short", "short", None),
+        # The older college wording
+        (
+            "(7:25) Shotgun JENNINGS, Kevin pass up the middle complete for 14 yards to PITTMAN JR., Randy to the "
+            "BC0, 1ST DOWN, TOUCHDOWN SMU, clock 07:25 (Scoring play confirmed).",
+            None,
+            "middle",
+        ),
+        # NFL (2006-2025):
+        (
+            "(14:18) (Shotgun) K.Murray pass short left to T.McBride pushed ob at ARI 36 for 11 yards (I.Yiadom).",
+            "short",
+            "left",
+        ),
+        # An incompletion ending on its direction: the loose match lost 5,437 of these, all incompletions
+        ("(15:00) (Shotgun) G.Minshew pass incomplete short right.", "short", "right"),
+        ("(14:09) J.Allen pass incomplete deep right. thrown away from outside the pocket", "deep", "right"),
+        # A scramble is no charted pass, whatever its text says after the run
+        ("(5:29) (Shotgun) M.Stafford scrambles right end ran ob at MIN 12 for 5 yards (H.Smith).", None, None),
+        (
+            "(1:49) (Shotgun) G.Minshew scrambles right end ran ob at MIA 9 for 5 yards (J.Holland). The Replay "
+            "Official reviewed the short of the line to gain ruling, and the play was REVERSED.",
+            None,
+            None,
+        ),
+        # A scramble then a pass in one text: the pass's own phrase, not the scramble's direction
+        (
+            "(13:24) J.Cutler scrambles up the middle to MIN 11 for 2 yards. J.Cutler pass incomplete short left "
+            "to E.Bennett.",
+            "short",
+            "left",
+        ),
+        # 2006's free-text annotation is no charted phrase: "deep" here is the end zone
+        (
+            "(4:22) J.Kitna pass to M.Furrey for 13 yards, TOUCHDOWN. Pass thrown right corner 5 yards deep end zone.",
+            None,
+            None,
+        ),
+        # No depth or direction tokens (a screen, a sack)
         ("pass complete to RB for 4 yards", None, None),
+        ("sacked for a loss of 5 yards", None, None),
     ],
 )
 def test_pass_depth_direction(text: str, depth, direction):
