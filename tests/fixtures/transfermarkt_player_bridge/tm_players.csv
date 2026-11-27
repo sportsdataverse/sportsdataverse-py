@@ -1,0 +1,428 @@
+player_id,name,date_of_birth,country_of_citizenship,current_club_id
+30391,Rasmus Elm,1988-03-17,Sweden,2410
+38824,Davide Brivio,1988-03-17,Italy,252
+52570,Fraser Forster,1988-03-17,England,989
+61841,Adam Smith,1991-04-29,England,989
+67836,Stelios Vasiliou,1991-04-29,Greece,2672
+74223,Jack Wilshere,1992-01-01,England,678
+78254,Umutcan Yüksel,1992-01-01,Turkey,20698
+85295,Iván Balliu,1992-01-01,Albania,367
+110369,Joseph Biersard,1991-04-29,Belgium,1245
+118534,Michael Keane,1993-01-11,England,29
+118535,Will Keane,1993-01-11,Ireland,3008
+119269,Shane Duffy,1992-01-01,Ireland,931
+143155,Jesper Drost,1993-01-11,Netherlands,1269
+150663,Sylian Mokono,1999-03-22,Netherlands,1304
+158055,Moritz Sprenger,1995-02-22,Germany,82
+163542,Alberto Almici,1993-01-11,Italy,276
+163582,Salvatore Molina,1992-01-01,Italy,2919
+166561,Badri Akubardia,1993-01-11,Ukraine,338
+170517,Marius Funk,1996-01-01,Germany,65
+184171,Nebojsa Kosovic,1995-02-24,Montenegro,3057
+184440,Tayfur Bingöl,1993-01-11,Türkiye,114
+188077,Ryan Christie,1995-02-22,Scotland,989
+191422,Mahmoud Dahoud,1996-01-01,Syria,24
+198513,Muamer Tankovic,1995-02-22,Sweden,2441
+199527,Jacob Murphy,1995-02-24,England,762
+199528,Josh Murphy,1995-02-24,England,603
+203394,Andreas Pereira,1996-01-01,Brazil,1023
+203409,Nick Van De Walle,1996-01-01,Belgium,204
+216969,Igor Aleksovski,1995-02-24,North Macedonia,12460
+218067,Jacopo Petriccione,1995-02-22,Italy,4083
+224662,Esben Petersen,1993-01-11,Denmark,2414
+228660,Yuriy Dyupin,1988-03-17,Russia,41231
+234773,Sérgio Duarte,1993-01-11,Portugal,982
+240640,Egemen Zengin,1996-01-01,Turkey,36
+242482,Ismail Köse,1996-01-01,Turkey,1467
+243042,Paulo Loureiro,1993-01-11,South Africa,2995
+244273,Craig Wighton,1997-07-27,Scotland,43
+247122,Nassar Nassar,1992-01-01,Lebanon,2468
+249089,Lewis Cook,1997-02-03,England,989
+258478,Basem Morsy,1992-01-01,Egypt,4603
+264514,Luca Vido,1997-02-03,Italy,800
+265176,Phil Neumann,1997-07-08,Germany,33
+271390,Joachim Eickmayer,1993-01-11,France,750
+276586,Josimar Quintero,1997-02-03,Ecuador,1083
+277033,David Brooks,1997-07-08,Wales,989
+279064,Nils Seufert,1997-02-03,Germany,65
+293944,Habib Maïga,1996-01-01,Cote d'Ivoire,347
+294801,Souleymane Diaby,1999-10-08,Cote d'Ivoire,242
+294814,Anderson Niangbo,1999-10-06,Cote d'Ivoire,4441
+295810,Alexandru Cicâldău,1997-07-08,Romania,40812
+301238,Michele Di Gregorio,1997-07-27,Italy,506
+303766,Amir Al-Ammari,1997-07-27,Iraq,5689
+312732,Juan Mosquera,1996-01-01,Colombia,1301
+313168,Stavros Mitkas,1996-01-01,Greece,169
+315867,Gianluca Scamacca,1999-01-01,Italy,800
+318112,Antonin Rusek,1999-03-22,Czech Republic,2311
+319859,Mathias Jensen,1996-01-01,Denmark,1148
+320408,Amadou Bakayoko,1996-01-01,Sierra Leone,511
+321403,Kyle Bradley,1999-02-14,Scotland,124
+321714,Cem Kablan,2000-01-01,Turkey,6646
+324736,Laurens Vermijl,1997-02-03,Belgium,1184
+325603,Daniel Ríos,1995-02-22,Mexico,4078
+330659,Justin Kluivert,1999-05-05,Netherlands,989
+330819,Cagatay Yilmaz,2000-01-01,Turkey,20
+331514,Bobby Adekanye,1999-02-14,Netherlands,1435
+332705,Tyler Adams,1999-02-14,United States,989
+335598,Will Collar,1997-02-03,England,2999
+336012,Nicolas Kühn,2000-01-01,Germany,1047
+336268,Emre Yilmaz,1996-01-01,Turkey,2293
+338629,Sebastiaan Bornauw,1999-03-22,Belgium,399
+339556,Rico Henry,1997-07-08,Jamaica,1148
+339601,Ibrahima Sory Bah,1999-01-01,Guinea,2861
+341278,Iván Martín,1999-02-14,Spain,12321
+342227,Brighton Labeau,1996-01-01,Martinique,938
+343622,Petro Stasyuk,1995-02-24,Ukraine,63007
+344588,Glenn Middleton,2000-01-01,Scotland,1519
+346560,Alessandro Mallamo,1999-03-22,Italy,800
+347435,Hiroki Noda,1997-07-27,Japan,6632
+348875,Hugo Andersson,1999-01-01,Sweden,3622
+352651,Recep Yemisci,1999-01-01,Turkey,10484
+352658,Mahsun Capkan,1999-10-08,Turkey,126
+356089,David Barbona,1995-02-22,Argentina,2402
+360102,Aaron Comrie,1997-02-03,Scotland,2578
+363714,Abukar Mohamed,1999-01-01,Finland,2477
+365589,Vincent Trummer,2000-05-18,Austria,1321
+371142,Myziane Maolida,1999-02-14,Comoros,91427
+371168,Roberto de la Rosa,2000-01-04,Mexico,2407
+372808,Mateo Stamatov,1999-03-22,Bulgaria,49702
+373669,Ibrahim Icuz,1996-01-01,Turkey,20698
+375719,Yasir Subaşı,1996-01-01,Türkiye,2293
+379098,Stefan Popovic,1993-01-11,Montenegro,4633
+379960,Noel Knothe,1999-05-05,Germany,24
+380173,Tjorven Melens,1997-02-03,Belgium,498
+386155,Kubilay Akyüz,1995-02-22,Turkey,10484
+388029,Luca Schuler,1999-03-22,Germany,33
+388058,Benjamin Goller,1999-01-01,Germany,86
+388287,Yeison Suárez,1997-07-08,Colombia,11854
+391980,Shawal Anuar,1991-04-29,Singapore,4131
+392710,Lennard Maloney,1999-10-08,United States,39
+392775,Ryan Sessegnon,2000-05-18,England,931
+392964,Emmanuel Latte Lath,1999-01-01,Cote d'Ivoire,51663
+393240,Boyd Reith,1999-05-05,Netherlands,468
+393321,James Sands,2000-07-06,United States,40058
+393327,Will Sands,2000-07-06,United States,626
+393637,Riccardo Santovito,1999-10-06,Italy,130
+394906,Charles Traoré,1992-01-01,Mali,995
+399037,Mukhammedzhan Seysen,1999-02-14,Kazakhstan,22220
+399434,Marcus Tavernier,1999-03-22,England,989
+400550,Nikolai Baden Frederiksen,2000-05-18,Denmark,2446
+401040,Blair Malcolm,1997-02-03,Scotland,2759
+402625,Aleksey Mironov,2000-01-01,Russia,1083
+402630,Vladislav Volkov,2000-05-18,Russia,3725
+403290,Dario Špikić,1999-03-22,Croatia,2425
+404386,Robbie Burton,1999-12-26,Wales,11
+404838,Vladyslav Kucheruk,1999-02-14,Ukraine,10690
+404840,Oleksandr Avramenko,1999-03-22,Ukraine,2477
+404851,Denis Yanakov,1999-01-01,Ukraine,29700
+405568,Maurice Malone,2000-08-17,Germany,14
+406558,Steven Sessegnon,2000-05-18,,931
+412045,Pol Lozano,1999-10-06,Spain,714
+416622,Jordan Green,1995-02-22,England,989
+419665,Ilya Skrobotov,2000-07-06,Russia,964
+425739,Aleks Ławniczak,1999-05-05,Poland,168
+426198,Gun-hee Kim,1995-02-22,"Korea, South",21459
+426648,Ibrahima Sory Sankhon,1996-01-01,Guinea,475
+429874,Ansgar Knauff,2002-01-10,Germany,24
+430976,Jonathan Svedberg,1999-03-22,Sweden,1011
+431698,Bosko Sutalo,2000-01-01,Croatia,5689
+433646,José Murillo,1995-02-24,Panama,20960
+436075,Ion Gheorghe,1999-10-08,Romania,11380
+439456,Sebastian Grönning,1997-02-03,Denmark,678
+441432,Nicolas Keckeisen,2001-08-13,Germany,1321
+442885,Kay Tejan,1997-02-03,Netherlands,1434
+443263,Abou Ouattara,1999-12-26,Burkina Faso,2420
+444208,Michael Obafemi,2000-07-06,Ireland,1132
+448028,Kevin Sessa,2000-07-06,Germany,2036
+450838,Matthew Henvey,2000-01-04,Scotland,511
+457235,Devid Eugene Bouah,2001-08-13,Italy,12
+460361,Soufiane Jebari,1995-02-24,Spain,37255
+460602,Franck Djoulou,1999-01-01,Cote d'Ivoire,410
+461613,Christian Gómez,2000-05-18,Spain,13
+462285,Fabian de Keijzer,2000-05-10,Netherlands,1304
+463605,Bafodé Diakité,2001-01-06,France,989
+464195,Filip Stojilkovic,2000-01-04,Switzerland,5689
+464446,Andri Fannar Baldursson,2002-01-10,Iceland,10484
+464682,Andrea Errico,1999-01-01,Italy,8970
+465555,Djordje Petrovic,1999-10-08,Serbia,989
+467243,Viktor Korniyenko,1999-02-14,Ukraine,660
+467940,Vitinho,2000-01-04,Brazil,8024
+468284,Qianglong Tao,2001-11-20,China,17276
+468871,Dinmukhammed Kashken,2000-01-04,Kazakhstan,15299
+471690,Max Aarons,2000-01-04,England,124
+471936,Oliver Christensen,1999-03-22,Denmark,122
+475946,Anthony Patterson,2000-05-10,England,289
+481272,Rodrigo Piñeiro,1999-05-05,Uruguay,1029
+485392,Afonso Brito,1999-05-05,Portugal,3349
+485592,Max de Waal,2002-01-10,Netherlands,403
+488872,Daniel Horak,2000-05-10,Czech Republic,1897
+491389,Lucas Chang-Andersen,1999-10-06,Denmark,443
+491542,Kevin Mier,2000-05-18,Colombia,3711
+491705,Facundo Colidio,2000-01-04,Argentina,209
+494847,Lovro Majkic,1999-10-08,Croatia,605
+495752,Taichi Hara,1999-05-05,Japan,35
+497543,David Duris,1999-03-22,Slovakia,195
+498686,Iván Angulo,1999-03-22,Colombia,45604
+502022,Stefan Milic,2000-07-06,Montenegro,669
+503731,Stephen Duke-McKenna,2000-08-17,Guyana,2578
+504542,Henry Wise,2000-01-01,England,1010
+508257,Carlos Vargas,1999-02-14,Mexico,3711
+509992,Marcel Schantl,2000-08-17,Austria,2157
+511119,Halil Yeral,2000-01-01,Türkiye,7160
+511815,Owen Otasowie,2001-01-06,United States,2282
+513970,Julián Araujo,2001-08-13,Mexico,989
+515501,Dzambolat Tsallagov,2000-01-01,Russia,1186
+521225,Jakob Kiilerich,2000-05-10,Denmark,3508
+524021,Roman Zhmurko,1997-07-27,Ukraine,4482
+531065,Oussama El Azzouzi,2001-05-29,Morocco,290
+532776,Amine Adli,2000-05-10,Morocco,989
+533565,Tomás Chancalay,1999-01-01,Argentina,56089
+534700,Jamie Shackleton,1999-10-08,,399
+534706,Rahmetullah Berisbek,1999-03-22,Turkey,11688
+539154,Leandro Sanca,2000-01-04,Guinea-Bissau,6112
+540302,Mateo Klimowicz,2000-07-06,Germany,40188
+541594,Felix Winther,2000-05-18,Denmark,5776
+542469,Lumbardh Dellova,1999-01-01,Kosovo,208
+546351,Berk Balaban,2000-01-01,Turkey,141
+548656,João Paredes,1996-01-01,Portugal,3325
+555106,Filip Marchwinski,2002-01-10,Poland,1005
+558713,Can Ahmet Üstün,1999-01-01,Turkey,2944
+562742,Leo Román,2000-07-06,Spain,237
+563696,Batuhan Yilmaz,1999-01-01,Turkey,36
+570538,Inal Chertkoev,1999-10-08,Ukraine,6992
+571271,Ivan Smolcic,2000-08-17,Croatia,1047
+571299,Hrvoje Smolcic,2000-08-17,Croatia,120
+575084,Kwaku Bonsu Osei,2000-08-17,Ghana,15276
+576983,Zurab Gigashvili,2001-11-20,Georgia,41201
+581619,Boran Güngör,2000-01-01,Turkey,141
+582168,Matías Godoy,2002-01-10,Argentina,12301
+583508,David Alba,1999-05-05,Spain,3709
+586534,Alexandros Kavvadias,2000-05-10,Greece,6418
+593774,Anouar El Azzouzi,2001-05-29,Morocco,1269
+597587,Mikaele Falzone,2000-05-18,Belgium,172
+598545,Breno,2000-01-01,Portugal,2503
+598828,Aleksey Mamin,1999-03-22,Russia,11127
+601454,Artem Sukhanov,2001-05-29,Russia,3729
+605194,Eren Karadag,2000-01-01,Turkey,126
+607779,Sergio Moreno,1999-01-01,Spain,367
+611793,James Hill,2002-01-10,England,989
+613873,Álvaro Barreal,2000-08-17,Argentina,221
+620091,Ahmet Celalettin Seckinli,1999-05-05,Turkey,2293
+622023,Noah Rupp,2003-08-13,Switzerland,938
+623306,Denis Novikov,2000-08-17,Russia,11127
+626472,Krisztián Keresztes,2000-01-04,Hungary,1519
+627282,Dani Tasende,2000-07-06,Spain,1050
+628970,Ariel Uribe,1999-02-14,Chile,5622
+630015,Khozhimat Erkinov,2001-05-29,Uzbekistan,3718
+647376,Luke Robinson,2001-11-20,Scotland,2578
+650568,António Silva,2003-10-30,Portugal,294
+654539,Adrien Truffert,2001-11-20,France,989
+654787,Denys Taraduda,2000-08-17,Ukraine,2740
+657742,Joaquín Sosa,2002-01-10,Uruguay,11648
+658713,Tornike Morchiladze,2002-01-10,Georgia,144
+660198,Lucas González,1997-07-27,Argentina,14602
+666545,Capita,2002-01-10,Angola,4284
+666974,Mikayil Faye,2004-07-14,Senegal,273
+672537,Flynn Duffy,2003-08-13,Scotland,1519
+673450,Jakub Elbel,2000-07-06,Czech Republic,2311
+676042,Juanlu Sánchez,2003-08-15,Spain,368
+676744,Hong Wan,2000-08-17,Malaysia,15817
+679414,Antonio Satriano,2003-10-30,Italy,1304
+682794,Malik Abubakari,2000-05-10,Ghana,369
+684307,Youssef Amyn,2003-08-21,Iraq,2156
+684606,Levin Winkler,2003-08-13,Switzerland,434
+687609,Isaac Romero,2000-05-18,Spain,368
+689207,Gasper Tratnik,2000-01-04,Slovenia,3527
+690736,Mehmet Fatih Dündar,2000-01-01,Turkey,2832
+690799,Anthony Rouault,2001-05-29,France,273
+693357,Hugo Vandermersch,1999-05-05,France,257
+695208,Christian Rust,2005-02-16,Denmark,865
+697401,Heron,2000-08-17,Brazil,443
+697818,Marcelo dos Santos,1997-07-27,Brazil,2424
+698323,Oscar Salomón,1999-03-22,Argentina,1286
+698454,Pedro Teixeira,2001-11-20,,1301
+698536,Viktor Radojević,2004-07-14,Serbia,3137
+699322,Nikita Gloydman,2002-01-10,,1186
+699679,Bernardo Schappo,1999-03-22,Brazil,2431
+700643,Martin Turk,2003-08-21,Slovenia,1465
+705094,Igor Lucatelli,2003-08-21,Italy,4171
+707229,Carmel Mabanza,2003-08-13,DR Congo,1158
+710968,Uros Kabic,2004-01-01,Serbia,53
+711166,Mihajlo Milosavic,2004-07-14,Serbia,3137
+711232,Stanislav Demkiv,2000-05-10,Ukraine,18105
+711337,Evanilson,1999-10-06,Brazil,989
+717906,Antoine Douaihy,1999-03-22,Lebanon,7142
+718029,Unai Ropero,2001-11-20,Spain,1108
+719673,Ben Gannon-Doak,2005-11-11,Scotland,31
+719720,David Argüelles,2002-01-10,Spain,3709
+719857,Mustafa Erdilman,2004-01-01,Türkiye,44006
+724968,Nikoloz Ugrekhelidze,2003-08-15,Georgia,6646
+726120,Simon Simoni,2004-07-14,Albania,2
+728133,Sang-hyeok Lee,2001-01-06,"Korea, South",35759
+734168,Hoang Viet Anh Bui,1999-01-01,Vietnam,81455
+739996,Matías Esquivel,1999-03-22,Argentina,30120
+741238,Omari Hutchinson,2003-10-30,England,703
+741700,Frankie Ealing,2004-07-14,England,405
+742268,Hrithik Tiwari,2002-01-10,India,45321
+743096,Ali Şahin Yılmaz,2004-01-01,Türkiye,449
+746740,Daniel Jebbison,2003-08-13,Canada,466
+748604,Devon Koswal,2003-08-21,Netherlands,1434
+750753,Rodrigo Saravia,2000-08-17,Uruguay,1083
+762317,Juan Díaz,2000-01-01,Colombia,32041
+765762,Christian Brauzman,2003-08-15,Kyrgyzstan,138189
+770325,Milos Mladenovic,2001-11-20,Serbia,4645
+782763,Bong-soo Kim,1999-12-26,"Korea, South",6499
+786497,Sofyane Bouzamoucha,2000-05-10,France,61
+794816,Rhys Bennett,2003-10-30,England,985
+795086,Lorenzo Offermann,2002-01-10,Belgium,1245
+802143,Isaac Boehmer,2001-11-20,Canada,6321
+802715,Mads Eriksen,2003-10-30,Denmark,5776
+806015,Adriano Onyegbule,2006-06-23,Germany,26
+807417,Emmanuel Fernandez,2001-11-20,Nigeria,124
+809639,Koffi,2001-11-20,Ghana,3709
+810895,Eliesse Ben Seghir,2005-02-16,Morocco,15
+812170,Kirill Samoylenko,2001-05-29,Ukraine,63007
+812783,Karlo Lusavec,2003-10-30,Croatia,599
+816585,Can Uzun,2005-11-11,Türkiye,24
+820371,Andrian Kraev,1999-02-14,Bulgaria,1017
+821113,Paolo Gardoni,2004-01-01,Italy,2239
+827742,Cosmin Gladun,2002-01-10,Romania,11380
+830307,Juan Pablo Zozaya,2001-08-13,Argentina,31284
+830842,Juan Carlos Portillo,2000-05-18,Argentina,209
+834463,Iker Córdoba,2005-11-11,Spain,1049
+848661,Janko Jevremovic,2004-07-14,Serbia,59358
+851385,Tobias Slotsager,2006-01-01,Denmark,276
+853278,Ignacio Maestro Puch,2003-08-13,Argentina,5662
+855256,Alex Scott,2003-08-21,England,989
+865682,Ezechiel Banzuzi,2005-02-16,Netherlands,23826
+869280,Kota Kudo,2003-08-13,Japan,828
+875114,Arda Cagdas,2004-01-01,Turkey,36
+875947,Román Vega,2004-01-01,Argentina,964
+878575,Bo-min Jeon,2000-05-10,"Korea, South",38898
+886183,Nawaf Al-Aqidi,2000-05-10,Saudi Arabia,18544
+886501,Wiktor Bogacz,2004-07-14,Poland,5689
+892089,Pablo Maia,2002-01-10,Brazil,585
+894372,Henrik Skogvold,2004-07-14,Norway,3837
+898350,Facundo Bernal,2003-08-21,Uruguay,2462
+901082,Faisal Al-Ghamdi,2001-08-13,Saudi Arabia,8023
+907359,Diógenes,2001-01-06,Brazil,221
+907664,Agustín Morales,1999-02-14,Argentina,14602
+911390,Mikail Akhmedov,2004-01-01,Russia,3725
+912081,Jun-ho Bae,2003-08-21,"Korea, South",512
+913841,Ki-wan Sung,2004-01-01,"Korea, South",21459
+918969,Lamine Camara,2004-01-01,Senegal,162
+926273,Kyrylo Arkhypchuk,2003-08-13,Ukraine,49364
+926978,Lucas Høgsberg,2006-06-23,Denmark,2778
+933570,Duke Verduin,2003-10-30,Netherlands,1269
+935358,Alexander Simmelhack,2005-11-11,Denmark,1177
+937040,Luca Ciobanu,2006-01-01,Romania,301
+938722,Oier Gastesi,2003-10-30,Spain,621
+943150,Al-Hashmi Al-Hussain,2003-08-15,Qatar,1230
+944124,Lass Sangaré,2001-11-20,Cote d'Ivoire,16795
+944217,Lyheng Reth,2004-01-01,Cambodia,25381
+944312,Sodiq Ismaila,2003-08-13,Nigeria,4507
+945362,Dara Vireak,2003-10-30,Cambodia,25383
+948275,Álvaro Rodríguez,2004-07-14,Uruguay,1531
+949615,Hassan Eenaaz,2000-01-01,Maldives,62967
+952014,Kaan Onaran,2004-01-01,Turkey,2381
+955206,Paolo Bedolla,2006-01-01,Mexico,3631
+955357,Junior Kroupi,2006-06-23,France,989
+957634,Hasan Abdulkareem,1999-01-01,Iraq,23806
+972467,Anthony Markanich Jr.,1999-12-26,United States,56089
+972764,Nick Markanich,1999-12-26,United States,9168
+987074,Dylan Lawlor,2006-01-01,Wales,603
+989112,Veljko Milosavljevic,2007-06-28,Serbia,989
+989824,Ben Hamed Touré,2003-08-21,Cote d'Ivoire,1147
+991460,Krzysztof Kolanko,2006-08-03,Poland,168
+993870,Davis Bautista,2005-02-16,Ecuador,24
+997057,Denzell García,2003-08-15,Mexico,49283
+998101,Alex Tóth,2005-10-23,Hungary,989
+1000701,José Mercado,2003-08-21,Colombia,14680
+1000768,Adnan Karahisar,2006-01-01,Türkiye,114
+1004728,Dudu,2006-01-01,Brazil,679
+1005802,Ulises Giménez,2006-01-01,Argentina,209
+1009658,Julio Soler,2005-02-16,Argentina,989
+1011140,Jack Fletcher,2007-03-19,England,985
+1012564,Rayan,2006-08-03,Brazil,989
+1018354,Abdulaziz Al-Harbi,2003-08-13,Saudi Arabia,9131
+1022445,Jaime Barceló,1999-10-06,Argentina,19775
+1024926,Kanta Sekitomi,2005-10-23,Japan,3828
+1027069,Scott Bright,2006-08-03,Scotland,2578
+1031047,George Robesten,2005-11-11,England,2759
+1037539,Paul Riveros,1997-07-08,Paraguay,830
+1048119,Taha Güneş,2006-01-01,Türkiye,2832
+1048767,Dzhabrail Taramov,2006-08-03,Russia,3725
+1049911,Tyler Fletcher,2007-03-19,Scotland,985
+1051756,Stan Berkani,2003-08-13,Algeria,3524
+1052497,Mingiyan Badmaev,2007-06-28,Russia,2410
+1054209,Mahamadou Baldé,2004-01-01,Spain,398
+1059771,Filippo Vertua,2006-01-01,Italy,749
+1062319,Luciano González,2006-01-01,Uruguay,2402
+1064105,Miguel Sierra,2004-07-14,Spain,368
+1064464,Mateusz Dziewiatowski,2007-06-28,Poland,168
+1064499,Luismi Quirant,2004-01-01,Spain,1531
+1076672,Ahmet Tırpancı,2007-03-19,Türkiye,2293
+1077465,Thiago Romano,2006-06-23,Argentina,653
+1082609,Daniel Sales,2006-06-23,Brazil,614
+1083600,Nathan Fernandes,2005-02-16,Brazil,537
+1109823,Nathan Paull,2003-08-21,Australia,6954
+1134878,Diego Martín,2003-08-13,Spain,472
+1135726,Freddy Molina,2004-01-01,Venezuela,14680
+1174093,Geo Almeida,2004-07-14,Portugal,4294
+1174506,Cheick Mamadou Diabaté,2004-01-01,Cote d'Ivoire,4441
+1175619,Mahmut Can Kara,2006-01-01,Türkiye,11282
+1178925,Muhammet Ali Apaydın,2006-01-01,Türkiye,11282
+1180065,Ziyad Al-Ghamdi,2005-02-16,Saudi Arabia,7732
+1180586,Nawaf Al-Osaimi,2001-05-29,Saudi Arabia,9840
+1181959,İbrahim Kağan Alkış,2006-01-01,Türkiye,2832
+1189055,Oğuzhan Ertem,2008-01-01,Türkiye,449
+1193303,Elivis Ngonde,2002-01-10,Uganda,18778
+1198863,Mervan Müjdeci,2008-01-01,Türkiye,2832
+1199942,Woldeamanuel Getu,2000-01-01,Ethiopia,14092
+1207708,Diego Besio,2006-06-23,Switzerland,257
+1209519,Victor Ntino-Emo Gidado,2004-07-14,Nigeria,2832
+1224226,Süleyman Emre Atalı,2006-01-01,Türkiye,7160
+1231248,Francisco Baridó,2008-01-01,Argentina,6195
+1235196,Eder López,2006-01-01,Mexico,49283
+1241022,Román Gómez,2004-07-14,Argentina,10010
+1242126,Aiden Hezarkhani,2007-06-28,United States,6643
+1248840,Yusuf Ali Şirin,2008-01-01,Türkiye,1467
+1251935,Thiaguinho Santos,2000-01-04,Brazil,35759
+1256092,Adrián Valencia,2003-08-21,Colombia,14649
+1259085,Hamza Abdelkarim,2008-01-01,Egypt,2470
+1259986,Malik Pimpong,2008-01-01,Denmark,865
+1264865,Daniel Sandu,2007-06-28,Romania,4959
+1269229,Jeferson Medina,2006-01-01,Colombia,32041
+1278648,Faris Fadillah,2008-01-01,Brunei Darussalam,75
+1283943,Krystian Harciński,2007-03-19,Poland,7154
+1286900,Arkadiusz Murzacz,2006-06-23,Poland,3527
+1294048,Alex Marques,2005-10-23,Portugal,2503
+1295301,Yegor Klymenko,2008-01-01,Ukraine,48726
+1304019,Efe Alkaç,2007-06-28,Türkiye,10484
+1307109,Georges Gomis,2008-01-01,Senegal,738
+1308235,Issa Koné,2006-01-01,Cote d'Ivoire,413
+1313493,Wojciech Zacharewicz,2006-06-23,Poland,6107
+1317253,Robert Ristoiu,2008-01-01,Romania,40812
+1318646,Santiago Martínez,2004-01-01,Argentina,12574
+1331431,Anton Höög,2007-03-19,Sweden,496
+1335870,José Antonio Morante,2007-06-28,Spain,150
+1340428,Will Wright,2008-01-01,England,31
+1356045,Alex Harris,2005-02-16,United States,1247
+1371179,Ömer Karslıoğlu,2008-01-01,Türkiye,11282
+1371326,Diego Díaz,2002-01-10,Argentina,7097
+1381051,Iddrisu Moro,2006-01-01,Ghana,1011
+1387391,Jan Rivera,2006-06-23,Puerto Rico,54100
+1394023,Hjalmar Smedberg,2006-06-23,Sweden,3641
+1395982,Yan Shevchenko,2006-06-23,Ukraine,81401
+1415274,Hibatur Rahman,2000-01-01,Brunei Darussalam,44338
+1430687,Momelezi Dlambewu,2004-01-01,South Africa,132261
+1437532,Samuel Martín,2006-01-01,Colombia,2350
+1438585,Mehmed Ali Kırcıoğlu,2008-01-01,Türkiye,10484
+1454724,Thomas Rios,2006-01-01,Argentina,1286
+1475206,Julián Ortiz,2006-01-01,Colombia,9811
+1501511,Thamer Mahdali,2004-01-01,Saudi Arabia,9131
+1517356,Sourou Koné,2008-01-01,Cote d'Ivoire,1059
+1520552,Faiz Hawsawi,2004-01-01,Nigeria,9131
+1542951,Fares Al-Zahrani,2008-01-01,Saudi Arabia,91427
+1546617,Yahya Mousa Gharawi,2006-01-01,Saudi Arabia,34911

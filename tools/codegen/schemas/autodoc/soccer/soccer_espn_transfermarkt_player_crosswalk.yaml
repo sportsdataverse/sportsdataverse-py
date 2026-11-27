@@ -1,0 +1,24 @@
+schema: soccer_espn_transfermarkt_player_crosswalk
+kind: dataframe
+columns:
+- name: espn_athlete_id
+  type: character
+  description: ''
+- name: espn_team_id
+  type: character
+  description: ''
+- name: espn_league
+  type: character
+  description: ''
+- name: espn_date_of_birth
+  type: date
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: tm_name
+  type: character
+  description: ''
+- name: match_method
+  type: character
+  description: ''
