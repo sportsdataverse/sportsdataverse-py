@@ -1,0 +1,33 @@
+schema: load_soccer_transfermarkt_transfers
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: transfer_date
+  type: date
+  description: ''
+- name: transfer_season
+  type: character
+  description: ''
+- name: from_club_id
+  type: integer
+  description: ''
+- name: to_club_id
+  type: integer
+  description: ''
+- name: from_club_name
+  type: character
+  description: ''
+- name: to_club_name
+  type: character
+  description: ''
+- name: transfer_fee
+  type: double
+  description: ''
+- name: market_value_in_eur
+  type: double
+  description: ''
+- name: player_name
+  type: character
+  description: ''

@@ -1,0 +1,36 @@
+schema: load_soccer_transfermarkt_competitions
+kind: dataframe
+columns:
+- name: competition_id
+  type: character
+  description: ''
+- name: competition_code
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: sub_type
+  type: character
+  description: ''
+- name: type
+  type: character
+  description: ''
+- name: country_id
+  type: integer
+  description: ''
+- name: country_name
+  type: character
+  description: ''
+- name: domestic_league_code
+  type: character
+  description: ''
+- name: confederation
+  type: character
+  description: ''
+- name: total_clubs
+  type: integer
+  description: ''
+- name: url
+  type: character
+  description: ''

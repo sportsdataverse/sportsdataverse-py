@@ -83834,3 +83834,90 @@ soccer_espn_reep_team_crosswalk:
   match_method: How the ESPN team was tied to reep. 'key_espn' (reep already carries this ESPN id), 'name' (exactly one
     reep row in the league's country shares a normalized name or alias), 'review' (settled by hand in
     tools/soccer_espn_reep_overrides.yaml), 'unmatched' (reviewed; no reep row is this club, reep columns null).
+load_soccer_transfermarkt_clubs:
+  club_id: Transfermarkt club id (Int64); the club_id of soccer_espn_transfermarkt_team_crosswalk.
+  club_code: Transfermarkt URL slug of the club (e.g. 'fc-barcelona').
+  name: Club name as Transfermarkt writes it (e.g. 'FC Barcelona').
+  domestic_competition_id: Transfermarkt id of the club's domestic league (e.g. 'ES1'); joins competition_id of
+    load_soccer_transfermarkt_competitions.
+  squad_size: Players in the club's squad in its last season in the dataset.
+  average_age: Average age of that squad, in years.
+  foreigners_number: Players in that squad without the club's nationality.
+  foreigners_percentage: foreigners_number as a percentage of squad_size; null when Transfermarkt shows none.
+  national_team_players: Players in that squad capped by a senior national team.
+  stadium_name: Name of the club's home stadium.
+  stadium_seats: Seating capacity of that stadium.
+  net_transfer_record: Net transfer balance as Transfermarkt displays it, text with currency and unit (e.g. '+€5.90m',
+    '€-25.00m').
+  coach_name: Head coach Transfermarkt lists; null for about half the clubs.
+  last_season: Start year of the club's last season in a covered competition (2025 = 2025-26).
+  url: Transfermarkt page of the club.
+load_soccer_transfermarkt_players:
+  player_id: Transfermarkt player id (Int64), unique in the table.
+  first_name: Given name; null when Transfermarkt shows one name only.
+  last_name: Family name (or the single name).
+  name: Full name as Transfermarkt shows it.
+  last_season: Start year of the last season the player appeared in a covered competition (2025 = 2025-26).
+  current_club_id: Transfermarkt id of the player's club at the snapshot (Int64); joins club_id.
+  player_code: Transfermarkt URL slug of the player.
+  country_of_birth: Country of birth.
+  city_of_birth: City of birth, as Transfermarkt writes it (may carry trailing non-breaking spaces).
+  country_of_citizenship: First citizenship Transfermarkt lists.
+  date_of_birth: Date of birth.
+  sub_position: Detailed position (e.g. 'Centre-Forward', 'Left-Back').
+  position: Position group - 'Goalkeeper', 'Defender', 'Midfield', 'Attack' or 'Missing'.
+  foot: Preferred foot - 'right', 'left' or 'both'; null when unknown.
+  height_in_cm: Height in centimetres.
+  contract_expiration_date: Date the player's current contract ends; null when unknown.
+  agent_name: Player's agency as Transfermarkt lists it.
+  image_url: URL of the player's Transfermarkt portrait.
+  international_caps: Senior caps for current_national_team_id; null when uncapped.
+  international_goals: Senior international goals; null when uncapped.
+  current_national_team_id: Transfermarkt id of the national team the player represents (Int64); null when none.
+  url: Transfermarkt page of the player.
+  current_club_domestic_competition_id: Domestic league id of current_club_id (e.g. 'GB1').
+  current_club_name: Name of current_club_id as Transfermarkt writes it (often the legal name, e.g. 'Società Sportiva
+    Lazio S.p.A.').
+  market_value_in_eur: Latest Transfermarkt market value, in euros; null when none is listed.
+  highest_market_value_in_eur: Highest market value Transfermarkt has recorded for the player, in euros.
+load_soccer_transfermarkt_player_valuations:
+  player_id: Transfermarkt player id (Int64); joins load_soccer_transfermarkt_players.
+  date: Date of the valuation (2000-01-20 to 2026-06-12 in the snapshot).
+  market_value_in_eur: Market value Transfermarkt assigned on that date, in euros.
+  current_club_name: Club the player was at on that date ('Unknown' when Transfermarkt does not say).
+  current_club_id: Transfermarkt id of that club (Int64).
+  player_club_domestic_competition_id: Domestic league id of that club (e.g. 'BE1'); null for clubs outside the covered
+    leagues.
+load_soccer_transfermarkt_transfers:
+  player_id: Transfermarkt player id (Int64).
+  transfer_date: Date the move takes effect; a pre-agreed future move can be dated years ahead.
+  transfer_season: Season of the move as Transfermarkt writes it (e.g. '25/26').
+  from_club_id: Transfermarkt id of the selling club (Int64).
+  to_club_id: Transfermarkt id of the buying club (Int64).
+  from_club_name: Name of the selling club.
+  to_club_name: Name of the buying club.
+  transfer_fee: Fee in euros; 0 for a free transfer, null when Transfermarkt shows no fee (undisclosed or unknown).
+  market_value_in_eur: Player's Transfermarkt market value at the time of the move, in euros; Float64 because the file writes
+    it with decimals, e.g. '700000.000').
+  player_name: Name of the player.
+load_soccer_transfermarkt_competitions:
+  competition_id: Transfermarkt competition id (e.g. 'GB1', 'CL').
+  competition_code: Transfermarkt URL slug of the competition (e.g. 'premier-league').
+  name: Competition name as its slug (e.g. 'premier-league').
+  sub_type: Kind of competition (e.g. 'first_tier', 'domestic_cup', 'uefa_champions_league', 'world_cup').
+  type: Competition group - 'domestic_league', 'domestic_cup', 'international_cup', 'national_team_competition' or
+    'other'.
+  country_id: Transfermarkt country id (Int64); -1 for international competitions.
+  country_name: Country name; null for international competitions.
+  domestic_league_code: Id of the country's first-tier league; null for international competitions.
+  confederation: Confederation as Transfermarkt names it ('europa', 'amerika', 'asien', 'afrika', 'fifa').
+  total_clubs: Clubs in the competition; null for some cups and national-team competitions.
+  url: Transfermarkt page of the competition.
+soccer_espn_transfermarkt_team_crosswalk:
+  espn_team_id: ESPN soccer team id, digits as text (Utf8, as the ESPN soccer frames carry team ids); unique.
+  espn_league: ESPN league slug the team was listed under when the ESPN <-> reep crosswalk was built.
+  espn_display_name: ESPN display name of the team at that build.
+  club_id: Transfermarkt club id (Int64); joins club_id of load_soccer_transfermarkt_clubs and current_club_id of
+    load_soccer_transfermarkt_players. Null when no Transfermarkt id is known; never on two ESPN teams.
+  match_method: Where club_id comes from - 'reep' (the reep row's Transfermarkt id) or 'review' (reviewed by hand
+    because the reep row has none); null with club_id.
