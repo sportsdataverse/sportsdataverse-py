@@ -1,0 +1,92 @@
+{
+  "news": {
+    "timestamp": "2026-11-26T19:19:00Z",
+    "resultsOffset": 0,
+    "status": "success",
+    "resultsLimit": 50,
+    "resultsCount": 12,
+    "feed": [
+      {
+        "id": 102801910,
+        "nowId": "23-102801910",
+        "contentKey": "102801910-23-1-1",
+        "dataSourceIdentifier": "a595481973d01",
+        "type": "Rotowire",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-10-28T20:19:15Z",
+        "lastModified": "2026-10-28T20:17:49Z",
+        "published": "2026-10-28T20:17:49Z",
+        "images": [],
+        "story": "<editorial text omitted from the committed sample>",
+        "allowContentReactions": false,
+        "allowSearch": false,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "self": {}
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=102801910"
+          }
+        },
+        "premium": false,
+        "playerId": 4905921
+      },
+      {
+        "id": 102801610,
+        "nowId": "23-102801610",
+        "contentKey": "102801610-23-1-1",
+        "dataSourceIdentifier": "00b9a56c3de49",
+        "type": "Rotowire",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-10-28T20:14:15Z",
+        "lastModified": "2026-10-28T13:17:20Z",
+        "published": "2026-10-28T13:17:20Z",
+        "images": [],
+        "story": "<editorial text omitted from the committed sample>",
+        "allowContentReactions": false,
+        "allowSearch": false,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "self": {}
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=102801610"
+          }
+        },
+        "premium": false,
+        "playerId": 4905921
+      },
+      {
+        "id": 102801510,
+        "nowId": "23-102801510",
+        "contentKey": "102801510-23-1-1",
+        "dataSourceIdentifier": "5f55d5460f8da",
+        "type": "Rotowire",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-10-28T20:14:15Z",
+        "lastModified": "2026-10-28T04:47:57Z",
+        "published": "2026-10-28T04:47:57Z",
+        "images": [],
+        "story": "<editorial text omitted from the committed sample>",
+        "allowContentReactions": false,
+        "allowSearch": false,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "self": {}
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=102801510"
+          }
+        },
+        "premium": false,
+        "playerId": 4905921
+      }
+    ]
+  }
+}

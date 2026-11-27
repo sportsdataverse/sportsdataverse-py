@@ -1,0 +1,59 @@
+[
+  {
+    "defaultPositionId": 4,
+    "droppable": true,
+    "eligibleSlots": [
+      4,
+      6,
+      7
+    ],
+    "firstName": "Mikulas",
+    "fullName": "Mikulas Hovorka",
+    "id": 5209557,
+    "lastName": "Hovorka",
+    "lastNewsDate": 1784677633000,
+    "ownership": {
+      "percentOwned": 0.01
+    },
+    "proTeamId": 26,
+    "universeId": 1
+  },
+  {
+    "defaultPositionId": 2,
+    "droppable": true,
+    "eligibleSlots": [
+      3,
+      1,
+      2
+    ],
+    "firstName": "Calle",
+    "fullName": "Calle Jarnkrok",
+    "id": 2555316,
+    "lastName": "Jarnkrok",
+    "lastNewsDate": 1788182797000,
+    "ownership": {
+      "percentOwned": 0.02
+    },
+    "proTeamId": 21,
+    "universeId": 1
+  },
+  {
+    "defaultPositionId": 1,
+    "droppable": true,
+    "eligibleSlots": [
+      3,
+      0,
+      6
+    ],
+    "firstName": "Charlie",
+    "fullName": "Charlie Coyle",
+    "id": 2555315,
+    "lastName": "Coyle",
+    "lastNewsDate": 1795505407000,
+    "ownership": {
+      "percentOwned": 44.78
+    },
+    "proTeamId": 29,
+    "universeId": 1
+  }
+]

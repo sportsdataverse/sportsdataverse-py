@@ -1,0 +1,333 @@
+{
+  "draftDetail": {
+    "drafted": true,
+    "inProgress": false
+  },
+  "gameId": 3,
+  "id": 1535462463,
+  "scoringPeriodId": 38,
+  "seasonId": 2027,
+  "segmentId": 0,
+  "status": {
+    "activatedDate": 1794355801938,
+    "createdAsLeagueType": 2,
+    "currentLeagueType": 2,
+    "currentMatchupPeriod": 6,
+    "finalScoringPeriod": 167,
+    "firstScoringPeriod": 28,
+    "isActive": true,
+    "isExpired": false,
+    "isFull": true,
+    "isPlayoffMatchupEdited": false,
+    "isToBeDeleted": false,
+    "isViewable": false,
+    "isWaiverOrderEdited": false,
+    "latestScoringPeriod": 38,
+    "previousSeasons": [],
+    "standingsUpdateDate": 1795684188615,
+    "teamsJoined": 10,
+    "transactionScoringPeriod": 38,
+    "waiverLastExecutionDate": 1795684188533,
+    "waiverProcessStatus": {}
+  },
+  "teams": [
+    {
+      "abbrev": "T1",
+      "currentProjectedRank": 9,
+      "divisionId": 0,
+      "draftDayProjectedRank": 7,
+      "draftStrategy": {},
+      "eliminated": false,
+      "eliminationMatchupPeriod": 0,
+      "id": 1,
+      "isActive": false,
+      "isTransactionLocked": false,
+      "logo": "",
+      "logoType": "VECTOR",
+      "name": "Team 1",
+      "owners": [
+        "{MEMBER-01}"
+      ],
+      "playoffSeed": 7,
+      "points": 1401.0,
+      "pointsAdjusted": 0.0,
+      "pointsDelta": 0.0,
+      "primaryOwner": "{MEMBER-01}",
+      "rankCalculatedFinal": 0,
+      "rankFinal": 0,
+      "record": {
+        "away": {
+          "gamesBack": 0.0,
+          "losses": 0,
+          "percentage": 0.0,
+          "pointsAgainst": 0.0,
+          "pointsFor": 0.0,
+          "streakLength": 0,
+          "streakType": "NONE",
+          "ties": 0,
+          "wins": 0
+        },
+        "division": {
+          "gamesBack": 1.0,
+          "losses": 1,
+          "percentage": 0.0,
+          "pointsAgainst": 0.0,
+          "pointsFor": 0.0,
+          "streakLength": 1,
+          "streakType": "LOSS",
+          "ties": 0,
+          "wins": 0
+        },
+        "home": {
+          "gamesBack": 0.0,
+          "losses": 1,
+          "percentage": 0.0,
+          "pointsAgainst": 0.0,
+          "pointsFor": 0.0,
+          "streakLength": 1,
+          "streakType": "LOSS",
+          "ties": 0,
+          "wins": 0
+        },
+        "overall": {
+          "gamesBack": 1.0,
+          "losses": 1,
+          "percentage": 0.0,
+          "pointsAgainst": 1607.0,
+          "pointsFor": 1401.0,
+          "streakLength": 1,
+          "streakType": "LOSS",
+          "ties": 0,
+          "wins": 0
+        }
+      },
+      "tradeBlock": {},
+      "transactionCounter": {
+        "acquisitionBudgetSpent": 0,
+        "acquisitions": 0,
+        "drops": 0,
+        "matchupAcquisitionTotals": {},
+        "misc": 0,
+        "moveToActive": 1,
+        "moveToIR": 0,
+        "paid": 0.0,
+        "teamCharges": 0.0,
+        "trades": 0
+      },
+      "valuesByStat": {
+        "0": 757.0,
+        "16": 181.0,
+        "1": 21.0,
+        "17": 75.0,
+        "2": 43.0,
+        "3": 159.0,
+        "6": 219.0,
+        "11": 68.0,
+        "13": 265.0,
+        "14": 589.0,
+        "15": 152.0
+      },
+      "waiverRank": 8
+    },
+    {
+      "abbrev": "T2",
+      "currentProjectedRank": 5,
+      "divisionId": 0,
+      "draftDayProjectedRank": 9,
+      "draftStrategy": {},
+      "eliminated": false,
+      "eliminationMatchupPeriod": 0,
+      "id": 2,
+      "isActive": false,
+      "isTransactionLocked": false,
+      "logo": "",
+      "logoType": "VECTOR",
+      "name": "Team 2",
+      "owners": [
+        "{MEMBER-02}"
+      ],
+      "playoffSeed": 5,
+      "points": 1400.0,
+      "pointsAdjusted": 0.0,
+      "pointsDelta": 0.0,
+      "primaryOwner": "{MEMBER-02}",
+      "rankCalculatedFinal": 0,
+      "rankFinal": 0,
+      "record": {
+        "away": {
+          "gamesBack": 0.0,
+          "losses": 0,
+          "percentage": 0.0,
+          "pointsAgainst": 0.0,
+          "pointsFor": 0.0,
+          "streakLength": 0,
+          "streakType": "NONE",
+          "ties": 0,
+          "wins": 0
+        },
+        "division": {
+          "gamesBack": 0.0,
+          "losses": 0,
+          "percentage": 1.0,
+          "pointsAgainst": 0.0,
+          "pointsFor": 0.0,
+          "streakLength": 1,
+          "streakType": "WIN",
+          "ties": 0,
+          "wins": 1
+        },
+        "home": {
+          "gamesBack": 0.0,
+          "losses": 0,
+          "percentage": 1.0,
+          "pointsAgainst": 0.0,
+          "pointsFor": 0.0,
+          "streakLength": 1,
+          "streakType": "WIN",
+          "ties": 0,
+          "wins": 1
+        },
+        "overall": {
+          "gamesBack": 0.0,
+          "losses": 0,
+          "percentage": 1.0,
+          "pointsAgainst": 1426.0,
+          "pointsFor": 1400.0,
+          "streakLength": 1,
+          "streakType": "WIN",
+          "ties": 0,
+          "wins": 1
+        }
+      },
+      "tradeBlock": {},
+      "transactionCounter": {
+        "acquisitionBudgetSpent": 0,
+        "acquisitions": 1,
+        "drops": 1,
+        "matchupAcquisitionTotals": {
+          "5": 1
+        },
+        "misc": 0,
+        "moveToActive": 1,
+        "moveToIR": 0,
+        "paid": 0.0,
+        "teamCharges": 0.0,
+        "trades": 0
+      },
+      "valuesByStat": {
+        "0": 709.0,
+        "16": 192.0,
+        "1": 20.0,
+        "17": 72.0,
+        "2": 39.0,
+        "3": 190.0,
+        "6": 242.0,
+        "11": 81.0,
+        "13": 247.0,
+        "14": 522.0,
+        "15": 143.0
+      },
+      "waiverRank": 5
+    },
+    {
+      "abbrev": "T3",
+      "currentProjectedRank": 6,
+      "divisionId": 0,
+      "draftDayProjectedRank": 8,
+      "draftStrategy": {},
+      "eliminated": false,
+      "eliminationMatchupPeriod": 0,
+      "id": 3,
+      "isActive": false,
+      "isTransactionLocked": false,
+      "logo": "",
+      "logoType": "VECTOR",
+      "name": "Team 3",
+      "owners": [
+        "{MEMBER-03}"
+      ],
+      "playoffSeed": 2,
+      "points": 1801.0,
+      "pointsAdjusted": 0.0,
+      "pointsDelta": 0.0,
+      "primaryOwner": "{MEMBER-03}",
+      "rankCalculatedFinal": 0,
+      "rankFinal": 0,
+      "record": {
+        "away": {
+          "gamesBack": 0.0,
+          "losses": 0,
+          "percentage": 1.0,
+          "pointsAgainst": 0.0,
+          "pointsFor": 0.0,
+          "streakLength": 1,
+          "streakType": "WIN",
+          "ties": 0,
+          "wins": 1
+        },
+        "division": {
+          "gamesBack": 0.0,
+          "losses": 0,
+          "percentage": 1.0,
+          "pointsAgainst": 0.0,
+          "pointsFor": 0.0,
+          "streakLength": 1,
+          "streakType": "WIN",
+          "ties": 0,
+          "wins": 1
+        },
+        "home": {
+          "gamesBack": 0.0,
+          "losses": 0,
+          "percentage": 0.0,
+          "pointsAgainst": 0.0,
+          "pointsFor": 0.0,
+          "streakLength": 0,
+          "streakType": "NONE",
+          "ties": 0,
+          "wins": 0
+        },
+        "overall": {
+          "gamesBack": 0.0,
+          "losses": 0,
+          "percentage": 1.0,
+          "pointsAgainst": 1482.0,
+          "pointsFor": 1801.0,
+          "streakLength": 1,
+          "streakType": "WIN",
+          "ties": 0,
+          "wins": 1
+        }
+      },
+      "tradeBlock": {},
+      "transactionCounter": {
+        "acquisitionBudgetSpent": 0,
+        "acquisitions": 1,
+        "drops": 0,
+        "matchupAcquisitionTotals": {
+          "5": 1
+        },
+        "misc": 0,
+        "moveToActive": 18,
+        "moveToIR": 1,
+        "paid": 0.0,
+        "teamCharges": 0.0,
+        "trades": 0
+      },
+      "valuesByStat": {
+        "0": 1005.0,
+        "16": 209.0,
+        "1": 37.0,
+        "17": 110.0,
+        "2": 52.0,
+        "3": 195.0,
+        "6": 294.0,
+        "11": 136.0,
+        "13": 366.0,
+        "14": 768.0,
+        "15": 163.0
+      },
+      "waiverRank": 10
+    }
+  ]
+}

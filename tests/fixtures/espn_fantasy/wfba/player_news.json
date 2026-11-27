@@ -1,0 +1,643 @@
+{
+  "news": {
+    "timestamp": "2026-11-26T19:19:13Z",
+    "resultsOffset": 0,
+    "status": "success",
+    "resultsLimit": 50,
+    "resultsCount": 22,
+    "feed": [
+      {
+        "id": 3709959,
+        "nowId": "23-3709959",
+        "contentKey": "3709959-23-1-1",
+        "dataSourceIdentifier": "ac40a57d811d3",
+        "type": "Rotowire",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-10-10T04:35:12Z",
+        "lastModified": "2026-10-10T04:35:00Z",
+        "published": "2026-10-10T04:35:00Z",
+        "images": [],
+        "story": "<editorial text omitted from the committed sample>",
+        "allowContentReactions": false,
+        "allowSearch": false,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "self": {}
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=3709959"
+          }
+        },
+        "premium": false,
+        "playerId": 3149391
+      },
+      {
+        "id": 50144617,
+        "nowId": "1-50144617",
+        "contentKey": "50144617-1-293-1",
+        "dataSourceIdentifier": "9c26a43b97796",
+        "publishedkey": "wnba401918300",
+        "type": "Media",
+        "eventId": 401918300,
+        "eventIdStr": "401918300",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-10-10T04:13:24Z",
+        "lastModified": "2026-10-10T04:13:22Z",
+        "published": "2026-10-10T04:13:22Z",
+        "root": "wnba",
+        "section": "WNBA",
+        "images": [
+          {
+            "name": "Las Vegas Aces vs. Golden State Valkyries - Game Highlights",
+            "caption": "Watch the Game Highlights from Las Vegas Aces vs. Golden State Valkyries, 10/09/2026",
+            "alt": "",
+            "height": 324,
+            "width": 576,
+            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300.jpg"
+          }
+        ],
+        "authors": [],
+        "allowComments": true,
+        "allowContentReactions": true,
+        "allowSearch": true,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/video/clips/50144617"
+            }
+          },
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showVideo?videoID=50144617&videoDSI=9c26a43b97796"
+          },
+          "web": {
+            "href": "https://www.espn.com/video/clip/_/id/50144617/las-vegas-aces-vs-golden-state-valkyries-game-highlights",
+            "self": {
+              "href": "https://www.espn.com/video/clip/_/id/50144617/las-vegas-aces-vs-golden-state-valkyries-game-highlights",
+              "dsi": {
+                "href": "https://www.espn.com/video/clip?id=9c26a43b97796"
+              }
+            }
+          }
+        },
+        "premium": false,
+        "video": [
+          {
+            "id": 50144617,
+            "dataSourceIdentifier": "9c26a43b97796",
+            "cerebroId": "6ac9bb5a96795732912dda1e",
+            "source": "espn",
+            "headline": "Las Vegas Aces vs. Golden State Valkyries - Game Highlights",
+            "shortHeadline": "Las Vegas Aces vs. Golden State Valkyries - Game Highlights",
+            "caption": "Watch the Game Highlights from Las Vegas Aces vs. Golden State Valkyries, 10/09/2026",
+            "title": "Las Vegas Aces vs. Golden State Valkyries - Game Highlights",
+            "description": "Watch the Game Highlights from Las Vegas Aces vs. Golden State Valkyries, 10/09/2026",
+            "shortDescription": "Watch the Game Highlights from Las Vegas Aces vs. Golden State Valkyries, 10/09/2026",
+            "lastModified": "2026-10-10T04:13:22Z",
+            "originalPublishDate": "2026-10-10T04:13:14Z",
+            "premium": false,
+            "syndicatable": true,
+            "duration": 66,
+            "videoRatio": "16:9,9:16",
+            "timeRestrictions": {
+              "embargoDate": "2026-10-10T04:13:07Z",
+              "expirationDate": "2026-11-30T05:00:00Z"
+            },
+            "deviceRestrictions": {
+              "devices": [
+                "settop",
+                "tablet",
+                "handset"
+              ],
+              "type": "whitelist"
+            },
+            "geoRestrictions": {
+              "countries": [
+                "PR",
+                "HN",
+                "PY"
+              ],
+              "type": "whitelist"
+            },
+            "gameId": 401918300,
+            "plays": [
+              {
+                "id": 40191830026
+              }
+            ],
+            "thumbnail": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300.jpg",
+            "images": [
+              {
+                "name": "Poster Image",
+                "caption": "",
+                "alt": "",
+                "credit": "",
+                "height": 324,
+                "width": 576,
+                "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300.jpg"
+              }
+            ],
+            "posterImages": {
+              "default": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300_default.jpg",
+                "width": 576,
+                "height": 324
+              },
+              "firstFrame": {
+                "href": "https://cmp-espn.media.dssott.com/opp/img/espn/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300/thumb-1-w720-h406-f4.jpg"
+              },
+              "full": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300.jpg"
+              },
+              "square": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300_1x1.jpg"
+              },
+              "vertical": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300_9x16.jpg"
+              },
+              "verticalFirstFrame": {
+                "href": "https://cmp-espn.media.dssott.com/opp/img/espn/9x16/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300/thumb-1-w406-h720-f4.jpg"
+              },
+              "wide": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300_5x2.jpg"
+              }
+            },
+            "links": {
+              "api": {
+                "self": {
+                  "href": "https://content.core.api.espn.com/v1/video/clips/50144617"
+                }
+              },
+              "mobile": {
+                "alert": {
+                  "href": "https://m.espn.com/general/video/videoAlert?vid=50144617"
+                },
+                "source": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300.mp4"
+                }
+              },
+              "source": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300.mp4",
+                "HD": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300.mp4"
+                },
+                "HLS": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300/playlist.m3u8",
+                  "9x16": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/9x16/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300/playlist.m3u8"
+                  },
+                  "HD": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300/playlist.m3u8"
+                  },
+                  "cmaf": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300/playlist.m3u8",
+                    "9x16": {
+                      "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/9x16/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300/playlist.m3u8"
+                    },
+                    "cmb": {
+                      "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/cmb/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300/playlist.m3u8"
+                    }
+                  },
+                  "cmb": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/cmb/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300/playlist.m3u8"
+                  }
+                },
+                "flash": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300.mp4"
+                },
+                "full": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300.mp4"
+                },
+                "mezzanine": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/533a1e2d-c576-4f20-b076-ff46d8a3c300/533a1e2d-c576-4f20-b076-ff46d8a3c300.mp4"
+                }
+              },
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showVideo?videoID=50144617&videoDSI=9c26a43b97796"
+              },
+              "web": {
+                "href": "https://www.espn.com/video/clip/_/id/50144617/las-vegas-aces-vs-golden-state-valkyries-game-highlights",
+                "self": {
+                  "href": "https://www.espn.com/video/clip/_/id/50144617/las-vegas-aces-vs-golden-state-valkyries-game-highlights",
+                  "dsi": {
+                    "href": "https://www.espn.com/video/clip?id=9c26a43b97796"
+                  }
+                }
+              }
+            },
+            "categories": [
+              {
+                "id": 123777,
+                "type": "team",
+                "uid": "s:40~l:59~t:17",
+                "guid": "c97eb968-6e82-9785-a302-0bb1a1c1d064",
+                "description": "Las Vegas Aces",
+                "sportId": 59,
+                "teamId": 17,
+                "team": {
+                  "id": 17,
+                  "description": "Las Vegas Aces",
+                  "abbreviation": "LV",
+                  "shortDisplayName": "Aces",
+                  "links": {
+                    "mobile": {
+                      "teams": {
+                        "href": "https://www.espn.com/wnba/team/_/name/lv/las-vegas-aces"
+                      }
+                    },
+                    "web": {
+                      "teams": {
+                        "href": "https://www.espn.com/wnba/team/_/name/lv/las-vegas-aces"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": 692570,
+                "type": "team",
+                "uid": "s:40~l:59~t:129689",
+                "guid": "170598de-f63a-3497-a04d-1fc514508f56",
+                "description": "Golden State Valkyries",
+                "sportId": 59,
+                "teamId": 129689,
+                "team": {
+                  "id": 129689,
+                  "description": "Golden State Valkyries",
+                  "abbreviation": "GS",
+                  "shortDisplayName": "Valkyries",
+                  "links": {
+                    "mobile": {
+                      "teams": {
+                        "href": "https://www.espn.com/wnba/team/_/name/gs/golden-state-valkyries"
+                      }
+                    },
+                    "web": {
+                      "teams": {
+                        "href": "https://www.espn.com/wnba/team/_/name/gs/golden-state-valkyries"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": 528617,
+                "type": "athlete",
+                "uid": "s:40~l:59~a:4398935",
+                "guid": "3cfb5941-68e7-722a-4525-aca3d5bdfb66",
+                "description": "Veronica Burton",
+                "sportId": 59,
+                "athleteId": 4398935,
+                "athlete": {
+                  "id": 4398935,
+                  "description": "Veronica Burton",
+                  "links": {
+                    "mobile": {
+                      "athletes": {
+                        "href": "https://www.espn.com/wnba/player/_/id/4398935/veronica-burton"
+                      }
+                    },
+                    "web": {
+                      "athletes": {
+                        "href": "https://www.espn.com/wnba/player/_/id/4398935/veronica-burton"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "ad": {
+              "bundle": "wnba_top_plays_highlights",
+              "sport": "wnba"
+            },
+            "contributingPartner": "wsc",
+            "contributingSystem": "wsc",
+            "tracking": {
+              "coverageType": "Final Game Highlight",
+              "leagueName": "WNBA",
+              "program": "NBC Sports Network",
+              "sportName": "basketball",
+              "trackingId": "dm_20261010_WNBA_las_vegas_aces_vs_golden_state_valkyries_game_highlights",
+              "trackingName": "WNBA_One-Play (Las Vegas Aces vs. Golden State Valkyries - Game Highlights) 2026/10/10 ESHEET"
+            }
+          }
+        ],
+        "playerId": 3149391
+      },
+      {
+        "id": 50143844,
+        "nowId": "1-50143844",
+        "contentKey": "50143844-1-293-1",
+        "dataSourceIdentifier": "170305f66a85b",
+        "publishedkey": "wnba401918300",
+        "type": "Media",
+        "eventId": 401918300,
+        "eventIdStr": "401918300",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-10-10T01:56:45Z",
+        "lastModified": "2026-10-10T01:56:43Z",
+        "published": "2026-10-10T01:56:43Z",
+        "root": "wnba",
+        "section": "WNBA",
+        "images": [
+          {
+            "name": "A'ja Wilson finishes over the defender for an and-1",
+            "caption": "A'ja Wilson finishes over the defender for an and-1",
+            "alt": "",
+            "height": 324,
+            "width": 576,
+            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110.jpg"
+          }
+        ],
+        "authors": [],
+        "allowComments": true,
+        "allowContentReactions": true,
+        "allowSearch": true,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "artwork": {
+              "href": "https://artwork.api.espn.com/artwork/collections/media/4835e19a-2a40-4705-9153-79af6b692d72"
+            },
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/video/clips/50143844"
+            }
+          },
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showVideo?videoID=50143844&videoDSI=170305f66a85b"
+          },
+          "web": {
+            "href": "https://www.espn.com/video/clip/_/id/50143844/aja-wilson-finishes-defender-1",
+            "self": {
+              "href": "https://www.espn.com/video/clip/_/id/50143844/aja-wilson-finishes-defender-1",
+              "dsi": {
+                "href": "https://www.espn.com/video/clip?id=170305f66a85b"
+              }
+            }
+          }
+        },
+        "premium": false,
+        "video": [
+          {
+            "id": 50143844,
+            "dataSourceIdentifier": "170305f66a85b",
+            "cerebroId": "6ac9987896795732912dadf0",
+            "pccId": "4835e19a-2a40-4705-9153-79af6b692d72",
+            "source": "espn",
+            "headline": "A'ja Wilson finishes over the defender for an and-1",
+            "shortHeadline": "A'ja Wilson finishes over the defender for an and-1",
+            "caption": "A'ja Wilson finishes over the defender for an and-1",
+            "title": "A'ja Wilson finishes over the defender for an and-1",
+            "description": "A'ja Wilson finishes over the defender for an and-1",
+            "shortDescription": "A'ja Wilson finishes over the defender for an and-1",
+            "lastModified": "2026-10-10T01:56:43Z",
+            "originalPublishDate": "2026-10-10T01:44:25Z",
+            "premium": false,
+            "syndicatable": true,
+            "duration": 20,
+            "videoRatio": "16:9,9:16",
+            "timeRestrictions": {
+              "embargoDate": "2026-10-10T01:44:19Z",
+              "expirationDate": "2026-11-30T05:00:00Z"
+            },
+            "deviceRestrictions": {
+              "devices": [
+                "settop",
+                "tablet",
+                "handset"
+              ],
+              "type": "whitelist"
+            },
+            "geoRestrictions": {
+              "countries": [
+                "PR",
+                "HN",
+                "PY"
+              ],
+              "type": "whitelist"
+            },
+            "gameId": 401918300,
+            "plays": [
+              {
+                "id": 40191830026
+              }
+            ],
+            "thumbnail": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110.jpg",
+            "images": [
+              {
+                "name": "Poster Image",
+                "caption": "",
+                "alt": "",
+                "credit": "",
+                "height": 324,
+                "width": 576,
+                "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110.jpg"
+              }
+            ],
+            "posterImages": {
+              "default": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110_default.jpg",
+                "width": 576,
+                "height": 324
+              },
+              "firstFrame": {
+                "href": "https://cmp-espn.media.dssott.com/opp/img/espn/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110/thumb-1-w720-h406-f4.jpg"
+              },
+              "full": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110.jpg"
+              },
+              "square": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110_1x1.jpg"
+              },
+              "vertical": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110_9x16.jpg"
+              },
+              "verticalFirstFrame": {
+                "href": "https://cmp-espn.media.dssott.com/opp/img/espn/9x16/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110/thumb-1-w406-h720-f4.jpg"
+              },
+              "wide": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110_5x2.jpg"
+              }
+            },
+            "links": {
+              "api": {
+                "artwork": {
+                  "href": "https://artwork.api.espn.com/artwork/collections/media/4835e19a-2a40-4705-9153-79af6b692d72"
+                },
+                "self": {
+                  "href": "https://content.core.api.espn.com/v1/video/clips/50143844"
+                }
+              },
+              "mobile": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/4835e19a-2a40-4705-9153-79af6b692d72/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50143844/aja-wilson-finishes-defender-1",
+                "alert": {
+                  "href": "https://m.espn.com/general/video/videoAlert?vid=50143844"
+                },
+                "progressiveDownload": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/brightcove/4835e19a-2a40-4705-9153-79af6b692d72/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50143844/aja-wilson-finishes-defender-1"
+                },
+                "source": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110.mp4"
+                },
+                "streaming": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/brightcove/4835e19a-2a40-4705-9153-79af6b692d72/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50143844/aja-wilson-finishes-defender-1"
+                }
+              },
+              "source": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110.mp4",
+                "HD": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110.mp4"
+                },
+                "HLS": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110/playlist.m3u8",
+                  "9x16": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/9x16/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110/playlist.m3u8"
+                  },
+                  "HD": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110/playlist.m3u8"
+                  },
+                  "cmaf": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110/playlist.m3u8",
+                    "9x16": {
+                      "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/9x16/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110/playlist.m3u8"
+                    },
+                    "cmb": {
+                      "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/cmb/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110/playlist.m3u8"
+                    }
+                  },
+                  "cmb": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/cmb/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110/playlist.m3u8"
+                  },
+                  "shield": {
+                    "href": "https://watch.auth.api.espn.com/video/auth/media/4835e19a-2a40-4705-9153-79af6b692d72/asset"
+                  }
+                },
+                "flash": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110.mp4"
+                },
+                "full": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110.mp4"
+                },
+                "mezzanine": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1010/89b0e032-b327-4680-b6c4-43f7e4581110/89b0e032-b327-4680-b6c4-43f7e4581110.mp4"
+                }
+              },
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showVideo?videoID=50143844&videoDSI=170305f66a85b"
+              },
+              "web": {
+                "href": "https://www.espn.com/video/clip/_/id/50143844/aja-wilson-finishes-defender-1",
+                "self": {
+                  "href": "https://www.espn.com/video/clip/_/id/50143844/aja-wilson-finishes-defender-1",
+                  "dsi": {
+                    "href": "https://www.espn.com/video/clip?id=170305f66a85b"
+                  }
+                }
+              }
+            },
+            "categories": [
+              {
+                "id": 123777,
+                "type": "team",
+                "uid": "s:40~l:59~t:17",
+                "guid": "c97eb968-6e82-9785-a302-0bb1a1c1d064",
+                "description": "Las Vegas Aces",
+                "sportId": 59,
+                "teamId": 17,
+                "team": {
+                  "id": 17,
+                  "description": "Las Vegas Aces",
+                  "abbreviation": "LV",
+                  "shortDisplayName": "Aces",
+                  "links": {
+                    "mobile": {
+                      "teams": {
+                        "href": "https://www.espn.com/wnba/team/_/name/lv/las-vegas-aces"
+                      }
+                    },
+                    "web": {
+                      "teams": {
+                        "href": "https://www.espn.com/wnba/team/_/name/lv/las-vegas-aces"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": 692570,
+                "type": "team",
+                "uid": "s:40~l:59~t:129689",
+                "guid": "170598de-f63a-3497-a04d-1fc514508f56",
+                "description": "Golden State Valkyries",
+                "sportId": 59,
+                "teamId": 129689,
+                "team": {
+                  "id": 129689,
+                  "description": "Golden State Valkyries",
+                  "abbreviation": "GS",
+                  "shortDisplayName": "Valkyries",
+                  "links": {
+                    "mobile": {
+                      "teams": {
+                        "href": "https://www.espn.com/wnba/team/_/name/gs/golden-state-valkyries"
+                      }
+                    },
+                    "web": {
+                      "teams": {
+                        "href": "https://www.espn.com/wnba/team/_/name/gs/golden-state-valkyries"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": 184006,
+                "type": "athlete",
+                "uid": "s:40~l:59~a:3149391",
+                "guid": "9d049a87-30bf-a718-0206-b47ef02f57df",
+                "description": "A'ja Wilson",
+                "sportId": 59,
+                "athleteId": 3149391,
+                "athlete": {
+                  "id": 3149391,
+                  "description": "A'ja Wilson",
+                  "links": {
+                    "mobile": {
+                      "athletes": {
+                        "href": "https://www.espn.com/wnba/player/_/id/3149391/aja-wilson"
+                      }
+                    },
+                    "web": {
+                      "athletes": {
+                        "href": "https://www.espn.com/wnba/player/_/id/3149391/aja-wilson"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "ad": {
+              "bundle": "wnba_top_plays_highlights",
+              "sport": "wnba"
+            },
+            "contributingPartner": "wsc",
+            "contributingSystem": "wsc",
+            "tracking": {
+              "coverageType": "OnePlay",
+              "leagueName": "WNBA",
+              "program": "NBC Sports Network",
+              "sportName": "basketball",
+              "trackingId": "dm_20261010_WNBA_aja_wilson_somehow_gets_the_and1_to_fall",
+              "trackingName": "WNBA_One-Play (A'ja Wilson finishes over the defender for an and-1) 2026/10/10 ESHEET"
+            }
+          }
+        ],
+        "playerId": 3149391
+      }
+    ]
+  }
+}

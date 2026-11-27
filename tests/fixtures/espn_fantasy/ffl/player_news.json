@@ -1,0 +1,596 @@
+{
+  "news": {
+    "timestamp": "2026-11-26T20:00:04Z",
+    "resultsOffset": 0,
+    "status": "success",
+    "resultsLimit": 50,
+    "resultsCount": 20,
+    "feed": [
+      {
+        "id": 50605372,
+        "nowId": "1-50605372",
+        "contentKey": "50605372-1-293-1",
+        "dataSourceIdentifier": "8c2be03201935",
+        "publishedkey": "nfl401873081",
+        "type": "Media",
+        "eventId": 401873081,
+        "eventIdStr": "401873081",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-11-26T18:57:47Z",
+        "lastModified": "2026-11-26T18:57:46Z",
+        "published": "2026-11-26T18:57:46Z",
+        "root": "nfl",
+        "section": "NFL",
+        "images": [
+          {
+            "name": "Live on CBS: Jahmyr Gibbs powers into the end zone for a Lions TD",
+            "caption": "Live on CBS: Jahmyr Gibbs powers into the end zone for a Lions TD",
+            "alt": "",
+            "height": 324,
+            "width": 576,
+            "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1126/8da828a46d724d80aa159ce6debb36a2837/8da828a46d724d80aa159ce6debb36a2837.jpg"
+          }
+        ],
+        "authors": [],
+        "allowComments": true,
+        "allowContentReactions": true,
+        "allowSearch": true,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "artwork": {
+              "href": "https://artwork.api.espn.com/artwork/collections/media/35e1e764-3648-419b-80fc-35d34a8aeea1"
+            },
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/video/clips/50605372"
+            }
+          },
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showVideo?videoID=50605372&videoDSI=8c2be03201935"
+          },
+          "web": {
+            "href": "https://www.espn.com/video/clip/_/id/50605372/jahmyr-gibbs-powers-end-zone-lions-td",
+            "self": {
+              "href": "https://www.espn.com/video/clip/_/id/50605372/jahmyr-gibbs-powers-end-zone-lions-td",
+              "dsi": {
+                "href": "https://www.espn.com/video/clip?id=8c2be03201935"
+              }
+            }
+          }
+        },
+        "premium": false,
+        "video": [
+          {
+            "id": 50605372,
+            "dataSourceIdentifier": "8c2be03201935",
+            "cerebroId": "6b0880aa39f82d58031c860b",
+            "pccId": "35e1e764-3648-419b-80fc-35d34a8aeea1",
+            "source": "espn",
+            "headline": "Live on CBS: Jahmyr Gibbs powers into the end zone for a Lions TD",
+            "shortHeadline": "Live on CBS: Jahmyr Gibbs powers into the end zone for a Lions TD",
+            "caption": "Live on CBS: Jahmyr Gibbs powers into the end zone for a Lions TD",
+            "title": "Live on CBS: Jahmyr Gibbs powers into the end zone for a Lions TD",
+            "description": "Live on CBS: Jahmyr Gibbs powers into the end zone for a Lions TD",
+            "shortDescription": "Live on CBS: Jahmyr Gibbs powers into the end zone for a Lions TD",
+            "lastModified": "2026-11-26T18:57:46Z",
+            "originalPublishDate": "2026-11-26T18:55:39Z",
+            "premium": false,
+            "syndicatable": true,
+            "duration": 16,
+            "videoRatio": "16:9,9:16",
+            "timeRestrictions": {
+              "embargoDate": "2026-11-26T18:55:34Z",
+              "expirationDate": "2026-11-28T18:55:34Z"
+            },
+            "deviceRestrictions": {
+              "devices": [
+                "settop",
+                "tablet",
+                "handset"
+              ],
+              "type": "whitelist"
+            },
+            "gameId": 401873081,
+            "plays": [
+              {
+                "id": 4018730811086
+              }
+            ],
+            "thumbnail": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1126/8da828a46d724d80aa159ce6debb36a2837/8da828a46d724d80aa159ce6debb36a2837.jpg",
+            "images": [
+              {
+                "name": "Poster Image",
+                "caption": "",
+                "alt": "",
+                "credit": "",
+                "height": 324,
+                "width": 576,
+                "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1126/8da828a46d724d80aa159ce6debb36a2837/8da828a46d724d80aa159ce6debb36a2837.jpg"
+              }
+            ],
+            "posterImages": {
+              "default": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1126/8da828a46d724d80aa159ce6debb36a2837/8da828a46d724d80aa159ce6debb36a2837_default.jpg",
+                "width": 576,
+                "height": 324
+              },
+              "firstFrame": {
+                "href": "https://cmp-espn.media.dssott.com/opp/img/espn/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2/thumb-1-w720-h406-f4.jpg"
+              },
+              "full": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1126/8da828a46d724d80aa159ce6debb36a2837/8da828a46d724d80aa159ce6debb36a2837.jpg"
+              },
+              "square": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1126/8da828a46d724d80aa159ce6debb36a2837/8da828a46d724d80aa159ce6debb36a2837_1x1.jpg"
+              },
+              "vertical": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1126/8da828a46d724d80aa159ce6debb36a2837/8da828a46d724d80aa159ce6debb36a2837_9x16.jpg"
+              },
+              "verticalFirstFrame": {
+                "href": "https://cmp-espn.media.dssott.com/opp/img/espn/9x16/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2/thumb-1-w406-h720-f4.jpg"
+              },
+              "wide": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1126/8da828a46d724d80aa159ce6debb36a2837/8da828a46d724d80aa159ce6debb36a2837_5x2.jpg"
+              }
+            },
+            "links": {
+              "api": {
+                "artwork": {
+                  "href": "https://artwork.api.espn.com/artwork/collections/media/35e1e764-3648-419b-80fc-35d34a8aeea1"
+                },
+                "self": {
+                  "href": "https://content.core.api.espn.com/v1/video/clips/50605372"
+                }
+              },
+              "mobile": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/35e1e764-3648-419b-80fc-35d34a8aeea1/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50605372/jahmyr-gibbs-powers-end-zone-lions-td",
+                "alert": {
+                  "href": "https://m.espn.com/general/video/videoAlert?vid=50605372"
+                },
+                "progressiveDownload": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/brightcove/35e1e764-3648-419b-80fc-35d34a8aeea1/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50605372/jahmyr-gibbs-powers-end-zone-lions-td"
+                },
+                "source": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2.mp4"
+                },
+                "streaming": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/brightcove/35e1e764-3648-419b-80fc-35d34a8aeea1/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50605372/jahmyr-gibbs-powers-end-zone-lions-td"
+                }
+              },
+              "source": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2.mp4",
+                "HD": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2.mp4"
+                },
+                "HLS": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2/playlist.m3u8",
+                  "9x16": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/9x16/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2/playlist.m3u8"
+                  },
+                  "HD": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2/playlist.m3u8"
+                  },
+                  "cmaf": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2/playlist.m3u8",
+                    "9x16": {
+                      "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/9x16/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2/playlist.m3u8"
+                    },
+                    "cmb": {
+                      "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/cmb/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2/playlist.m3u8"
+                    }
+                  },
+                  "cmb": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/cmb/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2/playlist.m3u8"
+                  },
+                  "shield": {
+                    "href": "https://watch.auth.api.espn.com/video/auth/media/35e1e764-3648-419b-80fc-35d34a8aeea1/asset"
+                  }
+                },
+                "flash": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2.mp4"
+                },
+                "full": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2.mp4"
+                },
+                "mezzanine": {
+                  "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1126/8da828a4-6d72-4d80-aa15-9ce6debb36a2/8da828a4-6d72-4d80-aa15-9ce6debb36a2.mp4"
+                }
+              },
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showVideo?videoID=50605372&videoDSI=8c2be03201935"
+              },
+              "web": {
+                "href": "https://www.espn.com/video/clip/_/id/50605372/jahmyr-gibbs-powers-end-zone-lions-td",
+                "self": {
+                  "href": "https://www.espn.com/video/clip/_/id/50605372/jahmyr-gibbs-powers-end-zone-lions-td",
+                  "dsi": {
+                    "href": "https://www.espn.com/video/clip?id=8c2be03201935"
+                  }
+                }
+              }
+            },
+            "categories": [
+              {
+                "id": 438406,
+                "type": "athlete",
+                "uid": "s:20~l:28~a:4429795",
+                "guid": "d85aed19-e3b8-3788-935e-55f636ad86e9",
+                "description": "Jahmyr Gibbs",
+                "sportId": 28,
+                "athleteId": 4429795,
+                "athlete": {
+                  "id": 4429795,
+                  "description": "Jahmyr Gibbs",
+                  "links": {
+                    "mobile": {
+                      "athletes": {
+                        "href": "https://www.espn.com/nfl/player/_/id/4429795/jahmyr-gibbs"
+                      }
+                    },
+                    "web": {
+                      "athletes": {
+                        "href": "https://www.espn.com/nfl/player/_/id/4429795/jahmyr-gibbs"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": 9572,
+                "type": "league",
+                "uid": "s:20~l:28",
+                "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+                "description": "NFL",
+                "sportId": 28,
+                "leagueId": 28,
+                "league": {
+                  "id": 28,
+                  "description": "NFL",
+                  "abbreviation": "NFL",
+                  "links": {
+                    "mobile": {
+                      "leagues": {
+                        "href": "https://www.espn.com/nfl/"
+                      }
+                    },
+                    "web": {
+                      "leagues": {
+                        "href": "https://www.espn.com/nfl/"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": 1750,
+                "type": "team",
+                "uid": "s:20~l:28~t:3",
+                "guid": "19d73366-b5a5-cca2-a176-a2c024ce0bb3",
+                "description": "Chicago Bears",
+                "sportId": 28,
+                "teamId": 3,
+                "team": {
+                  "id": 3,
+                  "description": "Chicago Bears",
+                  "abbreviation": "CHI",
+                  "shortDisplayName": "Bears",
+                  "links": {
+                    "mobile": {
+                      "teams": {
+                        "href": "https://www.espn.com/nfl/team/_/name/chi/chicago-bears"
+                      }
+                    },
+                    "web": {
+                      "teams": {
+                        "href": "https://www.espn.com/nfl/team/_/name/chi/chicago-bears"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "ad": {
+              "bundle": "nfl_one_plays",
+              "sport": "nfl"
+            },
+            "contributingPartner": "wsc",
+            "contributingSystem": "wsc",
+            "tracking": {
+              "coverageType": "OnePlay",
+              "leagueName": "NFL",
+              "program": "espnnfl",
+              "sportName": "football",
+              "trackingId": "dm_20261126_NFL_live_on_cbs_jahmyr_gibbs_powers_into_the_end_zone_for_a_lions_td",
+              "trackingName": "NFL_One-Play (Live on CBS: Jahmyr Gibbs powers into the end zone for a Lions TD) 2026/11/26 ESHEET"
+            }
+          }
+        ],
+        "playerId": 4429795
+      },
+      {
+        "id": 50564270,
+        "nowId": "1-50564270",
+        "contentKey": "50564270-1-6-1",
+        "dataSourceIdentifier": "d8e1d0d0196cc",
+        "publishedkey": "FFSundayHighLows-50564270",
+        "type": "Story",
+        "feedDisplayType": "Default",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "title": "Week 11 winners and losers: Huge week for Cowboys, Chiefs",
+        "linkText": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-11-26T18:56:38Z",
+        "originallyPosted": "2026-11-23T01:50:00Z",
+        "lastModified": "2026-11-23T15:21:07Z",
+        "published": "2026-11-23T15:21:07Z",
+        "pageName": "FFSundayHighLows-50564270",
+        "root": "ffl/2026",
+        "section": "Fantasy",
+        "images": [
+          {
+            "dataSourceIdentifier": "ea53783bd1198",
+            "id": 50565772,
+            "type": "header",
+            "name": "CeeDee Lamb [1296x729]",
+            "caption": "CeeDee Lamb hauled in 11 catches for 132 yards and a touchdown in the blowout win over the Titans.",
+            "alt": "Ceedee Lamb #88 of the Dallas Cowboys runs with the ball during the first quarter against the Tennessee Titans at AT&T Stadium on November 22, 2026 in Arlington, Texas.",
+            "credit": "Sam Hodde/Getty Images",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2026/1122/r1749841_1296x729_16-9.jpg"
+          }
+        ],
+        "related": [
+          {
+            "id": 50572280,
+            "dataSourceIdentifier": "98ce5355824a1",
+            "publishedkey": "FFWaiverWirePickUp-50572280",
+            "type": "Story",
+            "headline": "Fantasy football free agent pickups: Grab your Rams and Packers quickly",
+            "title": "Fantasy football free agent pickups for Week 12",
+            "linkText": "Fantasy football free agents: Grab Rams and Packers quickly in a spread-out Week 12",
+            "pageName": "FFWaiverWirePickUp-50572280",
+            "images": [
+              {
+                "dataSourceIdentifier": "a86a56e106432",
+                "id": 50572618,
+                "type": "header",
+                "name": "Konata Mumpfield [576x324]",
+                "caption": "Konata Mumpfield and the Rams help to kick off a very busy and lengthy Week 12.",
+                "alt": "Los Angeles Rams wide receiver Konata Mumpfield (4) gets past Arizona Cardinals cornerback Max Melton (16) during the first half of an NFL football game.",
+                "credit": "AP",
+                "height": 324,
+                "width": 576,
+                "url": "https://a.espncdn.com/photo/2026/1123/r1750128_576x324_16-9.jpg"
+              }
+            ],
+            "byline": "Eric Karabell",
+            "isLiveBlog": false,
+            "links": {
+              "api": {
+                "self": {
+                  "href": "https://content.core.api.espn.com/v1/sports/news/50572280"
+                }
+              },
+              "app": {
+                "sportscenter": {
+                  "href": "sportscenter://x-callback-url/showStory?uid=50572280"
+                }
+              },
+              "mobile": {
+                "href": "http://m.espn.go.com/wireless/story?storyId=50572280"
+              },
+              "web": {
+                "href": "https://www.espn.com/fantasy/football/story/_/page/FFWaiverWirePickUp-50572280/fantasy-football-waivers-free-agent-pickups-nfl-week-12"
+              }
+            },
+            "premium": false
+          },
+          {
+            "id": 50563342,
+            "dataSourceIdentifier": "7435c17a22db1",
+            "publishedkey": "50563342",
+            "type": "Story",
+            "headline": "NFL Week 11: Big takeaways, questions and fantasy spin from Sunday's games",
+            "title": "NFL Week 11 takeaways, questions, fantasy spin on Sunday's games",
+            "linkText": "What to make of NFL Week 11 -- including wins for the Jets and 49ers: Our reporters break down every game",
+            "source": "ESPN",
+            "images": [
+              {
+                "dataSourceIdentifier": "84dfdd23d1fc6",
+                "id": 50566610,
+                "type": "header",
+                "name": "Geno Smith [608x342]",
+                "alt": "Geno Smith",
+                "credit": "Jayne Kamin-Oncea/Imagn Images",
+                "height": 342,
+                "width": 608,
+                "url": "https://a.espncdn.com/photo/2026/1122/r1749880_608x342_16-9.jpg"
+              }
+            ],
+            "byline": "NFL Nation",
+            "isLiveBlog": false,
+            "links": {
+              "api": {
+                "self": {
+                  "href": "https://content.core.api.espn.com/v1/sports/news/50563342"
+                }
+              },
+              "app": {
+                "sportscenter": {
+                  "href": "sportscenter://x-callback-url/showStory?uid=50563342"
+                }
+              },
+              "mobile": {
+                "href": "http://m.espn.go.com/nfl/story?storyId=50563342"
+              },
+              "web": {
+                "href": "https://www.espn.com/nfl/story/_/id/50563342/week-11-sunday-games-takeaways-questions-2026"
+              }
+            },
+            "premium": false
+          },
+          {
+            "id": 40699880,
+            "dataSourceIdentifier": "3b5ddc54255df",
+            "publishedkey": "40699880",
+            "type": "Story",
+            "headline": "Fantasy buzz: How to navigate your roster for the Thanksgiving slate",
+            "title": "Fantasy buzz: How to navigate your roster for the Thanksgiving slate",
+            "linkText": "Fantasy buzz: How to navigate your roster for the six-day Thanksgiving slate",
+            "images": [
+              {
+                "dataSourceIdentifier": "0eee22fac2745",
+                "id": 50593961,
+                "type": "header",
+                "name": "Rome Odunze [1296x729]",
+                "caption": "Even though Bears WR Rome Odunze has been a solid flex option all season, because of his Thanksgiving day matchup, he's best suited to fill a WR slot in your roster.",
+                "alt": "Chicago Bears wide receiver Rome Odunze (15) reacts after a play during the NFL game between the New Orleans Saints and the Chicago Bears on November 22, 2026, at Soldier Field in Chicago, Illinois.",
+                "credit": "Michael Allio/Icon Sportswire",
+                "height": 729,
+                "width": 1296,
+                "url": "https://a.espncdn.com/photo/2026/1125/r1751118_1296x729_16-9.jpg"
+              }
+            ],
+            "byline": "ESPN Fantasy",
+            "isLiveBlog": false,
+            "links": {
+              "api": {
+                "self": {
+                  "href": "https://content.core.api.espn.com/v1/sports/news/40699880"
+                }
+              },
+              "app": {
+                "sportscenter": {
+                  "href": "sportscenter://x-callback-url/showStory?uid=40699880"
+                }
+              },
+              "mobile": {
+                "href": "http://m.espn.go.com/wireless/story?storyId=40699880"
+              },
+              "web": {
+                "href": "https://www.espn.com/fantasy/football/story/_/id/40699880/fantasy-football-injuries-position-battles-nfl-news-analysis"
+              }
+            },
+            "premium": false
+          }
+        ],
+        "authors": [
+          {
+            "dataSourceIdentifier": "631dcd03483b5",
+            "guid": "9fe58b95-78bb-367f-a97a-0fb2544fca92",
+            "slug": "matt-bowen",
+            "displayName": "Matt Bowen",
+            "shortName": "M. Bowen",
+            "firstName": "Matt",
+            "lastName": "Bowen",
+            "contactInfo": "matt.bowen@espn.com",
+            "twitterUserName": "MattBowen41",
+            "biography": "Matt Bowen is a fantasy football and NFL writer for ESPN. He joined ESPN in 2015, writes regularly for ESPN+ and spent multiple years on \"NFL Matchup.\" After graduating from the University of Iowa, Matt played safety in the NFL for St. Louis, Green Bay, Washington and Buffalo over seven seasons.",
+            "sourceLine": "ESPN Writer",
+            "links": {
+              "api": {
+                "self": {
+                  "href": "https://content.core.api.espn.com/v1/sports/news/9362128"
+                }
+              }
+            },
+            "images": [
+              {
+                "type": "headshot",
+                "name": "",
+                "alt": "",
+                "credit": "",
+                "url": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+              }
+            ]
+          },
+          {
+            "dataSourceIdentifier": "cac71e4bf1a6e",
+            "guid": "6f206a9b-4c7e-3475-bf3f-090be4770216",
+            "slug": "tristan-h-cockcroft",
+            "displayName": "Tristan H. Cockcroft",
+            "shortName": "T. Cockcroft",
+            "firstName": "Tristan",
+            "lastName": "Cockcroft",
+            "contactInfo": "tristan.cockcroft@espn.com",
+            "twitterUserName": "SultanofStat",
+            "biography": "Tristan H. Cockcroft is senior writer for fantasy baseball and football at ESPN. Tristan is a member of the FSWA Hall of Fame. He is also two-time LABR and four-time Tout Wars champion. ",
+            "sourceLine": "ESPN Senior Writer",
+            "links": {
+              "api": {
+                "self": {
+                  "href": "https://content.core.api.espn.com/v1/sports/news/2141876"
+                }
+              }
+            },
+            "images": [
+              {
+                "type": "headshot",
+                "name": "",
+                "alt": "",
+                "credit": "",
+                "url": "https://a.espncdn.com/i/columnists/full/tristan-cockcroft.png"
+              }
+            ]
+          }
+        ],
+        "story": "<editorial text omitted from the committed sample>",
+        "allowAMP": true,
+        "allowComments": true,
+        "allowContentReactions": true,
+        "allowSearch": true,
+        "byline": "Matt Bowen and Tristan H. Cockcroft",
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/50564270"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=50564270"
+            }
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=50564270"
+          },
+          "web": {
+            "href": "https://www.espn.com/fantasy/football/story/_/page/FFSundayHighLows-50564270/nfl-week-11-fantasy-football-winners-losers-injuries-rankings-more"
+          }
+        },
+        "premium": false,
+        "playerId": 4429795
+      },
+      {
+        "id": 64918428,
+        "nowId": "23-64918428",
+        "contentKey": "64918428-23-1-1",
+        "dataSourceIdentifier": "49cd4b29a6bc7",
+        "type": "Rotowire",
+        "headline": "<editorial text omitted from the committed sample>",
+        "description": "<editorial text omitted from the committed sample>",
+        "categorized": "2026-11-22T22:42:49Z",
+        "lastModified": "2026-11-22T22:37:47Z",
+        "published": "2026-11-22T22:37:47Z",
+        "images": [],
+        "story": "<editorial text omitted from the committed sample>",
+        "allowContentReactions": false,
+        "allowSearch": false,
+        "isLiveBlog": false,
+        "links": {
+          "api": {
+            "self": {}
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=64918428"
+          }
+        },
+        "premium": false,
+        "playerId": 4429795
+      }
+    ]
+  }
+}

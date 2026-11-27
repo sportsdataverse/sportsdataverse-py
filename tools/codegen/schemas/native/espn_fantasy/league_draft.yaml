@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: league_id
+  type: integer
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: pick_id
+  type: integer
+- description: ''
+  name: overall_pick_number
+  type: integer
+- description: ''
+  name: round_id
+  type: integer
+- description: ''
+  name: round_pick_number
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: bid_amount
+  type: integer
+- description: ''
+  name: keeper
+  type: logical
+- description: ''
+  name: reserved_for_keeper
+  type: logical
+- description: ''
+  name: auto_draft_type_id
+  type: integer
+- description: ''
+  name: lineup_slot_id
+  type: integer
+- description: ''
+  name: nominating_team_id
+  type: integer
+kind: dataframe
+schema: espn_fantasy_league_draft

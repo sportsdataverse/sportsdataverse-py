@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: league_id
+  type: integer
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: matchup_id
+  type: integer
+- description: ''
+  name: matchup_period_id
+  type: integer
+- description: ''
+  name: playoff_tier_type
+  type: character
+- description: ''
+  name: winner
+  type: character
+- description: ''
+  name: home_team_id
+  type: integer
+- description: ''
+  name: away_team_id
+  type: integer
+- description: ''
+  name: home_total_points
+  type: numeric
+- description: ''
+  name: away_total_points
+  type: numeric
+kind: dataframe
+schema: espn_fantasy_league_matchups
