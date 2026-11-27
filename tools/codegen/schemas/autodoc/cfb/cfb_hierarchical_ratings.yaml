@@ -1,0 +1,25 @@
+schema: cfb_hierarchical_ratings
+kind: dataframe
+hand_authored: true
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: asof_t
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: theta
+  type: double
+  description: ''
+- name: hfa
+  type: double
+  description: ''
+- name: tau_team
+  type: double
+  description: ''
+- name: sigma_obs
+  type: double
+  description: ''
