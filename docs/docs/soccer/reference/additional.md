@@ -521,7 +521,7 @@ polars.DataFrame | pandas.DataFrame: one row per `espn_team_id` (unique). Every 
 | `key_sofifa` | String | SoFIFA's numeric team id (the EA FC ratings site), as text (e.g. '1' for Arsenal). |
 | `key_fotmob` | String | FotMob's numeric team id, as text (e.g. '10204' for Brighton & Hove Albion). |
 | `key_thesportsdb` | String | TheSportsDB's numeric team id, as text (e.g. '133617' for Hull City). |
-| `key_understat` | String | Understat's numeric team id, as text (e.g. '244' for Brentford); top-five leagues only. |
+| `key_understat` | String | Understat's numeric team id, as text (e.g. '244' for Brentford); null for clubs Understat does not cover. |
 | `key_capology` | String | Capology club slug. |
 | `match_method` | String | How the ESPN team was tied to reep. 'key_espn' (reep already carries this ESPN id), 'name' (exactly one reep row in the league's country shares a normalized name or alias), 'review' (settled by hand in tools/soccer_espn_reep_overrides.yaml), 'unmatched' (reviewed; no reep row is this club, reep columns null). |
 
