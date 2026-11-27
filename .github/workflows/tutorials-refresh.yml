@@ -93,7 +93,7 @@ jobs:
           # live outputs; unset -> it re-renders the key-guarded fallback.
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
-          # render_notebooks.py exits 1 if ANY of the 19 live notebooks flakes, but it still writes
+          # render_notebooks.py exits 1 if ANY of the 20 live notebooks flakes, but it still writes
           # the pages that DID render (a failed notebook keeps its prior page). Record the failure
           # and fail the job at the end, after the pages that did render are uploaded for `publish`.
           set -o pipefail
