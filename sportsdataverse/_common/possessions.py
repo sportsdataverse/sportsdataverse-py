@@ -21,8 +21,8 @@ clustered SEs):
 * the opponent-adjusted ratings engine (``mbb_team_ratings``) and the pregame constants fit on it passed:
   the 2025-2026 pregame Brier, margin MAE and calibration slope are within 2 SEs in both leagues (Brier
   moves by less than 5e-6). It stays at 0.44 by the owner's decision: the models fit downstream of the
-  engine at 0.44 (the player WAR constants, the recruiting and transfer models) would all need refitting,
-  for a negligible forecast gain;
+  engine at 0.44 (the player WAR constants, the recruiting and transfer models) would all need refitting
+  (on the 0.475 engine their pinned gates fail; refit commit ``51a86ae3e46``), for a negligible forecast gain;
 * the player-value features (``usage``, ``tov_pct``): box-BPM passes for men and fails for women
   against the 2025 external BPM, and one weight serves both;
 * the expected player box usage: points improve, assists get worse by more than 2 SEs in both leagues.

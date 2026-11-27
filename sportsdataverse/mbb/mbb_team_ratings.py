@@ -192,7 +192,8 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
     # A refit at 0.475 (2026-11-26, tools/models/mbb_prediction/fit_pregame.py) passed its pre-registered
     # 2025-2026 pregame gate in both leagues (Brier, margin MAE and calibration slope within 2 SEs). It
     # stays at 0.44 by the owner's decision: the player WAR constants and the recruiting and transfer models
-    # were fit on this engine at 0.44 and would all need refitting, for a negligible forecast gain.
+    # were fit on this engine at 0.44 and would all need refitting (their pinned gates fail on the 0.475 engine;
+    # refit commit 51a86ae3e46), for a negligible forecast gain.
     ft_w = PRO_FT_POSSESSION_WEIGHT
     box = team_box.select(
         id_text(team_box, "game_id"),
