@@ -257,6 +257,13 @@ def test_a_float_game_id_is_refused_when_nflverse_game_id_is_there():
         espn_nfl_pbp_nflverse(plays.with_columns(pl.col("game_id").cast(pl.Float64)))
 
 
+def test_a_float_play_id_is_refused():
+    """A float play id may already have lost digits: the view refuses it instead of casting it."""
+    plays = _plays(401671740).with_columns(pl.lit("2024_04_PHI_TB").alias("nflverse_game_id"))
+    with pytest.raises(ValueError, match="espn_nfl_pbp_nflverse: id is Float64"):
+        espn_nfl_pbp_nflverse(plays.with_columns(pl.col("id").cast(pl.Float64)))
+
+
 def test_split_two_point_tries_keep_pass_and_run():
     """A split two-point row carries no two_point_pass flag; its play_type still follows nflverse's (in game order)."""
     view = espn_nfl_pbp_nflverse(_plays(401671696), _schedule())
