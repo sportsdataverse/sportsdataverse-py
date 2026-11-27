@@ -116,6 +116,67 @@ def _reference_ratings(ratings: pl.DataFrame, schedule: pl.DataFrame) -> dict[st
     return {ref: (0.0 if k == 0 else (values[k - 1] if len(values) >= k else None)) for ref, k in _REFERENCES.items()}
 
 
+def _played(schedule: pl.DataFrame, as_of_date: datetime.date | None) -> pl.Expr:
+    """True on completed games, before ``as_of_date`` when it is set (the calendar day, as ``cfb_ratings`` cuts it)."""
+    played = pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null()
+    if as_of_date is None:
+        return played
+    date_col = next((c for c in ("date", "start_date") if c in schedule.columns), None)
+    if date_col is None:
+        raise ValueError("cfb_resume: as_of_date needs a 'date' or 'start_date' column in the schedule")
+    day = pl.col(date_col)
+    day = day.str.slice(0, 10).str.to_date() if schedule.schema[date_col] == pl.Utf8 else day.cast(pl.Date)
+    return played & (day < pl.lit(as_of_date))
+
+
+def _reference_rows(
+    ratings: pl.DataFrame,
+    schedule: pl.DataFrame,
+    config: PredictConfig,
+    as_of_date: datetime.date | None,
+    refs: dict[str, float | None],
+) -> pl.DataFrame:
+    """One row per (team, scheduled game) with ``played``, ``won`` and each reference team's win probability."""
+    games = schedule.with_columns(_played=_played(schedule, as_of_date).fill_null(False))
+    neutral = pl.col("neutral_site") == True
+    sides = [
+        games.select(
+            team_id=pl.col(f"{team}_team_id"),
+            opp_team_id=pl.col(f"{opp}_team_id"),
+            h=pl.when(neutral).then(0).otherwise(sign).cast(pl.Float64),
+            played="_played",
+            won=(pl.col(f"{team}_score") > pl.col(f"{opp}_score")).fill_null(False),
+        )
+        for team, opp, sign in (("home", "away", 1), ("away", "home", -1))
+    ]
+    rows = pl.concat(sides).filter(pl.col("team_id").is_not_null())
+    opp = ratings.select(opp_team_id="team_id", opp_r="adj_net")
+    assert rows.schema["opp_team_id"] == opp.schema["opp_team_id"]
+    rows = rows.join(opp, on="opp_team_id", how="left")
+    opp_r, h = rows["opp_r"].to_numpy().astype(float), rows["h"].to_numpy()
+    for ref, r_ref in refs.items():
+        if r_ref is None:  # fewer rated teams than the reference needs: every column for it is null
+            rows = rows.with_columns(pl.lit(None, dtype=pl.Float64).alias(f"_p_{ref}"))
+            continue
+        margin = config.net_points_scale * (r_ref - opp_r) + h * config.hfa_points
+        prob = np.where(np.isnan(opp_r), 1.0, norm.cdf(margin / config.margin_sd))
+        rows = rows.with_columns(pl.Series(f"_p_{ref}", prob, dtype=pl.Float64))
+    return rows
+
+
+def _record_difficulty(past_rows: pl.DataFrame, refs: dict[str, float | None]) -> pl.DataFrame:
+    """Per team and reference: P(the reference team wins at least as many of the past games as the team did)."""
+    out: dict[str, list] = {"team_id": [], **{f"record_difficulty_{ref}": [] for ref in _REFERENCES}}
+    for (team,), g in past_rows.group_by("team_id"):
+        wins = int(g["won"].sum())
+        out["team_id"].append(team)
+        for ref in _REFERENCES:
+            tail = None if refs[ref] is None else _poisson_binomial_tail(g[f"_p_{ref}"].to_numpy(), wins)
+            out[f"record_difficulty_{ref}"].append(tail)
+    schema = {"team_id": pl.Utf8, **{f"record_difficulty_{ref}": pl.Float64 for ref in _REFERENCES}}
+    return pl.DataFrame(out, schema=schema)
+
+
 def _schedule_strength(
     ratings: pl.DataFrame,
     schedule: pl.DataFrame,
@@ -129,43 +190,9 @@ def _schedule_strength(
     (FCS) is a win, ``P = 1``. ``past`` games are completed ones before ``as_of_date`` (every completed game when it
     is ``None``); ``remaining`` the rest of the schedule.
     """
-    date_col = next((c for c in ("date", "start_date") if c in schedule.columns), None)
-    played = pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null()
-    if as_of_date is not None:
-        if date_col is None:
-            raise ValueError("cfb_resume: as_of_date needs a 'date' or 'start_date' column in the schedule")
-        # the calendar date as cfb_ratings cuts it: the first 10 characters of an ISO timestamp
-        day = pl.col(date_col)
-        day = day.str.slice(0, 10).str.to_date() if schedule.schema[date_col] == pl.Utf8 else day.cast(pl.Date)
-        played = played & (day < pl.lit(as_of_date))
-    games = schedule.with_columns(_played=played.fill_null(False))
-    neutral = pl.col("neutral_site") == True  # noqa: E712
-    sides = []
-    for team, opp, sign in (("home", "away", 1), ("away", "home", -1)):
-        sides.append(
-            games.select(
-                team_id=pl.col(f"{team}_team_id"),
-                opp_team_id=pl.col(f"{opp}_team_id"),
-                h=pl.when(neutral).then(0).otherwise(sign).cast(pl.Float64),
-                played="_played",
-                won=(pl.col(f"{team}_score") > pl.col(f"{opp}_score")).fill_null(False),
-            )
-        )
-    rows = pl.concat(sides).filter(pl.col("team_id").is_not_null())
-    opp = ratings.select(opp_team_id="team_id", opp_r="adj_net")
-    assert rows.schema["opp_team_id"] == opp.schema["opp_team_id"]
-    rows = rows.join(opp, on="opp_team_id", how="left")
     refs = _reference_ratings(ratings, schedule)
-    opp_r = rows["opp_r"].to_numpy().astype(float)
-    h = rows["h"].to_numpy()
-    for ref, r_ref in refs.items():
-        if r_ref is None:  # fewer rated teams than the reference needs: every column for it is null
-            rows = rows.with_columns(pl.lit(None, dtype=pl.Float64).alias(f"_p_{ref}"))
-            continue
-        margin = config.net_points_scale * (r_ref - opp_r) + h * config.hfa_points
-        prob = np.where(np.isnan(opp_r), 1.0, norm.cdf(margin / config.margin_sd))
-        rows = rows.with_columns(pl.Series(f"_p_{ref}", prob, dtype=pl.Float64))
-    past = pl.col("played") == True  # noqa: E712
+    rows = _reference_rows(ratings, schedule, config, as_of_date, refs)
+    past = pl.col("played") == True
     aggs: list[pl.Expr] = []
     for ref in _REFERENCES:
         p = pl.col(f"_p_{ref}")
@@ -174,28 +201,10 @@ def _schedule_strength(
             p.filter(~past).mean().alias(f"sos_{ref}_remaining"),
             p.mean().alias(f"sos_{ref}_season"),
         ]
-    out = rows.group_by("team_id").agg(
-        *aggs,
-        wins=pl.col("won").filter(past).sum().cast(pl.Float64),
-        wins_above_bubble=(pl.col("won").filter(past).sum().cast(pl.Float64) - pl.col("_p_bubble").filter(past).sum()),
-    )
-    # record difficulty: P(reference team wins at least as many of the team's past games as the team did)
-    past_rows = rows.filter(past)
-    tails: dict[str, list[float | None]] = {ref: [] for ref in _REFERENCES}
-    teams = out["team_id"].to_list()
-    by_team = {t: g for (t,), g in past_rows.group_by("team_id")}
-    wins = dict(zip(out["team_id"].to_list(), out["wins"].to_list(), strict=True))
-    for t in teams:
-        g = by_team.get(t)
-        for ref in _REFERENCES:
-            if g is None or g.height == 0 or refs[ref] is None:
-                tails[ref].append(None)
-            else:
-                tails[ref].append(_poisson_binomial_tail(g[f"_p_{ref}"].to_numpy(), int(wins[t])))
-    out = out.with_columns([pl.Series(f"record_difficulty_{ref}", tails[ref], dtype=pl.Float64) for ref in _REFERENCES])
-    if refs["bubble"] is None:
-        out = out.with_columns(wins_above_bubble=pl.lit(None, dtype=pl.Float64))
-    return out.drop("wins")
+    wab = pl.col("won").filter(past).sum().cast(pl.Float64) - pl.col("_p_bubble").filter(past).sum()
+    out = rows.group_by("team_id").agg(*aggs, wins_above_bubble=wab if refs["bubble"] is not None else pl.lit(None))
+    out = out.with_columns(pl.col("wins_above_bubble").cast(pl.Float64))
+    return out.join(_record_difficulty(rows.filter(past), refs), on="team_id", how="left")
 
 
 def _resume_core(
