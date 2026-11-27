@@ -28,6 +28,7 @@ from sportsdataverse.cfb.cfb_player_havoc import *
 from sportsdataverse.cfb.cfb_game_story import *
 from sportsdataverse.cfb.cfb_ratings import *
 from sportsdataverse.cfb.cfb_game_predict import *
+from sportsdataverse.cfb.cfb_hierarchical import *
 from sportsdataverse.cfb.cfb_draft_projection import *
 from sportsdataverse.cfb.cfb_recruiting_projection import *
 from sportsdataverse.cfb.cfb_resume import *

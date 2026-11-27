@@ -97,6 +97,7 @@ description: "sdv-py College football: endpoint references, dataset loaders and 
 - [`cfb_compute_results`](reference/additional/models-and-calculators-2#cfb_compute_results)
 - [`cfb_draft_projection`](reference/additional/models-and-calculators-2#cfb_draft_projection)
 - [`cfb_field_position`](reference/additional/models-and-calculators-2#cfb_field_position)
+- [`cfb_hierarchical_ratings`](reference/additional/models-and-calculators-2#cfb_hierarchical_ratings)
 - [`cfb_kickoff_out_of_bounds_spot_expr`](reference/additional/models-and-calculators-2#cfb_kickoff_out_of_bounds_spot_expr)
 - [`cfb_predict_games`](reference/additional/models-and-calculators-2#cfb_predict_games)
 - [`cfb_ratings`](reference/additional/models-and-calculators-2#cfb_ratings)

@@ -925,3 +925,18 @@ def test_a_try_hands_to_the_kickoff_through_every_penalty_walked_off_before_it()
     assert xp["wp_after"] == pytest.approx(ko_wb, abs=1e-6)
     for pen in pens:
         assert pen["wpa"] == pytest.approx(0.0, abs=1e-6)
+
+
+def test_the_2002_feed_wording_charts_a_pass_direction(mia_den_2002):
+    # 2002-04 write the direction "pass incomplete to the right side." / "pass [incomplete] across the middle";
+    # the charted-pass phrase read neither, so the processor charted no direction on these passes
+    passes = mia_den_2002.filter(pl.col("pass") == True)  # noqa: E712
+    for phrase, direction in (
+        ("pass incomplete to the right", "right"),
+        ("pass incomplete to the left", "left"),
+        ("pass across the middle", "middle"),
+        ("pass incomplete across the middle", "middle"),
+    ):
+        rows = passes.filter(pl.col("text").str.contains(phrase, literal=True))
+        assert rows.height > 0, phrase
+        assert rows["pass_direction"].to_list() == [direction] * rows.height, phrase

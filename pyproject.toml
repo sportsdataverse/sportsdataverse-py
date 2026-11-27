@@ -570,6 +570,7 @@ files = [
     "sportsdataverse/cfb/cfb_fox_ext.py",
     "sportsdataverse/cfb/cfb_draft_projection.py",
     "sportsdataverse/cfb/cfb_game_predict.py",
+    "sportsdataverse/cfb/cfb_hierarchical.py",
     "sportsdataverse/cfb/cfb_prediction_constants.py",
     "sportsdataverse/cfb/cfb_projection_constants.py",
     "sportsdataverse/cfb/cfb_ratings.py",

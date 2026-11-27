@@ -685,6 +685,7 @@
   "cfb_field_position": "models-and-calculators-2",
   "cfb_game_story": "analytics",
   "cfb_games_from_schedule": "analytics",
+  "cfb_hierarchical_ratings": "models-and-calculators-2",
   "cfb_kickoff_out_of_bounds_spot_expr": "models-and-calculators-2",
   "cfb_odds_events_crosswalk": "ids-and-crosswalks",
   "cfb_player_havoc": "analytics-2",

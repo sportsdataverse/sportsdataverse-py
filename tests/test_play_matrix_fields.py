@@ -105,6 +105,16 @@ def _apply_matrix_exprs(df: pl.DataFrame) -> pl.DataFrame:
             None,
             None,
         ),
+        # NFL 2002-04 feed wording (real 2002 text; the Griese rows are MIA @ DEN, 221013007): "to the" / "across the"
+        ("Brian Griese (DEN) pass incomplete to the right side.", None, "right"),
+        ("Brian Griese (DEN) pass incomplete to the left side.", None, "left"),
+        ("Brian Griese (DEN) pass across the middle complete to Rod Smith (DEN) for 8 yards.", None, "middle"),
+        ("Brian Griese (DEN) pass incomplete across the middle.", None, "middle"),
+        (
+            "Kerry Collins (NYG) pass across the middle intercepted by Tony Parrish (SFO). Returned for 6 yards.",
+            None,
+            "middle",
+        ),
         # No depth or direction tokens (a screen, a sack)
         ("pass complete to RB for 4 yards", None, None),
         ("sacked for a loss of 5 yards", None, None),

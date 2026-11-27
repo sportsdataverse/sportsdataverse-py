@@ -1848,6 +1848,14 @@ cfb_player_havoc:
     players; null where the rank is.
   tfl_per_game_rank: Rank of tfl_per_game within the season, 1 = most, average ties; null under min_games or with fewer than
     10 qualifiers.
+cfb_hierarchical_ratings:
+  season: Season of the slot rated.
+  asof_t: The slot rated (regular-season week, or 100 + postseason week); only completed games before it were used.
+  team_id: ESPN team id (character, the cfb_ratings join key).
+  theta: Team strength in points relative to the corpus average; expected home margin is theta_home - theta_away + hfa.
+  hfa: Home-field advantage in points from this fit, applied off neutral sites (one value per fit).
+  tau_team: Fitted between-team spread of strength in points.
+  sigma_obs: Fitted per-game residual spread of the margin in points.
 cfb_predict_games:
   away_team_id: Away team ESPN id (character; the ratings `team_id` join key).
   exp_margin: Expected home scoring margin in points (net_points_scale * net rating differential + the ridge-native home-field
