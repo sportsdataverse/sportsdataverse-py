@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Models and calculators: get_fg–nfl_ratings"
-sidebar_label: "Models and calculators: get_fg–nfl_ratings"
+title: "NFL — additional Python functions — Models and calculators: get_fg–nfl_line"
+sidebar_label: "Models and calculators: get_fg–nfl_line"
 sidebar_position: 26
-description: "NFL — additional Python functions — Models and calculators: get_fg–nfl_ratings — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Models and calculators: get_fg–nfl_line — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Models and calculators: get_fg–nfl_ratings
+# NFL — additional Python functions — Models and calculators: get_fg–nfl_line
 
 ### get_fg_wp {#get_fg_wp}
 
@@ -568,6 +568,84 @@ curve = load_nfl_fp_curve()
 curve.filter(curve["yardline_own"] == 30)
 ```
 
+### nfl_adjusted_epa_ledger {#nfl_adjusted_epa_ledger}
+
+`nfl_adjusted_epa_ledger(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, influence: 'bool' = True, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+A team's season opponent-adjusted net EPA per play, game by game, for the NFL.
+
+Each team's season `net_adj_epa` is a mean over its games of adjusted offensive EPA minus a mean of
+adjusted defensive EPA, and each game's adjusted value is its raw EPA plus a schedule term (the opponent's
+fitted strengths). The frame lays that sum out per team-game: raw net EPA, the schedule term, the game's
+weight and its contribution, which sum to the season value. With `influence` it refits the season once per
+game without that game and reports how far the game moved each of its two teams. The fit, plays and columns
+are `sportsdataverse.cfb.cfb_adjusted_epa_ledger`'s; the module docstring gives the backtest behind
+the choice and the two input shapes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame \| DataFrame` |  | One NFL season of play-by-play, polars or pandas, in either shape the module docstring lists, with only the season types to rate (nfl-data's team summaries rate the regular season alone). nflverse frames need `game_id`, `posteam`, `defteam`, `home_team`, `epa`, `qtr`, `score_differential`, `play_type`, `down` and `neutral_site` or `location` (the schedule's `"Neutral"`); `load_nfl_pbp` carries all of them. ESPN-processor frames need `game_id`, the offense and defense ids, `homeTeamId`, `EPA`, `pass`, `rush`, `period`, `pos_score_diff_start` and `neutral_site`. `season`, `week` and `season_type` (ESPN `seasonType`) are carried through when present. |
+| `ridge_lambda` | `float \| None` | `None` | Ridge penalty per play of a 577-play team season (`None`: 0.075, as `sportsdataverse.cfb.cfb_adjusted_epa`); must be > 0. |
+| `influence` | `bool` | `True` | Add `loo_net_adj_epa` and `game_influence` (one refit per game; a few seconds a season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per (game, team) for every team with two or more valid games, sorted by `team_id`, `week`, `game_id`: the columns of `sportsdataverse.cfb.cfb_adjusted_epa_ledger`. `team_id`, `pos_team` and `opponent_id` are the nflverse abbreviation, or the ESPN team id as a string.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Game identifier as the input carries it (the nflverse game_id, or the ESPN event id as a string). |
+| `season` | Int64 | Season of the game, carried from the input. |
+| `week` | Int64 | Week of the game, carried from the input. |
+| `season_type` | String | Season type carried from the input (nflverse 'REG' / 'POST', or ESPN's seasonType number). |
+| `team_id` | String | Team the row rates (the nflverse posteam abbreviation, or the ESPN team id as a string). |
+| `pos_team` | String | Team key the fit used for this team; the same value as team_id. |
+| `opponent_id` | String | The team it played in this game, in the same id space as team_id. |
+| `site` | String | Where the team played this game, 'home', 'away' or 'neutral' (the schedule's neutral-site flag). |
+| `off_plays` | Int64 | The team's offensive pass and rush plays in the fit for this game (garbage time by the score margin left out). |
+| `def_plays` | Int64 | The opponent's offensive plays in the fit for this game, i.e. the team's defensive plays. |
+| `raw_off_epa` | Float64 | The team's mean EPA per offensive play in this game, over the plays in the fit. |
+| `raw_def_epa` | Float64 | Mean EPA per play the team's defense allowed in this game, over the plays in the fit. |
+| `raw_net_epa` | Float64 | raw_off_epa minus raw_def_epa, the game's unadjusted net EPA per play. |
+| `off_strength_faced` | Float64 | The opponent's fitted offensive strength in EPA per play (league average plus its offense term), what the team's defensive EPA is netted against. |
+| `def_strength_faced` | Float64 | The opponent's fitted defensive strength in EPA per play (league average plus its defense term), what the team's offensive EPA is netted against. |
+| `schedule_adj` | Float64 | off_strength_faced minus def_strength_faced, what the opponent adds to this game's raw net EPA to give its adjusted net EPA. |
+| `adj_off_epa` | Float64 | raw_off_epa minus def_strength_faced, the game's opponent-adjusted offensive EPA per play. |
+| `adj_def_epa` | Float64 | raw_def_epa minus off_strength_faced, the game's opponent-adjusted defensive EPA per play allowed. |
+| `adj_net_epa` | Float64 | adj_off_epa minus adj_def_epa; equals raw_net_epa plus schedule_adj. |
+| `off_weight` | Float64 | This game's weight in the season mean of adj_off_epa, 1 over the team's games with offensive plays in the fit. |
+| `def_weight` | Float64 | This game's weight in the season mean of adj_def_epa, 1 over the team's games with defensive plays in the fit. |
+| `raw_contribution` | Float64 | off_weight times raw_off_epa minus def_weight times raw_def_epa, the game's raw share of the season value. |
+| `schedule_contribution` | Float64 | def_weight times off_strength_faced minus off_weight times def_strength_faced, the opponent's share of the season value through this game. |
+| `contribution` | Float64 | The game's share of the season net_adj_epa; raw_contribution plus schedule_contribution, and the team's rows sum to net_adj_epa. |
+| `net_adj_epa` | Float64 | The team's season opponent-adjusted net EPA per play, repeated on each of its rows. |
+| `loo_net_adj_epa` | Float64 | The team's season value refit with this game removed from the fit and from its own means; null when it would keep fewer than two valid games. |
+| `game_influence` | Float64 | net_adj_epa minus loo_net_adj_epa, how far this game moved the team's season value. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column for its shape. |
+| `ValueError` | If `ridge_lambda` is not positive or every play is garbage time. |
+
+**Example**
+
+```python
+import polars as pl
+import sportsdataverse.nfl as nfl
+pbp = nfl.load_nfl_pbp(seasons=[2024]).filter(pl.col("season_type") == "REG")
+ledger = nfl.nfl_adjusted_epa_ledger(pbp)
+ledger.filter(pl.col("team_id") == "KC").select("week", "opponent_id", "raw_net_epa", "schedule_adj")
+
+# The games that moved a team's season value the most
+
+ledger.sort(pl.col("game_influence").abs(), descending=True).head()
+```
+
 ### nfl_compute_results {#nfl_compute_results}
 
 `nfl_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'Union[str, int]', *, rng: 'Optional[np.random.Generator]' = None, elo: 'Optional[Mapping[str, float]]' = None, **kwargs: 'Any') -> 'Dict[str, pl.DataFrame]'`
@@ -813,126 +891,4 @@ Per `(season, team)`: raw + adjusted pressure rates and dropback counts, `ol_pas
 from sportsdataverse.nfl.nfl_line_grades import nfl_line_grades
 g = nfl_line_grades([2023])
 print(g.sort("dl_pass_rush_grade", descending=True).head())
-```
-
-### nfl_player_projection {#nfl_player_projection}
-
-`nfl_player_projection(seasons: 'List[int]', target_season: 'int', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-Marcel-style next-season player projection with delta-method aging.
-
-Loads weekly player stats + rosters, aggregates to season rates, and for
-every player visible in seasons **strictly before** `target_season`
-(the as-of-date leakage boundary) produces a recency-weighted rate blend
-regressed toward the volume-weighted position mean by
-`k / (k + reliability)`, scaled by the position aging-curve ratio
-`aging_mult(proj_age) / aging_mult(current_age)`. The aging curve is fit
-only on the same pre-target history.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  | History seasons to load (seasons `>= target_season` are discarded by the leakage split). |
-| `target_season` | `int` |  | The season being projected. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. |
-
-**Returns**
-
-One row per projected player: `player_id:Utf8, target_season:Int64, position_group:Utf8, proj_age:Float64, proj_ppg:Float64, proj_volume:Float64, proj_games:Float64, aging_mult:Float64, reliability:Float64` plus `proj_<stat>_rate` component-rate columns. Empty history returns a zero-row frame.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | String | nflverse gsis player id (character join key). |
-| `target_season` | Int64 | The season being projected (features use strictly earlier seasons only - the as-of-date leakage boundary). |
-| `position_group` | String | nflverse offensive position group (QB/RB/WR/TE plus fringe groups). |
-| `proj_age` | Float64 | Projected age at the target season (age at last visible season + season gap). |
-| `proj_ppg` | Float64 | Projected PPR fantasy points per game - recency-weighted rate blend regressed toward the volume-weighted position mean by k/(k + reliability), scaled by the damped aging-curve ratio. |
-| `proj_volume` | Float64 | Projected position-specific opportunity volume (QB = pass attempts, RB = carries + targets, WR/TE = targets). |
-| `proj_games` | Float64 | Recency-weighted mean of historical games played. |
-| `aging_mult` | Float64 | Applied aging multiplier - the damped, clamped ratio aging_curve(proj_age) / aging_curve(current_age). |
-| `reliability` | Float64 | Recency-weighted volume sum - the shrinkage evidence weight. |
-| `proj_completions_rate` | Float64 | Projected per-game pass completions (Marcel blend x aging ratio). |
-| `proj_attempts_rate` | Float64 | Projected per-game pass attempts (Marcel blend x aging ratio). |
-| `proj_passing_yards_rate` | Float64 | Projected per-game passing yards (Marcel blend x aging ratio). |
-| `proj_passing_tds_rate` | Float64 | Projected per-game passing touchdowns (Marcel blend x aging ratio). |
-| `proj_interceptions_rate` | Float64 | Projected per-game interceptions thrown (Marcel blend x aging ratio). |
-| `proj_carries_rate` | Float64 | Projected per-game rush attempts (Marcel blend x aging ratio). |
-| `proj_rushing_yards_rate` | Float64 | Projected per-game rushing yards (Marcel blend x aging ratio). |
-| `proj_rushing_tds_rate` | Float64 | Projected per-game rushing touchdowns (Marcel blend x aging ratio). |
-| `proj_receptions_rate` | Float64 | Projected per-game receptions (Marcel blend x aging ratio). |
-| `proj_targets_rate` | Float64 | Projected per-game targets (Marcel blend x aging ratio). |
-| `proj_receiving_yards_rate` | Float64 | Projected per-game receiving yards (Marcel blend x aging ratio). |
-| `proj_receiving_tds_rate` | Float64 | Projected per-game receiving touchdowns (Marcel blend x aging ratio). |
-| `proj_receiving_air_yards_rate` | Float64 | Projected per-game receiving air yards (Marcel blend x aging ratio). |
-| `proj_fumbles_lost_rate` | Float64 | Projected per-game fumbles lost (Marcel blend x aging ratio). |
-
-**Example**
-
-```python
-from sportsdataverse.nfl.nfl_projection import nfl_player_projection
-proj = nfl_player_projection([2021, 2022, 2023], 2024)
-proj.sort("proj_ppg", descending=True).head()
-
-# Pandas round-trip
-
-proj_pd = nfl_player_projection([2021, 2022, 2023], 2024, return_as_pandas=True)
-```
-
-### nfl_ratings {#nfl_ratings}
-
-`nfl_ratings(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, config: 'RatingsConfig | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-One row per team: the native NFL ratings spine (off/def/ST EPA).
-
-Public orchestrator over `efficiency_ratings` +
-`special_teams_ratings`. Loads play-by-play + schedule via
-`load_nfl_pbp` / `load_nfl_schedule`, joins each game's `gameday`
-onto the plays, optionally applies the as-of-date leakage boundary
-(only plays from games with `gameday < as_of_date` are used), then
-fits both components and reshapes into one wide per-team table with
-dense ranks and a net z-score.
-
-The loaded pbp is down-selected to the ridge columns *before* any fit so
-no market column (`spread_line` / `vegas_wp`) can leak into the
-ratings (the binding non-market boundary).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A single season (e.g. `2023`) or a list of seasons pooled into one combined fit. |
-| `as_of_date` | `date \| None` | `None` | When given, only plays from games strictly before this date are used (mirrors what was knowable heading into that date). `None` (default) uses the full season(s). |
-| `config` | `RatingsConfig \| None` | `None` | Tuning knobs forwarded to both component fits; defaults to `RatingsConfig`. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
-
-**Returns**
-
-A DataFrame with one row per `team_id`: `season` (Int64 -- the single passed season, `null` for a pooled multi-season call), `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_st_epa` / `adj_net` (Float64; `adj_net` is offense minus defense -- special teams stays a separate column), `games` (Int64), `off_rank` / `def_rank` / `net_rank` (Int64; `def_rank` ascends -- fewer EPA allowed ranks better), `net_z` (Float64). Zero-row, correctly-typed when the seasons have no data or `as_of_date` filters out every play.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season the ratings cover (null for a pooled multi-season fit). |
-| `team_id` | String | nflverse team abbreviation (character join key, e.g. "KC"). |
-| `adj_off_epa` | Float64 | Opponent-adjusted offensive EPA per play (higher is better); competitive-play ridge fit. |
-| `adj_def_epa` | Float64 | Opponent-adjusted defensive EPA allowed per play (lower is better); competitive-play ridge fit. |
-| `adj_st_epa` | Float64 | Opponent-adjusted special-teams EPA per play (ridge on special==1 plays; 0.0 for teams with no special-teams plays in the window). |
-| `adj_net` | Float64 | Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in). |
-| `games` | Int64 | Number of games the team played in the fitted window. |
-| `off_rank` | Int64 | Dense rank on adj_off_epa descending (best offense = 1). |
-| `def_rank` | Int64 | Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better). |
-| `net_rank` | Int64 | Dense rank on adj_net descending (best net rating = 1). |
-| `net_z` | Float64 | Z-score of adj_net across the 32 teams. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import nfl_ratings
-ratings = nfl_ratings(2023)
-ratings.sort("net_rank").head()
-
-# As-of-date leakage boundary
-
-import datetime as dt
-week6 = nfl_ratings(2023, as_of_date=dt.date(2023, 10, 12))
 ```

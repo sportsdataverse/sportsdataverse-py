@@ -117,6 +117,7 @@ from sportsdataverse.nfl.nfl_player_props import *
 from sportsdataverse.nfl.nfl_player_stats import *
 from sportsdataverse.nfl.nfl_qb_layer import *
 from sportsdataverse.nfl.nfl_ratings import *
+from sportsdataverse.nfl.nfl_adjusted_epa import *
 from sportsdataverse.nfl.nfl_stats import (
     build_nfl_player_stats,
     build_nfl_player_stats_def,

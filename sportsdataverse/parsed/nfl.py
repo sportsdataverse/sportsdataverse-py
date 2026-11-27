@@ -321,6 +321,7 @@ from sportsdataverse.nfl import load_team_stats as load_team_stats  # noqa: F401
 from sportsdataverse.nfl import load_teams as load_teams  # noqa: F401
 from sportsdataverse.nfl import load_trades as load_trades  # noqa: F401
 from sportsdataverse.nfl import most_recent_nfl_season as most_recent_nfl_season  # noqa: F401
+from sportsdataverse.nfl import nfl_adjusted_epa_ledger as nfl_adjusted_epa_ledger  # noqa: F401
 from sportsdataverse.nfl import nfl_availability_projection as nfl_availability_projection  # noqa: F401
 from sportsdataverse.nfl import nfl_clear_token_cache as nfl_clear_token_cache  # noqa: F401
 from sportsdataverse.nfl import nfl_compute_results as nfl_compute_results  # noqa: F401
@@ -661,6 +662,7 @@ __all__ = [
     "load_teams",
     "load_trades",
     "most_recent_nfl_season",
+    "nfl_adjusted_epa_ledger",
     "nfl_availability_projection",
     "nfl_clear_token_cache",
     "nfl_combine_profiles",

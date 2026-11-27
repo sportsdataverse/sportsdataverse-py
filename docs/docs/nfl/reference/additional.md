@@ -173,13 +173,14 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [get_punt_wp](additional/models-and-calculators-10.md#get_punt_wp) | Expected win probability of punting on 4th down (nfl4th `get_punt_wp`). |
 | [home_team_roof](additional/models-and-calculators-10.md#home_team_roof) | The roof of *team*'s home stadium in *season*, from `NFL_HOME_ROOF_BY_SEASON`. |
 | [load_nfl_fp_curve](additional/models-and-calculators-10.md#load_nfl_fp_curve) | Load the bundled NFL EP-by-yardline curve (no network). |
+| [nfl_adjusted_epa_ledger](additional/models-and-calculators-10.md#nfl_adjusted_epa_ledger) | A team's season opponent-adjusted net EPA per play, game by game, for the NFL. |
 | [nfl_compute_results](additional/models-and-calculators-10.md#nfl_compute_results) | Compute NFL game results for one week of a season simulation. |
 | [nfl_draft_projection](additional/models-and-calculators-10.md#nfl_draft_projection) | Draft outcome projection for one draft class. |
 | [nfl_fantasy_projection](additional/models-and-calculators-10.md#nfl_fantasy_projection) | Fantasy-points projection: deterministic scoring of the Marcel component |
 | [nfl_kicker_rating](additional/models-and-calculators-10.md#nfl_kicker_rating) | Environment-adjusted kicker FG-over-expected ratings. |
 | [nfl_line_grades](additional/models-and-calculators-10.md#nfl_line_grades) | Team-season OL pass-block + DL pass-rush grades (opponent-adjusted, EB-shrunk). |
-| [nfl_player_projection](additional/models-and-calculators-10.md#nfl_player_projection) | Marcel-style next-season player projection with delta-method aging. |
-| [nfl_ratings](additional/models-and-calculators-10.md#nfl_ratings) | One row per team: the native NFL ratings spine (off/def/ST EPA). |
+| [nfl_player_projection](additional/models-and-calculators-11.md#nfl_player_projection) | Marcel-style next-season player projection with delta-method aging. |
+| [nfl_ratings](additional/models-and-calculators-11.md#nfl_ratings) | One row per team: the native NFL ratings spine (off/def/ST EPA). |
 | [nfl_simulations](additional/models-and-calculators-11.md#nfl_simulations) | Simulate an NFL season from a schedule with (partially) missing results. |
 | [nfl_usage_projection](additional/models-and-calculators-11.md#nfl_usage_projection) | Project next-season target share, air-yards share, and WOPR. |
 | [opponent_adjusted_ridge](additional/models-and-calculators-11.md#opponent_adjusted_ridge) | Ridge-regress `resp_col` on offense + defense team indicators + HFA. |
