@@ -1,0 +1,169 @@
+espn_team_id,espn_league,espn_display_name,espn_abbreviation,reep_id,reep_name,reep_country,key_wikidata,key_transfermarkt,key_fbref,key_soccerway,key_opta,key_opta_numeric,key_kicker,key_flashscore,key_sofascore,key_soccerbase,key_uefa,key_footballdatabase_eu,key_worldfootball,key_playmakerstats,key_clubelo,key_sportmonks,key_api_football,key_sofifa,key_fotmob,key_thesportsdb,key_understat,key_capology,match_method
+306,eng.1,Hull City,HUL,reep_t7451405c,Hull City A.F.C.,United Kingdom,Q19477,3008,bd8769d1,725,f0figafm2v9h8ofo6slajj7xf,,,,,1310,2600537,1168,hull-city,5096,Hull,22,,,,133617,,hull-city,name
+331,eng.1,Brighton & Hove Albion,BHA,reep_tfa99f7f9,Brighton & Hove Albion F.C.,United Kingdom,Q19453,1237,d07537b9,703,e5p0ehyguld7egzhiedpdnc3w,36,,,,381,2601105,1201,brighton-hove-albion,2601,,78,,,10204,,,brighton,name
+337,eng.1,Brentford,BRE,reep_t03df16bf,Brentford F.C.,United Kingdom,Q19571,1148,cd051869,722,7yx5dqhhphyvfisohikodajhv,94,,,,,2601127,301,brentford-fc,,Brentford,30,35,,9937,134355,244,brentford,name
+349,eng.1,AFC Bournemouth,BOU,reep_t9f49dcb2,AFC Bournemouth,United Kingdom,Q19568,989,4ba7cbea,711,1pse9ta7a45pi2w2grjim70ge,,,,,359,2601124,299,afc-bournemouth,4929,Bournemouth,37,55,,8678,,,bournemouth,review
+357,eng.1,Leeds United,LEE,reep_t310cf271,Leeds United F.C.,United Kingdom,Q1128631,399,5bfb9659,681,48gk2hpqtsl6p9sx9kjhaydq4,2,,,,1524,53361,78,leeds-united,84,,71,,,8463,133635,,leeds,review
+359,eng.1,Arsenal,ARS,reep_t8596499a,Arsenal F.C.,United Kingdom,Q9617,11,18bb7c10,660,4dsgumo7d4zupm2ugsvm4zm4d,,,,,142,52280,31,arsenal-fc,75,Arsenal,3,42,1,9825,133604,83,,name
+360,eng.1,Manchester United,MAN,reep_t9d7dd08f,Manchester United F.C.,United Kingdom,Q18656,985,19538871,662,6eqit8ye8aomdsrrq0hk3v7gh,1,,,,1724,52682,30,manchester-united,87,ManUnited,1,33,11,10260,133612,89,manchester-united,key_espn
+361,eng.1,Newcastle United,NEW,reep_tca986041,Newcastle United F.C.,United Kingdom,Q18716,762,b2b47a98,664,7vn2i2kd35zuetw6b38gw9jsz,,,,,1823,59324,42,newcastle-united,89,,20,,13,10261,134777,86,newcastle,review
+362,eng.1,Aston Villa,AVL,reep_t086e7f04,Aston Villa F.C.,United Kingdom,Q18711,405,8602292d,665,b496gs285it6bheuikox6z9mj,7,,,,154,52683,84,aston-villa,76,,15,,2,10252,133601,71,aston-villa,name
+363,eng.1,Chelsea,CHE,reep_ta544eb41,Chelsea F.C.,United Kingdom,Q9616,631,cff3d9bb,661,9q0arba2kbnywth8bkxlhgmdr,8,,,,536,52914,38,chelsea-fc,81,Chelsea,18,49,5,8455,133610,80,chelsea,name
+364,eng.1,Liverpool,LIV,reep_td5dab25f,Liverpool F.C.,United Kingdom,Q1130849,31,822bd0ba,663,c8h9bw1l82s06h77xxrelzhur,14,,liverpool/lId4TMwf,,1563,7889,43,liverpool-fc,85,Liverpool,8,40,9,8650,133602,87,liverpool,review
+366,eng.1,Sunderland,SUN,reep_tb5c0a8e2,Sunderland A.F.C.,United Kingdom,Q18739,289,,683,1r3545b2dzan8yqa80gtmcjch,56,,,,2493,,54,sunderland-afc,91,,,,106,8472,133603,77,sunderland,name
+367,eng.1,Tottenham Hotspur,TOT,reep_tb3ba39f6,Tottenham Hotspur F.C.,United Kingdom,Q18741,148,,675,22doj4sgsocqpxw45h607udje,6,,,,2590,1652,92,tottenham-hotspur,92,Tottenham,6,47,,8586,133616,82,tottenham,name
+368,eng.1,Everton,EVE,reep_tb3b2e4a6,Everton F.C.,United Kingdom,Q5794,29,,674,ehd2iemqmschhj2ec0vayztzz,11,,,,942,52281,57,everton-fc,82,,13,,,8668,133615,72,everton,name
+370,eng.1,Fulham,FUL,reep_t78d85826,Fulham F.C.,United Kingdom,Q18708,931,,667,hzqh7z0mdl3v7gwete66syxp,54,,,,,75386,37,fulham-fc,,Fulham,11,,,9879,133600,228,fulham,name
+373,eng.1,Ipswich Town,IPS,reep_t1cdfb4a1,Ipswich Town F.C.,United Kingdom,Q9653,677,b74092de,,8b523ujgl21tbc01me65q0aoh,40,,,,,62301,143,ipswich-town,2586,,116,,,,133622,,ipswich-town,name
+382,eng.1,Manchester City,MNC,reep_t30ae204f,Manchester City F.C.,United Kingdom,Q50602,281,b8fd03ef,676,a3nyxabgsqlnqfkeg41m6tnpp,43,,,,1718,52919,110,manchester-city,86,ManCity,9,50,10,8456,133613,88,manchester-city,name
+384,eng.1,Crystal Palace,CRY,reep_tdae4e79f,Crystal Palace F.C.,United Kingdom,Q19467,873,47c64c55,679,,31,,,,646,52916,199,crystal-palace,2597,CrystalPalace,,,,9826,,,crystal-palace,review
+388,eng.1,Coventry City,COV,reep_t61615edc,Coventry City F.C.,United Kingdom,Q19580,990,f7e3dfe9,,,,,,,,,184,,,,4,,,,133625,,coventry,name
+393,eng.1,Nottingham Forest,NFO,reep_tf3e27a53,Nottingham Forest F.C.,United Kingdom,Q19490,703,e4a775cb,694,1qtaiy11gswx327s0vkibf70n,17,,,,1845,52681,268,nottingham-forest,2579,,63,,,10203,133720,249,nottingham-forest,name
+314,eng.2,Lincoln City,LCN,reep_tc6c54969,Lincoln City F.C.,United Kingdom,Q18519,1198,d76b7bed,,,,,,,,,1591,,,,17,52,,,135900,,lincoln,name
+318,eng.2,Swansea City,SWA,reep_t0394761b,Swansea City A.F.C.,United Kingdom,Q18659,2288,fb10988f,738,410jti6axb01yhvbc0axsp8li,,,,,2513,52659,817,swansea-city,2605,,,,,,133614,,swansea,name
+333,eng.2,Bristol City,BRC,reep_t4f0b2c0f,Bristol City F.C.,United Kingdom,Q19456,698,93493607,707,,,,,,,,1075,bristol-city,2598,,122,,,,133621,,bristol,name
+334,eng.2,Queens Park Rangers,QPR,reep_tfbd2a89d,Queens Park Rangers F.C.,United Kingdom,Q18723,1039,a757999c,702,,,,,,2093,,272,queens-park-rangers,2588,,47,,,,133605,,,name
+336,eng.2,Stoke City,STK,reep_t55f4d538,Stoke City F.C.,United Kingdom,Q18736,512,,690,4qioq44vcv619vnyy2rpovk4e,,,,,2477,53356,306,stoke-city,,,26,,,,133609,,stoke-city,name
+347,eng.2,Cardiff City,CAR,reep_t24a9a332,Cardiff City F.C.,United Kingdom,Q18662,603,75fae011,691,3ash57c0q2tgok6gvzbsta93,,,,,485,50095,275,cardiff-city,2591,Cardiff,,,,,133637,,cardiff,review
+352,eng.2,Wrexham,WXM,reep_tf10f3bbf,Wrexham A.F.C.,Wales,Q18529,1112,dad7970b,,,,,,,2859,,818,,5364,,,,,,,,wrexham,name
+358,eng.2,Bolton Wanderers,BOL,reep_t1913b299,Bolton Wanderers F.C.,United Kingdom,Q19451,355,445d3104,,,,,,,,53346,47,,79,,,,,,133606,,bolton,name
+365,eng.2,Blackburn Rovers,BLK,reep_ta058d109,Blackburn Rovers F.C.,United Kingdom,Q19446,164,e090f40b,672,,,,,,308,53344,85,blackburn-rovers,,,2,,,,133598,,blackburn,name
+369,eng.2,Middlesbrough,MID,reep_tea01ddc2,Middlesbrough F.C.,United Kingdom,Q18661,641,,671,cq0jd5ztepqjjeikk5trb15vr,,,,,1697,69600,105,middlesbrough-fc,88,Middlesbrough,7,,,,133628,93,middlesbrough,name
+371,eng.2,West Ham United,WHU,reep_te6c8eca5,West Ham United F.C.,United Kingdom,Q18747,379,7c21e445,684,4txjdaqveermfryvbfrr4taf7,21,,,,2802,53358,132,west-ham-united,94,,,,,8654,133636,,west-ham,review
+372,eng.2,Charlton Athletic,CHA,reep_t4cbb80ca,Charlton Athletic F.C.,United Kingdom,Q19462,358,7a8db6d4,668,,,,,,,,58,,,,,,,,133851,,charlton,name
+374,eng.2,Derby County,DER,reep_t151e961a,Derby County F.C.,United Kingdom,Q19470,22,26ab47ee,699,,,,,,747,52917,235,derby-county,2577,,,,,,133627,,derby-county,name
+376,eng.2,Southampton,SOU,reep_t2cef7cb3,Southampton F.C.,United Kingdom,Q18732,180,33c895d4,670,d5ydtvt96bv7fq04yqm2w2632,,,,,2471,52923,198,southampton-fc,90,,65,,,,134778,74,southampton,review
+379,eng.2,Burnley,BUR,reep_t55b6847b,Burnley F.C.,United Kingdom,Q19458,1132,943e8050,698,64bxxwu2mv2qqlv0monbkj1om,90,,,,435,53354,340,burnley-fc,2580,,27,,,8191,133623,92,burnley,review
+380,eng.2,Wolverhampton Wanderers,WOL,reep_t17396785,Wolverhampton Wanderers F.C.,United Kingdom,Q19500,543,8cec06e1,680,b9si1jn1lfxfund69e9ogcu2n,39,,,,2848,53357,158,wolverhampton-wanderers,1135,,29,,,8602,133599,229,wolverhampton,name
+381,eng.2,Norwich City,NOR,reep_t36aecb16,Norwich City F.C.,United Kingdom,Q18721,1123,,677,suz80crpy3anixyzccmu6jzp,,,,,1855,52921,302,norwich-city,2589,,,,,,133608,,norwich,name
+383,eng.2,West Bromwich Albion,WBA,reep_t45ced5e7,West Bromwich Albion F.C.,United Kingdom,Q18744,984,,678,d1lhefp805y0rcbjqkpu4fq0n,,,,,,,321,west-bromwich-albion,93,,10,,,,133611,76,west-bromwich,name
+385,eng.2,Portsmouth,POR,reep_t8c26303d,Portsmouth F.C.,United Kingdom,Q19604,1020,76ffc013,673,,,,,,2049,84297,190,portsmouth-fc,1137,,5,,,,133629,,portsmouth,name
+391,eng.2,Millwall,MIL,reep_t9050153a,Millwall F.C.,United Kingdom,Q19487,1028,e3c537a1,689,,,,,,,86796,269,millwall-fc,,,64,,,,133634,,millwall,name
+392,eng.2,Birmingham City,BIR,reep_tbf6d330d,Birmingham City F.C.,United Kingdom,Q19444,337,ec79b7c2,669,,,,,,,53342,114,birmingham-city,,,,,,,133597,,birmingham,review
+394,eng.2,Preston North End,PNE,reep_tf7466707,Preston North End F.C.,United Kingdom,Q19612,466,22df8478,693,,,,,,,,341,preston-north-end,,,99,,,,133809,,preston,name
+395,eng.2,Watford,WAT,reep_t2a827671,Watford F.C.,United Kingdom,Q2714,1010,,696,4t83rqbdbekinxl5fz2ygsyta,,,,,2741,52744,320,watford-fc,2599,Watford,,,,,133624,90,watford,name
+398,eng.2,Sheffield United,SHU,reep_t2b40c662,Sheffield United F.C.,United Kingdom,Q19607,350,1df6b87e,687,bws31egwjda253q9lvykgnivo,,,,,2328,68215,293,sheffield-united,2578,,21,,,,133811,238,sheffield-united,name
+101,esp.1,Rayo Vallecano,RAY,reep_tca43538f,Rayo Vallecano,Spain,Q10300,367,98e8af82,2054,,,,,,2221,74070,209,rayo-vallecano,,,377,,,8370,133728,145,rayo-vallecano,name
+102,esp.1,Villarreal,VIL,reep_t06ec1aab,Villarreal CF,Spain,Q12297,1050,2a8183b3,2023,,,,,,3123,70691,157,villarreal-cf,56,,3477,,,10205,133740,154,villarreal,review
+1068,esp.1,Atlético Madrid,ATM,reep_t3de4929e,Atlético Madrid,Spain,Q8701,13,db3b9613,2020,,175,,,,163,50124,201,atletico-madrid,39,Atletico,7980,,240,9906,133729,143,atletico-madrid,name
+1538,esp.1,Levante,LEV,reep_t88b915a8,Levante UD,Spain,Q8823,3368,9800b6a1,2036,,,,,,3251,87959,261,levante-ud,2570,,,,,8581,,151,levante,review
+243,esp.1,Sevilla,SEV,reep_t520f8dbd,Sevilla FC,Spain,Q10329,368,ad2be733,2021,,,,,,2292,52714,52,sevilla-fc,53,,676,,,8302,133735,138,sevilla,name
+244,esp.1,Real Betis,BET,reep_t05e5c936,Real Betis Balompié,Spain,Q8723,150,fc536746,2025,,,,,,2159,52265,53,real-betis,49,,485,,,8603,133722,153,real-betis,review
+2922,esp.1,Getafe,GET,reep_tce02b5a1,Getafe CF,Spain,Q8806,3709,7848bd64,2039,,,,,,3480,87960,725,getafe-cf,3753,,106,,,8305,133731,142,getafe,review
+3751,esp.1,Elche,ELC,reep_t43ac23ed,Elche CF,Spain,Q10512,1531,6c8b07df,,,,,,,,,248,,,,1099,,,10268,134384,207,elche,name
+83,esp.1,Barcelona,BAR,reep_tc7e2759e,FC Barcelona,Spain,,,,,,,,,,,,,,,,,,,,,,,review
+85,esp.1,Celta Vigo,CEL,reep_tf6becfc3,RC Celta de Vigo,Spain,Q8749,940,,2033,,,,,,690,53043,44,celta-vigo,41,,36,,,9910,133937,152,,name
+86,esp.1,Real Madrid,RMA,reep_t9e0ef566,Real Madrid Club de Fútbol,Spain,Q8682,418,53a2f082,2016,,186,,real-madrid/W8mj7MDD,,,50051,28,real-madrid,50,RealMadrid,,,243,8633,,,,name
+87,esp.1,Racing Santander,RAC,reep_td9d21597,Racing de Santander,Spain,Q12236,630,dee3bbc8,2029,,,,,,,64253,219,racing-santander,47,,9818,,,,133726,,,name
+88,esp.1,Espanyol,ESP,reep_tea9b4fb5,RCD Espanyol de Barcelona,Spain,Q8780,714,a8661628,2032,,,,,,927,54189,96,espanyol-barcelona,43,,528,,,8558,133734,141,espanyol,review
+89,esp.1,Real Sociedad,RSO,reep_t1511b870,Real Sociedad,Spain,Q10315,681,e31d1cd9,2028,,188,,,,2192,50123,65,real-sociedad,51,,594,,,8560,133724,140,real-sociedad,key_espn
+90,esp.1,Deportivo,DEP,reep_t80374b83,Deportivo de La Coruña,Spain,Q8760,897,2a60ed82,2018,,,,,,776,59044,64,deportivo-la-coruna,42,,429,,,,133816,139,deportivo,review
+93,esp.1,Athletic Club,ATH,reep_t537d528b,Athletic Club,Spain,Q8687,621,,2019,,,,,,207,50125,218,athletic-bilbao,38,,13258,,448,8315,133727,147,athletic-club,name
+94,esp.1,Valencia,VAL,reep_t24d0db8f,Valencia CF,Spain,Q10333,1049,dcc91a7b,2015,,,,,,2697,52268,34,valencia-cf,54,,214,,,10267,133725,146,,review
+96,esp.1,Alavés,ALA,reep_t52e2f188,Deportivo Alavés,Spain,Q223620,1108,8d6fd021,2037,,,,,,2975,69619,207,cd-alaves,37,,2975,,,9866,134221,158,alaves,review
+97,esp.1,Osasuna,OSA,reep_t1a69b736,Club Atlético Osasuna,Spain,Q10286,331,03c57e2b,2022,,,,,,1951,53042,217,ca-osasuna,46,,,,,8371,,,osasuna,name
+99,esp.1,Málaga,MCF,reep_tcd90ca20,Málaga CF,Spain,Q8857,1084,1c896955,,,,,,,,74069,50,,,,,,,,,137,malaga,review
+160,fra.1,Paris Saint-Germain,PSG,reep_t4d821d5c,Paris Saint-Germain FC,France,Q483020,583,e2d8892c,886,,149,,paris-sg/CjhkPw0k,,2068,52747,3,paris-saint-germain,127,,591,,73,9847,,161,,name
+166,fra.1,Lille,LILL,reep_t6c0ce34a,Lille OSC,France,Q19516,1082,cb188c0c,895,,429,,,,1576,75797,24,lille-osc,120,,33,36,,,,,lille,name
+167,fra.1,Lyon,LYON,reep_t385861e5,Olympique Lyonnais,France,Q704,1041,d53c0b06,884,,143,,lyon/2akflumR,,1645,5312,27,olympique-lyon,121,Lyon,79,,,9748,,,lyon,review
+169,fra.1,Stade Rennais,REN,reep_t2f7e3e8f,Stade Rennais F.C.,France,Q19509,273,b3072e00,893,,150,,,,2173,55031,10,stade-rennais,128,,,,,,,,,review
+170,fra.1,Troyes,TRY,reep_t3cf4b8aa,ES Troyes AC,France,Q501693,1095,54195385,914,,154,,troyes/fsfAHubD,,3051,73556,20,estac-troyes,132,,,,,,,,troyes,review
+172,fra.1,AJ Auxerre,AUX,reep_taf459f1f,AJ Auxerre,France,Q182876,290,,888,,,,,,174,52269,21,aj-auxerre,114,,,,,8583,,,auxerre,name
+174,fra.1,AS Monaco,MON,reep_taa892957,AS Monaco FC,Monaco,Q180305,162,fd6114db,885,,146,,,,1674,50023,8,as-monaco,123,,,,,9829,,,,review
+175,fra.1,Lens,RCL,reep_t1f47218c,R.C. Lens,France,Q191843,826,fd4e0f7d,892,,142,,,,1590,52277,5,rc-lens,119,,,,,8588,,,lens,name
+176,fra.1,Marseille,OLM,reep_t13a752b0,Olympique de Marseille,France,Q132885,244,5725cc7b,890,,144,,,,1748,52748,2,olympique-marseille,122,,44,,,8592,,,marseille,name
+179,fra.1,Toulouse,TOU,reep_tb3aaf6d9,Toulouse FC,France,Q19518,415,3f8c4b5f,899,,427,,,,2591,52934,6,toulouse-fc,1140,,,,,9941,,,toulouse,review
+180,fra.1,Strasbourg,STR,reep_t766ba498,RC Strasbourg Alsace,France,Q126334,667,,898,,153,,,,2248,59857,33,rc-strasbourg,131,,,,,9848,,,strasbourg,review
+2502,fra.1,Nice,NICE,reep_t3e015cde,OGC Nice,France,Q185163,417,,894,,1395,,,,1832,52355,40,ogc-nice,126,,,,,9831,,,nice,review
+2697,fra.1,Le Mans,MNS,reep_t306ce8b6,Le Mans F.C.,France,Q210864,1164,cd5d7aa6,905,,,,,,,,118,le-mans-fc,,,7758,,,,133848,,le-mans,review
+273,fra.1,Lorient,LOR,reep_t1d399985,F.C. Lorient,France,Q48911,1158,d2c87802,907,,694,,,,3150,68499,11,fc-lorient,3859,,,,,8689,,,lorient,review
+3236,fra.1,Le Havre AC,HAC,reep_tacb61040,Le Havre AC,France,Q328658,738,5c2737db,912,,141,,,,1552,52664,39,havre-ac,118,,,,,9746,,,le-havre,review
+6851,fra.1,Paris FC,PAR,reep_t213374b4,Paris FC,France,Q1051013,10004,056a5a75,2568,,,,,,,,2424,paris-fc,3852,,,,,6379,,,paris-fc,review
+6997,fra.1,Brest,BRE,reep_t4c2d3d86,Stade Brestois 29,France,Q218372,3911,fb08dbb3,922,,862,,,,2934,2601306,499,stade-brest,3840,,,,,8521,,,brest,name
+7868,fra.1,Angers,ANG,reep_t206ad092,Angers SCO,France,Q845137,1420,,918,,2128,,,,68,64162,168,angers-sco,3828,,776,,,,,,angers,name
+10388,ger.1,SV Elversberg,ELV,reep_tee73c21a,SV Elversberg,Germany,Q692691,64,fe686760,,,,,,,,,905,,13318,,,,,,138411,,elversberg,name
+11420,ger.1,RB Leipzig,RBL,reep_t525a6d9c,RB Leipzig,Germany,Q702455,23826,,13410,,6339,,,,5709,2603790,11691,rb-leipzig,32150,,277,,112172,178475,134695,,,name
+122,ger.1,FC Cologne,KOE,reep_td85c256f,1. FC Köln,Germany,Q104770,3,,980,,,,1-fc-koln/WG9pOTse,,,50018,69,1-fc-koeln,1124,,3320,,,8722,,,koln,review
+124,ger.1,Borussia Dortmund,DOR,reep_tdb0faf79,Borussia Dortmund,Germany,Q41420,16,add600ae,964,,157,,,,398,52758,246,borussia-dortmund,107,,68,,22,9789,133650,129,borussia-dortmund,name
+125,ger.1,Eintracht Frankfurt,SGE,reep_te31b36c6,Eintracht Frankfurt,Germany,Q38245,24,,979,,,,,,884,50072,86,eintracht-frankfurt,1122,,366,,,9810,133814,132,frankfurt,review
+126,ger.1,SC Freiburg,SCF,reep_t70979bf6,SC Freiburg,Germany,Q106394,60,,970,,,,,,1054,59880,354,sc-freiburg,1123,,,,,8358,,220,freiburg,review
+127,ger.1,Hamburg SV,HSV,reep_te2cd1ba9,Hamburger SV,Germany,Q51974,41,,,,,,,,,52167,283,,,,2708,,,9790,,118,,review
+131,ger.1,Bayer Leverkusen,B04,reep_tde1cded4,Bayer 04 Leverkusen,Germany,Q104761,15,c7a9f859,963,,164,bayer-04-leverkusen,,,468,50109,80,bayer-leverkusen,109,,3321,,32,8178,,119,,review
+132,ger.1,Bayern Munich,MUN,reep_td2baa7e4,FC Bayern Munich,Germany,Q15789,27,054efa67,961,,156,fc-bayern-muenchen,,,469,50037,46,bayern-muenchen,108,Bayern,503,,21,9823,133664,117,bayern-munich,name
+133,ger.1,Schalke 04,S04,reep_t02a8d789,Schalke 04,Germany,Q32494,33,c539e393,966,,,,,,2260,57388,61,fc-schalke-04,105,,67,,,,133661,124,schalke-04,name
+134,ger.1,VfB Stuttgart,VFB,reep_t88b5bc12,VfB Stuttgart,Germany,Q4512,79,,,,,,,,,50107,79,,,,3319,,,10269,133660,133,stuttgart,name
+137,ger.1,Werder Bremen,SVW,reep_te5e7897a,SV Werder Bremen,Germany,Q51976,86,,960,,,,,,2854,50040,142,werder-bremen,99,,,,,8697,,,werder-bremen,review
+268,ger.1,Borussia Mönchengladbach,BMG,reep_t3cb8c10b,Borussia Mönchengladbach,Germany,Q101959,18,32f3ee20,971,,683,,,,,52757,247,,110,,,,,9788,,,monchengladbach,review
+2950,ger.1,Mainz,M05,reep_tac5723c0,1. FSV Mainz 05,Germany,Q105254,39,,977,,,,,,3050,70853,,1-fsv-mainz-05,4163,,,,,9905,,,mainz,name
+3307,ger.1,SC Paderborn 07,SCP,reep_t47403dae,SC Paderborn 07,Germany,Q160532,127,,1013,,,,,,3523,,,sc-paderborn-07,4458,,,,,,,,paderborn,name
+3841,ger.1,FC Augsburg,FCA,reep_t36bebe51,FC Augsburg,Germany,Q15755,167,,,,,,,,,,,,,,,,,8406,,,augsburg,review
+598,ger.1,1. FC Union Berlin,FCU,reep_t63b1713b,1. FC Union Berlin,Germany,Q141971,89,7a41008f,1026,,816,,,,3393,77977,888,,4852,,,,,8149,,,union-berlin,name
+7911,ger.1,TSG Hoffenheim,TSG,reep_t1fc5f1d7,TSG 1899 Hoffenheim,Germany,Q22707,533,033ea6b8,1001,,,,,,3937,2600431,904,1899-hoffenheim,7241,,,,,8226,,,hoffenheim,review
+103,ita.1,AC Milan,MIL,reep_t92aa6359,AC Milan,Italy,Q1543,5,dc56fe14,1240,,120,,,,,50058,4,ac-milan,66,Milan,113,,,8564,133667,111,ac-milan,key_espn
+104,ita.1,AS Roma,ROMA,reep_t2a2a71e0,AS Roma,Italy,Q2739,12,cf74a709,1241,,,,,,2163,50137,35,as-roma,72,,,,,8686,,,roma,key_espn
+105,ita.1,Atalanta,ATA,reep_t946c1806,Atalanta BC,Italy,Q1886,800,922493f3,1255,,,,,,17,52816,204,atalanta,57,,,,,8524,,,atalanta,key_espn
+107,ita.1,Bologna,BOL,reep_t2448a5ed,Bologna F.C. 1909,Italy,Q1893,1025,1d8099f8,1249,,123,,,,268,52969,223,bologna-fc,58,,,,,9857,,,bologna,review
+109,ita.1,Fiorentina,FIO,reep_t879bdb44,ACF Fiorentina,Italy,Q2052,430,421387cf,1259,,125,,,,,52817,97,acf-fiorentina,3726,,,,110374,8535,,,fiorentina,name
+110,ita.1,Internazionale,INT,reep_tb354b960,Inter Milan,Italy,Q631,46,d609edc0,1244,,127,,,,1370,50138,16,inter,63,Inter,,,44,8636,133681,,inter-milan,key_espn
+111,ita.1,Juventus,JUV,reep_t7af7c9d1,Juventus FC,Italy,Q1422,506,e0652b02,1242,,128,,,,,50139,14,juventus,64,,625,,,9885,133676,98,,key_espn
+112,ita.1,Lazio,LAZ,reep_t8e09c6f2,SS Lazio,Italy,Q2609,398,,1245,,,,,,1501,52973,66,lazio-roma,65,,,,,8543,,,lazio,review
+113,ita.1,Lecce,LEC,reep_t6f83124c,US Lecce,Italy,Q13391,1005,,1251,,,,,,1508,52974,72,us-lecce,1129,,7790,,,9888,133678,,lecce,name
+114,ita.1,Napoli,NAP,reep_t2b6ccc55,SSC Napoli,Italy,Q2641,6195,d48ad4ff,1270,,459,,,,,50136,232,ssc-napoli,3735,,597,,,9875,133670,105,napoli,key_espn
+115,ita.1,Parma,PAR,reep_tbed0101c,Parma Calcio 1913,Italy,Q2693,130,,1243,,131,,,,2037,54262,1,parma-calcio-1913,68,,,,,10167,,230,parma,review
+118,ita.1,Udinese,UDI,reep_t53dcb145,Udinese Calcio,Italy,Q2798,410,04eea015,1246,,,,,,2634,51310,59,udinese-calcio,74,,,,,8600,,,udinese,name
+17530,ita.1,Venezia,VEN,reep_t1efcd42e,Venezia F.C.,Italy,Q501245,607,af5d5982,,,137,,,,,,51,venezia-fc,3750,,267,,,,134234,265,venezia,name
+239,ita.1,Torino,TOR,reep_t5ce85433,Torino FC,Italy,Q2768,416,,1268,,135,,,,,50029,15,torino-fc,73,,,,,9804,,,torino,review
+2572,ita.1,Como,COMO,reep_t54d007b0,Como 1907,Italy,Q1120838,1047,28c9c3cd,,,,,,,,,176,,61,,268,,,10171,,,como,review
+2925,ita.1,Cagliari,CAG,reep_t220ecc40,Cagliari Calcio,Italy,Q1900,1390,c4260e09,1256,,124,,,,525,59013,249,cagliari-calcio,3720,,,,,8529,,,cagliari,name
+3263,ita.1,Genoa,GEN,reep_t350ca358,Genoa CFC,Italy,Q2074,252,,1276,,,,,,1082,52972,325,genoa-cfc,3728,,,,,10233,,,genoa,name
+3997,ita.1,Sassuolo,SAS,reep_t5105195c,US Sassuolo Calcio,Italy,Q8603,6574,e2befd26,,,,,,,4692,2600632,3656,sassuolo-calcio,7908,,,,,7943,,,sassuolo,name
+4007,ita.1,Monza,MON,reep_tfcc34162,AC Monza,Italy,Q289482,2919,21680aa4,2355,,,,,,,,331,ac-monza,,,1628,,,,134270,,monza,name
+4057,ita.1,Frosinone,FRO,reep_t0d3a9474,Frosinone Calcio,Italy,Q845043,8970,6a7ad59d,2981,,,,,,4795,2601010,2296,frosinone-calcio,6117,,,,,,,,frosinone,name
+10125,mex.1,Tijuana,TIJ,reep_td4e8934c,Club Tijuana,Mexico,Q1103168,13353,,,,,,,,,,,,,,,,,,,,tijuana,review
+15720,mex.1,Atlético de San Luis,ASL,reep_tc3025a4b,Atletico de San Luis,Mexico,Q13408349,40188,,24936,,,,,,,,16472,,,,,,,,136856,,san-luis,name
+17851,mex.1,FC Juárez,JUA,reep_t4498ded4,FC Juárez,Mexico,Q20051399,49283,29bff345,,,,,,,,,,,,,,,,,136855,,,name
+216,mex.1,Atlas,ATS,reep_t6f9863a2,Atlas F.C.,Mexico,Q1023532,8590,,1460,,,,,,,,935,,,,,,,,134195,,atlas,name
+218,mex.1,Cruz Azul,CAZ,reep_t29ac58da,Cruz Azul,Mexico,Q845859,3711,632f1838,1461,,,,,,1275,,361,cruz-azul,,,,,,,134196,,cruz-azul,name
+219,mex.1,Guadalajara,GDL,reep_t5bd0669c,C.D. Guadalajara,Mexico,Q503321,6711,,1462,,,,,,,,805,,,,,,,,,,guadalajara,review
+220,mex.1,Monterrey,MTY,reep_t6ef2c7c6,Club de Fútbol Monterrey,Mexico,Q768253,2407,dd5ca9bd,,,,,,,,,523,,,,,,,,,,monterrey,name
+222,mex.1,Querétaro,QRO,reep_t18d92e2d,Querétaro F.C.,Mexico,Q606210,4961,c3352ce7,,,,,,,,,2889,,,,,,,,,,queretaro,review
+223,mex.1,Toluca,TOL,reep_tb900dd23,Deportivo Toluca F.C.,Mexico,Q670186,1804,44b88a4e,,,,,,,,,652,,,,,,,,,,toluca,review
+225,mex.1,Santos,SAN,reep_tdc7042fe,Santos Laguna,Mexico,Q745246,1403,03b65ba9,,,,,,,,,931,,,,,,,,134192,,santos-laguna,review
+226,mex.1,Atlante,ATL,reep_tb7c0f210,Atlante F.C.,Mexico,Q849949,,3caef53c,,,,,,,,,1893,,,,,,,,134203,,,name
+227,mex.1,América,AME,reep_t09cfec57,Club América,Mexico,Q459090,3631,,1458,,,,,,,,936,,,,,,,,,,america,review
+228,mex.1,León,LEO,reep_t09af8f8a,Club León,Mexico,Q633223,4941,,1477,,,,,,,,1895,,,,,,,,,,leon,name
+229,mex.1,Necaxa,NCX,reep_t9f8f97ac,Club Necaxa,Mexico,Q1280895,1146,,1465,,,,,,,,524,,,,,,,,,,necaxa,name
+231,mex.1,Puebla,PUE,reep_t66310807,Puebla F.C.,Mexico,Q646596,5662,,,,,,,,,,,,,,,,,,134199,,puebla,review
+232,mex.1,Tigres UANL,UANL,reep_tbecd0f2b,Tigres UANL,Mexico,Q849823,7055,d9e1bd51,1470,,,,,,958,,1200,uanl-tigres,2517,,,,,,,,uanl,review
+233,mex.1,Pumas UNAM,UNAM,reep_ta74fce25,Pumas UNAM,Mexico,Q1143000,7633,,,,,,,,,,804,,4356,,,,,,,,unam,name
+234,mex.1,Pachuca,PAC,reep_tdb48a448,CF Pachuca,Mexico,Q736937,4035,1be8d2e3,1466,,,,,,3442,,932,,2512,,,,,,,,pachuca,review
+10739,usa.1,Philadelphia Union,PHI,reep_t5f432af0,Philadelphia Union,United States,Q689874,25467,46024eeb,14575,,5513,,,,,,10092,,,,,,,,134142,,philadelphia-union,name
+12011,usa.1,Orlando City SC,ORL,reep_t8b1ef865,Orlando City SC,United States,Q15214308,45604,46ef01d0,13025,,6900,,,,,,14852,,,,,,,,,,orlando-city,review
+17362,usa.1,Minnesota United FC,MIN,reep_t737f7025,Minnesota United FC,United States,Q19828435,56089,99ea75a6,14860,,6977,,,,,,10738,,,,,,,,,,minnesota-united,review
+17606,usa.1,New York City FC,NYC,reep_t02bd918b,New York City FC,United States,Q13361030,40058,64e81410,27696,,9668,,,,,,17226,,,,,,,,134630,,,name
+182,usa.1,Chicago Fire FC,CHI,reep_t29573d12,Chicago Fire FC,United States,Q308683,432,f9940243,2273,,1207,,,,,,660,,,,,,,,134154,,chicago-fire,name
+18267,usa.1,FC Cincinnati,CIN,reep_t6f4e3b52,FC Cincinnati,United States,Q20855983,51772,e9ea41b2,35679,,11504,,,,,,22390,,108516,,,,,,136688,,fc-cincinnati,name
+183,usa.1,Columbus Crew,CLB,reep_t0955d652,Columbus Crew,United States,Q457163,813,529ba333,2280,,454,,,,,,736,,2494,,,,,,134152,,columbus-crew,review
+184,usa.1,Colorado Rapids,COL,reep_t0b97b10a,Colorado Rapids,United States,Q642408,1247,415b4465,2278,,436,,,,,,732,,,,,,,,134794,,colorado-rapids,name
+18418,usa.1,Atlanta United FC,ATL,reep_t50c0946c,Atlanta United FC,United States,Q16836317,51663,1ebc1a5b,,,11091,,,,,,22714,atlanta-united-fc,,,,,,,135851,,atlanta-united,name
+185,usa.1,FC Dallas,DAL,reep_t91a77f4c,FC Dallas,United States,Q642291,8816,15cf8f40,3841,,1903,,,,,,733,,,,,,,,134146,,fc-dallas,name
+186,usa.1,Sporting Kansas City,SKC,reep_tf398568b,Sporting Kansas City,United States,Q329812,4284,4acb0537,2274,,421,,,,,,731,,,,,,,,134143,,,review
+187,usa.1,LA Galaxy,LA,reep_t447cdaee,LA Galaxy,United States,Q204357,1061,d8b46897,2272,,1230,,,,,,602,,,,,,,,134153,,la-galaxy,name
+189,usa.1,New England Revolution,NE,reep_t584cd365,New England Revolution,United States,Q309095,626,,2279,,928,,,,,,734,,,,,,,,134159,,,name
+18966,usa.1,LAFC,LAFC,reep_tbbca3647,Los Angeles FC,United States,Q18380286,51828,81d817a3,41871,,11690,,,,,,22534,,,,,,,,136050,,,review
+18986,usa.1,Nashville SC,NSH,reep_te74de6f7,Nashville SC,United States,Q47518754,63966,35f1b818,45631,,,,,,,,27020,,,,,,,,,,nashville-sc,review
+190,usa.1,Red Bull New York,RBNY,reep_t1bba1a61,Red Bull New York,United States,Q204220,623,69a0fb10,6571,,399,,,,,,730-new_york_red_bulls,,,,,,,,,,,name
+191,usa.1,San Jose Earthquakes,SJ,reep_tc5f0758b,San Jose Earthquakes,United States,Q575370,218,ca460650,2276,,1131,,,,,,549,,,,,,,,,,san-jose-earthquakes,review
+193,usa.1,D.C. United,DC,reep_t00ccc097,D.C. United,United States,Q238593,2440,44117292,2277,,1326,,,,,,659,,,,,,,,,,,name
+20232,usa.1,Inter Miami CF,MIA,reep_t03c86df1,Inter Miami CF,United States,Q16844931,69261,cb8b86a2,44997,,14880,,,,7080,,28790,,231636,,,,112893,,137699,,inter-miami,key_espn
+20906,usa.1,Austin FC,ATX,reep_t43ce6cfb,Austin FC,United States,Q60643348,72309,b918956d,,,15296,,,,,,28778,,237366,,,,,,140079,,austin,name
+21300,usa.1,Charlotte FC,CLT,reep_ta64690a5,Charlotte FC,United States,Q78944434,78435,eb57545a,49750,,,,,,,,32003,,257515,,,,,,140078,,charlotte-fc,name
+21812,usa.1,St. Louis CITY SC,STL,reep_t32b07a21,St. Louis City SC,United States,Q66642491,82686,bd97ac1f,,,,,,,,,32376,,,,,,,,147062,,st-louis-city,review
+22529,usa.1,San Diego FC,SD,reep_t52ed77de,San Diego FC,United States,Q118945347,114977,91b092e1,64280,,,,,,,,42047,,323701,,,,,,150261,,san-diego-fc,review
+4771,usa.1,Real Salt Lake,RSL,reep_tde03b673,Real Salt Lake,United States,Q391353,6643,f7d86a43,,,1899,,,,,,2220,,,,,,,,134158,,real-salt-lake,name
+6077,usa.1,Houston Dynamo FC,HOU,reep_t962cfd4f,Houston Dynamo FC,United States,Q328313,9168,0d885416,6422,,1897,,,,,,4207,,7733,,,,,,134144,,houston-dynamo,name
+7318,usa.1,Toronto FC,TOR,reep_t1039270c,Toronto FC,Canada,Q327238,11141,130f43fa,7977,,2077,,,,,,3874-toronto_fc,,,,,,,,,,toronto-fc,review
+9720,usa.1,CF Montréal,MTL,reep_t5f3f7408,CF Montréal,Canada,Q167615,4078,fc22273c,20933,,12132,,,,,,555,,9865,,,,,,,,cf-montreal,name
+9723,usa.1,Portland Timbers,POR,reep_td71e95ad,Portland Timbers,United States,Q1031200,4291,d076914e,17501,,1581,,,,,,737,,,,,,,,,,portland-timbers,review
+9726,usa.1,Seattle Sounders FC,SEA,reep_t816bb886,Seattle Sounders FC,United States,Q632511,9636,6218ebd4,13024,,3500,,,,2460,,735,,,,,,,,,,,review
+9727,usa.1,Vancouver Whitecaps,VAN,reep_t09372233,Vancouver Whitecaps FC,Canada,Q196107,6321,ab41cb90,17500,,1708,,,,,,548,vancouver-whitecaps,,,,,,,,,,review

@@ -1,0 +1,113 @@
+reep_id,key_wikidata,name,country,founded,stadium,key_transfermarkt,key_fbref,key_soccerway,key_opta,key_kicker,key_flashscore,key_sofascore,key_soccerbase,key_uefa,key_footballdatabase_eu,key_worldfootball,key_espn,key_playmakerstats,key_clubelo,key_sportmonks,key_api_football,key_sofifa,key_fotmob,key_thesportsdb,key_understat,key_opta_numeric,key_capology
+reep_t00ccc097,Q238593,D.C. United,United States,1994-01-01,Audi Field,2440,44117292,2277,,,,,,,659,,,,,,,,,,,1326,
+reep_t02bd918b,Q13361030,New York City FC,United States,2013-05-21,Yankee Stadium,40058,64e81410,27696,,,,,,,17226,,,,,,,,,134630,,9668,
+reep_t03645f25,Q1090574,Vancouver Whitecaps,Canada,1973-12-11,Empire Stadium,,,,,,,,,,,,,,,,,,,,,,
+reep_t03c86df1,Q16844931,Inter Miami CF,United States,2018-01-29,Chase Stadium,69261,cb8b86a2,44997,,,,,7080,,28790,,20232,231636,,,,112893,,137699,,14880,inter-miami
+reep_t03df16bf,Q19571,Brentford F.C.,United Kingdom,1889-10-10,Griffin Park,1148,cd051869,722,7yx5dqhhphyvfisohikodajhv,,,,,2601127,301,brentford-fc,,,Brentford,30,35,,9937,134355,244,94,brentford
+reep_t086e7f04,Q18711,Aston Villa F.C.,United Kingdom,1874-11-21,Villa Park,405,8602292d,665,b496gs285it6bheuikox6z9mj,,,,154,52683,84,aston-villa,,76,,15,,2,10252,133601,71,7,aston-villa
+reep_t09372233,Q196107,Vancouver Whitecaps FC,Canada,2009-01-01,BC Place,6321,ab41cb90,17500,,,,,,,548,vancouver-whitecaps,,,,,,,,,,1708,
+reep_t0955d652,Q457163,Columbus Crew,United States,1994-01-01,ScottsMiracle-Gro Field,813,529ba333,2280,,,,,,,736,,,2494,,,,,,134152,,454,columbus-crew
+reep_t099d93b1,Q2494372,Crystal Palace F.C.,United Kingdom,1861-01-01,Crystal Palace Park,,,,1c8m2ko0wxq1asfkuykurdr0y,,,,,,,,,,,,,,,,78,,
+reep_t0b97b10a,Q642408,Colorado Rapids,United States,1995-01-01,Dick's Sporting Goods Park,1247,415b4465,2278,,,,,,,732,,,,,,,,,134794,,436,colorado-rapids
+reep_t0c80c543,Q127904,CD San José,Bolivia,1942-03-19,Estadio Jesús Bermúdez,,,,,,,,,,,,,,,,,,,,,,
+reep_t0d796beb,Q106325807,Associação Black Bulls,Mozambique,2017-01-01,,73715,,49523,,,associacao-black-bulls/nD0ehnkC,,,,32861,black-bulls,22425,227306,,,,,,,,,
+reep_t1039270c,Q327238,Toronto FC,Canada,2006-01-01,BMO Field,11141,130f43fa,7977,,,,,,,3874-toronto_fc,,,,,,,,,,,2077,toronto-fc
+reep_t104a27c5,Q2091731,Seattle Sounders,United States,1994-01-01,Starfire Sports,,de11a638,,,,,,,,,,,,,,,,,,,,
+reep_t12623f9b,Q172969,FC Shakhtar Donetsk,Ukraine,1936-01-01,Donbass Arena,660,e89d5a28,2254,,,shakhtar/4ENWX2OA,,2312,52707,423,shakhtar-donetsk,493,160,,621,,,,134126,,,shakhtar-donetsk
+reep_t12e2474c,Q74124018,Brighton SC,Australia,,,,,,,,,,,,,,,,,,,,,,,,
+reep_t1511b870,Q10315,Real Sociedad,Spain,1909-09-07,Anoeta Stadium,681,e31d1cd9,2028,,,,,2192,50123,65,real-sociedad,89,51,,594,,,8560,133724,140,188,real-sociedad
+reep_t17396785,Q19500,Wolverhampton Wanderers F.C.,United Kingdom,1877-01-01,Molineux Stadium,543,8cec06e1,680,b9si1jn1lfxfund69e9ogcu2n,,,,2848,53357,158,wolverhampton-wanderers,,1135,,29,,,8602,133599,229,39,wolverhampton
+reep_t1bba1a61,Q204220,Red Bull New York,United States,1995-01-01,Giants Stadium,623,69a0fb10,6571,,,,,,,730-new_york_red_bulls,,,,,,,,,,,399,
+reep_t1d8baeba,Q176371,PFC CSKA Moscow,Russia,1911-01-01,VEB Arena,2410,f0c0c2c2,1842,,,,,,54266,206,cska-moskva,1963,,,,,,,,,,cska
+reep_t1e49bed6,Q1138386,Portland Timbers,United States,1975-01-01,Providence Park,,,,,,,,,,,,,,,,,,,,,,
+reep_t21a05c1b,Q109255011,San José Fútbol Club,Costa Rica,2021-07-28,Estadio Ernesto Rohrmoser,,,,,,,,,,,,,,,,,,,,,,
+reep_t28161cc6,Q38806145,San Diego 1904 FC,United States,2017-01-01,Torero Stadium,,,,,,,,,,,,,,,,,,,,,16551,
+reep_t29573d12,Q308683,Chicago Fire FC,United States,1997-10-08,Soldier Field,432,f9940243,2273,,,,,,,660,,,,,,,,,134154,,1207,chicago-fire
+reep_t2a2a71e0,Q2739,AS Roma,Italy,1927-06-07,Stadio Olimpico,12,cf74a709,1241,,,,,2163,50137,35,as-roma,104,72,,,,,8686,,,,roma
+reep_t2a577a2a,Q130218787,AFC Toronto,,,,,,,,,,,,,,,,,,,,,,,,,
+reep_t2b6ccc55,Q2641,SSC Napoli,Italy,1926-01-01,Stadio Diego Armando Maradona,6195,d48ad4ff,1270,,,,,,50136,232,ssc-napoli,114,3735,,597,,,9875,133670,105,459,napoli
+reep_t30ae204f,Q50602,Manchester City F.C.,United Kingdom,1894-04-16,Etihad Stadium,281,b8fd03ef,676,a3nyxabgsqlnqfkeg41m6tnpp,,,,1718,52919,110,manchester-city,,86,ManCity,9,50,10,8456,133613,88,43,manchester-city
+reep_t310cf271,Q1128631,Leeds United F.C.,United Kingdom,1919-01-01,Elland Road,399,5bfb9659,681,48gk2hpqtsl6p9sx9kjhaydq4,,,,1524,53361,78,leeds-united,,84,,71,,,8463,133635,,2,leeds
+reep_t3193415b,Q75684,S.C. Braga,Portugal,1921-01-01,Estádio Municipal de Braga,1075,69d84c29,1682,,,,,2417,52336,156,sporting-braga,2994,15,,,,,,,,,braga
+reep_t32b07a21,Q66642491,St. Louis City SC,United States,2019-08-20,Energizer Park,82686,bd97ac1f,,,,,,,,32376,,,,,,,,,147062,,,st-louis-city
+reep_t33331e86,Q2471114,Arsenal,Lesotho,1983-01-01,Setsoto Stadium,9007,,,,,,,,,,,,,,,,,,,,3,arsenal
+reep_t3504bbb1,Q289343,A.C. Libertas,San Marino,1928-01-01,Campo sportivo di Borgo Maggiore,10616,1286546c,,,,ac-libertas/EizmiPoN,,4805,64509,4633,ac-libertas,17501,2105,,,,,,,,,
+reep_t395b612e,Q24185298,Nashville SC,United States,2016-05-19,First Horizon Park,,0b3a304c,42170,,,,,,,,,,,,,,,,,,15154,
+reep_t3a171eb7,Q818698,FK Velež Mostar,Bosnia and Herzegovina,1922-06-26,Rođeni Stadium,628,78addcf4,2715,,,velez-mostar/Q7LPqcLQ,6151,2679,50163,3550,velez-mostar,8070,8218,,,,,,,,,
+reep_t3e1a488f,Q223450,Vitória S.C.,Portugal,1922-09-22,Estádio D. Afonso Henriques,2420,,1689,,,,,2727,50097,832,vitoria-guimaraes,5309,18,,,,,,,,,
+reep_t3eec69e5,Q41634649,Breiðablik men's football,Iceland,1950-04-12,Kópavogsvöllur,3737,,1142,,,breidablik/QZVKceIg,,3556,71235,,breidablik,8250,7693,,,,,,,,,
+reep_t42e7291f,Q22098328,Burnley Bank Hall F.C.,United Kingdom,,,,,,,,,,,,,,,,,,,,,,,,
+reep_t43ce6cfb,Q60643348,Austin FC,United States,2018-01-01,Q2 Stadium,72309,b918956d,,,,,,,,28778,,,237366,,,,,,140079,,15296,austin
+reep_t447cdaee,Q204357,LA Galaxy,United States,1995-01-01,Dignity Health Sports Park,1061,d8b46897,2272,,,,,,,602,,,,,,,,,134153,,1230,la-galaxy
+reep_t50c0946c,Q16836317,Atlanta United FC,United States,2014-01-01,Mercedes-Benz Stadium,51663,1ebc1a5b,,,,,,,,22714,atlanta-united-fc,,,,,,,,135851,,11091,atlanta-united
+reep_t52ed77de,Q118945347,San Diego FC,United States,2023-05-18,Snapdragon Stadium,114977,91b092e1,64280,,,,,,,42047,,,323701,,,,,,150261,,,san-diego-fc
+reep_t55b6847b,Q19458,Burnley F.C.,United Kingdom,1882-01-01,Turf Moor,1132,943e8050,698,64bxxwu2mv2qqlv0monbkj1om,,,,435,53354,340,burnley-fc,,2580,,27,,,8191,133623,92,90,burnley
+reep_t55ecb32e,Q24264044,S.V. Arsenal,Aruba,,,,,,,,,,,,,,,,,,,,,,,,
+reep_t584cd365,Q309095,New England Revolution,United States,1995-01-01,Gillette Stadium,626,,2279,,,,,,,734,,,,,,,,,134159,,928,
+reep_t5ae81061,Q1339086,PFC Ludogorets 1945,Bulgaria,2001-06-18,Huvepharma Arena,31614,,12387,,,,,,2603104,11607,pfc-ludogorets-razgrad,13018,46337,,,,,,,,,
+reep_t5c037bcc,Q115104762,Vancouver FC,Canada,2022-11-02,Willoughby Community Park Stadium,94560,1ba245db,,,,,,,,,,,,,,,,,,,,
+reep_t5cbcfc37,Q690787,S.S. Folgore Falciano Calcio,San Marino,1972-01-01,San Marino Stadium,11479,c582b1da,1888,,ss-folgore-falciano,folgore/ARyhbSD9,,3240,64507,2726,ss-folgore-falciano,17507,2109,,,,,,,,,
+reep_t5d4efdee,Q19984972,Miami FC,United States,2015-01-01,Pitbull Stadium,42814,a0a57b76,,,,,,,,,,,,,,,,,140072,,,
+reep_t5f3f7408,Q167615,CF Montréal,Canada,2010-01-01,Saputo Stadium,4078,fc22273c,20933,,,,,,,555,,,9865,,,,,,,,12132,cf-montreal
+reep_t5f432af0,Q689874,Philadelphia Union,United States,2008-01-01,Subaru Park,25467,46024eeb,14575,,,,,,,10092,,,,,,,,,134142,,5513,philadelphia-union
+reep_t61d9eabc,Q3567798,Vancouver Whitecaps,Canada,2001-01-01,Swangard Stadium,6321,,,,,,,,,,,,,,,,,,,,,vancouver-whitecaps
+reep_t6a9a7185,Q7712188,Academy of West Ham United F.C.,United Kingdom,,,,,,,,,,,,,,,,,,,,,,,,
+reep_t6f4e3b52,Q20855983,FC Cincinnati,United States,2015-08-12,TQL Stadium,51772,e9ea41b2,35679,,,,,,,22390,,,108516,,,,,,136688,,11504,fc-cincinnati
+reep_t70a84844,Q1837357,Portland Timbers,United States,1985-01-01,Providence Park,,,,,,,,,,,,,,,,,,,,,,
+reep_t732aa5b5,Q16025275,Portland Timbers,United States,2001-01-01,Providence Park,,4a68b04c,,,,,,,,,,,,,,,,,,,,
+reep_t737f7025,Q19828435,Minnesota United FC,United States,2015-01-01,Allianz Field,56089,99ea75a6,14860,,,,,,,10738,,,,,,,,,,,6977,minnesota-united
+reep_t786cd815,Q179075,FC Dynamo Kyiv,Ukraine,1927-01-01,Olimpiyskiy National Sports Complex,338,c734e22f,2253,,,,,847,52723,296,dinamo-kiev,440,141,,556,,,,133944,,,dynamo-kyiv
+reep_t78d85826,Q18708,Fulham F.C.,United Kingdom,1879-01-01,Craven Cottage,931,,667,hzqh7z0mdl3v7gwete66syxp,,,,,75386,37,fulham-fc,,,Fulham,11,,,9879,133600,228,54,fulham
+reep_t79dcad78,Q18552,A.F.C. Liverpool,United Kingdom,2008-01-01,,,e84ae6e6,,,,,,,,,,,,,,,,,,,,
+reep_t7af7c9d1,Q1422,Juventus FC,Italy,1897-11-01,Juventus Stadium,506,e0652b02,1242,,,,,,50139,14,juventus,111,64,,625,,,9885,133676,98,128,
+reep_t7f0c93dc,Q117450745,San José F.C.,Costa Rica,,,,,,,,,,,,,,,,,,,,,,,,
+reep_t816bb886,Q632511,Seattle Sounders FC,United States,2009-01-01,Lumen Field,9636,6218ebd4,13024,,,,,2460,,735,,,,,,,,,,,3500,
+reep_t826a3ddf,Q18274,F.C. United of Manchester,United Kingdom,2005-01-01,Broadhurst Park,,a3b1d6fb,,,,,,,,,,,,,,,,,,,,
+reep_t8596499a,Q9617,Arsenal F.C.,United Kingdom,1886-01-01,Emirates Stadium,11,18bb7c10,660,4dsgumo7d4zupm2ugsvm4zm4d,,,,142,52280,31,arsenal-fc,,75,Arsenal,3,42,1,9825,133604,83,,
+reep_t8b1ef865,Q15214308,Orlando City SC,United States,2013-01-01,Inter&Co Stadium,45604,46ef01d0,13025,,,,,,,14852,,,,,,,,,,,6900,orlando-city
+reep_t8fc26380,Q16844562,Manchester City F.C.,Sierra Leone,2004-01-01,,,,,,,,,,,,,,,,,,,,,,,
+reep_t91a77f4c,Q642291,FC Dallas,United States,1995-01-01,Toyota Stadium,8816,15cf8f40,3841,,,,,,,733,,,,,,,,,134146,,1903,fc-dallas
+reep_t92aa6359,Q1543,AC Milan,Italy,1899-12-16,Giuseppe Meazza Stadium,5,dc56fe14,1240,,,,,,50058,4,ac-milan,103,66,Milan,113,,,8564,133667,111,120,ac-milan
+reep_t946c1806,Q1886,Atalanta BC,Italy,1907-10-17,Stadio Atleti Azzurri d'Italia,800,922493f3,1255,,,,,17,52816,204,atalanta,105,57,,,,,8524,,,,atalanta
+reep_t962cfd4f,Q328313,Houston Dynamo FC,United States,2005-01-01,Shell Energy Stadium,9168,0d885416,6422,,,,,,,4207,,,7733,,,,,,134144,,1897,houston-dynamo
+reep_t971ab6ea,Q61387357,Crystal Palace SC,,,,,,,,,,,,,,,,,,,,,,,,,
+reep_t99ee027c,Q7017413,Newcastle F.C.,United Kingdom,1977-01-01,,,,,,,,,,,,,,,,,,,,,,4,
+reep_t9a8e720c,Q3276051,FC Kansas City,United States,2012-01-01,Children's Mercy Park,,64c362f2,,,,,,,,,fc-kansas-city-frauen,,,,,,,,,,12477,
+reep_t9d7dd08f,Q18656,Manchester United F.C.,United Kingdom,1878-01-01,Old Trafford,985,19538871,662,6eqit8ye8aomdsrrq0hk3v7gh,,,,1724,52682,30,manchester-united,360,87,ManUnited,1,33,11,10260,133612,89,1,manchester-united
+reep_t9f49dcb2,Q19568,AFC Bournemouth,United Kingdom,1899-01-01,Dean Court,989,4ba7cbea,711,1pse9ta7a45pi2w2grjim70ge,,,,359,2601124,299,afc-bournemouth,,4929,Bournemouth,37,55,,8678,,,,bournemouth
+reep_ta544eb41,Q9616,Chelsea F.C.,United Kingdom,1905-03-10,Stamford Bridge,631,cff3d9bb,661,9q0arba2kbnywth8bkxlhgmdr,,,,536,52914,38,chelsea-fc,,81,Chelsea,18,49,5,8455,133610,80,8,chelsea
+reep_ta64690a5,Q78944434,Charlotte FC,United States,2019-12-17,Bank of America Stadium,78435,eb57545a,49750,,,,,,,32003,,,257515,,,,,,140078,,,charlotte-fc
+reep_tb077f22c,Q55284710,FC Columbus,United States,,,,,,,,,,,,,,,,,,,,,,,,
+reep_tb354b960,Q631,Inter Milan,Italy,1908-03-09,Giuseppe Meazza Stadium,46,d609edc0,1244,,,,,1370,50138,16,inter,110,63,Inter,,,44,8636,133681,,127,inter-milan
+reep_tb3b2e4a6,Q5794,Everton F.C.,United Kingdom,1878-01-01,Hill Dickinson Stadium,29,,674,ehd2iemqmschhj2ec0vayztzz,,,,942,52281,57,everton-fc,,82,,13,,,8668,133615,72,11,everton
+reep_tb3ba39f6,Q18741,Tottenham Hotspur F.C.,United Kingdom,1882-09-05,Tottenham Hotspur Stadium,148,,675,22doj4sgsocqpxw45h607udje,,,,2590,1652,92,tottenham-hotspur,,92,Tottenham,6,47,,8586,133616,82,6,tottenham
+reep_tb5c0a8e2,Q18739,Sunderland A.F.C.,United Kingdom,1879-01-01,Stadium of Light,289,,683,1r3545b2dzan8yqa80gtmcjch,,,,2493,,54,sunderland-afc,,91,,,,106,8472,133603,77,56,sunderland
+reep_tb7c8b439,Q22097892,Leeds A.F.C.,United Kingdom,1894-01-01,,,,,,,,,,,,,,,,,,,,,245,,
+reep_tbbca3647,Q18380286,Los Angeles FC,United States,2014-01-01,BMO Stadium,51828,81d817a3,41871,,,,,,,22534,,,,,,,,,136050,,11690,
+reep_tc5f0758b,Q575370,San Jose Earthquakes,United States,1995-01-01,Stevens Stadium,218,ca460650,2276,,,,,,,549,,,,,,,,,,,1131,san-jose-earthquakes
+reep_tca619bc9,Q240444,FC Akhmat Grozny,Russia,1946-01-01,Akhmat-Arena,3725,8aa1135c,1856,,,,,,86795,1474,akhmat-grozny,2991,4253,,3578,,,,134434,,,akhmat
+reep_tca986041,Q18716,Newcastle United F.C.,United Kingdom,1892-12-09,St James’ Park,762,b2b47a98,664,7vn2i2kd35zuetw6b38gw9jsz,,,,1823,59324,42,newcastle-united,,89,,20,,13,10261,134777,86,,newcastle
+reep_tcc96e7d7,Q1095113,San Jose Earthquakes,United States,1973-12-11,,,,,,,,,,,,,,,,,,,,,,,
+reep_td07d68ad,Q134883407,Wolves SC,,,,,,,,,,,,,,,,,,,,,,,,,
+reep_td1520e72,Q5212324,Bournemouth F.C.,United Kingdom,1875-01-01,"Victoria Park, Bournemouth",,c5b06e34,,,,,,,,,,,,,19571,,,,134301,73,91,
+reep_td5dab25f,Q1130849,Liverpool F.C.,United Kingdom,1892-06-03,Anfield,31,822bd0ba,663,c8h9bw1l82s06h77xxrelzhur,,liverpool/lId4TMwf,,1563,7889,43,liverpool-fc,,85,Liverpool,8,40,9,8650,133602,87,14,liverpool
+reep_td71e95ad,Q1031200,Portland Timbers,United States,2009-01-01,Providence Park,4291,d076914e,17501,,,,,,,737,,,,,,,,,,,1581,portland-timbers
+reep_td88b7d12,Q25409246,Miami FC,United States,2006-01-01,,,,,,,,,,,,,,,,,,,,,,,
+reep_td9d23791,Q7442174,Seattle Sounders FC,,,,,,,,,,,,,,,,,,,,,,,,,
+reep_tda58dadb,Q956200,Seattle Sounders,United States,1973-12-11,Memorial Stadium,,,,,,,,,,,,,,,,,,,,,,
+reep_tdae4e79f,Q19467,Crystal Palace F.C.,United Kingdom,1905-09-10,Selhurst Park,873,47c64c55,679,,,,,646,52916,199,crystal-palace,,2597,CrystalPalace,,,,9826,,,31,crystal-palace
+reep_tde03b673,Q391353,Real Salt Lake,United States,2005-01-01,America First Field,6643,f7d86a43,,,,,,,,2220,,,,,,,,,134158,,1899,real-salt-lake
+reep_te5689a0c,Q122290829,Chelsea FC,Namibia,,,,,,,,,,,,,,,,,,,,,,,,
+reep_te5b9715e,Q97601239,San José F.C.,Mexico,,,,,,,,,,,,,,,,,,,,,,,,
+reep_te6c8eca5,Q18747,West Ham United F.C.,United Kingdom,1895-01-01,London Stadium,379,7c21e445,684,4txjdaqveermfryvbfrr4taf7,,,,2802,53358,132,west-ham-united,,94,,,,,8654,133636,,21,west-ham
+reep_te74de6f7,Q47518754,Nashville SC,United States,2017-01-01,Nissan Stadium,63966,35f1b818,45631,,,,,,,27020,,,,,,,,,,,,nashville-sc
+reep_ted04f2dc,Q289755,AC St. Louis,United States,2009-01-01,World Wide Technology Soccer Park,,9682f9b2,,,,,,,,,,,,,,,,,,,,
+reep_tee4f8ec4,Q2616054,SC Toronto,Canada,1994-01-01,Lamport Stadium,,,,,,,,,,,,,,,,,,,,,,
+reep_tf398568b,Q329812,Sporting Kansas City,United States,1995-01-01,Legends Field,4284,4acb0537,2274,,,,,,,731,,,,,,,,,134143,,421,
+reep_tf3e27a53,Q19490,Nottingham Forest F.C.,United Kingdom,1865-01-01,City Ground,703,e4a775cb,694,1qtaiy11gswx327s0vkibf70n,,,,1845,52681,268,nottingham-forest,,2579,,63,,,10203,133720,249,17,nottingham-forest
+reep_tf8398d9c,Q5417396,Everton F.C.,Trinidad and Tobago,1920-01-01,,,,,,,,,,,,,,,,,,,,,,,
+reep_tf8b9a9da,Q704857,S.P. Tre Penne,San Marino,1956-01-01,Stadio Fonte dell'Ovo,10747,aaffe678,1887,,tre-penne-galazzano,tre-penne/hbTJ6z9T,,5244,64515,2736,sp-tre-penne,8592,2107,,,,,,,,,
+reep_tfa99f7f9,Q19453,Brighton & Hove Albion F.C.,United Kingdom,1901-06-24,Brighton Community Stadium,1237,d07537b9,703,e5p0ehyguld7egzhiedpdnc3w,,,,381,2601105,1201,brighton-hove-albion,,2601,,78,,,10204,,,36,brighton
+reep_tfade59bd,Q2008499,Vancouver Whitecaps,Canada,1986-01-01,Swangard Stadium,,0174ffd1,,,,,,,,,,,,,,,,,,,,
+reep_tfbd28de8,Q953046,Minnesota United FC,United States,2010-01-01,National Sports Center,,817a8e14,,,,,,,,,,,,,,,,,,,,
+reep_tfd57ea9b,Q1393746,Orlando City SC,United States,2010-01-01,Camping World Stadium,,fdf691b3,,,,,,,,,,,,,,,,,,,,
