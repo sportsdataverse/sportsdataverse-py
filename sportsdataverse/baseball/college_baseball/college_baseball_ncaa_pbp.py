@@ -85,7 +85,7 @@ _SUB_FULL_RE = re.compile(rf"^{_SUB_NAME}\s+to\s+{_POS_CODES}\b(?:\s+for\s+{_SUB
 # after a colon (2016-2021), so the 3a/; split alone left them inside the batter's clause.
 _RUNNER_START_RE = re.compile(
     rf"(?<![A-Za-z'.\-])(?!(?:RBI|SAC|SF)\b)(?:{_NAME},?\s+"
-    r"(?:scored|advanced to|out (?:at|on)\b|stole|picked off|caught stealing)"
+    r"(?:scored|advanced (?:to|from)|out (?:at|on)\b|stole|picked off|caught stealing)"
     rf"|(?P<dbl>{_NAME}),?\s+(?P=dbl)(?=(?:,\s*unearned)?\s*(?:[.;]|3a|$)))"  # the name must END its clause
 )
 # stats.ncaa.org sometimes prints the runner's name where "scored" belongs, with the RBI count confirming the run:

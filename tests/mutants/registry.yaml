@@ -13474,6 +13474,16 @@
   expected: kill
   note: "'Mitchell,Mack advanced from second base, scored on play ...' (2026) counts no run."
 
+- id: bb-advanced-from-not-cut
+  group: bb-name-for-scored
+  finding: bb-name-for-scored
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "r\"(?:scored|advanced (?:to|from)|out (?:at|on)\\b|stole|picked off|caught stealing)\""
+  mutant: "r\"(?:scored|advanced to|out (?:at|on)\\b|stole|picked off|caught stealing)\""
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A run-on 'Jones advanced from second base, scored.' stays in the batter clause and credits the batter."
+
 # --- nfl-lateral-full-names: a lateral's credited player reads the box score's full name -----------
 - id: nfl-lateral-full-names-applied
   group: nfl-lateral-full-names

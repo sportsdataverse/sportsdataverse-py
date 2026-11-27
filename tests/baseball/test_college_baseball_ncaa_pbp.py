@@ -280,6 +280,8 @@ _RUNNER_CASES = [
     ),
     # a steal of home that also says "scored" is one run (2026 contest 6501583)
     ("Franck,Gage stole home, scored.", 1, ["Franck,Gage"], 0),
+    # a run-on "advanced from" runner clause splits off too (CodeRabbit on #1356)
+    ("Smith singled to right field, RBI Jones advanced from second base, scored.", 1, ["Jones"], 0),
 ]
 
 
