@@ -286,6 +286,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_game_player_box_splits](additional/analytics-2.md#nba_game_player_box_splits) | Player box by game, period and garbage time: minutes and counts from the play-by-play. |
 | [nba_game_player_impact](additional/analytics-2.md#nba_game_player_impact) | The game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
 | [nba_game_stints](additional/analytics-3.md#nba_game_stints) | Game stints: per player and game, every stretch on the floor with its clock, points and possessions. |
+| [nba_game_story](additional/analytics-3.md#nba_game_story) | How the winner won it, for one or many basketball games: edges in points, the moment, periods, runs, performers. |
 | [nba_game_units](additional/analytics-3.md#nba_game_units) | In-game units: per 1- to 5-man set of teammates and game, minutes, ratings, four factors and shot zones. |
 | [nba_impact_rows](additional/analytics-3.md#nba_impact_rows) | Map the stats.nba.com releases onto the game-impact row frame. |
 | [nba_l2m](additional/analytics-3.md#nba_l2m) | Fetch and parse an NBA Last Two Minute report from official.nba.com. |
@@ -295,8 +296,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_neutral_site_games](additional/analytics-3.md#nba_neutral_site_games) | The curated NBA / WNBA neutral-site games: played abroad, or NBA Cup knockout games in Las Vegas. |
 | [nba_official_seasons](additional/analytics-3.md#nba_official_seasons) | NBA official season profiles: games, fouls and FTA per game, pace and home splits. |
 | [nba_play_context](additional/analytics-3.md#nba_play_context) | Fetch one game and return its possessions with the full CTG play-context surface. |
-| [nba_play_style_features](additional/analytics-3.md#nba_play_style_features) | The play-style clustering features, one row per qualifying player- or team-season. |
-| [nba_player_ages](additional/analytics-3.md#nba_player_ages) | Per-player age for a season (bulk), for the DARKO aging curve. |
+| [nba_play_style_features](additional/analytics-4.md#nba_play_style_features) | The play-style clustering features, one row per qualifying player- or team-season. |
+| [nba_player_ages](additional/analytics-4.md#nba_player_ages) | Per-player age for a season (bulk), for the DARKO aging curve. |
 | [nba_player_factor_rapm](additional/analytics-4.md#nba_player_factor_rapm) | Player RAPM split into Dean Oliver's four factors, offense and defense, per player-season. |
 | [nba_player_game_expected_box](additional/analytics-4.md#nba_player_game_expected_box) | NBA points, rebounds and assists per player-game against his season, per minute and usage-adjusted. |
 | [nba_player_identity](additional/analytics-4.md#nba_player_identity) | Human-readable identity for every player in a season's box logs. |
@@ -305,7 +306,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_player_positions](additional/analytics-4.md#nba_player_positions) | Fetch league-wide listed positions for a season as numeric 1-5. |
 | [nba_player_props](additional/analytics-4.md#nba_player_props) | Per-player expected prop lines + team pace projection for a matchup. |
 | [nba_player_season_box_rates](additional/analytics-4.md#nba_player_season_box_rates) | NBA per-36 points, rebounds and assists per player-season, ranked, with the season usage. |
-| [nba_player_shot_zones](additional/analytics-4.md#nba_player_shot_zones) | Season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |
+| [nba_player_shot_zones](additional/analytics-5.md#nba_player_shot_zones) | Season shot profile by zone per player: rim / mid / corner 3 / above-the-break 3. |
 | [nba_player_war](additional/analytics-5.md#nba_player_war) | WAR and VORP per player-season, from our BPM, RAPM and BOBAN (regular season). |
 | [nba_player_wowy](additional/analytics-5.md#nba_player_wowy) | WOWY pairs: a team's season with two teammates together, apart and both off, per pair. |
 | [nba_playoff_series](additional/analytics-5.md#nba_playoff_series) | Every postseason game keyed to its series, with the series score after it. |
@@ -317,8 +318,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_rated_priors](additional/analytics-5.md#nba_rated_priors) | Rated pregame home win probability for every ESPN game of a season, as of each game's date. |
 | [nba_ratings_panel](additional/analytics-5.md#nba_ratings_panel) | Player-ratings-through-date long panel: one row per (player_id, date). |
 | [nba_raw_store_season_frame](additional/analytics-5.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
-| [nba_referee_assignments](additional/analytics-5.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
-| [nba_score_rows](additional/analytics-5.md#nba_score_rows) | Map the stats.nba.com play-by-play onto the game-flow score rows. |
+| [nba_referee_assignments](additional/analytics-6.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
+| [nba_score_rows](additional/analytics-6.md#nba_score_rows) | Map the stats.nba.com play-by-play onto the game-flow score rows. |
 | [nba_season_sim](additional/analytics-6.md#nba_season_sim) | Season sim as of a date: projected W-L, division, seed, play-in, playoff and lottery odds. |
 | [nba_season_standings](additional/analytics-6.md#nba_season_standings) | Standings with the league's tiebreakers from completed regular-season games. |
 | [nba_shot_value](additional/analytics-6.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |

@@ -225,6 +225,7 @@ from sportsdataverse.nba.nba_coach_seasons import nba_coach_careers, nba_coach_s
 from sportsdataverse.nba.nba_official_seasons import nba_official_seasons  # noqa: F401
 from sportsdataverse.nba.nba_player_box_expected import nba_player_game_expected_box, nba_player_season_box_rates  # noqa: F401
 from sportsdataverse.nba.nba_game_flow import nba_game_flow, nba_score_rows, nba_team_season_flow  # noqa: F401
+from sportsdataverse.nba.nba_game_story import nba_game_story  # noqa: F401
 from sportsdataverse.nba.nba_situational import (  # noqa: F401
     nba_situation_rows,
     nba_situational_lineup,
