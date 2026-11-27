@@ -127,6 +127,22 @@ _PUBLISHED: dict[tuple[str, Side], tuple[Literal["adj", "raw"], float]] = {
     ("epa_standard_down", "def"): ("adj", 233.7),  # .564 -> .669; holdout .605 -> .704
     ("epa_first_half", "off"): ("raw", 216.5),  # .639 -> .665 (gain < .03); holdout .605 -> .632
     ("epa_first_half", "def"): ("raw", 280.3),  # .583 -> .639 (a season < .50); holdout .588 -> .680
+    ("epa_pass", "off"): ("raw", 183.4),  # .631 -> .646 (gain < .03); holdout .553 -> .557
+    ("success_pass", "off"): ("adj", 133.0),  # .674 -> .708; holdout .652 -> .659
+    ("epa_rush", "off"): ("raw", 293.1),  # .539 -> .555 (gain < .03, a season < .50); holdout .606 -> .651
+    ("epa_rush", "def"): ("raw", 275.9),  # .560 -> .617 (a season < .50); holdout .439 -> .585
+    ("success_rush", "off"): ("adj", 210.0),  # .576 -> .621; holdout .498 -> .639
+    ("success_rush", "def"): ("adj", 169.0),  # .611 -> .674; holdout .451 -> .600
+    ("epa_pass", "def"): ("raw", 387.6),  # .454 -> .500 (a season < .50); holdout .522 -> .607
+    ("success_pass", "def"): ("raw", 335.2),  # .488 -> .545 (a season < .50); holdout .492 -> .582
+    ("epa_passing_down", "off"): ("raw", 245.3),  # .461 -> .504 (a season < .50); holdout .511 -> .528
+    ("epa_q1", "off"): ("raw", 165.2),  # .513 -> .530 (gain < .03); holdout .443 -> .464
+    ("explosive_rate", "off"): ("raw", 799.6),  # .456 -> .450; holdout .380 -> .338
+    ("success_late_down", "off"): ("raw", 164.1),  # never adjusted; raw .483, holdout .581
+    ("success_late_down", "def"): ("raw", 184.9),  # never adjusted; raw .460, holdout .388
+    ("epa_q2", "off"): ("raw", 237.9),  # never adjusted; raw .458, holdout .476
+    ("epa_q2", "def"): ("raw", 287.8),  # never adjusted; raw .415, holdout .423
+    ("iso_ppp", "def"): ("raw", 299.2),  # never adjusted; raw .494, holdout .522
 }
 
 _VALUE_SCHEMA = {
@@ -256,7 +272,8 @@ def cfb_adjusted_breakdowns(
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the columns :func:`cfb_adjusted_epa`
             reads, plus the ones each requested breakdown slices on: ``EPA_success`` (or ``epa_success``),
-            ``start.down`` (or ``down``), ``standard_down`` and ``period``. One season at a time.
+            ``EPA_explosive``, ``start.down`` (or ``down``), ``standard_down``, ``passing_down``, ``period``,
+            ``pass`` and ``rush``. One season at a time.
         metrics: Breakdown names to return, in that order (default: every published one). Each name covers both
             sides that are published for it.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
