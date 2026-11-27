@@ -409,7 +409,8 @@ def cfb_predict_games(
 
             from sportsdataverse.cfb import load_cfb_schedule, cfb_hierarchical_ratings
             hier = cfb_hierarchical_ratings(load_cfb_schedule(list(range(2014, 2027))), 2026, 13)
-            preds = cfb_predict_games(week13_games, ratings, model="hierarchical", hierarchical=hier)
+            ratings_2026 = cfb_ratings(2026)  # still feeds exp_total
+            preds = cfb_predict_games(week13_games, ratings_2026, model="hierarchical", hierarchical=hier)
 
     See Also:
         * `cfbfastR`_ -- the R companion whose ratings/prediction surface this mirrors.

@@ -102,7 +102,7 @@ def _corpus(
     for s in sorted(g["season"].unique().to_list()):
         arr: np.ndarray = np.full(len(team_ids), cix["OTHER"], dtype=np.int32)
         sub = modal.filter(pl.col("season") == s)
-        for tm, c in zip(sub["team_id"].to_list(), sub["conf"].to_list()):
+        for tm, c in zip(sub["team_id"].to_list(), sub["conf"].to_list(), strict=True):
             arr[tix[int(tm)]] = cix[c]
         conf_of[int(s)] = arr
     g = g.with_columns(
