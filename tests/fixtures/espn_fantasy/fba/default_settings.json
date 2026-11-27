@@ -1,0 +1,215 @@
+{
+  "gameId": 3,
+  "id": 1,
+  "scoringPeriodId": 38,
+  "seasonId": 2027,
+  "segmentId": 0,
+  "settings": {
+    "acquisitionSettings": {
+      "acquisitionBudget": 100,
+      "acquisitionLimit": -1,
+      "acquisitionType": "WAIVERS_TRADITIONAL",
+      "finalPlaceTransactionEligible": 0,
+      "isUsingAcquisitionBudget": false,
+      "matchupAcquisitionLimit": 0.0,
+      "matchupLimitPerScoringPeriod": false,
+      "minimumBid": 1,
+      "transactionLockingEnabled": false,
+      "waiverHours": 24,
+      "waiverOrderReset": false,
+      "waiverProcessDays": [
+        "SUNDAY"
+      ],
+      "waiverProcessHour": 8
+    },
+    "draftSettings": {
+      "auctionBudget": 200,
+      "isTradingEnabled": false,
+      "keeperCount": 0,
+      "keeperCountFuture": 0,
+      "keeperOrderType": "TRADITIONAL",
+      "leagueSubType": "NONE",
+      "orderType": "DRAFT_START",
+      "pickOrder": [
+        1,
+        2,
+        3
+      ],
+      "timePerSelection": 90,
+      "type": "SNAKE"
+    },
+    "financeSettings": {
+      "entryFee": 0.0,
+      "miscFee": 0.0,
+      "perLoss": 0.0,
+      "perTrade": 0.0,
+      "playerAcquisition": 0.0,
+      "playerDrop": 0.0,
+      "playerMoveToActive": 0.0,
+      "playerMoveToIR": 0.0
+    },
+    "isAutoReactivate": false,
+    "isCustomizable": false,
+    "isPublic": false,
+    "name": "FBA Rotisserie",
+    "restrictionType": "NONE",
+    "rosterSettings": {
+      "autoPilotTypeSupported": "NONE",
+      "isBenchUnlimited": true,
+      "isUsingUndroppableList": true,
+      "lineupLocktimeType": "INDIVIDUAL_GAME",
+      "lineupSlotCounts": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 3,
+        "12": 3,
+        "13": 1,
+        "14": 0
+      },
+      "lineupSlotStatLimits": {
+        "0": {
+          "limitValue": 82.0,
+          "statId": 42
+        },
+        "1": {
+          "limitValue": 82.0,
+          "statId": 42
+        },
+        "2": {
+          "limitValue": 82.0,
+          "statId": 42
+        },
+        "3": {
+          "limitValue": 82.0,
+          "statId": 42
+        },
+        "4": {
+          "limitValue": 82.0,
+          "statId": 42
+        },
+        "5": {
+          "limitValue": 82.0,
+          "statId": 42
+        },
+        "6": {
+          "limitValue": 82.0,
+          "statId": 42
+        },
+        "11": {
+          "limitValue": 246.0,
+          "statId": 42
+        }
+      },
+      "moveLimit": -1,
+      "positionLimits": {
+        "0": 0,
+        "1": -1,
+        "2": -1,
+        "3": -1,
+        "4": -1,
+        "5": 4
+      },
+      "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+      "universeIds": [
+        0
+      ]
+    },
+    "scheduleSettings": {
+      "consolationLadderDisabled": false,
+      "divisions": [
+        {
+          "id": 0,
+          "name": "League Standings",
+          "size": 10
+        }
+      ],
+      "matchupPeriodCount": 1,
+      "matchupPeriodLength": 1,
+      "matchupPeriods": {
+        "1": [
+          1
+        ]
+      },
+      "periodTypeId": 0,
+      "playoffMatchupPeriodLength": 0,
+      "playoffReseed": false,
+      "playoffSeedingRule": "H2H_RECORD",
+      "playoffSeedingRuleBy": 0,
+      "playoffTeamCount": 0,
+      "variablePlayoffMatchupPeriodLength": false
+    },
+    "scoringSettings": {
+      "allowOutOfPositionScoring": false,
+      "homeTeamBonus": 0,
+      "matchupTieRule": "NONE",
+      "matchupTieRuleBy": 0,
+      "playerRankType": "STANDARD",
+      "playoffHomeTeamBonus": 0,
+      "playoffMatchupTieRule": "NONE",
+      "playoffMatchupTieRuleBy": 0,
+      "scoringItems": [
+        {
+          "isReverseItem": false,
+          "leagueRanking": 0.0,
+          "leagueTotal": 0.0,
+          "points": 1.0,
+          "pointsOverrides": {},
+          "statId": 0
+        },
+        {
+          "isReverseItem": false,
+          "leagueRanking": 0.0,
+          "leagueTotal": 0.0,
+          "points": 1.0,
+          "pointsOverrides": {},
+          "statId": 1
+        },
+        {
+          "isReverseItem": false,
+          "leagueRanking": 0.0,
+          "leagueTotal": 0.0,
+          "points": 1.0,
+          "pointsOverrides": {},
+          "statId": 2
+        }
+      ],
+      "scoringType": "ROTO"
+    },
+    "size": 10,
+    "tradeSettings": {
+      "allowOutOfUniverse": false,
+      "deadlineDate": 1803056400000,
+      "max": -1,
+      "revisionHours": 24,
+      "vetoVotesRequired": 4
+    }
+  },
+  "status": {
+    "createdAsLeagueType": 0,
+    "currentLeagueType": 0,
+    "currentMatchupPeriod": 1,
+    "finalScoringPeriod": 174,
+    "firstScoringPeriod": 0,
+    "isActive": false,
+    "isExpired": false,
+    "isFull": false,
+    "isPlayoffMatchupEdited": false,
+    "isToBeDeleted": false,
+    "isViewable": false,
+    "isWaiverOrderEdited": false,
+    "latestScoringPeriod": 0,
+    "previousSeasons": [],
+    "teamsJoined": 0,
+    "transactionScoringPeriod": 0,
+    "waiverProcessStatus": {}
+  }
+}

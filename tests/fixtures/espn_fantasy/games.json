@@ -1,0 +1,77 @@
+[
+  {
+    "abbrev": "FFL",
+    "active": true,
+    "currentSeason": {
+      "abbrev": "FFL 2026",
+      "active": true,
+      "currentScoringPeriod": {
+        "id": 12
+      },
+      "display": true,
+      "displayOrder": 0,
+      "endDate": 1837580400000,
+      "gameId": 1,
+      "id": 2026,
+      "name": "Fantasy Football 2026",
+      "startDate": 1774422000000
+    },
+    "currentSeasonId": 2026,
+    "display": true,
+    "displayOrder": 1,
+    "id": 1,
+    "name": "Fantasy Football",
+    "proSportAbbrev": "NFL",
+    "proSportName": "football"
+  },
+  {
+    "abbrev": "FLB",
+    "active": true,
+    "currentSeason": {
+      "abbrev": "FLB 2026",
+      "active": true,
+      "currentScoringPeriod": {
+        "id": 188
+      },
+      "display": true,
+      "displayOrder": -1,
+      "endDate": 1832486400000,
+      "gameId": 2,
+      "id": 2026,
+      "name": "Fantasy Baseball 2026",
+      "startDate": 1769414400000
+    },
+    "currentSeasonId": 2026,
+    "display": true,
+    "displayOrder": 2,
+    "id": 2,
+    "name": "Fantasy Baseball",
+    "proSportAbbrev": "MLB",
+    "proSportName": "baseball"
+  },
+  {
+    "abbrev": "FBA",
+    "active": true,
+    "currentSeason": {
+      "abbrev": "FBA 2027",
+      "active": true,
+      "currentScoringPeriod": {
+        "id": 38
+      },
+      "display": true,
+      "displayOrder": 0,
+      "endDate": 1844319600000,
+      "gameId": 3,
+      "id": 2027,
+      "name": "Fantasy Basketball 2027",
+      "startDate": 1781161200000
+    },
+    "currentSeasonId": 2027,
+    "display": true,
+    "displayOrder": 3,
+    "id": 3,
+    "name": "Fantasy Basketball",
+    "proSportAbbrev": "NBA",
+    "proSportName": "basketball"
+  }
+]

@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: season_abbrev
+  type: character
+- description: ''
+  name: season_name
+  type: character
+- description: ''
+  name: active
+  type: logical
+- description: ''
+  name: display
+  type: logical
+- description: ''
+  name: current_scoring_period_id
+  type: integer
+- description: ''
+  name: start_date
+  type: datetime
+- description: ''
+  name: end_date
+  type: datetime
+kind: dataframe
+schema: espn_fantasy_seasons

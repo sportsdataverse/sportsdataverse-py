@@ -1,0 +1,44 @@
+[
+  {
+    "abbrev": "FBA 2027",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 38
+    },
+    "display": true,
+    "displayOrder": 0,
+    "endDate": 1844319600000,
+    "gameId": 3,
+    "id": 2027,
+    "name": "Fantasy Basketball 2027",
+    "startDate": 1781161200000
+  },
+  {
+    "abbrev": "FBA 2026",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 175
+    },
+    "display": true,
+    "displayOrder": 0,
+    "endDate": 1781161200000,
+    "gameId": 3,
+    "id": 2026,
+    "name": "Fantasy Basketball 2026",
+    "startDate": 1749625200000
+  },
+  {
+    "abbrev": "FBA 2025",
+    "active": true,
+    "currentScoringPeriod": {
+      "id": 175
+    },
+    "display": true,
+    "displayOrder": 0,
+    "endDate": 1749625200000,
+    "gameId": 3,
+    "id": 2025,
+    "name": "Fantasy Basketball 2025",
+    "startDate": 1718953200000
+  }
+]
