@@ -93,10 +93,13 @@ def _fetch(table: str) -> pl.DataFrame:
     if body[:2] != b"\x1f\x8b":
         raise AssetFetchError(f"{url} answered HTTP {resp.status_code} with something other than a gzip CSV")
     try:
-        return pl.read_csv(io.BytesIO(gzip.decompress(body)), infer_schema=False)
+        out = pl.read_csv(io.BytesIO(gzip.decompress(body)), infer_schema=False)
     # a truncated or corrupt gzip, an empty file, a ragged CSV: the fetch failed, it did not answer "nothing here"
     except (EOFError, OSError, zlib.error, pl.exceptions.PolarsError) as exc:
         raise AssetFetchError(f"{url}: the body is not a readable gzip CSV ({type(exc).__name__}: {exc})") from exc
+    if out.is_empty():  # every published table has rows; a header-only file is a broken publish, not an answer
+        raise AssetFetchError(f"{url}: the gzip CSV has a header and no rows")
+    return out
 
 
 def _typed(raw: pl.DataFrame, table: str) -> pl.DataFrame:

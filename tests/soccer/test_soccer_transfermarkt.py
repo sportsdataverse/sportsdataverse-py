@@ -179,6 +179,10 @@ def test_a_dropped_connection_or_a_truncated_body_is_a_failed_fetch(monkeypatch)
         monkeypatch.setattr(tm, "download", lambda url, *a, b=bad, **k: _Resp(b))
         with pytest.raises(AssetFetchError, match="not a readable gzip CSV"):
             load_soccer_transfermarkt_competitions()
+    header = (FIX / "competitions.csv").read_bytes().splitlines(keepends=True)[0]
+    monkeypatch.setattr(tm, "download", lambda url, *a, **k: _Resp(gzip.compress(header)))
+    with pytest.raises(AssetFetchError, match="header and no rows"):
+        load_soccer_transfermarkt_competitions()
 
 
 def test_a_date_with_a_time_is_refused_not_truncated(monkeypatch) -> None:
