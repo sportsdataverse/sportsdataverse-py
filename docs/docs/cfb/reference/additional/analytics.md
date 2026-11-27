@@ -634,7 +634,7 @@ How the winner won it, for one or many college football games: edges in EPA, the
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | The ESPN-processed plays of one or many games: `load_cfb_pbp` (the `espn_cfb_pbp` release) or `CFBPlayProcess(...).run_processing_pipeline()`'s plays frame. Needs `game_id`, `id`, `game_play_number`, `period.number`, `clock.displayValue`, `text`, `pos_team_id`, `homeTeamId`, `awayTeamId`, `homeScore`, `awayScore`, `EPA`, `wpa`, `scrimmage_play`, `pass`, `rush`, `type.text`, `is_pos_team_turnover`, `EPA_explosive`, `EPA_success`, `start.yardsToEndzone`, `late_down` and the `passer` / `rusher` / `receiver` `_player_id` / `_player_name` columns. |
+| `pbp` | `DataFrame` |  | The ESPN-processed plays of one or many games: `load_cfb_pbp` (the `espn_cfb_pbp` release) or `CFBPlayProcess(...).run_processing_pipeline()`'s plays frame. Needs `game_id`, `id`, `game_play_number`, `period.number`, `clock.displayValue`, `text`, `pos_team_id` (the processor's frame calls it `pos_team`), `homeTeamId`, `awayTeamId`, `homeScore`, `awayScore`, `EPA`, `wpa`, `scrimmage_play`, `pass`, `rush`, `type.text`, `is_pos_team_turnover`, `EPA_explosive`, `EPA_success`, `start.yardsToEndzone`, `late_down` and the `passer` / `rusher` / `receiver` `_player_id` / `_player_name` columns. |
 | `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
 
 **Returns**
