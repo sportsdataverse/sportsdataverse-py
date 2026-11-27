@@ -467,3 +467,82 @@ from sportsdataverse.soccer import soccer_open_dataset, soccer_spadl, soccer_xth
 actions = soccer_xthreat_rate(soccer_spadl(soccer_open_dataset("statsbomb", 8658)))
 print(actions.group_by("player_id").agg(pl.col("xt_value").sum()).sort("xt_value", descending=True).head())
 ```
+
+## reep football id register
+
+### soccer_espn_reep_team_crosswalk {#soccer_espn_reep_team_crosswalk}
+
+`soccer_espn_reep_team_crosswalk(league: 'str | None' = None, *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+ESPN soccer team id -> reep team id, with reep's ids for the same club at about 20 providers.
+
+One row per ESPN team in the leagues the table covers: `eng.1`, `eng.2`, `esp.1`, `ger.1`,
+`ita.1`, `fra.1`, `usa.1` and `mex.1` (the clubs ESPN listed when the table was built,
+2026-11-26). The table ships with sdv-py; no request is made. reep data is CC0 1.0 (release
+2026.25). NWSL is not covered: reep has no row for 5 of its 16 clubs, below the 75% per-league floor.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str \| None` | `None` | An ESPN league slug from the list above, to keep that league's rows; `None` (default) returns every league. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+polars.DataFrame | pandas.DataFrame: one row per `espn_team_id` (unique). Every column is text (Utf8): `espn_team_id` joins `espn_soccer_teams_site().team_id` and the ESPN soccer scoreboard and summary team ids as it is. The reep columns are null when no reep row is that club (`match_method == "unmatched"`).
+
+| col_name | type | description |
+|---|---|---|
+| `espn_team_id` | String | ESPN soccer team id, digits as text (Utf8, the dtype of team_id in espn_soccer_teams_site and the ESPN soccer scoreboard and summary frames); unique in the table. |
+| `espn_league` | String | ESPN league slug the team was listed under when the table was built (eng.1, eng.2, esp.1, ger.1, ita.1, fra.1, usa.1, mex.1). |
+| `espn_display_name` | String | ESPN display name of the team at build time (e.g. 'Manchester United'). |
+| `espn_abbreviation` | String | ESPN team abbreviation at build time (e.g. 'MAN' for Manchester United). |
+| `reep_id` | String | reep team id (reep_t + 8 hex characters); null when no reep row is this club. No reep_id appears on two ESPN teams. |
+| `reep_name` | String | Club name as reep records it (e.g. 'Manchester United F.C.'). |
+| `reep_country` | String | Country reep records for the club ('United Kingdom' for English clubs, 'Wales' for some Welsh ones). |
+| `key_wikidata` | String | Wikidata entity id of the club (e.g. 'Q18656'). |
+| `key_transfermarkt` | String | Transfermarkt club id, digits as text (e.g. '985'). |
+| `key_fbref` | String | FBref squad id (8 hex characters). |
+| `key_soccerway` | String | Soccerway team id. |
+| `key_opta` | String | Opta team UUID (25 alphanumeric characters). |
+| `key_opta_numeric` | String | Opta numeric team id. |
+| `key_kicker` | String | kicker.de club slug. |
+| `key_flashscore` | String | Flashscore team id. |
+| `key_sofascore` | String | Sofascore team id. |
+| `key_soccerbase` | String | Soccerbase team id. |
+| `key_uefa` | String | UEFA club id. |
+| `key_footballdatabase_eu` | String | footballdatabase.eu club id. |
+| `key_worldfootball` | String | worldfootball.net club slug. |
+| `key_playmakerstats` | String | playmakerstats.com team id. |
+| `key_clubelo` | String | ClubElo club name (the key its ratings use, e.g. 'ManUnited'). |
+| `key_sportmonks` | String | Sportmonks team id. |
+| `key_api_football` | String | API-Football team id. |
+| `key_sofifa` | String | SoFIFA team id. |
+| `key_fotmob` | String | FotMob team id. |
+| `key_thesportsdb` | String | TheSportsDB team id. |
+| `key_understat` | String | Understat team id. |
+| `key_capology` | String | Capology club slug. |
+| `match_method` | String | How the ESPN team was tied to reep. 'key_espn' (reep already carries this ESPN id), 'name' (exactly one reep row in the league's country shares a normalized name or alias), 'review' (settled by hand in tools/soccer_espn_reep_overrides.yaml), 'unmatched' (reviewed; no reep row is this club, reep columns null). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If *league* is not one of the covered league slugs. |
+
+**Example**
+
+```python
+from sportsdataverse.soccer import soccer_espn_reep_team_crosswalk
+xw = soccer_espn_reep_team_crosswalk()
+print(xw.shape)
+
+# One league, as pandas
+
+epl = soccer_espn_reep_team_crosswalk(league="eng.1", return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+xw.select("espn_team_id", "key_transfermarkt", "key_fbref").drop_nulls("key_transfermarkt")
+```
