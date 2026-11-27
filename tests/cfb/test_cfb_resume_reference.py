@@ -155,6 +155,26 @@ def test_reference_ratings_keep_fbs_teams_only(ratings, schedule) -> None:
     assert refs["top5"] != _reference_ratings(ratings, schedule)["top5"]
 
 
+def test_an_unrated_fbs_opponent_is_left_out_not_a_sure_win(ratings, schedule) -> None:
+    """With division columns, an FBS opponent missing from the ratings gets no probability (only FCS is a sure win)."""
+    tagged = schedule.with_columns(home_division=pl.lit("fbs"), away_division=pl.lit("fbs"))
+    games = tagged.filter((pl.col("home_team_id") == "130") | (pl.col("away_team_id") == "130"))
+    dropped = games["away_team_id"][0]  # Michigan's first opponent, East Carolina
+    thin = ratings.filter(pl.col("team_id") != dropped)
+    refs = _reference_ratings(thin, tagged)
+    row = _resume_core(thin, tagged, _CFG, 2023).filter(pl.col("team_id") == "130").row(0, named=True)
+    p, wins = _games(
+        thin,
+        tagged.filter((pl.col("home_team_id") != dropped) & (pl.col("away_team_id") != dropped)),
+        "130",
+        refs["bubble"],
+    )
+    assert len(p) == games.height - 1
+    assert row["sos_bubble_past"] == pytest.approx(p.mean(), abs=1e-12)
+    assert row["record_difficulty_bubble"] == pytest.approx(_poisson_binomial_tail(p, wins), abs=1e-12)
+    assert row["wins_above_bubble"] == pytest.approx(wins - p.sum(), abs=1e-12)
+
+
 def test_new_columns_in_the_empty_schema() -> None:
     from sportsdataverse.cfb.cfb_resume import _RESUME_SCHEMA
 
