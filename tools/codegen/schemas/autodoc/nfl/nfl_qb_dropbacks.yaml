@@ -1,0 +1,24 @@
+schema: nfl_qb_dropbacks
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: game_date
+  type: date
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: qb_id
+  type: character
+  description: ''
+- name: qb_epa
+  type: double
+  description: ''
+- name: is_dropback
+  type: logical
+  description: ''

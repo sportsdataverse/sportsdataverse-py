@@ -12957,11 +12957,11 @@ load_cfb_team_summaries:
     plays with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer than two distinct
     values: unranked, not last.'
 load_cfb_team_adjustment_ledger:
-  season: Season year.
-  game_id: ESPN game id.
+  season: Season of the game (the year the season starts).
+  game_id: ESPN game id of the team-game (the play-by-play game_id).
   week: ESPN week; the postseason restarts at 1.
   season_type: "ESPN season type of the game: 2 regular season, 3 postseason."
-  team_id: ESPN team id.
+  team_id: ESPN team id of the rated team (the pos_team_id the fit uses).
   pos_team: The team's name as the play-by-play carries it.
   opponent_id: ESPN team id of the opponent.
   site: home, away or neutral, for the team.
@@ -83636,6 +83636,123 @@ kalshi_fill_price:
     below the best bid); 0 when the touch fills it all.
   cost: Dollars paid (buy) or received (sell) for the filled contracts, before fees; null when nothing fills.
   levels_used: Price levels the fill touches.
+nfl_qb_dropbacks:
+  game_id: nflverse game id of the play (`2025_05_DET_CIN`).
+  season: Season of the play (the year the season starts).
+  game_date: Date of the game, the as-of key every QB-layer window is cut on.
+  team: Offense's franchise code, relocated to the current one (OAK -> LV, SD -> LAC, STL -> LA).
+  qb_id: GSIS id of the QB on a dropback (passer, else scrambling rusher); null off dropbacks.
+  qb_epa: nflverse qb_epa of the play (EPA credited to the QB).
+  is_dropback: True on a QB dropback with a QB id and a non-null qb_epa; False on a designed run (a scramble is a dropback), an unattributed play or a null qb_epa.
+nfl_qb_values:
+  qb_id: GSIS id of the quarterback.
+  dropbacks: Career dropbacks before the as-of date, from the config's history start season.
+  epa_per_dropback: Raw mean qb_epa per dropback over those career dropbacks (unshrunk).
+  qb_value: Shrunk value (n * e + k * prior) / (n + k), prior = replacement under new_qb_dropbacks (default 100) else league mean.
+nfl_expected_starters:
+  game_id: nflverse game id from the schedule.
+  team: Franchise code of the side, relocated to the current one as in the play-by-play.
+  kickoff: Kickoff in UTC (schedule gameday + gametime, US Eastern).
+  chart_dt: Timestamp of the depth-chart snapshot used, strictly before kickoff; null when the previous start was used or there is no source.
+  expected_qb_id: 'GSIS id of the pregame expected starter: depth-chart QB1, else the previous game''s starter.'
+  backup_qb_id: GSIS id of depth-chart QB2 from the same snapshot; null without a snapshot or when it lists one QB.
+  starter_source: 'Where the expected starter came from: depth_chart, previous_start, or null (no source).'
+  status: 'Expected starter''s final injury-report status that week: Out, Doubtful, Questionable, or the string none.'
+  p_start: Fitted chance the expected starter starts at that status (1.0 when there is no expected starter).
+nfl_qb_predict_games:
+  game_id: nflverse game id from the schedule.
+  season: Season of the game.
+  week: Week of the game.
+  home_team: Home franchise code, relocated to the current one.
+  away_team: Away franchise code, relocated to the current one.
+  neutral_site: True when the schedule's location is Neutral (no home-field advantage).
+  base_margin: Shipped spine's expected home margin in points, ratings as of the game date.
+  base_win_prob: Shipped spine's home win probability, Phi(base_margin / margin_sd).
+  base_lo80: Lower end of the spine's 80% home-margin interval (base_margin - 1.2816 margin_sd).
+  base_hi80: Upper end of the spine's 80% home-margin interval (base_margin + 1.2816 margin_sd).
+  qb_margin: 'QB layer''s expected home margin: mean of the start-probability mixture.'
+  qb_win_prob: 'QB layer''s home win probability: P(margin > 0) under the mixture.'
+  qb_lo80: 0.10 quantile of the QB layer's home-margin mixture.
+  qb_hi80: 0.90 quantile of the QB layer's home-margin mixture.
+  home_qb_id: GSIS id of the home starter priced (expected, or realized in the realized arm).
+  away_qb_id: GSIS id of the away starter priced (expected, or realized in the realized arm).
+  home_status: Home expected starter's report status (Out, Doubtful, Questionable, or the string none; none in the realized arm).
+  away_status: Away expected starter's report status (Out, Doubtful, Questionable, or the string none; none in the realized arm).
+  home_p_start: Chance the home expected starter starts (1.0 in the realized arm or when unpriced).
+  away_p_start: Chance the away expected starter starts (1.0 in the realized arm or when unpriced).
+  home_shift: 'Home starter''s shift to adj_net in EPA per play: gamma * dropback share * (value - rated value).'
+  away_shift: 'Away starter''s shift to adj_net in EPA per play: gamma * dropback share * (value - rated value).'
+  home_layer_applied: False when the home side had no starter or no rated dropbacks and was left unchanged.
+  away_layer_applied: False when the away side had no starter or no rated dropbacks and was left unchanged.
+cfb_adjusted_epa_ledger:
+  game_id: Game id of the team-game (the play-by-play game_id).
+  season: Season carried through from the plays when present.
+  week: Week carried through from the plays when present.
+  season_type: ESPN season type carried from the plays' seasonType (2 = regular season, 3 = postseason) when present.
+  team_id: Id of the rated team (the pos_team_id the fit uses).
+  pos_team: Name of the rated team.
+  opponent_id: Id of the opponent in this game.
+  site: 'Where the rated team played: home, away or neutral.'
+  off_plays: The team's offensive plays in this game that entered the fit.
+  def_plays: The team's defensive plays in this game that entered the fit.
+  raw_off_epa: Raw offensive EPA per play in this game.
+  raw_def_epa: Raw EPA per play allowed in this game.
+  raw_net_epa: raw_off_epa minus raw_def_epa for this game.
+  off_strength_faced: The opponent's fitted offensive strength, EPA per play (what the defense faced).
+  def_strength_faced: The opponent's fitted defensive strength, EPA per play (what the offense faced).
+  schedule_adj: 'off_strength_faced minus def_strength_faced: what the schedule term adds to this game''s raw net.'
+  adj_off_epa: Opponent-adjusted offensive EPA per play for this game.
+  adj_def_epa: Opponent-adjusted EPA per play allowed for this game.
+  adj_net_epa: adj_off_epa minus adj_def_epa for this game.
+  off_weight: 'This game''s weight in the season offensive mean: 1 / the games with offensive fit plays.'
+  def_weight: 'This game''s weight in the season defensive mean: 1 / the games with defensive fit plays.'
+  raw_contribution: The raw part of this game's contribution to the season net_adj_epa.
+  schedule_contribution: The schedule part of this game's contribution to the season net_adj_epa.
+  contribution: This game's contribution to the season net_adj_epa (raw plus schedule); sums to it per team.
+  net_adj_epa: The team's season net adjusted EPA per play, repeated on each of its games.
+  loo_net_adj_epa: The team's season net_adj_epa refit without this game (with influence); null under two games or when a play's opponent id is null.
+  game_influence: 'net_adj_epa minus loo_net_adj_epa: how far this game moved the team''s season value.'
+load_mlb_chadwick_register:
+  key_person: Register primary person key (8 hex characters), unique per row.
+  key_uuid: Register UUID for the person.
+  key_mlbam: MLB Advanced Media (MLB Stats API / Statcast) person id.
+  key_retro: Retrosheet's id for the person (player, manager, coach or umpire).
+  key_bbref: Baseball-Reference major-league player id.
+  key_bbref_minors: Baseball-Reference minor-league / register id.
+  key_fangraphs: FanGraphs player id (the playerid in FanGraphs URLs and leaderboards).
+  key_npb: Nippon Professional Baseball player id, zero-padded text (8 digits).
+  key_sr_nfl: Sports-Reference pro football id, for multi-sport athletes.
+  key_sr_nba: Sports-Reference pro basketball id, for multi-sport athletes.
+  key_sr_nhl: Sports-Reference hockey id, for multi-sport athletes.
+  key_wikidata: Wikidata entity id of the person.
+  name_last: Last name as the register records it.
+  name_first: First name as commonly used.
+  name_given: Given (full first and middle) name.
+  name_suffix: Name suffix such as Jr. or III.
+  name_matrilineal: Matrilineal surname, where recorded.
+  name_nick: Nickname, where recorded.
+  birth_year: Calendar year of birth.
+  birth_month: Month of birth (1-12).
+  birth_day: Day of the month the person was born.
+  death_year: Calendar year of death; null for the living.
+  death_month: Month of death (1-12); null for the living.
+  death_day: Day of the month of death; null for the living.
+  pro_played_first: First season played professionally.
+  pro_played_last: Last season played professionally.
+  mlb_played_first: First season played in the major leagues.
+  mlb_played_last: Last season played in the major leagues.
+  col_played_first: First season played in college.
+  col_played_last: Last season played in college.
+  pro_managed_first: First season managed professionally.
+  pro_managed_last: Last season managed professionally.
+  mlb_managed_first: First season managed in the major leagues.
+  mlb_managed_last: Last season managed in the major leagues.
+  col_managed_first: First season managed in college.
+  col_managed_last: Last season managed in college.
+  pro_umpired_first: First season umpired professionally.
+  pro_umpired_last: Last season umpired professionally.
+  mlb_umpired_first: First season umpired in the major leagues.
+  mlb_umpired_last: Last season umpired in the major leagues.
 espn_fantasy_games:
   game_id: ESPN's number for the fantasy game (1 football, 2 baseball, 3 men's basketball, 4 hockey, 5 women's basketball).
   game_abbrev: Game abbreviation as ESPN writes it (FFL, FLB, FBA, FHL, WFBA); the lower-case form is the game argument.
