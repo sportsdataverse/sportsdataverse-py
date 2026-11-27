@@ -81,11 +81,11 @@ def _down(lo: int, hi: int) -> Callable[[pl.DataFrame], pl.Expr]:
 
 
 def _flag(name: str) -> Callable[[pl.DataFrame], pl.Expr]:
-    return lambda df: pl.col(name).cast(pl.Float64) == 1
+    return lambda _df: pl.col(name).cast(pl.Float64) == 1
 
 
 def _period(lo: int, hi: int) -> Callable[[pl.DataFrame], pl.Expr]:
-    return lambda df: pl.col("period").is_between(lo, hi)
+    return lambda _df: pl.col("period").is_between(lo, hi)
 
 
 # name -> (slice mask, response, may be opponent-adjusted). Pre-registered in full; publication is in _PUBLISHED.
@@ -202,7 +202,7 @@ def _breakdown_values(clean: pl.DataFrame, metrics: Sequence[str]) -> pl.DataFra
 
 def _wide(values: pl.DataFrame, keys: Sequence[tuple[str, Side]]) -> pl.DataFrame:
     """One row per team; five columns per published (metric, side), in ``keys`` order."""
-    teams = values.group_by("team_id").agg(pos_team=pl.col("pos_team").first()).sort("team_id")
+    teams = values.group_by("team_id").agg(pos_team=pl.col("pos_team").drop_nulls().first()).sort("team_id")
     for metric, side in keys:
         tier, k = _PUBLISHED[(metric, side)]
         p = f"{metric}_{side}"
