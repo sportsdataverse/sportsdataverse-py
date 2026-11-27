@@ -47,6 +47,7 @@ cfb:
   get_fg_wp: {pbp_df: {$call: cfb.load_cfb_pbp, args: {seasons: 2026}}}  # 67447 rows x 505 cols
   get_2pt_probs: {pbp_df: {$call: cfb.load_cfb_pbp, args: {seasons: 2026}}}  # 67447 rows x 505 cols
   cfb_game_story: {pbp: {$call: cfb.load_cfb_pbp, args: {seasons: 2026}}}  # dict of frames -> hand_authored
+  cfb_hierarchical_ratings: {schedule: {$call: cfb.load_cfb_schedule, args: {seasons: [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026]}}, season: 2026, t: 13}  # hand_authored
 
 nfl:
   espn_nfl_calendar: {season: 2025}

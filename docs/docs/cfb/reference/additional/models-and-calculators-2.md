@@ -352,6 +352,16 @@ neutral sites.
 
 One row per team in the corpus, with columns: | col_name | type | description | |---|---|---| | season | Int64 | Season of the slot. | | asof_t | Int64 | The slot rated; only games before it were used. | | team_id | String | ESPN team id (the `cfb_ratings` key dtype). | | theta | Float64 | Team strength in points, relative to the corpus average. | | hfa | Float64 | Home-field advantage in points (one value per fit). | | tau_team | Float64 | Fitted between-team spread of strength. | | sigma_obs | Float64 | Fitted per-game residual spread. |
 
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season of the slot rated. |
+| `asof_t` | Int64 | The slot rated (regular-season week, or 100 + postseason week); only completed games before it were used. |
+| `team_id` | String | ESPN team id (character, the cfb_ratings join key). |
+| `theta` | Float64 | Team strength in points relative to the corpus average; expected home margin is theta_home - theta_away + hfa. |
+| `hfa` | Float64 | Home-field advantage in points from this fit, applied off neutral sites (one value per fit). |
+| `tau_team` | Float64 | Fitted between-team spread of strength in points. |
+| `sigma_obs` | Float64 | Fitted per-game residual spread of the margin in points. |
+
 **Raises**
 
 | Exception | Description |
