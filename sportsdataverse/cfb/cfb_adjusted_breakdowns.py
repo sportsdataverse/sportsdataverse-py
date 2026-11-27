@@ -272,7 +272,8 @@ def cfb_adjusted_breakdowns(
     Args:
         plays: A cfbfastR-schema play-by-play frame (polars or pandas) with the columns :func:`cfb_adjusted_epa`
             reads, plus the ones each requested breakdown slices on: ``EPA_success`` (or ``epa_success``),
-            ``start.down`` (or ``down``), ``standard_down`` and ``period``. One season at a time.
+            ``EPA_explosive``, ``start.down`` (or ``down``), ``standard_down``, ``passing_down``, ``period``,
+            ``pass`` and ``rush``. One season at a time.
         metrics: Breakdown names to return, in that order (default: every published one). Each name covers both
             sides that are published for it.
         return_as_pandas: Return a pandas ``DataFrame`` instead of polars.
