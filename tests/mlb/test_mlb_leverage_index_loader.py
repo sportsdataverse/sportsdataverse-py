@@ -2,7 +2,7 @@
 
 ``tests/fixtures/mlb_game_state/leverage_index_2024_inning9.parquet`` is every ``inning_capped == 9``
 row (466 buckets: the 9th and all extra innings) of the ``mlb_game_state`` release asset
-``mlb_leverage_index_2024.parquet`` as rebuilt 2026-11-26. It stands in for the release download.
+``mlb_leverage_index_2024.parquet`` as rebuilt 2026-11-27. It stands in for the release download.
 """
 
 from __future__ import annotations

@@ -1390,7 +1390,8 @@ NHL APIs (`nhl_api_web`, `nhl_edge`, `nhl_stats_rest`, `nhl_records`), `nba_stat
 RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
 `sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
 event data, the reep football id register (`reep`, the bundled ESPN soccer team-id crosswalk), the CC0 Transfermarkt dataset
-(`transfermarkt_datasets`: clubs, players, market values, transfers; snapshot to 2026-07-06), Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
+(`transfermarkt_datasets`: clubs, players, market values, transfers; snapshot to 2026-07-06, read from the
+`soccer_transfermarkt` release mirror with the original files as fallback), Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
 TheSportsDB (`thesportsdb`), `euroleague`, SIHF (`sihf`), Jolpica (`f1`), the PGA TOUR
 GraphQL API (`pgatour`), the Premier Lacrosse League stats API (`pll`), `cbs_napi`, `yahoo_shangrila`, `fox_api`,
 HockeyTech, the European hockey leagues (the eSports
