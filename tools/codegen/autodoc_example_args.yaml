@@ -145,6 +145,7 @@ nfl:
   get_fg_wp: {pbp_df: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 49492 rows x 376 cols
   get_4th_down_probs: {pbp_df: {$call: nfl.shield_nfl_pbp, args: {shield_game_id: "a9a8944e-4feb-11f1-abca-2c54536568a9"}}}  # 176 rows x 329 cols
   efficiency_ratings: {plays: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 32 rows x 5 cols
+  nfl_adjusted_epa_ledger: {plays: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # one row per team-game, 27 cols
   special_teams_ratings: {plays: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 32 rows x 2 cols
   nfl_qb_dropbacks: {pbp: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}
   nfl_qb_values: {dropbacks: {$call: nfl.nfl_qb_dropbacks, args: {pbp: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}}, as_of_date: 2024-10-01}

@@ -884,6 +884,7 @@ categories:
       - sportsdataverse.mbb.mbb_team_ratings
       - sportsdataverse.nba.nba_team_ratings
       - sportsdataverse.nfl.nfl_ratings
+      - sportsdataverse.nfl.nfl_adjusted_epa
       - sportsdataverse.nhl.nhl_team_ratings
       - sportsdataverse.nhl.nhl_unit_ratings
       - sportsdataverse.pwhl.pwhl_team_ratings
