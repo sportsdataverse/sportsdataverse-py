@@ -70,8 +70,40 @@ _SCORED_RE = re.compile(rf"^({_NAME}),?\s+scored")  # "Dixon, B, scored" (2013)
 _THEN_SCORED_RE = re.compile(r",\s*scored\b")
 _ADVANCED_RE = re.compile(rf"^({_NAME})\s+advanced to (\w+)")
 # Present-tense pages (2022-2024) put each run in its own sentence: "... left field. Brown scores. Cates scores",
-# or lead with it: "Booker scores on steal of home". The past-tense pages never write "scores".
+# or lead with it: "Booker scores on steal of home". Counted only on a present-tense page (see below).
 _PRESENT_SCORES_RE = re.compile(rf"(?:^|\.\s+)({_NAME}) scores\b")
+# On a present-tense page each verb reads as its past-tense twin, so one classifier serves both. A past-tense
+# page is never normalized: its scorer comments ("Martinez scores on PB on 1-1 pitch.", 2025) restate a run
+# the row before already counted.
+_PRESENT_TO_PAST = {
+    "singles": "singled",
+    "doubles": "doubled",
+    "triples": "tripled",
+    "homers": "homered",
+    "walks": "walked",
+    "is hit by pitch": "hit by pitch",
+    "strikes out": "struck out",
+    "grounds out": "grounded out",
+    "flies out": "flied out",
+    "lines out": "lined out",
+    "pops up": "popped up",
+    "pops out": "popped up",
+    "reaches on": "reached on",
+    "steals": "stole",
+    "advances to": "advanced to",
+}
+_PRESENT_VERB_RE = re.compile(r"\b(" + "|".join(_PRESENT_TO_PAST) + r"|scores)\b")
+_PAST_VERB_RE = re.compile(
+    r"\b(?:singled|doubled|tripled|homered|walked|struck out|grounded|flied|lined|popped|scored|advanced|stole)\b"
+)
+
+
+def _is_present_tense(descs: "list[str]") -> bool:
+    """A page (one call's rows) is present-tense when its present-tense verb rows outnumber the past-tense ones."""
+    present = sum(bool(_PRESENT_VERB_RE.search(d)) for d in descs)
+    return present > sum(bool(_PAST_VERB_RE.search(d)) for d in descs)
+
+
 _OUT_RE = re.compile(r"\bout (?:at|on)\b")
 _POS_CODES = r"(?:p|1b|2b|3b|ss|lf|cf|rf|c|dh|ph|pr|dp|flex)"
 # A "Last", "Last, F", or legacy "First Last" name (no intervening verbs).
@@ -111,50 +143,51 @@ def _clauses(desc: str) -> "list[str]":
     return [c for c in out if c]
 
 
-def _classify(rest: str) -> "tuple[str, dict]":
+def _classify(rest: str, present: bool = False) -> "tuple[str, dict]":
     """Map a batter clause's verb phrase to (play_type, extra fields)."""
     low = rest.lower()
+    if present:
+        low = _PRESENT_VERB_RE.sub(lambda m: _PRESENT_TO_PAST.get(m.group(1), m.group(1)), low)
     x: dict = {}
     # order: specific before general (substitution is detected upstream in _decompose)
     if "double play" in low:
         return "double_play", {"is_double_play": True, "is_out": True}
-    # present-tense pages (2022-2024: "Simon homers on a line drive ...") use the same play types
-    if low.startswith(("singled", "singles")):
+    if low.startswith("singled"):
         return "single", {"is_hit": True}
-    if low.startswith(("doubled", "doubles")):
+    if low.startswith("doubled"):
         return "double", {"is_hit": True}
-    if low.startswith(("tripled", "triples")):
+    if low.startswith("tripled"):
         return "triple", {"is_hit": True}
-    if low.startswith(("homered", "homers")):
+    if low.startswith("homered"):
         return "home_run", {"is_hit": True}
-    if low.startswith(("walked", "walks")) or "intentionally walked" in low:
+    if low.startswith("walked") or "intentionally walked" in low:
         return "walk", x
-    if low.startswith(("hit by pitch", "is hit by pitch")):
+    if low.startswith("hit by pitch"):
         return "hit_by_pitch", x
-    if low.startswith(("struck out", "strikes out")):
+    if low.startswith("struck out"):
         t = "swinging" if "swinging" in low else ("looking" if "looking" in low else None)
         return "strikeout", {"is_out": True, "strikeout_type": t}
-    if low.startswith(("grounded out", "grounds out")):
+    if low.startswith("grounded out"):
         return "groundout", {"is_out": True, "hit_trajectory": "ground"}
-    if low.startswith(("flied out", "flied into", "flies out")):
+    if low.startswith("flied out") or low.startswith("flied into"):
         return "flyout", {"is_out": True, "hit_trajectory": "fly"}
-    if low.startswith(("lined out", "lined into", "lines out")):
+    if low.startswith("lined out") or low.startswith("lined into"):
         return "lineout", {"is_out": True, "hit_trajectory": "line"}
-    if low.startswith(("popped up", "pops up", "pops out")):
+    if low.startswith("popped up"):
         return "popup", {"is_out": True, "hit_trajectory": "pop"}
     if low.startswith("fouled out"):
         return "foulout", {"is_out": True, "hit_trajectory": "foul"}
     if re.search(r"fielder'?s choice", low):  # 2020 pages drop the apostrophe
         return "fielders_choice", x
-    if re.search(r"reach(?:ed|es) on (?:an? )?(?:throwing |fielding )?error", low):
+    if re.search(r"reached on (?:an? )?(?:throwing |fielding )?error", low):
         return "reached_on_error", x
-    if "stole " in low or low.startswith("steals"):
+    if "stole " in low:
         return "stolen_base", x
     if "wild pitch" in low:
         return "wild_pitch", x
     if "passed ball" in low:
         return "passed_ball", x
-    if low.startswith(("advanced to", "advances to")) or "advanced to" in low[:20]:
+    if low.startswith("advanced to") or "advanced to" in low[:20]:
         return "runner_advance", x
     if _OUT_RE.search(low):
         return "out", {"is_out": True}
@@ -163,7 +196,7 @@ def _classify(rest: str) -> "tuple[str, dict]":
     return "unknown", x
 
 
-def _decompose(desc: str) -> "dict":
+def _decompose(desc: str, present: bool = False) -> "dict":
     """Turn one raw pbp ``description`` into the structured field dict."""
     out: dict = {
         "batter": None,
@@ -208,10 +241,10 @@ def _decompose(desc: str) -> "dict":
         m = _LEADNAME_RE.match(primary)
         batter, rest = (m.group(1), m.group(2)) if m else (None, primary)
         out["batter"] = batter
-        ptype, extra = _classify(rest)
+        ptype, extra = _classify(rest, present)
         if ptype == "runner_advance" and len(clauses) > 1:
             # run-on pages put the cause after the LAST runner ("... advanced to third on a wild pitch.")
-            ptype, extra = _classify(desc[len(batter or "") :])
+            ptype, extra = _classify(desc[len(batter or "") :], present)
         out["play_type"] = ptype
         out.update(extra)
 
@@ -300,7 +333,7 @@ def _decompose(desc: str) -> "dict":
         # the batter comes all the way round: "Vitaletti tripled to center field, scored on a throwing error"
         out["runs_scored"] += 1
         out["scoring_runners"].append(out["batter"])
-    for pm in _PRESENT_SCORES_RE.finditer(desc):
+    for pm in _PRESENT_SCORES_RE.finditer(desc) if present else ():
         out["runs_scored"] += 1
         out["scoring_runners"].append(pm.group(1))
     # on a home run the batter also scores, but NCAA text only lists the runners.
@@ -400,6 +433,7 @@ def decompose_college_baseball_plays(
         .. _baseballr: https://billpetti.github.io/baseballr/
     """
     out: "list[dict]" = []
+    present = _is_present_tense([r.get("description") or "" for r in rows])
     for i, r in enumerate(rows, start=1):
         sa, sh = r.get("score_away"), r.get("score_home")
         if sa is None and sh is None:
@@ -418,7 +452,7 @@ def decompose_college_baseball_plays(
             "score_home": sh,
             "description": desc,
         }
-        row.update(_decompose(desc))
+        row.update(_decompose(desc, present))
         out.append(row)
     df = pl.DataFrame(out, schema=PBP_SCHEMA) if out else pl.DataFrame(schema=PBP_SCHEMA)
     if return_as_pandas:

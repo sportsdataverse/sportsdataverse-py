@@ -296,6 +296,27 @@ _RUNNER_CASES = [
 ]
 
 
+def test_scorer_comments_on_past_tense_pages_add_no_runs() -> None:
+    """2025 contest 6301797 / 2012 contest 761583: a present-tense scorer comment restates the run the row before
+    already counted, so on a past-tense page it is neither a run nor a home run."""
+    wp, hr = (
+        decompose_college_baseball_plays([{"description": a}, {"description": b}]).to_dicts()
+        for a, b in (
+            (
+                "Christensen advanced to second on a wild pitch; Autrey, H. advanced to third; Marthilj, T. scored.",
+                "Marthiljohni scores on wild pitch on second pitch of at-bat.",
+            ),
+            (
+                "Fratantuono homered down the rf line, 3 RBI (0-2) Fitzgerald scored H Bennett scored.",
+                "Dominic Fratantuono homers just inside the right field foul pole - 2nd of.",
+            ),
+        )
+    )
+    assert [r["runs_scored"] for r in wp] == [1, 0]
+    assert [r["runs_scored"] for r in hr] == [3, 0]
+    assert hr[1]["play_type"] != "home_run"
+
+
 def test_present_tense_rows_classify() -> None:
     """2023 contests 2391617 / 2390316 / 2392056: the present-tense verbs map to the past-tense play types."""
     rows = decompose_college_baseball_plays(

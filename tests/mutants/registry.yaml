@@ -13519,51 +13519,51 @@
   group: bb-present-tense
   finding: bb-present-tense
   file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
-  snippet: "    for pm in _PRESENT_SCORES_RE.finditer(desc):"
-  mutant: "    for pm in []:"
+  snippet: "    for pm in _PRESENT_SCORES_RE.finditer(desc) if present else ():"
+  mutant: "    for pm in ():"
   test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
   expected: kill
   note: "Present-tense pages ('... left field. Brown scores. Cates scores') read 0 runs again (2022-2024)."
 
-- id: bb-present-homers-not-home-run
+- id: bb-present-scores-ungated
   group: bb-present-tense
   finding: bb-present-tense
   file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
-  snippet: "    if low.startswith((\"homered\", \"homers\")):"
-  mutant: "    if low.startswith(\"homered\"):"
+  snippet: "    for pm in _PRESENT_SCORES_RE.finditer(desc) if present else ():"
+  mutant: "    for pm in _PRESENT_SCORES_RE.finditer(desc):"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k scorer_comments"
+  expected: kill
+  note: "A past-tense page's scorer comment ('Marthiljohni scores on wild pitch ...') counts its run twice."
+
+- id: bb-present-verbs-not-normalized
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "        low = _PRESENT_VERB_RE.sub(lambda m: _PRESENT_TO_PAST.get(m.group(1), m.group(1)), low)"
+  mutant: "        low = low"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k \"runner_clauses or present_tense_rows_classify\""
+  expected: kill
+  note: "Present-tense verbs ('Brown walks', 'Simon homers') classify as unknown and a homer's batter run is lost."
+
+- id: bb-present-page-always
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "    return present > sum(bool(_PAST_VERB_RE.search(d)) for d in descs)"
+  mutant: "    return True"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k scorer_comments"
+  expected: kill
+  note: "Every page reads as present-tense: a scorer comment 'X homers ...' becomes a second home run."
+
+- id: bb-present-page-never
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "    return present > sum(bool(_PAST_VERB_RE.search(d)) for d in descs)"
+  mutant: "    return False"
   test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
   expected: kill
-  note: "A present-tense 'Simon homers ...' is not a home run and the batter's own run is lost."
-
-- id: bb-present-walks-unknown
-  group: bb-present-tense
-  finding: bb-present-tense
-  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
-  snippet: "    if low.startswith((\"walked\", \"walks\")) or \"intentionally walked\" in low:"
-  mutant: "    if low.startswith(\"walked\") or \"intentionally walked\" in low:"
-  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k present_tense_rows_classify"
-  expected: kill
-  note: "'Brown walks, McClendon pitching' classifies as unknown."
-
-- id: bb-present-steals-unknown
-  group: bb-present-tense
-  finding: bb-present-tense
-  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
-  snippet: "    if \"stole \" in low or low.startswith(\"steals\"):"
-  mutant: "    if \"stole \" in low:"
-  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k present_tense_rows_classify"
-  expected: kill
-  note: "'Mims steals 2nd' classifies as unknown."
-
-- id: bb-present-reaches-on-error-unknown
-  group: bb-present-tense
-  finding: bb-present-tense
-  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
-  snippet: "    if re.search(r\"reach(?:ed|es) on (?:an? )?(?:throwing |fielding )?error\", low):"
-  mutant: "    if re.search(r\"reached on (?:an? )?(?:throwing |fielding )?error\", low):"
-  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k present_tense_rows_classify"
-  expected: kill
-  note: "'... hits a ground ball and reaches on an error by shortstop Jones' classifies as unknown."
+  note: "No page reads as present-tense: the 2022-2024 present-tense games read 0 runs again."
 
 - id: bb-present-lineup-changed-batter
   group: bb-present-tense
