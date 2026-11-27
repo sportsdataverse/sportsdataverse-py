@@ -75,11 +75,12 @@ def _release_crosswalk(league: str) -> pl.DataFrame | None:
         if df is not None:
             return df.select([pl.col(c).cast(t) for c, t in _SCHEMA.items()])
         reason = "no published asset"
-    # A failed fetch (offline, rate-limited), a corrupt or truncated asset (pyarrow cannot read it) or a drifted
-    # one (a column gone or of another type) is a stale fallback, not an empty one: the bundled copy still
-    # answers, with a warning (MD-4). Anything else is a bug and raises.
-    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:
-        reason = f"{type(e).__name__}: {e}"
+    # A failed fetch (offline, rate-limited), a corrupt or truncated asset (pyarrow cannot read it; a footer whose
+    # metadata will not decode is a bare OSError, and every transport OSError is already an AssetFetchError by
+    # here) or a drifted one (a column gone or of another type) is a stale fallback, not an empty one: the bundled
+    # copy still answers, with a warning (MD-4). Anything else is a bug and raises.
+    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError, OSError) as e:
+        reason = f"{type(e).__name__}: {' '.join(str(e).split())}"  # one line, whatever the parser wrote
     cli_warn(f"ncaa_espn_team_crosswalk: {url} unavailable ({reason}); using the bundled copy")
     return None
 
