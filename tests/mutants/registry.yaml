@@ -13514,3 +13514,63 @@
   test: tests/soccer/test_soccer_espn_transfermarkt_player_crosswalk.py -k 1_january
   expected: kill
   note: a 1 January birth date (a stand-in for an unknown day) resolved on name alone, giving one player two athletes
+
+- id: bb-present-scores-dropped
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "    for pm in _PRESENT_SCORES_RE.finditer(desc):"
+  mutant: "    for pm in []:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "Present-tense pages ('... left field. Brown scores. Cates scores') read 0 runs again (2022-2024)."
+
+- id: bb-present-homers-not-home-run
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "    if low.startswith((\"homered\", \"homers\")):"
+  mutant: "    if low.startswith(\"homered\"):"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k runner_clauses"
+  expected: kill
+  note: "A present-tense 'Simon homers ...' is not a home run and the batter's own run is lost."
+
+- id: bb-present-walks-unknown
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "    if low.startswith((\"walked\", \"walks\")) or \"intentionally walked\" in low:"
+  mutant: "    if low.startswith(\"walked\") or \"intentionally walked\" in low:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k present_tense_rows_classify"
+  expected: kill
+  note: "'Brown walks, McClendon pitching' classifies as unknown."
+
+- id: bb-present-steals-unknown
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "    if \"stole \" in low or low.startswith(\"steals\"):"
+  mutant: "    if \"stole \" in low:"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k present_tense_rows_classify"
+  expected: kill
+  note: "'Mims steals 2nd' classifies as unknown."
+
+- id: bb-present-reaches-on-error-unknown
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "    if re.search(r\"reach(?:ed|es) on (?:an? )?(?:throwing |fielding )?error\", low):"
+  mutant: "    if re.search(r\"reached on (?:an? )?(?:throwing |fielding )?error\", low):"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k present_tense_rows_classify"
+  expected: kill
+  note: "'... hits a ground ball and reaches on an error by shortstop Jones' classifies as unknown."
+
+- id: bb-present-lineup-changed-batter
+  group: bb-present-tense
+  finding: bb-present-tense
+  file: sportsdataverse/baseball/college_baseball/college_baseball_ncaa_pbp.py
+  snippet: "        or plow.startswith(\"lineup changed\")  # present-tense pages: \"Lineup changed: Fluet in at pitcher\""
+  mutant: "        or False"
+  test: "tests/baseball/test_college_baseball_ncaa_pbp.py -k present_tense_rows_classify"
+  expected: kill
+  note: "'Lineup changed: Fluet in at pitcher' reads 'Lineup' as a batter."
