@@ -1,0 +1,224 @@
+# TPBL — TPBL API (api.tpbl.basketball, Taiwan) — Player
+
+> TPBL — TPBL API (api.tpbl.basketball, Taiwan) — Player — function reference in sdv-py, the SportsDataverse Python package.
+
+## tpbl_player_shots
+
+Every field-goal attempt of one player in one division with its court position.
+
+**Endpoint URL:** `GET https://api.tpbl.basketball/api/divisions/{division_id}/players/{player_id}/shooting-spots`
+
+**Valid URL:** [https://api.tpbl.basketball/api/divisions/2/players/75/shooting-spots](https://api.tpbl.basketball/api/divisions/2/players/75/shooting-spots)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `division_id` | `division_id` |  | `Y` |  | Required. TPBL division id (one competition phase of one season: 1, 2, 5, 6, 7 = 2024-25 preseason, regular season, playoffs, postseason challenge, finals; 8, 9, 11, 12, 35 = 2025-26; 655, 656 = 2026-27); ``division_id`` in tpbl_divisions. Not the GoHoops division id. |
+| `player_id` | `player_id` |  | `Y` |  | Required. TPBL player id (one per person across seasons and teams); ``player_id`` in tpbl_roster. Not the GoHoops person id and not the roster id. |
+
+### Returns {#tpbl_player_shots-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `division_id` | Int64 | TPBL division id (key space: TPBL divisions, one competition phase of one season; 1, 2, 5, 6, 7 = 2024-25, 8, 9, 11, 12, 35 = 2025-26, 655, 656 = 2026-27): the {division_id} of every division route. Not the GoHoops division id. |
+| `player_id` | Int64 | TPBL player id (key space: TPBL players; one per person across seasons and teams): the {player_id} of the player routes. Not the GoHoops person id and not the roster id. |
+| `is_made` | Boolean | True when the shot went in. |
+| `point_x` | Int64 | Shot position in MILLIMETRES, 0-28000 along the court length (a 28 m court). The hoops sit at x = 1575 (offense_basket 0) and x = 26425 (offense_basket 1), y = 7500. Same frame as the team list, where it was verified; here it is only checked to stay on the court. |
+| `point_y` | Int64 | Shot position in MILLIMETRES, 0-15000 across the court (a 15 m court). The hoops sit at x = 1575 (offense_basket 0) and x = 26425 (offense_basket 1), y = 7500. The direction of y is unverified. |
+| `offense_basket` | Int64 | Basket the player's team attacked: 0 = the hoop at x = 1575, 1 = the hoop at x = 26425. |
+
+**`return_parsed=False`** — the raw body (`dict`): the API's JSON object, or a list body wrapped as `{'data': [...]}`, plus `_request` (the season, game, division, team or player asked for and the ids the runtime resolved).
+
+### Raises {#tpbl_player_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
+### Example {#tpbl_player_shots-example}
+
+```python
+tpbl_player_shots(division_id=2, player_id=75)
+```
+
+## tpbl_player_games
+
+A player's game log in one division: one row per game played, with that game's whole stat line.
+
+**Endpoint URL:** `GET https://api.tpbl.basketball/api/players/{player_id}/games/stats`
+
+**Valid URL:** [https://api.tpbl.basketball/api/players/75/games/stats?division_id=2](https://api.tpbl.basketball/api/players/75/games/stats?division_id=2)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | Required. TPBL player id (one per person across seasons and teams); ``player_id`` in tpbl_roster. Not the GoHoops person id and not the roster id. |
+| `division_id` | `division_id` |  | `Y` |  | Required. TPBL division id (one competition phase of one season: 1, 2, 5, 6, 7 = 2024-25 preseason, regular season, playoffs, postseason challenge, finals; 8, 9, 11, 12, 35 = 2025-26; 655, 656 = 2026-27); ``division_id`` in tpbl_divisions. Not the GoHoops division id. Without it the API answers HTTP 422; an unknown id answers HTTP 500, which is not retried. |
+
+### Returns {#tpbl_player_games-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | Int64 | TPBL player id (key space: TPBL players; one per person across seasons and teams): the {player_id} of the player routes. Not the GoHoops person id and not the roster id. |
+| `gohoops_person_id` | Int64 | GoHoops person id (key space: GoHoops persons; one per human). Not the TPBL player id and not the roster id. |
+| `gohoops_roster_id` | Int64 | GoHoops roster id (key space: GoHoops rosters = one player registered with one squad in one season; it changes when the player changes season or team). His roster in the division: join tpbl_box_players to tpbl_roster on it. Not the TPBL player id and not the person id. |
+| `player` | String | Player name (Traditional Chinese, or a transliteration for foreign players). |
+| `division_id` | Int64 | TPBL division id (key space: TPBL divisions, one competition phase of one season; 1, 2, 5, 6, 7 = 2024-25, 8, 9, 11, 12, 35 = 2025-26, 655, 656 = 2026-27): the {division_id} of every division route. The division asked for. Not the GoHoops division id. |
+| `gohoops_division_id` | Int64 | GoHoops division id (key space: GoHoops divisions; e.g. 64 = the 2024-25 preseason, 65 = the 2024-25 regular season). Not the TPBL division id. |
+| `team_id` | Int64 | TPBL team id (key space: TPBL teams = franchises, 2-8 so far; stable across seasons): the {team_id} of the division team routes. Not the GoHoops franchise id and not the squad id. The team the player played for in that game. |
+| `team` | String | Name of the team the player played for in that game. Team name in Traditional Chinese with the sponsor (高雄全家海神 = Kaohsiung Aquas, 福爾摩沙夢想家 = Formosa Dreamers, 新竹御嵿攻城獅 = Hsinchu Lioneers, 桃園台啤永豐雲豹 = Taoyuan Leopards, 新北中信特攻 = New Taipei CTBC DEA, 新北國王 = New Taipei Kings, 臺北台新戰神 = Taipei Mars). |
+| `game_id` | Int64 | TPBL game id (key space: TPBL games on api.tpbl.basketball): the {game_id} of the game routes. Not sequential by date (2024-25 = 1-1367, 2025-26 = 1371-8641, 2026-27 = 27535-27667). The box score echoes no game id, so a box frame parsed without the request stamp has a null game_id. |
+| `gohoops_game_id` | Int64 | GoHoops game id (key space: GoHoops games; 1242 for TPBL game 6). Not the TPBL game id. |
+| `game_title` | String | Game title: the division name and the game number counted from the end ('例行賽 Game 124' = regular season, game 124). |
+| `home_team_id` | Int64 | TPBL team id of the home team of the game (franchise, 2-8). |
+| `away_team_id` | Int64 | TPBL team id of the away team of the game (franchise, 2-8). |
+| `home_score` | Int64 | Home team final score in the game. |
+| `away_score` | Int64 | Away team final score in the game. |
+| `venue` | String | Venue name in Traditional Chinese (the API's game location). |
+| `tipoff` | String | Scheduled tip-off as a naive timestamp (no zone). Taiwan local date and time (UTC+8 by every tip-off seen; the API sends no zone). |
+| `periods_played` | Int64 | Number of quarters in which the player was on court in this game. |
+| `score` | Int64 | Points scored by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `rebounds` | Int64 | Total rebounds by the player in the game of this row (accumulated_stats of a one-game row is that game's total) (offensive + defensive). |
+| `assists` | Int64 | Assists by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `steals` | Int64 | Steals by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `blocks` | Int64 | Blocked shots by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `turnovers` | Int64 | Turnovers committed by the player in the game of this row (accumulated_stats of a one-game row is that game's total); equals the sum of the *_turnovers type columns (checked on 4,237 played player lines of 189 games). |
+| `fouls` | Int64 | Fouls charged by the player in the game of this row (accumulated_stats of a one-game row is that game's total): personal + technical + unsportsmanlike + disqualifying; equals defensive_fouls + offensive_fouls (checked on 4,237 played player lines of 189 games). |
+| `roster_fouls` | Int64 | Fouls charged to the roster member by the player in the game of this row (accumulated_stats of a one-game row is that game's total); equals fouls in the committed samples (meaning inferred from the name). |
+| `bench_fouls` | Int64 | Fouls charged to the bench by the player in the game of this row (accumulated_stats of a one-game row is that game's total); 0 in every committed sample (meaning inferred from the name). |
+| `time_on_court` | Int64 | Seconds on court by the player in the game of this row (accumulated_stats of a one-game row is that game's total) (436 = 7:16). A team quarter sums its five players: 3600 = 5 x 720 s (12-minute quarter), 1500 = 5 x 300 s (5-minute overtime). |
+| `two_pointers_made` | Int64 | 2-point field goals made by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_missed` | Int64 | 2-point field goals missed by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_attempted` | Int64 | 2-point field goals attempted by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_made` | Int64 | 3-point field goals made by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_missed` | Int64 | 3-point field goals missed by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_attempted` | Int64 | 3-point field goals attempted by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `free_throws_made` | Int64 | Free throws made by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `free_throws_missed` | Int64 | Free throws missed by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `free_throws_attempted` | Int64 | Free throws attempted by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_made` | Int64 | Field goals made by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_missed` | Int64 | Field goals missed by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_attempted` | Int64 | Field goals attempted by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_made_in_the_paint` | Int64 | Field goals made in the paint by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_missed_in_the_paint` | Int64 | Field goals missed in the paint by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_attempted_in_the_paint` | Int64 | Field goals attempted in the paint by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_made_on_fast_break` | Int64 | Field goals made on the fast break by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_missed_on_fast_break` | Int64 | Field goals missed on the fast break by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_attempted_on_fast_break` | Int64 | Field goals attempted on the fast break by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_made_on_second_chance` | Int64 | Field goals made on a second chance (after an offensive rebound) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_missed_on_second_chance` | Int64 | Field goals missed on a second chance (after an offensive rebound) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `field_goals_attempted_on_second_chance` | Int64 | Field goals attempted on a second chance (after an offensive rebound) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `defensive_rebounds` | Int64 | Defensive rebounds by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `offensive_rebounds` | Int64 | Offensive rebounds by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `offensive_fouls` | Int64 | Fouls committed on offense by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `defensive_fouls` | Int64 | Fouls committed on defense by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `personal_fouls` | Int64 | Personal fouls by the player in the game of this row (accumulated_stats of a one-game row is that game's total) (excludes technical, unsportsmanlike and disqualifying fouls). |
+| `technical_fouls` | Int64 | Technical fouls by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `unsportsmanlike_fouls` | Int64 | Unsportsmanlike fouls by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `disqualifying_fouls` | Int64 | Disqualifying fouls by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `bad_pass_turnovers` | Int64 | Turnovers of type 'bad pass' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `ball_handling_turnovers` | Int64 | Turnovers of type 'ball-handling error' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `out_of_bounds_turnovers` | Int64 | Turnovers of type 'out of bounds' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `travel_turnovers` | Int64 | Turnovers of type 'traveling' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_seconds_turnovers` | Int64 | Turnovers of type 'three-second violation' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `five_seconds_turnovers` | Int64 | Turnovers of type 'five-second violation' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `back_court_turnovers` | Int64 | Turnovers of type 'back-court violation' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `offensive_goal_tending_turnovers` | Int64 | Turnovers of type 'offensive goaltending' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `double_dribble_turnovers` | Int64 | Turnovers of type 'double dribble' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `carry_turnovers` | Int64 | Turnovers of type 'carrying' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `offensive_foul_turnovers` | Int64 | Turnovers of type 'offensive foul' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `other_turnovers` | Int64 | Turnovers of type 'other' by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `plus_minus` | Int64 | Plus/minus: the team's point differential while the player was on court (standard definition; not independently checked). |
+| `fast_break_points` | Int64 | Points scored on the fast break by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `second_chance_points` | Int64 | Points scored on second chances (after an offensive rebound) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `points_in_paint` | Int64 | Points scored in the paint by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `points_off_turnovers` | Int64 | Points scored off opponent turnovers by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_jump_shot_made` | Int64 | 2-point field goals made that were a jump shot (standing or catch-and-shoot) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_jump_shot_missed` | Int64 | 2-point field goals missed that were a jump shot (standing or catch-and-shoot) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_jump_shot_attempted` | Int64 | 2-point field goals attempted that were a jump shot (standing or catch-and-shoot) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_jump_shot_made` | Int64 | 3-point field goals made that were a jump shot (standing or catch-and-shoot) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_jump_shot_missed` | Int64 | 3-point field goals missed that were a jump shot (standing or catch-and-shoot) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_jump_shot_attempted` | Int64 | 3-point field goals attempted that were a jump shot (standing or catch-and-shoot) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_layup_made` | Int64 | 2-point field goals made that were a layup by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_layup_missed` | Int64 | 2-point field goals missed that were a layup by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_layup_attempted` | Int64 | 2-point field goals attempted that were a layup by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_driving_layup_made` | Int64 | 2-point field goals made that were a driving layup by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_driving_layup_missed` | Int64 | 2-point field goals missed that were a driving layup by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_driving_layup_attempted` | Int64 | 2-point field goals attempted that were a driving layup by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_dunk_made` | Int64 | 2-point field goals made that were a dunk by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_dunk_missed` | Int64 | 2-point field goals missed that were a dunk by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_dunk_attempted` | Int64 | 2-point field goals attempted that were a dunk by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_putback_dunk_made` | Int64 | 2-point field goals made that were a putback dunk (off an offensive rebound) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_putback_dunk_missed` | Int64 | 2-point field goals missed that were a putback dunk (off an offensive rebound) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_putback_dunk_attempted` | Int64 | 2-point field goals attempted that were a putback dunk (off an offensive rebound) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_putback_tip_in_made` | Int64 | 2-point field goals made that were a putback tip-in (off an offensive rebound) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_putback_tip_in_missed` | Int64 | 2-point field goals missed that were a putback tip-in (off an offensive rebound) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_putback_tip_in_attempted` | Int64 | 2-point field goals attempted that were a putback tip-in (off an offensive rebound) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_alley_oop_made` | Int64 | 2-point field goals made that were a alley-oop by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_alley_oop_missed` | Int64 | 2-point field goals missed that were a alley-oop by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_alley_oop_attempted` | Int64 | 2-point field goals attempted that were a alley-oop by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_hook_shot_made` | Int64 | 2-point field goals made that were a hook shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_hook_shot_missed` | Int64 | 2-point field goals missed that were a hook shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_hook_shot_attempted` | Int64 | 2-point field goals attempted that were a hook shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_hook_shot_made` | Int64 | 3-point field goals made that were a hook shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_hook_shot_missed` | Int64 | 3-point field goals missed that were a hook shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_hook_shot_attempted` | Int64 | 3-point field goals attempted that were a hook shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_floating_jump_shot_made` | Int64 | 2-point field goals made that were a floating jump shot (floater) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_floating_jump_shot_missed` | Int64 | 2-point field goals missed that were a floating jump shot (floater) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_floating_jump_shot_attempted` | Int64 | 2-point field goals attempted that were a floating jump shot (floater) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_floating_jump_shot_made` | Int64 | 3-point field goals made that were a floating jump shot (floater) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_floating_jump_shot_missed` | Int64 | 3-point field goals missed that were a floating jump shot (floater) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_floating_jump_shot_attempted` | Int64 | 3-point field goals attempted that were a floating jump shot (floater) by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_fadeaway_jump_shot_made` | Int64 | 2-point field goals made that were a fadeaway jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_fadeaway_jump_shot_missed` | Int64 | 2-point field goals missed that were a fadeaway jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_fadeaway_jump_shot_attempted` | Int64 | 2-point field goals attempted that were a fadeaway jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_fadeaway_jump_shot_made` | Int64 | 3-point field goals made that were a fadeaway jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_fadeaway_jump_shot_missed` | Int64 | 3-point field goals missed that were a fadeaway jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_fadeaway_jump_shot_attempted` | Int64 | 3-point field goals attempted that were a fadeaway jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_turnaround_jump_shot_made` | Int64 | 2-point field goals made that were a turnaround jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_turnaround_jump_shot_missed` | Int64 | 2-point field goals missed that were a turnaround jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_turnaround_jump_shot_attempted` | Int64 | 2-point field goals attempted that were a turnaround jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_turnaround_jump_shot_made` | Int64 | 3-point field goals made that were a turnaround jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_turnaround_jump_shot_missed` | Int64 | 3-point field goals missed that were a turnaround jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_turnaround_jump_shot_attempted` | Int64 | 3-point field goals attempted that were a turnaround jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_step_back_jump_shot_made` | Int64 | 2-point field goals made that were a step-back jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_step_back_jump_shot_missed` | Int64 | 2-point field goals missed that were a step-back jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_step_back_jump_shot_attempted` | Int64 | 2-point field goals attempted that were a step-back jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_step_back_jump_shot_made` | Int64 | 3-point field goals made that were a step-back jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_step_back_jump_shot_missed` | Int64 | 3-point field goals missed that were a step-back jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_step_back_jump_shot_attempted` | Int64 | 3-point field goals attempted that were a step-back jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_pull_up_jump_shot_made` | Int64 | 2-point field goals made that were a pull-up jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_pull_up_jump_shot_missed` | Int64 | 2-point field goals missed that were a pull-up jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `two_pointers_pull_up_jump_shot_attempted` | Int64 | 2-point field goals attempted that were a pull-up jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_pull_up_jump_shot_made` | Int64 | 3-point field goals made that were a pull-up jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_pull_up_jump_shot_missed` | Int64 | 3-point field goals missed that were a pull-up jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `three_pointers_pull_up_jump_shot_attempted` | Int64 | 3-point field goals attempted that were a pull-up jump shot by the player in the game of this row (accumulated_stats of a one-game row is that game's total). |
+| `efficiency` | Int64 | Efficiency rating by the player in the game of this row (accumulated_stats of a one-game row is that game's total): (points + rebounds + assists + steals + blocks) - (missed field goals + missed free throws + turnovers); verified on all 4,237 played player lines of 189 games. |
+| `pir` | Int64 | Performance index rating: efficiency minus fouls (the API's performance_index_rating; checked on 189 games of the box-score lines). |
+| `two_pointers_percentage` | Float64 | 2-point field goals percentage , 0-100 as a string with one decimal ('57.1'); '0.0' without attempts. |
+| `three_pointers_percentage` | Float64 | 3-point field goals percentage , 0-100 as a string with one decimal ('57.1'); '0.0' without attempts. |
+| `free_throws_percentage` | Float64 | Free throws percentage , 0-100 as a string with one decimal ('57.1'); '0.0' without attempts. |
+| `field_goals_percentage` | Float64 | Field goals percentage , 0-100 as a string with one decimal ('57.1'); '0.0' without attempts. |
+| `turnovers_percentage` | Float64 | Turnover percentage, 0-100 (a one-decimal string on the API; the exact formula is not documented). |
+| `efg` | Float64 | Effective field-goal percentage, 0-100 (the API's effective_field_goals_percentage, a one-decimal string). |
+| `tsp` | Float64 | True-shooting percentage, 0-100 (the API's true_shooting_percentage, a one-decimal string). |
+
+**`return_parsed=False`** — the raw body (`dict`): the API's JSON object, or a list body wrapped as `{'data': [...]}`, plus `_request` (the season, game, division, team or player asked for and the ids the runtime resolved).
+
+### Raises {#tpbl_player_games-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
+### Example {#tpbl_player_games-example}
+
+```python
+tpbl_player_games(division_id=2, player_id=75)
+```

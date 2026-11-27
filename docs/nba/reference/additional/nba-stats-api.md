@@ -1,0 +1,443 @@
+# NBA — additional Python functions — NBA Stats API
+
+> NBA — additional Python functions — NBA Stats API — function reference in sdv-py, the SportsDataverse Python package.
+
+### nba_live_boxscore {#nba_live_boxscore}
+
+`nba_live_boxscore(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'`
+
+Fetch and parse NBA cdn.nba.com liveData boxscore for a game.
+
+Retrieves `https://cdn.nba.com/static/json/liveData/boxscore/boxscore_{game_id}.json`
+and parses it via `parse_nba_live_boxscore` into six tables (game,
+officials, home/away players, home/away team).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str \| int` |  | NBA game ID (int or str). Zero-padded to 10 digits. |
+| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) instead of parsed DataFrames. |
+| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
+| `proxy` | `dict[str, str] \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `officials`, `home_players`, `away_players`, `home_team`, `away_team`) parsed by `parse_nba_live_boxscore`. Their core columns are guaranteed on every frame, even a zero-row one, at their declared dtypes: `game_id` on all six, plus `game_status`, `game_time_utc`, `home_team_id`, `away_team_id`, and `attendance` on `game`; `person_id`, `name`, `jersey_num`, and `assignment` on `officials`; `team_id`, `person_id`, `name`, `jersey_num`, `position`, `starter`, and `played` on the player frames; and `team_id`, `team_tricode`, and `score` on the team frames. Every other liveData field is passed through, snake-cased, with each nested `statistics` object flattened into `statistics_*` columns; a field only some players carry, such as `not_playing_reason`, is present only when a player on that side has it.
+
+`game`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | 10-digit NBA/WNBA game id (zero-padded), from the payload's game.gameId. |
+| `game_status` | Int64 | Numeric game status code from the feed: 1 scheduled, 2 in progress, 3 final. |
+| `game_time_utc` | String | Scheduled tip-off time in UTC (ISO-8601 timestamp). |
+| `home_team_id` | Int64 | NBA/WNBA team id of the home team, taken from the payload's homeTeam object. |
+| `away_team_id` | Int64 | NBA/WNBA team id of the away team, taken from the payload's awayTeam object. |
+| `attendance` | Int64 | Reported attendance figure for the game, when published by the feed. |
+| `game_time_local` | String | Scheduled tip-off in the arena's local time, ISO-8601 with UTC offset, e.g. 2025-10-21T18:30:00-05:00. |
+| `game_time_home` | String | Scheduled tip-off in the home team's local time, ISO-8601 with UTC offset; the same as game_time_local on the capture, whose two teams share the arena's time zone. |
+| `game_time_away` | String | Scheduled tip-off in the away team's local time, ISO-8601 with UTC offset; the same as game_time_local on the capture, whose two teams share the arena's time zone. |
+| `game_et` | String | Scheduled tip-off in US Eastern time, ISO-8601 with UTC offset, e.g. 2025-10-21T19:30:00-04:00. |
+| `duration` | Int64 | Wall-clock length of the game in whole minutes, opening tip to final buzzer, e.g. 196 on the double-overtime capture, whose first and last play-by-play actions are 3h16m apart. |
+| `game_code` | String | Game code written as the game date (YYYYMMDD), a slash, then the away and home team tricodes, e.g. 20251021/HOUOKC. |
+| `game_status_text` | String | Game status as display text, e.g. Final. |
+| `regulation_periods` | Int64 | Number of regulation periods in the game, 4. |
+| `period` | Int64 | Current period, or the last period played on a final game; 5 and up are overtime periods (6 on the double-overtime capture). |
+| `game_clock` | String | Time left in the current period as an ISO-8601 duration, e.g. PT00M00.00S on a final game. |
+| `sellout` | String | Sellout flag as a string, "1" when the game sold out; "1" on the capture. |
+
+`officials`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | 10-digit NBA/WNBA game id (zero-padded) this officiating crew worked. |
+| `person_id` | Int64 | NBA/WNBA person id of the on-court official. |
+| `name` | String | Official's display name. |
+| `jersey_num` | String | Official's jersey number as a string. |
+| `assignment` | String | Crew role label from the feed (OFFICIAL1, OFFICIAL2 or OFFICIAL3, listed in no fixed order), or ALTERNATE for the extra official listed in playoff games. |
+| `name_i` | String | Official's first initial and last name, e.g. Z. Zarba. |
+| `first_name` | String | Official's first name as the feed writes it. |
+| `family_name` | String | Official's last name as the feed writes it. |
+
+`home_players`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | 10-digit NBA/WNBA game id (zero-padded) for this side's player entry. |
+| `team_id` | Int64 | NBA/WNBA team id of the side (home or away) the player belongs to. |
+| `person_id` | Int64 | NBA/WNBA player id. |
+| `name` | String | Player's display name. |
+| `jersey_num` | String | Player's jersey number as a string. |
+| `position` | String | Starting-lineup slot, one each of SF, PF, C, SG, and PG across the five starters (order 1-5) rather than the player's roster position; null for non-starters. |
+| `starter` | String | Feed's starter flag as a string ("1"/"0") for whether the player started the game. |
+| `played` | String | Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0"). |
+| `status` | String | Roster status, ACTIVE or INACTIVE (ruled out before the game); an ACTIVE player can still sit out, which played and not_playing_reason show. |
+| `order` | Int64 | Player's place in the feed's roster listing for the team, from 1; the five starters are 1-5 (SF, PF, C, SG, PG), then the rest of the active roster, then inactive players. |
+| `oncourt` | String | Flag as a string ("1"/"0") for whether the player is on the floor as of the capture; on a final game, the five on the floor at the final buzzer. |
+| `name_i` | String | Player's first initial and last name, e.g. L. Dort or J. Smith Jr. |
+| `first_name` | String | Player's first name as the feed writes it. |
+| `family_name` | String | Player's last name including any suffix, e.g. Gilgeous-Alexander or Smith Jr. |
+| `statistics_assists` | Int64 | Assists credited to the player. |
+| `statistics_blocks` | Int64 | Opponent shots the player blocked. |
+| `statistics_blocks_received` | Int64 | Player's shot attempts that an opponent blocked. |
+| `statistics_field_goals_attempted` | Int64 | Field-goal attempts, statistics_two_pointers_attempted plus statistics_three_pointers_attempted. |
+| `statistics_field_goals_made` | Int64 | Field goals made, statistics_two_pointers_made plus statistics_three_pointers_made. |
+| `statistics_field_goals_percentage` | Float64 | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot. |
+| `statistics_fouls_offensive` | Int64 | Offensive fouls committed, also counted in statistics_fouls_personal. |
+| `statistics_fouls_drawn` | Int64 | Fouls opponents committed on the player. |
+| `statistics_fouls_personal` | Int64 | Personal fouls committed, offensive fouls included; technical fouls excluded. |
+| `statistics_fouls_technical` | Int64 | Technical fouls charged to the player. |
+| `statistics_free_throws_attempted` | Int64 | Free-throw attempts by the player. |
+| `statistics_free_throws_made` | Int64 | Free throws the player made. |
+| `statistics_free_throws_percentage` | Float64 | Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted; 0 when the player attempted none. |
+| `statistics_minus` | Float64 | Points the opponent scored while the player was on the floor, as a float (e.g. 92.0); 0.0 for a player who did not play. |
+| `statistics_minutes` | String | Playing time as an ISO-8601 duration to the hundredth of a second, e.g. PT45M15.10S; PT00M00.00S for a player who did not play. |
+| `statistics_minutes_calculated` | String | Playing time in whole minutes as an ISO-8601 duration, e.g. PT45M; usually statistics_minutes rounded to the nearest minute, but adjusted so the team's players add up to the team's statistics_minutes_calculated (a 20:32 stint shows PT20M and a 0:05.6 one PT01M). |
+| `statistics_plus` | Float64 | Points the player's team scored while the player was on the floor, as a float (e.g. 94.0); 0.0 for a player who did not play. |
+| `statistics_plus_minus_points` | Float64 | Plus-minus, statistics_plus minus statistics_minus, as a float (e.g. 2.0). |
+| `statistics_points` | Int64 | Points the player scored. |
+| `statistics_points_fast_break` | Int64 | Fast-break points, free throws included. |
+| `statistics_points_in_the_paint` | Int64 | Points on field goals made in the paint. |
+| `statistics_points_second_chance` | Int64 | Second-chance points, free throws included. |
+| `statistics_rebounds_defensive` | Int64 | Defensive rebounds the player grabbed. |
+| `statistics_rebounds_offensive` | Int64 | Offensive rebounds the player grabbed. |
+| `statistics_rebounds_total` | Int64 | Total rebounds, statistics_rebounds_offensive plus statistics_rebounds_defensive. |
+| `statistics_steals` | Int64 | Steals credited to the player. |
+| `statistics_three_pointers_attempted` | Int64 | Three-point field-goal attempts. |
+| `statistics_three_pointers_made` | Int64 | Three-point field goals made. |
+| `statistics_three_pointers_percentage` | Float64 | Three-point percentage as a 0-1 fraction, statistics_three_pointers_made / statistics_three_pointers_attempted; 0 when the player attempted none. |
+| `statistics_turnovers` | Int64 | Turnovers charged to the player. |
+| `statistics_two_pointers_attempted` | Int64 | Two-point field-goal attempts. |
+| `statistics_two_pointers_made` | Int64 | Two-point field goals made. |
+| `statistics_two_pointers_percentage` | Float64 | Two-point percentage as a 0-1 fraction, statistics_two_pointers_made / statistics_two_pointers_attempted; 0 when the player attempted none. |
+| `not_playing_reason` | String | Code for why the player did not play, e.g. INACTIVE_INJURY, INACTIVE_GLEAGUE_TWOWAY, or DND_INJURY; null for everyone else, including some players who sat out with no stated reason. The column is present only when a player on that side has one. |
+| `not_playing_description` | String | Free-text detail for not_playing_reason, for an injury the body part and the injury, e.g. "Left Knee; Contusion" (sometimes with a trailing space); null when none is given, as on INACTIVE_GLEAGUE_TWOWAY. The column is present only when a player on that side has one. |
+
+`away_players`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | 10-digit NBA/WNBA game id (zero-padded) for this side's player entry. |
+| `team_id` | Int64 | NBA/WNBA team id of the side (home or away) the player belongs to. |
+| `person_id` | Int64 | NBA/WNBA player id. |
+| `name` | String | Player's display name. |
+| `jersey_num` | String | Player's jersey number as a string. |
+| `position` | String | Starting-lineup slot, one each of SF, PF, C, SG, and PG across the five starters (order 1-5) rather than the player's roster position; null for non-starters. |
+| `starter` | String | Feed's starter flag as a string ("1"/"0") for whether the player started the game. |
+| `played` | String | Feed's flag as a string for whether the player recorded any playing time in the game ("1"/"0"). |
+| `status` | String | Roster status, ACTIVE or INACTIVE (ruled out before the game); an ACTIVE player can still sit out, which played and not_playing_reason show. |
+| `order` | Int64 | Player's place in the feed's roster listing for the team, from 1; the five starters are 1-5 (SF, PF, C, SG, PG), then the rest of the active roster, then inactive players. |
+| `oncourt` | String | Flag as a string ("1"/"0") for whether the player is on the floor as of the capture; on a final game, the five on the floor at the final buzzer. |
+| `name_i` | String | Player's first initial and last name, e.g. L. Dort or J. Smith Jr. |
+| `first_name` | String | Player's first name as the feed writes it. |
+| `family_name` | String | Player's last name including any suffix, e.g. Gilgeous-Alexander or Smith Jr. |
+| `statistics_assists` | Int64 | Assists credited to the player. |
+| `statistics_blocks` | Int64 | Opponent shots the player blocked. |
+| `statistics_blocks_received` | Int64 | Player's shot attempts that an opponent blocked. |
+| `statistics_field_goals_attempted` | Int64 | Field-goal attempts, statistics_two_pointers_attempted plus statistics_three_pointers_attempted. |
+| `statistics_field_goals_made` | Int64 | Field goals made, statistics_two_pointers_made plus statistics_three_pointers_made. |
+| `statistics_field_goals_percentage` | Float64 | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted; 0 when the player took no shot. |
+| `statistics_fouls_offensive` | Int64 | Offensive fouls committed, also counted in statistics_fouls_personal. |
+| `statistics_fouls_drawn` | Int64 | Fouls opponents committed on the player. |
+| `statistics_fouls_personal` | Int64 | Personal fouls committed, offensive fouls included; technical fouls excluded. |
+| `statistics_fouls_technical` | Int64 | Technical fouls charged to the player. |
+| `statistics_free_throws_attempted` | Int64 | Free-throw attempts by the player. |
+| `statistics_free_throws_made` | Int64 | Free throws the player made. |
+| `statistics_free_throws_percentage` | Float64 | Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted; 0 when the player attempted none. |
+| `statistics_minus` | Float64 | Points the opponent scored while the player was on the floor, as a float (e.g. 92.0); 0.0 for a player who did not play. |
+| `statistics_minutes` | String | Playing time as an ISO-8601 duration to the hundredth of a second, e.g. PT45M15.10S; PT00M00.00S for a player who did not play. |
+| `statistics_minutes_calculated` | String | Playing time in whole minutes as an ISO-8601 duration, e.g. PT45M; usually statistics_minutes rounded to the nearest minute, but adjusted so the team's players add up to the team's statistics_minutes_calculated (a 20:32 stint shows PT20M and a 0:05.6 one PT01M). |
+| `statistics_plus` | Float64 | Points the player's team scored while the player was on the floor, as a float (e.g. 94.0); 0.0 for a player who did not play. |
+| `statistics_plus_minus_points` | Float64 | Plus-minus, statistics_plus minus statistics_minus, as a float (e.g. 2.0). |
+| `statistics_points` | Int64 | Points the player scored. |
+| `statistics_points_fast_break` | Int64 | Fast-break points, free throws included. |
+| `statistics_points_in_the_paint` | Int64 | Points on field goals made in the paint. |
+| `statistics_points_second_chance` | Int64 | Second-chance points, free throws included. |
+| `statistics_rebounds_defensive` | Int64 | Defensive rebounds the player grabbed. |
+| `statistics_rebounds_offensive` | Int64 | Offensive rebounds the player grabbed. |
+| `statistics_rebounds_total` | Int64 | Total rebounds, statistics_rebounds_offensive plus statistics_rebounds_defensive. |
+| `statistics_steals` | Int64 | Steals credited to the player. |
+| `statistics_three_pointers_attempted` | Int64 | Three-point field-goal attempts. |
+| `statistics_three_pointers_made` | Int64 | Three-point field goals made. |
+| `statistics_three_pointers_percentage` | Float64 | Three-point percentage as a 0-1 fraction, statistics_three_pointers_made / statistics_three_pointers_attempted; 0 when the player attempted none. |
+| `statistics_turnovers` | Int64 | Turnovers charged to the player. |
+| `statistics_two_pointers_attempted` | Int64 | Two-point field-goal attempts. |
+| `statistics_two_pointers_made` | Int64 | Two-point field goals made. |
+| `statistics_two_pointers_percentage` | Float64 | Two-point percentage as a 0-1 fraction, statistics_two_pointers_made / statistics_two_pointers_attempted; 0 when the player attempted none. |
+| `not_playing_reason` | String | Code for why the player did not play, e.g. INACTIVE_INJURY, INACTIVE_GLEAGUE_TWOWAY, or DND_INJURY; null for everyone else, including some players who sat out with no stated reason. The column is present only when a player on that side has one. |
+| `not_playing_description` | String | Free-text detail for not_playing_reason, for an injury the body part and the injury, e.g. "Left Knee; Contusion" (sometimes with a trailing space); null when none is given, as on INACTIVE_GLEAGUE_TWOWAY. The column is present only when a player on that side has one. |
+
+`home_team`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | 10-digit NBA/WNBA game id (zero-padded) for this side's team entry. |
+| `team_id` | Int64 | NBA/WNBA team id of the side (home or away). |
+| `team_tricode` | String | Three-letter team code, e.g. OKC or HOU. |
+| `score` | Int64 | Team's current or final score. |
+| `team_name` | String | Team nickname, e.g. Thunder or Rockets. |
+| `team_city` | String | Team's location label, e.g. Oklahoma City or Houston. |
+| `in_bonus` | String | Flag as a string ("1"/"0") for whether the team is in the bonus as of the capture, i.e. the opponent has reached the team-foul penalty in the current period (the last period on a final game). |
+| `timeouts_remaining` | Int64 | Timeouts the team has left as of the capture (at the end of the game on a final). |
+| `statistics_assists` | Int64 | Team assists, the players' assists summed. |
+| `statistics_assists_turnover_ratio` | Float64 | Assists divided by statistics_turnovers_total (team turnovers included), e.g. 29 / 12 = 2.4167. |
+| `statistics_bench_points` | Int64 | Points scored by the players who did not start. |
+| `statistics_biggest_lead` | Int64 | Team's largest lead in points during the game. |
+| `statistics_biggest_lead_score` | String | Score when the team first reached its biggest lead, written away-home, e.g. "104-110" for the home team's 6-point lead. |
+| `statistics_biggest_scoring_run` | Int64 | Team's longest run of unanswered points in the game. |
+| `statistics_biggest_scoring_run_score` | String | Score when the team's longest run ended, written away-home, e.g. "104-110". |
+| `statistics_blocks` | Int64 | Opponent shots the team blocked. |
+| `statistics_blocks_received` | Int64 | Team's shot attempts that were blocked, equal to the opponent's blocks. |
+| `statistics_fast_break_points_attempted` | Int64 | Fast-break field-goal attempts; free throws are not counted. |
+| `statistics_fast_break_points_made` | Int64 | Fast-break field goals made; free throws are not counted. |
+| `statistics_fast_break_points_percentage` | Float64 | statistics_fast_break_points_made / statistics_fast_break_points_attempted as a 0-1 fraction. |
+| `statistics_field_goals_attempted` | Int64 | Field-goal attempts by the team's players, the sum of the player rows; a heave counted in statistics_team_field_goal_attempts is not included. |
+| `statistics_field_goals_effective_adjusted` | Float64 | Effective field-goal percentage as a 0-1 fraction, (statistics_field_goals_made + 0.5 * statistics_three_pointers_made) / statistics_field_goals_attempted. |
+| `statistics_field_goals_made` | Int64 | Field goals made by the team's players. |
+| `statistics_field_goals_percentage` | Float64 | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted. |
+| `statistics_fouls_offensive` | Int64 | Offensive fouls committed, also counted in statistics_fouls_personal. |
+| `statistics_fouls_drawn` | Int64 | Fouls drawn, equal to the opponent's statistics_fouls_personal on the capture. |
+| `statistics_fouls_personal` | Int64 | Personal fouls committed by the team's players, offensive fouls included and technical fouls excluded. |
+| `statistics_fouls_team` | Int64 | Team fouls, statistics_fouls_personal minus statistics_fouls_offensive on the capture. |
+| `statistics_fouls_technical` | Int64 | Technical fouls charged to the team's players (0 on the capture). |
+| `statistics_fouls_team_technical` | Int64 | Technical fouls charged to the team rather than a player (0 on the capture). |
+| `statistics_free_throws_attempted` | Int64 | Free-throw attempts by the team's players. |
+| `statistics_free_throws_made` | Int64 | Free throws made by the team's players. |
+| `statistics_free_throws_percentage` | Float64 | Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted. |
+| `statistics_lead_changes` | Int64 | Number of lead changes in the game, the same on both teams' rows. |
+| `statistics_minutes` | String | Total playing time of the team's players as an ISO-8601 duration, five times the game length, e.g. PT290M00.00S for a double-overtime game. |
+| `statistics_minutes_calculated` | String | Total playing time in whole minutes as an ISO-8601 duration, e.g. PT290M; the players' statistics_minutes_calculated add up to it. |
+| `statistics_points` | Int64 | Team points, equal to score on the capture. |
+| `statistics_points_against` | Int64 | Points the opponent scored. |
+| `statistics_points_fast_break` | Int64 | Fast-break points, free throws included. |
+| `statistics_points_from_turnovers` | Int64 | Points scored off the opponent's turnovers, free throws included. |
+| `statistics_points_in_the_paint` | Int64 | Points on field goals made in the paint. |
+| `statistics_points_in_the_paint_attempted` | Int64 | Field-goal attempts in the paint. |
+| `statistics_points_in_the_paint_made` | Int64 | Field goals made in the paint. |
+| `statistics_points_in_the_paint_percentage` | Float64 | statistics_points_in_the_paint_made / statistics_points_in_the_paint_attempted as a 0-1 fraction. |
+| `statistics_points_second_chance` | Int64 | Second-chance points, free throws included. |
+| `statistics_rebounds_defensive` | Int64 | Defensive rebounds by the team's players; team rebounds are in statistics_rebounds_team_defensive. |
+| `statistics_rebounds_offensive` | Int64 | Offensive rebounds by the team's players; team rebounds are in statistics_rebounds_team_offensive. |
+| `statistics_rebounds_personal` | Int64 | Rebounds by the team's players, statistics_rebounds_defensive plus statistics_rebounds_offensive. |
+| `statistics_rebounds_team` | Int64 | Team rebounds credited to the team rather than a player, statistics_rebounds_team_defensive plus statistics_rebounds_team_offensive. |
+| `statistics_rebounds_team_defensive` | Int64 | Defensive rebounds credited to the team rather than a player. |
+| `statistics_rebounds_team_offensive` | Int64 | Offensive rebounds credited to the team rather than a player. |
+| `statistics_rebounds_total` | Int64 | All rebounds, statistics_rebounds_personal plus statistics_rebounds_team. |
+| `statistics_second_chance_points_attempted` | Int64 | Second-chance field-goal attempts; free throws are not counted. |
+| `statistics_second_chance_points_made` | Int64 | Second-chance field goals made; free throws are not counted. |
+| `statistics_second_chance_points_percentage` | Float64 | statistics_second_chance_points_made / statistics_second_chance_points_attempted as a 0-1 fraction. |
+| `statistics_steals` | Int64 | Steals by the team's players. |
+| `statistics_team_field_goal_attempts` | Int64 | Field-goal attempts credited to the team rather than a player and left out of statistics_field_goals_attempted, e.g. an end-of-quarter heave (1 for Houston on the capture, whose play-by-play logs one heave). |
+| `statistics_three_pointers_attempted` | Int64 | Three-point field-goal attempts by the team's players. |
+| `statistics_three_pointers_made` | Int64 | Three-point field goals made by the team's players. |
+| `statistics_three_pointers_percentage` | Float64 | Three-point percentage as a 0-1 fraction, statistics_three_pointers_made / statistics_three_pointers_attempted. |
+| `statistics_time_leading` | String | Game-clock time the team held the lead, as an ISO-8601 duration, e.g. PT10M18.70S. |
+| `statistics_times_tied` | Int64 | Number of times the score was tied after 0-0, the same on both teams' rows. |
+| `statistics_true_shooting_attempts` | Float64 | True-shooting attempts, statistics_field_goals_attempted + 0.44 * statistics_free_throws_attempted. |
+| `statistics_true_shooting_percentage` | Float64 | True-shooting percentage as a 0-1 fraction, statistics_points / (2 * statistics_true_shooting_attempts). |
+| `statistics_turnovers` | Int64 | Turnovers by the team's players; team turnovers are in statistics_turnovers_team. |
+| `statistics_turnovers_team` | Int64 | Turnovers charged to the team rather than a player, e.g. a shot-clock violation. |
+| `statistics_turnovers_total` | Int64 | All turnovers, statistics_turnovers plus statistics_turnovers_team. |
+| `statistics_two_pointers_attempted` | Int64 | Two-point field-goal attempts by the team's players. |
+| `statistics_two_pointers_made` | Int64 | Two-point field goals made by the team's players. |
+| `statistics_two_pointers_percentage` | Float64 | Two-point percentage as a 0-1 fraction, statistics_two_pointers_made / statistics_two_pointers_attempted. |
+
+`away_team`:
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | 10-digit NBA/WNBA game id (zero-padded) for this side's team entry. |
+| `team_id` | Int64 | NBA/WNBA team id of the side (home or away). |
+| `team_tricode` | String | Three-letter team code, e.g. OKC or HOU. |
+| `score` | Int64 | Team's current or final score. |
+| `team_name` | String | Team nickname, e.g. Thunder or Rockets. |
+| `team_city` | String | Team's location label, e.g. Oklahoma City or Houston. |
+| `in_bonus` | String | Flag as a string ("1"/"0") for whether the team is in the bonus as of the capture, i.e. the opponent has reached the team-foul penalty in the current period (the last period on a final game). |
+| `timeouts_remaining` | Int64 | Timeouts the team has left as of the capture (at the end of the game on a final). |
+| `statistics_assists` | Int64 | Team assists, the players' assists summed. |
+| `statistics_assists_turnover_ratio` | Float64 | Assists divided by statistics_turnovers_total (team turnovers included), e.g. 29 / 12 = 2.4167. |
+| `statistics_bench_points` | Int64 | Points scored by the players who did not start. |
+| `statistics_biggest_lead` | Int64 | Team's largest lead in points during the game. |
+| `statistics_biggest_lead_score` | String | Score when the team first reached its biggest lead, written away-home, e.g. "104-110" for the home team's 6-point lead. |
+| `statistics_biggest_scoring_run` | Int64 | Team's longest run of unanswered points in the game. |
+| `statistics_biggest_scoring_run_score` | String | Score when the team's longest run ended, written away-home, e.g. "104-110". |
+| `statistics_blocks` | Int64 | Opponent shots the team blocked. |
+| `statistics_blocks_received` | Int64 | Team's shot attempts that were blocked, equal to the opponent's blocks. |
+| `statistics_fast_break_points_attempted` | Int64 | Fast-break field-goal attempts; free throws are not counted. |
+| `statistics_fast_break_points_made` | Int64 | Fast-break field goals made; free throws are not counted. |
+| `statistics_fast_break_points_percentage` | Float64 | statistics_fast_break_points_made / statistics_fast_break_points_attempted as a 0-1 fraction. |
+| `statistics_field_goals_attempted` | Int64 | Field-goal attempts by the team's players, the sum of the player rows; a heave counted in statistics_team_field_goal_attempts is not included. |
+| `statistics_field_goals_effective_adjusted` | Float64 | Effective field-goal percentage as a 0-1 fraction, (statistics_field_goals_made + 0.5 * statistics_three_pointers_made) / statistics_field_goals_attempted. |
+| `statistics_field_goals_made` | Int64 | Field goals made by the team's players. |
+| `statistics_field_goals_percentage` | Float64 | Field-goal percentage as a 0-1 fraction, statistics_field_goals_made / statistics_field_goals_attempted. |
+| `statistics_fouls_offensive` | Int64 | Offensive fouls committed, also counted in statistics_fouls_personal. |
+| `statistics_fouls_drawn` | Int64 | Fouls drawn, equal to the opponent's statistics_fouls_personal on the capture. |
+| `statistics_fouls_personal` | Int64 | Personal fouls committed by the team's players, offensive fouls included and technical fouls excluded. |
+| `statistics_fouls_team` | Int64 | Team fouls, statistics_fouls_personal minus statistics_fouls_offensive on the capture. |
+| `statistics_fouls_technical` | Int64 | Technical fouls charged to the team's players (0 on the capture). |
+| `statistics_fouls_team_technical` | Int64 | Technical fouls charged to the team rather than a player (0 on the capture). |
+| `statistics_free_throws_attempted` | Int64 | Free-throw attempts by the team's players. |
+| `statistics_free_throws_made` | Int64 | Free throws made by the team's players. |
+| `statistics_free_throws_percentage` | Float64 | Free-throw percentage as a 0-1 fraction, statistics_free_throws_made / statistics_free_throws_attempted. |
+| `statistics_lead_changes` | Int64 | Number of lead changes in the game, the same on both teams' rows. |
+| `statistics_minutes` | String | Total playing time of the team's players as an ISO-8601 duration, five times the game length, e.g. PT290M00.00S for a double-overtime game. |
+| `statistics_minutes_calculated` | String | Total playing time in whole minutes as an ISO-8601 duration, e.g. PT290M; the players' statistics_minutes_calculated add up to it. |
+| `statistics_points` | Int64 | Team points, equal to score on the capture. |
+| `statistics_points_against` | Int64 | Points the opponent scored. |
+| `statistics_points_fast_break` | Int64 | Fast-break points, free throws included. |
+| `statistics_points_from_turnovers` | Int64 | Points scored off the opponent's turnovers, free throws included. |
+| `statistics_points_in_the_paint` | Int64 | Points on field goals made in the paint. |
+| `statistics_points_in_the_paint_attempted` | Int64 | Field-goal attempts in the paint. |
+| `statistics_points_in_the_paint_made` | Int64 | Field goals made in the paint. |
+| `statistics_points_in_the_paint_percentage` | Float64 | statistics_points_in_the_paint_made / statistics_points_in_the_paint_attempted as a 0-1 fraction. |
+| `statistics_points_second_chance` | Int64 | Second-chance points, free throws included. |
+| `statistics_rebounds_defensive` | Int64 | Defensive rebounds by the team's players; team rebounds are in statistics_rebounds_team_defensive. |
+| `statistics_rebounds_offensive` | Int64 | Offensive rebounds by the team's players; team rebounds are in statistics_rebounds_team_offensive. |
+| `statistics_rebounds_personal` | Int64 | Rebounds by the team's players, statistics_rebounds_defensive plus statistics_rebounds_offensive. |
+| `statistics_rebounds_team` | Int64 | Team rebounds credited to the team rather than a player, statistics_rebounds_team_defensive plus statistics_rebounds_team_offensive. |
+| `statistics_rebounds_team_defensive` | Int64 | Defensive rebounds credited to the team rather than a player. |
+| `statistics_rebounds_team_offensive` | Int64 | Offensive rebounds credited to the team rather than a player. |
+| `statistics_rebounds_total` | Int64 | All rebounds, statistics_rebounds_personal plus statistics_rebounds_team. |
+| `statistics_second_chance_points_attempted` | Int64 | Second-chance field-goal attempts; free throws are not counted. |
+| `statistics_second_chance_points_made` | Int64 | Second-chance field goals made; free throws are not counted. |
+| `statistics_second_chance_points_percentage` | Float64 | statistics_second_chance_points_made / statistics_second_chance_points_attempted as a 0-1 fraction. |
+| `statistics_steals` | Int64 | Steals by the team's players. |
+| `statistics_team_field_goal_attempts` | Int64 | Field-goal attempts credited to the team rather than a player and left out of statistics_field_goals_attempted, e.g. an end-of-quarter heave (1 for Houston on the capture, whose play-by-play logs one heave). |
+| `statistics_three_pointers_attempted` | Int64 | Three-point field-goal attempts by the team's players. |
+| `statistics_three_pointers_made` | Int64 | Three-point field goals made by the team's players. |
+| `statistics_three_pointers_percentage` | Float64 | Three-point percentage as a 0-1 fraction, statistics_three_pointers_made / statistics_three_pointers_attempted. |
+| `statistics_time_leading` | String | Game-clock time the team held the lead, as an ISO-8601 duration, e.g. PT10M18.70S. |
+| `statistics_times_tied` | Int64 | Number of times the score was tied after 0-0, the same on both teams' rows. |
+| `statistics_true_shooting_attempts` | Float64 | True-shooting attempts, statistics_field_goals_attempted + 0.44 * statistics_free_throws_attempted. |
+| `statistics_true_shooting_percentage` | Float64 | True-shooting percentage as a 0-1 fraction, statistics_points / (2 * statistics_true_shooting_attempts). |
+| `statistics_turnovers` | Int64 | Turnovers by the team's players; team turnovers are in statistics_turnovers_team. |
+| `statistics_turnovers_team` | Int64 | Turnovers charged to the team rather than a player, e.g. a shot-clock violation. |
+| `statistics_turnovers_total` | Int64 | All turnovers, statistics_turnovers plus statistics_turnovers_team. |
+| `statistics_two_pointers_attempted` | Int64 | Two-point field-goal attempts by the team's players. |
+| `statistics_two_pointers_made` | Int64 | Two-point field goals made by the team's players. |
+| `statistics_two_pointers_percentage` | Float64 | Two-point percentage as a 0-1 fraction, statistics_two_pointers_made / statistics_two_pointers_attempted. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
+| `NoDataError` | The game has no liveData boxscore object (too old, or not yet started). |
+| `AssetFetchError` | The fetch failed (network error, rate limit, or a bot-check block), or the 200 body is not a JSON object carrying the liveData `game` object -- checked with `raw=True` too. |
+| `ImportError` | Curl_cffi is not installed -- required for the live transport (`pip install curl_cffi` / `sportsdataverse[all]`). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_live import nba_live_boxscore
+result = nba_live_boxscore("0022500001")
+officials = result["officials"]
+print(officials.select("person_id", "name", "assignment"))
+```
+
+### nba_live_pbp {#nba_live_pbp}
+
+`nba_live_pbp(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'`
+
+Fetch and parse NBA cdn.nba.com liveData play-by-play for a game.
+
+Retrieves `https://cdn.nba.com/static/json/liveData/playbyplay/playbyplay_{game_id}.json`
+and parses it via `parse_nba_live_pbp`. Unlike stats.nba.com's
+play-by-play, this feed carries per-whistle referee ids (`official_id`,
+populated on every foul since the 2019-20 season) and wall-clock timestamps
+(`time_actual`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str \| int` |  | NBA game ID (int or str). Zero-padded to 10 digits. |
+| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) instead of a DataFrame. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame instead of polars. |
+| `proxy` | `dict[str, str] \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+If `raw=True`, the raw JSON dict. Otherwise, a DataFrame with one row per action, parsed by `parse_nba_live_pbp`. Its 13 core columns (`game_id`, `action_number`, `period`, `clock`, `time_actual`, `action_type`, `sub_type`, `team_id`, `person_id`, `official_id`, `x_legacy`, `y_legacy`, `description`) are guaranteed on every frame, even a zero-row one, at their declared dtypes. Every other liveData action field is passed through, snake-cased, when the payload carries it, so an event-specific column such as `block_person_id` or `foul_drawn_person_id` is present only when the game had that event.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | 10-digit NBA/WNBA game id (zero-padded), stamped onto every action from the payload's game.gameId. |
+| `action_number` | Int64 | Action id from the liveData feed's actionNumber field, assigned in the order actions are logged rather than strictly in game order (an action logged late gets a higher number than plays that followed it); sort by order_number for game order. |
+| `period` | Int64 | Period of the game: 1-4 for quarters, 5+ for overtime periods. |
+| `clock` | String | ISO-8601 duration game clock at the action, e.g. "PT11M25.00S", not yet converted to MM:SS. |
+| `time_actual` | String | Wall-clock UTC timestamp when the action occurred, letting plays be matched to real elapsed time. |
+| `action_type` | String | Action category from the feed, lower-cased, e.g. 2pt, 3pt, foul, substitution, or turnover. |
+| `sub_type` | String | Action sub-type as the feed writes it, e.g. personal or offensive for a foul, Jump Shot or Layup for a 2pt/3pt shot, 1 of 2 for a free throw. |
+| `team_id` | Int64 | NBA/WNBA team id of the team associated with the action, when applicable. |
+| `person_id` | Int64 | NBA/WNBA player id of the primary person involved in the action, when applicable. |
+| `official_id` | Int64 | Referee's person id for the whistle on this action; populated on every foul since the 2019-20 season, and also on whistled turnovers and violations such as traveling, out-of-bounds, or kicked ball (null on live-ball turnovers like a bad pass). |
+| `x_legacy` | Float64 | Shot x-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead). |
+| `y_legacy` | Float64 | Shot y-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead). |
+| `description` | String | Long-form human-readable description of the action, as shown on NBA.com's live scoreboard. |
+| `period_type` | String | Period kind from the feed, REGULAR for the four quarters and OVERTIME for an overtime period. |
+| `possession` | Int64 | Team id of the team with the ball as of the action (on a rebound or steal, the team that gained it); 0 on game and period start/end rows. |
+| `score_home` | String | Home team's running score after the action, stored as a string. |
+| `score_away` | String | Away team's running score after the action, stored as a string. |
+| `order_number` | Int64 | The feed's sort key for the action (actions ship in this order); sorting by it gives game order even where action_number does not, since an action logged late is slotted in at its place in the game. |
+| `edited` | String | UTC timestamp (ISO-8601, whole seconds) of the feed's last edit to the action, never earlier than time_actual. |
+| `qualifiers` | List | List of context tags on the action, e.g. pointsinthepaint, fastbreak, 2ndchance, or fromturnover on a shot, 2freethrow or inpenalty on a foul, and team on a team rebound or turnover; empty when none apply. |
+| `descriptor` | String | Extra detail on sub_type, e.g. driving or step back on a shot, shooting or loose ball on a foul, bad pass on a turnover, heldball or startperiod on a jump ball; null when absent. |
+| `is_target_score_last_period` | Boolean | Feed flag for a last period played to a target score instead of the game clock (the Elam-ending format); False on every action of a regular game. |
+| `team_tricode` | String | Three-letter code of the team in team_id, e.g. OKC or HOU. |
+| `player_name` | String | Last name of the action's primary player (person_id) as the feed writes it, e.g. Gilgeous-Alexander; null on team and administrative actions. |
+| `player_name_i` | String | First initial and last name of the action's primary player (person_id), e.g. S. Gilgeous-Alexander; null on team and administrative actions. |
+| `person_ids_filter` | List | List of every player id on the action, i.e. person_id plus any assist, block, steal, foul-drawn, or jump-ball participant; empty when no player is involved. |
+| `is_field_goal` | Int64 | Field-goal attempt flag, 1 on a 2pt/3pt shot and 0 on every other action (including a heave). |
+| `shot_result` | String | Made or Missed; set on 2pt/3pt shots and free throws. |
+| `shot_distance` | Float64 | Shot distance from the basket in feet; set on 2pt/3pt shots and heaves. |
+| `x` | Float64 | Shot location along the court's length on a 0-100 scale from the left baseline; populated only on 2pt/3pt shots, like x_legacy. |
+| `y` | Float64 | Shot location across the court's width on a 0-100 scale, 50 at the baskets' centerline; populated only on 2pt/3pt shots, like y_legacy. |
+| `side` | String | Court half of the shot, left or right (left where x is below 50); populated only on 2pt/3pt shots. |
+| `area` | String | Court zone of the action, e.g. Restricted Area, In The Paint (Non-RA), Mid-Range, Left Corner 3, Right Corner 3, or Above the Break 3; set on 2pt/3pt shots and also on heaves, fouls, blocks, steals, turnovers, and most rebounds, which carry no x/y coordinates. |
+| `area_detail` | String | Finer zone for the same actions as area, written as a distance band in feet plus a direction, e.g. "0-8 Center", "16-24 Left Center", or "24+ Right". |
+| `points_total` | Int64 | Scorer's running point total in the game, including this basket; set on made shots and made free throws. |
+| `assist_person_id` | Int64 | Player id credited with the assist on a made 2pt/3pt shot; null on unassisted and missed shots. |
+| `assist_player_name_initial` | String | First initial and last name of the player credited with the assist on a made 2pt/3pt shot, e.g. L. Dort. |
+| `assist_total` | Int64 | Assisting player's running assist total in the game, including this assist. |
+| `shot_action_number` | Int64 | On a rebound, the action_number of the missed shot or free throw being rebounded. |
+| `rebound_total` | Int64 | Rebounder's running rebound total in the game, including this rebound (rebound_offensive_total plus rebound_defensive_total); null on a team rebound. |
+| `rebound_offensive_total` | Int64 | Rebounder's running offensive-rebound total in the game as of this rebound; null on a team rebound. |
+| `rebound_defensive_total` | Int64 | Rebounder's running defensive-rebound total in the game as of this rebound; null on a team rebound. |
+| `foul_drawn_person_id` | Int64 | Player id of the opponent who drew the foul; null when no player drew it (e.g. a technical foul). |
+| `foul_drawn_player_name` | String | Last name of the opponent who drew the foul; null when no player drew it (e.g. a technical foul). |
+| `foul_personal_total` | Int64 | Fouling player's running personal-foul count in the game as of this foul (a technical foul leaves it unchanged); null on a team foul. |
+| `foul_technical_total` | Int64 | Fouling player's running technical-foul count in the game as of this foul; null on a team foul. |
+| `turnover_total` | Int64 | Player's running turnover count in the game, including this turnover; null on a team turnover. |
+| `steal_person_id` | Int64 | Player id credited with the steal, on the turnover row it forced; the steal is also logged as its own steal action. |
+| `steal_player_name` | String | Last name of the player credited with the steal, on the turnover row it forced. |
+| `block_person_id` | Int64 | Player id credited with the block, on the blocked (missed) shot's row; the block is also logged as its own block action. |
+| `block_player_name` | String | Last name of the player credited with the block, on the blocked (missed) shot's row. |
+| `jump_ball_won_person_id` | Int64 | Player id of the jumper who won the tip on a jump ball. |
+| `jump_ball_won_player_name` | String | Last name of the jumper who won the tip on a jump ball. |
+| `jump_ball_lost_person_id` | Int64 | Player id of the jumper who lost the tip on a jump ball. |
+| `jump_ball_lost_player_name` | String | Last name of the jumper who lost the tip on a jump ball. |
+| `jump_ball_recoverd_person_id` | Int64 | Player id of the player who recovered the tip on a jump ball, null when a team recovered it; the column keeps the feed's own spelling (jumpBallRecoverdPersonId). |
+| `jump_ball_recovered_name` | String | First initial and last name of the player who recovered the tip on a jump ball, or a team label such as "Team (OKC)" when a team recovered it. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
+| `NoDataError` | The game has no liveData play-by-play object (too old, or not yet started). |
+| `AssetFetchError` | The fetch failed (network error, rate limit, or a bot-check block), or the 200 body is not a JSON object carrying the liveData `game` object -- checked with `raw=True` too. |
+| `ImportError` | Curl_cffi is not installed -- required for the live transport (`pip install curl_cffi` / `sportsdataverse[all]`). |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_live import nba_live_pbp
+pbp = nba_live_pbp("0022500001")
+print(pbp.filter(pbp["action_type"] == "foul").height)
+
+# Pipeline next step (fouls with a referee id)
+
+fouls = pbp.filter(pbp["action_type"] == "foul").select("official_id", "time_actual")
+```
