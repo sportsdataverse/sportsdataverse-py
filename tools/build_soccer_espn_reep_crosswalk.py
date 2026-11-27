@@ -83,7 +83,7 @@ REEP_KEYS = (
 
 ESPN_COLS = ("espn_team_id", "espn_league", "espn_display_name", "espn_abbreviation")
 OUT_COLS = (*ESPN_COLS, "reep_id", "reep_name", "reep_country", *REEP_KEYS, "match_method")
-SCHEMA = {c: pl.Utf8 for c in OUT_COLS}
+SCHEMA = dict.fromkeys(OUT_COLS, pl.Utf8)
 
 # ponytail: a short token list, not a club-name grammar; extend it when a review shows a miss it would fix
 _STRIP = frozenset(
@@ -232,7 +232,7 @@ def match(
             review.append({**e, "candidates": pending.get(tid, [])})
             continue
         rows.append({**e, "reep_id": rid, "match_method": method})
-    base = pl.DataFrame(rows, schema={**{c: pl.Utf8 for c in ESPN_COLS}, "reep_id": pl.Utf8, "match_method": pl.Utf8})
+    base = pl.DataFrame(rows, schema={**dict.fromkeys(ESPN_COLS, pl.Utf8), "reep_id": pl.Utf8, "match_method": pl.Utf8})
     reep_cols = teams.select(
         "reep_id",
         pl.col("name").alias("reep_name"),

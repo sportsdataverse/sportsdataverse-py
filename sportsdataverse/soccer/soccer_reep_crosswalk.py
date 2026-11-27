@@ -32,9 +32,8 @@ _FILE = "espn_reep_team_crosswalk.csv"
 #: Every column is text. ``espn_team_id`` is Utf8 because every ESPN soccer frame in sdv-py carries its
 #: team ids as Utf8 (``espn_soccer_teams_site().team_id``, the scoreboard and summary team ids), so it
 #: joins them schema-equal. reep's ids are opaque text at several providers (Opta, FBref, Understat).
-_SCHEMA: dict[str, pl.DataType] = {
-    c: pl.Utf8
-    for c in (
+_SCHEMA: dict[str, pl.DataType] = dict.fromkeys(
+    (
         "espn_team_id",
         "espn_league",
         "espn_display_name",
@@ -65,8 +64,9 @@ _SCHEMA: dict[str, pl.DataType] = {
         "key_understat",
         "key_capology",
         "match_method",
-    )
-}
+    ),
+    pl.Utf8,
+)
 
 
 @functools.lru_cache(maxsize=1)

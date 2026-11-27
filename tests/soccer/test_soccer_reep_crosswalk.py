@@ -119,8 +119,7 @@ def test_gate_fails_on_a_shared_reep_row_and_on_lost_coverage(xw: pl.DataFrame) 
     assert any(f.startswith("duplicate espn_team_id") for f in build.gate_failures(pl.concat([xw, xw.head(1)])))
 
 
-def test_a_null_or_non_numeric_espn_id_is_refused(inputs, xw: pl.DataFrame) -> None:
-    espn, _, _ = inputs
+def test_a_null_or_non_numeric_espn_id_is_refused(xw: pl.DataFrame) -> None:
     parsed = parse_soccer_teams(json.loads((FIX / "espn/soccer/eng.1/site-v2/teams.json").read_text(encoding="utf-8")))
     with pytest.raises(ValueError, match="non-numeric ESPN team ids"):
         build.espn_frame(parsed.with_columns(pl.lit(None, dtype=pl.Utf8).alias("team_id")), "eng.1")
