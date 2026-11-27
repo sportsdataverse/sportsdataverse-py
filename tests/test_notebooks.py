@@ -87,9 +87,10 @@ def test_notebook_covers_the_missing_families(stem, needles):
     assert not missing, f"{stem}.ipynb does not cover: {missing}"
 
 
-def test_cron_counts_the_notebooks():
-    body = CRON.read_text(encoding="utf-8")
-    assert f"{len(NOTEBOOKS)} live notebooks" in body
+def test_cron_states_no_notebook_count():
+    """The render step globs every notebook, so a count in the workflow is prose that goes stale on the next notebook."""
+    stated = re.findall(r"\b\d+ live notebooks?\b", CRON.read_text(encoding="utf-8"))
+    assert not stated, f"{CRON.name} hard-codes a notebook count ({stated}); there are {len(NOTEBOOKS)}"
 
 
 @pytest.mark.parametrize("nb", NOTEBOOKS, ids=lambda p: p.stem)

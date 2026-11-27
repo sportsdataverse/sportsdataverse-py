@@ -504,24 +504,24 @@ polars.DataFrame | pandas.DataFrame: one row per `espn_team_id` (unique). Every 
 | `key_wikidata` | String | Wikidata entity id of the club (e.g. 'Q18656'). |
 | `key_transfermarkt` | String | Transfermarkt club id, digits as text (e.g. '985'). |
 | `key_fbref` | String | FBref squad id (8 hex characters). |
-| `key_soccerway` | String | Soccerway team id. |
+| `key_soccerway` | String | Soccerway's id for the club as reep records it (text); null when reep has none. |
 | `key_opta` | String | Opta team UUID (25 alphanumeric characters). |
 | `key_opta_numeric` | String | Opta numeric team id. |
 | `key_kicker` | String | kicker.de club slug. |
-| `key_flashscore` | String | Flashscore team id. |
-| `key_sofascore` | String | Sofascore team id. |
-| `key_soccerbase` | String | Soccerbase team id. |
-| `key_uefa` | String | UEFA club id. |
+| `key_flashscore` | String | Flashscore's id for the club as reep records it (text); null when reep has none. |
+| `key_sofascore` | String | Sofascore's id for the club as reep records it (text); null when reep has none. |
+| `key_soccerbase` | String | Soccerbase's id for the club as reep records it (text); null when reep has none. |
+| `key_uefa` | String | UEFA's id for the club as reep records it (text); null when reep has none. |
 | `key_footballdatabase_eu` | String | footballdatabase.eu club id. |
 | `key_worldfootball` | String | worldfootball.net club slug. |
 | `key_playmakerstats` | String | playmakerstats.com team id. |
 | `key_clubelo` | String | ClubElo club name (the key its ratings use, e.g. 'ManUnited'). |
-| `key_sportmonks` | String | Sportmonks team id. |
+| `key_sportmonks` | String | Sportmonks's id for the club as reep records it (text); null when reep has none. |
 | `key_api_football` | String | API-Football team id. |
-| `key_sofifa` | String | SoFIFA team id. |
-| `key_fotmob` | String | FotMob team id. |
-| `key_thesportsdb` | String | TheSportsDB team id. |
-| `key_understat` | String | Understat team id. |
+| `key_sofifa` | String | SoFIFA's id for the club as reep records it (text); null when reep has none. |
+| `key_fotmob` | String | FotMob's id for the club as reep records it (text); null when reep has none. |
+| `key_thesportsdb` | String | TheSportsDB's id for the club as reep records it (text); null when reep has none. |
+| `key_understat` | String | Understat's id for the club as reep records it (text); null when reep has none. |
 | `key_capology` | String | Capology club slug. |
 | `match_method` | String | How the ESPN team was tied to reep. 'key_espn' (reep already carries this ESPN id), 'name' (exactly one reep row in the league's country shares a normalized name or alias), 'review' (settled by hand in tools/soccer_espn_reep_overrides.yaml), 'unmatched' (reviewed; no reep row is this club, reep columns null). |
 
