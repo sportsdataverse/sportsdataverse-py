@@ -137,7 +137,7 @@ One row per (game, team) for the teams `cfb_adjusted_epa` rates (two or more val
 | `game_id` | String | Game id of the team-game (the play-by-play game_id). |
 | `season` | Int64 | Season carried through from the plays when present. |
 | `week` | Int64 | Week carried through from the plays when present. |
-| `season_type` | String | Season type carried through from the plays' seasonType when present. |
+| `season_type` | Int64 | ESPN season type carried from the plays' seasonType (2 = regular season, 3 = postseason) when present. |
 | `team_id` | String | Id of the rated team (the pos_team_id the fit uses). |
 | `pos_team` | String | Name of the rated team. |
 | `opponent_id` | String | Id of the opponent in this game. |
@@ -159,7 +159,7 @@ One row per (game, team) for the teams `cfb_adjusted_epa` rates (two or more val
 | `schedule_contribution` | Float64 | The schedule part of this game's contribution to the season net_adj_epa. |
 | `contribution` | Float64 | This game's contribution to the season net_adj_epa (raw plus schedule); sums to it per team. |
 | `net_adj_epa` | Float64 | The team's season net adjusted EPA per play, repeated on each of its games. |
-| `loo_net_adj_epa` | Float64 | The team's season net_adj_epa refit without this game (with influence); null under two games. |
+| `loo_net_adj_epa` | Float64 | The team's season net_adj_epa refit without this game (with influence); null under two games or when a play's opponent id is null. |
 | `game_influence` | Float64 | net_adj_epa minus loo_net_adj_epa: how far this game moved the team's season value. |
 
 **Raises**

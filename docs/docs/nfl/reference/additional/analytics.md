@@ -185,11 +185,11 @@ One row per team-game: `game_id` / `team` / `expected_qb_id` / `backup_qb_id` / 
 | `game_id` | String | nflverse game id from the schedule. |
 | `team` | String | Franchise code of the side, relocated to the current one as in the play-by-play. |
 | `kickoff` | Datetime | Kickoff in UTC (schedule gameday + gametime, US Eastern). |
-| `chart_dt` | Datetime | Timestamp of the depth-chart snapshot used, strictly before kickoff; null when the previous start was used. |
+| `chart_dt` | Datetime | Timestamp of the depth-chart snapshot used, strictly before kickoff; null when the previous start was used or there is no source. |
 | `expected_qb_id` | String | GSIS id of the pregame expected starter: depth-chart QB1, else the previous game's starter. |
-| `backup_qb_id` | String | GSIS id of depth-chart QB2 from the same snapshot; null without a snapshot. |
+| `backup_qb_id` | String | GSIS id of depth-chart QB2 from the same snapshot; null without a snapshot or when it lists one QB. |
 | `starter_source` | String | Where the expected starter came from: depth_chart, previous_start, or null (no source). |
-| `status` | String | Expected starter's final injury-report status that week: Out, Doubtful, Questionable or none. |
+| `status` | String | Expected starter's final injury-report status that week: Out, Doubtful, Questionable, or the string none. |
 | `p_start` | Float64 | Fitted chance the expected starter starts at that status (1.0 when there is no expected starter). |
 
 **Raises**
@@ -532,7 +532,7 @@ team's dropback share reads all of them.
 | `team` | String | Offense's franchise code, relocated to the current one (OAK -> LV, SD -> LAC, STL -> LA). |
 | `qb_id` | String | GSIS id of the QB on a dropback (passer, else scrambling rusher); null off dropbacks. |
 | `qb_epa` | Float64 | nflverse qb_epa of the play (EPA credited to the QB). |
-| `is_dropback` | Boolean | True on a QB dropback with a QB id and a qb_epa; False on a run or an unattributed play. |
+| `is_dropback` | Boolean | True on a QB dropback with a QB id and a non-null qb_epa; False on a run, an unattributed play or a null qb_epa. |
 
 **Example**
 
@@ -619,8 +619,8 @@ One row per priced game with a rating for both teams (games before either team h
 | `qb_hi80` | Float64 | 0.90 quantile of the QB layer's home-margin mixture. |
 | `home_qb_id` | String | GSIS id of the home starter priced (expected, or realized in the realized arm). |
 | `away_qb_id` | String | GSIS id of the away starter priced (expected, or realized in the realized arm). |
-| `home_status` | String | Home expected starter's report status (Out, Doubtful, Questionable or none). |
-| `away_status` | String | Away expected starter's report status (Out, Doubtful, Questionable or none). |
+| `home_status` | String | Home expected starter's report status (Out, Doubtful, Questionable, or the string none; none in the realized arm). |
+| `away_status` | String | Away expected starter's report status (Out, Doubtful, Questionable, or the string none; none in the realized arm). |
 | `home_p_start` | Float64 | Chance the home expected starter starts (1.0 in the realized arm or when unpriced). |
 | `away_p_start` | Float64 | Chance the away expected starter starts (1.0 in the realized arm or when unpriced). |
 | `home_shift` | Float64 | Home starter's shift to adj_net in EPA per play: gamma * dropback share * (value - rated value). |
@@ -673,7 +673,7 @@ One row per QB: `qb_id` (Utf8), `dropbacks` (Int64), `epa_per_dropback` (Float64
 | `qb_id` | String | GSIS id of the quarterback. |
 | `dropbacks` | Int64 | Career dropbacks before the as-of date, from the config's history start season. |
 | `epa_per_dropback` | Float64 | Raw mean qb_epa per dropback over those career dropbacks (unshrunk). |
-| `qb_value` | Float64 | Shrunk value (n * e + k * prior) / (n + k), prior = replacement under 100 dropbacks else league mean. |
+| `qb_value` | Float64 | Shrunk value (n * e + k * prior) / (n + k), prior = replacement under new_qb_dropbacks (default 100) else league mean. |
 
 **Example**
 

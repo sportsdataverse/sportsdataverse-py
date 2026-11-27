@@ -12,7 +12,7 @@ columns:
   type: integer
   description: ''
 - name: season_type
-  type: character
+  type: integer
   description: ''
 - name: team_id
   type: character

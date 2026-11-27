@@ -36,12 +36,13 @@ jobs:
       - name: Codegen drift check (generated files in sync with metadata)
         run: uv run --frozen python tools/codegen/generate.py --check
       - name: Docs coverage gates (pull requests)
-        # The full suite below is main-only, so these fast gates run here: a new public DataFrame
-        # function without a returns table or example args, a blank or filler column description, or a
-        # pointer to private material otherwise passes the PR and turns main red after the merge.
+        # The codegen suite below and tests.yml's offline pytest job are both main-only, so these gates
+        # run here: a new public DataFrame function without a returns table or example args, a blank or
+        # filler column description, or a pointer to private material otherwise passes the PR and turns
+        # main red after the merge.
         if: ${{ github.event_name == 'pull_request' }}
         run: >-
-          uv run --frozen pytest -q
+          uv run --frozen pytest -q --durations=5
           tests/codegen/test_autodoc_schema_coverage.py::test_every_dataframe_autodoc_function_has_a_schema
           tests/codegen/test_autodoc_schema_coverage.py::test_every_dataframe_autodoc_function_has_example_args_or_takes_none
           tests/codegen/test_manual_descriptions.py

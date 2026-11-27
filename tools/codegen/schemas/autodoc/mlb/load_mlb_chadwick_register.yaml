@@ -121,9 +121,3 @@ columns:
 - name: mlb_umpired_last
   type: integer
   description: ''
-- name: col_umpired_first
-  type: integer
-  description: ''
-- name: col_umpired_last
-  type: integer
-  description: ''

@@ -83540,21 +83540,21 @@ nfl_qb_dropbacks:
   team: Offense's franchise code, relocated to the current one (OAK -> LV, SD -> LAC, STL -> LA).
   qb_id: GSIS id of the QB on a dropback (passer, else scrambling rusher); null off dropbacks.
   qb_epa: nflverse qb_epa of the play (EPA credited to the QB).
-  is_dropback: True on a QB dropback with a QB id and a qb_epa; False on a run or an unattributed play.
+  is_dropback: True on a QB dropback with a QB id and a non-null qb_epa; False on a run, an unattributed play or a null qb_epa.
 nfl_qb_values:
   qb_id: GSIS id of the quarterback.
   dropbacks: Career dropbacks before the as-of date, from the config's history start season.
   epa_per_dropback: Raw mean qb_epa per dropback over those career dropbacks (unshrunk).
-  qb_value: Shrunk value (n * e + k * prior) / (n + k), prior = replacement under 100 dropbacks else league mean.
+  qb_value: Shrunk value (n * e + k * prior) / (n + k), prior = replacement under new_qb_dropbacks (default 100) else league mean.
 nfl_expected_starters:
   game_id: nflverse game id from the schedule.
   team: Franchise code of the side, relocated to the current one as in the play-by-play.
   kickoff: Kickoff in UTC (schedule gameday + gametime, US Eastern).
-  chart_dt: Timestamp of the depth-chart snapshot used, strictly before kickoff; null when the previous start was used.
+  chart_dt: Timestamp of the depth-chart snapshot used, strictly before kickoff; null when the previous start was used or there is no source.
   expected_qb_id: 'GSIS id of the pregame expected starter: depth-chart QB1, else the previous game''s starter.'
-  backup_qb_id: GSIS id of depth-chart QB2 from the same snapshot; null without a snapshot.
+  backup_qb_id: GSIS id of depth-chart QB2 from the same snapshot; null without a snapshot or when it lists one QB.
   starter_source: 'Where the expected starter came from: depth_chart, previous_start, or null (no source).'
-  status: 'Expected starter''s final injury-report status that week: Out, Doubtful, Questionable or none.'
+  status: 'Expected starter''s final injury-report status that week: Out, Doubtful, Questionable, or the string none.'
   p_start: Fitted chance the expected starter starts at that status (1.0 when there is no expected starter).
 nfl_qb_predict_games:
   game_id: nflverse game id from the schedule.
@@ -83573,8 +83573,8 @@ nfl_qb_predict_games:
   qb_hi80: 0.90 quantile of the QB layer's home-margin mixture.
   home_qb_id: GSIS id of the home starter priced (expected, or realized in the realized arm).
   away_qb_id: GSIS id of the away starter priced (expected, or realized in the realized arm).
-  home_status: Home expected starter's report status (Out, Doubtful, Questionable or none).
-  away_status: Away expected starter's report status (Out, Doubtful, Questionable or none).
+  home_status: Home expected starter's report status (Out, Doubtful, Questionable, or the string none; none in the realized arm).
+  away_status: Away expected starter's report status (Out, Doubtful, Questionable, or the string none; none in the realized arm).
   home_p_start: Chance the home expected starter starts (1.0 in the realized arm or when unpriced).
   away_p_start: Chance the away expected starter starts (1.0 in the realized arm or when unpriced).
   home_shift: 'Home starter''s shift to adj_net in EPA per play: gamma * dropback share * (value - rated value).'
@@ -83585,7 +83585,7 @@ cfb_adjusted_epa_ledger:
   game_id: Game id of the team-game (the play-by-play game_id).
   season: Season carried through from the plays when present.
   week: Week carried through from the plays when present.
-  season_type: Season type carried through from the plays' seasonType when present.
+  season_type: ESPN season type carried from the plays' seasonType (2 = regular season, 3 = postseason) when present.
   team_id: Id of the rated team (the pos_team_id the fit uses).
   pos_team: Name of the rated team.
   opponent_id: Id of the opponent in this game.
@@ -83607,16 +83607,16 @@ cfb_adjusted_epa_ledger:
   schedule_contribution: The schedule part of this game's contribution to the season net_adj_epa.
   contribution: This game's contribution to the season net_adj_epa (raw plus schedule); sums to it per team.
   net_adj_epa: The team's season net adjusted EPA per play, repeated on each of its games.
-  loo_net_adj_epa: The team's season net_adj_epa refit without this game (with influence); null under two games.
+  loo_net_adj_epa: The team's season net_adj_epa refit without this game (with influence); null under two games or when a play's opponent id is null.
   game_influence: 'net_adj_epa minus loo_net_adj_epa: how far this game moved the team''s season value.'
 load_mlb_chadwick_register:
   key_person: Register primary person key (8 hex characters), unique per row.
   key_uuid: Register UUID for the person.
-  key_mlbam: MLB Advanced Media (MLB Stats API / Statcast) person id, Int64.
+  key_mlbam: MLB Advanced Media (MLB Stats API / Statcast) person id.
   key_retro: Retrosheet's id for the person (player, manager, coach or umpire).
   key_bbref: Baseball-Reference major-league player id.
   key_bbref_minors: Baseball-Reference minor-league / register id.
-  key_fangraphs: FanGraphs player id, Int64.
+  key_fangraphs: FanGraphs player id (the playerid in FanGraphs URLs and leaderboards).
   key_npb: Nippon Professional Baseball player id, zero-padded text (8 digits).
   key_sr_nfl: Sports-Reference pro football id, for multi-sport athletes.
   key_sr_nba: Sports-Reference pro basketball id, for multi-sport athletes.
@@ -83650,8 +83650,6 @@ load_mlb_chadwick_register:
   pro_umpired_last: Last season umpired professionally.
   mlb_umpired_first: First season umpired in the major leagues.
   mlb_umpired_last: Last season umpired in the major leagues.
-  col_umpired_first: First season umpired in college.
-  col_umpired_last: Last season umpired in college.
 espn_fantasy_games:
   game_id: ESPN's number for the fantasy game (1 football, 2 baseball, 3 men's basketball, 4 hockey, 5 women's basketball).
   game_abbrev: Game abbreviation as ESPN writes it (FFL, FLB, FBA, FHL, WFBA); the lower-case form is the game argument.

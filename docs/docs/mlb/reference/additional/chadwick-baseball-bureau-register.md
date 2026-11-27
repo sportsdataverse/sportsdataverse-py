@@ -31,11 +31,11 @@ One row per person (about 528,000; `key_person` is unique). `key_mlbam` is Int64
 |---|---|---|
 | `key_person` | String | Register primary person key (8 hex characters), unique per row. |
 | `key_uuid` | String | Register UUID for the person. |
-| `key_mlbam` | Int64 | MLB Advanced Media (MLB Stats API / Statcast) person id, Int64. |
+| `key_mlbam` | Int64 | MLB Advanced Media (MLB Stats API / Statcast) person id. |
 | `key_retro` | String | Retrosheet's id for the person (player, manager, coach or umpire). |
 | `key_bbref` | String | Baseball-Reference major-league player id. |
 | `key_bbref_minors` | String | Baseball-Reference minor-league / register id. |
-| `key_fangraphs` | Int64 | FanGraphs player id, Int64. |
+| `key_fangraphs` | Int64 | FanGraphs player id (the playerid in FanGraphs URLs and leaderboards). |
 | `key_npb` | String | Nippon Professional Baseball player id, zero-padded text (8 digits). |
 | `key_sr_nfl` | String | Sports-Reference pro football id, for multi-sport athletes. |
 | `key_sr_nba` | String | Sports-Reference pro basketball id, for multi-sport athletes. |
@@ -69,8 +69,6 @@ One row per person (about 528,000; `key_person` is unique). `key_mlbam` is Int64
 | `pro_umpired_last` | Int64 | Last season umpired professionally. |
 | `mlb_umpired_first` | Int64 | First season umpired in the major leagues. |
 | `mlb_umpired_last` | Int64 | Last season umpired in the major leagues. |
-| `col_umpired_first` | Int64 | First season umpired in college. |
-| `col_umpired_last` | Int64 | Last season umpired in college. |
 
 **Raises**
 
