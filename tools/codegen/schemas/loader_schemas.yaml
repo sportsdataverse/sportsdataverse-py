@@ -13378,6 +13378,25 @@ load_mlb_groups:
   type: Int32
 - name: notes
   type: String
+load_mlb_leverage_index:
+- name: inning_capped
+  type: Int64
+- name: half
+  type: String
+- name: base_state
+  type: String
+- name: outs_start
+  type: Int64
+- name: score_diff_bucket
+  type: Int64
+- name: leverage_index
+  type: Float64
+- name: n
+  type: UInt32
+- name: thin
+  type: Boolean
+- name: season
+  type: Int64
 load_mlb_oaa:
 - name: fielder_id
   type: String

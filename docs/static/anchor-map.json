@@ -4831,6 +4831,7 @@
   "load_mlb_group_aliases": "other",
   "load_mlb_group_seasons": "other",
   "load_mlb_groups": "other",
+  "load_mlb_leverage_index": "other",
   "load_mlb_oaa": "other",
   "load_mlb_park_dimensions": "other",
   "load_mlb_pbp": "other",

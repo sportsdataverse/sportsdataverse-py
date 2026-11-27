@@ -16,6 +16,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_mlb_re24_matrix` | [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_game_state) | — |
 | `load_mlb_we_table` | [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_game_state) | — |
 | `load_mlb_wpa` | [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_game_state) | — |
+| `load_mlb_leverage_index` | [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_game_state) | — |
 | `load_mlb_pbp` | [mlb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pbp) | — |
 | `load_mlb_pitches` | [mlb_pitches](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_pitches) | — |
 | `load_mlb_runners` | [mlb_runners](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mlb_runners) | — |
@@ -74,6 +75,7 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | [load_mlb_re24_matrix](loaders/other.md#load_mlb_re24_matrix) | Release: mlb_game_state · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_game_state/mlb_re24_matrix_{season}.parquet` |
 | [load_mlb_we_table](loaders/other.md#load_mlb_we_table) | Release: mlb_game_state · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_game_state/mlb_we_table_{season}.parquet` |
 | [load_mlb_wpa](loaders/other.md#load_mlb_wpa) | Release: mlb_game_state · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_game_state/mlb_wpa_{season}.parquet` |
+| [load_mlb_leverage_index](loaders/other.md#load_mlb_leverage_index) | Release: mlb_game_state · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_game_state/mlb_leverage_index_{season}.parquet` |
 | [load_mlb_pbp](loaders/other.md#load_mlb_pbp) | Release: mlb_pbp · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pbp/mlb_pbp_{season}.parquet` |
 | [load_mlb_pitches](loaders/other.md#load_mlb_pitches) | Release: mlb_pitches · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_pitches/mlb_pitches_{season}.parquet` |
 | [load_mlb_runners](loaders/other.md#load_mlb_runners) | Release: mlb_runners · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mlb_runners/mlb_runners_{season}.parquet` |
