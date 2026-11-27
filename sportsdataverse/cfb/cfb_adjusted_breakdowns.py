@@ -129,7 +129,7 @@ _PUBLISHED: dict[tuple[str, Side], tuple[Literal["adj", "raw"], float]] = {
     ("epa_first_half", "def"): ("raw", 280.3),  # .583 -> .639 (a season < .50); holdout .588 -> .680
     ("epa_pass", "off"): ("raw", 183.4),  # .631 -> .646 (gain < .03); holdout .553 -> .557
     ("success_pass", "off"): ("adj", 133.0),  # .674 -> .708; holdout .652 -> .659
-    ("epa_rush", "off"): ("raw", 293.1),  # .539 -> .555 (gain < .03); holdout .606 -> .651
+    ("epa_rush", "off"): ("raw", 293.1),  # .539 -> .555 (gain < .03, a season < .50); holdout .606 -> .651
     ("epa_rush", "def"): ("raw", 275.9),  # .560 -> .617 (a season < .50); holdout .439 -> .585
     ("success_rush", "off"): ("adj", 210.0),  # .576 -> .621; holdout .498 -> .639
     ("success_rush", "def"): ("adj", 169.0),  # .611 -> .674; holdout .451 -> .600

@@ -1684,35 +1684,35 @@ cfb_adjusted_breakdowns:
   epa_first_half_def_shrunk: "Display value: the raw EPA per play the defense allowed on the first half, shrunk toward the league mean by n / (n + 280.3)."
   epa_first_half_def_n: "Plays behind the defense values: its pass and rush plays on the first half outside garbage time (the n in the shrinkage)."
   epa_first_half_def_rank: Rank of epa_first_half_def_shrunk (lowest = 1, ties averaged).
-  epa_pass_off_raw: Raw EPA per play the offense gained on pass plays (pass and rush plays outside garbage time).
+  epa_pass_off_raw: Raw EPA per play the offense gained on pass plays outside garbage time.
   epa_pass_off_adj: "Always null: EPA per play on pass plays for the offense is published raw, since the opponent adjustment did not make it more reliable."
   epa_pass_off_shrunk: "Display value: the raw EPA per play the offense gained on pass plays, shrunk toward the league mean by n / (n + 183.4)."
-  epa_pass_off_n: "Plays behind the offense values: its pass and rush plays on pass plays outside garbage time (the n in the shrinkage)."
+  epa_pass_off_n: "Plays behind the offense values: its pass plays outside garbage time (the n in the shrinkage)."
   epa_pass_off_rank: Rank of epa_pass_off_shrunk (highest = 1, ties averaged).
-  success_pass_off_raw: Raw success rate (share of plays with positive EPA) the offense gained on pass plays (pass and rush plays outside garbage time).
+  success_pass_off_raw: Raw success rate (share of plays with positive EPA) the offense gained on pass plays outside garbage time.
   success_pass_off_adj: Opponent-adjusted success rate (share of plays with positive EPA) the offense gained on pass plays (league mean plus the team's mean per-game residual against its opponents' fitted strength).
   success_pass_off_shrunk: "Display value: the adjusted success rate (share of plays with positive EPA) the offense gained on pass plays, shrunk toward the league mean by n / (n + 133)."
-  success_pass_off_n: "Plays behind the offense values: its pass and rush plays on pass plays outside garbage time (the n in the shrinkage)."
+  success_pass_off_n: "Plays behind the offense values: its pass plays outside garbage time (the n in the shrinkage)."
   success_pass_off_rank: Rank of success_pass_off_shrunk (highest = 1, ties averaged).
-  epa_rush_off_raw: Raw EPA per play the offense gained on rush plays (pass and rush plays outside garbage time).
+  epa_rush_off_raw: Raw EPA per play the offense gained on rush plays outside garbage time.
   epa_rush_off_adj: "Always null: EPA per play on rush plays for the offense is published raw, since the opponent adjustment did not make it more reliable."
   epa_rush_off_shrunk: "Display value: the raw EPA per play the offense gained on rush plays, shrunk toward the league mean by n / (n + 293.1)."
-  epa_rush_off_n: "Plays behind the offense values: its pass and rush plays on rush plays outside garbage time (the n in the shrinkage)."
+  epa_rush_off_n: "Plays behind the offense values: its rush plays outside garbage time (the n in the shrinkage)."
   epa_rush_off_rank: Rank of epa_rush_off_shrunk (highest = 1, ties averaged).
-  epa_rush_def_raw: Raw EPA per play the defense allowed on rush plays (pass and rush plays outside garbage time).
+  epa_rush_def_raw: Raw EPA per play the defense allowed on rush plays outside garbage time.
   epa_rush_def_adj: "Always null: EPA per play on rush plays for the defense is published raw, since the opponent adjustment did not make it more reliable."
   epa_rush_def_shrunk: "Display value: the raw EPA per play the defense allowed on rush plays, shrunk toward the league mean by n / (n + 275.9)."
-  epa_rush_def_n: "Plays behind the defense values: its pass and rush plays on rush plays outside garbage time (the n in the shrinkage)."
+  epa_rush_def_n: "Plays behind the defense values: its rush plays outside garbage time (the n in the shrinkage)."
   epa_rush_def_rank: Rank of epa_rush_def_shrunk (lowest = 1, ties averaged).
-  success_rush_off_raw: Raw success rate (share of plays with positive EPA) the offense gained on rush plays (pass and rush plays outside garbage time).
+  success_rush_off_raw: Raw success rate (share of plays with positive EPA) the offense gained on rush plays outside garbage time.
   success_rush_off_adj: Opponent-adjusted success rate (share of plays with positive EPA) the offense gained on rush plays (league mean plus the team's mean per-game residual against its opponents' fitted strength).
   success_rush_off_shrunk: "Display value: the adjusted success rate (share of plays with positive EPA) the offense gained on rush plays, shrunk toward the league mean by n / (n + 210)."
-  success_rush_off_n: "Plays behind the offense values: its pass and rush plays on rush plays outside garbage time (the n in the shrinkage)."
+  success_rush_off_n: "Plays behind the offense values: its rush plays outside garbage time (the n in the shrinkage)."
   success_rush_off_rank: Rank of success_rush_off_shrunk (highest = 1, ties averaged).
-  success_rush_def_raw: Raw success rate (share of plays with positive EPA) the defense allowed on rush plays (pass and rush plays outside garbage time).
+  success_rush_def_raw: Raw success rate (share of plays with positive EPA) the defense allowed on rush plays outside garbage time.
   success_rush_def_adj: Opponent-adjusted success rate (share of plays with positive EPA) the defense allowed on rush plays (league mean plus the team's mean per-game residual against its opponents' fitted strength).
   success_rush_def_shrunk: "Display value: the adjusted success rate (share of plays with positive EPA) the defense allowed on rush plays, shrunk toward the league mean by n / (n + 169)."
-  success_rush_def_n: "Plays behind the defense values: its pass and rush plays on rush plays outside garbage time (the n in the shrinkage)."
+  success_rush_def_n: "Plays behind the defense values: its rush plays outside garbage time (the n in the shrinkage)."
   success_rush_def_rank: Rank of success_rush_def_shrunk (lowest = 1, ties averaged).
 cfb_adjusted_tempo:
   adj_plays_game: Opponent-adjusted situation-neutral plays per game (iterative solver; higher = faster).
