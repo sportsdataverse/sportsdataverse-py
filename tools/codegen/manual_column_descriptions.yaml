@@ -41689,6 +41689,18 @@ load_mlb_team_group_seasons:
     says which.'
   team_id_source: 'Id space of team_id (in this table: espn, mlb).'
   team_name: Team name as of that season, not today's.
+load_mlb_leverage_index:
+  base_state: Three-character pre-play base occupancy where each slot carries its base number when occupied and an underscore
+    when empty, so ___ is bases empty and _2_ is a runner on second only.
+  half: Half-inning, top (away team batting) or bottom (home team batting).
+  inning_capped: Inning number with the ninth and every extra inning collapsed into 9, the same buckets as load_mlb_we_table.
+  leverage_index: Expected absolute change in home win expectancy over the next plate appearance from this state, divided
+    by the plate-appearance-weighted average of that quantity, so 1.0 is an average situation and 2.0 twice as pivotal.
+  n: Plate appearances observed in this state bucket that season, the sample behind leverage_index.
+  outs_start: Outs already recorded when the plate appearance began (0-2).
+  score_diff_bucket: Home score minus away score before the play, clipped to the range -6 through +6.
+  season: MLB season (calendar year).
+  thin: True when n is below 50, a small-sample flag; larger buckets also vary noticeably from one season to the next.
 load_mlb_we_table:
   base_state: Three-character pre-play base occupancy where each slot carries its base number when occupied and an underscore
     when empty, so ___ is bases empty and 123 is bases loaded.
