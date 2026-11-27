@@ -148,6 +148,10 @@ nfl:
   calculate_nfl_series_conversion_rates: {pbp: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 32 rows x 24 cols
   build_nfl_player_stats_def: {pbp: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 1435 rows x 30 cols
   build_nfl_player_stats_kicking: {pbp: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}  # 280 rows x 42 cols
+  nfl_qb_dropbacks: {pbp: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}
+  nfl_qb_values: {dropbacks: {$call: nfl.nfl_qb_dropbacks, args: {pbp: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}}}, as_of_date: 2024-12-01}
+  nfl_expected_starters: {schedule: {$call: nfl.load_nfl_schedule, args: {seasons: [2024]}}}
+  nfl_qb_predict_games: {schedule: {$call: nfl.load_nfl_schedule, args: {seasons: [2024]}}, pbp: {$call: nfl.load_nfl_pbp, args: {seasons: 2024}}, starters: {$call: nfl.nfl_expected_starters, args: {schedule: {$call: nfl.load_nfl_schedule, args: {seasons: [2024]}}}}}
   calculate_nfl_standings: {games: {$call: nfl.load_nfl_schedule, args: {seasons: [2023]}}}  # 32 rows x 13 cols
   player_usage_efficiency: {player_stats: {$call: nfl.load_nfl_player_stats, args: {seasons: [2023]}}, as_of_week: 10}  # 480 rows x 13 cols
 

@@ -16952,6 +16952,54 @@ nba_rookie_projection:
   proj_rookie_min: "Projected minutes in the first NBA season the pick plays, from a pick curve (floored at 0)."
   proj_avail_pct: "Projected share of games available in the debut season, from nba_availability; 0.75 when it has no row for the pick. Never folded into the value columns."
   pro_tier: "Pick band: lottery (1-14), first_round (15-30) or second_round (31-60)."
+nfl_expected_starters:
+  game_id: nflverse game id (season_week_away_home).
+  team: Team code, the franchise's current code (OAK -> LV, SD -> LAC, STL -> LA), as in the play-by-play.
+  kickoff: Kickoff time in UTC, from the schedule's gameday and gametime (US Eastern).
+  chart_dt: UTC timestamp of the depth-chart snapshot used; null when the starter comes from the previous start.
+  expected_qb_id: GSIS id of the expected starting QB.
+  backup_qb_id: GSIS id of the depth chart's QB2; null under the previous-start rule.
+  starter_source: 'Where the expected starter came from: depth_chart, previous_start, or null when neither exists.'
+  status: The expected starter's report_status on that week's injury report (Out, Doubtful, Questionable), else none.
+  p_start: Fitted probability that the expected starter starts, given his report status.
+nfl_qb_dropbacks:
+  game_id: nflverse game id (season_week_away_home).
+  season: Season of the play.
+  game_date: Date of the game.
+  team: Offensive team (posteam).
+  qb_id: GSIS id of the QB on a dropback (passer, else rusher); null off dropbacks.
+  qb_epa: QB EPA on the play.
+  is_dropback: True when the play is a dropback with a QB id and a qb_epa.
+nfl_qb_predict_games:
+  game_id: nflverse game id (season_week_away_home).
+  season: Season of the game.
+  week: Week of the game.
+  home_team: Home team code, relocated as in nfl_expected_starters.
+  away_team: Away team code, relocated as in nfl_expected_starters.
+  neutral_site: True when the schedule's location is Neutral.
+  base_margin: Shipped spine's predicted home margin, in points.
+  base_win_prob: Shipped spine's probability that the home team wins.
+  base_lo80: Lower bound of the shipped spine's 80% margin interval.
+  base_hi80: Upper bound of the shipped spine's 80% margin interval.
+  qb_margin: QB layer's mixture-mean home margin, in points.
+  qb_win_prob: QB layer's probability that the home team wins.
+  qb_lo80: Lower bound of the QB layer's 80% margin interval.
+  qb_hi80: Upper bound of the QB layer's 80% margin interval.
+  home_qb_id: GSIS id of the home starter the layer priced.
+  away_qb_id: GSIS id of the away starter the layer priced.
+  home_status: Home starter's injury-report status.
+  away_status: Away starter's injury-report status.
+  home_p_start: Probability the home starter starts.
+  away_p_start: Probability the away starter starts.
+  home_shift: Home starter's shift to adj_net, in EPA per play.
+  away_shift: Away starter's shift to adj_net, in EPA per play.
+  home_layer_applied: False when the home side had no starter or no rated dropbacks and the layer left it unchanged.
+  away_layer_applied: False when the away side had no starter or no rated dropbacks and the layer left it unchanged.
+nfl_qb_values:
+  qb_id: GSIS id of the QB.
+  dropbacks: Career dropbacks in games strictly before as_of_date.
+  epa_per_dropback: Raw EPA per dropback over those dropbacks.
+  qb_value: Shrunk EPA per dropback, (n * e + k * prior) / (n + k), toward replacement level or the league mean.
 nojhl_season_id:
   game_type_label: 'Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs"
     (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season
@@ -41444,6 +41492,47 @@ load_mlb_catcher_framing:
     value, so it measures stolen strikes rather than runs.
   takes: Called strikes plus balls the catcher received across the season, a pure workload count; the framing figures themselves
     sum only over the shadow-zone subset of these.
+load_mlb_chadwick_register:
+  key_person: Register primary person key (8 hex characters)
+  key_uuid: Register UUID for the person
+  key_mlbam: MLB Advanced Media (MLB Stats API / Statcast) person id
+  key_retro: Retrosheet person id, eight characters such as ruthb101.
+  key_bbref: Baseball-Reference major-league player id
+  key_bbref_minors: Baseball-Reference minor-league / register id
+  key_fangraphs: FanGraphs player id (Int64), the playerid in FanGraphs URLs.
+  key_npb: Nippon Professional Baseball player id (zero-padded, 8 digits)
+  key_sr_nfl: Sports-Reference pro football id (multi-sport athletes)
+  key_sr_nba: Sports-Reference pro basketball id (multi-sport athletes)
+  key_sr_nhl: Sports-Reference hockey id (multi-sport athletes)
+  key_wikidata: Wikidata entity id for the person (a Q-prefixed number).
+  name_last: Last name (surname) of the person.
+  name_first: First name (as commonly used)
+  name_given: Given (full first and middle) name
+  name_suffix: Name suffix (Jr., III, ...)
+  name_matrilineal: Matrilineal surname
+  name_nick: Nickname recorded by the register.
+  birth_year: Year of birth; null when unknown.
+  birth_month: Month of birth (1-12); null when unknown.
+  birth_day: Day of the month of birth; null when unknown.
+  death_year: Year of death; null when living or unknown.
+  death_month: Month of death (1-12); null when living or unknown.
+  death_day: Day of the month of death; null when living or unknown.
+  pro_played_first: First season played professionally
+  pro_played_last: Last season played professionally
+  mlb_played_first: First season played in the major leagues
+  mlb_played_last: Last season played in the major leagues
+  col_played_first: First season played in college
+  col_played_last: Last season played in college
+  pro_managed_first: First season managed professionally
+  pro_managed_last: Last season managed professionally
+  mlb_managed_first: First season managed in the major leagues
+  mlb_managed_last: Last season managed in the major leagues
+  col_managed_first: First season managed in college
+  col_managed_last: Last season managed in college
+  pro_umpired_first: First season umpired professionally
+  pro_umpired_last: Last season umpired professionally
+  mlb_umpired_first: First season umpired in the major leagues
+  mlb_umpired_last: Last season umpired in the major leagues
 load_mlb_command_plus:
   command_plus: Command+/Location+ on the 100-is-average scale, exactly 100 minus 10 times (location_rv_hat minus the league
     mean) over the league SD; it grades where the pitch finished, not intent, since Statcast ships no catcher target.

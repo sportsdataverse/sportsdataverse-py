@@ -27,6 +27,49 @@ ODC-By 1.0; credit the Chadwick Baseball Bureau when you redistribute derived da
 
 One row per person (about 528,000; `key_person` is unique). `key_mlbam` is Int64 and joins the Int64 MLBAM ids of `load_mlb_pbp` (`batter_id`, `pitcher_id`) and `load_mlb_statcast`; `key_npb` keeps its zero padding as Utf8. An Int64 column holding a value upstream that is not an integer comes back as Utf8 with a `SchemaDriftWarning`. | col_name | type | description | |:---|:---|:---| | key_person | Utf8 | Register primary person key (8 hex characters) | | key_uuid | Utf8 | Register UUID for the person | | key_mlbam | Int64 | MLB Advanced Media (MLB Stats API / Statcast) person id | | key_retro | Utf8 | Retrosheet person id | | key_bbref | Utf8 | Baseball-Reference major-league player id | | key_bbref_minors | Utf8 | Baseball-Reference minor-league / register id | | key_fangraphs | Int64 | FanGraphs player id | | key_npb | Utf8 | Nippon Professional Baseball player id (zero-padded, 8 digits) | | key_sr_nfl | Utf8 | Sports-Reference pro football id (multi-sport athletes) | | key_sr_nba | Utf8 | Sports-Reference pro basketball id (multi-sport athletes) | | key_sr_nhl | Utf8 | Sports-Reference hockey id (multi-sport athletes) | | key_wikidata | Utf8 | Wikidata entity id | | name_last | Utf8 | Last name | | name_first | Utf8 | First name (as commonly used) | | name_given | Utf8 | Given (full first and middle) name | | name_suffix | Utf8 | Name suffix (Jr., III, ...) | | name_matrilineal | Utf8 | Matrilineal surname | | name_nick | Utf8 | Nickname | | birth_year | Int64 | Birth year | | birth_month | Int64 | Birth month | | birth_day | Int64 | Birth day | | death_year | Int64 | Death year | | death_month | Int64 | Death month | | death_day | Int64 | Death day | | pro_played_first | Int64 | First season played professionally | | pro_played_last | Int64 | Last season played professionally | | mlb_played_first | Int64 | First season played in the major leagues | | mlb_played_last | Int64 | Last season played in the major leagues | | col_played_first | Int64 | First season played in college | | col_played_last | Int64 | Last season played in college | | pro_managed_first | Int64 | First season managed professionally | | pro_managed_last | Int64 | Last season managed professionally | | mlb_managed_first | Int64 | First season managed in the major leagues | | mlb_managed_last | Int64 | Last season managed in the major leagues | | col_managed_first | Int64 | First season managed in college | | col_managed_last | Int64 | Last season managed in college | | pro_umpired_first | Int64 | First season umpired professionally | | pro_umpired_last | Int64 | Last season umpired professionally | | mlb_umpired_first | Int64 | First season umpired in the major leagues | | mlb_umpired_last | Int64 | Last season umpired in the major leagues |
 
+| col_name | type | description |
+|---|---|---|
+| `key_person` | String | Register primary person key (8 hex characters) |
+| `key_uuid` | String | Register UUID for the person |
+| `key_mlbam` | Int64 | MLB Advanced Media (MLB Stats API / Statcast) person id |
+| `key_retro` | String | Retrosheet person id, eight characters such as ruthb101. |
+| `key_bbref` | String | Baseball-Reference major-league player id |
+| `key_bbref_minors` | String | Baseball-Reference minor-league / register id |
+| `key_fangraphs` | Int64 | FanGraphs player id (Int64), the playerid in FanGraphs URLs. |
+| `key_npb` | String | Nippon Professional Baseball player id (zero-padded, 8 digits) |
+| `key_sr_nfl` | String | Sports-Reference pro football id (multi-sport athletes) |
+| `key_sr_nba` | String | Sports-Reference pro basketball id (multi-sport athletes) |
+| `key_sr_nhl` | String | Sports-Reference hockey id (multi-sport athletes) |
+| `key_wikidata` | String | Wikidata entity id for the person (a Q-prefixed number). |
+| `name_last` | String | Last name (surname) of the person. |
+| `name_first` | String | First name (as commonly used) |
+| `name_given` | String | Given (full first and middle) name |
+| `name_suffix` | String | Name suffix (Jr., III, ...) |
+| `name_matrilineal` | String | Matrilineal surname |
+| `name_nick` | String | Nickname recorded by the register. |
+| `birth_year` | Int64 | Year of birth; null when unknown. |
+| `birth_month` | Int64 | Month of birth (1-12); null when unknown. |
+| `birth_day` | Int64 | Day of the month of birth; null when unknown. |
+| `death_year` | Int64 | Year of death; null when living or unknown. |
+| `death_month` | Int64 | Month of death (1-12); null when living or unknown. |
+| `death_day` | Int64 | Day of the month of death; null when living or unknown. |
+| `pro_played_first` | Int64 | First season played professionally |
+| `pro_played_last` | Int64 | Last season played professionally |
+| `mlb_played_first` | Int64 | First season played in the major leagues |
+| `mlb_played_last` | Int64 | Last season played in the major leagues |
+| `col_played_first` | Int64 | First season played in college |
+| `col_played_last` | Int64 | Last season played in college |
+| `pro_managed_first` | Int64 | First season managed professionally |
+| `pro_managed_last` | Int64 | Last season managed professionally |
+| `mlb_managed_first` | Int64 | First season managed in the major leagues |
+| `mlb_managed_last` | Int64 | Last season managed in the major leagues |
+| `col_managed_first` | Int64 | First season managed in college |
+| `col_managed_last` | Int64 | Last season managed in college |
+| `pro_umpired_first` | Int64 | First season umpired professionally |
+| `pro_umpired_last` | Int64 | Last season umpired professionally |
+| `mlb_umpired_first` | Int64 | First season umpired in the major leagues |
+| `mlb_umpired_last` | Int64 | Last season umpired in the major leagues |
+
 **Raises**
 
 | Exception | Description |
