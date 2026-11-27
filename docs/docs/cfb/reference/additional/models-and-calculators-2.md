@@ -6,6 +6,108 @@ description: "College football — additional Python functions — Models and ca
 ---
 # College football — additional Python functions — Models and calculators: cfb_adjusted–fit_field
 
+### cfb_adjusted_breakdowns {#cfb_adjusted_breakdowns}
+
+`cfb_adjusted_breakdowns(plays: 'pl.DataFrame | pd.DataFrame', *, metrics: 'Sequence[str] | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Season opponent-adjusted team breakdowns, shrunk toward the league mean for display.
+
+Each breakdown is a slice of the plays `cfb_adjusted_epa` scores (the pass and rush plays that are not
+garbage time by the score-margin rule) and a response: EPA, the EPA success flag or the EPA explosive flag. The
+slice goes through the same opponent fit as `cfb_adjusted_epa` with that response in place of EPA, then the
+displayed value is shrunk toward the league mean by `n / (n + k)` (see the module docstring). Breakdowns whose
+adjustment did not improve their reliability are published as the raw value with the same shrinkage and a null
+`_adj`. In-sample and descriptive: the fit uses the whole season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns `cfb_adjusted_epa` reads, plus the ones each requested breakdown slices on: `EPA_success` (or `epa_success`), `start.down` (or `down`), `standard_down` and `period`. One season at a time. |
+| `metrics` | `Sequence[str] \| None` | `None` | Breakdown names to return, in that order (default: every published one). Each name covers both sides that are published for it. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per team rated in any requested breakdown: `team_id`, `pos_team`, then for each published breakdown and side (`off` = the team's offense, `def` = its defense) `<metric>_<side>_raw`, `_adj` (null when the breakdown is published raw), `_shrunk` (the display value), `_n` (plays) and `_rank` (on `_shrunk`; offense highest first, defense lowest first). A team needs two or more games with plays on both sides of the slice to be rated in it. No rows when every play is garbage time.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | String | Team ESPN id (character join key). |
+| `pos_team` | String | Team name as ESPN spells it in the play-by-play. |
+| `epa_all_off_raw` | Float64 | Raw EPA per play the offense gained on all downs (pass and rush plays outside garbage time). |
+| `epa_all_off_adj` | Float64 | Opponent-adjusted EPA per play the offense gained on all downs (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `epa_all_off_shrunk` | Float64 | Display value: the adjusted EPA per play the offense gained on all downs, shrunk toward the league mean by n / (n + 222.5). |
+| `epa_all_off_n` | Int64 | Plays behind the offense values: its pass and rush plays on all downs outside garbage time (the n in the shrinkage). |
+| `epa_all_off_rank` | Float64 | Rank of epa_all_off_shrunk (highest = 1, ties averaged). |
+| `epa_all_def_raw` | Float64 | Raw EPA per play the defense allowed on all downs (pass and rush plays outside garbage time). |
+| `epa_all_def_adj` | Float64 | Opponent-adjusted EPA per play the defense allowed on all downs (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `epa_all_def_shrunk` | Float64 | Display value: the adjusted EPA per play the defense allowed on all downs, shrunk toward the league mean by n / (n + 244.2). |
+| `epa_all_def_n` | Int64 | Plays behind the defense values: its pass and rush plays on all downs outside garbage time (the n in the shrinkage). |
+| `epa_all_def_rank` | Float64 | Rank of epa_all_def_shrunk (lowest = 1, ties averaged). |
+| `success_all_off_raw` | Float64 | Raw success rate (share of plays with positive EPA) the offense gained on all downs (pass and rush plays outside garbage time). |
+| `success_all_off_adj` | Float64 | Opponent-adjusted success rate (share of plays with positive EPA) the offense gained on all downs (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `success_all_off_shrunk` | Float64 | Display value: the adjusted success rate (share of plays with positive EPA) the offense gained on all downs, shrunk toward the league mean by n / (n + 199.4). |
+| `success_all_off_n` | Int64 | Plays behind the offense values: its pass and rush plays on all downs outside garbage time (the n in the shrinkage). |
+| `success_all_off_rank` | Float64 | Rank of success_all_off_shrunk (highest = 1, ties averaged). |
+| `success_all_def_raw` | Float64 | Raw success rate (share of plays with positive EPA) the defense allowed on all downs (pass and rush plays outside garbage time). |
+| `success_all_def_adj` | Float64 | Opponent-adjusted success rate (share of plays with positive EPA) the defense allowed on all downs (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `success_all_def_shrunk` | Float64 | Display value: the adjusted success rate (share of plays with positive EPA) the defense allowed on all downs, shrunk toward the league mean by n / (n + 229.4). |
+| `success_all_def_n` | Int64 | Plays behind the defense values: its pass and rush plays on all downs outside garbage time (the n in the shrinkage). |
+| `success_all_def_rank` | Float64 | Rank of success_all_def_shrunk (lowest = 1, ties averaged). |
+| `epa_early_down_off_raw` | Float64 | Raw EPA per play the offense gained on first and second downs (pass and rush plays outside garbage time). |
+| `epa_early_down_off_adj` | Float64 | Opponent-adjusted EPA per play the offense gained on first and second downs (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `epa_early_down_off_shrunk` | Float64 | Display value: the adjusted EPA per play the offense gained on first and second downs, shrunk toward the league mean by n / (n + 205.8). |
+| `epa_early_down_off_n` | Int64 | Plays behind the offense values: its pass and rush plays on first and second downs outside garbage time (the n in the shrinkage). |
+| `epa_early_down_off_rank` | Float64 | Rank of epa_early_down_off_shrunk (highest = 1, ties averaged). |
+| `epa_early_down_def_raw` | Float64 | Raw EPA per play the defense allowed on first and second downs (pass and rush plays outside garbage time). |
+| `epa_early_down_def_adj` | Float64 | Opponent-adjusted EPA per play the defense allowed on first and second downs (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `epa_early_down_def_shrunk` | Float64 | Display value: the adjusted EPA per play the defense allowed on first and second downs, shrunk toward the league mean by n / (n + 233.3). |
+| `epa_early_down_def_n` | Int64 | Plays behind the defense values: its pass and rush plays on first and second downs outside garbage time (the n in the shrinkage). |
+| `epa_early_down_def_rank` | Float64 | Rank of epa_early_down_def_shrunk (lowest = 1, ties averaged). |
+| `epa_standard_down_off_raw` | Float64 | Raw EPA per play the offense gained on standard downs (pass and rush plays outside garbage time). |
+| `epa_standard_down_off_adj` | Float64 | Opponent-adjusted EPA per play the offense gained on standard downs (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `epa_standard_down_off_shrunk` | Float64 | Display value: the adjusted EPA per play the offense gained on standard downs, shrunk toward the league mean by n / (n + 252.8). |
+| `epa_standard_down_off_n` | Int64 | Plays behind the offense values: its pass and rush plays on standard downs outside garbage time (the n in the shrinkage). |
+| `epa_standard_down_off_rank` | Float64 | Rank of epa_standard_down_off_shrunk (highest = 1, ties averaged). |
+| `epa_standard_down_def_raw` | Float64 | Raw EPA per play the defense allowed on standard downs (pass and rush plays outside garbage time). |
+| `epa_standard_down_def_adj` | Float64 | Opponent-adjusted EPA per play the defense allowed on standard downs (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `epa_standard_down_def_shrunk` | Float64 | Display value: the adjusted EPA per play the defense allowed on standard downs, shrunk toward the league mean by n / (n + 233.7). |
+| `epa_standard_down_def_n` | Int64 | Plays behind the defense values: its pass and rush plays on standard downs outside garbage time (the n in the shrinkage). |
+| `epa_standard_down_def_rank` | Float64 | Rank of epa_standard_down_def_shrunk (lowest = 1, ties averaged). |
+| `epa_first_half_off_raw` | Float64 | Raw EPA per play the offense gained on the first half (pass and rush plays outside garbage time). |
+| `epa_first_half_off_adj` | Float64 | Always null: EPA per play on the first half for the offense is published raw, since the opponent adjustment did not make it more reliable. |
+| `epa_first_half_off_shrunk` | Float64 | Display value: the raw EPA per play the offense gained on the first half, shrunk toward the league mean by n / (n + 216.5). |
+| `epa_first_half_off_n` | Int64 | Plays behind the offense values: its pass and rush plays on the first half outside garbage time (the n in the shrinkage). |
+| `epa_first_half_off_rank` | Float64 | Rank of epa_first_half_off_shrunk (highest = 1, ties averaged). |
+| `epa_first_half_def_raw` | Float64 | Raw EPA per play the defense allowed on the first half (pass and rush plays outside garbage time). |
+| `epa_first_half_def_adj` | Float64 | Always null: EPA per play on the first half for the defense is published raw, since the opponent adjustment did not make it more reliable. |
+| `epa_first_half_def_shrunk` | Float64 | Display value: the raw EPA per play the defense allowed on the first half, shrunk toward the league mean by n / (n + 280.3). |
+| `epa_first_half_def_n` | Int64 | Plays behind the defense values: its pass and rush plays on the first half outside garbage time (the n in the shrinkage). |
+| `epa_first_half_def_rank` | Float64 | Rank of epa_first_half_def_shrunk (lowest = 1, ties averaged). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+| `ValueError` | If a name in `metrics` is not a published breakdown. |
+
+**Example**
+
+```python
+# Quick start (``plays`` is a season of FBS pass / rush plays with the columns :func:`cfb_adjusted_epa` reads, such as the cfbfastR-cfb-data team-summaries input)
+
+    import polars as pl
+    import sportsdataverse.cfb as cfb
+    bd = cfb.cfb_adjusted_breakdowns(plays)
+    bd.sort("success_all_off_rank").select("pos_team", "success_all_off_shrunk", "success_all_off_n").head()
+
+# Only some breakdowns
+
+    cfb.cfb_adjusted_breakdowns(plays, metrics=["success_all", "epa_early_down"])
+```
+
 ### cfb_adjusted_epa {#cfb_adjusted_epa}
 
 `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`

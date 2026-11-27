@@ -111,6 +111,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [calculate_win_probability](additional/models-and-calculators.md#calculate_win_probability) | Win probability for each row. |
 | [calculate_wpa](additional/models-and-calculators.md#calculate_wpa) | Win probability added: the change in WP across a play. |
 | [calculate_xpass](additional/models-and-calculators.md#calculate_xpass) | Expected pass probability for each row. |
+| [cfb_adjusted_breakdowns](additional/models-and-calculators-2.md#cfb_adjusted_breakdowns) | Season opponent-adjusted team breakdowns, shrunk toward the league mean for display. |
 | [cfb_adjusted_epa](additional/models-and-calculators-2.md#cfb_adjusted_epa) | Season opponent-adjusted per-team EPA from a season's play-by-play. |
 | [cfb_adjusted_epa_by_game](additional/models-and-calculators-2.md#cfb_adjusted_epa_by_game) | Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game. |
 | [cfb_adjusted_epa_ledger](additional/models-and-calculators-2.md#cfb_adjusted_epa_ledger) | Per-game decomposition of `cfb_adjusted_epa`'s season figure, one row per team-game. |
