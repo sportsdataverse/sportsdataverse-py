@@ -59,7 +59,12 @@ def test_missing_chain_start_refuses():
 
 
 def _games_and_ratings(hier: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
-    slate = SCHED.filter((pl.col("season") == 2024) & (pl.col("week") == 10) & (pl.col("season_type") == "regular"))
+    slate = SCHED.filter(
+        (pl.col("season") == 2024)
+        & (pl.col("week") == 10)
+        & (pl.col("season_type") == "regular")
+        & (pl.col("fbs_participant") == True)  # noqa: E712
+    )
     games = slate.select(
         pl.col("game_id").cast(pl.Int64),
         pl.col("home_id").cast(pl.Int64).cast(pl.Utf8).alias("home_team_id"),
@@ -113,3 +118,21 @@ def test_predict_games_never_falls_back():
         cfb_predict_games(games, ratings, hierarchical=hier)
     with pytest.raises(ValueError, match="model must be"):
         cfb_predict_games(games, ratings, model="bayes")
+
+
+def test_integer_keyed_ratings_join_the_string_ids():
+    """cfb_ratings_weekly carries Int64 team ids; the hierarchical String ids must meet them."""
+    hier = cfb_hierarchical_ratings(SCHED, 2024, 10, first_season=2023)
+    games, ratings = _games_and_ratings(hier)
+    as_str = cfb_predict_games(games, ratings, model="hierarchical", hierarchical=hier)
+    games_i = games.with_columns(pl.col("home_team_id", "away_team_id").cast(pl.Int64))
+    ratings_i = ratings.with_columns(pl.col("team_id").cast(pl.Int64))
+    as_int = cfb_predict_games(games_i, ratings_i, model="hierarchical", hierarchical=hier)
+    np.testing.assert_array_equal(as_int["exp_margin"].to_numpy(), as_str["exp_margin"].to_numpy())
+
+
+def test_fixture_exercises_the_filters():
+    """Non-FBS, unplayed and null-conference rows are present, so the corpus filters are tested."""
+    assert SCHED.filter(pl.col("fbs_participant") != True).height > 0  # noqa: E712
+    assert SCHED.filter(pl.col("home_points").is_null()).height > 0
+    assert SCHED.filter(pl.col("home_conference").is_null() | pl.col("away_conference").is_null()).height > 0

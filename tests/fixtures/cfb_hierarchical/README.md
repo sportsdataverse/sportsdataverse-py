@@ -8,8 +8,9 @@
 
 # cfb_hierarchical fixtures
 
-- `schedule_2023_2024.parquet`: every 2023-2024 game with an FBS team from the `cfb_schedules` release, read
-  2026-11-27 with `load_cfb_schedule([2023, 2024])`. Only the columns `cfb_hierarchical_ratings` reads are kept.
+- `schedule_2023_2024.parquet`: every 2023-2024 game in the `cfb_schedules` release (7,535), read 2026-11-27 with
+  `load_cfb_schedule([2023, 2024])`. It includes the non-FBS games, 5 unplayed games and 148 with a null conference,
+  so the corpus filters are exercised. Only the columns `cfb_hierarchical_ratings` reads are kept.
 - `expected_ratings.parquet`: the reference model's as-of strengths on that schedule, for (2023, t=6), (2024, t=10)
   and (2024, t=101, the bowls). The reference is cfbfastR-cfb-data `cfb_higher_models.hierarchical`:
   `build_corpus` and `fit_asof(method="eb")`.

@@ -94,7 +94,7 @@ def _corpus(
     modal = (
         long.group_by(["season", "team_id", "conf"])
         .len()
-        .sort("len", descending=True)
+        .sort(["len", "conf"], descending=[True, False])
         .group_by(["season", "team_id"])
         .first()
     )

@@ -529,9 +529,12 @@ def _hierarchical_margin(frame: pl.DataFrame, hierarchical: pl.DataFrame | None)
     if hierarchical is None:
         raise ValueError("cfb_predict_games: model='hierarchical' needs the cfb_hierarchical_ratings frame")
     hier = hierarchical if isinstance(hierarchical, pl.DataFrame) else pl.from_pandas(hierarchical)
-    key = hier.schema["team_id"]
-    for side in ("home_team_id", "away_team_id"):
-        assert frame.schema[side] == key, f"{side} dtype {frame.schema[side]} != hierarchical team_id {key}"
+    key = frame.schema["home_team_id"]
+    assert frame.schema["away_team_id"] == key, "home_team_id and away_team_id dtypes differ"
+    if hier.schema["team_id"] != key:
+        # cfb_hierarchical_ratings emits String ids; the ratings key may be Int64. An integer
+        # parse, never through float, so "123" and 123 meet and nothing else does.
+        hier = hier.with_columns(pl.col("team_id").cast(pl.Int64, strict=True).cast(key))
     if hier["hfa"].n_unique() != 1 or hier["asof_t"].n_unique() != 1:
         raise ValueError("cfb_predict_games: the hierarchical frame must hold ONE as-of fit (one hfa, one asof_t)")
     th = hier.select("team_id", "theta")
