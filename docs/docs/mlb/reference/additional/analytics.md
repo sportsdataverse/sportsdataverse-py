@@ -702,7 +702,7 @@ How the winner won it, for one or many MLB games: edges in runs, the moment, inn
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `re24` has no run expectancy for one of the games' seasons, or for any of the PAs. |
+| `ValueError` | If `re24` has no run expectancy for one of the games' seasons, or for a PA's base-out state. |
 
 **Example**
 
@@ -714,7 +714,7 @@ sched = load_mlb_schedule([2025]).filter(pl.col("detailed_state") == "Final")
 story = mlb_game_story(load_mlb_pbp([2025]), sched, load_mlb_wpa([2025]), load_mlb_re24_matrix([2025]))
 story["edges"].filter(pl.col("rank") == 1)
 
-# Every walk-off's moment
+# The largest winner-favoring swings
 
 story["moment"].filter(pl.col("winner_wpa") > 0.4)
 ```
