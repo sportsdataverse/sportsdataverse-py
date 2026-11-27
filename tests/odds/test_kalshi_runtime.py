@@ -142,3 +142,14 @@ def test_primary_host_is_the_generated_family_host():
         (pathlib.Path(__file__).parents[2] / "tools/codegen/endpoints/kalshi.yaml").read_text("utf-8")
     )
     assert spec["host"] == PRIMARY_HOST  # a drift here would silently switch the failover off
+
+
+def test_a_caller_transport_is_honoured_and_still_fails_over():
+    seen = []
+
+    def mine(**kwargs):
+        seen.append(kwargs["url"])
+        return _Resp(503) if kwargs["url"].startswith(PRIMARY_HOST) else _Resp(200, STATUS)
+
+    assert kalshi_exchange_status(return_parsed=False, transport=mine) == STATUS
+    assert seen == [f"{PRIMARY_HOST}/exchange/status", f"{FALLBACK_HOST}/exchange/status"]
