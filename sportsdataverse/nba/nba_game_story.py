@@ -178,6 +178,59 @@ def _wp(pbp: pl.DataFrame, league: str) -> pl.DataFrame:
     )
 
 
+def _games(rows: pl.DataFrame, league: str) -> pl.DataFrame:
+    """One row per game: the teams, the official final and the regulation periods."""
+    home = rows.filter(pl.col("team_home_away") == "home").select(
+        "game_id",
+        "season",
+        pl.col("team_id").alias("home_team_id"),
+        pl.col("team_score").cast(pl.Int64).alias("home_score"),
+    )
+    away = rows.filter(pl.col("team_home_away") == "away").select(
+        "game_id", pl.col("team_id").alias("away_team_id"), pl.col("team_score").cast(pl.Int64).alias("away_score")
+    )
+    games = home.join(away, on="game_id", how="inner")
+    regs = {s: game_regulation_periods(league, season=s) for s in games["season"].drop_nulls().unique().to_list()}
+    return games.with_columns(
+        pl.col("season")
+        .replace_strict(regs, default=game_regulation_periods(league), return_dtype=pl.Int64)
+        .alias("regulation_periods")
+    )
+
+
+def _plays(pbp: pl.DataFrame, games: pl.DataFrame, league: str) -> pl.DataFrame:
+    """The games' plays with their win-probability change, in the core's play schema."""
+    pbp = pbp.with_columns(pl.col("game_id").cast(pl.Int64)).join(games.select("game_id"), on="game_id", how="semi")
+    return _wp(pbp, league).select(
+        "game_id",
+        pl.col("id").cast(pl.Int64).alias("play_id"),
+        pl.col("game_play_number").cast(pl.Int64).alias("order"),
+        pl.col("period_number").cast(pl.Int64).alias("period"),
+        pl.col("clock_display_value").cast(pl.Utf8).alias("clock"),
+        pl.col("team_id").cast(pl.Int64),
+        pl.col("text").cast(pl.Utf8),
+        pl.col("home_score").cast(pl.Int64),
+        pl.col("away_score").cast(pl.Int64),
+        pl.col("wp_delta").cast(pl.Float64).alias("wpa"),
+    )
+
+
+def _players(player_box: pl.DataFrame) -> pl.DataFrame:
+    """Each player who played, by points (ties: assists plus rebounds)."""
+    pb = player_box
+    if "did_not_play" in pb.columns:
+        pb = pb.filter(pl.col("did_not_play").fill_null(False) == False)
+    return pb.select(
+        pl.col("game_id").cast(pl.Int64),
+        pl.col("team_id").cast(pl.Int64),
+        pl.col("athlete_id").cast(pl.Int64).alias("player_id"),
+        pl.col("athlete_display_name").cast(pl.Utf8).alias("player_name"),
+        pl.lit("points").alias("metric"),
+        pl.col("points").cast(pl.Float64).alias("value"),
+        (pl.col("assists").cast(pl.Float64) + pl.col("rebounds").cast(pl.Float64)).alias("tiebreak"),
+    )
+
+
 def nba_game_story(
     pbp: pl.DataFrame,
     team_box: pl.DataFrame,
@@ -239,48 +292,9 @@ def nba_game_story(
     if league not in _LEAGUES:
         raise ValueError(f"league must be one of {list(_LEAGUES)}, got {league!r}")
     rows = _team_rows(team_box, league)
-    home = rows.filter(pl.col("team_home_away") == "home").select(
-        "game_id",
-        "season",
-        pl.col("team_id").alias("home_team_id"),
-        pl.col("team_score").cast(pl.Int64).alias("home_score"),
-    )
-    away = rows.filter(pl.col("team_home_away") == "away").select(
-        "game_id", pl.col("team_id").alias("away_team_id"), pl.col("team_score").cast(pl.Int64).alias("away_score")
-    )
-    games = home.join(away, on="game_id", how="inner")
-    regs = {s: game_regulation_periods(league, season=s) for s in games["season"].drop_nulls().unique().to_list()}
-    games = games.with_columns(
-        pl.col("season")
-        .replace_strict(regs, default=game_regulation_periods(league), return_dtype=pl.Int64)
-        .alias("regulation_periods")
-    )
-    pbp = pbp.with_columns(pl.col("game_id").cast(pl.Int64)).join(games.select("game_id"), on="game_id", how="semi")
-    scored = _wp(pbp, league)
-    plays = scored.select(
-        "game_id",
-        pl.col("id").cast(pl.Int64).alias("play_id"),
-        pl.col("game_play_number").cast(pl.Int64).alias("order"),
-        pl.col("period_number").cast(pl.Int64).alias("period"),
-        pl.col("clock_display_value").cast(pl.Utf8).alias("clock"),
-        pl.col("team_id").cast(pl.Int64),
-        pl.col("text").cast(pl.Utf8),
-        pl.col("home_score").cast(pl.Int64),
-        pl.col("away_score").cast(pl.Int64),
-        pl.col("wp_delta").cast(pl.Float64).alias("wpa"),
-    )
-    pb = player_box
-    if "did_not_play" in pb.columns:
-        pb = pb.filter(pl.col("did_not_play").fill_null(False) == False)
-    players = pb.select(
-        pl.col("game_id").cast(pl.Int64),
-        pl.col("team_id").cast(pl.Int64),
-        pl.col("athlete_id").cast(pl.Int64).alias("player_id"),
-        pl.col("athlete_display_name").cast(pl.Utf8).alias("player_name"),
-        pl.lit("points").alias("metric"),
-        pl.col("points").cast(pl.Float64).alias("value"),
-        (pl.col("assists").cast(pl.Float64) + pl.col("rebounds").cast(pl.Float64)).alias("tiebreak"),
-    )
+    games = _games(rows, league)
+    plays = _plays(pbp, games, league)
+    players = _players(player_box)
     story = game_story(games, _edges(rows), plays, players)
     if return_as_pandas:
         return {k: v.to_pandas() for k, v in story.items()}

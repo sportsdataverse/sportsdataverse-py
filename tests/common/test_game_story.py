@@ -146,7 +146,7 @@ def test_basketball_league_check() -> None:
 
 
 @pytest.mark.parametrize(("fn", "lg"), [(cfb_game_story, "cfb"), (nfl_game_story, "nfl")])
-def test_football_gates_on_real_games(fn, lg: str) -> None:  # noqa: ANN001 - the two public adapters
+def test_football_gates_on_real_games(fn, lg: str) -> None:
     pbp = pl.read_parquet(FB / f"espn_{lg}_pbp_games.parquet")
     story = fn(pbp)
     _assert_schemas(story)
