@@ -133,9 +133,15 @@ PASS_DEPTH_RE = r"\bpass(?:\s+(?:complete|incomplete))?\s+(short|deep)\b"
 #: text ends on it ("pass incomplete short right.", 5,437 attempts), so the charted
 #: completion rate ran 63.9% against 62.7% for all attempts (63.0% with this one), and it
 #: gave 16,645 scramble rows ("scrambles right end") a pass depth or direction. College
-#: changes on 6 of 114,319 2025-26 pass rows, each a fix.
+#: changes on 6 of 114,319 2025-26 pass rows, each a fix. The 2002-04 NFL feed writes the
+#: direction as "pass incomplete to the right side." and "pass [incomplete ]across the middle",
+#: so "to the" and "across the" are read too: without them the anchored phrase charted no
+#: direction on 20,814 2002-04 passes (17,270 of them read by the loose match it replaced).
+#: They move no 2006-25 NFL pass row; 7 rows of the 2025 college release gain a direction
+#: ("pass short to the right incomplete").
 PASS_DIRECTION_RE = (
-    r"\bpass(?:\s+(?:complete|incomplete))?(?:\s+(?:short|deep))?\s+(?:up\s+the\s+)?(left|middle|right)\b"
+    r"\bpass(?:\s+(?:complete|incomplete))?(?:\s+(?:short|deep))?\s+(?:up\s+the\s+|to\s+the\s+|across\s+the\s+)?"
+    r"(left|middle|right)\b"
 )
 
 
