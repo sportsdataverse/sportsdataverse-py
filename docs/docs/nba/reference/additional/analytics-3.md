@@ -1,10 +1,78 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_game–nba_player"
-sidebar_label: "Analytics: nba_game–nba_player"
+title: "NBA — additional Python functions — Analytics: nba_game–nba_play"
+sidebar_label: "Analytics: nba_game–nba_play"
 sidebar_position: 17
-description: "NBA — additional Python functions — Analytics: nba_game–nba_player — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_game–nba_play — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_game–nba_player
+# NBA — additional Python functions — Analytics: nba_game–nba_play
+
+### nba_game_stints {#nba_game_stints}
+
+`nba_game_stints(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Game stints: per player and game, every stretch on the floor with its clock, points and possessions.
+
+The definitions are in `sportsdataverse._common.game_stints`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `(season, game_id, team_id, player_id, stint_number)`: `opp_team_id`, `stint_number` (1 = his first in the game), `period`, `clock_in` / `clock_out` (the period clock, seconds left, when the stint began and ended), `seconds` / `minutes` on the floor, `poss` / `opp_poss` (offensive / defensive possessions started), `pts` / `opp_pts` (team points scored / allowed), `plus_minus` and the player's own box in the stint (`nba_box_events`): `points`, `fgm` / `fga`, `fg3m` / `fg3a`, `ftm` / `fta`, `oreb` / `dreb` / `reb`, `ast`, `stl`, `blk`, `tov` and `pf`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
+| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
+| `team_id` | Int64 | stats.nba.com team id. |
+| `opp_team_id` | Int64 | The opponent's team id. |
+| `player_id` | Int64 | stats.nba.com player (person) id. |
+| `stint_number` | Int64 | The stint's place among the player's stints in the game, from 1 in game order. A stint is a run of consecutive actions of one period with him on the floor. |
+| `period` | Int64 | Period of the stint (a stint never spans a period end). |
+| `clock_in` | Float64 | Period clock (seconds left) when the stint began: the clock at the action before his first. |
+| `clock_out` | Float64 | Period clock (seconds left) when the stint ended: the clock at his last action. |
+| `seconds` | Float64 | Game-clock seconds of the stint: the clock that ran into each of its actions. |
+| `minutes` | Float64 | Game-clock minutes of the stint (seconds / 60). |
+| `poss` | Int64 | Offensive possessions that started during the stint (each counted on the lineup at the action that starts it). |
+| `opp_poss` | Int64 | Defensive possessions that started during the stint, counted as poss is. |
+| `pts` | Int64 | The team's points during the stint, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
+| `opp_pts` | Int64 | The opponent's points during the stint, credited as pts is. |
+| `plus_minus` | Int64 | The stint's +/-: pts - opp_pts. |
+| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw, his own, on the stint's actions. |
+| `fgm` | Int64 | Field goals made, his own, on the stint's actions. |
+| `fga` | Int64 | Field goals attempted, his own, on the stint's actions. |
+| `fg3m` | Int64 | Three-pointers made, his own, on the stint's actions. |
+| `fg3a` | Int64 | Three-pointers attempted, his own, on the stint's actions. |
+| `ftm` | Int64 | Free throws made, his own, on the stint's actions. |
+| `fta` | Int64 | Free throws attempted, his own, on the stint's actions. |
+| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
+| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
+| `reb` | Int64 | Total rebounds in the stint: oreb + dreb. |
+| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on, his own, on the stint's actions. |
+| `stl` | Int64 | Steals, his own, on the stint's actions. |
+| `blk` | Int64 | Blocked shots, his own, on the stint's actions. |
+| `tov` | Int64 | Turnovers (a team turnover is no player's), his own, on the stint's actions. |
+| `pf` | Int64 | Personal fouls (technicals are not counted), his own, on the stint's actions. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_stints import nba_game_stints
+stints = nba_game_stints(2026)
+stints.filter(game_id="0022500101")
+```
 
 ### nba_game_story {#nba_game_story}
 
@@ -785,95 +853,4 @@ clean = poss.filter(
     (pl.col("is_garbage_time_ctg") == False) & (pl.col("is_heave_possession") == False)
 )
 print(clean["is_transition_ctg"].mean())
-```
-
-### nba_play_style_features {#nba_play_style_features}
-
-`nba_play_style_features(seasons: 'int | list[int]', *, side: 'str' = 'offense', entity: 'str' = 'player', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-The play-style clustering features, one row per qualifying player- or team-season.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). Seasons before `NBA_PLAY_STYLE_FIRST_SEASON` are skipped. |
-| `side` | `str` | `'offense'` | `"offense"` or `"defense"`. |
-| `entity` | `str` | `'player'` | `"player"` or `"team"`. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-The ids, `season` (and `min` for players) and the raw (unstandardized) features of `NBA_PLAY_STYLE_FEATURES` for `(side, entity)` (every candidate feature for the team defense). A season no release covers yet is skipped; with none left the frame has those columns and zero rows. The returns table below is the default `side="offense", entity="player"` frame.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | Int64 | stats.nba.com player id. |
-| `season` | Int64 | Season, named by the year it ends (2026 is 2025-26). |
-| `player_name` | String | Player's display name on stats.nba.com. |
-| `team_id` | Int64 | stats.nba.com team id (the league-dashboard team; a traded player's last team). |
-| `min` | Float64 | Regular-season minutes; the qualifier is a quarter of the season's most minutes. |
-| `pt_isolation` | Float64 | Share of the player's Synergy possessions that were isolations (stats.nba.com play-type frequency). |
-| `pt_prballhandler` | Float64 | Share of Synergy possessions as the pick-and-roll ball handler. |
-| `pt_prrollman` | Float64 | Share of Synergy possessions as the pick-and-roll roll man. |
-| `pt_postup` | Float64 | Share of Synergy possessions that were post-ups. |
-| `pt_spotup` | Float64 | Share of Synergy possessions that were spot-ups. |
-| `pt_handoff` | Float64 | Share of Synergy possessions out of handoffs. |
-| `pt_offscreen` | Float64 | Share of Synergy possessions coming off screens. |
-| `pt_cut` | Float64 | Share of Synergy possessions on cuts. |
-| `pt_transition` | Float64 | Share of Synergy possessions in transition. |
-| `pt_offrebound` | Float64 | Share of Synergy possessions on putbacks after an offensive rebound. |
-| `fga3_share` | Float64 | Share of field-goal attempts that were threes. |
-| `uast_share` | Float64 | Share of made field goals that were unassisted. |
-| `paint_pts_share` | Float64 | Share of points scored in the paint. |
-| `mid_pts_share` | Float64 | Share of points from mid-range twos. |
-| `drives_p36` | Float64 | Drives per 36 minutes (tracking). |
-| `touches_p36` | Float64 | Touches per 36 minutes (tracking). |
-| `sec_per_touch` | Float64 | Average seconds per touch (tracking). |
-| `drib_per_touch` | Float64 | Average dribbles per touch (tracking). |
-| `catch_shoot_share` | Float64 | Catch-and-shoot attempts as a share of field-goal attempts. |
-| `pull_up_share` | Float64 | Pull-up attempts as a share of field-goal attempts. |
-| `post_touches_p36` | Float64 | Post touches per 36 minutes. |
-| `paint_touches_p36` | Float64 | Paint touches per 36 minutes. |
-| `potential_ast_p36` | Float64 | Potential assists per 36 minutes. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `side` or `entity` is not one of the values above. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_play_style import nba_play_style_features
-feats = nba_play_style_features(2025, side="defense", entity="team")
-```
-
-### nba_player_ages {#nba_player_ages}
-
-`nba_player_ages(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'`
-
-Per-player age for a season (bulk), for the DARKO aging curve.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `str` |  | NBA season, e.g. `"2023-24"`. |
-| `league_id` | `str` | `'00'` | LeagueID (`"00"` NBA). |
-| `fetch` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable `nba_stats_leaguedashplayerbiostats` replacement for offline tests. |
-
-**Returns**
-
-Frame `player_id:Int64, age:Float64`.
-
-No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_player_ages
-ages = nba_player_ages("2023-24")
-print(ages.head())
 ```

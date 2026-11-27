@@ -1,5 +1,5 @@
 {
-  "total": 84,
+  "total": 85,
   "sports": [
     {
       "label": "Football",
@@ -475,6 +475,11 @@
           "key": "kloppy",
           "label": "kloppy open event data",
           "href": "https://kloppy.pysport.org"
+        },
+        {
+          "key": "reep",
+          "label": "reep football id register",
+          "href": "https://github.com/withqwerty/reep"
         },
         {
           "key": "mls",

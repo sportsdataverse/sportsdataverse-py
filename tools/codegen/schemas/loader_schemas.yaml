@@ -6781,6 +6781,61 @@ load_cfb_schedule_crosswalk:
   type: String
 - name: matched_sources
   type: String
+load_cfb_team_adjustment_ledger:
+- name: season
+  type: Int64
+- name: game_id
+  type: Int64
+- name: week
+  type: Int64
+- name: season_type
+  type: Int64
+- name: team_id
+  type: Int64
+- name: pos_team
+  type: String
+- name: opponent_id
+  type: Int64
+- name: site
+  type: String
+- name: off_plays
+  type: Int64
+- name: def_plays
+  type: Int64
+- name: raw_off_epa
+  type: Float64
+- name: raw_def_epa
+  type: Float64
+- name: raw_net_epa
+  type: Float64
+- name: off_strength_faced
+  type: Float64
+- name: def_strength_faced
+  type: Float64
+- name: schedule_adj
+  type: Float64
+- name: adj_off_epa
+  type: Float64
+- name: adj_def_epa
+  type: Float64
+- name: adj_net_epa
+  type: Float64
+- name: off_weight
+  type: Float64
+- name: def_weight
+  type: Float64
+- name: raw_contribution
+  type: Float64
+- name: schedule_contribution
+  type: Float64
+- name: contribution
+  type: Float64
+- name: net_adj_epa
+  type: Float64
+- name: loo_net_adj_epa
+  type: Float64
+- name: game_influence
+  type: Float64
 load_cfb_team_aliases:
 - name: league
   type: String
@@ -13378,6 +13433,25 @@ load_mlb_groups:
   type: Int32
 - name: notes
   type: String
+load_mlb_leverage_index:
+- name: inning_capped
+  type: Int64
+- name: half
+  type: String
+- name: base_state
+  type: String
+- name: outs_start
+  type: Int64
+- name: score_diff_bucket
+  type: Int64
+- name: leverage_index
+  type: Float64
+- name: n
+  type: UInt32
+- name: thin
+  type: Boolean
+- name: season
+  type: Int64
 load_mlb_oaa:
 - name: fielder_id
   type: String

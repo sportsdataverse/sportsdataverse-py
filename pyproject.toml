@@ -264,7 +264,7 @@ include = ["sportsdataverse*", "sdv_docs*", "sdv_cli*"]
 [tool.setuptools.package-data]
 # ``py.typed`` is the PEP 561 marker that tells downstream type checkers this
 # package ships inline type information.
-sportsdataverse = ["cfb/models/*", "cfb/ncaa_pbp/data/*", "cricket/models/*", "golf/pgatour_queries/*.graphql", "mbb/data/*", "mbb/models/*", "mlb/models/*", "nba/data/*", "nba/models/*", "nfl/models/*", "nfl/shield_pbp/data/*", "nhl/models/*", "soccer/models/*", "wbb/data/*", "registry/*.yaml", "schemas/raw/*.yaml", "scrape/ncaa/data/*", "validation/*.yaml", "py.typed"]
+sportsdataverse = ["cfb/models/*", "cfb/ncaa_pbp/data/*", "cricket/models/*", "golf/pgatour_queries/*.graphql", "mbb/data/*", "mbb/models/*", "mlb/models/*", "nba/data/*", "nba/models/*", "nfl/models/*", "nfl/shield_pbp/data/*", "nhl/models/*", "soccer/data/*", "soccer/models/*", "wbb/data/*", "registry/*.yaml", "schemas/raw/*.yaml", "scrape/ncaa/data/*", "validation/*.yaml", "py.typed"]
 
 
 
@@ -1072,6 +1072,7 @@ files = [
     "sportsdataverse/wexp/market.py",
     "sportsdataverse/odds/market_join.py",
     "sportsdataverse/odds/kalshi_book.py",
+    "sportsdataverse/odds/kalshi_runtime.py",
     "sportsdataverse/wexp/scoring.py",
     "sportsdataverse/wexp/store.py",
     "sportsdataverse/wexp/oracle_market.py",
@@ -1088,6 +1089,7 @@ files = [
     "sportsdataverse/soccer/soccer_events.py",
     "sportsdataverse/soccer/spadl.py",
     "sportsdataverse/soccer/xthreat.py",
+    "sportsdataverse/soccer/soccer_reep_crosswalk.py",
     "sportsdataverse/f1/f1_parsers.py",
     "sportsdataverse/f1/f1_extra.py",
     "sdv_docs/__init__.py",

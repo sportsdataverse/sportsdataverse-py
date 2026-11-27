@@ -6,6 +6,128 @@ description: "NBA — additional Python functions — Analytics: nba_coach–nba
 ---
 # NBA — additional Python functions — Analytics: nba_coach–nba_game
 
+### nba_coach_careers {#nba_coach_careers}
+
+`nba_coach_careers(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', espn: 'bool' = True, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Head-coach careers over `seasons`: `nba_coach_seasons` summed per coach, rates recomputed.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | The seasons the careers cover (a career counts only these). |
+| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
+| `season_type` | `str` | `'regular-season'` | As `nba_coach_seasons`. |
+| `espn` | `bool` | `True` | As `nba_coach_seasons`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per `coach_id`, most games first: `teams` (abbreviations, first to last), `seasons`, `first_season`, `last_season`, the summed record and counts and the recomputed rates, with ranks among coaches with at least a full season of games. To build careers from coach seasons already in hand, call `~sportsdataverse._common.coach_seasons.coach_careers` on them.
+
+| col_name | type | description |
+|---|---|---|
+| `coach_id` | Int64 | stats.nba.com coach id of the head coach (nba_stats_coaches / wnba_stats_coaches). |
+| `coach` | String | Head coach's name (stats.nba.com's staff list). |
+| `role` | String | HC: head coach (the only role the table carries). |
+| `teams` | String | Teams coached, first to last, comma-joined (schools in college, abbreviations in the pros). |
+| `seasons` | Int64 | Distinct seasons in the career (only the seasons passed in). |
+| `first_season` | Int64 | First season in the career. |
+| `last_season` | Int64 | Last season in the career. |
+| `games` | Int64 | Games credited to the coach over the seasons passed in. |
+| `wins` | Int64 | Wins in the coach's games (final scores). |
+| `losses` | Int64 | Losses in the coach's games (final scores). |
+| `win_pct` | Float64 | Win fraction: wins divided by games, from the final scores. |
+| `pts` | Int64 | Points scored in the coach's games (final scores). |
+| `opp_pts` | Int64 | Points allowed in the coach's games (final scores). |
+| `pbp_games` | Int64 | The coach's games with published possessions; the ratings and four factors cover these. |
+| `poss` | Int64 | Offensive possessions in the coach's games. |
+| `opp_poss` | Int64 | Defensive possessions in the coach's games. |
+| `poss_pts` | Int64 | Points scored on those possessions (the off_rtg numerator; can differ from pts by a few points a game). |
+| `opp_poss_pts` | Int64 | Points allowed on those possessions (the def_rtg numerator). |
+| `seconds` | Float64 | Game clock, in seconds, that the coach's possessions used (the pace denominator). |
+| `o_fga` | Float64 | The team's field-goal attempts in the coach's games (a four-factor count; null when the source has none). |
+| `d_fga` | Float64 | Opponents' field-goal attempts in the coach's games (a four-factor count). |
+| `o_fgm` | Float64 | The team's field goals made in the coach's games (a four-factor count; null when the source has none). |
+| `d_fgm` | Float64 | Opponents' field goals made in the coach's games (a four-factor count). |
+| `o_fg3m` | Float64 | The team's three-pointers made in the coach's games (a four-factor count; null when the source has none). |
+| `d_fg3m` | Float64 | Opponents' three-pointers made in the coach's games (a four-factor count). |
+| `o_fta` | Float64 | The team's free-throw attempts in the coach's games (a four-factor count; null when the source has none). |
+| `d_fta` | Float64 | Opponents' free-throw attempts in the coach's games (a four-factor count). |
+| `o_oreb` | Float64 | The team's offensive rebounds in the coach's games (a four-factor count; null when the source has none). |
+| `d_oreb` | Float64 | Opponents' offensive rebounds in the coach's games (a four-factor count). |
+| `o_dreb` | Float64 | The team's defensive rebounds in the coach's games (a four-factor count; null when the source has none). |
+| `d_dreb` | Float64 | Opponents' defensive rebounds in the coach's games (a four-factor count). |
+| `o_tov` | Float64 | The team's turnovers in the coach's games (a four-factor count; null when the source has none). |
+| `d_tov` | Float64 | Opponents' turnovers in the coach's games (a four-factor count). |
+| `o_ff_poss` | Float64 | The team's possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor count; null when the source has none). |
+| `d_ff_poss` | Float64 | Opponents' possessions counted for the turnover rate (the box possessions in college) in the coach's games (a four-factor count). |
+| `off_rtg` | Float64 | Offensive rating: points scored per 100 offensive possessions, over the coach's games. |
+| `def_rtg` | Float64 | Defensive rating: points allowed per 100 defensive possessions, over the coach's games. |
+| `net_rtg` | Float64 | Net rating: off_rtg minus def_rtg. |
+| `pace` | Float64 | Pace: possessions per 48 minutes (40 with league_id="10", the WNBA), the mean of poss and opp_poss over the game clock those possessions used. |
+| `efg_pct` | Float64 | Effective field-goal percentage, (FGM + 0.5 * 3PM) / FGA, as a fraction. |
+| `tov_pct` | Float64 | Turnovers per possession, as a fraction. |
+| `orb_pct` | Float64 | Offensive rebound rate: offensive rebounds over offensive-rebound chances (own OREB plus the defense's DREB), as a fraction. |
+| `ft_rate` | Float64 | Free-throw rate, FTA / FGA. |
+| `opp_efg_pct` | Float64 | Opponents' effective field-goal percentage, as a fraction. |
+| `opp_tov_pct` | Float64 | Opponents' turnovers per possession (turnovers forced), as a fraction. |
+| `opp_orb_pct` | Float64 | Opponents' offensive rebound rate, as a fraction. |
+| `opp_ft_rate` | Float64 | Opponents' free-throw rate, FTA / FGA. |
+| `win_pct_rank` | Float64 | Rank of win_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `off_rtg_rank` | Float64 | Rank of off_rtg among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `def_rtg_rank` | Float64 | Rank of def_rtg among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the lowest value ranks 1; ties average). |
+| `net_rtg_rank` | Float64 | Rank of net_rtg among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `pace_rank` | Float64 | Rank of pace among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `efg_pct_rank` | Float64 | Rank of efg_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `tov_pct_rank` | Float64 | Rank of tov_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the lowest value ranks 1; ties average). |
+| `orb_pct_rank` | Float64 | Rank of orb_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `ft_rate_rank` | Float64 | Rank of ft_rate among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `opp_efg_pct_rank` | Float64 | Rank of opp_efg_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the lowest value ranks 1; ties average). |
+| `opp_tov_pct_rank` | Float64 | Rank of opp_tov_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the highest value ranks 1; ties average). |
+| `opp_orb_pct_rank` | Float64 | Rank of opp_orb_pct among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the lowest value ranks 1; ties average). |
+| `opp_ft_rate_rank` | Float64 | Rank of opp_ft_rate among coaches with at least one full season of games (the most games any team played in a season of the input; null under five) (the lowest value ranks 1; ties average). |
+| `win_pct_pct` | Float64 | Percentile of win_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `off_rtg_pct` | Float64 | Percentile of off_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `def_rtg_pct` | Float64 | Percentile of def_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `net_rtg_pct` | Float64 | Percentile of net_rtg among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `pace_pct` | Float64 | Percentile of pace among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `efg_pct_pct` | Float64 | Percentile of efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `tov_pct_pct` | Float64 | Percentile of tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `orb_pct_pct` | Float64 | Percentile of orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `ft_rate_pct` | Float64 | Percentile of ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_efg_pct_pct` | Float64 | Percentile of opp_efg_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_tov_pct_pct` | Float64 | Percentile of opp_tov_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_orb_pct_pct` | Float64 | Percentile of opp_orb_pct among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `opp_ft_rate_pct` | Float64 | Percentile of opp_ft_rate among the same qualified coaches: 100 * (n + 1 - rank) / (n + 1), n the qualifiers with a value. |
+| `win_pct_n` | Int64 | Sample size of win_pct: games. |
+| `off_rtg_n` | Int64 | Sample size of off_rtg: offensive possessions. |
+| `def_rtg_n` | Int64 | Sample size of def_rtg: defensive possessions. |
+| `net_rtg_n` | Int64 | Sample size of net_rtg: offensive plus defensive possessions. |
+| `pace_n` | Int64 | Sample size of pace: the games with possessions (pbp_games). |
+| `efg_pct_n` | Int64 | Sample size of efg_pct: field-goal attempts. |
+| `tov_pct_n` | Int64 | Sample size of tov_pct: turnover-rate possessions. |
+| `orb_pct_n` | Int64 | Sample size of orb_pct: offensive-rebound chances. |
+| `ft_rate_n` | Int64 | Sample size of ft_rate: field-goal attempts. |
+| `opp_efg_pct_n` | Int64 | Sample size of opp_efg_pct: opponents' field-goal attempts. |
+| `opp_tov_pct_n` | Int64 | Sample size of opp_tov_pct: opponents' turnover-rate possessions. |
+| `opp_orb_pct_n` | Int64 | Sample size of opp_orb_pct: opponents' offensive-rebound chances. |
+| `opp_ft_rate_n` | Int64 | Sample size of opp_ft_rate: opponents' field-goal attempts. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | As `nba_coach_seasons`. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_coach_seasons import nba_coach_careers
+nba_coach_careers(list(range(2016, 2027))).select("coach", "teams", "games", "win_pct").head()
+```
+
 ### nba_coach_seasons {#nba_coach_seasons}
 
 `nba_coach_seasons(seasons: 'int | list[int]', *, league_id: 'str' = '00', season_type: 'str' = 'regular-season', espn: 'bool' = True, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -886,72 +1008,4 @@ One row per `(season, game_id, team_id, player_id)`: `opp_team_id`, `minutes` an
 from sportsdataverse.nba.nba_game_impact import nba_game_player_impact
 box = nba_game_player_impact(2026)
 box.filter(game_id="0022500101")
-```
-
-### nba_game_stints {#nba_game_stints}
-
-`nba_game_stints(seasons: 'int | list[int]', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Game stints: per player and game, every stretch on the floor with its clock, points and possessions.
-
-The definitions are in `sportsdataverse._common.game_stints`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season or list of seasons, named by the year it ends (`2026` is 2025-26). The WNBA season is its calendar year. |
-| `league_id` | `str` | `'00'` | `"00"` NBA or `"10"` WNBA. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per `(season, game_id, team_id, player_id, stint_number)`: `opp_team_id`, `stint_number` (1 = his first in the game), `period`, `clock_in` / `clock_out` (the period clock, seconds left, when the stint began and ended), `seconds` / `minutes` on the floor, `poss` / `opp_poss` (offensive / defensive possessions started), `pts` / `opp_pts` (team points scored / allowed), `plus_minus` and the player's own box in the stint (`nba_box_events`): `points`, `fgm` / `fga`, `fg3m` / `fg3a`, `ftm` / `fta`, `oreb` / `dreb` / `reb`, `ast`, `stl`, `blk`, `tov` and `pf`. Ids are the stats.nba.com ids (Int64; `game_id` a String). Empty input returns that schema with zero rows.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | Int64 | Season, named by the year it ends (the WNBA season is its calendar year). |
-| `game_id` | String | stats.nba.com game id (e.g. 0022500101). |
-| `team_id` | Int64 | stats.nba.com team id. |
-| `opp_team_id` | Int64 | The opponent's team id. |
-| `player_id` | Int64 | stats.nba.com player (person) id. |
-| `stint_number` | Int64 | The stint's place among the player's stints in the game, from 1 in game order. A stint is a run of consecutive actions of one period with him on the floor. |
-| `period` | Int64 | Period of the stint (a stint never spans a period end). |
-| `clock_in` | Float64 | Period clock (seconds left) when the stint began: the clock at the action before his first. |
-| `clock_out` | Float64 | Period clock (seconds left) when the stint ended: the clock at his last action. |
-| `seconds` | Float64 | Game-clock seconds of the stint: the clock that ran into each of its actions. |
-| `minutes` | Float64 | Game-clock minutes of the stint (seconds / 60). |
-| `poss` | Int64 | Offensive possessions that started during the stint (each counted on the lineup at the action that starts it). |
-| `opp_poss` | Int64 | Defensive possessions that started during the stint, counted as poss is. |
-| `pts` | Int64 | The team's points during the stint, each scoring action credited to the lineup at that action (a free throw to the lineup at the last foul). |
-| `opp_pts` | Int64 | The opponent's points during the stint, credited as pts is. |
-| `plus_minus` | Int64 | The stint's +/-: pts - opp_pts. |
-| `points` | Int64 | Points the player scored: 2 or 3 per made field goal and 1 per made free throw, his own, on the stint's actions. |
-| `fgm` | Int64 | Field goals made, his own, on the stint's actions. |
-| `fga` | Int64 | Field goals attempted, his own, on the stint's actions. |
-| `fg3m` | Int64 | Three-pointers made, his own, on the stint's actions. |
-| `fg3a` | Int64 | Three-pointers attempted, his own, on the stint's actions. |
-| `ftm` | Int64 | Free throws made, his own, on the stint's actions. |
-| `fta` | Int64 | Free throws attempted, his own, on the stint's actions. |
-| `oreb` | Int64 | Offensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
-| `dreb` | Int64 | Defensive rebounds (a team rebound is no player's), his own, on the stint's actions. |
-| `reb` | Int64 | Total rebounds in the stint: oreb + dreb. |
-| `ast` | Int64 | Assists: made field goals the play-by-play credits him as the passer on, his own, on the stint's actions. |
-| `stl` | Int64 | Steals, his own, on the stint's actions. |
-| `blk` | Int64 | Blocked shots, his own, on the stint's actions. |
-| `tov` | Int64 | Turnovers (a team turnover is no player's), his own, on the stint's actions. |
-| `pf` | Int64 | Personal fouls (technicals are not counted), his own, on the stint's actions. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ValueError` | If `league_id` is not `"00"` or `"10"`. |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_stints import nba_game_stints
-stints = nba_game_stints(2026)
-stints.filter(game_id="0022500101")
 ```

@@ -708,6 +708,13 @@ providers:
       - sportsdataverse.soccer.spadl
       - sportsdataverse.soccer.xthreat
 
+  reep:
+    label: reep football id register
+    home: https://github.com/withqwerty/reep
+    auth: none (bundled table, CC0 1.0)
+    modules:
+      - sportsdataverse.soccer.soccer_reep_crosswalk
+
   mls:
     label: MLS official web API
     home: https://sportapi.mlssoccer.com

@@ -435,7 +435,7 @@ add_possession_flags:
   fg2m: Two-point field goals made during the possession.
   is_second_chance: Whether the row is a second-chance continuation following an offensive rebound.
   lineup_source: Provenance of the on-court lineup identification for the row (how the five-man units were resolved).
-  number_in_period: Sequential possession number for the offense within the period.
+  number_in_period: Possession number within the period, both teams counted, resetting to 1 at each period start.
   off_player_1: NBA Stats player id of offensive on-court player 1 of 5 for the possession.
   off_player_2: NBA Stats player id of offensive on-court player 2 of 5 for the possession.
   off_player_3: NBA Stats player id of offensive on-court player 3 of 5 for the possession.
@@ -453,6 +453,67 @@ add_possession_flags:
     Synergy's Transition play type; college's is 10). Never null.
   seconds_to_first_shot: Seconds from the change of possession (the clock at the previous possession's last event) to the
     possession's first field-goal attempt; null when it has no field-goal attempt.
+add_two_for_one_flags:
+  count_as_possession: Whether the row counts as a true possession for per-possession rate stats.
+  def_player_1: NBA Stats player id of defensive on-court player 1 of 5 for the possession.
+  def_player_2: NBA Stats player id of defensive on-court player 2 of 5 for the possession.
+  def_player_3: NBA Stats player id of defensive on-court player 3 of 5 for the possession.
+  def_player_4: NBA Stats player id of defensive on-court player 4 of 5 for the possession.
+  def_player_5: NBA Stats player id of defensive on-court player 5 of 5 for the possession.
+  defense_team_id: NBA Stats team id of the defending team for the possession.
+  end_order_index: order_index of the play-by-play event that ends the possession.
+  end_seconds_remaining: Seconds remaining in the period when the possession ended.
+  fg2a: Two-point field goal attempts during the possession.
+  fg2m: Two-point field goals made during the possession.
+  is_second_chance: Whether the row is a second-chance continuation following an offensive rebound.
+  lineup_source: Provenance of the on-court lineup identification for the row (how the five-man units were resolved).
+  number_in_period: Possession number within the period, both teams counted, resetting to 1 at each period start.
+  off_player_1: NBA Stats player id of offensive on-court player 1 of 5 for the possession.
+  off_player_2: NBA Stats player id of offensive on-court player 2 of 5 for the possession.
+  off_player_3: NBA Stats player id of offensive on-court player 3 of 5 for the possession.
+  off_player_4: NBA Stats player id of offensive on-court player 4 of 5 for the possession.
+  off_player_5: NBA Stats player id of offensive on-court player 5 of 5 for the possession.
+  possession_start_type: How the possession began (e.g. off a made shot, defensive rebound, turnover, or period start).
+  start_order_index: order_index of the play-by-play event that starts the possession.
+  start_seconds_remaining: Seconds remaining in the period when the possession started.
+  is_garbage_time: The possessions table's garbage-time flag (add_possession_flags), passed through unchanged.
+  is_transition: The possessions table's transition flag (add_possession_flags), passed through unchanged.
+  seconds_to_first_shot: Seconds from the change of possession to the possession's first field-goal attempt
+    (add_possession_flags), passed through unchanged; null when it has no field-goal attempt.
+  change_clock: Seconds left in the period at the change of possession (the previous possession's last event; a period's
+    first possession uses its own first event), the moment seconds_to_first_shot counts from. Set on every possession.
+  first_shot_clock: Seconds left in the period at the possession's first field-goal attempt (change_clock minus
+    seconds_to_first_shot); null when it has no field-goal attempt.
+  two_for_one: The 2-for-1 choice, null outside the window (change_clock in (33, 46] by default). went when the first shot
+    leaves at least go_floor (27) seconds, held when not and the possession ends with 24 or fewer left (the opponent can
+    hold for the last shot), other otherwise (an early turnover or foul trip, or an end between 24 and 27).
+  extra_possession: In the window, whether the offense has the ball again after the defense has had it, in the same period,
+    on a possession whose change clock is above 0 (a last-second heave counts; keeping the ball does not); null outside it.
+  sequence_points: In the window, the offense's points on this possession and its later ones in the period; null outside
+    it.
+  sequence_points_allowed: In the window, the defense's points on its possessions after this one in the period; null
+    outside it.
+  sequence_net: sequence_points minus sequence_points_allowed; null outside the window.
+  margin_at_change: The offense's score minus the defense's at the change of possession, from the play-by-play running
+    score. Set on every possession, except null for a game whose home side the score cannot tell.
+two_for_one_summary:
+  offense_team_id: NBA Stats team id of the offense (the default by group).
+  games: Games with at least one kept 2-for-1-window possession for the group.
+  n_went: Kept window possessions that went 2-for-1.
+  n_held: Kept window possessions that held.
+  n_other: Kept window possessions that were neither (an early turnover or foul trip, or an end between 24 and the floor).
+  go_rate: n_went over n_went plus n_held; null when the group has neither.
+  extra_rate_went: Share of went possessions whose offense got the ball back after the opponent's possession.
+  extra_rate_held: Share of held possessions whose offense got the ball back after the opponent's possession.
+  extra_rate_1s_went: As extra_rate_went, counting the ball back only with 1.0 s or more on its change clock.
+  extra_rate_1s_held: As extra_rate_held, counting the ball back only with 1.0 s or more on its change clock.
+  net_went: Mean sequence_net (the offense's rest-of-period points minus the defense's) of went possessions.
+  net_held: Mean sequence_net of held possessions.
+  net_other: Mean sequence_net of other possessions (a sensitivity; not in the comparison).
+  net_diff: Went minus held sequence_net within 1-second change_clock bins ((b - 1, b]), averaged with each bin weighted
+    by its went plus held count. Descriptive, not the value of going 2-for-1.
+  net_diff_lo: Lower end of net_diff's interval (90% by default) from a bootstrap that resamples whole games.
+  net_diff_hi: Upper end of net_diff's interval (90% by default) from a bootstrap that resamples whole games.
 add_sequence_features:
   batter_faced_index: Dense rank of this plate appearance's at_bat_number within the game (1 = first batter faced).
   cum_pitches_game: Running count of pitches thrown by this pitcher so far in this game (inclusive of the current pitch).
@@ -12895,6 +12956,34 @@ load_cfb_team_summaries:
   yardsplay_off_rush_rank: 'National rank of the team''s yards gained per play (an interception counts as 0 yards) on rush
     plays with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer than two distinct
     values: unranked, not last.'
+load_cfb_team_adjustment_ledger:
+  season: Season year.
+  game_id: ESPN game id.
+  week: ESPN week; the postseason restarts at 1.
+  season_type: "ESPN season type of the game: 2 regular season, 3 postseason."
+  team_id: ESPN team id.
+  pos_team: The team's name as the play-by-play carries it.
+  opponent_id: ESPN team id of the opponent.
+  site: home, away or neutral, for the team.
+  off_plays: The team's offensive plays in the adjusted-EPA fit that game (FBS-vs-FBS passes and rushes that are not garbage time by the score-margin rule).
+  def_plays: The team's defensive plays in the fit that game; 0 when it had none, and its defense mean then skips the game.
+  raw_off_epa: The team's EPA per offensive play that game, on the fit's plays.
+  raw_def_epa: EPA per play the team's defense allowed that game, on the fit's plays; null when def_plays is 0.
+  raw_net_epa: raw_off_epa minus raw_def_epa; null when def_plays is 0.
+  off_strength_faced: The opponent's fitted offense, EPA per play.
+  def_strength_faced: The opponent's fitted defense, EPA per play allowed.
+  schedule_adj: "off_strength_faced minus def_strength_faced: what the schedule term adds to the game's raw net EPA."
+  adj_off_epa: raw_off_epa minus def_strength_faced.
+  adj_def_epa: raw_def_epa minus off_strength_faced; null when def_plays is 0.
+  adj_net_epa: adj_off_epa minus adj_def_epa, which equals raw_net_epa plus schedule_adj; null when def_plays is 0.
+  off_weight: "The game's weight in the season offense mean: 1 over the team's games with offensive plays in the fit."
+  def_weight: "The game's weight in the season defense mean: 1 over the team's games with defensive plays in the fit. Null when def_plays is 0."
+  raw_contribution: "The game's raw part of the season value: off_weight times raw_off_epa minus def_weight times raw_def_epa."
+  schedule_contribution: "The game's schedule part of the season value: def_weight times off_strength_faced minus off_weight times def_strength_faced."
+  contribution: raw_contribution plus schedule_contribution; a team's rows sum to its net_adj_epa.
+  net_adj_epa: The team's season opponent-adjusted net EPA per play, as cfb_team_summaries publishes it, repeated on each row.
+  loo_net_adj_epa: The season value refit as if this game had never been played; null when the team would keep fewer than two valid games.
+  game_influence: "net_adj_epa minus loo_net_adj_epa: how far this game moved the season value. Null when loo_net_adj_epa is null."
 load_cfb_team_summaries_weekly:
   EPAdrive_def: EPA per drive (total EPA divided by drives), with the team on defense (i.e. allowed to opponents).
   EPAdrive_def_conf_pct: Percentile (0-100) of EPA per drive (total EPA divided by drives) with the team on defense (i.e.
@@ -41600,6 +41689,18 @@ load_mlb_team_group_seasons:
     says which.'
   team_id_source: 'Id space of team_id (in this table: espn, mlb).'
   team_name: Team name as of that season, not today's.
+load_mlb_leverage_index:
+  base_state: Three-character pre-play base occupancy where each slot carries its base number when occupied and an underscore
+    when empty, so ___ is bases empty and _2_ is a runner on second only.
+  half: Half-inning, top (away team batting) or bottom (home team batting).
+  inning_capped: Inning number with the ninth and every extra inning collapsed into 9, the same buckets as load_mlb_we_table.
+  leverage_index: Expected absolute change in home win expectancy over the next plate appearance from this state, divided
+    by the plate-appearance-weighted average of that quantity, so 1.0 is an average situation and 2.0 twice as pivotal.
+  n: Plate appearances observed in this state bucket that season, the sample behind leverage_index.
+  outs_start: Outs already recorded when the plate appearance began (0-2).
+  score_diff_bucket: Home score minus away score before the play, clipped to the range -6 through +6.
+  season: MLB season (calendar year).
+  thin: True when n is below 50, a small-sample flag; larger buckets also vary noticeably from one season to the next.
 load_mlb_we_table:
   base_state: Three-character pre-play base occupancy where each slot carries its base number when occupied and an underscore
     when empty, so ___ is bases empty and 123 is bases loaded.
@@ -83770,6 +83871,42 @@ espn_fantasy_player_pool:
   average_draft_position: Average pick at which the player goes in ESPN drafts.
   auction_value_average: Average winning bid for the player in ESPN auction drafts.
   last_news_date: Time of the player's latest fantasy news item (UTC); see espn_fantasy_player_news.
+soccer_espn_reep_team_crosswalk:
+  espn_team_id: ESPN soccer team id, digits as text (Utf8, the dtype of team_id in espn_soccer_teams_site and the ESPN
+    soccer scoreboard and summary frames); unique in the table.
+  espn_league: ESPN league slug the team was listed under when the table was built (eng.1, eng.2, esp.1, ger.1, ita.1,
+    fra.1, usa.1, mex.1).
+  espn_display_name: ESPN display name of the team at build time (e.g. 'Manchester United').
+  espn_abbreviation: ESPN team abbreviation at build time (e.g. 'MAN' for Manchester United).
+  reep_id: reep team id (reep_t + 8 hex characters); null when no reep row is this club. No reep_id appears on two ESPN
+    teams.
+  reep_name: Club name as reep records it (e.g. 'Manchester United F.C.').
+  reep_country: Country reep records for the club ('United Kingdom' for English clubs, 'Wales' for some Welsh ones).
+  key_wikidata: Wikidata entity id of the club (e.g. 'Q18656').
+  key_transfermarkt: Transfermarkt club id, digits as text (e.g. '985').
+  key_fbref: FBref squad id (8 hex characters).
+  key_soccerway: Soccerway team id.
+  key_opta: Opta team UUID (25 alphanumeric characters).
+  key_opta_numeric: Opta numeric team id.
+  key_kicker: kicker.de club slug.
+  key_flashscore: Flashscore team id.
+  key_sofascore: Sofascore team id.
+  key_soccerbase: Soccerbase team id.
+  key_uefa: UEFA club id.
+  key_footballdatabase_eu: footballdatabase.eu club id.
+  key_worldfootball: worldfootball.net club slug.
+  key_playmakerstats: playmakerstats.com team id.
+  key_clubelo: ClubElo club name (the key its ratings use, e.g. 'ManUnited').
+  key_sportmonks: Sportmonks team id.
+  key_api_football: API-Football team id.
+  key_sofifa: SoFIFA team id.
+  key_fotmob: FotMob team id.
+  key_thesportsdb: TheSportsDB team id.
+  key_understat: Understat team id.
+  key_capology: Capology club slug.
+  match_method: How the ESPN team was tied to reep. 'key_espn' (reep already carries this ESPN id), 'name' (exactly one
+    reep row in the league's country shares a normalized name or alias), 'review' (settled by hand in
+    tools/soccer_espn_reep_overrides.yaml), 'unmatched' (reviewed; no reep row is this club, reep columns null).
 nba_game_story:
   edges.edge: 'Edge name. Accounting: shooting, turnovers, rebounding, free_throws (the four-factor parts priced at the game''s own pooled rates,
     adding up to the margin exactly). Splits: three_pt_points, points_off_turnovers, fast_break_points, points_in_paint (box points).'
