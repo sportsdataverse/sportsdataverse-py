@@ -9,6 +9,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from sportsdataverse.cfb import cfb_adjusted_epa, cfb_adjusted_epa_ledger
+from sportsdataverse.cfb.cfb_adjusted_epa import _ADJ_REQUIRED, _prepare
 from sportsdataverse.nfl import nfl_adjusted_epa_ledger
 from sportsdataverse.nfl.nfl_adjusted_epa import _nfl_plays
 
@@ -60,6 +61,27 @@ def test_leave_one_game_out_equals_refitting_without_the_game(plays_2024, ledger
         assert row["game_influence"] == pytest.approx(row["net_adj_epa"] - expected, abs=1e-9)
 
 
+def test_matches_the_validated_team_summaries_frame(plays_2024, ledger_2024) -> None:
+    # Values from the frame the 2014-2023 walk-forward scored: nfl-data's nfl_team_summaries.input.prepare_plays
+    # on the same release asset (plus period = qtr), run through cfb_adjusted_epa there, independently of
+    # _nfl_plays. A wrong score_differential / qtr / home_team / play mapping moves these.
+    base, clean = _prepare(_nfl_plays(plays_2024), _ADJ_REQUIRED, None)
+    assert base.height == 33_335  # pass / rush plays with EPA
+    assert clean.height == 32_086  # of which not garbage time
+    golden = {
+        "BAL": 0.3253703242007089,
+        "CAR": -0.2789117200219179,
+        "DET": 0.2615145993558845,
+        "KC": 0.06691249112746177,
+    }
+    got = dict(ledger_2024.group_by("team_id").agg(pl.col("net_adj_epa").first()).rows())
+    for team, value in golden.items():
+        assert got[team] == pytest.approx(value, abs=1e-9)
+    # who was home, and who was played
+    opener = ledger_2024.filter(pl.col("game_id") == "2024_01_BAL_KC").sort("team_id")
+    assert opener.select("team_id", "opponent_id", "site").rows() == [("BAL", "KC", "away"), ("KC", "BAL", "home")]
+
+
 def test_only_scrimmage_plays_with_a_down_are_kept(plays_2024) -> None:
     kept = _nfl_plays(plays_2024)
     assert set(kept["play_type"].unique().to_list()) == {"pass", "run"}
@@ -103,7 +125,8 @@ def test_espn_processor_frames_live_and_released_names_agree(espn_plays) -> None
     assert sorted(live["team_id"].unique().to_list()) == ["12", "33"]
     assert live.schema["team_id"] == pl.Utf8 and live["season_type"].unique().to_list() == [2]
     # the same plays straight into the college ledger (kneels dropped, ids as strings) give the same frame
-    direct = espn_plays.filter(pl.col("kneel_down") == False).with_columns(  # noqa: E712
+    not_scrimmage = pl.col("text").str.contains(r"(?i)\bspiked? the ball\b|\bno play\b")
+    direct = espn_plays.filter((pl.col("kneel_down") == False) & (not_scrimmage == False)).with_columns(  # noqa: E712
         pl.col("game_id").cast(pl.Utf8),
         pos_team_id=pl.col("pos_team").cast(pl.Utf8),
         def_pos_team_id=pl.col("def_pos_team").cast(pl.Utf8),
@@ -112,6 +135,7 @@ def test_espn_processor_frames_live_and_released_names_agree(espn_plays) -> None
         **{"pass": pl.col("pass").cast(pl.Int8), "rush": pl.col("rush").cast(pl.Int8)},
     )
     assert espn_plays["kneel_down"].sum() > 0  # the fixture has kneels to drop
+    assert espn_plays.filter(pl.col("text").str.contains("spiked the ball")).height == 2  # and spikes
     _same(cfb_adjusted_epa_ledger(direct), live)
 
 
@@ -120,3 +144,16 @@ def test_pandas_in_and_out(plays_2024) -> None:
     assert "game_influence" not in plain.columns
     pdf = nfl_adjusted_epa_ledger(plays_2024.to_pandas(), influence=False, return_as_pandas=True)
     assert list(pdf.columns) == plain.columns and len(pdf) == plain.height
+
+
+def test_espn_and_nflverse_shapes_keep_the_same_plays_per_game(plays_2024, espn_plays) -> None:
+    # the same three games from both sources: once kneels, spikes and no-play penalties are out, the play counts agree
+    ids = {"401671789": "2024_01_BAL_KC", "401671624": "2024_02_LV_BAL", "401671670": "2024_02_CIN_KC"}
+
+    def per_game(frame: pl.DataFrame) -> dict[str, int]:
+        base, _ = _prepare(_nfl_plays(frame), _ADJ_REQUIRED, None)
+        return dict(base.group_by("game_id").len().rows())
+
+    espn = {ids[g]: n for g, n in per_game(espn_plays).items()}
+    nflverse = per_game(plays_2024.filter(pl.col("game_id").is_in(list(ids.values()))))
+    assert espn == nflverse == {"2024_01_BAL_KC": 123, "2024_02_LV_BAL": 120, "2024_02_CIN_KC": 120}

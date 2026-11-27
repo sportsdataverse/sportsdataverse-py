@@ -16,10 +16,13 @@ Two input shapes are accepted, told apart by their columns:
 
 * **nflverse** (``load_nfl_pbp``, ``nfl_model_pbp``): ``posteam`` present. Scrimmage plays are
   ``play_type`` ``"pass"`` or ``"run"`` with a ``down`` (kneels, spikes, penalties with no play, kicks and
-  conversions are not), and a team is its ``posteam`` abbreviation.
+  conversions are not), and a team is its ``posteam`` abbreviation. On 2014, 2019 and 2024 this keeps exactly the
+  plays nfl-data's team-summaries input (the frame the backtest scored) keeps.
 * **ESPN processor** (``NFLPlayProcess`` output): the offense is ``pos_team_id`` in released frames and
   ``pos_team`` (the numeric team id) in a live run; the defense likewise ``def_pos_team_id`` / ``def_pos_team``.
-  Plays are its ``pass`` / ``rush`` flags with kneel-downs dropped, and a team is its ESPN id as a string.
+  Plays are its ``pass`` / ``rush`` flags with kneel-downs, spikes and no-play penalties dropped (on three 2024
+  games, the same number of plays per game as the nflverse shape), and a team is its ESPN id as a string. The processor does not emit a neutral-site column: join ``neutral_site`` (the summary header's
+  ``competitions[0].neutralSite``, or the schedule) before calling.
 """
 
 from __future__ import annotations
@@ -99,6 +102,11 @@ def _nfl_plays(plays: pl.DataFrame | pd.DataFrame) -> pl.DataFrame:
     _require(df, (off, dfn, *_ESPN_REQUIRED), "ESPN-processor")
     if "kneel_down" in df.columns:
         df = df.filter(pl.col("kneel_down").fill_null(False) == False)  # noqa: E712
+    if "text" in df.columns:
+        # The processor flags a spike as a pass and a penalty that wipes out the snap ("... - No Play.") as the
+        # pass or rush it was; nflverse calls them qb_spike / no_play, and neither is a scrimmage play here.
+        not_scrimmage = pl.col("text").str.contains(r"(?i)\bspiked? the ball\b|\bno play\b").fill_null(False)
+        df = df.filter(not_scrimmage == False)  # noqa: E712
     return df.with_columns(
         game_id=pl.col("game_id").cast(pl.Utf8),
         pos_team=_id(off),
