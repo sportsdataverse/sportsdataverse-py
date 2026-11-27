@@ -124,12 +124,19 @@ def _frames(summaries: dict | list[dict]) -> tuple[pl.DataFrame, pl.DataFrame, l
     """The games, every key event with the running score after it, the box's shots on target and the goal participants."""
     payloads = [summaries] if isinstance(summaries, dict) else list(summaries)
     games, goals, players, stats = [], [], [], []
-    seen: set[int] = set()
+    seen: dict[int, tuple[int, int]] = {}
     for p in payloads:
         g, gl, pr, st = _one(p)
-        if g["game_id"] is None or g["home_score"] is None or g["away_score"] is None or g["game_id"] in seen:
-            continue  # a summary passed twice counts once
-        seen.add(g["game_id"])
+        if g["game_id"] is None or g["home_score"] is None or g["away_score"] is None:
+            continue
+        score = (g["home_score"], g["away_score"])
+        if g["game_id"] in seen:  # a summary passed twice counts once; two different finals are an error
+            if seen[g["game_id"]] != score:
+                raise ValueError(
+                    f"game {g['game_id']} is passed twice with different finals: {seen[g['game_id']]}, {score}"
+                )
+            continue
+        seen[g["game_id"]] = score
         games.append(g)
         goals += gl
         players += pr

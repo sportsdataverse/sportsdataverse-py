@@ -236,8 +236,20 @@ def test_mlb_automatic_runner_who_scores_starts_on_second() -> None:
         (pl.col("inning") <= 9) & (pl.col("at_bat_index") == pl.col("at_bat_index").min().over("inning", "half"))
     )
     assert reg_opens["base_state"].unique().to_list() == ["___"]
-    story = mlb_game_story(pbp, sched, _read("mlb_wpa_716356.parquet"), re24)
-    assert story["summary"]["periods_agree"].to_list() == [True]
+    # a World Series game has no automatic runner: its extra halves open empty
+    pbp, sched = _read("mlb_pbp_748542.parquet"), _read("mlb_schedule_748542.parquet")
+    ws_games = sched.select(
+        pl.col("game_pk").cast(pl.Int64).alias("game_id"),
+        pl.col("season").cast(pl.Int64),
+        pl.col("home_team_id").cast(pl.Int64),
+        pl.col("away_team_id").cast(pl.Int64),
+    )
+    ws = mod._states(pbp, re24, ws_games)
+    ws_opens = ws.filter(
+        (pl.col("inning") > 9) & (pl.col("at_bat_index") == pl.col("at_bat_index").min().over("inning", "half"))
+    )
+    assert ws_opens.height == 4
+    assert ws_opens["base_state"].unique().to_list() == ["___"]
 
 
 def test_soccer_summary_passed_twice_counts_once() -> None:
@@ -256,3 +268,14 @@ def test_soccer_without_key_events_has_no_accounting() -> None:
     story = soccer_game_story([stripped])
     edges = story["edges"].filter(pl.col("game_id") == gid)
     assert edges.filter(pl.col("kind") == "accounting").height == 0
+
+
+def test_soccer_two_finals_for_one_game_raise() -> None:
+    raw = _summaries()
+    stale = {**raw[0], "header": {**raw[0]["header"]}}
+    comp = stale["header"]["competitions"][0]
+    stale["header"]["competitions"] = [
+        {**comp, "competitors": [{**c, "score": str(int(c.get("score") or 0) + 1)} for c in comp["competitors"]]}
+    ]
+    with pytest.raises(ValueError, match="different finals"):
+        soccer_game_story([raw[0], stale])

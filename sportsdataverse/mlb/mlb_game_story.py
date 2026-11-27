@@ -54,8 +54,9 @@ def _automatic_runner(half: list[str]) -> pl.Expr:
     """``base_state`` with an extra half's automatic runner on 2nd where the release pbp alone shows him.
 
     The release pbp has no runner movements, so when he scores or is put out on the half's first PA
-    nothing after it shows he was there. That PA's own result does: runs beyond the batter's own (a home
-    run's one), or outs beyond the batter's (none if he reached), need a runner on base before it.
+    nothing after it shows he was there. That PA's own result does: runs beyond a home run's one, or outs
+    beyond the batter's (none if he reached), need a runner on base before it. A batter who comes all the
+    way round on a hit and errors reads as one too, so the check runs only past the 9th, where the rule puts him.
     """
     hr = (pl.col("event") == "Home Run").fill_null(False)
     first = pl.col("at_bat_index") == pl.col("at_bat_index").min().over(half)
@@ -136,6 +137,8 @@ def _states(pbp: pl.DataFrame, re24: pl.DataFrame, games: pl.DataFrame) -> pl.Da
     missing = sorted(set(out["season"].drop_nulls().to_list()) - set(re["season"].drop_nulls().to_list()))
     if missing:
         raise ValueError(f"re24 has no run expectancy for season(s) {missing}: pass load_mlb_re24_matrix for them")
+    if out.height and out["re"].null_count() == out.height:
+        raise ValueError("re24 matches none of these PAs' base-out states: pass load_mlb_re24_matrix for them")
     # a side's starter: the first pitcher it used
     starter = (
         out.sort("game_id", "at_bat_index")
@@ -300,7 +303,7 @@ def mlb_game_story(
         largest unanswered run; the top WPA player (``player_name`` null: the releases carry ids only).
 
     Raises:
-        ValueError: If ``re24`` has no run expectancy for one of the games' seasons.
+        ValueError: If ``re24`` has no run expectancy for one of the games' seasons, or for any of the PAs.
 
     Example:
         Quick start::
