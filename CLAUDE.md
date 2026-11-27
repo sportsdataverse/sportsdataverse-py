@@ -1389,7 +1389,7 @@ NHL APIs (`nhl_api_web`, `nhl_edge`, `nhl_stats_rest`, `nhl_records`), `nba_stat
 `wnba_stats` / `nbagl_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop Stats, Basketball-Reference, the official NBA injury report (`nba_official`),
 RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
 `sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
-event data, Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
+event data, the reep football id register (`reep`, the bundled ESPN soccer team-id crosswalk), Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
 TheSportsDB (`thesportsdb`), `euroleague`, SIHF (`sihf`), Jolpica (`f1`), the PGA TOUR
 GraphQL API (`pgatour`), the Premier Lacrosse League stats API (`pll`), `cbs_napi`, `yahoo_shangrila`, `fox_api`,
 HockeyTech, the European hockey leagues (the eSports
