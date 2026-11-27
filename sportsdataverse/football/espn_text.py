@@ -137,8 +137,9 @@ PASS_DEPTH_RE = r"\bpass(?:\s+(?:complete|incomplete))?\s+(short|deep)\b"
 #: direction as "pass incomplete to the right side." and "pass [incomplete ]across the middle",
 #: so "to the" and "across the" are read too: without them the anchored phrase charted no
 #: direction on 20,814 2002-04 passes (17,270 of them read by the loose match it replaced).
-#: They move no 2006-25 NFL pass row; 7 rows of the 2025 college release gain a direction
-#: ("pass short to the right incomplete").
+#: The 2004 college feed uses the same wording: 16,081 of its 29,976 pass rows gain a
+#: direction. No NFL pass row of 2005-26, and no college pass row of 2005, 2006, 2010 or 2025,
+#: moves.
 PASS_DIRECTION_RE = (
     r"\bpass(?:\s+(?:complete|incomplete))?(?:\s+(?:short|deep))?\s+(?:up\s+the\s+|to\s+the\s+|across\s+the\s+)?"
     r"(left|middle|right)\b"
