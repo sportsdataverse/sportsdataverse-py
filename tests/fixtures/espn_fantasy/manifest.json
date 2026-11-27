@@ -1,0 +1,306 @@
+{
+  "_public_leagues": {
+    "fba": 1535462463
+  },
+  "fba/default_settings.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leaguedefaults/1?view=mSettings",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 3754,
+    "captured": "2026-11-26"
+  },
+  "fba/league_directory.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/leaguedirectory/DRAFT_LOBBY",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 30536,
+    "captured": "2026-11-26"
+  },
+  "fba/league_kona_player_info.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/1535462463?view=kona_player_info",
+    "x_fantasy_filter": {
+      "players": {
+        "limit": 25,
+        "sortPercOwned": {
+          "sortPriority": 1,
+          "sortAsc": false
+        }
+      }
+    },
+    "status": 200,
+    "bytes": 268900,
+    "captured": "2026-11-26"
+  },
+  "fba/league_mBoxscore.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/1535462463?view=mBoxscore&scoringPeriodId=37",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 286912,
+    "captured": "2026-11-26"
+  },
+  "fba/league_mDraftDetail.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/1535462463?view=mDraftDetail",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 34251,
+    "captured": "2026-11-26"
+  },
+  "fba/league_mMatchupScore.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/1535462463?view=mMatchupScore",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 103456,
+    "captured": "2026-11-26"
+  },
+  "fba/league_mRoster.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/1535462463?view=mRoster",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 1524340,
+    "captured": "2026-11-26"
+  },
+  "fba/league_mSettings.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/1535462463?view=mSettings",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 4252,
+    "captured": "2026-11-26"
+  },
+  "fba/league_mTeam.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/1535462463?view=mTeam",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 24098,
+    "captured": "2026-11-26"
+  },
+  "fba/league_mTransactions2.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/segments/0/leagues/1535462463?view=mTransactions2&scoringPeriodId=37",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 10250,
+    "captured": "2026-11-26"
+  },
+  "fba/player_news.json": {
+    "url": "https://site.api.espn.com/apis/fantasy/v3/games/fba/news/players?playerId=5104157",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 421884,
+    "captured": "2026-11-26"
+  },
+  "fba/players.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027/players?view=players_wl",
+    "x_fantasy_filter": {
+      "filterActive": {
+        "value": true
+      }
+    },
+    "status": 200,
+    "bytes": 264744,
+    "captured": "2026-11-26"
+  },
+  "fba/pro_team_schedules.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons/2027?view=proTeamSchedules_wl",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 422525,
+    "captured": "2026-11-26"
+  },
+  "fba/seasons.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fba/seasons",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 4120,
+    "captured": "2026-11-26"
+  },
+  "ffl/default_settings.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leaguedefaults/1?view=mSettings",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 8119,
+    "captured": "2026-11-26"
+  },
+  "ffl/league_directory.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/leaguedirectory/DRAFT_LOBBY",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 137511,
+    "captured": "2026-11-26"
+  },
+  "ffl/player_news.json": {
+    "url": "https://site.api.espn.com/apis/fantasy/v3/games/ffl/news/players?playerId=4429795",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 258369,
+    "captured": "2026-11-26"
+  },
+  "ffl/players.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/players?view=players_wl",
+    "x_fantasy_filter": {
+      "filterActive": {
+        "value": true
+      }
+    },
+    "status": 200,
+    "bytes": 678333,
+    "captured": "2026-11-26"
+  },
+  "ffl/pro_team_schedules.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026?view=proTeamSchedules_wl",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 108835,
+    "captured": "2026-11-26"
+  },
+  "ffl/seasons.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 4675,
+    "captured": "2026-11-26"
+  },
+  "fhl/default_settings.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fhl/seasons/2027/segments/0/leaguedefaults/1?view=mSettings",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 3841,
+    "captured": "2026-11-26"
+  },
+  "fhl/league_directory.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fhl/seasons/2027/leaguedirectory/DRAFT_LOBBY",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 22584,
+    "captured": "2026-11-26"
+  },
+  "fhl/player_news.json": {
+    "url": "https://site.api.espn.com/apis/fantasy/v3/games/fhl/news/players?playerId=5206628",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 51483,
+    "captured": "2026-11-26"
+  },
+  "fhl/players.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fhl/seasons/2027/players?view=players_wl",
+    "x_fantasy_filter": {
+      "filterActive": {
+        "value": true
+      }
+    },
+    "status": 200,
+    "bytes": 405921,
+    "captured": "2026-11-26"
+  },
+  "fhl/pro_team_schedules.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fhl/seasons/2027?view=proTeamSchedules_wl",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 473325,
+    "captured": "2026-11-26"
+  },
+  "fhl/seasons.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fhl/seasons",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 4050,
+    "captured": "2026-11-26"
+  },
+  "flb/default_settings.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/flb/seasons/2026/segments/0/leaguedefaults/1?view=mSettings",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 3974,
+    "captured": "2026-11-26"
+  },
+  "flb/league_directory.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/flb/seasons/2026/leaguedirectory/DRAFT_LOBBY",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 12692,
+    "captured": "2026-11-26"
+  },
+  "flb/player_news.json": {
+    "url": "https://site.api.espn.com/apis/fantasy/v3/games/flb/news/players?playerId=4905921",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 13764,
+    "captured": "2026-11-26"
+  },
+  "flb/players.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/flb/seasons/2026/players?view=players_wl",
+    "x_fantasy_filter": {
+      "filterActive": {
+        "value": true
+      }
+    },
+    "status": 200,
+    "bytes": 942639,
+    "captured": "2026-11-26"
+  },
+  "flb/pro_team_schedules.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/flb/seasons/2026?view=proTeamSchedules_wl",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 851186,
+    "captured": "2026-11-26"
+  },
+  "flb/seasons.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/flb/seasons",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 4297,
+    "captured": "2026-11-26"
+  },
+  "games.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 1963,
+    "captured": "2026-11-26"
+  },
+  "wfba/default_settings.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/wfba/seasons/2026/segments/0/leaguedefaults/2?view=mSettings",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 3298,
+    "captured": "2026-11-26"
+  },
+  "wfba/league_directory.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/wfba/seasons/2026/leaguedirectory/DRAFT_LOBBY",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 2906,
+    "captured": "2026-11-26"
+  },
+  "wfba/player_news.json": {
+    "url": "https://site.api.espn.com/apis/fantasy/v3/games/wfba/news/players?playerId=3149391",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 194599,
+    "captured": "2026-11-26"
+  },
+  "wfba/players.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/wfba/seasons/2026/players?view=players_wl",
+    "x_fantasy_filter": {
+      "filterActive": {
+        "value": true
+      }
+    },
+    "status": 200,
+    "bytes": 98637,
+    "captured": "2026-11-26"
+  },
+  "wfba/pro_team_schedules.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/wfba/seasons/2026?view=proTeamSchedules_wl",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 125582,
+    "captured": "2026-11-26"
+  },
+  "wfba/seasons.json": {
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/wfba/seasons",
+    "x_fantasy_filter": null,
+    "status": 200,
+    "bytes": 1285,
+    "captured": "2026-11-26"
+  }
+}

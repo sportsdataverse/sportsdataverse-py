@@ -1,0 +1,98 @@
+[
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795719300000,
+    "draftDate": 1795719480000,
+    "draftInProgress": true,
+    "draftType": "AUCTION",
+    "experienceType": "PRO",
+    "full": true,
+    "gameId": 1,
+    "leagueDefaultId": 3,
+    "leagueId": 1857621801,
+    "leagueName": "Philadelphia Pro H2H Points PPR Salary Cap League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "PPR",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "INDIVIDUAL_GAME",
+    "scoringItemStatIds": [
+      128,
+      129,
+      130
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2026,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 10,
+    "universeIds": [
+      0
+    ]
+  },
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795719900000,
+    "draftDate": 1795720080000,
+    "draftInProgress": true,
+    "draftType": "SNAKE",
+    "experienceType": "PRO",
+    "full": true,
+    "gameId": 1,
+    "leagueDefaultId": 3,
+    "leagueId": 92295107,
+    "leagueName": "Kansas City Pro H2H Points PPR League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "PPR",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "INDIVIDUAL_GAME",
+    "scoringItemStatIds": [
+      128,
+      129,
+      130
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2026,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 10,
+    "universeIds": [
+      0
+    ]
+  },
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795719900000,
+    "draftDate": 1795720080000,
+    "draftInProgress": true,
+    "draftType": "AUCTION",
+    "experienceType": "PRO",
+    "full": true,
+    "gameId": 1,
+    "leagueDefaultId": 6,
+    "leagueId": 161795660,
+    "leagueName": "Jacksonville Pro Knockout PPR Salary Cap League",
+    "leagueSize": 7,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "PPR",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "INDIVIDUAL_GAME",
+    "scoringItemStatIds": [
+      128,
+      129,
+      130
+    ],
+    "scoringType": "WEEKLY_ALL_PLAY_POINTS",
+    "seasonId": 2026,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 7,
+    "universeIds": [
+      0
+    ]
+  }
+]

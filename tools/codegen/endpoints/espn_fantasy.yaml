@@ -1,0 +1,550 @@
+api: espn_fantasy
+docstring:
+  example_import: true
+  notes:
+  - 'Public data only. No cookie is ever sent, so these wrappers read every game''s
+    league-agnostic routes and the PUBLIC leagues ESPN lists in espn_fantasy_league_directory.
+    A private league answers HTTP 401: reading one needs its owner''s espn_s2 / SWID
+    cookies, which this package does not take.'
+  - 'Season ids are ESPN''s: the start year for football (2026 = fall 2026), the end
+    year for basketball and hockey (2026-27 = 2027). Ids are Int64; team_id is unique
+    only inside one league. No member or owner account id is returned.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: ESPN answered 404 (unknown game, season or
+    id).'
+  - 'AssetFetchError: also raised for a private league (HTTP 401).'
+  see_also:
+  - name: ESPN Fantasy
+    note: the fantasy platform these routes serve; public leagues are listed in its
+      draft lobby
+    url: https://fantasy.espn.com/
+endpoints:
+- example_args:
+    game: ffl
+    league_default_id: 1
+    season: 2026
+  fixed_params:
+    view: mSettings
+  parser: parse_espn_fantasy_scoring
+  path: /games/{game}/seasons/{season}/segments/0/leaguedefaults/{league_default_id}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  - description: Default-settings template id (league_default_id in espn_fantasy_league_directory).
+    name: league_default_id
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/default_scoring
+  short: default_scoring
+  summary: Scoring items of one of ESPN's default league-settings templates (points
+    per stat).
+- example_args: {}
+  parser: parse_espn_fantasy_games
+  path: /games
+  returns_schema: native/espn_fantasy/games
+  short: games
+  summary: Every ESPN fantasy game (ffl, fba, flb, fhl, wfba) with its current season
+    and scoring period.
+- example_args:
+    game: fba
+    league_id: 1535462463
+    scoring_period_id: 37
+    season: 2027
+  extra_params:
+  - description: 'Scoring period: the NFL week for ffl, one day of the season for
+      the other games. Omitted = the league''s current period.'
+    name: scoring_period_id
+    query_key: scoringPeriodId
+    type: int
+  fixed_params:
+    view: mBoxscore
+  parser: parse_espn_fantasy_league_boxscores
+  path: /games/{game}/seasons/{season}/segments/0/leagues/{league_id}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  - description: Public league id (league_id in espn_fantasy_league_directory). A
+      private league answers HTTP 401 without its owner's cookies and is out of scope.
+    name: league_id
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/league_boxscores
+  short: league_boxscores
+  summary: 'Box scores of a public league for one scoring period: each player''s fantasy
+    points by matchup.'
+- example_args:
+    game: fba
+    season: 2027
+  parser: parse_espn_fantasy_league_directory
+  path: /games/{game}/seasons/{season}/leaguedirectory/{league_sub_type}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  - choices:
+    - DRAFT_LOBBY
+    - MOCKDRAFT_LOBBY
+    default: DRAFT_LOBBY
+    description: 'DRAFT_LOBBY: ESPN-run public leagues with an upcoming or running
+      draft. MOCKDRAFT_LOBBY: mock-draft rooms.'
+    name: league_sub_type
+    required: false
+    type: str
+  returns_schema: native/espn_fantasy/league_directory
+  short: league_directory
+  summary: 'ESPN''s public-league directory: the public leagues anyone can join, readable
+    by league id.'
+- example_args:
+    game: fba
+    league_id: 1535462463
+    season: 2027
+  fixed_params:
+    view: mDraftDetail
+  parser: parse_espn_fantasy_league_draft
+  path: /games/{game}/seasons/{season}/segments/0/leagues/{league_id}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  - description: Public league id (league_id in espn_fantasy_league_directory). A
+      private league answers HTTP 401 without its owner's cookies and is out of scope.
+    name: league_id
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/league_draft
+  short: league_draft
+  summary: 'The draft of a public league: one row per pick, in pick order.'
+- example_args:
+    game: fba
+    league_id: 1535462463
+    season: 2027
+  fixed_params:
+    view: mMatchupScore
+  parser: parse_espn_fantasy_league_matchups
+  path: /games/{game}/seasons/{season}/segments/0/leagues/{league_id}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  - description: Public league id (league_id in espn_fantasy_league_directory). A
+      private league answers HTTP 401 without its owner's cookies and is out of scope.
+    name: league_id
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/league_matchups
+  short: league_matchups
+  summary: Every head-to-head matchup of a public league's season, with points and
+    winner.
+- example_args:
+    game: fba
+    league_id: 1535462463
+    season: 2027
+  fixed_params:
+    view: mRoster
+  parser: parse_espn_fantasy_league_rosters
+  path: /games/{game}/seasons/{season}/segments/0/leagues/{league_id}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  - description: Public league id (league_id in espn_fantasy_league_directory). A
+      private league answers HTTP 401 without its owner's cookies and is out of scope.
+    name: league_id
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/league_rosters
+  short: league_rosters
+  summary: 'The rosters of a public league: one row per rostered player, with lineup
+    slot and acquisition.'
+- example_args:
+    game: fba
+    league_id: 1535462463
+    season: 2027
+  fixed_params:
+    view: mSettings
+  parser: parse_espn_fantasy_scoring
+  path: /games/{game}/seasons/{season}/segments/0/leagues/{league_id}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  - description: Public league id (league_id in espn_fantasy_league_directory). A
+      private league answers HTTP 401 without its owner's cookies and is out of scope.
+    name: league_id
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/league_scoring
+  short: league_scoring
+  summary: Scoring items of a public league (points per stat).
+- example_args:
+    game: fba
+    league_id: 1535462463
+    season: 2027
+  fixed_params:
+    view: mTeam
+  parser: parse_espn_fantasy_league_teams
+  path: /games/{game}/seasons/{season}/segments/0/leagues/{league_id}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  - description: Public league id (league_id in espn_fantasy_league_directory). A
+      private league answers HTTP 401 without its owner's cookies and is out of scope.
+    name: league_id
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/league_teams
+  short: league_teams
+  summary: 'The teams of a public league: overall record, points, ranks and transaction
+    counters.'
+- example_args:
+    game: fba
+    league_id: 1535462463
+    season: 2027
+  extra_params:
+  - description: Scoring period. Honoured for past periods; a recent or omitted period
+      returns the league's current activity (pending and future moves). Not a complete
+      ledger.
+    name: scoring_period_id
+    query_key: scoringPeriodId
+    type: int
+  fixed_params:
+    view: mTransactions2
+  parser: parse_espn_fantasy_league_transactions
+  path: /games/{game}/seasons/{season}/segments/0/leagues/{league_id}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  - description: Public league id (league_id in espn_fantasy_league_directory). A
+      private league answers HTTP 401 without its owner's cookies and is out of scope.
+    name: league_id
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/league_transactions
+  short: league_transactions
+  summary: Recent transactions of a public league (adds, drops, trades, lineup moves),
+    one row per item.
+- example_args:
+    game: fba
+    player_id: 5104157
+  extra_params:
+  - description: ESPN athlete id (player_id in espn_fantasy_players).
+    name: player_id
+    query_key: playerId
+    required: true
+    type: int
+  host: https://site.api.espn.com/apis/fantasy/v3
+  parser: parse_espn_fantasy_player_news
+  path: /games/{game}/news/players
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  returns_schema: native/espn_fantasy/player_news
+  short: player_news
+  summary: Fantasy news items for one player (site.api.espn.com).
+- example_args:
+    game: fba
+    league_id: 1535462463
+    season: 2027
+  extra_params:
+  - default: '{"players":{"limit":50,"sortPercOwned":{"sortPriority":1,"sortAsc":false}}}'
+    description: JSON object sent as the X-Fantasy-Filter request header. The default
+      returns the 50 most-owned players; add "filterStatus":{"value":["FREEAGENT"]}
+      inside players for free agents only. A limit needs a sort, or the host answers
+      400.
+    name: fantasy_filter
+    query_key: X-Fantasy-Filter
+    type: str
+  fixed_params:
+    view: kona_player_info
+  parser: parse_espn_fantasy_player_pool
+  path: /games/{game}/seasons/{season}/segments/0/leagues/{league_id}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  - description: Public league id (league_id in espn_fantasy_league_directory). A
+      private league answers HTTP 401 without its owner's cookies and is out of scope.
+    name: league_id
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/player_pool
+  short: player_pool
+  summary: 'A public league''s player pool: free agents, waivers and rostered players
+    with ownership.'
+- example_args:
+    game: fba
+    season: 2027
+  extra_params:
+  - default: '{"filterActive":{"value":true}}'
+    description: JSON object sent as the X-Fantasy-Filter request header. The default
+      keeps active players only; pass '{}' for every player. A limit needs a sort,
+      or the host answers 400.
+    name: fantasy_filter
+    query_key: X-Fantasy-Filter
+    type: str
+  fixed_params:
+    view: players_wl
+  parser: parse_espn_fantasy_players
+  path: /games/{game}/seasons/{season}/players
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/players
+  short: players
+  summary: 'The player universe of a fantasy season: ids, names, pro team, position
+    and ownership.'
+- example_args:
+    game: fba
+    season: 2027
+  fixed_params:
+    view: proTeamSchedules_wl
+  parser: parse_espn_fantasy_pro_schedule
+  path: /games/{game}/seasons/{season}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/pro_schedule
+  short: pro_schedule
+  summary: 'The pro-game schedule of a fantasy season: one row per pro game, keyed
+    to its scoring period.'
+- example_args:
+    game: ffl
+    season: 2026
+  fixed_params:
+    view: proTeamSchedules_wl
+  parser: parse_espn_fantasy_pro_teams
+  path: /games/{game}/seasons/{season}
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  - description: 'ESPN''s season id: the START year for ffl (2026 = the fall 2026
+      season), the END year for fba / fhl (2026-27 = 2027); flb and wfba fit in one
+      year. espn_fantasy_games gives each game''s current one.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/espn_fantasy/pro_teams
+  short: pro_teams
+  summary: The pro teams of a fantasy season, with bye weeks (football) and the free-agent
+    pool (id 0).
+- example_args:
+    game: ffl
+  parser: parse_espn_fantasy_seasons
+  path: /games/{game}/seasons
+  path_params:
+  - choices:
+    - ffl
+    - fba
+    - flb
+    - fhl
+    - wfba
+    description: 'Fantasy game: ffl (football), fba (men''s basketball), flb (baseball),
+      fhl (hockey), wfba (women''s basketball).'
+    name: game
+    required: true
+    type: str
+  returns_schema: native/espn_fantasy/seasons
+  short: seasons
+  summary: Every season of one fantasy game, newest first.
+getter_module: sportsdataverse.providers.espn_fantasy.espn_fantasy_runtime
+host: https://lm-api-reads.fantasy.espn.com/apis/v3
+module: espn_fantasy
+name_pattern: espn_fantasy_{short}
+parser_module: providers.espn_fantasy.espn_fantasy_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: espn_fantasy_

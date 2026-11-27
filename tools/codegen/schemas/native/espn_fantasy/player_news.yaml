@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: news_id
+  type: integer
+- description: ''
+  name: now_id
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: type
+  type: character
+- description: ''
+  name: headline
+  type: character
+- description: ''
+  name: description
+  type: character
+- description: ''
+  name: story
+  type: character
+- description: ''
+  name: published
+  type: datetime
+- description: ''
+  name: last_modified
+  type: datetime
+- description: ''
+  name: premium
+  type: logical
+kind: dataframe
+schema: espn_fantasy_player_news

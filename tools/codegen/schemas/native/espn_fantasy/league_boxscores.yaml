@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: league_id
+  type: integer
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: scoring_period_id
+  type: integer
+- description: ''
+  name: matchup_id
+  type: integer
+- description: ''
+  name: matchup_period_id
+  type: integer
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: pro_team_id
+  type: integer
+- description: ''
+  name: default_position_id
+  type: integer
+- description: ''
+  name: lineup_slot_id
+  type: integer
+- description: ''
+  name: applied_stat_total
+  type: numeric
+kind: dataframe
+schema: espn_fantasy_league_boxscores
