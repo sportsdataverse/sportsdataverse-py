@@ -180,18 +180,6 @@ schedule (`home_qb_id` / `away_qb_id`) are read only for rule 2's previous game.
 
 One row per team-game: `game_id` / `team` / `expected_qb_id` / `backup_qb_id` / `starter_source` (`depth_chart` / `previous_start` / null) / `status` (Utf8), `kickoff` / `chart_dt` (UTC Datetime; `chart_dt` is the snapshot used, null under rule 2), `p_start` (Float64). Zero-row on an empty schedule. `team` is the franchise's current code (`OAK` -> `LV`, `SD` -> `LAC`, `STL` -> `LA`), as in the play-by-play.
 
-| col_name | type | description |
-|---|---|---|
-| `game_id` | String | nflverse game id (season_week_away_home). |
-| `team` | String | Team code, the franchise's current code (OAK -> LV, SD -> LAC, STL -> LA), as in the play-by-play. |
-| `kickoff` | Datetime | Kickoff time in UTC, from the schedule's gameday and gametime (US Eastern). |
-| `chart_dt` | Datetime | UTC timestamp of the depth-chart snapshot used; null when the starter comes from the previous start. |
-| `expected_qb_id` | String | GSIS id of the expected starting QB. |
-| `backup_qb_id` | String | GSIS id of the depth chart's QB2; null under the previous-start rule. |
-| `starter_source` | String | Where the expected starter came from: depth_chart, previous_start, or null when neither exists. |
-| `status` | String | The expected starter's report_status on that week's injury report (Out, Doubtful, Questionable), else none. |
-| `p_start` | Float64 | Fitted probability that the expected starter starts, given his report status. |
-
 **Raises**
 
 | Exception | Description |
@@ -524,16 +512,6 @@ team's dropback share reads all of them.
 
 `game_id` / `team` / `qb_id` (Utf8; `qb_id` null off dropbacks), `season` (Int64), `game_date` (Date), `qb_epa` (Float64), `is_dropback` (Boolean). Plays with `play_type` other than `pass` / `run` are dropped; a dropback with no QB id or no `qb_epa` is kept as a play but not as a dropback.
 
-| col_name | type | description |
-|---|---|---|
-| `game_id` | String | nflverse game id (season_week_away_home). |
-| `season` | Int64 | Season of the play. |
-| `game_date` | Date | Date of the game. |
-| `team` | String | Offensive team (posteam). |
-| `qb_id` | String | GSIS id of the QB on a dropback (passer, else rusher); null off dropbacks. |
-| `qb_epa` | Float64 | QB EPA on the play. |
-| `is_dropback` | Boolean | True when the play is a dropback with a QB id and a qb_epa. |
-
 **Example**
 
 ```python
@@ -601,33 +579,6 @@ team's dropback exposure on the same window. `base_*` is the shipped spine;
 
 One row per priced game with a rating for both teams (games before either team has a rated play are dropped): `game_id` / `home_team` / `away_team` (Utf8, team codes relocated as in `nfl_expected_starters`), `season` / `week` (Int64), `neutral_site` (Boolean); `base_margin` / `base_win_prob` / `base_lo80` / `base_hi80` (the shipped spine) and `qb_margin` / `qb_win_prob` / `qb_lo80` / `qb_hi80` (the layer's mixture mean, P(home wins) and 80% interval), all Float64; per side `*_qb_id` / `*_status` (Utf8), `*_p_start` and `*_shift` (Float64, the starter's shift to `adj_net` in EPA per play) and `*_layer_applied` (Boolean, False when the side had no starter or no rated dropbacks and the layer left it unchanged).
 
-| col_name | type | description |
-|---|---|---|
-| `game_id` | String | nflverse game id (season_week_away_home). |
-| `season` | Int64 | Season of the game. |
-| `week` | Int64 | Week of the game. |
-| `home_team` | String | Home team code, relocated as in nfl_expected_starters. |
-| `away_team` | String | Away team code, relocated as in nfl_expected_starters. |
-| `neutral_site` | Boolean | True when the schedule's location is Neutral. |
-| `base_margin` | Float64 | Shipped spine's predicted home margin, in points. |
-| `base_win_prob` | Float64 | Shipped spine's probability that the home team wins. |
-| `base_lo80` | Float64 | Lower bound of the shipped spine's 80% margin interval. |
-| `base_hi80` | Float64 | Upper bound of the shipped spine's 80% margin interval. |
-| `qb_margin` | Float64 | QB layer's mixture-mean home margin, in points. |
-| `qb_win_prob` | Float64 | QB layer's probability that the home team wins. |
-| `qb_lo80` | Float64 | Lower bound of the QB layer's 80% margin interval. |
-| `qb_hi80` | Float64 | Upper bound of the QB layer's 80% margin interval. |
-| `home_qb_id` | String | GSIS id of the home starter the layer priced. |
-| `away_qb_id` | String | GSIS id of the away starter the layer priced. |
-| `home_status` | String | Home starter's injury-report status. |
-| `away_status` | String | Away starter's injury-report status. |
-| `home_p_start` | Float64 | Probability the home starter starts. |
-| `away_p_start` | Float64 | Probability the away starter starts. |
-| `home_shift` | Float64 | Home starter's shift to adj_net, in EPA per play. |
-| `away_shift` | Float64 | Away starter's shift to adj_net, in EPA per play. |
-| `home_layer_applied` | Boolean | False when the home side had no starter or no rated dropbacks and the layer left it unchanged. |
-| `away_layer_applied` | Boolean | False when the away side had no starter or no rated dropbacks and the layer left it unchanged. |
-
 **Raises**
 
 | Exception | Description |
@@ -667,13 +618,6 @@ dropbacks and the league mean from there on.
 **Returns**
 
 One row per QB: `qb_id` (Utf8), `dropbacks` (Int64), `epa_per_dropback` (Float64, raw), `qb_value` (Float64, shrunk). A QB absent from the frame has no row; callers value him at the replacement level.
-
-| col_name | type | description |
-|---|---|---|
-| `qb_id` | String | GSIS id of the QB. |
-| `dropbacks` | Int64 | Career dropbacks in games strictly before as_of_date. |
-| `epa_per_dropback` | Float64 | Raw EPA per dropback over those dropbacks. |
-| `qb_value` | Float64 | Shrunk EPA per dropback, (n * e + k * prior) / (n + k), toward replacement level or the league mean. |
 
 **Example**
 

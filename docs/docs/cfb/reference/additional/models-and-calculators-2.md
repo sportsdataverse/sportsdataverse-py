@@ -132,8 +132,6 @@ values (the refit moves every team; the ledger reports the two that played).
 
 One row per (game, team) for the teams `cfb_adjusted_epa` rates (two or more valid games), sorted by `team_id`, then `week` (when present), then `game_id`: `game_id`, the carried `season` / `week` / `season_type`, `team_id`, `pos_team`, `opponent_id`, `site` (`home` / `away` / `neutral`), `off_plays` / `def_plays` (the team's offensive / defensive plays in the fit), `raw_off_epa`, `raw_def_epa`, `raw_net_epa`, `off_strength_faced` / `def_strength_faced` (the opponent's fitted offense / defense, EPA/play), `schedule_adj` (`off_strength_faced - def_strength_faced`: what the schedule term adds to this game's raw net), `adj_off_epa`, `adj_def_epa`, `adj_net_epa`, `off_weight` / `def_weight` (the game's weight in each season mean: 1 / the games where that side has fit plays, so the two differ when a game has plays on one side only), `raw_contribution`, `schedule_contribution`, `contribution` (to the season value), `net_adj_epa` (the season value, repeated) and, with `influence`, `loo_net_adj_epa` (the season value without this game) and `game_influence` (`net_adj_epa - loo_net_adj_epa`; both null when the team would keep fewer than two games).
 
-No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
-
 **Raises**
 
 | Exception | Description |
