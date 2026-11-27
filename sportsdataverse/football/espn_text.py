@@ -25,6 +25,10 @@ surname-first "Arreola,Carlos" / "Wesco Jr.,Bryant" stats.ncaa.org writes, and
 field-goal anchors built from it (:data:`CLAUSE_RETURNER_RE`,
 :data:`CLAUSE_FG_KICKER_RE`), so the CFB processor keeps no name regex of its
 own for them.
+
+It also holds the charted-pass phrase both processors read ``pass_depth`` and
+``pass_direction`` from (:data:`PASS_DEPTH_RE`, :data:`PASS_DIRECTION_RE`),
+with what ESPN's "short" and "deep" mean in each league.
 """
 
 from __future__ import annotations
@@ -106,6 +110,33 @@ CLAUSE_RETURNER_RE = (
 #: The field-goal kicker in any name shape: the name before "field goal attempt", at the
 #: text start, after the clock parenthetical, or after a jersey.
 CLAUSE_FG_KICKER_RE = r"(?:^|\)\s|#\d{1,3}\s)" + CLAUSE_NAME + r" field goal attempt"
+
+#: A charted pass's depth, from the phrase ESPN writes for it: "pass [complete |
+#: incomplete ]short|deep" ("pass incomplete deep right to", "pass short left to"). Group 1
+#: is ``short`` or ``deep``. The label is ESPN's, and it is a fixed air-yards split, measured
+#: 2026-11-26 on full seasons against an independent air-yards figure:
+#:
+#: - college: deep is 20+ air yards, short anything under, behind the line included (every
+#:   2025-26 attempt: 974 short / 4 deep at 19 air yards, 1 short / 942 deep at 20);
+#: - NFL: deep is 16+, the league's own 15-yard short pass (every 2006-25 attempt: 8,359
+#:   short / 29 deep at 15, 2 short / 7,080 deep at 16).
+#:
+#: Anchored on ``pass`` so a "short" or "deep" elsewhere in the text is never read as one:
+#: a replay note's "short of the line to gain" on a scramble, or 2006's "5 yards deep end
+#: zone" in a touchdown annotation. ``\b`` rather than a trailing space reads a phrase that
+#: ends the text ("pass incomplete short").
+PASS_DEPTH_RE = r"\bpass(?:\s+(?:complete|incomplete))?\s+(short|deep)\b"
+#: A charted pass's direction, from the same phrase: "pass [complete | incomplete ][short |
+#: deep ]left|middle|right", and the older "pass up the middle". Group 1 is ``left``,
+#: ``middle`` or ``right``. On the 2006-25 sdv ESPN NFL release, the loose
+#: ``\s(left|middle|right)\s`` this replaced lost the direction of every incompletion whose
+#: text ends on it ("pass incomplete short right.", 5,437 attempts), so the charted
+#: completion rate ran 63.9% against 62.7% for all attempts (63.0% with this one), and it
+#: gave 16,645 scramble rows ("scrambles right end") a pass depth or direction. College
+#: changes on 6 of 114,319 2025-26 pass rows, each a fix.
+PASS_DIRECTION_RE = (
+    r"\bpass(?:\s+(?:complete|incomplete))?(?:\s+(?:short|deep))?\s+(?:up\s+the\s+)?(left|middle|right)\b"
+)
 
 
 def _text(col: str) -> pl.Expr:
