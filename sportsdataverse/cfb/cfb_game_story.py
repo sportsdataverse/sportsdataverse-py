@@ -68,6 +68,9 @@ _EDGE_ORDER = (
 
 def _plays(pbp: pl.DataFrame) -> pl.DataFrame:
     """The plays with an ``_phase`` (the accounting edge each belongs to) and the ids cast."""
+    # the processor's own frame names the offense ``pos_team``; the releases rename it ``pos_team_id``
+    if "pos_team_id" not in pbp.columns and "pos_team" in pbp.columns:
+        pbp = pbp.rename({"pos_team": "pos_team_id"})
     phase = (
         pl.when(_ACCOUNTING["passing"])
         .then(pl.lit("passing"))
@@ -237,7 +240,7 @@ def cfb_game_story(
         pbp: The ESPN-processed plays of one or many games: ``load_cfb_pbp`` (the ``espn_cfb_pbp``
             release) or ``CFBPlayProcess(...).run_processing_pipeline()``'s plays frame. Needs ``game_id``,
             ``id``, ``game_play_number``, ``period.number``, ``clock.displayValue``, ``text``,
-            ``pos_team_id``, ``homeTeamId``, ``awayTeamId``, ``homeScore``, ``awayScore``, ``EPA``, ``wpa``,
+            ``pos_team_id`` (the processor's frame calls it ``pos_team``), ``homeTeamId``, ``awayTeamId``, ``homeScore``, ``awayScore``, ``EPA``, ``wpa``,
             ``scrimmage_play``, ``pass``, ``rush``, ``type.text``, ``is_pos_team_turnover``,
             ``EPA_explosive``, ``EPA_success``, ``start.yardsToEndzone``, ``late_down`` and the
             ``passer`` / ``rusher`` / ``receiver`` ``_player_id`` / ``_player_name`` columns.

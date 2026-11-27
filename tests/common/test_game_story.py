@@ -146,7 +146,7 @@ def test_basketball_league_check() -> None:
 
 
 @pytest.mark.parametrize(("fn", "lg"), [(cfb_game_story, "cfb"), (nfl_game_story, "nfl")])
-def test_football_gates_on_real_games(fn, lg: str) -> None:  # noqa: ANN001 - the two public adapters
+def test_football_gates_on_real_games(fn, lg: str) -> None:
     pbp = pl.read_parquet(FB / f"espn_{lg}_pbp_games.parquet")
     story = fn(pbp)
     _assert_schemas(story)
@@ -283,3 +283,12 @@ def test_basketball_accounting_unpriced_when_a_side_lacks_a_count(monkeypatch: p
     acct = edges.filter(pl.col("kind") == "accounting")
     assert acct.height == 0
     assert edges.filter(pl.col("rank") == 1)["kind"][0] == "split"
+
+
+def test_football_reads_the_processor_frame_too() -> None:
+    """``CFBPlayProcess(...).plays_frame`` names the offense ``pos_team`` (the releases: ``pos_team_id``); same story."""
+    pbp = pl.read_parquet(FB / "espn_cfb_pbp_games.parquet")
+    a = cfb_game_story(pbp)
+    b = cfb_game_story(pbp.rename({"pos_team_id": "pos_team"}))
+    for k in a:
+        assert a[k].equals(b[k]), k

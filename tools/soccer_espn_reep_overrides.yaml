@@ -1,0 +1,100 @@
+# Hand-reviewed ESPN soccer team -> reep team decisions, read by tools/build_soccer_espn_reep_crosswalk.py.
+#
+# An entry is needed for every ESPN team the automatic match cannot settle: no in-country reep row
+# shares one of its normalized names (no candidate), or several do (ambiguous). The build refuses to
+# write the crosswalk while such a team has no entry. An entry also overrules a wrong automatic match.
+#
+#   espn_team_id  ESPN Site v2 team id (text)
+#   espn_name     ESPN display name at review time (for the reader; not used by the build)
+#   reep_id       the reep team row that is this club, or null when no reep row is this club
+#   reason        what decided it
+#
+# Reviewed 2026-11-26 against reep data_version 2026.25. The deciding evidence, in order: the row is
+# the senior men's (or, for NWSL, senior women's) first team, not a reserve, academy, women's, beach,
+# predecessor or namesake club; its founding date and Wikidata entity; the provider ids it carries.
+# Where reep holds the same club twice (two Wikidata entities), the row carrying the provider ids is
+# the club; the other holds none or a duplicate.
+overrides:
+  # --- eng.1 / eng.2 ---
+  - {espn_team_id: "349", espn_name: AFC Bournemouth, reep_id: reep_t9f49dcb2, reason: "AFC Bournemouth 1899 (Q19568); the other row is the 1875 Bournemouth F.C."}
+  - {espn_team_id: "384", espn_name: Crystal Palace, reep_id: reep_tdae4e79f, reason: "Crystal Palace F.C. 1905 (Q19467); the other is the 1861 club"}
+  - {espn_team_id: "357", espn_name: Leeds United, reep_id: reep_t310cf271, reason: "Leeds United 1919 (Q1128631); the other is Leeds A.F.C. 1894"}
+  - {espn_team_id: "364", espn_name: Liverpool, reep_id: reep_td5dab25f, reason: "Liverpool F.C. 1892 (Q1130849); the other is A.F.C. Liverpool 2008"}
+  - {espn_team_id: "361", espn_name: Newcastle United, reep_id: reep_tca986041, reason: "Newcastle United 1892 (Q18716); the other is Newcastle F.C. 1977"}
+  - {espn_team_id: "392", espn_name: Birmingham City, reep_id: reep_tbf6d330d, reason: "Birmingham City F.C. 1875 (Q19444); the other is The Birmingham Club"}
+  - {espn_team_id: "379", espn_name: Burnley, reep_id: reep_t55b6847b, reason: "Burnley F.C. 1882 (Q19458); the other is Burnley Bank Hall"}
+  - {espn_team_id: "347", espn_name: Cardiff City, reep_id: reep_t24a9a332, reason: "Cardiff City F.C. 1899 (Q18662); the other is A.F.C. Cardiff"}
+  - {espn_team_id: "376", espn_name: Southampton, reep_id: reep_t2cef7cb3, reason: "Southampton F.C. 1885 (Q18732); the other is Road-Sea Southampton"}
+  - {espn_team_id: "371", espn_name: West Ham United, reep_id: reep_te6c8eca5, reason: "West Ham United 1895 (Q18747); the other is its academy"}
+  # --- esp.1 ---
+  - {espn_team_id: "96", espn_name: Alavés, reep_id: reep_t52e2f188, reason: "Deportivo Alavés 1921 (Q223620); no exact name hit, B/C/women's sides rejected"}
+  - {espn_team_id: "83", espn_name: Barcelona, reep_id: reep_tc7e2759e, reason: "FC Barcelona founded 1899-11-29; the only first-team row (it carries no provider ids in this reep release); the other is the beach-soccer side"}
+  - {espn_team_id: "90", espn_name: Deportivo, reep_id: reep_t80374b83, reason: "Deportivo de La Coruña 1906 (Q8760), abbreviation DEP"}
+  - {espn_team_id: "88", espn_name: Espanyol, reep_id: reep_tea9b4fb5, reason: "RCD Espanyol de Barcelona 1900 (Q8780); the other is Espanyol B"}
+  - {espn_team_id: "2922", espn_name: Getafe, reep_id: reep_tce02b5a1, reason: "Getafe CF 1983 (Q8806); the other is the women's side"}
+  - {espn_team_id: "1538", espn_name: Levante, reep_id: reep_t88b915a8, reason: "Levante UD (Q8823) carrying the provider ids; the others are a duplicate entity and the predecessor Levante FC"}
+  - {espn_team_id: "99", espn_name: Málaga, reep_id: reep_tcd90ca20, reason: "Málaga CF 1904-04-03 (Q8857); CD Málaga is the dissolved predecessor"}
+  - {espn_team_id: "244", espn_name: Real Betis, reep_id: reep_t05e5c936, reason: "Real Betis Balompié 1907 (Q8723); the other is Betis CF"}
+  - {espn_team_id: "94", espn_name: Valencia, reep_id: reep_t24d0db8f, reason: "Valencia CF 1919 (Q10333); the other is Football Club Valencia 1905"}
+  - {espn_team_id: "102", espn_name: Villarreal, reep_id: reep_t06ec1aab, reason: "Villarreal CF 1923 (Q12297); the other is CD Villarreal"}
+  # --- ger.1 ---
+  - {espn_team_id: "131", espn_name: Bayer Leverkusen, reep_id: reep_tde1cded4, reason: "Bayer 04 Leverkusen (Q104761); the other is VfL Leverkusen"}
+  - {espn_team_id: "268", espn_name: Borussia Mönchengladbach, reep_id: reep_t3cb8c10b, reason: "Q101959 carrying the provider ids; the other is a duplicate entity (Q19962426)"}
+  - {espn_team_id: "125", espn_name: Eintracht Frankfurt, reep_id: reep_te31b36c6, reason: "Eintracht Frankfurt 1899 (Q38245); the others are other Frankfurt clubs matched on location"}
+  - {espn_team_id: "3841", espn_name: FC Augsburg, reep_id: reep_t36bebe51, reason: "FC Augsburg 1907 (Q15755); the others are BC and TSG Augsburg"}
+  - {espn_team_id: "122", espn_name: FC Cologne, reep_id: reep_td85c256f, reason: "1. FC Köln (Q104770); ESPN uses the English name, which no reep alias carries"}
+  - {espn_team_id: "127", espn_name: Hamburg SV, reep_id: reep_te2cd1ba9, reason: "Hamburger SV 1887 (Q51974); ESPN spells it Hamburg SV"}
+  - {espn_team_id: "126", espn_name: SC Freiburg, reep_id: reep_t70979bf6, reason: "SC Freiburg 1904 (Q106394); the other is the 1975 women's side"}
+  - {espn_team_id: "7911", espn_name: TSG Hoffenheim, reep_id: reep_t1fc5f1d7, reason: "TSG 1899 Hoffenheim (Q22707); the other is the 2007 women's side"}
+  - {espn_team_id: "137", espn_name: Werder Bremen, reep_id: reep_te5e7897a, reason: "SV Werder Bremen 1899 (Q51976); the other is the 2007 women's side"}
+  # --- ita.1 ---
+  - {espn_team_id: "107", espn_name: Bologna, reep_id: reep_t2448a5ed, reason: "Bologna F.C. 1909 (Q1893); the others are Bologna CF 1966 and the women's side"}
+  - {espn_team_id: "2572", espn_name: Como, reep_id: reep_t54d007b0, reason: "Como 1907 (Q1120838); the 2020/2022 rows are the women's sides"}
+  - {espn_team_id: "112", espn_name: Lazio, reep_id: reep_t8e09c6f2, reason: "SS Lazio 1900 (Q2609); the other is the women's side"}
+  - {espn_team_id: "115", espn_name: Parma, reep_id: reep_tbed0101c, reason: "Parma Calcio 1913 (Q2693); the other is the academy"}
+  - {espn_team_id: "239", espn_name: Torino, reep_id: reep_t5ce85433, reason: "Torino FC (Q2768) carrying the provider ids; the other is Torino CF 1981 (women)"}
+  # --- fra.1 ---
+  - {espn_team_id: "174", espn_name: AS Monaco, reep_id: reep_taa892957, reason: "AS Monaco FC 1924 (Q180305); the other is a 1976 entity with no provider ids"}
+  - {espn_team_id: "3236", espn_name: Le Havre AC, reep_id: reep_tacb61040, reason: "Le Havre AC 1884 (Q328658); the other is the 2014 women's side"}
+  - {espn_team_id: "2697", espn_name: Le Mans, reep_id: reep_t306ce8b6, reason: "Le Mans F.C. 1985 (Q210864); the other is a duplicate entity with no provider ids"}
+  - {espn_team_id: "273", espn_name: Lorient, reep_id: reep_t1d399985, reason: "F.C. Lorient 1926 (Q48911); the other is the women's side"}
+  - {espn_team_id: "167", espn_name: Lyon, reep_id: reep_t385861e5, reason: "Olympique Lyonnais (Q704); the others are two FC Lyon clubs"}
+  - {espn_team_id: "2502", espn_name: Nice, reep_id: reep_t3e015cde, reason: "OGC Nice 1904 (Q185163); the other is an amateur club"}
+  - {espn_team_id: "6851", espn_name: Paris FC, reep_id: reep_t213374b4, reason: "Paris FC 1969 (Q1051013); the other is the women's side"}
+  - {espn_team_id: "169", espn_name: Stade Rennais, reep_id: reep_t2f7e3e8f, reason: "Stade Rennais F.C. 1901 (Q19509); the others are other Rennes clubs matched on location"}
+  - {espn_team_id: "180", espn_name: Strasbourg, reep_id: reep_t766ba498, reason: "RC Strasbourg Alsace 1906 (Q126334); the others are AS Strasbourg and a duplicate entity"}
+  - {espn_team_id: "179", espn_name: Toulouse, reep_id: reep_tb3aaf6d9, reason: "Toulouse FC 1970 (Q19518); the others are the 1937 club and the women's side"}
+  - {espn_team_id: "170", espn_name: Troyes, reep_id: reep_t3cf4b8aa, reason: "ES Troyes AC (Q501693); overrules the automatic match on location to AS Troyes 1900"}
+  # --- usa.1 ---
+  - {espn_team_id: "183", espn_name: Columbus Crew, reep_id: reep_t0955d652, reason: "Columbus Crew 1994 (Q457163); the other is FC Columbus"}
+  - {espn_team_id: "18966", espn_name: LAFC, reep_id: reep_tbbca3647, reason: "Los Angeles FC (Q18380286); ESPN uses the abbreviation"}
+  - {espn_team_id: "17362", espn_name: Minnesota United FC, reep_id: reep_t737f7025, reason: "the MLS club 2015 (Q19828435); the other is the 2010 second-division side"}
+  - {espn_team_id: "18986", espn_name: Nashville SC, reep_id: reep_te74de6f7, reason: "the MLS club (Q47518754); the other is the 2016 USL side"}
+  - {espn_team_id: "12011", espn_name: Orlando City SC, reep_id: reep_t8b1ef865, reason: "the MLS club 2013 (Q15214308); the other is the 2010 USL side"}
+  - {espn_team_id: "9723", espn_name: Portland Timbers, reep_id: reep_td71e95ad, reason: "the MLS club 2009 (Q1031200); the others are the NASL and USL sides"}
+  - {espn_team_id: "22529", espn_name: San Diego FC, reep_id: reep_t52ed77de, reason: "San Diego FC 2023 (Q118945347); the other is San Diego 1904 FC"}
+  - {espn_team_id: "191", espn_name: San Jose Earthquakes, reep_id: reep_tc5f0758b, reason: "the MLS club 1995 (Q575370); the other is the NASL side"}
+  - {espn_team_id: "9726", espn_name: Seattle Sounders FC, reep_id: reep_t816bb886, reason: "the MLS club 2009 (Q632511); the others are the NASL and USL sides"}
+  - {espn_team_id: "186", espn_name: Sporting Kansas City, reep_id: reep_tf398568b, reason: "Sporting Kansas City 1995 (Q329812); the other is FC Kansas City (women)"}
+  - {espn_team_id: "21812", espn_name: St. Louis CITY SC, reep_id: reep_t32b07a21, reason: "St. Louis City SC 2019 (Q66642491); the other is AC St. Louis"}
+  - {espn_team_id: "7318", espn_name: Toronto FC, reep_id: reep_t1039270c, reason: "Toronto FC 2006 (Q327238); the other is SC Toronto"}
+  - {espn_team_id: "9727", espn_name: Vancouver Whitecaps, reep_id: reep_t09372233, reason: "Vancouver Whitecaps FC 2009, the MLS club (Q196107); the others are the NASL, CSL and USL sides and Vancouver FC"}
+  # --- mex.1 (reep's 2017 rows are the Liga MX Femenil sides) ---
+  - {espn_team_id: "227", espn_name: América, reep_id: reep_t09cfec57, reason: "Club América 1916 (Q459090); the other is the 2017 women's side"}
+  - {espn_team_id: "219", espn_name: Guadalajara, reep_id: reep_t5bd0669c, reason: "C.D. Guadalajara 1906 (Q503321); the other is the 2017 women's side"}
+  - {espn_team_id: "234", espn_name: Pachuca, reep_id: reep_tdb48a448, reason: "CF Pachuca 1901 (Q736937); the other is the 2017 women's side"}
+  - {espn_team_id: "231", espn_name: Puebla, reep_id: reep_t66310807, reason: "Puebla F.C. 1944 (Q646596); the other is Puebla A.C. 1898"}
+  - {espn_team_id: "222", espn_name: Querétaro, reep_id: reep_t18d92e2d, reason: "Querétaro F.C. 1950 (Q606210); the others are the 2017 women's side and Club Querétaro"}
+  - {espn_team_id: "225", espn_name: Santos, reep_id: reep_tdc7042fe, reason: "Santos Laguna 1982 (Q745246); ESPN uses the short name"}
+  - {espn_team_id: "232", espn_name: Tigres UANL, reep_id: reep_tbecd0f2b, reason: "Tigres UANL 1960 (Q849823); the other is the 2017 women's side"}
+  - {espn_team_id: "10125", espn_name: Tijuana, reep_id: reep_td4e8934c, reason: "Club Tijuana 2007 (Q1103168); the other is the 2017 women's side"}
+  - {espn_team_id: "223", espn_name: Toluca, reep_id: reep_tb900dd23, reason: "Deportivo Toluca F.C. 1917 (Q670186); the others are the women's and Premier sides"}
+  # --- usa.nwsl (reviewed; the league is not built: see LEAGUE_COUNTRIES in the build script) ---
+  - {espn_team_id: "131563", espn_name: Denver Summit FC, reep_id: reep_t056ee940, reason: "Denver Summit FC (Q132067920); the other is FC Denver"}
+  - {espn_team_id: "20907", espn_name: Kansas City Current, reep_id: reep_tfed4a23b, reason: "Kansas City Current 2020 (Q104804155); the other is the defunct FC Kansas City"}
+  - {espn_team_id: "15366", espn_name: North Carolina Courage, reep_id: reep_t77d2e056, reason: "North Carolina Courage 2017 (Q28169542); the other is the men's North Carolina FC"}
+  - {espn_team_id: "21423", espn_name: San Diego Wave FC, reep_id: null, reason: "no reep row; the candidates are the men's San Diego FC and San Diego 1904 FC"}
+  - {espn_team_id: "21422", espn_name: Angel City FC, reep_id: null, reason: "no reep row under this or any alias"}
+  - {espn_team_id: "15363", espn_name: Seattle Reign FC, reep_id: null, reason: "no reep row under this or any alias"}
+  - {espn_team_id: "19141", espn_name: Utah Royals, reep_id: null, reason: "no reep row under this or any alias"}
+  - {espn_team_id: "15365", espn_name: Washington Spirit, reep_id: null, reason: "no reep row under this or any alias"}

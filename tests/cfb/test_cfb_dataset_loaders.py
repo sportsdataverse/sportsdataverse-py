@@ -35,6 +35,7 @@ _DATASET_LOADERS = {
     "load_cfb_percentiles": 2023,
     "load_cfb_receiving": 2025,
     "load_cfb_rushing": 2025,
+    "load_cfb_team_adjustment_ledger": 2025,
     "load_cfb_team_summaries": 2025,
 }
 

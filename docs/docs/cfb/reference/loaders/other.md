@@ -1,7 +1,7 @@
 ---
 title: "CFB dataset loaders — Other: ratings–model_pbp"
 sidebar_label: "Other: ratings–model_pbp"
-sidebar_position: 15
+sidebar_position: 16
 description: "CFB dataset loaders — Other: ratings–model_pbp — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---

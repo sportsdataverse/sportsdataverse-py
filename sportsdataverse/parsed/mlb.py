@@ -320,6 +320,7 @@ from sportsdataverse.mlb import load_mlb_expected_stats as load_mlb_expected_sta
 from sportsdataverse.mlb import load_mlb_group_aliases as load_mlb_group_aliases  # noqa: F401
 from sportsdataverse.mlb import load_mlb_group_seasons as load_mlb_group_seasons  # noqa: F401
 from sportsdataverse.mlb import load_mlb_groups as load_mlb_groups  # noqa: F401
+from sportsdataverse.mlb import load_mlb_leverage_index as load_mlb_leverage_index  # noqa: F401
 from sportsdataverse.mlb import load_mlb_oaa as load_mlb_oaa  # noqa: F401
 from sportsdataverse.mlb import load_mlb_park_dimensions as load_mlb_park_dimensions  # noqa: F401
 from sportsdataverse.mlb import load_mlb_pbp as load_mlb_pbp  # noqa: F401
@@ -597,6 +598,7 @@ __all__ = [
     "load_mlb_group_aliases",
     "load_mlb_group_seasons",
     "load_mlb_groups",
+    "load_mlb_leverage_index",
     "load_mlb_oaa",
     "load_mlb_park_dimensions",
     "load_mlb_pbp",

@@ -380,6 +380,21 @@ loaders:
     seasons: 2024
   id_int64:
   - team_id
+# The season Adj EPA/Play of cfb_team_summaries laid out game by game (sdv-py
+# cfb_adjusted_epa_ledger, stage 68 of cfbfastR-cfb-data): each team's contribution rows
+# sum to its published net_adj_epa.
+- fn: load_cfb_team_adjustment_ledger
+  league: cfb
+  base: sdv_releases
+  url: cfb_team_adjustment_ledger/cfb_team_adjustment_ledger_{season}.parquet
+  tag: cfb_team_adjustment_ledger
+  min_season: 2004
+  example_args:
+    seasons: 2024
+  id_int64:
+  - game_id
+  - team_id
+  - opponent_id
 # ESPN CFB usage leaderboards + team / coach tendencies (sportsdataverse.football
 # usage_box / tendencies, built by cfbfastR-cfb-data). One asset per season; the
 # coach_careers tag is a single season-less file (no {season} token -> no seasons arg).
@@ -573,6 +588,15 @@ loaders:
   url: mlb_game_state/mlb_wpa_{season}.parquet
   tag: mlb_game_state
   min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_mlb_leverage_index
+  league: mlb
+  base: sdv_releases
+  url: mlb_game_state/mlb_leverage_index_{season}.parquet
+  tag: mlb_game_state
+  min_season: 2020
+  notes: "Published 2020-2026, one row per load_mlb_we_table state bucket; extra half-innings open with the automatic runner on 2nd."
   example_args:
     seasons: 2024
 - fn: load_mlb_pbp
