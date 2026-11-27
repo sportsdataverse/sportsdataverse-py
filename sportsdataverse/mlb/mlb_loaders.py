@@ -239,7 +239,7 @@ def load_mlb_leverage_index(seasons, return_as_pandas: bool = False):
         |season            |Int64   |
 
     Note:
-        Published 2020-2026, one row per load_mlb_we_table state bucket; extra half-innings open with the automatic runner on 2nd.
+        Published 2020-2026, one row per load_mlb_we_table state bucket; extra half-innings open with the automatic runner on 2nd. Each PA's swing is the WE change it causes, with WE read from one table pooled over the 2015-2026 regular seasons and averaged over the season's own PAs (rebuilt 2026-11-27).
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2020.
