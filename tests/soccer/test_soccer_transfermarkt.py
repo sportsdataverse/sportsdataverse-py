@@ -18,6 +18,7 @@ from sportsdataverse.soccer import (
     load_soccer_transfermarkt_transfers,
     soccer_espn_transfermarkt_team_crosswalk,
 )
+from sportsdataverse import _codegen_runtime as rt
 from sportsdataverse.soccer import soccer_transfermarkt as tm
 from tests.conftest import skip_if_no_live
 from tools.build_soccer_espn_reep_crosswalk import norm
@@ -29,6 +30,43 @@ FIX = Path(__file__).resolve().parents[1] / "fixtures" / "transfermarkt"
 #: every league. Measured: 139/144 (0.965); lowest fra.1, ger.1 and mex.1, 17/18 each.
 FIRST_TIER = ("eng.1", "esp.1", "ger.1", "ita.1", "fra.1", "usa.1", "mex.1")
 GATE = {"min_share": 0.90, "min_league_share": 0.75}
+
+
+_REAL_FROM_RELEASE = tm._from_release
+
+
+@pytest.fixture(autouse=True)
+def _source_path(monkeypatch):
+    """Every test reads the original-source path unless it opts back into the mirror (``mirror``)."""
+    monkeypatch.setattr(tm, "_from_release", lambda table: None)
+
+
+@pytest.fixture
+def mirror(monkeypatch):
+    """The real release-mirror path, its parquet read served from the typed fixture rows."""
+    monkeypatch.setattr(tm, "_from_release", _REAL_FROM_RELEASE)
+    calls: list[str] = []
+
+    def fake_release(url):
+        calls.append(url)
+        table = url.rsplit("/", 1)[1].removesuffix(".parquet")
+        return rt._parse_release(url, io.BytesIO(_parquet(table)))  # the runtime's own parquet parse
+
+    monkeypatch.setattr(tm, "_fetch_release_parquet", fake_release)
+    return calls
+
+
+def _parquet(table: str, frame: pl.DataFrame | None = None) -> bytes:
+    """The mirror's bytes for one table, written the way the publish script writes them."""
+    buf = io.BytesIO()
+    (
+        frame if frame is not None else tm._typed(pl.read_csv(FIX / f"{table}.csv", infer_schema=False), table)
+    ).write_parquet(buf)
+    return buf.getvalue()
+
+
+def _release_bytes(monkeypatch, body: bytes) -> None:
+    monkeypatch.setattr(tm, "_fetch_release_parquet", lambda url: rt._parse_release(url, io.BytesIO(body)))
 
 
 class _Resp:
@@ -200,6 +238,93 @@ def test_bundled_reep_transfermarkt_ids_are_integers() -> None:
 
     ids = soccer_espn_reep_team_crosswalk()["key_transfermarkt"].drop_nulls()
     assert ids.str.contains(r"^[0-9]+$").all()
+
+
+def test_the_mirror_is_read_first_and_the_source_is_not_touched(mirror, monkeypatch) -> None:
+    def no_source(*a, **k):
+        raise AssertionError("the original source was read while the mirror answered")
+
+    monkeypatch.setattr(tm, "download", no_source)
+    for table in tm._TABLES:
+        df = getattr(tm, f"load_soccer_transfermarkt_{table}")()
+        assert dict(df.schema) == tm._TABLES[table]
+        assert df.height == pl.read_csv(FIX / f"{table}.csv", infer_schema=False).height
+    assert mirror == [tm.TRANSFERMARKT_RELEASE_URL.format(table=t) for t in tm._TABLES]
+
+
+def _clubs() -> pl.DataFrame:
+    return tm._typed(pl.read_csv(FIX / "clubs.csv", infer_schema=False), "clubs")
+
+
+@pytest.mark.parametrize(
+    ("failure", "reason"),
+    [
+        (NoDataError("absent"), "NoDataError: absent"),
+        (AssetFetchError("rate limited"), "AssetFetchError: rate limited"),
+        (b"not a parquet file at all", "ArrowInvalid"),
+        (b"", "Error"),
+        ("corrupt_footer", "OSError"),
+        ("dropped_column", "are not the loader's"),
+        ("reordered", "are not the loader's"),
+        ("int32_id", "are not the loader's"),
+        ("empty", "has no rows"),
+    ],
+    ids=["absent", "failed", "garbage", "empty_body", "corrupt_footer", "dropped", "reordered", "int32", "no_rows"],
+)
+def test_an_unusable_mirror_warns_naming_why_and_falls_back(served, monkeypatch, failure, reason) -> None:
+    monkeypatch.setattr(tm, "_from_release", _REAL_FROM_RELEASE)
+    if isinstance(failure, Exception):
+
+        def raise_it(url):
+            raise failure
+
+        monkeypatch.setattr(tm, "_fetch_release_parquet", raise_it)
+    elif isinstance(failure, bytes):
+        _release_bytes(monkeypatch, failure)
+    elif failure == "corrupt_footer":
+        good = _parquet("clubs")
+        _release_bytes(monkeypatch, good[:-8] + b"\0\0\0\0PAR1")
+    else:
+        frame = {
+            "dropped_column": lambda: _clubs().drop("url"),
+            "reordered": lambda: _clubs().select(reversed(_clubs().columns)),
+            "int32_id": lambda: _clubs().with_columns(pl.col("club_id").cast(pl.Int32)),
+            "empty": lambda: _clubs().head(0),
+        }[failure]()
+        _release_bytes(monkeypatch, _parquet("clubs", frame))
+    with pytest.warns(UserWarning, match=f"unavailable \\(.*{reason}.*\\); reading the original source"):
+        df = load_soccer_transfermarkt_clubs()
+    assert served == [tm.TRANSFERMARKT_DATA_URL.format(table="clubs")]
+    assert df.schema == pl.Schema(tm._TABLES["clubs"]) and df.height > 0
+
+
+def test_an_unexpected_mirror_error_is_not_swallowed(monkeypatch) -> None:
+    monkeypatch.setattr(tm, "_from_release", _REAL_FROM_RELEASE)
+
+    def boom(url):
+        raise TypeError("a bug, not a fetch failure")
+
+    monkeypatch.setattr(tm, "_fetch_release_parquet", boom)
+    with pytest.raises(TypeError):
+        load_soccer_transfermarkt_clubs()
+
+
+def test_mirror_and_pandas(mirror) -> None:
+    pdf = load_soccer_transfermarkt_players(return_as_pandas=True)
+    assert str(pdf["current_national_team_id"].dtype).startswith("int64")
+
+
+@skip_if_no_live
+@pytest.mark.parametrize("table", list(tm._TABLES))
+def test_live_release_mirror(monkeypatch, table) -> None:
+    monkeypatch.setattr(tm, "_from_release", _REAL_FROM_RELEASE)
+
+    def no_source(*a, **k):
+        raise AssertionError("fell back to the original source")
+
+    monkeypatch.setattr(tm, "download", no_source)
+    df = getattr(tm, f"load_soccer_transfermarkt_{table}")()
+    assert df.schema == pl.Schema(tm._TABLES[table]) and df.height > 0
 
 
 @skip_if_no_live

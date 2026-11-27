@@ -1,9 +1,11 @@
 """Transfermarkt clubs, players, market values, transfers and competitions, plus an ESPN team-id bridge.
 
-The tables are the CC0 1.0 Transfermarkt dataset, one gzip CSV per table. It is a snapshot current to
-2026-07-06 and is not being refreshed, so 2026-27 squads, transfers and values are absent. Each loader
-reads its published file on every call and types the ids at this boundary: ``player_id``, ``club_id`` and
-every ``*_club_id`` are the Int64 Transfermarkt ids; competition ids such as ``"GB1"`` stay text.
+The tables are the CC0 1.0 Transfermarkt dataset, a snapshot current to 2026-07-06 that is not being
+refreshed, so 2026-27 squads, transfers and values are absent. Each loader reads the table's parquet from the
+``soccer_transfermarkt`` sportsdataverse-data release (a mirror, with sha256s and a README naming source and
+licence; the hashes are for audit, the loader does not check them); when that cannot be read it warns and reads
+the original gzip CSV instead, typing the ids at this boundary. Either way ``player_id``, ``club_id`` and every ``*_club_id`` are the Int64 Transfermarkt ids;
+competition ids such as ``"GB1"`` stay text.
 
 :func:`soccer_espn_transfermarkt_team_crosswalk` maps ESPN soccer team ids to Transfermarkt ``club_id``
 from the bundled ESPN <-> reep crosswalk (whose reep rows carry the Transfermarkt id for 166 of its 168
@@ -20,9 +22,10 @@ from typing import TYPE_CHECKING
 
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _check_response, _transport_errors
+from sportsdataverse._codegen_runtime import _check_response, _fetch_release_parquet, _transport_errors, cli_warn
+from sportsdataverse.config import SDVRELEASES
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import AssetFetchError, SchemaDriftWarning
+from sportsdataverse.errors import AssetFetchError, NoDataError, SchemaDriftWarning
 from sportsdataverse.soccer.soccer_reep_crosswalk import soccer_espn_reep_team_crosswalk
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -38,6 +41,8 @@ __all__ = [
 ]
 
 TRANSFERMARKT_DATA_URL = "https://pub-e682421888d945d684bcae8890b0ec20.r2.dev/data/{table}.csv.gz"
+#: The mirror (``tools/publish_soccer_transfermarkt.py``): the same tables, already typed, as parquet.
+TRANSFERMARKT_RELEASE_URL = SDVRELEASES + "soccer_transfermarkt/{table}.parquet"
 
 _I, _F, _S, _D = pl.Int64, pl.Float64, pl.Utf8, pl.Date
 
@@ -137,8 +142,31 @@ def _typed(raw: pl.DataFrame, table: str) -> pl.DataFrame:
     return out
 
 
+def _from_release(table: str) -> pl.DataFrame | None:
+    """The mirrored table, or ``None`` (with a warning naming why) when it cannot be read or has drifted."""
+    import pyarrow as pa
+
+    url = TRANSFERMARKT_RELEASE_URL.format(table=table)
+    try:
+        df = _fetch_release_parquet(url)
+        if df.schema != pl.Schema(_TABLES[table]):  # names, dtypes and order
+            reason = f"columns {dict(df.schema)} are not the loader's {_TABLES[table]}"
+        elif df.is_empty():
+            reason = "the asset has no rows"
+        else:
+            return df
+    # absent (404), failed (429/5xx/dropped), or unreadable (pyarrow reports a corrupt footer as a bare OSError;
+    # every transport OSError is already an AssetFetchError here): the original source still answers, with a warning
+    except (NoDataError, AssetFetchError, pa.ArrowException, pl.exceptions.PolarsError, OSError) as e:
+        reason = f"{type(e).__name__}: {' '.join(str(e).split())}"  # one line, whatever the parser wrote
+    cli_warn(f"load_soccer_transfermarkt_{table}: {url} unavailable ({reason}); reading the original source")
+    return None
+
+
 def _load(table: str, return_as_pandas: bool) -> pl.DataFrame | pd.DataFrame:
-    out = _typed(_fetch(table), table)
+    out = _from_release(table)
+    if out is None:
+        out = _typed(_fetch(table), table)
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -147,7 +175,7 @@ def load_soccer_transfermarkt_players(*, return_as_pandas: bool = False) -> pl.D
 
     About 50,000 players: everyone who appeared for a club of the first-tier leagues the dataset covers
     (Premier League, LaLiga, Bundesliga, Serie A, Ligue 1, MLS, Liga MX and about 20 more). A snapshot
-    current to 2026-07-06 (not refreshed), read from its published file on every call. Licence: CC0 1.0.
+    current to 2026-07-06 (not refreshed), read on every call from the release mirror. Licence: CC0 1.0.
 
     Args:
         return_as_pandas: Return a pandas DataFrame instead of polars.
@@ -159,10 +187,11 @@ def load_soccer_transfermarkt_players(*, return_as_pandas: bool = False) -> pl.D
         text with a ``SchemaDriftWarning``.
 
     Raises:
-        ValueError: The host answered 400 / 422.
-        NoDataError: The host answered 404 (the file moved).
-        AssetFetchError: The fetch failed (429, 5xx, a dropped connection), returned something other than a
-            readable gzip CSV, or the file lacks a column this loader types.
+        ValueError: The original source answered 400 / 422.
+        NoDataError: The original source answered 404 (the file moved).
+        AssetFetchError: The original source, read when the release mirror cannot be (with a warning), failed
+            (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or
+            lacks a column this loader types.
 
     Example:
         Quick start::
@@ -187,7 +216,7 @@ def load_soccer_transfermarkt_clubs(*, return_as_pandas: bool = False) -> pl.Dat
     """Load the CC0 Transfermarkt clubs table: one row per club of the first-tier leagues the dataset covers.
 
     About 800 clubs, each with its league, squad profile and stadium as of its last season in the dataset.
-    A snapshot current to 2026-07-06 (not refreshed), read from its published file on every call.
+    A snapshot current to 2026-07-06 (not refreshed), read on every call from the release mirror.
     Licence: CC0 1.0.
 
     Args:
@@ -199,10 +228,11 @@ def load_soccer_transfermarkt_clubs(*, return_as_pandas: bool = False) -> pl.Dat
         type comes back as text with a ``SchemaDriftWarning``.
 
     Raises:
-        ValueError: The host answered 400 / 422.
-        NoDataError: The host answered 404 (the file moved).
-        AssetFetchError: The fetch failed (429, 5xx, a dropped connection), returned something other than a
-            readable gzip CSV, or the file lacks a column this loader types.
+        ValueError: The original source answered 400 / 422.
+        NoDataError: The original source answered 404 (the file moved).
+        AssetFetchError: The original source, read when the release mirror cannot be (with a warning), failed
+            (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or
+            lacks a column this loader types.
 
     Example:
         Quick start::
@@ -226,8 +256,8 @@ def load_soccer_transfermarkt_clubs(*, return_as_pandas: bool = False) -> pl.Dat
 def load_soccer_transfermarkt_player_valuations(*, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """Load the CC0 Transfermarkt market-value history: one row per player and valuation date.
 
-    About 656,000 valuations, from 2000 to 2026-06-12 (the snapshot is not refreshed), read from the
-    published file on every call. Licence: CC0 1.0.
+    About 656,000 valuations, from 2000 to 2026-06-12 (the snapshot is not refreshed), read on every call from
+    the release mirror. Licence: CC0 1.0.
 
     Args:
         return_as_pandas: Return a pandas DataFrame instead of polars.
@@ -238,10 +268,11 @@ def load_soccer_transfermarkt_player_valuations(*, return_as_pandas: bool = Fals
         another type comes back as text with a ``SchemaDriftWarning``.
 
     Raises:
-        ValueError: The host answered 400 / 422.
-        NoDataError: The host answered 404 (the file moved).
-        AssetFetchError: The fetch failed (429, 5xx, a dropped connection), returned something other than a
-            readable gzip CSV, or the file lacks a column this loader types.
+        ValueError: The original source answered 400 / 422.
+        NoDataError: The original source answered 404 (the file moved).
+        AssetFetchError: The original source, read when the release mirror cannot be (with a warning), failed
+            (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or
+            lacks a column this loader types.
 
     Example:
         Quick start::
@@ -266,7 +297,7 @@ def load_soccer_transfermarkt_transfers(*, return_as_pandas: bool = False) -> pl
     """Load the CC0 Transfermarkt transfers table: one row per player move between clubs, with its fee.
 
     About 175,000 transfers involving the clubs the dataset covers, to the 2025-26 season (the snapshot is
-    current to 2026-07-06 and not refreshed), read from the published file on every call. Licence: CC0 1.0.
+    current to 2026-07-06 and not refreshed), read on every call from the release mirror. Licence: CC0 1.0.
 
     Args:
         return_as_pandas: Return a pandas DataFrame instead of polars.
@@ -277,10 +308,11 @@ def load_soccer_transfermarkt_transfers(*, return_as_pandas: bool = False) -> pl
         text with a ``SchemaDriftWarning``.
 
     Raises:
-        ValueError: The host answered 400 / 422.
-        NoDataError: The host answered 404 (the file moved).
-        AssetFetchError: The fetch failed (429, 5xx, a dropped connection), returned something other than a
-            readable gzip CSV, or the file lacks a column this loader types.
+        ValueError: The original source answered 400 / 422.
+        NoDataError: The original source answered 404 (the file moved).
+        AssetFetchError: The original source, read when the release mirror cannot be (with a warning), failed
+            (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or
+            lacks a column this loader types.
 
     Example:
         Quick start::
@@ -305,7 +337,7 @@ def load_soccer_transfermarkt_competitions(*, return_as_pandas: bool = False) ->
     """Load the CC0 Transfermarkt competitions table: the leagues and cups the dataset covers.
 
     65 competitions: first-tier domestic leagues, domestic cups and international club competitions, read
-    from the published file on every call. Licence: CC0 1.0.
+    on every call from the release mirror. Licence: CC0 1.0.
 
     Args:
         return_as_pandas: Return a pandas DataFrame instead of polars.
@@ -316,10 +348,11 @@ def load_soccer_transfermarkt_competitions(*, return_as_pandas: bool = False) ->
         ``current_club_domestic_competition_id``.
 
     Raises:
-        ValueError: The host answered 400 / 422.
-        NoDataError: The host answered 404 (the file moved).
-        AssetFetchError: The fetch failed (429, 5xx, a dropped connection), returned something other than a
-            readable gzip CSV, or the file lacks a column this loader types.
+        ValueError: The original source answered 400 / 422.
+        NoDataError: The original source answered 404 (the file moved).
+        AssetFetchError: The original source, read when the release mirror cannot be (with a warning), failed
+            (429, 5xx, a dropped connection), returned something other than a readable gzip CSV with rows, or
+            lacks a column this loader types.
 
     Example:
         Quick start::
