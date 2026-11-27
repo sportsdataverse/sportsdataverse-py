@@ -18,7 +18,8 @@ description: "sdv-py Soccer (all): endpoint references, dataset loaders and pars
 | [OpenLigaDB](#openligadb) | `api.openligadb.de` | 11 | none |
 | [kloppy open event data](#kloppy-open-event-data) | `kloppy.pysport.org` | 8 | none (optional `soccer` extra) |
 | [reep football id register](#reep-football-id-register) | `github.com` | 1 | none (bundled table, CC0 1.0) |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 10 | — |
+| [Transfermarkt dataset (CC0)](#transfermarkt-dataset-cc0) | `github.com` | 6 | none (public CSV files, CC0 1.0) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 16 | — |
 
 ## ESPN {#espn}
 
@@ -76,6 +77,12 @@ description: "sdv-py Soccer (all): endpoint references, dataset loaders and pars
 | Reference | Functions |
 |---|---:|
 | [Hand-written wrappers](reference/additional) | 1 |
+
+## Transfermarkt dataset (CC0) {#transfermarkt-dataset-cc0}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 6 |
 ## Tools and helpers
 
 ### Analytics {#analytics}

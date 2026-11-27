@@ -254,7 +254,7 @@ How the winner won it, for one or many NFL games: edges in EPA, the moment, peri
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  | The ESPN-processed plays of one or many games: the `espn_nfl_pbp` release or `NFLPlayProcess(...).run_processing_pipeline()`'s plays frame (the columns `~sportsdataverse.cfb.cfb_game_story.cfb_game_story` lists; the NFL frame has no `homeFinalScore`, so the final is the last running score). |
+| `pbp` | `DataFrame` |  | The ESPN-processed plays of one or many games: the `espn_nfl_pbp` release or a live game's `NFLPlayProcess.plays_frame` (set by `run_processing_pipeline()`), with the columns `~sportsdataverse.cfb.cfb_game_story.cfb_game_story` lists. The NFL frame has no `homeFinalScore` / `awayFinalScore`, so the final is the last running score and `periods_agree` is always true; add those two columns (the schedule's score) to check it. |
 | `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
 
 **Returns**
