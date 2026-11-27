@@ -18,7 +18,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [nflverse data releases](#nflverse-data-releases) | `github.com` | 48 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 23 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 179 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 180 | — |
 
 ## ESPN {#espn}
 
@@ -145,6 +145,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 - [`nfl_availability_projection`](reference/additional/analytics#nfl_availability_projection)
 - [`nfl_expected_starters`](reference/additional/analytics#nfl_expected_starters)
 - [`nfl_game_script`](reference/additional/analytics#nfl_game_script)
+- [`nfl_game_story`](reference/additional/analytics#nfl_game_story)
 - [`nfl_play_call_probabilities`](reference/additional/analytics#nfl_play_call_probabilities)
 - [`nfl_play_call_tendencies`](reference/additional/analytics#nfl_play_call_tendencies)
 - [`nfl_player_props`](reference/additional/analytics#nfl_player_props)
