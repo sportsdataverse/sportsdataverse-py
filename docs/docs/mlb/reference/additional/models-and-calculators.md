@@ -268,14 +268,19 @@ Empirical (Tango) leverage index per base-out-score-inning state bucket.
 
 `leverage_index(s) = E[|delta WE|] over the empirical next-state
 distribution from `s`, divided by the league-average of that
-quantity (so the average state has `leverage_index == 1``).
+quantity (so the average state has `leverage_index == 1`). A plate
+appearance's swing is `|WE(next PA) - WE(this PA)|`: the change the
+PA starting in `s` causes, not the one that led into `s`. After a
+game's last PA the next WE is the result (1 if the home team won, 0
+if it lost, 0.5 for a game called tied), read from that PA's
+`score_diff` and `runs_on_play``.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `states` | `DataFrame` |  | Output of `sportsdataverse.mlb.mlb_run_expectancy.pbp_base_out_states`. |
-| `we_table` | `DataFrame` |  | Output of `build_we_table`. |
+| `we_table` | `DataFrame` |  | Output of `build_we_table`. A single season's table is noisy to difference on low-swing states (the game's first PA moves WE by about 0.02); the published `mlb_leverage_index` tables pass one pooled across the 2015-2026 regular seasons, while the swings are still averaged over the season's own PAs. |
 | `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` instead of polars. |
 
 **Returns**

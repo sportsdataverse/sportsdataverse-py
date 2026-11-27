@@ -596,7 +596,7 @@ loaders:
   url: mlb_game_state/mlb_leverage_index_{season}.parquet
   tag: mlb_game_state
   min_season: 2020
-  notes: "Published 2020-2026, one row per load_mlb_we_table state bucket; extra half-innings open with the automatic runner on 2nd."
+  notes: "Published 2020-2026, one row per load_mlb_we_table state bucket; extra half-innings open with the automatic runner on 2nd. Each PA's swing is the WE change it causes, with WE read from one table pooled over the 2015-2026 regular seasons and averaged over the season's own PAs (rebuilt 2026-11-27)."
   example_args:
     seasons: 2024
 - fn: load_mlb_pbp

@@ -255,11 +255,19 @@ def leverage_index(
 
     ``leverage_index(s) = E[|delta WE|] over the empirical next-state
     distribution from ``s``, divided by the league-average of that
-    quantity (so the average state has ``leverage_index == 1``).
+    quantity (so the average state has ``leverage_index == 1``). A plate
+    appearance's swing is ``|WE(next PA) - WE(this PA)|``: the change the
+    PA starting in ``s`` causes, not the one that led into ``s``. After a
+    game's last PA the next WE is the result (1 if the home team won, 0
+    if it lost, 0.5 for a game called tied), read from that PA's
+    ``score_diff`` and ``runs_on_play``.
 
     Args:
         states: Output of :func:`sportsdataverse.mlb.mlb_run_expectancy.pbp_base_out_states`.
-        we_table: Output of :func:`build_we_table`.
+        we_table: Output of :func:`build_we_table`. A single season's table is noisy to
+            difference on low-swing states (the game's first PA moves WE by about 0.02); the
+            published ``mlb_leverage_index`` tables pass one pooled across the 2015-2026
+            regular seasons, while the swings are still averaged over the season's own PAs.
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -284,15 +292,21 @@ def leverage_index(
     if states.height == 0 or we_table.height == 0:
         return pl.DataFrame(schema=_LI_SCHEMA)
     looked = _lookup_we(states, we_table).sort(["game_id", "at_bat_index"])
-    looked = looked.with_columns(
-        (pl.col("home_win_exp") - pl.col("home_win_exp").shift(1, fill_value=0.5).over("game_id"))
-        .abs()
-        .alias("abs_wpa")
+    # The swing of a PA is the WE change it CAUSES: from its own start-of-PA WE to the next PA's
+    # (the next half's first PA across a half-inning boundary). After a game's last PA the game is
+    # decided, so the next WE is the result: home - away after that PA = start-of-PA score_diff plus
+    # the runs it scored for the batting side (bottom = home).
+    last = pl.col("at_bat_index") == pl.col("at_bat_index").max().over("game_id")
+    final_diff = pl.col("score_diff") + pl.when(pl.col("half") == "bottom").then(1).otherwise(-1) * pl.col(
+        "runs_on_play"
     )
-    global_mean = looked["abs_wpa"].mean() or 1.0
+    result_we = pl.when(final_diff > 0).then(1.0).when(final_diff < 0).then(0.0).otherwise(0.5)
+    next_we = pl.when(last).then(result_we).otherwise(pl.col("home_win_exp").shift(-1).over("game_id"))
+    looked = looked.with_columns((next_we - pl.col("home_win_exp")).abs().alias("swing"))
+    global_mean = looked["swing"].mean() or 1.0
     out = (
         looked.group_by(_WE_KEY)
-        .agg((pl.col("abs_wpa").mean() / global_mean).alias("leverage_index"))
+        .agg((pl.col("swing").mean() / global_mean).alias("leverage_index"))
         .select(*_WE_KEY, "leverage_index")
     )
     return out.to_pandas() if return_as_pandas else out
