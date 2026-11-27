@@ -1,7 +1,7 @@
 ---
 title: "CFB dataset loaders — Other: passing–player_aliases"
 sidebar_label: "Other: passing–player_aliases"
-sidebar_position: 16
+sidebar_position: 17
 description: "CFB dataset loaders — Other: passing–player_aliases — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
