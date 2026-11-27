@@ -219,7 +219,9 @@ strength and rolls the games up into:
   `wins_above_bubble`: the win probability of a fixed reference team (the
   5th, 25th or 12th-best rated FBS team, or an average one) on the team's
   schedule, `Phi((net_points_scale * (r_ref - r_opp) + h * hfa_points) /
-  margin_sd)`. `as_of_date` splits completed from remaining games.
+  margin_sd)`. `as_of_date` splits completed from remaining games for these
+  columns only; the columns above use every completed game. The reference
+  ratings come from the ratings passed in (pooled when several seasons are).
 
 **Parameters**
 

@@ -20,7 +20,6 @@ import pandas as pd
 import polars as pl
 from scipy.stats import norm
 
-from sportsdataverse._temporal import as_date
 from sportsdataverse.cfb.cfb_loaders import load_cfb_schedule
 from sportsdataverse.cfb.cfb_prediction_constants import PredictConfig, get_constants
 from sportsdataverse.cfb.cfb_ratings import cfb_ratings
@@ -132,8 +131,13 @@ def _schedule_strength(
     """
     date_col = next((c for c in ("date", "start_date") if c in schedule.columns), None)
     played = pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null()
-    if as_of_date is not None and date_col is not None:
-        played = played & (as_date(pl.col(date_col)) < pl.lit(as_of_date))
+    if as_of_date is not None:
+        if date_col is None:
+            raise ValueError("cfb_resume: as_of_date needs a 'date' or 'start_date' column in the schedule")
+        # the calendar date as cfb_ratings cuts it: the first 10 characters of an ISO timestamp
+        day = pl.col(date_col)
+        day = day.str.slice(0, 10).str.to_date() if schedule.schema[date_col] == pl.Utf8 else day.cast(pl.Date)
+        played = played & (day < pl.lit(as_of_date))
     games = schedule.with_columns(_played=played.fill_null(False))
     neutral = pl.col("neutral_site") == True  # noqa: E712
     sides = []
@@ -155,11 +159,11 @@ def _schedule_strength(
     opp_r = rows["opp_r"].to_numpy().astype(float)
     h = rows["h"].to_numpy()
     for ref, r_ref in refs.items():
-        if r_ref is None:
-            prob = np.full(rows.height, np.nan)
-        else:
-            margin = config.net_points_scale * (r_ref - opp_r) + h * config.hfa_points
-            prob = np.where(np.isnan(opp_r), 1.0, norm.cdf(margin / config.margin_sd))
+        if r_ref is None:  # fewer rated teams than the reference needs: every column for it is null
+            rows = rows.with_columns(pl.lit(None, dtype=pl.Float64).alias(f"_p_{ref}"))
+            continue
+        margin = config.net_points_scale * (r_ref - opp_r) + h * config.hfa_points
+        prob = np.where(np.isnan(opp_r), 1.0, norm.cdf(margin / config.margin_sd))
         rows = rows.with_columns(pl.Series(f"_p_{ref}", prob, dtype=pl.Float64))
     past = pl.col("played") == True  # noqa: E712
     aggs: list[pl.Expr] = []
@@ -293,7 +297,9 @@ def cfb_resume(
       ``wins_above_bubble``: the win probability of a fixed reference team (the
       5th, 25th or 12th-best rated FBS team, or an average one) on the team's
       schedule, ``Phi((net_points_scale * (r_ref - r_opp) + h * hfa_points) /
-      margin_sd)``. ``as_of_date`` splits completed from remaining games.
+      margin_sd)``. ``as_of_date`` splits completed from remaining games for these
+      columns only; the columns above use every completed game. The reference
+      ratings come from the ratings passed in (pooled when several seasons are).
 
     Args:
         seasons: A single season or list of seasons.

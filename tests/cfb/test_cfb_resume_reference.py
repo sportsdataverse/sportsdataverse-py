@@ -94,13 +94,14 @@ def test_reference_order_and_unbeaten_record(resume, ratings, schedule) -> None:
     assert refs["average"] == 0.0
     assert refs["top5"] > refs["bubble"] > refs["top25"]
     mich = resume.filter(pl.col("team_id") == "130").row(0, named=True)
-    # a harder reference wins fewer of the same games, so an unbeaten record is rarer against it
+    # a stronger reference wins more of the same games, so matching an unbeaten record is likelier for it
     assert mich["sos_top5_past"] > mich["sos_bubble_past"] > mich["sos_top25_past"] > mich["sos_average_past"]
     assert mich["record_difficulty_top5"] > mich["record_difficulty_bubble"] > mich["record_difficulty_average"]
 
 
 def test_as_of_date_splits_past_from_remaining(ratings, schedule) -> None:
-    cut = datetime.date(2023, 10, 1)
+    """A game ON the cutoff date is remaining (strict <); every past-game column uses only the earlier games."""
+    cut = datetime.date(2023, 9, 30)  # Michigan played at Nebraska that day
     out = (
         _resume_core(ratings, schedule, _CFG, 2023, as_of_date=cut)
         .filter(pl.col("team_id") == "130")
@@ -108,13 +109,50 @@ def test_as_of_date_splits_past_from_remaining(ratings, schedule) -> None:
     )
     refs = _reference_ratings(ratings, schedule)
     games = schedule.filter((pl.col("home_team_id") == "130") | (pl.col("away_team_id") == "130"))
-    before = games.filter(pl.col("date") < cut).height
-    assert 0 < before < games.height
-    p, _ = _games(ratings, schedule, "130", refs["bubble"])
-    order = games.with_row_index().filter(pl.col("date") < cut)["index"].to_numpy()
-    rest = np.setdiff1d(np.arange(games.height), order)
-    assert out["sos_bubble_past"] == pytest.approx(p[order].mean(), abs=1e-12)
-    assert out["sos_bubble_remaining"] == pytest.approx(p[rest].mean(), abs=1e-12)
+    assert games.filter(pl.col("date") == cut).height == 1
+    early = schedule.filter(pl.col("date") < cut)
+    late = schedule.filter(pl.col("date") >= cut)
+    p_all, _ = _games(ratings, schedule, "130", refs["bubble"])
+    p_past, wins = _games(ratings, early, "130", refs["bubble"])
+    p_rest, _ = _games(ratings, late, "130", refs["bubble"])
+    assert len(p_past) == 4
+    assert len(p_past) + len(p_rest) == len(p_all)
+    assert out["sos_bubble_past"] == pytest.approx(p_past.mean(), abs=1e-12)
+    assert out["sos_bubble_remaining"] == pytest.approx(p_rest.mean(), abs=1e-12)
+    assert out["record_difficulty_bubble"] == pytest.approx(_poisson_binomial_tail(p_past, wins), abs=1e-12)
+    assert out["wins_above_bubble"] == pytest.approx(wins - p_past.sum(), abs=1e-12)
+
+
+def test_an_unrated_fcs_opponent_is_a_sure_win(ratings, schedule, resume) -> None:
+    """Ohio State 2023 hosted Youngstown State (FCS, unrated): that game is P = 1 for every reference."""
+    rated = set(ratings["team_id"].to_list())
+    refs = _reference_ratings(ratings, schedule)
+    games = schedule.filter((pl.col("home_team_id") == "194") | (pl.col("away_team_id") == "194"))
+    opps = [a if h == "194" else h for h, a in zip(games["home_team_id"], games["away_team_id"], strict=True)]
+    n_fcs = sum(o not in rated for o in opps)
+    assert n_fcs == 1
+    rmap = dict(zip(ratings["team_id"].to_list(), ratings["adj_net"].to_list(), strict=True))
+    row = resume.filter(pl.col("team_id") == "194").row(0, named=True)
+    for ref, r_ref in refs.items():
+        fbs = 0.0
+        for g, o in zip(games.iter_rows(named=True), opps, strict=True):
+            if o in rated:
+                h = 0.0 if g["neutral_site"] else (1.0 if g["home_team_id"] == "194" else -1.0)
+                fbs += norm.cdf((_CFG.net_points_scale * (r_ref - rmap[o]) + h * _CFG.hfa_points) / _CFG.margin_sd)
+        assert row[f"sos_{ref}_past"] * len(opps) == pytest.approx(fbs + n_fcs, abs=1e-9), ref
+
+
+def test_reference_ratings_keep_fbs_teams_only(ratings, schedule) -> None:
+    """With division columns, a rated team the schedule lists outside FBS does not set a reference rating."""
+    best = ratings.sort("adj_net", descending=True)["team_id"][0]
+    tagged = schedule.with_columns(
+        home_division=pl.when(pl.col("home_team_id") == best).then(pl.lit("fcs")).otherwise(pl.lit("fbs")),
+        away_division=pl.when(pl.col("away_team_id") == best).then(pl.lit("fcs")).otherwise(pl.lit("fbs")),
+    )
+    values = sorted(ratings.filter(pl.col("team_id") != best)["adj_net"].to_list(), reverse=True)
+    refs = _reference_ratings(ratings, tagged)
+    assert refs["top5"] == values[4] and refs["bubble"] == values[11] and refs["top25"] == values[24]
+    assert refs["top5"] != _reference_ratings(ratings, schedule)["top5"]
 
 
 def test_new_columns_in_the_empty_schema() -> None:
