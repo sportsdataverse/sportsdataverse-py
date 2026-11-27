@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, List, Literal, Optional, Union, overload
 
 import polars as pl
 
-from sportsdataverse.nfl.nfl_loaders import load_nfl_rosters, load_nfl_snap_counts
+from sportsdataverse.nfl.nfl_loaders import load_nfl_ff_playerids, load_nfl_rosters, load_nfl_snap_counts
 from sportsdataverse.nfl.nfl_projection_constants import _season_rosters, as_of_season_split, get_position_constants
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -43,6 +43,48 @@ _SEASON_SCHEMA: dict = {
 }
 
 
+#: share of regular-season skill-position snap rows (QB/RB/WR/TE with offense snaps) the PFR -> gsis bridge must
+#: place; the 2020-2023 rows match at 0.995-1.000 by position, so a lower rate means the crosswalk broke
+SNAP_BRIDGE_MIN_MATCH = 0.98
+
+
+def _snaps_by_gsis(snaps: pl.DataFrame, player_ids: pl.DataFrame) -> pl.DataFrame:
+    """Regular-season snap counts keyed by gsis ``player_id``, bridged from PFR ids as the fitted corpus was.
+
+    ``tests/fixtures/nfl_projection/snap_counts_2020_2023.parquet`` (the sample ``EB_PRIOR_SEASONS``,
+    ``AVAIL_RECAL`` and the position ``base_availability`` were fit on) is ``load_nfl_snap_counts`` regular-season
+    rows inner-joined to ``load_nfl_ff_playerids()`` on ``pfr_player_id == pfr_id``. A PFR id that the crosswalk maps
+    to more than one gsis id is dropped rather than credited to both players.
+
+    Raises:
+        ValueError: When fewer than ``SNAP_BRIDGE_MIN_MATCH`` of the skill-position rows find a gsis id.
+    """
+    if snaps.height == 0 or "player_id" in snaps.columns or "pfr_player_id" not in snaps.columns:
+        return snaps
+    reg = snaps.filter(pl.col("game_type") == "REG") if "game_type" in snaps.columns else snaps
+    bridge = (
+        player_ids.select(pl.col("pfr_id").cast(pl.Utf8), pl.col("gsis_id").cast(pl.Utf8))
+        .drop_nulls()
+        .unique()
+        .filter(pl.len().over("pfr_id") == 1)
+    )
+    reg = reg.with_columns(pl.col("pfr_player_id").cast(pl.Utf8))
+    assert reg.schema["pfr_player_id"] == bridge.schema["pfr_id"]
+    skill = reg.filter(pl.col("position").is_in(["QB", "RB", "WR", "TE"]) & (pl.col("offense_snaps") > 0))
+    if skill.height:
+        rate = skill.select(pl.col("pfr_player_id").is_in(bridge["pfr_id"].implode()).mean()).item()
+        if rate < SNAP_BRIDGE_MIN_MATCH:
+            raise ValueError(
+                f"only {rate:.1%} of skill-position snap rows map to a gsis id (floor {SNAP_BRIDGE_MIN_MATCH:.0%}): "
+                "the PFR -> gsis crosswalk is broken"
+            )
+    return (
+        reg.join(bridge, left_on="pfr_player_id", right_on="pfr_id", how="inner")
+        .rename({"gsis_id": "player_id"})
+        .with_columns(pl.col("season").cast(pl.Int64), pl.col("week").cast(pl.Int64))
+    )
+
+
 def season_availability(
     snap_counts: pl.DataFrame,
     rosters: pl.DataFrame,
@@ -71,6 +113,10 @@ def season_availability(
         availability_rate:Float64, injury_weeks:Float64``. Empty input returns
         a zero-row frame with that schema.
 
+    Raises:
+        ValueError: When ``snap_counts`` is keyed by ``pfr_player_id`` (``load_nfl_snap_counts``) instead of the
+            gsis ``player_id``; bridge it first.
+
     Example:
         Quick start::
 
@@ -84,6 +130,11 @@ def season_availability(
     .. _nflverse: https://nflverse.nflverse.com
     """
     required = {"player_id", "season", "week", "offense_snaps"}
+    if snap_counts.height and "player_id" not in snap_counts.columns and "pfr_player_id" in snap_counts.columns:
+        # load_nfl_snap_counts is keyed by PFR id; counting it as empty silently projected nobody
+        raise ValueError(
+            "snap counts keyed by pfr_player_id: bridge them with _snaps_by_gsis(snaps, load_nfl_ff_playerids())"
+        )
     if snap_counts.height == 0 or not required.issubset(snap_counts.columns):
         return pl.DataFrame(schema=_SEASON_SCHEMA)
     sc = snap_counts.with_columns(
@@ -177,7 +228,7 @@ def nfl_availability_projection(
 
     .. _nflverse: https://nflverse.nflverse.com
     """
-    snaps = load_nfl_snap_counts(list(seasons))
+    snaps = _snaps_by_gsis(load_nfl_snap_counts(list(seasons)), load_nfl_ff_playerids())
     rosters = load_nfl_rosters(list(seasons))
     season_avail = season_availability(snaps, rosters, team_games=team_games)
     hist = as_of_season_split(season_avail, target_season)
