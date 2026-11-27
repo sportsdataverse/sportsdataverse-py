@@ -123,6 +123,8 @@ def main() -> None:
         "name_pattern": "kalshi_{short}",
         "module": STEM,
         "parser_module": "odds.kalshi_parsers",
+        # Fails over to the second Kalshi host on a connection error or 5xx (never a 4xx).
+        "getter_module": "sportsdataverse.odds.kalshi_runtime",
         "qualifier": "",
         "passthrough_query": False,
         "docstring": {
