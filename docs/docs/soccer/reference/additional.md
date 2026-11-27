@@ -504,24 +504,24 @@ polars.DataFrame | pandas.DataFrame: one row per `espn_team_id` (unique). Every 
 | `key_wikidata` | String | Wikidata entity id of the club (e.g. 'Q18656'). |
 | `key_transfermarkt` | String | Transfermarkt club id, digits as text (e.g. '985'). |
 | `key_fbref` | String | FBref squad id (8 hex characters). |
-| `key_soccerway` | String | Soccerway team id. |
+| `key_soccerway` | String | The team's id on Soccerway, from the reep register. |
 | `key_opta` | String | Opta team UUID (25 alphanumeric characters). |
 | `key_opta_numeric` | String | Opta numeric team id. |
 | `key_kicker` | String | kicker.de club slug. |
-| `key_flashscore` | String | Flashscore team id. |
-| `key_sofascore` | String | Sofascore team id. |
-| `key_soccerbase` | String | Soccerbase team id. |
-| `key_uefa` | String | UEFA club id. |
+| `key_flashscore` | String | The team's id on Flashscore, from the reep register. |
+| `key_sofascore` | String | The team's id on Sofascore, from the reep register. |
+| `key_soccerbase` | String | The team's id on Soccerbase, from the reep register. |
+| `key_uefa` | String | The club's id on UEFA.com, from the reep register. |
 | `key_footballdatabase_eu` | String | footballdatabase.eu club id. |
 | `key_worldfootball` | String | worldfootball.net club slug. |
 | `key_playmakerstats` | String | playmakerstats.com team id. |
 | `key_clubelo` | String | ClubElo club name (the key its ratings use, e.g. 'ManUnited'). |
-| `key_sportmonks` | String | Sportmonks team id. |
+| `key_sportmonks` | String | The team's id on Sportmonks, from the reep register. |
 | `key_api_football` | String | API-Football team id. |
-| `key_sofifa` | String | SoFIFA team id. |
-| `key_fotmob` | String | FotMob team id. |
-| `key_thesportsdb` | String | TheSportsDB team id. |
-| `key_understat` | String | Understat team id. |
+| `key_sofifa` | String | The team's id on SoFIFA, from the reep register. |
+| `key_fotmob` | String | The team's id on FotMob, from the reep register. |
+| `key_thesportsdb` | String | The team's id on TheSportsDB, from the reep register. |
+| `key_understat` | String | The team's id on Understat, from the reep register. |
 | `key_capology` | String | Capology club slug. |
 | `match_method` | String | How the ESPN team was tied to reep. 'key_espn' (reep already carries this ESPN id), 'name' (exactly one reep row in the league's country shares a normalized name or alias), 'review' (settled by hand in tools/soccer_espn_reep_overrides.yaml), 'unmatched' (reviewed; no reep row is this club, reep columns null). |
 

@@ -14,11 +14,11 @@ Release: [cfb_team_adjustment_ledger](https://github.com/sportsdataverse/sportsd
 
 | col_name | type | description |
 |---|---|---|
-| `season` | Int64 | Season year. |
-| `game_id` | Int64 | ESPN game id. |
+| `season` | Int64 | Season year of the ledger row. |
+| `game_id` | Int64 | ESPN game id of the team-game. |
 | `week` | Int64 | ESPN week; the postseason restarts at 1. |
 | `season_type` | Int64 | ESPN season type of the game: 2 regular season, 3 postseason. |
-| `team_id` | Int64 | ESPN team id. |
+| `team_id` | Int64 | ESPN team id of the rated team. |
 | `pos_team` | String | The team's name as the play-by-play carries it. |
 | `opponent_id` | Int64 | ESPN team id of the opponent. |
 | `site` | String | home, away or neutral, for the team. |

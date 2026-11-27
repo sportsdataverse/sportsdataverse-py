@@ -12957,11 +12957,11 @@ load_cfb_team_summaries:
     plays with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer than two distinct
     values: unranked, not last.'
 load_cfb_team_adjustment_ledger:
-  season: Season year.
-  game_id: ESPN game id.
+  season: Season year of the ledger row.
+  game_id: ESPN game id of the team-game.
   week: ESPN week; the postseason restarts at 1.
   season_type: "ESPN season type of the game: 2 regular season, 3 postseason."
-  team_id: ESPN team id.
+  team_id: ESPN team id of the rated team.
   pos_team: The team's name as the play-by-play carries it.
   opponent_id: ESPN team id of the opponent.
   site: home, away or neutral, for the team.
@@ -83974,24 +83974,24 @@ soccer_espn_reep_team_crosswalk:
   key_wikidata: Wikidata entity id of the club (e.g. 'Q18656').
   key_transfermarkt: Transfermarkt club id, digits as text (e.g. '985').
   key_fbref: FBref squad id (8 hex characters).
-  key_soccerway: Soccerway team id.
+  key_soccerway: The team's id on Soccerway, from the reep register.
   key_opta: Opta team UUID (25 alphanumeric characters).
   key_opta_numeric: Opta numeric team id.
   key_kicker: kicker.de club slug.
-  key_flashscore: Flashscore team id.
-  key_sofascore: Sofascore team id.
-  key_soccerbase: Soccerbase team id.
-  key_uefa: UEFA club id.
+  key_flashscore: The team's id on Flashscore, from the reep register.
+  key_sofascore: The team's id on Sofascore, from the reep register.
+  key_soccerbase: The team's id on Soccerbase, from the reep register.
+  key_uefa: The club's id on UEFA.com, from the reep register.
   key_footballdatabase_eu: footballdatabase.eu club id.
   key_worldfootball: worldfootball.net club slug.
   key_playmakerstats: playmakerstats.com team id.
   key_clubelo: ClubElo club name (the key its ratings use, e.g. 'ManUnited').
-  key_sportmonks: Sportmonks team id.
+  key_sportmonks: The team's id on Sportmonks, from the reep register.
   key_api_football: API-Football team id.
-  key_sofifa: SoFIFA team id.
-  key_fotmob: FotMob team id.
-  key_thesportsdb: TheSportsDB team id.
-  key_understat: Understat team id.
+  key_sofifa: The team's id on SoFIFA, from the reep register.
+  key_fotmob: The team's id on FotMob, from the reep register.
+  key_thesportsdb: The team's id on TheSportsDB, from the reep register.
+  key_understat: The team's id on Understat, from the reep register.
   key_capology: Capology club slug.
   match_method: How the ESPN team was tied to reep. 'key_espn' (reep already carries this ESPN id), 'name' (exactly one
     reep row in the league's country shares a normalized name or alias), 'review' (settled by hand in
