@@ -128,8 +128,8 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [cfb_simulations](additional/models-and-calculators-2.md#cfb_simulations) | Simulate college football seasons (nflseedR-style week loop). |
 | [cfb_touchback_yardline_expr](additional/models-and-calculators-2.md#cfb_touchback_yardline_expr) | Kickoff-touchback yards-to-endzone per row: 80 through 2011, 75 from 2012. |
 | [efficiency_ratings](additional/models-and-calculators-2.md#efficiency_ratings) | One row per team: opponent-adjusted offensive/defensive efficiency. |
-| [fei_ratings](additional/models-and-calculators-2.md#fei_ratings) | One row per team: opponent-adjusted per-drive efficiency (FEI-style). |
-| [fit_field_position_ep](additional/models-and-calculators-2.md#fit_field_position_ep) | Fit the monotone EP-by-starting-yardline curve from a drives frame. |
+| [fei_ratings](additional/models-and-calculators-3.md#fei_ratings) | One row per team: opponent-adjusted per-drive efficiency (FEI-style). |
+| [fit_field_position_ep](additional/models-and-calculators-3.md#fit_field_position_ep) | Fit the monotone EP-by-starting-yardline curve from a drives frame. |
 | [get_2pt_probs](additional/models-and-calculators-3.md#get_2pt_probs) | Two-point-conversion decision surface (cfb4th `get_2pt_wp`). |
 | [get_4th_down_probs](additional/models-and-calculators-3.md#get_4th_down_probs) | Full 4th-down decision surface (cfb4th `add_4th_probs`) + recommendation. |
 | [get_fg_wp](additional/models-and-calculators-4.md#get_fg_wp) | Expected win probability of attempting a field goal (cfb4th `get_fg_wp`). |

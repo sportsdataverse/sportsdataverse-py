@@ -28,6 +28,10 @@ _SLICES = {
     "epa_early_down": (pl.col("down").is_in([1, 2]), "EPA"),
     "epa_standard_down": (pl.col("standard_down") == True, "EPA"),  # noqa: E712
     "epa_first_half": (pl.col("period").is_in([1, 2]), "EPA"),
+    "epa_pass": (pl.col("pass") == 1, "EPA"),
+    "success_pass": (pl.col("pass") == 1, "epa_success"),
+    "epa_rush": (pl.col("rush") == 1, "EPA"),
+    "success_rush": (pl.col("rush") == 1, "epa_success"),
 }
 
 
@@ -86,6 +90,8 @@ def test_slices_counts_and_raw_values(board: pl.DataFrame) -> None:
         m = sl["y"].mean()
         assert _slice_values(clean, metric)["m"][0] == pytest.approx(m, abs=1e-12), metric
         for side, key in (("off", "pos_team_id"), ("def", "def_pos_team_id")):
+            if (metric, side) not in _PUBLISHED:
+                continue
             exp = sl.group_by(key).agg(n=pl.len(), raw=pl.col("y").mean()).rename({key: "team_id"})
             got = board.select("team_id", n=f"{metric}_{side}_n", raw=f"{metric}_{side}_raw").drop_nulls()
             j = got.join(exp, on="team_id", how="left", suffix="_exp")

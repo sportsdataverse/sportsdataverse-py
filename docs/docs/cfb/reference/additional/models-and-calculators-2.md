@@ -1,10 +1,10 @@
 ---
-title: "College football — additional Python functions — Models and calculators: cfb_adjusted–fit_field"
-sidebar_label: "Models and calculators: cfb_adjusted–fit_field"
+title: "College football — additional Python functions — Models and calculators: cfb_adjusted–efficiency_ratings"
+sidebar_label: "Models and calculators: cfb_adjusted–efficiency_ratings"
 sidebar_position: 8
-description: "College football — additional Python functions — Models and calculators: cfb_adjusted–fit_field — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Models and calculators: cfb_adjusted–efficiency_ratings — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# College football — additional Python functions — Models and calculators: cfb_adjusted–fit_field
+# College football — additional Python functions — Models and calculators: cfb_adjusted–efficiency_ratings
 
 ### cfb_adjusted_breakdowns {#cfb_adjusted_breakdowns}
 
@@ -85,6 +85,36 @@ One row per team rated in any requested breakdown: `team_id`, `pos_team`, then f
 | `epa_first_half_def_shrunk` | Float64 | Display value: the raw EPA per play the defense allowed on the first half, shrunk toward the league mean by n / (n + 280.3). |
 | `epa_first_half_def_n` | Int64 | Plays behind the defense values: its pass and rush plays on the first half outside garbage time (the n in the shrinkage). |
 | `epa_first_half_def_rank` | Float64 | Rank of epa_first_half_def_shrunk (lowest = 1, ties averaged). |
+| `epa_pass_off_raw` | Float64 | Raw EPA per play the offense gained on pass plays outside garbage time. |
+| `epa_pass_off_adj` | Float64 | Always null: EPA per play on pass plays for the offense is published raw, since the opponent adjustment did not make it more reliable. |
+| `epa_pass_off_shrunk` | Float64 | Display value: the raw EPA per play the offense gained on pass plays, shrunk toward the league mean by n / (n + 183.4). |
+| `epa_pass_off_n` | Int64 | Plays behind the offense values: its pass plays outside garbage time (the n in the shrinkage). |
+| `epa_pass_off_rank` | Float64 | Rank of epa_pass_off_shrunk (highest = 1, ties averaged). |
+| `success_pass_off_raw` | Float64 | Raw success rate (share of plays with positive EPA) the offense gained on pass plays outside garbage time. |
+| `success_pass_off_adj` | Float64 | Opponent-adjusted success rate (share of plays with positive EPA) the offense gained on pass plays (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `success_pass_off_shrunk` | Float64 | Display value: the adjusted success rate (share of plays with positive EPA) the offense gained on pass plays, shrunk toward the league mean by n / (n + 133). |
+| `success_pass_off_n` | Int64 | Plays behind the offense values: its pass plays outside garbage time (the n in the shrinkage). |
+| `success_pass_off_rank` | Float64 | Rank of success_pass_off_shrunk (highest = 1, ties averaged). |
+| `epa_rush_off_raw` | Float64 | Raw EPA per play the offense gained on rush plays outside garbage time. |
+| `epa_rush_off_adj` | Float64 | Always null: EPA per play on rush plays for the offense is published raw, since the opponent adjustment did not make it more reliable. |
+| `epa_rush_off_shrunk` | Float64 | Display value: the raw EPA per play the offense gained on rush plays, shrunk toward the league mean by n / (n + 293.1). |
+| `epa_rush_off_n` | Int64 | Plays behind the offense values: its rush plays outside garbage time (the n in the shrinkage). |
+| `epa_rush_off_rank` | Float64 | Rank of epa_rush_off_shrunk (highest = 1, ties averaged). |
+| `epa_rush_def_raw` | Float64 | Raw EPA per play the defense allowed on rush plays outside garbage time. |
+| `epa_rush_def_adj` | Float64 | Always null: EPA per play on rush plays for the defense is published raw, since the opponent adjustment did not make it more reliable. |
+| `epa_rush_def_shrunk` | Float64 | Display value: the raw EPA per play the defense allowed on rush plays, shrunk toward the league mean by n / (n + 275.9). |
+| `epa_rush_def_n` | Int64 | Plays behind the defense values: its rush plays outside garbage time (the n in the shrinkage). |
+| `epa_rush_def_rank` | Float64 | Rank of epa_rush_def_shrunk (lowest = 1, ties averaged). |
+| `success_rush_off_raw` | Float64 | Raw success rate (share of plays with positive EPA) the offense gained on rush plays outside garbage time. |
+| `success_rush_off_adj` | Float64 | Opponent-adjusted success rate (share of plays with positive EPA) the offense gained on rush plays (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `success_rush_off_shrunk` | Float64 | Display value: the adjusted success rate (share of plays with positive EPA) the offense gained on rush plays, shrunk toward the league mean by n / (n + 210). |
+| `success_rush_off_n` | Int64 | Plays behind the offense values: its rush plays outside garbage time (the n in the shrinkage). |
+| `success_rush_off_rank` | Float64 | Rank of success_rush_off_shrunk (highest = 1, ties averaged). |
+| `success_rush_def_raw` | Float64 | Raw success rate (share of plays with positive EPA) the defense allowed on rush plays outside garbage time. |
+| `success_rush_def_adj` | Float64 | Opponent-adjusted success rate (share of plays with positive EPA) the defense allowed on rush plays (league mean plus the team's mean per-game residual against its opponents' fitted strength). |
+| `success_rush_def_shrunk` | Float64 | Display value: the adjusted success rate (share of plays with positive EPA) the defense allowed on rush plays, shrunk toward the league mean by n / (n + 169). |
+| `success_rush_def_n` | Int64 | Plays behind the defense values: its rush plays outside garbage time (the n in the shrinkage). |
+| `success_rush_def_rank` | Float64 | Rank of success_rush_def_shrunk (lowest = 1, ties averaged). |
 
 **Raises**
 
@@ -947,88 +977,4 @@ No returns table is published for this function: no capture: it needs play-by-pl
 from sportsdataverse.cfb.cfb_ratings import efficiency_ratings
 ratings = efficiency_ratings(pbp)
 ratings.sort("adj_net", descending=True).head()
-```
-
-### fei_ratings {#fei_ratings}
-
-`fei_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'`
-
-One row per team: opponent-adjusted per-drive efficiency (FEI-style).
-
-The Fremeau Efficiency Index rates teams on drive value above expectation
-given starting field position. The cfbfastR-schema `plays` frame this
-package works with carries no starting-field-position column, so this
-function uses the documented fallback: per-play EPA summed within each
-`(game_id, drive_id)` group stands in for drive value, and that
-aggregate is fit through the same opponent-adjustment ridge as
-`efficiency_ratings` / `special_teams_ratings` -- no forked
-solver. Offline validation against the Fremeau FEI oracle put this
-fallback's team ranking at Spearman 0.967.
-
-`cfb_adjusted_epa._prepare` filters to individual pass/rush plays and
-is not reused here (drive value should reflect every play on the drive,
-special-teams snaps included); the `hfa` treatment is reproduced
-directly, matching `special_teams_ratings`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._REQUIRED_COLUMNS` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `wp_before`) plus `drive_id`. Not pre-aggregated to drives -- this function does that grouping itself. |
-| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs. Only `ridge_lambda` is consulted here; defaults to `RatingsConfig` when omitted. |
-
-**Returns**
-
-A `polars.DataFrame` with one row per `team_id` appearing as `pos_team_id` on at least one drive: `team_id` (Utf8), `fei_off` / `fei_def` / `fei_net` (Float64). The ridge's dropped reference team is re-added at the shared intercept (`fei_net == 0.0`). Zero-row (correctly-typed) when `plays` has no rows with a non-null `EPA`.
-
-No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `ImportError` | If `scikit-learn` is not installed. |
-
-**Example**
-
-```python
-from sportsdataverse.cfb.cfb_ratings import fei_ratings
-fei = fei_ratings(pbp)
-fei.sort("fei_net", descending=True).head()
-```
-
-### fit_field_position_ep {#fit_field_position_ep}
-
-`fit_field_position_ep(drives: 'pl.DataFrame', *, start_col: 'str' = 'drive_start_yardline', pts_col: 'str' = 'drive_next_score_pts') -> 'pl.DataFrame'`
-
-Fit the monotone EP-by-starting-yardline curve from a drives frame.
-
-Groups drives by starting yard line (from own goal), takes the mean
-next-score points, and applies sample-count-weighted isotonic regression
-(weight = number of drives at each starting yard line, non-decreasing),
-interpolated onto the full 1..99 grid.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `drives` | `DataFrame` |  | one row per drive. |
-| `start_col` | `str` | `'drive_start_yardline'` | starting yard line from own goal (1..99). |
-| `pts_col` | `str` | `'drive_next_score_pts'` | net next-score points for the drive's offense. |
-
-**Returns**
-
-`yardline_own: Int64 (1..99), ep: Float64` -- monotone non-decreasing. Empty input returns a zero-row frame.
-
-| col_name | type | description |
-|---|---|---|
-| `yardline_own` | Int64 | Starting yard line from the offense's own goal (1-99). |
-| `ep` | Float64 | Fitted expected points for a drive starting at this yard line (isotonic, non-decreasing). |
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.cfb.cfb_field_position import fit_field_position_ep
-curve = fit_field_position_ep(drives_frame)
 ```
