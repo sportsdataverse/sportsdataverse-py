@@ -25,7 +25,7 @@ providers:
     home: https://www.espn.com
     auth: none
     espn_apis: [espn_site_v2, espn_web_v3, espn_core_v2, espn_fitt_v3, espn_cdn]
-    flat_apis: [espn_content]  # content.core.api.espn.com/v1 news (sportsdataverse.providers.espn_content)
+    flat_apis: [espn_content, espn_fantasy]  # content.core news; lm-api-reads.fantasy.espn.com (providers.espn_fantasy)
     modules:
       - sportsdataverse._common_espn_player_stats
       - sportsdataverse._espn_basketball_pbp
@@ -707,6 +707,13 @@ providers:
       - sportsdataverse.soccer.soccer_events
       - sportsdataverse.soccer.spadl
       - sportsdataverse.soccer.xthreat
+
+  reep:
+    label: reep football id register
+    home: https://github.com/withqwerty/reep
+    auth: none (bundled table, CC0 1.0)
+    modules:
+      - sportsdataverse.soccer.soccer_reep_crosswalk
 
   mls:
     label: MLS official web API

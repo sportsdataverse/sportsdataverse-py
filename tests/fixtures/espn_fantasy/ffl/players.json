@@ -1,0 +1,60 @@
+[
+  {
+    "defaultPositionId": 11,
+    "droppable": true,
+    "eligibleSlots": [
+      10,
+      15,
+      20
+    ],
+    "firstName": "Jaishawn",
+    "fullName": "Jaishawn Barham",
+    "id": 4685266,
+    "lastName": "Barham",
+    "lastNewsDate": 1795663026000,
+    "ownership": {
+      "percentOwned": 0.77
+    },
+    "proTeamId": 6,
+    "universeId": 2
+  },
+  {
+    "defaultPositionId": 3,
+    "droppable": true,
+    "eligibleSlots": [
+      25,
+      3,
+      4
+    ],
+    "firstName": "Germie",
+    "fullName": "Germie Bernard",
+    "id": 4685261,
+    "lastName": "Bernard",
+    "lastNewsDate": 1795486118000,
+    "lastVideoDate": 1792421341000,
+    "ownership": {
+      "percentOwned": 38.25
+    },
+    "proTeamId": 23,
+    "universeId": 1
+  },
+  {
+    "defaultPositionId": 9,
+    "droppable": true,
+    "eligibleSlots": [
+      8,
+      11,
+      15
+    ],
+    "firstName": "DJ",
+    "fullName": "DJ Davidson",
+    "id": 4242899,
+    "lastName": "Davidson",
+    "lastNewsDate": 1786226583000,
+    "ownership": {
+      "percentOwned": 0.02
+    },
+    "proTeamId": 28,
+    "universeId": 2
+  }
+]

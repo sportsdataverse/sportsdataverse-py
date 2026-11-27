@@ -236,6 +236,7 @@ _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
         "sportsdataverse.basketball.euroleague.euroleague_runtime",
+        "sportsdataverse.providers.espn_fantasy.espn_fantasy_runtime",
         "sportsdataverse.hockey.euro_hockey_runtime",
         "sportsdataverse.basketball.basketball_runtime",
         "sportsdataverse.basketball.fiba_hub.fiba_runtime",
@@ -301,6 +302,7 @@ _VOCAB_GETTERS = frozenset(
         # 4.4
         "sportsdataverse.providers.cbs.cbs_napi_runtime",
         "sportsdataverse.golf.pgatour_runtime",
+        "sportsdataverse.odds.kalshi_runtime",
     }
 )
 # (error name, aliases a YAML ``raises:`` line may already use for it, line to add)
@@ -795,6 +797,7 @@ _NONLEAGUE_HOMES = (
     "euroleague",
     "f1",
     "espn_content",
+    "espn_fantasy",
     "thesportsdb",
     "sihf",
     *_EURO_HOCKEY_HOMES,
@@ -812,6 +815,8 @@ _NESTED_HOMES = {
     **{h: f"hockey.{h}" for h in _EURO_HOCKEY_HOMES},
     **{h: f"basketball.{h}" for h in _BASKETBALL_HOMES},
     "del": "hockey.del_",
+    # a cross-sport provider born under providers/ (no top-level alias)
+    "espn_fantasy": "providers.espn_fantasy",
     # moved from the top level (old paths alias through sportsdataverse._MOVED)
     "euroleague": "basketball.euroleague",
     **{h: f"providers.{h}" for h in ("cbs", "fox", "yahoo", "espn_content", "thesportsdb")},
@@ -840,6 +845,7 @@ def _home_module(prefix: str) -> str:
 _NO_R_DICT_FAMILIES = frozenset(
     {
         "espn_content",
+        "espn_fantasy",
         "thesportsdb",
         "football_data",
         "openligadb",
@@ -3165,6 +3171,7 @@ FLAT_APIS = [
     # wave-2 intake families (espn-content, thesportsdb, football-data.co.uk, openligadb,
     # polymarket, kalshi)
     ("espn_content", "espn_content"),
+    ("espn_fantasy", "espn_fantasy"),  # ESPN Fantasy read API (public data only)
     ("thesportsdb", "thesportsdb"),
     ("football_data", "soccer"),
     ("openligadb", "soccer"),
@@ -3331,7 +3338,8 @@ def _flat_modules_for_prefix(prefix: str) -> list[str]:
 # ``__init__.py`` is generated, so a module listed here is the ONLY way its public
 # names reach ``sportsdataverse.<group>`` and the top-level package.
 _CONTAINER_HANDWRITTEN: dict[str, list[str]] = {
-    "soccer": ["soccer_events", "spadl", "xthreat"],  # kloppy event data, the optional ``soccer`` extra
+    # kloppy event data (the optional ``soccer`` extra) and the bundled ESPN <-> reep team crosswalk
+    "soccer": ["soccer_events", "spadl", "xthreat", "soccer_reep_crosswalk"],
 }
 
 
@@ -3494,6 +3502,7 @@ _COVERAGE_LEAGUES = [
     "euroleague",
     "f1",
     "espn_content",
+    "espn_fantasy",
     "thesportsdb",
     "sihf",
     *_EURO_HOCKEY_HOMES,
@@ -3889,6 +3898,7 @@ _FLAT_API_DOC = {
     "pgatour": "PGA TOUR GraphQL API (orchestrator.pgatour.com; runtime only, public frontend key or $PGA_API_KEY)",
     "pll": "Premier Lacrosse League stats API (stats.premierlacrosseleague.com; runtime only, no key, the site's Referer)",
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
+    "espn_fantasy": "ESPN Fantasy API (lm-api-reads.fantasy.espn.com/apis/v3; public leagues, no cookies)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
     "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",
     "del_esports": "DEL data feed (eSports hokejovyzapis S3 bucket, Germany)",
@@ -4148,6 +4158,7 @@ _LEAGUE_NOTEBOOKS: dict[str, tuple[str, str]] = {
     "whl": ("11_junior_hockey_intro", "Junior & minor hockey tutorial"),
     "qmjhl": ("11_junior_hockey_intro", "Junior & minor hockey tutorial"),
     "odds": ("12_odds_intro", "Betting odds tutorial"),
+    "espn_fantasy": ("20_espn_fantasy_intro", "ESPN Fantasy tutorial"),
 }
 
 
@@ -5993,7 +6004,7 @@ _LEAGUE_GROUPS: dict[str, str] = {
     "golf": "Golf",
     "f1": "Motorsport",
     "odds": "Betting & prediction markets",
-    **dict.fromkeys(("cbs", "fox", "yahoo", "espn_content", "thesportsdb"), "Cross-sport providers"),
+    **dict.fromkeys(("cbs", "fox", "yahoo", "espn_content", "espn_fantasy", "thesportsdb"), "Cross-sport providers"),
 }
 # Sport of a documented league that leagues.yaml does not list (releases-only or hand-written modules).
 _EXTRA_LEAGUE_SPORT = {
@@ -6038,6 +6049,7 @@ _LEAGUE_LABELS = {
     "euroleague": "EuroLeague",
     "f1": "Formula 1",
     "espn_content": "ESPN content (news)",
+    "espn_fantasy": "ESPN Fantasy",
     "thesportsdb": "TheSportsDB",
     "sihf": "SIHF (Swiss hockey)",
     "icehl": "ICE Hockey League",

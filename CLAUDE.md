@@ -61,7 +61,7 @@ multiple leagues (NBA + G-League, WNBA, NFL, MLB, NHL, MBB, WBB, CFB, PWHL +
 softball, soccer, cricket, lacrosse, golf, UFL/XFL/CFL, plus odds), plus international
 basketball (EuroLeague and 24 provider families), European hockey (SIHF and 12
 leagues), Formula 1, the Kalshi and Polymarket prediction markets, and the
-cross-sport providers (CBS, Fox, Yahoo, ESPN content, TheSportsDB).
+cross-sport providers (CBS, Fox, Yahoo, ESPN content, ESPN Fantasy, TheSportsDB).
 
 When this guide differs from current repository docs, treat
 `CONTRIBUTING.md` and the current test suite under `tests/` as authoritative.
@@ -213,7 +213,7 @@ sportsdataverse/
   football/   # UFL / XFL / CFL ESPN families
   nbagl/      # NBA G League: ESPN wrappers, nbagl_stats (stats.nba.com, LeagueID=20) and engine helpers
   providers/  # cross-sport sources: cbs/ (CBS NAPI), fox/ (Fox Sports API), yahoo/ (Yahoo Shangrila),
-              #   espn_content/ (ESPN news), thesportsdb/ (TheSportsDB)
+              #   espn_content/ (ESPN news), espn_fantasy/ (ESPN Fantasy, public leagues only), thesportsdb/ (TheSportsDB)
   analytics/  # rolling_windows, metric_curves, defense_vs_position, paper_index (Paper Index + deserved wins)
   registry/   # metric registry: resolver + TypeScript render
   validation/ # pbp/box invariant sweeps + per-game gate (validate_game, GameReport)
@@ -1389,7 +1389,7 @@ NHL APIs (`nhl_api_web`, `nhl_edge`, `nhl_stats_rest`, `nhl_records`), `nba_stat
 `wnba_stats` / `nbagl_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop Stats, Basketball-Reference, the official NBA injury report (`nba_official`),
 RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
 `sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
-event data, Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
+event data, the reep football id register (`reep`, the bundled ESPN soccer team-id crosswalk), Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
 TheSportsDB (`thesportsdb`), `euroleague`, SIHF (`sihf`), Jolpica (`f1`), the PGA TOUR
 GraphQL API (`pgatour`), the Premier Lacrosse League stats API (`pll`), `cbs_napi`, `yahoo_shangrila`, `fox_api`,
 HockeyTech, the European hockey leagues (the eSports
@@ -1402,7 +1402,8 @@ NBL Australia (`nbl_rosetta`), FEB (`feb`), BBL and DBBL (`scb`), Lega Basket (`
 LKL (`lkl`), TBF (`tbf`), CEBL (`cebl`), ABA League (`aba`), EASL (`easl`), BNXT (`sportpress`), TPBL (`tpbl`), P. LEAGUE+
 (`pleague`, `pleague_preciser`), CBA (`cba`) and Basketligaen (`sportality`)), stats.ncaa.org, The Odds API, and the
 prediction markets Polymarket (`polymarket`) and Kalshi (`kalshi`). ESPN's content API
-(`espn_content`) files under ESPN.
+(`espn_content`) and ESPN Fantasy (`espn_fantasy`, public leagues only: no cookies,
+so a private league is a 401) file under ESPN.
 
 Helper categories (non-data functions, grouped on every page's **Tools and
 helpers**): play-by-play processing (including the `football/sources` adapters for
@@ -1436,7 +1437,7 @@ The parts worth repeating here:
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.
-- **`FLAT_APIS` has 81 families**, not three.
+- **`FLAT_APIS` has 82 families**, not three.
 - **The documented leagues come from `docs/src/data/leagues.json`**, written by
   `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
 - **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in

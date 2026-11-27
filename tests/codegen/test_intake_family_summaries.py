@@ -21,6 +21,7 @@ FAMILIES = (
     "f1",
     # wave 2
     "espn_content",
+    "espn_fantasy",
     "thesportsdb",
     "football_data",
     "openligadb",

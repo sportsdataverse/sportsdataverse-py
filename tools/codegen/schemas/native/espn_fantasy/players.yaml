@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: pro_team_id
+  type: integer
+- description: ''
+  name: default_position_id
+  type: integer
+- description: ''
+  name: eligible_slots
+  type: character
+- description: ''
+  name: droppable
+  type: logical
+- description: ''
+  name: percent_owned
+  type: numeric
+- description: ''
+  name: last_news_date
+  type: datetime
+- description: ''
+  name: universe_id
+  type: integer
+kind: dataframe
+schema: espn_fantasy_players

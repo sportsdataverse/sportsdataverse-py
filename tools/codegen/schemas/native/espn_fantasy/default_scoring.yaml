@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: league_id
+  type: integer
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: scoring_type
+  type: character
+- description: ''
+  name: stat_id
+  type: integer
+- description: ''
+  name: points
+  type: numeric
+- description: ''
+  name: is_reverse_item
+  type: logical
+- description: ''
+  name: points_overrides
+  type: character
+kind: dataframe
+schema: espn_fantasy_default_scoring

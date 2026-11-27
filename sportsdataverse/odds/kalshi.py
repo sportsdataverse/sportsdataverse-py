@@ -11,7 +11,7 @@ from typing import Dict, List, Optional, Union  # noqa: F401
 import pandas as pd  # noqa: F401
 import polars as pl  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _get
+from sportsdataverse.odds.kalshi_runtime import _get
 from sportsdataverse.odds.kalshi_parsers import parse_kalshi
 
 __all__ = [

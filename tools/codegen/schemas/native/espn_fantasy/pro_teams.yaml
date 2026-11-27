@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: pro_team_id
+  type: integer
+- description: ''
+  name: pro_team_abbrev
+  type: character
+- description: ''
+  name: pro_team_location
+  type: character
+- description: ''
+  name: pro_team_name
+  type: character
+- description: ''
+  name: bye_week
+  type: integer
+- description: ''
+  name: universe_id
+  type: integer
+kind: dataframe
+schema: espn_fantasy_pro_teams

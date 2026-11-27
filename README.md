@@ -84,13 +84,13 @@ provider. The [Getting Started table](https://py.sportsdataverse.org/docs/intro)
 | | College hockey (M/W) | `sportsdataverse.hockey.mch`, `.wch` | ESPN |
 | | SIHF and 12 European leagues (DEL, ICEHL, EIHL, Metal Ligaen, ELH, Liiga, SHL, HockeyAllsvenskan, National League, Ligue Magnus, KHL, VHL) | `sportsdataverse.hockey.<lg>` (DEL is `hockey.del_`) | Each league's own feed |
 | [Baseball](https://py.sportsdataverse.org/docs/leagues/baseball) | MLB; college baseball & softball | `sportsdataverse.mlb`, `.baseball` | ESPN, **MLB Stats API**, **Baseball Savant / Statcast** (`mlb_statcast_*`), Chadwick Baseball Bureau register (`load_mlb_chadwick_register`), stats.ncaa.org, Fox Sports |
-| [Soccer](https://py.sportsdataverse.org/docs/leagues/soccer) | 12 leagues (EPL, LaLiga, Bundesliga, Serie A, Ligue 1, MLS, Liga MX, UCL, UEL, NWSL, WWC, WC) | `sportsdataverse.soccer` | ESPN, ASA, FotMob, UEFA, FIFA, MLS and NWSL APIs, Football-Data.co.uk, OpenLigaDB, kloppy open event data |
+| [Soccer](https://py.sportsdataverse.org/docs/leagues/soccer) | 12 leagues (EPL, LaLiga, Bundesliga, Serie A, Ligue 1, MLS, Liga MX, UCL, UEL, NWSL, WWC, WC) | `sportsdataverse.soccer` | ESPN, ASA, FotMob, UEFA, FIFA, MLS and NWSL APIs, Football-Data.co.uk, OpenLigaDB, kloppy open event data, reep id register (`soccer_espn_reep_team_crosswalk`) |
 | [More sports & sources](https://py.sportsdataverse.org/docs/leagues/other) | Cricket | `sportsdataverse.cricket` | ESPN + bundled win-probability models |
 | | Lacrosse (PLL, NLL, men's and women's college) | `sportsdataverse.lacrosse` | ESPN, **PLL stats API** (`pll_*`: schedule, play-by-play, box scores, standings, team and player stats, leaders, rosters, bios; runtime only) |
 | | Golf (PGA Tour, LPGA, LIV, DP World Tour, PGA Tour Champions, Korn Ferry Tour, TGL, WTGL, Olympics) | `sportsdataverse.golf` | ESPN (scoreboard + leaderboard parsers), **PGA TOUR GraphQL** (`pgatour_*`: schedule, leaderboard, hole-by-hole, scorecards, tee times, field, past results and champions, course and hole stats, players and career results, stats, FedExCup, ShotLink shots; runtime only) |
 | | Formula 1 | `sportsdataverse.f1` | Jolpica |
 | | Odds & prediction markets | `sportsdataverse.odds` | The Odds API, Kalshi, Polymarket |
-| | Cross-sport providers | `sportsdataverse.providers.<name>` (`cbs`, `fox`, `yahoo`, `espn_content`, `thesportsdb`) | CBS Sports, Fox Sports, Yahoo Sports, ESPN content, TheSportsDB |
+| | Cross-sport providers | `sportsdataverse.providers.<name>` (`cbs`, `fox`, `yahoo`, `espn_content`, `espn_fantasy`, `thesportsdb`) | CBS Sports, Fox Sports, Yahoo Sports, ESPN content, ESPN Fantasy (public leagues), TheSportsDB |
 
 The big league modules export roughly 270–740 public names each (ESPN wrappers, that league's
 native-API wrappers, dataset loaders and parsers), and the flat `sportsdataverse` namespace holds
@@ -292,6 +292,7 @@ under [`examples/notebooks/`](examples/notebooks):
 | `17_european_college_hockey_intro.ipynb` | SHL, Liiga, DEL, KHL and NCAA hockey; a DEL shot map, college team colors (sdvplot) |
 | `18_prediction_markets_intro.ipynb` | Kalshi and Polymarket market data: events, markets, order books |
 | `19_more_sources_intro.ipynb` | NBA G League (ESPN), Formula 1, TheSportsDB, ESPN content |
+| `20_espn_fantasy_intro.ipynb` | ESPN Fantasy: games, player universe, pro schedule, default scoring, a public league |
 
 ## **Using with AI agents**
 

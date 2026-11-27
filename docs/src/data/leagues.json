@@ -554,6 +554,11 @@
           "group": "Cross-sport providers"
         },
         {
+          "prefix": "espn_fantasy",
+          "label": "ESPN Fantasy",
+          "group": "Cross-sport providers"
+        },
+        {
           "prefix": "thesportsdb",
           "label": "TheSportsDB",
           "group": "Cross-sport providers"

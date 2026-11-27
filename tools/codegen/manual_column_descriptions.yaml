@@ -12895,6 +12895,34 @@ load_cfb_team_summaries:
   yardsplay_off_rush_rank: 'National rank of the team''s yards gained per play (an interception counts as 0 yards) on rush
     plays with the team on offense, where 1 is best. Null when the metric is null or the column holds fewer than two distinct
     values: unranked, not last.'
+load_cfb_team_adjustment_ledger:
+  season: Season year.
+  game_id: ESPN game id.
+  week: ESPN week; the postseason restarts at 1.
+  season_type: "ESPN season type of the game: 2 regular season, 3 postseason."
+  team_id: ESPN team id.
+  pos_team: The team's name as the play-by-play carries it.
+  opponent_id: ESPN team id of the opponent.
+  site: home, away or neutral, for the team.
+  off_plays: The team's offensive plays in the adjusted-EPA fit that game (FBS-vs-FBS passes and rushes that are not garbage time by the score-margin rule).
+  def_plays: The team's defensive plays in the fit that game; 0 when it had none, and its defense mean then skips the game.
+  raw_off_epa: The team's EPA per offensive play that game, on the fit's plays.
+  raw_def_epa: EPA per play the team's defense allowed that game, on the fit's plays; null when def_plays is 0.
+  raw_net_epa: raw_off_epa minus raw_def_epa; null when def_plays is 0.
+  off_strength_faced: The opponent's fitted offense, EPA per play.
+  def_strength_faced: The opponent's fitted defense, EPA per play allowed.
+  schedule_adj: "off_strength_faced minus def_strength_faced: what the schedule term adds to the game's raw net EPA."
+  adj_off_epa: raw_off_epa minus def_strength_faced.
+  adj_def_epa: raw_def_epa minus off_strength_faced; null when def_plays is 0.
+  adj_net_epa: adj_off_epa minus adj_def_epa, which equals raw_net_epa plus schedule_adj; null when def_plays is 0.
+  off_weight: "The game's weight in the season offense mean: 1 over the team's games with offensive plays in the fit."
+  def_weight: "The game's weight in the season defense mean: 1 over the team's games with defensive plays in the fit. Null when def_plays is 0."
+  raw_contribution: "The game's raw part of the season value: off_weight times raw_off_epa minus def_weight times raw_def_epa."
+  schedule_contribution: "The game's schedule part of the season value: def_weight times off_strength_faced minus off_weight times def_strength_faced."
+  contribution: raw_contribution plus schedule_contribution; a team's rows sum to its net_adj_epa.
+  net_adj_epa: The team's season opponent-adjusted net EPA per play, as cfb_team_summaries publishes it, repeated on each row.
+  loo_net_adj_epa: The season value refit as if this game had never been played; null when the team would keep fewer than two valid games.
+  game_influence: "net_adj_epa minus loo_net_adj_epa: how far this game moved the season value. Null when loo_net_adj_epa is null."
 load_cfb_team_summaries_weekly:
   EPAdrive_def: EPA per drive (total EPA divided by drives), with the team on defense (i.e. allowed to opponents).
   EPAdrive_def_conf_pct: Percentile (0-100) of EPA per drive (total EPA divided by drives) with the team on defense (i.e.
@@ -83533,3 +83561,276 @@ kalshi_fill_price:
     below the best bid); 0 when the touch fills it all.
   cost: Dollars paid (buy) or received (sell) for the filled contracts, before fees; null when nothing fills.
   levels_used: Price levels the fill touches.
+espn_fantasy_games:
+  game_id: ESPN's number for the fantasy game (1 football, 2 baseball, 3 men's basketball, 4 hockey, 5 women's basketball).
+  game_abbrev: Game abbreviation as ESPN writes it (FFL, FLB, FBA, FHL, WFBA); the lower-case form is the game argument.
+  game_name: Display name of the fantasy game (e.g. "Fantasy Football").
+  pro_sport_abbrev: Abbreviation of the professional league the game is played on (NFL, MLB, NBA, NHL, WNBA).
+  pro_sport_name: Name of the professional sport the game follows (e.g. "football").
+  active: True while ESPN runs the game.
+  display: True when ESPN shows the game in its fantasy front end.
+  current_season_id: 'The game''s current season. ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year
+    for fba / fhl (2026-27 = 2027).'
+  current_scoring_period_id: Current scoring period of that season (NFL week for football, season day for the others).
+  season_start_date: Start of ESPN's rollover window for the current season (UTC); wider than the pro schedule.
+  season_end_date: End of ESPN's rollover window for the current season (UTC); wider than the pro schedule.
+espn_fantasy_seasons:
+  game_id: ESPN's number for the fantasy game the season belongs to (1 football, 3 men's basketball, ...).
+  season_id: 'ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year for fba / fhl (2026-27 = 2027).'
+  season_abbrev: Short season label, game plus year (e.g. "FFL 2026").
+  season_name: Display name of the season (e.g. "Fantasy Football 2026").
+  active: True for the season ESPN currently runs.
+  display: True when ESPN lists the season in its front end.
+  current_scoring_period_id: Current (or final) scoring period of the season.
+  start_date: Start of ESPN's rollover window for the season (UTC); it can open months before the pro season.
+  end_date: End of ESPN's rollover window for the season (UTC); it can run past the next season's start.
+espn_fantasy_pro_teams:
+  pro_team_id: ESPN team id of the pro team (the id ESPN's site API uses for that pro league); 0 is the free-agent pool.
+  pro_team_abbrev: Pro team abbreviation (e.g. "IND"; "FA" for the free-agent pool).
+  pro_team_location: Pro team city or region (e.g. "Indianapolis").
+  pro_team_name: Pro team nickname (e.g. "Colts").
+  bye_week: Football bye week (the NFL week the team does not play); 0 in the other games and for the pool.
+  universe_id: ESPN's player-universe grouping for the team; ESPN does not document its values.
+espn_fantasy_pro_schedule:
+  pro_game_id: ESPN event id of the pro game (the same id ESPN's scoreboard and summary routes use).
+  scoring_period_id: Fantasy scoring period the pro game counts toward (NFL week, or season day).
+  game_date: Scheduled start of the pro game (UTC).
+  home_pro_team_id: Pro-team number of the home team (pro_team_id in espn_fantasy_pro_teams).
+  away_pro_team_id: Pro-team number of the away team (pro_team_id in espn_fantasy_pro_teams).
+  start_time_tbd: True while the pro game's start time is not set.
+  stats_official: True once ESPN marks the pro game's stats official.
+  valid_for_locking: ESPN's flag for whether the game's start counts toward lineup locks.
+espn_fantasy_players:
+  player_id: ESPN athlete id, shared with ESPN's site and core APIs.
+  full_name: Player's full display name.
+  first_name: Player's first name.
+  last_name: Player's last name.
+  pro_team_id: Pro-team number of the player's team (0 = free agent); see espn_fantasy_pro_teams.
+  default_position_id: ESPN's position code for the player in this game (per-game enum).
+  eligible_slots: JSON list of the lineup-slot codes the player may fill (per-game enum).
+  droppable: False when ESPN does not let teams drop the player.
+  percent_owned: Share of ESPN leagues (percent, 0-100) in which the player is rostered.
+  last_news_date: Time of the player's latest fantasy news item (UTC); see espn_fantasy_player_news.
+  universe_id: ESPN's player-universe grouping for the player; ESPN does not document its values.
+espn_fantasy_league_directory:
+  league_id: Public league id, readable by the espn_fantasy_league_* wrappers.
+  league_name: League name ESPN gave the public league (e.g. "Minnesota Pro H2H Points League").
+  league_sub_type: Directory the league was listed in (DRAFT_LOBBY or MOCKDRAFT_LOBBY).
+  league_default_id: Default-settings template the league uses; pass it to espn_fantasy_default_scoring.
+  league_size: Number of teams the league holds.
+  teams_joined: Number of teams already claimed.
+  full: True when every team is claimed.
+  public: True for a public league anyone can join.
+  standard_league: True when the league runs ESPN's standard settings for its template.
+  customizable: True when the league manager may change the settings.
+  draft_type: Draft format (SNAKE or AUCTION).
+  draft_date: Scheduled draft start (UTC). A passed time does not mean the draft has finished.
+  draft_available_date: When the draft room opens (UTC).
+  draft_in_progress: Flag ESPN sets on the directory entry; it can stay True after the draft ends.
+  scoring_type: Scoring format (H2H_POINTS, H2H_CATEGORY, H2H_MOST_CATEGORIES, ROTO, TOTAL_SEASON_POINTS, WEEKLY_ALL_PLAY_POINTS).
+  experience_type: Experience level ESPN labels the league with (BEGINNER, PRO or ANY).
+  rank_type: Player-rank list the league's draft uses (e.g. STANDARD, PPR).
+  restriction_type: Joining restriction on the league (NONE for open public leagues).
+  roster_locktime_type: When lineups lock (FIRSTGAME_SCORINGPERIOD or INDIVIDUAL_GAME).
+  scoring_item_stat_ids: JSON list of the stat ids the league scores.
+  universe_ids: JSON list of ESPN's player-universe groupings the league uses; ESPN does not document the values.
+  season_id: 'Season of the league. ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year for fba / fhl
+    (2026-27 = 2027).'
+  game_id: ESPN's number for the fantasy game (1 football, 3 men's basketball, ...).
+espn_fantasy_default_scoring:
+  league_id: Default-settings template id (league_default_id), since a template is not a league.
+  season_id: 'Season the template applies to. ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year for
+    fba / fhl (2026-27 = 2027).'
+  game_id: ESPN's number for the fantasy game (1 football, 3 men's basketball, ...).
+  scoring_type: Scoring format of the template (e.g. H2H_POINTS, H2H_CATEGORY, ROTO); points only matter in points formats.
+  stat_id: Stat being scored (per-game enum, the keys of the stats maps).
+  points: Fantasy points per unit of the stat (negative for a penalty) in points formats; 1.0 on every item in ROTO.
+  is_reverse_item: True when a lower value is better (categories leagues, e.g. turnovers).
+  points_overrides: JSON map of lineup-slot code to the points that slot earns instead (empty = none).
+espn_fantasy_league_scoring:
+  league_id: Public league id the scoring settings belong to.
+  season_id: 'Season of the league. ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year for fba / fhl
+    (2026-27 = 2027).'
+  game_id: ESPN's number for the fantasy game (1 football, 3 men's basketball, ...).
+  scoring_type: Scoring format of the league (e.g. H2H_POINTS, H2H_CATEGORY, ROTO); points only matter in points formats.
+  stat_id: Stat being scored (per-game enum, the keys of the stats maps).
+  points: Fantasy points per unit of the stat (negative for a penalty) in points formats; 1.0 on every item in ROTO.
+  is_reverse_item: True when a lower value is better (categories leagues, e.g. turnovers).
+  points_overrides: JSON map of lineup-slot code to the points that slot earns instead (empty = none).
+espn_fantasy_player_news:
+  news_id: ESPN's id for the news item; the number after the dash in now_id.
+  now_id: ESPN content id of the item as text (source prefix, then the item id, e.g. "23-54107746").
+  player_id: ESPN athlete id the news item is about.
+  type: Source or kind of the item (e.g. "Rotowire" for a third-party blurb, "Story" for ESPN's own).
+  headline: Headline of the news item.
+  description: Short summary of the news item.
+  story: Body text of the news item; null for a Media (video) item.
+  published: When the item was published (UTC).
+  last_modified: When the item was last edited (UTC).
+  premium: True for an ESPN+ item.
+espn_fantasy_league_teams:
+  league_id: Public league id (league_id in espn_fantasy_league_directory).
+  season_id: 'Season of the league. ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year for fba / fhl
+    (2026-27 = 2027).'
+  team_id: Team number inside the league; unique only within one league, so join on (league_id, team_id).
+  team_name: Team name its owner chose.
+  team_abbrev: Team abbreviation its owner chose.
+  division_id: Division the team plays in (0 when the league has one division).
+  wins: Head-to-head wins this season.
+  losses: Head-to-head losses this season.
+  ties: Head-to-head ties this season.
+  win_percentage: Share of matchups won (0-1).
+  points_for: Fantasy points the team has scored this season, including the matchup in progress.
+  points_against: Fantasy points scored against the team this season, including the matchup in progress.
+  games_back: Games behind the division leader.
+  streak_type: Current streak kind (WIN, LOSS, TIE or NONE).
+  streak_length: Length of the current streak, in matchups.
+  playoff_seed: Current playoff seed (standings rank).
+  points: Season fantasy-point total ESPN reports for the team (equal to points_for in head-to-head points leagues).
+  current_projected_rank: ESPN's projected final rank for the team now.
+  draft_day_projected_rank: ESPN's projected final rank on draft day.
+  rank_calculated_final: Final rank once the season is over; 0 before then.
+  waiver_rank: Team's position in the waiver order (1 claims first).
+  acquisitions: Players the team has added this season.
+  drops: Players the team has dropped this season.
+  trades: Trades the team has completed this season.
+  move_to_active: Moves from a reserve slot to the active lineup this season.
+  move_to_ir: Moves to the injured-reserve slot this season.
+  acquisition_budget_spent: Free-agent budget the team has spent (budget leagues; 0 otherwise).
+espn_fantasy_league_rosters:
+  league_id: Public league id (league_id in espn_fantasy_league_directory).
+  season_id: 'Season of the league. ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year for fba / fhl
+    (2026-27 = 2027).'
+  team_id: Team number inside the league that rosters the player.
+  player_id: ESPN athlete id of the rostered player.
+  full_name: Player's full display name.
+  pro_team_id: Pro-team number of the player's team (0 = free agent); see espn_fantasy_pro_teams.
+  default_position_id: ESPN's position code for the player in this game (per-game enum).
+  lineup_slot_id: Lineup slot the player fills on the team now (per-game enum; bench and IR included).
+  acquisition_type: How the team got the player (e.g. DRAFT, ADD).
+  acquisition_date: When the team got the player (UTC).
+  injury_status: Injury status on the roster entry (NORMAL when healthy); the pool table's injury_status uses other values.
+  player_status: Player's pool status in the league (ONTEAM for every rostered player).
+  applied_stat_total: 'Fantasy points of the stats entry ESPN attaches to the roster entry: one recent scoring period, not
+    the season.'
+  percent_owned: Share of ESPN leagues (percent, 0-100) in which the player is rostered.
+  percent_started: Share of ESPN leagues (percent, 0-100) in which the player is in a starting slot.
+espn_fantasy_league_matchups:
+  league_id: Public league id (league_id in espn_fantasy_league_directory).
+  season_id: 'Season of the league. ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year for fba / fhl
+    (2026-27 = 2027).'
+  matchup_id: Matchup number inside the league's season schedule.
+  matchup_period_id: Head-to-head period of the matchup (a week; it spans one or more scoring periods).
+  playoff_tier_type: Playoff bracket the matchup belongs to (NONE for the regular season).
+  winner: Result (HOME, AWAY, TIE, or UNDECIDED for an unplayed or running matchup).
+  home_team_id: Team number of the home side; unique only within one league.
+  away_team_id: Team number of the away side (unique only within one league); null for a bye.
+  home_total_points: Fantasy points of the home side (0 before the matchup is played).
+  away_total_points: Fantasy points of the away side (0 before the matchup is played).
+espn_fantasy_league_boxscores:
+  league_id: Public league id (league_id in espn_fantasy_league_directory).
+  season_id: 'Season of the league. ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year for fba / fhl
+    (2026-27 = 2027).'
+  scoring_period_id: Scoring period the box score is for (the scoring_period_id requested).
+  matchup_id: Matchup number inside the league's season schedule.
+  matchup_period_id: Head-to-head period the matchup belongs to.
+  side: Which side of the matchup the team is on (home or away).
+  team_id: Team number inside the league.
+  player_id: ESPN athlete id of the player in the lineup.
+  full_name: Player's full display name.
+  pro_team_id: Pro-team number of the player's team; see espn_fantasy_pro_teams.
+  default_position_id: ESPN's position code for the player in this game (per-game enum).
+  lineup_slot_id: Lineup slot the player filled in that scoring period (per-game enum; bench included).
+  applied_stat_total: Fantasy points the player scored in the scoring period under the league's scoring.
+espn_fantasy_league_draft:
+  league_id: Public league id (league_id in espn_fantasy_league_directory).
+  season_id: 'Season of the league. ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year for fba / fhl
+    (2026-27 = 2027).'
+  pick_id: Pick record id in ESPN's draft detail (equal to the overall pick number in the captured draft).
+  overall_pick_number: Overall pick number across all rounds.
+  round_id: Draft round of the pick (1 = first round).
+  round_pick_number: Pick number within the round.
+  team_id: Team number inside the league that made the pick.
+  player_id: ESPN athlete id of the drafted player.
+  bid_amount: Winning bid in an auction draft; 0 in a snake draft.
+  keeper: True when the pick is a kept player.
+  reserved_for_keeper: True when the pick slot was reserved for a keeper.
+  auto_draft_type_id: ESPN's code for how the pick was made (by the team, or one of ESPN's auto-draft modes).
+  lineup_slot_id: Lineup slot the drafted player was placed in (per-game enum).
+  nominating_team_id: Team that nominated the player in an auction draft; 0 in a snake draft.
+espn_fantasy_league_transactions:
+  league_id: Public league id (league_id in espn_fantasy_league_directory).
+  season_id: 'Season of the league. ESPN''s season id: the start year for ffl (2026 = fall 2026), the end year for fba / fhl
+    (2026-27 = 2027).'
+  transaction_id: UUID of the transaction; every item row of one transaction shares it.
+  transaction_type: Kind of transaction (e.g. FREEAGENT, ROSTER, FUTURE_ROSTER).
+  status: Processing state of the transaction (e.g. EXECUTED).
+  execution_type: How ESPN processes the transaction (EXECUTE on every one seen).
+  scoring_period_id: Scoring period the transaction takes effect in.
+  proposed_date: When the transaction was proposed (UTC).
+  team_id: Team number inside the league that made the transaction.
+  bid_amount: Free-agent budget bid (budget waivers); 0 otherwise.
+  is_pending: True while the transaction waits to process.
+  item_type: What the item does (e.g. ADD, DROP, LINEUP); null for a transaction without items.
+  player_id: ESPN athlete id the item moves.
+  from_team_id: Team number the player leaves; 0 = none (the free-agent pool on an ADD, not applicable on LINEUP).
+  to_team_id: Team number the player joins; 0 = none (the free-agent pool on a DROP, not applicable on LINEUP).
+  from_lineup_slot_id: 'Lineup slot the player leaves (-1 = none: the player was not on the roster).'
+  to_lineup_slot_id: 'Lineup slot the player moves to (-1 = none: the player leaves the roster).'
+espn_fantasy_player_pool:
+  player_id: ESPN athlete id, shared with ESPN's site and core APIs.
+  full_name: Player's full display name.
+  pro_team_id: Pro-team number of the player's team (0 = free agent); see espn_fantasy_pro_teams.
+  default_position_id: ESPN's position code for the player in this game (per-game enum).
+  first_name: Player's first name.
+  last_name: Player's last name.
+  eligible_slots: JSON list of the lineup-slot codes the player may fill (per-game enum).
+  jersey: Player's jersey number as text.
+  injured: True when the player carries an injury designation.
+  injury_status: Player's injury designation (e.g. ACTIVE, OUT); the roster table's injury_status uses other values.
+  status: Player's status in this league (FREEAGENT, WAIVERS or ONTEAM).
+  on_team_id: Team number inside the league that rosters the player; 0 when unrostered.
+  keeper_value: Keeper cost of the player in this league; 0 outside keeper leagues.
+  draft_auction_value: Auction value ESPN assigns the player in this league; 0 outside auction leagues.
+  percent_owned: Share of ESPN leagues (percent, 0-100) in which the player is rostered.
+  percent_started: Share of ESPN leagues (percent, 0-100) in which the player is in a starting slot.
+  percent_change: Recent change in percent_owned, in percentage points.
+  average_draft_position: Average pick at which the player goes in ESPN drafts.
+  auction_value_average: Average winning bid for the player in ESPN auction drafts.
+  last_news_date: Time of the player's latest fantasy news item (UTC); see espn_fantasy_player_news.
+soccer_espn_reep_team_crosswalk:
+  espn_team_id: ESPN soccer team id, digits as text (Utf8, the dtype of team_id in espn_soccer_teams_site and the ESPN
+    soccer scoreboard and summary frames); unique in the table.
+  espn_league: ESPN league slug the team was listed under when the table was built (eng.1, eng.2, esp.1, ger.1, ita.1,
+    fra.1, usa.1, mex.1).
+  espn_display_name: ESPN display name of the team at build time (e.g. 'Manchester United').
+  espn_abbreviation: ESPN team abbreviation at build time (e.g. 'MAN' for Manchester United).
+  reep_id: reep team id (reep_t + 8 hex characters); null when no reep row is this club. No reep_id appears on two ESPN
+    teams.
+  reep_name: Club name as reep records it (e.g. 'Manchester United F.C.').
+  reep_country: Country reep records for the club ('United Kingdom' for English clubs, 'Wales' for some Welsh ones).
+  key_wikidata: Wikidata entity id of the club (e.g. 'Q18656').
+  key_transfermarkt: Transfermarkt club id, digits as text (e.g. '985').
+  key_fbref: FBref squad id (8 hex characters).
+  key_soccerway: Soccerway team id.
+  key_opta: Opta team UUID (25 alphanumeric characters).
+  key_opta_numeric: Opta numeric team id.
+  key_kicker: kicker.de club slug.
+  key_flashscore: Flashscore team id.
+  key_sofascore: Sofascore team id.
+  key_soccerbase: Soccerbase team id.
+  key_uefa: UEFA club id.
+  key_footballdatabase_eu: footballdatabase.eu club id.
+  key_worldfootball: worldfootball.net club slug.
+  key_playmakerstats: playmakerstats.com team id.
+  key_clubelo: ClubElo club name (the key its ratings use, e.g. 'ManUnited').
+  key_sportmonks: Sportmonks team id.
+  key_api_football: API-Football team id.
+  key_sofifa: SoFIFA team id.
+  key_fotmob: FotMob team id.
+  key_thesportsdb: TheSportsDB team id.
+  key_understat: Understat team id.
+  key_capology: Capology club slug.
+  match_method: How the ESPN team was tied to reep. 'key_espn' (reep already carries this ESPN id), 'name' (exactly one
+    reep row in the league's country shares a normalized name or alias), 'review' (settled by hand in
+    tools/soccer_espn_reep_overrides.yaml), 'unmatched' (reviewed; no reep row is this club, reep columns null).

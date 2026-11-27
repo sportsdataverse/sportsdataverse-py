@@ -1,0 +1,59 @@
+[
+  {
+    "defaultPositionId": 11,
+    "droppable": true,
+    "eligibleSlots": [
+      13,
+      15,
+      16
+    ],
+    "firstName": "Nick",
+    "fullName": "Nick Ramirez",
+    "id": 32140,
+    "lastName": "Ramirez",
+    "lastNewsDate": 1725978589000,
+    "ownership": {
+      "percentOwned": 0.01
+    },
+    "proTeamId": 0,
+    "universeId": 0
+  },
+  {
+    "defaultPositionId": 11,
+    "droppable": true,
+    "eligibleSlots": [
+      13,
+      15,
+      16
+    ],
+    "firstName": "Jason",
+    "fullName": "Jason Adam",
+    "id": 32145,
+    "lastName": "Adam",
+    "lastNewsDate": 1790213412000,
+    "ownership": {
+      "percentOwned": 8.9
+    },
+    "proTeamId": 0,
+    "universeId": 0
+  },
+  {
+    "defaultPositionId": 4,
+    "droppable": true,
+    "eligibleSlots": [
+      2,
+      6,
+      19
+    ],
+    "firstName": "Marcus",
+    "fullName": "Marcus Semien",
+    "id": 32146,
+    "lastName": "Semien",
+    "lastNewsDate": 1790435977000,
+    "ownership": {
+      "percentOwned": 34.82
+    },
+    "proTeamId": 21,
+    "universeId": 2
+  }
+]

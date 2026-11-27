@@ -1,0 +1,98 @@
+[
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795722000000,
+    "draftDate": 1795722180000,
+    "draftInProgress": false,
+    "draftType": "AUCTION",
+    "experienceType": "BEGINNER",
+    "full": false,
+    "gameId": 5,
+    "leagueDefaultId": 2,
+    "leagueId": 2114549427,
+    "leagueName": "Connecticut Beginner H2H Points Salary Cap League",
+    "leagueSize": 6,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      0,
+      17,
+      1
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2026,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 5,
+    "universeIds": [
+      0
+    ]
+  },
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795722000000,
+    "draftDate": 1795722180000,
+    "draftInProgress": false,
+    "draftType": "SNAKE",
+    "experienceType": "BEGINNER",
+    "full": false,
+    "gameId": 5,
+    "leagueDefaultId": 2,
+    "leagueId": 327849455,
+    "leagueName": "Washington Beginner H2H Points League",
+    "leagueSize": 6,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      0,
+      17,
+      1
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2026,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 3,
+    "universeIds": [
+      0
+    ]
+  },
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795722000000,
+    "draftDate": 1795722180000,
+    "draftInProgress": false,
+    "draftType": "AUCTION",
+    "experienceType": "PRO",
+    "full": false,
+    "gameId": 5,
+    "leagueDefaultId": 2,
+    "leagueId": 815061257,
+    "leagueName": "Chicago Pro H2H Points Salary Cap League",
+    "leagueSize": 6,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      0,
+      17,
+      1
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2026,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 1,
+    "universeIds": [
+      0
+    ]
+  }
+]
