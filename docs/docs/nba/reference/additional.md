@@ -285,6 +285,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [nba_game_player_box_splits](additional/analytics-2.md#nba_game_player_box_splits) | Player box by game, period and garbage time: minutes and counts from the play-by-play. |
 | [nba_game_player_impact](additional/analytics-2.md#nba_game_player_impact) | The game impact box: per player and game, minutes, on-court possessions, +/- and ratings. |
 | [nba_game_stints](additional/analytics-2.md#nba_game_stints) | Game stints: per player and game, every stretch on the floor with its clock, points and possessions. |
+| [nba_game_story](additional/analytics-3.md#nba_game_story) | How the winner won it, for one or many basketball games: edges in points, the moment, periods, runs, performers. |
 | [nba_game_units](additional/analytics-3.md#nba_game_units) | In-game units: per 1- to 5-man set of teammates and game, minutes, ratings, four factors and shot zones. |
 | [nba_impact_rows](additional/analytics-3.md#nba_impact_rows) | Map the stats.nba.com releases onto the game-impact row frame. |
 | [nba_l2m](additional/analytics-3.md#nba_l2m) | Fetch and parse an NBA Last Two Minute report from official.nba.com. |

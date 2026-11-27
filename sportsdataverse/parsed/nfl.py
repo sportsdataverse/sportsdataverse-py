@@ -331,6 +331,7 @@ from sportsdataverse.nfl import nfl_game_details as nfl_game_details  # noqa: F4
 from sportsdataverse.nfl import nfl_game_pbp as nfl_game_pbp  # noqa: F401
 from sportsdataverse.nfl import nfl_game_schedule as nfl_game_schedule  # noqa: F401
 from sportsdataverse.nfl import nfl_game_script as nfl_game_script  # noqa: F401
+from sportsdataverse.nfl import nfl_game_story as nfl_game_story  # noqa: F401
 from sportsdataverse.nfl import nfl_headers_gen as nfl_headers_gen  # noqa: F401
 from sportsdataverse.nfl import nfl_kicker_rating as nfl_kicker_rating  # noqa: F401
 from sportsdataverse.nfl import nfl_line_grades as nfl_line_grades  # noqa: F401
@@ -674,6 +675,7 @@ __all__ = [
     "nfl_game_pbp",
     "nfl_game_schedule",
     "nfl_game_script",
+    "nfl_game_story",
     "nfl_game_summaries",
     "nfl_headers_gen",
     "nfl_injuries",
