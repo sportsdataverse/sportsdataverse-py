@@ -1,0 +1,98 @@
+[
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795717800000,
+    "draftDate": 1795717980000,
+    "draftInProgress": true,
+    "draftType": "AUCTION",
+    "experienceType": "PRO",
+    "full": true,
+    "gameId": 4,
+    "leagueDefaultId": 5,
+    "leagueId": 230809540,
+    "leagueName": "Vegas Pro Season Points Salary Cap League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      32,
+      1,
+      2
+    ],
+    "scoringType": "TOTAL_SEASON_POINTS",
+    "seasonId": 2027,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 10,
+    "universeIds": [
+      0
+    ]
+  },
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795721100000,
+    "draftDate": 1795721280000,
+    "draftInProgress": true,
+    "draftType": "SNAKE",
+    "experienceType": "PRO",
+    "full": true,
+    "gameId": 4,
+    "leagueDefaultId": 2,
+    "leagueId": 1318043884,
+    "leagueName": "Columbus Pro H2H Points League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      32,
+      1,
+      2
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2027,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 10,
+    "universeIds": [
+      0
+    ]
+  },
+  {
+    "customizable": false,
+    "draftAvailableDate": 1795721700000,
+    "draftDate": 1795721880000,
+    "draftInProgress": true,
+    "draftType": "SNAKE",
+    "experienceType": "BEGINNER",
+    "full": true,
+    "gameId": 4,
+    "leagueDefaultId": 2,
+    "leagueId": 831316444,
+    "leagueName": "Columbus Beginner H2H Points League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      32,
+      1,
+      2
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2027,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 10,
+    "universeIds": [
+      0
+    ]
+  }
+]

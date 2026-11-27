@@ -1,0 +1,98 @@
+[
+  {
+    "customizable": false,
+    "draftAvailableDate": 1794356100000,
+    "draftDate": 1794356280000,
+    "draftInProgress": true,
+    "draftType": "SNAKE",
+    "experienceType": "PRO",
+    "full": true,
+    "gameId": 3,
+    "leagueDefaultId": 2,
+    "leagueId": 1535462463,
+    "leagueName": "Minnesota Pro H2H Points League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      16,
+      0,
+      17
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2027,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 10,
+    "universeIds": [
+      0
+    ]
+  },
+  {
+    "customizable": false,
+    "draftAvailableDate": 1794356400000,
+    "draftDate": 1794356580000,
+    "draftInProgress": true,
+    "draftType": "SNAKE",
+    "experienceType": "PRO",
+    "full": true,
+    "gameId": 3,
+    "leagueDefaultId": 2,
+    "leagueId": 1804910101,
+    "leagueName": "San Antonio Pro H2H Points League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      16,
+      0,
+      17
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2027,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 10,
+    "universeIds": [
+      0
+    ]
+  },
+  {
+    "customizable": false,
+    "draftAvailableDate": 1794442500000,
+    "draftDate": 1794442680000,
+    "draftInProgress": true,
+    "draftType": "SNAKE",
+    "experienceType": "PRO",
+    "full": true,
+    "gameId": 3,
+    "leagueDefaultId": 2,
+    "leagueId": 1109550710,
+    "leagueName": "Toronto Pro H2H Points League",
+    "leagueSize": 10,
+    "leagueSubType": "DRAFT_LOBBY",
+    "public": true,
+    "rankType": "STANDARD",
+    "restrictionType": "NONE",
+    "rosterLocktimeType": "FIRSTGAME_SCORINGPERIOD",
+    "scoringItemStatIds": [
+      16,
+      0,
+      17
+    ],
+    "scoringType": "H2H_POINTS",
+    "seasonId": 2027,
+    "segmentId": 0,
+    "standardLeague": true,
+    "teamsJoined": 10,
+    "universeIds": [
+      0
+    ]
+  }
+]

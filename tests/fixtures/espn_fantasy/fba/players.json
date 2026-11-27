@@ -1,0 +1,57 @@
+[
+  {
+    "defaultPositionId": 2,
+    "droppable": true,
+    "eligibleSlots": [
+      1,
+      5,
+      7
+    ],
+    "firstName": "Ian",
+    "fullName": "Ian Clark",
+    "id": 2489785,
+    "lastName": "Clark",
+    "ownership": {
+      "percentOwned": 0.01
+    },
+    "proTeamId": 3,
+    "universeId": 2
+  },
+  {
+    "defaultPositionId": 5,
+    "droppable": true,
+    "eligibleSlots": [
+      4,
+      9,
+      10
+    ],
+    "firstName": "Yang",
+    "fullName": "Yang Hansen",
+    "id": 5217746,
+    "lastName": "Hansen",
+    "lastNewsDate": 1795191250000,
+    "ownership": {
+      "percentOwned": 0.29
+    },
+    "proTeamId": 22,
+    "universeId": 2
+  },
+  {
+    "defaultPositionId": 2,
+    "droppable": true,
+    "eligibleSlots": [
+      1,
+      5,
+      7
+    ],
+    "firstName": "Shake",
+    "fullName": "Shake Milton",
+    "id": 3915195,
+    "lastName": "Milton",
+    "ownership": {
+      "percentOwned": 0.02
+    },
+    "proTeamId": 13,
+    "universeId": 2
+  }
+]

@@ -147,6 +147,7 @@ _LEAGUES: Dict[str, str] = {
     "fox": "providers.fox",
     "f1": "f1",
     "espn_content": "providers.espn_content",
+    "espn_fantasy": "providers.espn_fantasy",
     "thesportsdb": "providers.thesportsdb",
 }
 # END generated: league homes
