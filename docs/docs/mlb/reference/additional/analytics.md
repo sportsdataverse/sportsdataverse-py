@@ -702,7 +702,7 @@ How the winner won it, for one or many MLB games: edges in runs, the moment, inn
 
 | Exception | Description |
 |---|---|
-| `ValueError` | If `re24` has no run expectancy for any of the games (a matrix of another season). |
+| `ValueError` | If `re24` has no run expectancy for one of the games' seasons. |
 
 **Example**
 
