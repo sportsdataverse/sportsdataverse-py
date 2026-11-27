@@ -45,8 +45,9 @@ rule drops about 9%, none in a one-score game.
 the standardized dropped-reference-level ridge at lambda 0.035, and weeks ordered
 by ``week`` alone, with a team's own EPA on every play. It reads ``wp_before``
 instead of ``period`` / ``pos_score_diff_start`` and does not need ``seasonType``.
-#598 was validated on CFB only; pre598 is not validated for NFL either and stays
-only for continuity until NFL is.
+#598 was validated on CFB only. On NFL regular seasons 2014-2023 (the same walk-forward) the current fit beat
+pre598 by 0.088 points of MAE, 95% CI [0.015, 0.170], and by 0.127 on 2024-2025; pre598 stays only until nfl-data's
+team summaries move to the current fit (:func:`sportsdataverse.nfl.nfl_adjusted_epa_ledger` is its NFL ledger).
 """
 
 from __future__ import annotations

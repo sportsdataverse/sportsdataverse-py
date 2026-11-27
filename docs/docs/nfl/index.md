@@ -18,7 +18,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [nflverse data releases](#nflverse-data-releases) | `github.com` | 48 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 23 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 180 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 181 | — |
 
 ## ESPN {#espn}
 
@@ -123,13 +123,14 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 - [`get_punt_wp`](reference/additional/models-and-calculators-10#get_punt_wp)
 - [`home_team_roof`](reference/additional/models-and-calculators-10#home_team_roof)
 - [`load_nfl_fp_curve`](reference/additional/models-and-calculators-10#load_nfl_fp_curve)
+- [`nfl_adjusted_epa_ledger`](reference/additional/models-and-calculators-10#nfl_adjusted_epa_ledger)
 - [`nfl_compute_results`](reference/additional/models-and-calculators-10#nfl_compute_results)
 - [`nfl_draft_projection`](reference/additional/models-and-calculators-10#nfl_draft_projection)
 - [`nfl_fantasy_projection`](reference/additional/models-and-calculators-10#nfl_fantasy_projection)
 - [`nfl_kicker_rating`](reference/additional/models-and-calculators-10#nfl_kicker_rating)
 - [`nfl_line_grades`](reference/additional/models-and-calculators-10#nfl_line_grades)
-- [`nfl_player_projection`](reference/additional/models-and-calculators-10#nfl_player_projection)
-- [`nfl_ratings`](reference/additional/models-and-calculators-10#nfl_ratings)
+- [`nfl_player_projection`](reference/additional/models-and-calculators-11#nfl_player_projection)
+- [`nfl_ratings`](reference/additional/models-and-calculators-11#nfl_ratings)
 - [`nfl_simulations`](reference/additional/models-and-calculators-11#nfl_simulations)
 - [`nfl_usage_projection`](reference/additional/models-and-calculators-11#nfl_usage_projection)
 - [`opponent_adjusted_ridge`](reference/additional/models-and-calculators-11#opponent_adjusted_ridge)

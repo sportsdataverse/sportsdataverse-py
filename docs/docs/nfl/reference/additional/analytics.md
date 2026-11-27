@@ -660,7 +660,7 @@ team's dropback share reads all of them.
 | `team` | String | Offense's franchise code, relocated to the current one (OAK -> LV, SD -> LAC, STL -> LA). |
 | `qb_id` | String | GSIS id of the QB on a dropback (passer, else scrambling rusher); null off dropbacks. |
 | `qb_epa` | Float64 | nflverse qb_epa of the play (EPA credited to the QB). |
-| `is_dropback` | Boolean | True on a QB dropback with a QB id and a non-null qb_epa; False on a run, an unattributed play or a null qb_epa. |
+| `is_dropback` | Boolean | True on a QB dropback with a QB id and a non-null qb_epa; False on a designed run (a scramble is a dropback), an unattributed play or a null qb_epa. |
 
 **Example**
 

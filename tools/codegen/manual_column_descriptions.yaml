@@ -83651,7 +83651,7 @@ nfl_qb_dropbacks:
   team: Offense's franchise code, relocated to the current one (OAK -> LV, SD -> LAC, STL -> LA).
   qb_id: GSIS id of the QB on a dropback (passer, else scrambling rusher); null off dropbacks.
   qb_epa: nflverse qb_epa of the play (EPA credited to the QB).
-  is_dropback: True on a QB dropback with a QB id and a non-null qb_epa; False on a run, an unattributed play or a null qb_epa.
+  is_dropback: True on a QB dropback with a QB id and a non-null qb_epa; False on a designed run (a scramble is a dropback), an unattributed play or a null qb_epa.
 nfl_qb_values:
   qb_id: GSIS id of the quarterback.
   dropbacks: Career dropbacks before the as-of date, from the config's history start season.
@@ -84327,3 +84327,41 @@ soccer_espn_transfermarkt_player_crosswalk:
     shared name token), 'name_dob_nationality' (several such players, one with the athlete's citizenship),
     'name_jan1_club' / 'name_jan1_nationality' (a 1 January birth date, resolved only because exactly one such player
     is also at the team's Transfermarkt club or shares the citizenship), or 'unmatched'.
+nfl_adjusted_epa_ledger:
+  game_id: Game identifier as the input carries it (the nflverse game_id, or the ESPN event id as a string).
+  season: Season of the game, carried from the input.
+  week: Week of the game, carried from the input.
+  season_type: Season type carried from the input (nflverse 'REG' / 'POST', or ESPN's seasonType number).
+  team_id: Team the row rates (the nflverse posteam abbreviation, or the ESPN team id as a string).
+  pos_team: Team key the fit used for this team; the same value as team_id.
+  opponent_id: The team it played in this game, in the same id space as team_id.
+  site: Where the team played this game, 'home', 'away' or 'neutral' (the schedule's neutral-site flag).
+  off_plays: The team's offensive pass and rush plays in the fit for this game (garbage time by the score margin left
+    out).
+  def_plays: The opponent's offensive plays in the fit for this game, i.e. the team's defensive plays.
+  raw_off_epa: The team's mean EPA per offensive play in this game, over the plays in the fit.
+  raw_def_epa: Mean EPA per play the team's defense allowed in this game, over the plays in the fit.
+  raw_net_epa: raw_off_epa minus raw_def_epa, the game's unadjusted net EPA per play.
+  off_strength_faced: The opponent's fitted offensive strength in EPA per play (league average plus its offense
+    term), what the team's defensive EPA is netted against.
+  def_strength_faced: The opponent's fitted defensive strength in EPA per play (league average plus its defense
+    term), what the team's offensive EPA is netted against.
+  schedule_adj: off_strength_faced minus def_strength_faced, what the opponent adds to this game's raw net EPA to
+    give its adjusted net EPA.
+  adj_off_epa: raw_off_epa minus def_strength_faced, the game's opponent-adjusted offensive EPA per play.
+  adj_def_epa: raw_def_epa minus off_strength_faced, the game's opponent-adjusted defensive EPA per play allowed.
+  adj_net_epa: adj_off_epa minus adj_def_epa; equals raw_net_epa plus schedule_adj.
+  off_weight: This game's weight in the season mean of adj_off_epa, 1 over the team's games with offensive plays in
+    the fit.
+  def_weight: This game's weight in the season mean of adj_def_epa, 1 over the team's games with defensive plays in
+    the fit.
+  raw_contribution: off_weight times raw_off_epa minus def_weight times raw_def_epa, the game's raw share of the
+    season value.
+  schedule_contribution: def_weight times off_strength_faced minus off_weight times def_strength_faced, the
+    opponent's share of the season value through this game.
+  contribution: The game's share of the season net_adj_epa; raw_contribution plus schedule_contribution, and the
+    team's rows sum to net_adj_epa.
+  net_adj_epa: The team's season opponent-adjusted net EPA per play, repeated on each of its rows.
+  loo_net_adj_epa: The team's season value refit with this game removed from the fit and from its own means; null
+    when it would keep fewer than two valid games.
+  game_influence: net_adj_epa minus loo_net_adj_epa, how far this game moved the team's season value.

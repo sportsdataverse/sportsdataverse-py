@@ -282,7 +282,71 @@ _RUNNER_CASES = [
     ("Franck,Gage stole home, scored.", 1, ["Franck,Gage"], 0),
     # a run-on "advanced from" runner clause splits off too (CodeRabbit on #1356)
     ("Smith singled to right field, RBI Jones advanced from second base, scored.", 1, ["Jones"], 0),
+    # present-tense pages (2022-2024): each run is its own sentence, or leads the row (2023 contests 2391328, 2390316)
+    ("Simon homers on a line drive to left field. Brown scores. Cates scores", 3, ["Brown", "Cates", "Simon"], 0),
+    ("Booker scores on steal of home", 1, ["Booker"], 0),
+    (
+        "Castillo hits a ground ball and reaches on an error by shortstop Weaver. Goudeau scores. Vidato scores",
+        2,
+        ["Goudeau", "Vidato"],
+        0,
+    ),
+    ("Weaver grounds out to third baseman Castillo. Johnson II scores", 1, ["Johnson II"], 1),
+    # two spaces before "scores" (2023 contests 2402326, 2405089)
+    ("Easley  scores on wild pitch", 1, ["Easley"], 0),
+    (
+        "Cinton hits a ground ball and reaches on an error by shortstop Weaver. Escobar  scores",
+        1,
+        ["Escobar"],
+        0,
+    ),
 ]
+
+
+def test_scorer_comments_on_past_tense_pages_add_no_runs() -> None:
+    """2025 contest 6301797 / 2012 contest 761583: a present-tense scorer comment restates the run the row before
+    already counted, so on a past-tense page it is neither a run nor a home run."""
+    wp, hr = (
+        decompose_college_baseball_plays([{"description": a}, {"description": b}]).to_dicts()
+        for a, b in (
+            (
+                "Christensen advanced to second on a wild pitch; Autrey, H. advanced to third; Marthilj, T. scored.",
+                "Marthiljohni scores on wild pitch on second pitch of at-bat.",
+            ),
+            (
+                "Fratantuono homered down the rf line, 3 RBI (0-2) Fitzgerald scored H Bennett scored.",
+                "Dominic Fratantuono homers just inside the right field foul pole - 2nd of.",
+            ),
+        )
+    )
+    assert [r["runs_scored"] for r in wp] == [1, 0]
+    assert [r["runs_scored"] for r in hr] == [3, 0]
+    assert hr[1]["play_type"] != "home_run"
+
+
+def test_present_tense_rows_classify() -> None:
+    """2023 contests 2391617 / 2390316 / 2392056: the present-tense verbs map to the past-tense play types."""
+    rows = decompose_college_baseball_plays(
+        [
+            {"description": "Micah singles on a ground ball to third baseman Holmes. Jackson scores"},
+            {"description": "Brown walks, McClendon pitching"},
+            {"description": "Willis strikes out looking"},
+            {"description": "Mims steals 2nd"},
+            {"description": "Figueroa advances to 3rd on passed ball"},
+            {"description": "Mims hits a ground ball and reaches on an error by shortstop Jones"},
+            {"description": "Lineup changed: Fluet in at pitcher"},
+        ]
+    ).to_dicts()
+    assert [(r["play_type"], r["is_out"]) for r in rows] == [
+        ("single", False),
+        ("walk", False),
+        ("strikeout", True),
+        ("stolen_base", False),
+        ("passed_ball", False),
+        ("reached_on_error", False),
+        ("substitution", False),
+    ]
+    assert rows[-1]["batter"] is None
 
 
 @pytest.mark.parametrize(("desc", "runs", "runners", "outs"), _RUNNER_CASES)
@@ -336,3 +400,21 @@ def test_repeated_given_name_inside_a_batter_name_does_not_split_the_clause() ->
     """A doubled token mid-name ("A Dai Dai singled") is not the doubled-name scoring clause."""
     row = decompose_college_baseball_plays([{"description": "A Dai Dai singled to left field."}]).row(0, named=True)
     assert (row["batter"], row["play_type"], row["is_hit"], row["runs_scored"]) == ("A Dai Dai", "single", True, 0)
+
+
+def test_present_tense_steal_of_home_is_a_stolen_base_and_one_run() -> None:
+    """2023 contest 2390316: "Booker scores on steal of home" is the steal itself, counted once."""
+    row = decompose_college_baseball_plays([{"description": "Booker scores on steal of home"}]).row(0, named=True)
+    assert (row["play_type"], row["runs_scored"], row["scoring_runners"]) == ("stolen_base", 1, ["Booker"])
+
+
+def test_steal_of_home_comment_on_a_past_tense_page_stays_unknown() -> None:
+    """A past-tense page's present-tense scorer comment is never re-read as a play (round-2 review of #1368)."""
+    rows = decompose_college_baseball_plays(
+        [
+            {"description": "Martinez stole second."},
+            {"description": "Martinez stole second."},
+            {"description": "Booker scores on steal of home"},
+        ]
+    ).to_dicts()
+    assert (rows[-1]["play_type"], rows[-1]["runs_scored"]) == ("unknown", 0)
