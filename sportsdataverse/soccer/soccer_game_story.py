@@ -124,10 +124,12 @@ def _frames(summaries: dict | list[dict]) -> tuple[pl.DataFrame, pl.DataFrame, l
     """The games, every key event with the running score after it, the box's shots on target and the goal participants."""
     payloads = [summaries] if isinstance(summaries, dict) else list(summaries)
     games, goals, players, stats = [], [], [], []
+    seen: set[int] = set()
     for p in payloads:
         g, gl, pr, st = _one(p)
-        if g["game_id"] is None or g["home_score"] is None or g["away_score"] is None:
-            continue
+        if g["game_id"] is None or g["home_score"] is None or g["away_score"] is None or g["game_id"] in seen:
+            continue  # a summary passed twice counts once
+        seen.add(g["game_id"])
         games.append(g)
         goals += gl
         players += pr
@@ -218,17 +220,32 @@ def _soccer_edges(gl: pl.DataFrame, gdf: pl.DataFrame, stats: list[pl.DataFrame]
         )
     edges_used = [e for e in _EDGES if e[1] == "accounting" or stats]
     order = {e: i for i, (e, _) in enumerate(edges_used)}
+    # a kind a side never scored is 0, and only where the key events carry every goal of the final: a summary
+    # missing some has no accounting at all (its kinds would not sum to the margin)
+    complete = (
+        gdf.join(
+            gl.group_by("game_id").agg(pl.col("home_score").max().alias("_h"), pl.col("away_score").max().alias("_a")),
+            on="game_id",
+            how="left",
+        )
+        .filter(
+            (pl.col("_h").fill_null(0) == pl.col("home_score")) & (pl.col("_a").fill_null(0) == pl.col("away_score"))
+        )
+        .select("game_id", pl.lit(True).alias("_complete"))
+    )
+    full = pl.col("_complete") == True
     edges = (
         teams.join(pl.DataFrame({"edge": list(order)}), how="cross")
         .join(found, on=["game_id", "team_id", "edge"], how="left")
+        .join(complete, on="game_id", how="left")
         .with_columns(
             pl.when(pl.col("edge") == "shots_on_target")
             .then(pl.col("value"))
-            .otherwise(pl.col("value").fill_null(0.0))
+            .otherwise(pl.when(full).then(pl.col("value").fill_null(0.0)))
             .alias("value"),
             pl.when(pl.col("edge") == "shots_on_target")
             .then(pl.col("points"))
-            .otherwise(pl.col("points").fill_null(0.0))
+            .otherwise(pl.when(full).then(pl.col("points").fill_null(0.0)))
             .alias("points"),
             pl.col("edge").replace_strict(order, return_dtype=pl.Int64).alias("edge_order"),
             pl.col("edge").replace_strict(dict(edges_used), return_dtype=pl.Utf8).alias("kind"),

@@ -50,6 +50,25 @@ _EDGES = (
 _HITS = ("Single", "Double", "Triple", "Home Run")
 
 
+def _automatic_runner(half: list[str]) -> pl.Expr:
+    """``base_state`` with an extra half's automatic runner on 2nd where the release pbp alone shows him.
+
+    The release pbp has no runner movements, so when he scores or is put out on the half's first PA
+    nothing after it shows he was there. That PA's own result does: runs beyond the batter's own (a home
+    run's one), or outs beyond the batter's (none if he reached), need a runner on base before it.
+    """
+    hr = (pl.col("event") == "Home Run").fill_null(False)
+    first = pl.col("at_bat_index") == pl.col("at_bat_index").min().over(half)
+    batter_out = pl.when(hr | (pl.col("_batter_on") == True)).then(0).otherwise(1)
+    implied = (pl.col("runs_on_play") > hr.cast(pl.Int64)) | (pl.col("_outs_after") > batter_out)
+    return (
+        pl.when(first & (pl.col("inning") > _REGULATION) & (pl.col("base_state") == "___") & implied.fill_null(False))
+        .then(pl.lit("_2_"))
+        .otherwise(pl.col("base_state"))
+        .alias("base_state")
+    )
+
+
 def _states(pbp: pl.DataFrame, re24: pl.DataFrame, games: pl.DataFrame) -> pl.DataFrame:
     """Each PA with its batting and fielding team, pitcher, RE24 and runs."""
     statsapi = pbp.select(
@@ -75,6 +94,11 @@ def _states(pbp: pl.DataFrame, re24: pl.DataFrame, games: pl.DataFrame) -> pl.Da
         pl.col("description").cast(pl.Utf8),
         pl.col("home_score").cast(pl.Int64),
         pl.col("away_score").cast(pl.Int64),
+        pl.col("outs").cast(pl.Int64).alias("_outs_after"),
+        pl.any_horizontal(
+            (pl.col(c).cast(pl.Int64) == pl.col("batter_id").cast(pl.Int64)).fill_null(False)
+            for c in ("post_on_first_id", "post_on_second_id", "post_on_third_id")
+        ).alias("_batter_on"),
     ).unique(["game_id", "at_bat_index"], keep="first")
     re = re24.select(
         pl.col("season").cast(pl.Int64),
@@ -85,6 +109,7 @@ def _states(pbp: pl.DataFrame, re24: pl.DataFrame, games: pl.DataFrame) -> pl.Da
     half = ["game_id", "inning", "half"]
     out = (
         st.join(pa, on=["game_id", "at_bat_index"], how="left")
+        .with_columns(_automatic_runner(half))
         .join(
             games.select("game_id", "season", "home_team_id", "away_team_id"),
             on="game_id",
@@ -108,8 +133,9 @@ def _states(pbp: pl.DataFrame, re24: pl.DataFrame, games: pl.DataFrame) -> pl.Da
         )
         .with_columns((pl.col("_re_end") - pl.col("re") + pl.col("runs_on_play")).alias("re24"))
     )
-    if out.height and out["re"].null_count() == out.height:
-        raise ValueError("re24 has no run expectancy for these games' seasons: pass load_mlb_re24_matrix for them")
+    missing = sorted(set(out["season"].drop_nulls().to_list()) - set(re["season"].drop_nulls().to_list()))
+    if missing:
+        raise ValueError(f"re24 has no run expectancy for season(s) {missing}: pass load_mlb_re24_matrix for them")
     # a side's starter: the first pitcher it used
     starter = (
         out.sort("game_id", "at_bat_index")
@@ -274,7 +300,7 @@ def mlb_game_story(
         largest unanswered run; the top WPA player (``player_name`` null: the releases carry ids only).
 
     Raises:
-        ValueError: If ``re24`` has no run expectancy for any of the games (a matrix of another season).
+        ValueError: If ``re24`` has no run expectancy for one of the games' seasons.
 
     Example:
         Quick start::

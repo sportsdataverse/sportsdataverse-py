@@ -200,3 +200,59 @@ def test_mlb_matrix_of_another_season_raises() -> None:
     pbp, sched, wpa, re24 = (_read(f"mlb_{k}_games.parquet") for k in ("pbp", "schedule", "wpa", "re24"))
     with pytest.raises(ValueError, match="no run expectancy"):
         mlb_game_story(pbp, sched, wpa, re24.with_columns(pl.col("season") + 1))
+
+
+def test_mlb_partial_matrix_raises() -> None:
+    pbp, sched, wpa, re24 = (_read(f"mlb_{k}_games.parquet") for k in ("pbp", "schedule", "wpa", "re24"))
+    one = sched["game_pk"][0]
+    sched = sched.with_columns(pl.when(pl.col("game_pk") == one).then(2099).otherwise(pl.col("season")).alias("season"))
+    with pytest.raises(ValueError, match=r"season\(s\) \[2099\]"):
+        mlb_game_story(pbp, sched, wpa, re24)
+
+
+def test_mlb_automatic_runner_who_scores_starts_on_second() -> None:
+    import importlib
+
+    mod = importlib.import_module("sportsdataverse.mlb.mlb_game_story")
+    pbp, sched, re24 = (
+        _read("mlb_pbp_716356.parquet"),
+        _read("mlb_schedule_716356.parquet"),
+        _read("mlb_re24_2023.parquet"),
+    )
+    games = sched.select(
+        pl.col("game_pk").cast(pl.Int64).alias("game_id"),
+        pl.col("season").cast(pl.Int64),
+        pl.col("home_team_id").cast(pl.Int64),
+        pl.col("away_team_id").cast(pl.Int64),
+    )
+    st = mod._states(pbp, re24, games)
+    opens = st.filter(
+        (pl.col("inning") > 9) & (pl.col("at_bat_index") == pl.col("at_bat_index").min().over("inning", "half"))
+    )
+    # every extra half opens with him on 2nd; two show him only through the run he scores
+    assert opens["base_state"].to_list() == ["_2_"] * 4
+    assert opens.filter(pl.col("runs_on_play") > 0).height == 2
+    reg_opens = st.filter(
+        (pl.col("inning") <= 9) & (pl.col("at_bat_index") == pl.col("at_bat_index").min().over("inning", "half"))
+    )
+    assert reg_opens["base_state"].unique().to_list() == ["___"]
+    story = mlb_game_story(pbp, sched, _read("mlb_wpa_716356.parquet"), re24)
+    assert story["summary"]["periods_agree"].to_list() == [True]
+
+
+def test_soccer_summary_passed_twice_counts_once() -> None:
+    once, twice = soccer_game_story(_summaries()), soccer_game_story(_summaries() * 2)
+    for k in ("summary", "edges", "periods", "performers"):
+        assert twice[k].equals(once[k]), k
+
+
+def test_soccer_without_key_events_has_no_accounting() -> None:
+    raw = _summaries()
+    scored = next(
+        p for p in raw if any("oal" in str(e.get("type", {}).get("text", "")) for e in p.get("keyEvents", []))
+    )
+    gid = int(scored["header"]["id"])
+    stripped = {**scored, "keyEvents": []}
+    story = soccer_game_story([stripped])
+    edges = story["edges"].filter(pl.col("game_id") == gid)
+    assert edges.filter(pl.col("kind") == "accounting").height == 0
