@@ -18,7 +18,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
 | [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
 | [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 293 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 295 | — |
 
 ## ESPN {#espn}
 
@@ -184,6 +184,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`add_shot_make_prob`](reference/additional/analytics#add_shot_make_prob)
 - [`add_start_type_detail`](reference/additional/analytics#add_start_type_detail)
 - [`add_transition`](reference/additional/analytics#add_transition)
+- [`add_two_for_one_flags`](reference/additional/analytics#add_two_for_one_flags)
 - [`box_features`](reference/additional/analytics#box_features)
 - [`build_play_context_shots`](reference/additional/analytics#build_play_context_shots)
 - [`build_possession_shooting`](reference/additional/analytics#build_possession_shooting)
@@ -198,7 +199,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_availability`](reference/additional/analytics#nba_availability)
 - [`nba_box_events`](reference/additional/analytics#nba_box_events)
 - [`nba_box_logs`](reference/additional/analytics#nba_box_logs)
-- [`nba_coach_careers`](reference/additional/analytics#nba_coach_careers)
+- [`nba_coach_careers`](reference/additional/analytics-2#nba_coach_careers)
 - [`nba_coach_seasons`](reference/additional/analytics-2#nba_coach_seasons)
 - [`nba_cup_sim`](reference/additional/analytics-2#nba_cup_sim)
 - [`nba_cup_standings`](reference/additional/analytics-2#nba_cup_standings)
@@ -213,7 +214,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_game_on_off`](reference/additional/analytics-2#nba_game_on_off)
 - [`nba_game_player_box_splits`](reference/additional/analytics-2#nba_game_player_box_splits)
 - [`nba_game_player_impact`](reference/additional/analytics-2#nba_game_player_impact)
-- [`nba_game_stints`](reference/additional/analytics-2#nba_game_stints)
+- [`nba_game_stints`](reference/additional/analytics-3#nba_game_stints)
 - [`nba_game_units`](reference/additional/analytics-3#nba_game_units)
 - [`nba_impact_rows`](reference/additional/analytics-3#nba_impact_rows)
 - [`nba_l2m`](reference/additional/analytics-3#nba_l2m)
@@ -291,6 +292,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`starters_on_court_counts`](reference/additional/analytics-9#starters_on_court_counts)
 - [`team_pace_projection`](reference/additional/analytics-9#team_pace_projection)
 - [`team_play_context`](reference/additional/analytics-9#team_play_context)
+- [`two_for_one_summary`](reference/additional/analytics-9#two_for_one_summary)
 - [`xpoints_baseline`](reference/additional/analytics-9#xpoints_baseline)
 - [`zone_value_map`](reference/additional/analytics-9#zone_value_map)
 

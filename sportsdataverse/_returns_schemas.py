@@ -9265,6 +9265,17 @@ SCHEMAS: dict[str, dict[str, pl.DataType]] = {
         "last_season": pl.Int32,
         "notes": pl.String,
     },
+    "loader_schemas:load_mlb_leverage_index": {
+        "inning_capped": pl.Int64,
+        "half": pl.String,
+        "base_state": pl.String,
+        "outs_start": pl.Int64,
+        "score_diff_bucket": pl.Int64,
+        "leverage_index": pl.Float64,
+        "n": pl.UInt32,
+        "thin": pl.Boolean,
+        "season": pl.Int64,
+    },
     "loader_schemas:load_mlb_oaa": {
         "fielder_id": pl.String,
         "position": pl.Int64,
