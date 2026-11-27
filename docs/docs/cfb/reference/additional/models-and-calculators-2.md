@@ -132,6 +132,36 @@ values (the refit moves every team; the ledger reports the two that played).
 
 One row per (game, team) for the teams `cfb_adjusted_epa` rates (two or more valid games), sorted by `team_id`, then `week` (when present), then `game_id`: `game_id`, the carried `season` / `week` / `season_type`, `team_id`, `pos_team`, `opponent_id`, `site` (`home` / `away` / `neutral`), `off_plays` / `def_plays` (the team's offensive / defensive plays in the fit), `raw_off_epa`, `raw_def_epa`, `raw_net_epa`, `off_strength_faced` / `def_strength_faced` (the opponent's fitted offense / defense, EPA/play), `schedule_adj` (`off_strength_faced - def_strength_faced`: what the schedule term adds to this game's raw net), `adj_off_epa`, `adj_def_epa`, `adj_net_epa`, `off_weight` / `def_weight` (the game's weight in each season mean: 1 / the games where that side has fit plays, so the two differ when a game has plays on one side only), `raw_contribution`, `schedule_contribution`, `contribution` (to the season value), `net_adj_epa` (the season value, repeated) and, with `influence`, `loo_net_adj_epa` (the season value without this game) and `game_influence` (`net_adj_epa - loo_net_adj_epa`; both null when the team would keep fewer than two games).
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Game id of the team-game (the play-by-play game_id). |
+| `season` | Int64 | Season carried through from the plays when present. |
+| `week` | Int64 | Week carried through from the plays when present. |
+| `season_type` | String | Season type carried through from the plays' seasonType when present. |
+| `team_id` | String | Id of the rated team (the pos_team_id the fit uses). |
+| `pos_team` | String | Name of the rated team. |
+| `opponent_id` | String | Id of the opponent in this game. |
+| `site` | String | Where the rated team played: home, away or neutral. |
+| `off_plays` | Int64 | The team's offensive plays in this game that entered the fit. |
+| `def_plays` | Int64 | The team's defensive plays in this game that entered the fit. |
+| `raw_off_epa` | Float64 | Raw offensive EPA per play in this game. |
+| `raw_def_epa` | Float64 | Raw EPA per play allowed in this game. |
+| `raw_net_epa` | Float64 | raw_off_epa minus raw_def_epa for this game. |
+| `off_strength_faced` | Float64 | The opponent's fitted offensive strength, EPA per play (what the defense faced). |
+| `def_strength_faced` | Float64 | The opponent's fitted defensive strength, EPA per play (what the offense faced). |
+| `schedule_adj` | Float64 | off_strength_faced minus def_strength_faced: what the schedule term adds to this game's raw net. |
+| `adj_off_epa` | Float64 | Opponent-adjusted offensive EPA per play for this game. |
+| `adj_def_epa` | Float64 | Opponent-adjusted EPA per play allowed for this game. |
+| `adj_net_epa` | Float64 | adj_off_epa minus adj_def_epa for this game. |
+| `off_weight` | Float64 | This game's weight in the season offensive mean: 1 / the games with offensive fit plays. |
+| `def_weight` | Float64 | This game's weight in the season defensive mean: 1 / the games with defensive fit plays. |
+| `raw_contribution` | Float64 | The raw part of this game's contribution to the season net_adj_epa. |
+| `schedule_contribution` | Float64 | The schedule part of this game's contribution to the season net_adj_epa. |
+| `contribution` | Float64 | This game's contribution to the season net_adj_epa (raw plus schedule); sums to it per team. |
+| `net_adj_epa` | Float64 | The team's season net adjusted EPA per play, repeated on each of its games. |
+| `loo_net_adj_epa` | Float64 | The team's season net_adj_epa refit without this game (with influence); null under two games. |
+| `game_influence` | Float64 | net_adj_epa minus loo_net_adj_epa: how far this game moved the team's season value. |
+
 **Raises**
 
 | Exception | Description |

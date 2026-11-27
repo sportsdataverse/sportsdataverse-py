@@ -1,0 +1,30 @@
+schema: nfl_expected_starters
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: kickoff
+  type: datetime
+  description: ''
+- name: chart_dt
+  type: datetime
+  description: ''
+- name: expected_qb_id
+  type: character
+  description: ''
+- name: backup_qb_id
+  type: character
+  description: ''
+- name: starter_source
+  type: character
+  description: ''
+- name: status
+  type: character
+  description: ''
+- name: p_start
+  type: double
+  description: ''
