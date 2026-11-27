@@ -60,6 +60,7 @@ __all__ = [
     "load_cfb_adv_team_gamelog",
     "load_cfb_ratings_weekly",
     "load_cfb_team_summaries_weekly",
+    "load_cfb_team_adjustment_ledger",
     "load_cfb_usage_players",
     "load_cfb_usage_position_groups",
     "load_cfb_usage_tackles",
@@ -5610,6 +5611,84 @@ def load_cfb_team_summaries_weekly(seasons, return_as_pandas: bool = False):
     # Producers shipped this id with differing dtypes across releases; pin it here
     # so a cross-dataset join cannot silently match nothing.
     out = _cast_ids_int64(out, ["team_id"])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_team_adjustment_ledger(seasons, return_as_pandas: bool = False):
+    """Load cfb_team_adjustment_ledger (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_adjustment_ledger
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name              |type    |
+        |:---------------------|:-------|
+        |season                |Int64   |
+        |game_id               |Int64   |
+        |week                  |Int64   |
+        |season_type           |Int64   |
+        |team_id               |Int64   |
+        |pos_team              |String  |
+        |opponent_id           |Int64   |
+        |site                  |String  |
+        |off_plays             |Int64   |
+        |def_plays             |Int64   |
+        |raw_off_epa           |Float64 |
+        |raw_def_epa           |Float64 |
+        |raw_net_epa           |Float64 |
+        |off_strength_faced    |Float64 |
+        |def_strength_faced    |Float64 |
+        |schedule_adj          |Float64 |
+        |adj_off_epa           |Float64 |
+        |adj_def_epa           |Float64 |
+        |adj_net_epa           |Float64 |
+        |off_weight            |Float64 |
+        |def_weight            |Float64 |
+        |raw_contribution      |Float64 |
+        |schedule_contribution |Float64 |
+        |contribution          |Float64 |
+        |net_adj_epa           |Float64 |
+        |loo_net_adj_epa       |Float64 |
+        |game_influence        |Float64 |
+
+    Raises:
+        SeasonNotFoundError: if a requested season is below 2004.
+
+    Example:
+        Quick start::
+
+            load_cfb_team_adjustment_ledger(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_adjustment_ledger/cfb_team_adjustment_ledger_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_team_adjustment_ledger: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    # No season resolved: the documented columns with zero rows, never a (0, 0) frame (A-M7).
+    out = (
+        pl.concat(frames, how="diagonal_relaxed")
+        if frames
+        else _empty_from_schema("loader_schemas:load_cfb_team_adjustment_ledger")
+    )
+    # Producers shipped this id with differing dtypes across releases; pin it here
+    # so a cross-dataset join cannot silently match nothing.
+    out = _cast_ids_int64(out, ["game_id", "team_id", "opponent_id"])
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 

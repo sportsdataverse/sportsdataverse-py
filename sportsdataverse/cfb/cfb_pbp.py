@@ -6411,15 +6411,18 @@ class CFBPlayProcess(object):
                 .then(True)
                 .otherwise(False),
                 # --- Pass depth/direction + rush direction (Game on Paper matrix fields) ---
-                # Extracted from ESPN play description text; null when the pattern is absent
-                # (sacks, screens, and pre-2025 plays that omit depth/direction).
-                # Depth: "short" (0-12 air yards) | "deep" (12+ air yards)
+                # Read from the phrase ESPN writes for a charted pass, "pass [complete|incomplete]
+                # short|deep left|middle|right" (football/espn_text.py PASS_DEPTH_RE /
+                # PASS_DIRECTION_RE); null when the phrase is absent (sacks, screens, and almost
+                # every play before 2025 Week 9, whose text omits it; an older "pass up the
+                # middle" still gives a direction).
+                # Depth: ESPN's "short" | "deep" -- deep is 20+ air yards, short anything under
                 # Direction: "left" | "middle" | "right"
                 pass_depth=pl.when(pl.col("pass") == True)
-                .then(pl.col("text").str.extract(r"\s(short|deep)\s", 1))
+                .then(pl.col("text").str.extract(_espn_text.PASS_DEPTH_RE, 1))
                 .otherwise(None),
                 pass_direction=pl.when(pl.col("pass") == True)
-                .then(pl.col("text").str.extract(r"\s(left|middle|right)\s", 1))
+                .then(pl.col("text").str.extract(_espn_text.PASS_DIRECTION_RE, 1))
                 .otherwise(None),
                 rush_direction=pl.when(pl.col("rush") == True)
                 .then(pl.col("text").str.extract(r"\s(left|middle|right)\s", 1))

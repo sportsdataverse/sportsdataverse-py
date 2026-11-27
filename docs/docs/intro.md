@@ -68,7 +68,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 <!-- BEGIN generated: leagues-and-sources -->
 | Sport | League | Module | Data sources |
 |---|---|---|---|
-| Football | [College football](cfb/) | `sportsdataverse.cfb` | ESPN (132), sportsdataverse-data releases (76), stats.ncaa.org (1), On3 Recruit Database (82), 247Sports Recruit Database (47), Yahoo Sports Shangrila (7), Fox Sports API (29) |
+| Football | [College football](cfb/) | `sportsdataverse.cfb` | ESPN (132), sportsdataverse-data releases (77), stats.ncaa.org (1), On3 Recruit Database (82), 247Sports Recruit Database (47), Yahoo Sports Shangrila (7), Fox Sports API (29) |
 | Football | [NFL](nfl/) | `sportsdataverse.nfl` | ESPN (125), NFL.com Shield API (22), NFL Pro (32), Sleeper fantasy API (15), PFF Developer API (68), PFF Premium Stats (LEGACY) (46), nflverse data releases (48), sportsdataverse-data releases (23), Fox Sports API (25) |
 | Football (Spring & Canadian) | [UFL](ufl/) | `sportsdataverse.football.ufl` | ESPN (114): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1, CDN API (cdn.espn.com) 1, Hand-written wrappers 1 |
 | Football (Spring & Canadian) | [XFL](xfl/) | `sportsdataverse.football.xfl` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
@@ -152,7 +152,7 @@ Parser-backed wrappers return a polars DataFrame by default; see
 | Baseball | [MLB](mlb/) | `sportsdataverse.mlb` | ESPN (123), sportsdataverse-data releases (35), MLB Stats API (79), Baseball Savant (Statcast) (43), Chadwick Baseball Bureau register (1), Fox Sports API (23) |
 | Baseball (College baseball & softball) | [College baseball](college_baseball/) | `sportsdataverse.baseball.college_baseball` | ESPN (122), stats.ncaa.org (3) |
 | Baseball (College baseball & softball) | [College softball](college_softball/) | `sportsdataverse.baseball.college_softball` | ESPN (121): site API (v2) 25, web API (v3) 5, core API (v2) 87, FPI API (fitt v3) 1, CDN API (cdn.espn.com) 3 |
-| Soccer | [Soccer (all)](soccer/) | `sportsdataverse.soccer` | ESPN (112), American Soccer Analysis (16), FotMob (14), UEFA (7), FIFA (9), Football-Data.co.uk (3), OpenLigaDB (11), kloppy open event data (8) |
+| Soccer | [Soccer (all)](soccer/) | `sportsdataverse.soccer` | ESPN (112), American Soccer Analysis (16), FotMob (14), UEFA (7), FIFA (9), Football-Data.co.uk (3), OpenLigaDB (11), kloppy open event data (8), reep football id register (1) |
 | Soccer (Leagues) | [EPL](epl/) | `sportsdataverse.soccer.epl` | ESPN (113): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1, CDN API (cdn.espn.com) 1 |
 | Soccer (Leagues) | [LaLiga](laliga/) | `sportsdataverse.soccer.laliga` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
 | Soccer (Leagues) | [Bundesliga](bundesliga/) | `sportsdataverse.soccer.bundesliga` | ESPN (112): site API (v2) 24, web API (v3) 5, core API (v2) 82, FPI API (fitt v3) 1 |
