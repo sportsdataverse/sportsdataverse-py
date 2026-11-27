@@ -354,6 +354,7 @@ from sportsdataverse.cfb import calculate_win_probability as calculate_win_proba
 from sportsdataverse.cfb import calculate_wpa as calculate_wpa  # noqa: F401
 from sportsdataverse.cfb import calculate_xpass as calculate_xpass  # noqa: F401
 from sportsdataverse.cfb import canonical_play_type_expr as canonical_play_type_expr  # noqa: F401
+from sportsdataverse.cfb import cfb_adjusted_breakdowns as cfb_adjusted_breakdowns  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa as cfb_adjusted_epa  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa_by_game as cfb_adjusted_epa_by_game  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa_ledger as cfb_adjusted_epa_ledger  # noqa: F401
@@ -553,6 +554,7 @@ __all__ = [
     "calculate_wpa",
     "calculate_xpass",
     "canonical_play_type_expr",
+    "cfb_adjusted_breakdowns",
     "cfb_adjusted_epa",
     "cfb_adjusted_epa_by_game",
     "cfb_adjusted_epa_ledger",

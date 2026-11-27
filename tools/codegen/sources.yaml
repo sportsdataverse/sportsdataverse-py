@@ -966,6 +966,7 @@ categories:
       - sportsdataverse.nba.nba_model_validation
       - sportsdataverse.cfb.cfb_two_point
       - sportsdataverse.cfb.cfb_adjusted_epa
+      - sportsdataverse.cfb.cfb_adjusted_breakdowns
       - sportsdataverse.cfb.cfb_field_position
       - sportsdataverse.nfl.nfl_field_position
     functions:

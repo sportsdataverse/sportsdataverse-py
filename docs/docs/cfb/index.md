@@ -17,7 +17,7 @@ description: "sdv-py College football: endpoint references, dataset loaders and 
 | [247Sports Recruit Database](#247sports-recruit-database) | `247sports.com`, `ipa.247sports.com` | 47 | none |
 | [Yahoo Sports Shangrila](#yahoo-sports-shangrila) | `graphite-secure.sports.yahoo.com` | 7 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 29 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 114 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 115 | — |
 
 ## ESPN {#espn}
 
@@ -90,6 +90,7 @@ description: "sdv-py College football: endpoint references, dataset loaders and 
 - [`calculate_win_probability`](reference/additional/models-and-calculators#calculate_win_probability)
 - [`calculate_wpa`](reference/additional/models-and-calculators#calculate_wpa)
 - [`calculate_xpass`](reference/additional/models-and-calculators#calculate_xpass)
+- [`cfb_adjusted_breakdowns`](reference/additional/models-and-calculators-2#cfb_adjusted_breakdowns)
 - [`cfb_adjusted_epa`](reference/additional/models-and-calculators-2#cfb_adjusted_epa)
 - [`cfb_adjusted_epa_by_game`](reference/additional/models-and-calculators-2#cfb_adjusted_epa_by_game)
 - [`cfb_adjusted_epa_ledger`](reference/additional/models-and-calculators-2#cfb_adjusted_epa_ledger)

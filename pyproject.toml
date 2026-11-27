@@ -540,6 +540,7 @@ files = [
     "sportsdataverse/_common/metrics.py",
     "sportsdataverse/_common/ratings.py",
     "sportsdataverse/errors.py",
+    "sportsdataverse/cfb/cfb_adjusted_breakdowns.py",
     "sportsdataverse/cfb/cfb_adjusted_epa.py",
     "sportsdataverse/cfb/cfb_advanced_constants.py",
     "sportsdataverse/cfb/cfb_advanced_stats.py",
