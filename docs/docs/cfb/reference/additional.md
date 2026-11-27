@@ -125,9 +125,9 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [cfb_ratings_compute_results](additional/models-and-calculators-2.md#cfb_ratings_compute_results) | Results generator driven by fixed team ratings (points, adjusted EPA or raw EPA). |
 | [cfb_recruiting_projection](additional/models-and-calculators-2.md#cfb_recruiting_projection) | Project team wins / scoring margin for a season from preseason roster features. |
 | [cfb_roster_talent](additional/models-and-calculators-2.md#cfb_roster_talent) | Team-talent composite per team-season (247 Team Talent Composite style). |
-| [cfb_simulations](additional/models-and-calculators-2.md#cfb_simulations) | Simulate college football seasons (nflseedR-style week loop). |
-| [cfb_touchback_yardline_expr](additional/models-and-calculators-2.md#cfb_touchback_yardline_expr) | Kickoff-touchback yards-to-endzone per row: 80 through 2011, 75 from 2012. |
-| [efficiency_ratings](additional/models-and-calculators-2.md#efficiency_ratings) | One row per team: opponent-adjusted offensive/defensive efficiency. |
+| [cfb_simulations](additional/models-and-calculators-3.md#cfb_simulations) | Simulate college football seasons (nflseedR-style week loop). |
+| [cfb_touchback_yardline_expr](additional/models-and-calculators-3.md#cfb_touchback_yardline_expr) | Kickoff-touchback yards-to-endzone per row: 80 through 2011, 75 from 2012. |
+| [efficiency_ratings](additional/models-and-calculators-3.md#efficiency_ratings) | One row per team: opponent-adjusted offensive/defensive efficiency. |
 | [fei_ratings](additional/models-and-calculators-3.md#fei_ratings) | One row per team: opponent-adjusted per-drive efficiency (FEI-style). |
 | [fit_field_position_ep](additional/models-and-calculators-3.md#fit_field_position_ep) | Fit the monotone EP-by-starting-yardline curve from a drives frame. |
 | [get_2pt_probs](additional/models-and-calculators-3.md#get_2pt_probs) | Two-point-conversion decision surface (cfb4th `get_2pt_wp`). |

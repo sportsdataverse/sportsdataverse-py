@@ -32,6 +32,12 @@ _SLICES = {
     "success_pass": (pl.col("pass") == 1, "epa_success"),
     "epa_rush": (pl.col("rush") == 1, "EPA"),
     "success_rush": (pl.col("rush") == 1, "epa_success"),
+    "epa_passing_down": (pl.col("passing_down") == True, "EPA"),  # noqa: E712
+    "epa_q1": (pl.col("period") == 1, "EPA"),
+    "explosive_rate": (pl.col("EPA").is_not_null(), "EPA_explosive"),
+    "success_late_down": (pl.col("down").is_in([3, 4]), "epa_success"),
+    "epa_q2": (pl.col("period") == 2, "EPA"),
+    "iso_ppp": (pl.col("epa_success") == 1, "EPA"),
 }
 
 

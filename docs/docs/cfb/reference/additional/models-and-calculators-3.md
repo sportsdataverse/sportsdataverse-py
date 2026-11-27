@@ -1,10 +1,153 @@
 ---
-title: "College football — additional Python functions — Models and calculators: fei_ratings–get_4th"
-sidebar_label: "Models and calculators: fei_ratings–get_4th"
+title: "College football — additional Python functions — Models and calculators: cfb_simulations–get_4th"
+sidebar_label: "Models and calculators: cfb_simulations–get_4th"
 sidebar_position: 9
-description: "College football — additional Python functions — Models and calculators: fei_ratings–get_4th — function reference in sdv-py, the SportsDataverse Python package."
+description: "College football — additional Python functions — Models and calculators: cfb_simulations–get_4th — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# College football — additional Python functions — Models and calculators: fei_ratings–get_4th
+# College football — additional Python functions — Models and calculators: cfb_simulations–get_4th
+
+### cfb_simulations {#cfb_simulations}
+
+`cfb_simulations(games: 'FrameLike', teams: 'FrameLike', compute_results: 'ComputeResultsFn | None' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 12, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'POST', rankings: 'FrameLike | None' = None, tiebreaker_data: 'dict[str, FrameLike] | None' = None, seed: 'int | None' = None, return_as_pandas: 'bool' = False) -> 'dict[str, pl.DataFrame | Any]'`
+
+Simulate college football seasons (nflseedR-style week loop).
+
+Replicates the input season `simulations` times, fills unplayed games
+week by week through the pluggable `compute_results`, then simulates
+the postseason (conference championships + CFP bracket) and aggregates
+per-team probabilities. See the module docstring for every documented
+CFB simplification.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `FrameLike` |  | One season of games in the engine schema (`season` or `sim`, `week`, `game_type`, `home_team`, `away_team`, `result` — null = unplayed, `neutral`). Played results are kept as-is. A `season` column picks that season's tiebreakers and CFP rule; `sim`-keyed input uses the current ones. The optional `home_points`/`away_points`/`conf_game` columns of `sportsdataverse.cfb.cfb_games_from_schedule` pass through to `sportsdataverse.cfb.cfb_standings`. |
+| `teams` | `FrameLike` |  | Team table (`team`, `conference`, plus the optional `sportsdataverse.cfb.cfb_standings` columns). |
+| `compute_results` | `ComputeResultsFn \| None` | `None` | Results generator with the signature `fn(teams, games, week_num, **kwargs) -> {"teams": ..., "games": ...}` filling `result` for that week's unplayed games only. Defaults to `cfb_compute_results` (dynamic ELO). |
+| `simulations` | `int` | `10000` | Number of simulated seasons (sequential, no chunking). |
+| `playoff_seeds` | `int` | `12` | CFP field size passed to `cfb_playoff_seeds`. |
+| `tiebreaker_depth` | `str` | `'SOS'` | nflseedR depth ladder (`RANDOM` < `PRE-SOV` < `SOS` < `POINTS`) used by every standings computation. |
+| `sim_include` | `str` | `'POST'` | How deep to simulate: `"REG"` (regular season only), `"CONF"` (+ conference championships) or `"POST"` (+ CFP bracket, default). |
+| `rankings` | `FrameLike \| None` | `None` | Optional committee rankings (`team`, `rank`) forwarded to `cfb_playoff_seeds`. When None, seeding falls back to the per-sim standings ordering (documented in `cfb_playoff_seeds`). |
+| `tiebreaker_data` | `dict[str, FrameLike] \| None` | `None` | Optional tiebreaker inputs (`"analytics_ratings"`, `"cfp_rankings"`, `"apr"` frames) forwarded unchanged to every `sportsdataverse.cfb.cfb_standings` call, so the official rungs run. |
+| `seed` | `int \| None` | `None` | Seed for the numpy RNG (deterministic runs). |
+| `return_as_pandas` | `bool` | `False` | Return pandas DataFrames instead of polars. |
+
+**Returns**
+
+Dict of frames mirroring the nflseedR summary list: * `"standings"` — per (sim, team) standings incl. `conf_rank`, `conf_champ` and (`sim_include="POST"`) `seed`. * `"games"` — all games incl. simulated results and generated postseason rows. * `"overall"` — per-team probabilities (`won_conf`, `made_playoff`, `first_round_bye`, `won_cfp`) and mean record columns. * `"game_summary"` — per unique matchup: games played, home win / tie rates and mean margin.
+
+| col_name | type | description |
+|---|---|---|
+| `team` | String | Team name the simulated probabilities belong to (overall summary frame). |
+| `conference` | String | Conference the team belongs to; null or "FBS Independents" marks an independent. |
+| `wins` | Float64 | Mean wins per simulated season (all game types through the conference championship). |
+| `losses` | Float64 | Mean losses per simulated season (all game types through the conference championship). |
+| `ties` | Float64 | Mean ties per simulated season. |
+| `win_pct` | Float64 | Mean overall win percentage across the simulated seasons. |
+| `won_conf` | Float64 | Share of simulations in which the team won its conference (CONF_CHAMP game winner, or rank-1 fallback). |
+| `made_playoff` | Float64 | Share of simulations in which the team made the College Football Playoff field. |
+| `first_round_bye` | Float64 | Share of simulations in which the team earned a CFP first-round bye (seeds 1-4 in the 12-team field; in general the top P - n seeds, P being the smallest power of two at or above the field size n). |
+| `won_cfp` | Float64 | Share of simulations in which the team won the College Football Playoff national championship. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | On invalid `sim_include` / `tiebreaker_depth`, multi-season input, missing columns, or duplicate team rows. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_simulations
+out = cfb_simulations(games, teams, simulations=100, seed=42,
+                      playoff_seeds=12)
+print(out["overall"].sort("won_cfp", descending=True).head())
+
+# Regular season only
+
+out = cfb_simulations(games, teams, simulations=100,
+                      sim_include="REG", seed=1)
+```
+
+### cfb_touchback_yardline_expr {#cfb_touchback_yardline_expr}
+
+`cfb_touchback_yardline_expr(season: polars.expr.expr.Expr) -> polars.expr.expr.Expr`
+
+Kickoff-touchback yards-to-endzone per row: 80 through 2011, 75 from 2012.
+
+Reads `TOUCHBACK_YARDLINE_BY_SEASON` (the NCAA 2012 kickoff rule). Named with the `cfb_`
+prefix so the top-level `sportsdataverse` namespace keeps NFL's `touchback_yardline_expr`
+(2016 cut) distinct from this one.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Expr` |  | Integer season expression (`pl.col("season")`). |
+
+**Returns**
+
+An integer expression of the touchback yards-to-endzone per row.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import cfb_touchback_yardline_expr
+
+df = pl.DataFrame({"season": [2011, 2012]})
+print(df.select(cfb_touchback_yardline_expr(pl.col("season"))).to_series().to_list())  # [80, 75]
+```
+
+### efficiency_ratings {#efficiency_ratings}
+
+`efficiency_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'`
+
+One row per team: opponent-adjusted offensive/defensive efficiency.
+
+The same fit as `sportsdataverse.cfb.cfb_adjusted_epa`: one ridge of
+per-play EPA on offense, defense and home-field indicators over the pass
+and rush plays that are not garbage time (score margin at the snap above
+43 / 37 / 27 / 21 in Q1-Q4 and overtime, the
+`~sportsdataverse.cfb.cfb_opponent_adjust.flag_garbage_time` rule; no
+win probability, so the pregame line never decides which plays count),
+every team shrunk toward the league average by its own play count
+(`_ADJ_EPA_LAMBDA`). Each team's raw per-game EPA on those same plays is
+then netted against the opponent's fitted strength and averaged across
+games -- the R `adjust_epa` statistic. `games` and `off_pace` still
+count every pass/rush play. Through 0.2.0b1 this function fit a separate
+standardized ridge (lambda 0.035) on `0.1 <= wp_before <= 0.9`, which
+priced the pregame spread into the fit and predicted next week's margins
+0.67 points worse.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._ADJ_REQUIRED` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `period`, `pos_score_diff_start`). Callers pass an already as-of-date-filtered frame; this function is pure. |
+| `config` | `RatingsConfig \| None` | `None` | Accepted for signature parity with `fei_ratings`; not read here (the penalty is `cfb_adjusted_epa`'s, so the two entry points cannot disagree). |
+
+**Returns**
+
+A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when every play is garbage time.
+
+No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import efficiency_ratings
+ratings = efficiency_ratings(pbp)
+ratings.sort("adj_net", descending=True).head()
+```
 
 ### fei_ratings {#fei_ratings}
 
